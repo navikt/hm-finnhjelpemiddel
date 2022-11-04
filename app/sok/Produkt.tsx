@@ -1,19 +1,20 @@
-import { Heading, Link } from '@navikt/ds-react'
+import { BodyShort, Heading, Link } from '@navikt/ds-react'
+import { Produkt } from '../../utils/productType'
 
 type ProduktProps = {
-  artikkelId: string
-  artikkelnavn: string
+  produkt: Produkt
   paaRammeavtale: boolean
 }
 
-const Produkt = ({ artikkelId, artikkelnavn, paaRammeavtale }: ProduktProps) => {
+const Produkt = ({ produkt, paaRammeavtale }: ProduktProps) => {
   return (
     <li>
-      <article key="artikkelId">
+      <article key="produkt-kompakt">
         <Heading level="3" size="xsmall">
-          {artikkelnavn}
+          {produkt?.tittel}
         </Heading>
-        <Link href={`/artikler/${artikkelId}`}>{artikkelnavn}</Link>
+        <Link href={`/artikler/${produkt.id}`}>Les mer</Link>
+        <BodyShort>{produkt?.modell?.hmm}</BodyShort>
       </article>
     </li>
   )

@@ -4,6 +4,7 @@ export interface Produkt {
   modell?: {
     navn?: string
     beskrivelse?: string
+    hmm?: string
   }
   isoKode?: number
   tilbehør?: boolean

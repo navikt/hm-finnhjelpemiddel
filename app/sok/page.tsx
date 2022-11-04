@@ -10,9 +10,13 @@ import Produkt from './Produkt'
 const SokPage: NextPage<{}> = () => {
   const [pageNumber, setPageNumber] = useState(1)
   const pageIndex = pageNumber - 1
-
-  const { data } = useSWR<FetchResponse>({ url: `/product/_search`, pageIndex }, fetchProdukter)
+  const pageSize = 15
   const [selectedIsocode, setSelectedIsocode] = useState<string>('')
+  const { data } = useSWR<FetchResponse>(
+    { url: `/product/_search`, pageIndex, pageSize, isoFilter: selectedIsocode },
+    fetchProdukter
+  )
+  const paginationCount = Math.ceil((data?.antallProdukter || 1) / pageSize)
   const levels = selectedIsocode.length / 2 + 1
 
   useEffect(() => {
@@ -50,7 +54,9 @@ const SokPage: NextPage<{}> = () => {
             <Heading level="2" size="medium">
               Søkeresultat
             </Heading>
-            <BodyShort>x av y antall produkter vises</BodyShort>
+            <BodyShort>
+              {data?.produkter.length} av {data?.antallProdukter} produkter vises
+            </BodyShort>
           </div>
           <Select label="Sortér etter" hideLabel={false} className="results__sort-select" size="small">
             <option value="">Alfabetisk</option>
@@ -58,21 +64,18 @@ const SokPage: NextPage<{}> = () => {
         </header>
         <ol className="results__list">
           {data?.produkter.map((produkt) => (
-            <Produkt
-              key={produkt?.id}
-              artikkelId={'artikkel'}
-              artikkelnavn={produkt?.id.toString()}
-              paaRammeavtale={false}
-            />
+            <Produkt key={produkt.id} produkt={produkt} paaRammeavtale={false} />
           ))}
         </ol>
-        <Pagination
-          page={pageNumber}
-          onPageChange={(x) => setPageNumber(x)}
-          count={100}
-          boundaryCount={1}
-          siblingCount={3}
-        />
+        {paginationCount > 1 && (
+          <Pagination
+            page={pageNumber}
+            onPageChange={(x) => setPageNumber(x)}
+            count={paginationCount}
+            boundaryCount={1}
+            siblingCount={3}
+          />
+        )}
       </div>
     </div>
   )

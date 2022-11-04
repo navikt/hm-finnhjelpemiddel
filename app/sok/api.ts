@@ -3,6 +3,8 @@ import { Produkt } from '../../utils/productType'
 type FetchProps = {
   url: string
   pageIndex: number
+  pageSize: number
+  isoFilter: string
 }
 
 export type FetchResponse = {
@@ -10,9 +12,8 @@ export type FetchResponse = {
   produkter: Produkt[]
 }
 
-export const fetchProdukter = ({ url, pageIndex }: FetchProps): Promise<FetchResponse> => {
-  const size = 20
-  const from = size * pageIndex
+export const fetchProdukter = ({ url, pageIndex, pageSize, isoFilter }: FetchProps): Promise<FetchResponse> => {
+  const from = pageSize * pageIndex
 
   return fetch(url, {
     method: 'POST',
@@ -21,14 +22,33 @@ export const fetchProdukter = ({ url, pageIndex }: FetchProps): Promise<FetchRes
     },
     body: JSON.stringify({
       from,
-      size,
+      size: pageSize,
+      ...(isoFilter && {
+        query: {
+          match_phrase_prefix: {
+            isoCategory: isoFilter,
+          },
+        },
+      }),
     }),
   })
     .then((res) => res.json())
     .then((data) => {
-      const produkter: Produkt[] = data.hits.hits.map((hit: any) => ({
-        id: hit._source.id,
-      }))
+      const produkter: Produkt[] = data.hits.hits.map((hit: any) => {
+        const produkt = hit._source
+        return {
+          id: produkt.id,
+          tittel: produkt.title,
+          modell: {
+            navn: produkt.description.modelName,
+            beskrivelse: produkt.description.modelDescription,
+            hmm: produkt.description.text,
+          },
+          isoKode: Number(produkt.isoCategory),
+          tilbehør: produkt.accessory,
+          del: produkt.part,
+        }
+      })
       return { antallProdukter: data.hits.total.value, produkter }
     })
 }
