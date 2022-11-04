@@ -7,6 +7,14 @@ const nextConfig = {
     defaultLocale: 'no',
   },
   experimental: { appDir: true },
+  async rewrites() {
+    return [
+      {
+        source: '/product/_search:path*',
+        destination: 'http://localhost:8080/product/_search:path*',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

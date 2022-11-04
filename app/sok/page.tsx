@@ -1,14 +1,23 @@
 'use client'
-import { BodyShort, Search, Select, Heading } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
 import { NextPage } from 'next/types'
-import { useState } from 'react'
+import useSWR from 'swr'
+import { BodyShort, Search, Select, Heading, Pagination } from '@navikt/ds-react'
 import { calculateNextAvailableIsoCategory } from '../../utils/isoCategory'
+import { fetchProdukter, FetchResponse } from './api'
 import Produkt from './Produkt'
 
 const SokPage: NextPage<{}> = () => {
+  const [pageNumber, setPageNumber] = useState(1)
+  const pageIndex = pageNumber - 1
+
+  const { data } = useSWR<FetchResponse>({ url: `/product/_search`, pageIndex }, fetchProdukter)
   const [selectedIsocode, setSelectedIsocode] = useState<string>('')
-  const filtrerteArtikler = [1, 2, 3]
   const levels = selectedIsocode.length / 2 + 1
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
 
   return (
     <div className="flex-wrapper">
@@ -48,10 +57,22 @@ const SokPage: NextPage<{}> = () => {
           </Select>
         </header>
         <ol className="results__list">
-          {filtrerteArtikler.map((i) => (
-            <Produkt key={i} artikkelId={'artikkel'} artikkelnavn={'artikkelnavn'} paaRammeavtale={false}></Produkt>
+          {data?.produkter.map((produkt) => (
+            <Produkt
+              key={produkt?.id}
+              artikkelId={'artikkel'}
+              artikkelnavn={produkt?.id.toString()}
+              paaRammeavtale={false}
+            />
           ))}
         </ol>
+        <Pagination
+          page={pageNumber}
+          onPageChange={(x) => setPageNumber(x)}
+          count={100}
+          boundaryCount={1}
+          siblingCount={3}
+        />
       </div>
     </div>
   )

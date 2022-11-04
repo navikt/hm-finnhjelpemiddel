@@ -10,7 +10,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <title>Next.js</title>
       </head>
       <body>
-        <nav>
+        <nav className="nav-topp">
           <ul>
             <li>
               <Link href="/sok">Søk</Link>
