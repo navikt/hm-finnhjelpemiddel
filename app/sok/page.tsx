@@ -33,9 +33,16 @@ const SokPage: NextPage<{}> = () => {
           <Search label="Søk artikler" variant="primary" role="search" size="small" className="search__input-field" />
           {[...Array(levels).keys()].map((i) => {
             const nextCategories = calculateNextAvailableIsoCategory(selectedIsocode, i)
+            const updateIsoCode = (iso: string, index: number) => {
+              if (iso !== '') {
+                setSelectedIsocode(iso.slice(0, (index + 1) * 2))
+              } else {
+                setSelectedIsocode(selectedIsocode.slice(0, (index + 1) * 2 - 2))
+              }
+            }
             return (
               nextCategories.length > 0 && (
-                <Select label={'Velg kategori ' + (i + 1)} onChange={(e) => setSelectedIsocode(e.target.value)} key={i}>
+                <Select label={'Velg kategori ' + (i + 1)} onChange={(e) => updateIsoCode(e.target.value, i)} key={i}>
                   <option value="">Velg kategori</option>
                   {nextCategories.map(([isoCode, title]) => (
                     <option key={isoCode} value={isoCode}>
@@ -73,7 +80,7 @@ const SokPage: NextPage<{}> = () => {
             onPageChange={(x) => setPageNumber(x)}
             count={paginationCount}
             boundaryCount={1}
-            siblingCount={3}
+            siblingCount={1}
           />
         )}
       </div>
