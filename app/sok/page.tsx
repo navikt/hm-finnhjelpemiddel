@@ -2,22 +2,24 @@
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next/types'
 import useSWR from 'swr'
-import { BodyShort, Search, Select, Heading, Pagination } from '@navikt/ds-react'
-import { calculateNextAvailableIsoCategory } from '../../utils/isoCategory'
+import { BodyShort, Search, Select, Heading, Pagination, Loader } from '@navikt/ds-react'
 import { fetchProdukter, FetchResponse } from './api'
+
+import Kategorivelger from './Kategorivelger'
 import Produkt from './Produkt'
+
+import './sok.scss'
 
 const SokPage: NextPage<{}> = () => {
   const [pageNumber, setPageNumber] = useState(1)
+  const [selectedIsoCode, setSelectedIsoCode] = useState<string>('')
   const pageIndex = pageNumber - 1
   const pageSize = 15
-  const [selectedIsocode, setSelectedIsocode] = useState<string>('')
   const { data } = useSWR<FetchResponse>(
-    { url: `/product/_search`, pageIndex, pageSize, isoFilter: selectedIsocode },
+    { url: `/product/_search`, pageIndex, pageSize, isoFilter: selectedIsoCode },
     fetchProdukter
   )
   const paginationCount = Math.ceil((data?.antallProdukter || 1) / pageSize)
-  const levels = selectedIsocode.length / 2 + 1
 
   useEffect(() => {
     console.log(data)
@@ -30,58 +32,46 @@ const SokPage: NextPage<{}> = () => {
           <Heading level="2" size="medium">
             Søk
           </Heading>
-          <Search label="Søk artikler" variant="primary" role="search" size="small" className="search__input-field" />
-          {[...Array(levels).keys()].map((i) => {
-            const nextCategories = calculateNextAvailableIsoCategory(selectedIsocode, i)
-            const updateIsoCode = (iso: string, index: number) => {
-              if (iso !== '') {
-                setSelectedIsocode(iso.slice(0, (index + 1) * 2))
-              } else {
-                setSelectedIsocode(selectedIsocode.slice(0, (index + 1) * 2 - 2))
-              }
-            }
-            return (
-              nextCategories.length > 0 && (
-                <Select label={'Velg kategori ' + (i + 1)} onChange={(e) => updateIsoCode(e.target.value, i)} key={i}>
-                  <option value="">Velg kategori</option>
-                  {nextCategories.map(([isoCode, title]) => (
-                    <option key={isoCode} value={isoCode}>
-                      {title}
-                    </option>
-                  ))}
-                </Select>
-              )
-            )
-          })}
+          <Search label="Søk i artikler" variant="secondary" hideLabel={false} className="search__input" />
+          <Kategorivelger selectedIsoCode={selectedIsoCode} setSelectedIsoCode={setSelectedIsoCode} />
         </form>
       </div>
+
       <div className="results__wrapper">
-        <header className="results__header">
-          <div>
-            <Heading level="2" size="medium">
-              Søkeresultat
-            </Heading>
-            <BodyShort>
-              {data?.produkter.length} av {data?.antallProdukter} produkter vises
-            </BodyShort>
-          </div>
-          <Select label="Sortér etter" hideLabel={false} className="results__sort-select" size="small">
-            <option value="">Alfabetisk</option>
-          </Select>
-        </header>
-        <ol className="results__list">
-          {data?.produkter.map((produkt) => (
-            <Produkt key={produkt.id} produkt={produkt} paaRammeavtale={false} />
-          ))}
-        </ol>
-        {paginationCount > 1 && (
-          <Pagination
-            page={pageNumber}
-            onPageChange={(x) => setPageNumber(x)}
-            count={paginationCount}
-            boundaryCount={1}
-            siblingCount={1}
-          />
+        {!data && <Loader size="3xlarge" title="Laster produkter" />}
+
+        {data && (
+          <>
+            <header className="results__header">
+              <div>
+                <Heading level="2" size="medium">
+                  Søkeresultat
+                </Heading>
+                <BodyShort>
+                  {data.produkter.length
+                    ? `${data?.produkter.length} av ${data?.antallProdukter} produkter vises`
+                    : 'Ingen produkter funnet'}
+                </BodyShort>
+              </div>
+              <Select label="Sortering" hideLabel={false} size="small" className="results__sort-select">
+                <option value="">Alfabetisk</option>
+              </Select>
+            </header>
+            <ol className="results__list">
+              {data?.produkter.map((produkt) => (
+                <Produkt key={produkt.id} produkt={produkt} paaRammeavtale={false} />
+              ))}
+            </ol>
+            {paginationCount > 1 && (
+              <Pagination
+                page={pageNumber}
+                onPageChange={(x) => setPageNumber(x)}
+                count={paginationCount}
+                boundaryCount={1}
+                siblingCount={1}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

@@ -7,11 +7,9 @@ type Filters = [string, string][]
 export const calculateNextAvailableIsoCategory = (iso: string, level: number): Filters => {
   const categoryIso = level === 0 ? '' : iso.slice(0, 2 * level)
 
-  const filteredCategories = Object.entries(isoKategorier).filter(
+  return Object.entries(isoKategorier).filter(
     ([key, _]) => key.length === categoryIso.length + 2 && key.startsWith(categoryIso)
   )
-
-  return filteredCategories
 }
 
 export const isoKategorier = {

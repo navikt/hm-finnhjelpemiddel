@@ -6,7 +6,7 @@ type ProduktProps = {
   paaRammeavtale: boolean
 }
 
-const Produkt = ({ produkt, paaRammeavtale }: ProduktProps) => {
+const Produkt = ({ produkt }: ProduktProps) => {
   return (
     <li>
       <article key="produkt-kompakt">

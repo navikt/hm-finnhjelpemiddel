@@ -42,7 +42,7 @@ export const fetchProdukter = ({ url, pageIndex, pageSize, isoFilter }: FetchPro
           modell: {
             navn: produkt.description.modelName,
             beskrivelse: produkt.description.modelDescription,
-            hmm: produkt.description.text,
+            tekst: produkt.description.text,
           },
           isoKode: Number(produkt.isoCategory),
           tilbehør: produkt.accessory,

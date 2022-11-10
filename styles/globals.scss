@@ -1,3 +1,5 @@
+@use "styles/mixins";
+
 @import '@navikt/ds-css';
 
 main {
@@ -28,5 +30,18 @@ main {
     padding: 0.25em 0.5em;
     color: white;
     text-decoration: none;
+  }
+}
+
+.flex-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--navds-spacing-8) 0;
+
+  @include mixins.for-size(tablet-up) {
+    flex-direction: row;
+    justify-content: center;
   }
 }

@@ -1,13 +1,15 @@
-import './globals.scss'
 import React from 'react'
-import reportAccessibility from '../utils/reportAccessibility'
 import Link from 'next/link'
+import reportAccessibility from '../utils/reportAccessibility'
+
+import '../styles/globals.scss'
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="no">
       <head>
-        <title>Next.js</title>
+        <title>Oversikt over hjelpemiddelartikler</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </head>
       <body>
         <nav className="nav-topp">
