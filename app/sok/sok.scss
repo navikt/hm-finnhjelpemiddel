@@ -1,63 +1,41 @@
-.flex-wrapper {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 1200px;
-  padding: 45px 0;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-
-  @media (min-width: 800px) {
-    flex-direction: row;
-    justify-content: center;
-  }
-}
+@use "styles/mixins";
 
 .search {
   &__side-bar {
-    display: flex;
-    flex: 1;
-    background: var(--navds-semantic-color-canvas-background-light);
-    box-shadow: 1px 1px 4px var(--navds-global-color-gray-300);
-    padding: 20px 16px;
-    margin: 0 24px;
     min-width: 288px;
     height: fit-content;
+    margin: 0 var(--navds-spacing-6);
+    padding: var(--navds-spacing-5) var(--navds-spacing-4);
+    background: var(--navds-semantic-color-canvas-background-light);
+    box-shadow: 1px 1px 4px var(--navds-global-color-gray-300);
 
-    @media (min-width: 800px) {
-      max-width: 340px;
+    @include mixins.for-size(tablet-up) {
+      max-width: 344px;
     }
 
     h2 {
-      margin-bottom: 20px;
+      margin-bottom: var(--navds-spacing-5);
     }
   }
 
-  &__input-field {
-    .navds-sr-only {
-      height: auto;
-      width: auto;
-      text-align: left;
-      position: static;
-    }
+  &__iso-category-select {
+    margin-top: var(--navds-spacing-5)
   }
 }
 
 .results {
   &__wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 3;
-    margin-right: 24px;
-    margin-left: 24px;
+    flex: 1;
+    margin: 0 var(--navds-spacing-6);
 
-    @media (min-width: 800px) {
-      margin-right: 24px;
-      margin-left: 0;
-    }
 
     h2 {
-      padding: 20px 0;
+      margin: var(--navds-spacing-5) 0;
+    }
+
+    @include mixins.for-size(tablet-up) {
+      margin-left: 0;
+      margin-right: var(--navds-spacing-6);
     }
   }
 
@@ -65,7 +43,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding-left: 5px;
+    padding-left: var(--navds-spacing-1);
   }
 
   &__sort-select {
@@ -77,12 +55,13 @@
   &__list {
     list-style: none;
     padding: 0;
-    box-shadow: 1px 1px 4px var(--navds-global-color-gray-300);
 
     article {
-      padding: 15px 10px;
+      margin-bottom: var(--navds-spacing-2);
+      padding: var(--navds-spacing-5) var(--navds-spacing-3);
       background: var(--navds-semantic-color-canvas-background-light);
       border: 1px solid var(--navds-semantic-color-canvas-background);
+      box-shadow: 1px 1px 4px var(--navds-global-color-gray-300);
     }
   }
 }

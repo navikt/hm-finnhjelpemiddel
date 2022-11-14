@@ -4,7 +4,8 @@ type FetchProps = {
   url: string
   pageIndex: number
   pageSize: number
-  isoFilter: string
+  searchTerm?: string
+  isoFilter?: string
 }
 
 export type FetchResponse = {
@@ -12,8 +13,38 @@ export type FetchResponse = {
   produkter: Produkt[]
 }
 
-export const fetchProdukter = ({ url, pageIndex, pageSize, isoFilter }: FetchProps): Promise<FetchResponse> => {
+export const fetchProdukter = ({
+  url,
+  pageIndex,
+  pageSize,
+  searchTerm,
+  isoFilter,
+}: FetchProps): Promise<FetchResponse> => {
   const from = pageSize * pageIndex
+
+  const query = {
+    bool: {
+      must: [
+        ...(searchTerm
+          ? [
+              {
+                simple_query_string: {
+                  query: `\"${searchTerm}*\" | (${searchTerm.split(' ').join(' + ')})`,
+                  fields: ['title^3', 'description.text^2', '*'],
+                },
+              },
+            ]
+          : []),
+      ],
+      ...(isoFilter && {
+        filter: {
+          match_bool_prefix: {
+            isoCategory: isoFilter,
+          },
+        },
+      }),
+    },
+  }
 
   return fetch(url, {
     method: 'POST',
@@ -23,13 +54,7 @@ export const fetchProdukter = ({ url, pageIndex, pageSize, isoFilter }: FetchPro
     body: JSON.stringify({
       from,
       size: pageSize,
-      ...(isoFilter && {
-        query: {
-          match_phrase_prefix: {
-            isoCategory: isoFilter,
-          },
-        },
-      }),
+      query,
     }),
   })
     .then((res) => res.json())
@@ -41,12 +66,14 @@ export const fetchProdukter = ({ url, pageIndex, pageSize, isoFilter }: FetchPro
           tittel: produkt.title,
           modell: {
             navn: produkt.description.modelName,
-            beskrivelse: produkt.description.modelDescription,
-            hmm: produkt.description.text,
+            tilleggsinfo: produkt.description.modelDescription,
+            beskrivelse: produkt.description.text,
           },
-          isoKode: Number(produkt.isoCategory),
+          isoKode: produkt.isoCategory,
           tilbehør: produkt.accessory,
           del: produkt.part,
+          hmsNr: produkt.hmsartNr,
+          tekniskData: produkt.data,
         }
       })
       return { antallProdukter: data.hits.total.value, produkter }
