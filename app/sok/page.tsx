@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next/types'
 import useSWR from 'swr'
-import { BodyShort, Search, Select, Heading, Pagination, Loader } from '@navikt/ds-react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { BodyShort, Search, Select, Heading, Pagination, Loader, TextField } from '@navikt/ds-react'
 import { fetchProdukter, FetchResponse } from './api'
 
 import Kategorivelger from './Kategorivelger'
@@ -10,13 +11,19 @@ import Produkt from './Produkt'
 
 import './sok.scss'
 
-const SokPage: NextPage<{}> = () => {
+type SearchFormInputs = {
+  searchTerm: string
+}
+
+const SokPage: NextPage = () => {
+  const { control, handleSubmit } = useForm<SearchFormInputs>()
   const [pageNumber, setPageNumber] = useState(1)
   const [selectedIsoCode, setSelectedIsoCode] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const pageIndex = pageNumber - 1
   const pageSize = 15
   const { data } = useSWR<FetchResponse>(
-    { url: `/product/_search`, pageIndex, pageSize, isoFilter: selectedIsoCode },
+    { url: `/product/_search`, pageIndex, pageSize, searchTerm, isoFilter: selectedIsoCode },
     fetchProdukter
   )
   const paginationCount = Math.ceil((data?.antallProdukter || 1) / pageSize)
@@ -25,14 +32,29 @@ const SokPage: NextPage<{}> = () => {
     console.log(data)
   }, [data])
 
+  const onSubmit: SubmitHandler<SearchFormInputs> = (data) => setSearchTerm(data.searchTerm)
+
   return (
     <div className="flex-wrapper">
       <div className="search__side-bar">
-        <form>
+        <form role="search" onClick={handleSubmit(onSubmit)}>
           <Heading level="2" size="medium">
             Søk
           </Heading>
-          <Search label="Søk i artikler" variant="secondary" hideLabel={false} className="search__input" />
+          <Controller
+            render={({ field }) => (
+              <Search
+                label="Søk i artikler"
+                variant="secondary"
+                hideLabel={false}
+                className="search__input"
+                {...field}
+              />
+            )}
+            name="searchTerm"
+            control={control}
+            defaultValue=""
+          />
           <Kategorivelger selectedIsoCode={selectedIsoCode} setSelectedIsoCode={setSelectedIsoCode} />
         </form>
       </div>

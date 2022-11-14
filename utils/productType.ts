@@ -4,9 +4,11 @@ export interface Produkt {
   modell?: {
     navn?: string
     beskrivelse?: string
-    hmm?: string
+    tilleggsinfo?: string
   }
-  isoKode?: number
+  isoKode?: string
   tilbehør?: boolean
   del?: boolean
+  hmsNr?: string
+  tekniskData?: [{ key: string; value: string; unit?: string }]
 }
