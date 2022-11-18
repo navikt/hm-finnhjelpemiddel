@@ -13,12 +13,10 @@ const Kategorivelger = ({ selectedIsoCode, setSelectedIsoCode }: KategorivelgerP
     <>
       {[...Array(levels).keys()].map((level) => {
         const nextCategories = calculateNextAvailableIsoCategory(selectedIsoCode, level)
+
         const updateIsoCode = (iso: string, index: number) => {
-          if (iso !== '') {
-            setSelectedIsoCode(iso.slice(0, (index + 1) * 2))
-          } else {
-            setSelectedIsoCode(selectedIsoCode.slice(0, (index + 1) * 2 - 2))
-          }
+          let isocode = iso !== '' ? iso.slice(0, (index + 1) * 2) : selectedIsoCode.slice(0, (index + 1) * 2 - 2)
+          setSelectedIsoCode(isocode)
         }
         return (
           nextCategories.length > 0 && (

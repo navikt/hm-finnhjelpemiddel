@@ -34,7 +34,7 @@ const Produkt = ({ produkt }: ProduktProps) => {
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Tilbehør</Table.DataCell>
-              <Table.DataCell>{produkt.tilbehør ? 'Ja' : 'Nei'}</Table.DataCell>
+              <Table.DataCell>{produkt.tilbehor ? 'Ja' : 'Nei'}</Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.DataCell>Del</Table.DataCell>
@@ -61,7 +61,7 @@ const Produkt = ({ produkt }: ProduktProps) => {
             </Accordion.Content>
           </Accordion.Item>
         </Accordion>
-        <Link href={`/artikler/${produkt.id}`}>Les mer</Link>
+        <Link href={`/produkt/${produkt.id}`}>Les mer</Link>
       </article>
     </li>
   )
