@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import reportAccessibility from '../utils/reportAccessibility'
-
 import '../styles/globals.scss'
 
 function RootLayout({ children }: { children: React.ReactNode }) {

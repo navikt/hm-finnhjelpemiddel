@@ -15,7 +15,7 @@ type SearchFormInputs = {
   searchTerm: string
 }
 
-const SokPage: NextPage = () => {
+export default function Page() {
   const { control, handleSubmit } = useForm<SearchFormInputs>()
   const [pageNumber, setPageNumber] = useState(1)
   const [selectedIsoCode, setSelectedIsoCode] = useState<string>('')
@@ -99,5 +99,3 @@ const SokPage: NextPage = () => {
     </div>
   )
 }
-
-export default SokPage

@@ -1,4 +1,4 @@
-import { Produkt } from '../../utils/productType'
+import { opprettProdukter, Produkt } from '../../utils/productType'
 
 type FetchProps = {
   url: string
@@ -59,23 +59,19 @@ export const fetchProdukter = ({
   })
     .then((res) => res.json())
     .then((data) => {
-      const produkter: Produkt[] = data.hits.hits.map((hit: any) => {
-        const produkt = hit._source
-        return {
-          id: produkt.id,
-          tittel: produkt.title,
-          modell: {
-            navn: produkt.description.modelName,
-            tilleggsinfo: produkt.description.modelDescription,
-            beskrivelse: produkt.description.text,
-          },
-          isoKode: produkt.isoCategory,
-          tilbehør: produkt.accessory,
-          del: produkt.part,
-          hmsNr: produkt.hmsartNr,
-          tekniskData: produkt.data,
-        }
-      })
+      const produkter: Produkt[] = opprettProdukter(data)
       return { antallProdukter: data.hits.total.value, produkter }
     })
+}
+
+export async function fetchAlleProdukter() {
+  const alleProdukter = await fetch('http://localhost:8080/product/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ size: 10000 }),
+    cache: 'force-cache',
+  })
+  return alleProdukter.json()
 }
