@@ -1,11 +1,12 @@
 import { opprettProdukter, Produkt } from '../../utils/productType'
+import { SearchData } from './Sidebar'
+
+const PAGE_SIZE = 15
 
 type FetchProps = {
   url: string
   pageIndex: number
-  pageSize: number
-  searchTerm?: string
-  isoFilter?: string
+  searchData: SearchData
 }
 
 export type FetchResponse = {
@@ -13,14 +14,9 @@ export type FetchResponse = {
   produkter: Produkt[]
 }
 
-export const fetchProdukter = ({
-  url,
-  pageIndex,
-  pageSize,
-  searchTerm,
-  isoFilter,
-}: FetchProps): Promise<FetchResponse> => {
-  const from = pageSize * pageIndex
+export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
+  const from = pageIndex * PAGE_SIZE
+  const { searchTerm, isoCode } = searchData
 
   const query = {
     bool: {
@@ -36,10 +32,10 @@ export const fetchProdukter = ({
             ]
           : []),
       ],
-      ...(isoFilter && {
+      ...(isoCode && {
         filter: {
           match_bool_prefix: {
-            isoCategory: isoFilter,
+            isoCategory: isoCode,
           },
         },
       }),
@@ -53,7 +49,7 @@ export const fetchProdukter = ({
     },
     body: JSON.stringify({
       from,
-      size: pageSize,
+      size: PAGE_SIZE,
       query,
     }),
   })

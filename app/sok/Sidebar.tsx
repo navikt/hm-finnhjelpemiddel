@@ -1,0 +1,51 @@
+import { Button, Heading, Search } from '@navikt/ds-react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { AtLeastOne } from '../../utils/type-util'
+
+import Kategorivelger from './Kategorivelger'
+
+export type SearchData = { searchTerm: string; isoCode: string }
+
+type SidebarProps = {
+  searchData: SearchData
+  setSearchData: (searchData: (prevSearchData: SearchData) => any) => void
+}
+
+const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
+  const { control, handleSubmit, reset } = useForm<SearchData>()
+
+  const setSearch = (searchData: AtLeastOne<SearchData>) =>
+    setSearchData((prevSearchFilters) => ({ ...prevSearchFilters, ...searchData }))
+
+  const setSelectedIsoCode = (isoCode: string) => setSearch({ isoCode })
+
+  const onSubmit: SubmitHandler<SearchData> = (data) => setSearch({ searchTerm: data.searchTerm })
+
+  return (
+    <form className="search__side-bar" role="search" onClick={handleSubmit(onSubmit)}>
+      <Heading level="2" size="medium">
+        Søk
+      </Heading>
+      <Controller
+        render={({ field }) => (
+          <Search label="Søk etter produkt" hideLabel={false} className="search__input" {...field} />
+        )}
+        name="searchTerm"
+        control={control}
+        defaultValue=""
+      />
+      <Kategorivelger selectedIsoCode={searchData.isoCode} setSelectedIsoCode={setSelectedIsoCode} />
+      <Button
+        className="search__reset-button"
+        onClick={() => {
+          setSelectedIsoCode('')
+          reset()
+        }}
+      >
+        Nullstill søket
+      </Button>
+    </form>
+  )
+}
+
+export default Sidebar

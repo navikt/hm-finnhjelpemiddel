@@ -3,7 +3,6 @@
 @import '@navikt/ds-css';
 
 main {
-  background: var(--navds-semantic-color-canvas-background);
   min-height: 100vh;
 }
 
@@ -38,7 +37,6 @@ main {
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--navds-spacing-8) 0;
 
   @include mixins.for-size(tablet-up) {
     flex-direction: row;

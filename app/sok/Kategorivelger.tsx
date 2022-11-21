@@ -21,7 +21,7 @@ const Kategorivelger = ({ selectedIsoCode, setSelectedIsoCode }: KategorivelgerP
         return (
           nextCategories.length > 0 && (
             <Select
-              label={`Velg kategori ${level + 1}`}
+              label={`Kategori ${level + 1}`}
               onChange={(e) => updateIsoCode(e.target.value, level)}
               className="search__iso-category-select"
               key={level}
