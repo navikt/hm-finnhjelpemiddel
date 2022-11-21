@@ -7,7 +7,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="no">
       <head>
-        <title>Oversikt over hjelpemiddelartikler</title>
+        <title>Oversikt over hjelpemidler</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </head>
       <body>
