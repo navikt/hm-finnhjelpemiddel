@@ -1,5 +1,5 @@
 import { LinkPanel } from '@navikt/ds-react'
-import { Produkt } from '../../utils/productType'
+import { Produkt } from '../../utils/interface'
 
 type ProduktProps = {
   produkt: Produkt

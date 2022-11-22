@@ -1,6 +1,8 @@
-import Image from 'next/image'
-import { opprettProdukt } from '../../../utils/productType'
+import { opprettProdukt } from '../../../utils/interface'
 import { fetchAlleProdukter } from '../../sok/api'
+import BildeSlider from './BildeSlider'
+
+import './produkt.scss'
 
 //Same as: getStaticPaths
 export async function generateStaticParams() {
@@ -36,26 +38,20 @@ export default async function ProduktPage({ params, searchParams }: any) {
   const { id } = params
 
   const res = await fetchProdukt(id)
-  const produktInfo = opprettProdukt(res.hits.hits[0]?._source)
-
-  const images = produktInfo.images?.map(({ order, url }) => (
-    <Image
-      key={url}
-      src={url}
-      alt={'Bilde nummer ' + String(order)}
-      width={400}
-      height={300}
-      style={{ objectFit: 'contain' }}
-    />
-  ))
+  const produktInfo = opprettProdukt(res.hits.hits?.at(0)?._source)
 
   return (
-    <article className="flex-wrapper">
-      <section className="flex-wrapper">
-        <aside className="image-container">{images}</aside>
-        <div className="produkt-compact-info"></div>
+    <article className="produkt-info">
+      <section className="bilde-og-beskrivelse">
+        <aside>{produktInfo?.bilder && <BildeSlider bilder={produktInfo?.bilder}></BildeSlider>}</aside>
+        <div className="produkt-beskrivelse">
+          <h1>{produktInfo.tittel}</h1>
+          <p>{produktInfo?.modell?.navn && produktInfo?.modell?.navn}</p>
+          <p>{produktInfo?.modell?.beskrivelse && produktInfo?.modell?.beskrivelse}</p>
+          <p>{produktInfo?.modell?.tilleggsinfo && produktInfo?.modell?.tilleggsinfo}</p>
+        </div>
       </section>
-      <section>
+      <section className="produkt-detaljert-info">
         <dl>
           <dt>id</dt>
           <dd>{produktInfo.id}</dd>
