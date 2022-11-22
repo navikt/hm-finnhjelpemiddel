@@ -12,7 +12,7 @@ type SidebarProps = {
 }
 
 const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
-  const { control, handleSubmit, reset } = useForm<SearchData>()
+  const { control, handleSubmit, register, reset } = useForm<SearchData>()
 
   const setSearch = (searchData: AtLeastOne<SearchData>) =>
     setSearchData((prevSearchFilters) => ({ ...prevSearchFilters, ...searchData }))
@@ -34,7 +34,11 @@ const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
         control={control}
         defaultValue=""
       />
-      <Kategorivelger selectedIsoCode={searchData.isoCode} setSelectedIsoCode={setSelectedIsoCode} />
+      <Kategorivelger
+        selectedIsoCode={searchData.isoCode}
+        setSelectedIsoCode={setSelectedIsoCode}
+        register={register}
+      />
       <Button
         className="search__reset-button"
         onClick={() => {

@@ -9,9 +9,9 @@ type ProduktProps = {
 const Produkt = ({ produkt }: ProduktProps) => {
   return (
     <li>
-      <LinkPanel style={{ marginBottom: 16 }} href={`/produkt/${produkt.id}`} border>
+      <LinkPanel className="product" href={`/produkt/${produkt.id}`} border>
         <LinkPanel.Title>{produkt.tittel}</LinkPanel.Title>
-        <LinkPanel.Description>{produkt.modell?.beskrivelse}</LinkPanel.Description>
+        <LinkPanel.Description className="product__description">{produkt.modell?.beskrivelse}</LinkPanel.Description>
       </LinkPanel>
     </li>
   )

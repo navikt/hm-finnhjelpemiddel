@@ -1,7 +1,7 @@
 import { opprettProdukter, Produkt } from '../../utils/produkt-util'
 import { SearchData } from './Sidebar'
 
-const PAGE_SIZE = 15
+export const PAGE_SIZE = 15
 
 type FetchProps = {
   url: string
