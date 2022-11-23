@@ -1,10 +1,9 @@
 import { Button, Heading, Search } from '@navikt/ds-react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { AtLeastOne } from '../../utils/type-util'
+import { AtLeastOne } from '../utils/type-util'
+import { SearchData } from '../utils/api-util'
 
 import Kategorivelger from './Kategorivelger'
-
-export type SearchData = { searchTerm: string; isoCode: string }
 
 type SidebarProps = {
   searchData: SearchData
@@ -12,7 +11,7 @@ type SidebarProps = {
 }
 
 const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
-  const { control, handleSubmit, reset } = useForm<SearchData>()
+  const { control, handleSubmit, register, reset } = useForm<SearchData>()
 
   const setSearch = (searchData: AtLeastOne<SearchData>) =>
     setSearchData((prevSearchFilters) => ({ ...prevSearchFilters, ...searchData }))
@@ -34,7 +33,11 @@ const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
         control={control}
         defaultValue=""
       />
-      <Kategorivelger selectedIsoCode={searchData.isoCode} setSelectedIsoCode={setSelectedIsoCode} />
+      <Kategorivelger
+        selectedIsoCode={searchData.isoCode}
+        setSelectedIsoCode={setSelectedIsoCode}
+        register={register}
+      />
       <Button
         className="search__reset-button"
         onClick={() => {

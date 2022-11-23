@@ -1,5 +1,5 @@
 import { opprettProdukt } from '../../../utils/produkt-util'
-import { fetchAlleProdukter } from '../../sok/api'
+import { fetchAlleProdukter } from '../../../utils/api-util'
 import Bildeslider from './BildeSlider'
 
 import './produkt.scss'
