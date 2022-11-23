@@ -1,5 +1,5 @@
 'use client'
-import { Bilde } from '../../../utils/interface'
+import { Bilde } from '../../../utils/produkt-util'
 import Image from 'next/image'
 import { ChevronLeftCircle, ChevronRightCircle } from '@navikt/ds-icons'
 
@@ -17,7 +17,7 @@ const testBilder: Bilde[] = [
   { url: 'https://picsum.photos/id/23/300', order: 3 },
 ]
 
-const BildeSlider = ({ bilder }: BildeSliderProps) => {
+const Bildeslider = ({ bilder }: BildeSliderProps) => {
   const antallBilder = testBilder.length
   let [aktiv, setAktiv] = useState(0)
 
@@ -66,7 +66,7 @@ const BildeSlider = ({ bilder }: BildeSliderProps) => {
             nesteBilde()
           }}
         >
-          <ChevronRightCircle height={40} width={40}></ChevronRightCircle>
+          <ChevronRightCircle height={40} width={40} />
         </div>
       </div>
       <div className="dots">
@@ -90,4 +90,4 @@ const BildeSlider = ({ bilder }: BildeSliderProps) => {
   )
 }
 
-export default BildeSlider
+export default Bildeslider

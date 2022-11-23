@@ -1,6 +1,6 @@
-import { opprettProdukt } from '../../../utils/interface'
+import { opprettProdukt } from '../../../utils/produkt-util'
 import { fetchAlleProdukter } from '../../sok/api'
-import BildeSlider from './BildeSlider'
+import Bildeslider from './BildeSlider'
 
 import './produkt.scss'
 
@@ -43,7 +43,7 @@ export default async function ProduktPage({ params, searchParams }: any) {
   return (
     <article className="produkt-info">
       <section className="bilde-og-beskrivelse">
-        <aside>{produktInfo?.bilder && <BildeSlider bilder={produktInfo?.bilder}></BildeSlider>}</aside>
+        <aside>{produktInfo?.bilder && <Bildeslider bilder={produktInfo?.bilder}></Bildeslider>}</aside>
         <div className="produkt-beskrivelse">
           <h1>{produktInfo.tittel}</h1>
           <p>{produktInfo?.modell?.navn && produktInfo?.modell?.navn}</p>
