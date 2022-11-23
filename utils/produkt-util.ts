@@ -15,7 +15,6 @@ export interface Produkt {
 }
 
 export interface Bilde {
-  order: number
   url: string
 }
 
@@ -37,11 +36,11 @@ export const opprettProdukt = (_source?: any): Produkt => {
   }
 }
 
-const opprettBildeinfo = (media: any): [{ order: number; url: string }] => {
+const opprettBildeinfo = (media: any): [{ url: string }] => {
   return media
     .filter((image: any) => image.order && image.uri)
+    .sort((a: any, b: any) => a.order - b.order)
     .map((image: any) => ({
-      order: image.order,
       url: image.uri,
     }))
 }

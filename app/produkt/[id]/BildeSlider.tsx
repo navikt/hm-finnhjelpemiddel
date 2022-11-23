@@ -11,10 +11,10 @@ type BildeSliderProps = {
 }
 
 const testBilder: Bilde[] = [
-  { url: 'https://picsum.photos/id/2/320/200', order: 0 },
-  { url: 'https://picsum.photos/id/133/300/200', order: 1 },
-  { url: 'https://picsum.photos/id/21/300/200', order: 2 },
-  { url: 'https://picsum.photos/id/23/300', order: 3 },
+  { url: 'https://picsum.photos/id/2/320/200' },
+  { url: 'https://picsum.photos/id/133/300/200' },
+  { url: 'https://picsum.photos/id/21/300/200' },
+  { url: 'https://picsum.photos/id/23/300' },
 ]
 
 const Bildeslider = ({ bilder }: BildeSliderProps) => {
@@ -49,7 +49,7 @@ const Bildeslider = ({ bilder }: BildeSliderProps) => {
                 <Image
                   key={bilde.url}
                   src={bilde.url}
-                  alt={'Bilde nummer ' + String(bilde.order)}
+                  alt={'Bilde nummer ' + String(i)}
                   width={400}
                   height={300}
                   style={{ objectFit: 'contain' }}
@@ -79,10 +79,10 @@ const Bildeslider = ({ bilder }: BildeSliderProps) => {
                 onClick={() => {
                   setAktiv(index)
                 }}
-              ></div>
+              />
             )
           } else {
-            return <div key={index} className="activeDot"></div>
+            return <div key={index} className="activeDot" />
           }
         })}
       </div>
