@@ -77,7 +77,6 @@ const BildeSlider = ({ bilder }: BildeSliderProps) => {
                 key={index}
                 className={'dot'}
                 onClick={() => {
-                  console.log('index', index)
                   setAktiv(index)
                 }}
               ></div>
