@@ -40,7 +40,7 @@ const BildeSlider = ({ bilder }: BildeSliderProps) => {
             forrigeBilde()
           }}
         >
-          <ChevronLeftCircle height={40} width={40}></ChevronLeftCircle>
+          <ChevronLeftCircle height={40} width={40} />
         </div>
         <div className="bilde-container">
           {testBilder.map((bilde: Bilde, i: number) => {
