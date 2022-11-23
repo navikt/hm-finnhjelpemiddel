@@ -1,4 +1,4 @@
-import { opprettProdukter, Produkt } from '../../utils/productType'
+import { opprettProdukter, Produkt } from '../../utils/produkt-util'
 import { SearchData } from './Sidebar'
 
 const PAGE_SIZE = 15
