@@ -1,7 +1,8 @@
-import { opprettProdukter, Produkt } from '../../utils/produkt-util'
-import { SearchData } from './Sidebar'
+import { opprettProdukter, Produkt } from './produkt-util'
 
 export const PAGE_SIZE = 15
+
+export type SearchData = { searchTerm: string; isoCode: string }
 
 type FetchProps = {
   url: string

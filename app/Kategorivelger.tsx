@@ -1,7 +1,7 @@
 import { Select } from '@navikt/ds-react'
-import { calculateNextAvailableIsoCategory } from '../../utils/isoCategory'
 import { UseFormRegister } from 'react-hook-form'
-import { SearchData } from './Sidebar'
+import { calculateNextAvailableIsoCategory } from '../utils/isoCategory'
+import { SearchData } from '../utils/api-util'
 
 type KategorivelgerProps = {
   selectedIsoCode: string

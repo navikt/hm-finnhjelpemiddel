@@ -1,10 +1,9 @@
 import { Button, Heading, Search } from '@navikt/ds-react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { AtLeastOne } from '../../utils/type-util'
+import { AtLeastOne } from '../utils/type-util'
+import { SearchData } from '../utils/api-util'
 
 import Kategorivelger from './Kategorivelger'
-
-export type SearchData = { searchTerm: string; isoCode: string }
 
 type SidebarProps = {
   searchData: SearchData
