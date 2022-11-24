@@ -40,6 +40,14 @@ main {
     img {
       align-self: center;
     }
+
+    &:focus {
+      background-color: transparent;
+      border-color: transparent;
+      border-radius: var(--a-border-radius-medium);
+      box-shadow: var(--a-shadow-focus);
+      outline: none;
+    }
   }
 }
 
