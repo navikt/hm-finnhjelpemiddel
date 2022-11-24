@@ -22,9 +22,6 @@ const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
 
   return (
     <form className="search__side-bar" role="search" onClick={handleSubmit(onSubmit)}>
-      <Heading level="2" size="medium">
-        Søk
-      </Heading>
       <Controller
         render={({ field }) => (
           <Search label="Søk etter produkt" hideLabel={false} className="search__input" {...field} />
