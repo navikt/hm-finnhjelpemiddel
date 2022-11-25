@@ -3,10 +3,6 @@ import { Accordion } from '@navikt/ds-react'
 import { TekniskData } from '../../../utils/produkt-util'
 import Definisjonsliste from './Definisjonsliste'
 
-const tilDeflisteElement = (tekniskData: TekniskData[]): { term: string; definition: string[] }[] => {
-  return tekniskData.map(({ key, value }) => ({ term: key, definition: [value] }))
-}
-
 const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
   const spesifikasjoner = tekniskData.map(({ key, value }) => (
     <>
