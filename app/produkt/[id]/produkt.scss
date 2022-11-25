@@ -8,11 +8,14 @@
   width: 100%;
 
   h1 {
-    margin-top: var(--a-spacing-5);
-    margin-bottom: var(--a-spacing-5);
     font-size: var(--a-font-size-heading-2xlarge);
     letter-spacing: -0.01em;
     line-height: var(--a-font-line-height-heading-2xlarge);
+    margin: 0;
+  }
+
+  p {
+    margin-bottom: var(--a-spacing-4);
   }
 
   .bilde-og-beskrivelse {
@@ -54,5 +57,25 @@
     padding: var(--a-spacing-5) var(--a-spacing-5);
     margin-left: var(--a-spacing-5);
     border-left: 1px solid var(--a-gray-300);
+
+    .leverandør {
+      margin-top: var(--a-spacing-5);
+      h2 {
+        font-size: var(--a-font-size-heading-xlarge);
+        letter-spacing: -0.008em;
+        line-height: var(--a-font-line-height-heading-xlarge);
+        margin: 0;
+      }
+      p {
+        margin: 0.2rem;
+      }
+    }
+  }
+
+  .produkt-detaljert-info {
+    padding: var(--a-spacing-16) var(--a-spacing-10);
+    .teknisk-data {
+      max-width: 500px;
+    }
   }
 }
