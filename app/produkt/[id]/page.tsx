@@ -1,7 +1,7 @@
 import { opprettProdukt } from '../../../utils/produkt-util'
 import { fetchAlleProdukter } from '../../../utils/api-util'
-import Bildeslider from './BildeSlider'
-
+import Bildeslider from './Bildeslider'
+import InfoAccordion from './InfoAccordion'
 import './produkt.scss'
 
 //Same as: getStaticPaths
@@ -43,29 +43,23 @@ export default async function ProduktPage({ params, searchParams }: any) {
   return (
     <article className="produkt-info">
       <section className="bilde-og-beskrivelse">
-        <aside>{produktInfo?.bilder && <Bildeslider bilder={produktInfo?.bilder}></Bildeslider>}</aside>
+        <aside>{produktInfo?.bilder && <Bildeslider bilder={produktInfo?.bilder} />}</aside>
         <div className="produkt-beskrivelse">
           <h1>{produktInfo.tittel}</h1>
           <p>{produktInfo?.modell?.navn && produktInfo?.modell?.navn}</p>
           <p>{produktInfo?.modell?.beskrivelse && produktInfo?.modell?.beskrivelse}</p>
           <p>{produktInfo?.modell?.tilleggsinfo && produktInfo?.modell?.tilleggsinfo}</p>
+          <div className="leverandør">
+            <h2>Leverandør</h2>
+            <p>Navn på leverandør</p>
+            <p>Adresselinje 1</p>
+            <p>0000, Oslo</p>
+            <a href="www.vg.no">Lenke til nettsted</a>
+          </div>
         </div>
       </section>
       <section className="produkt-detaljert-info">
-        <dl>
-          <dt>id</dt>
-          <dd>{produktInfo.id}</dd>
-          <dt>tittel</dt>
-          <dd>{produktInfo.tittel ? produktInfo.tittel : ''}</dd>
-          <dt>beskrivelse</dt>
-          <dd>{produktInfo.modell?.tilleggsinfo ? produktInfo.modell?.tilleggsinfo : ''}</dd>
-          <dt>er det et tilbehør</dt>
-          <dd>{produktInfo.tilbehor ? 'true' : 'false'}</dd>
-          <dt>er det en del</dt>
-          <dd>{produktInfo.del ? 'true' : 'false'}</dd>
-          <dt>hms</dt>
-          <dd>{produktInfo.hmsNr && produktInfo.hmsNr}</dd>
-        </dl>
+        {produktInfo.tekniskData && <InfoAccordion tekniskData={produktInfo.tekniskData} />}
       </section>
     </article>
   )

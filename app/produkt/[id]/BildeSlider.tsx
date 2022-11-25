@@ -36,6 +36,7 @@ const Bildeslider = ({ bilder }: BildeSliderProps) => {
       <div className="bilde-og-piler">
         <div
           className="pil"
+          alt="asd"
           onClick={() => {
             forrigeBilde()
           }}
