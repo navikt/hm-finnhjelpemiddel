@@ -1,0 +1,7 @@
+version: "3"
+services:
+  hm-oversikt-frontend:
+    build: .
+    image: "hm-oversikt-frontend"
+    ports:
+      - "3000:3000"
