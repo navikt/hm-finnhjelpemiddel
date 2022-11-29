@@ -11,7 +11,8 @@ const nextConfig = {
     return [
       {
         source: '/product/_search:path*',
-        destination: 'http://localhost:8080/product/_search:path*',
+        destination: 'https://grunndata-search.dev-gcp.nais.io/product/_search:path*',
+        // destination: 'http://localhost:8080/product/_search:path*',
       },
     ]
   },

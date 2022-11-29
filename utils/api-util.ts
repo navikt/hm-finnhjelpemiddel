@@ -62,7 +62,7 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
 }
 
 export async function fetchAlleProdukter() {
-  const alleProdukter = await fetch('http://localhost:8080/product/_search', {
+  const alleProdukter = await fetch('/product/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
