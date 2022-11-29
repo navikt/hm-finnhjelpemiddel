@@ -8,6 +8,7 @@ const nextConfig = {
   },
   experimental: { appDir: true },
   async rewrites() {
+    // lurer på om vi ikke trenger denne
     return [
       {
         source: '/product/_search:path*',
@@ -21,13 +22,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'www.hjelpemiddeldatabasen.no',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-        port: '',
         pathname: '/**',
       },
     ],

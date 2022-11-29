@@ -63,7 +63,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex-wrapper">
+    <div className="main-wrapper">
       <Sidebar searchData={searchData} setSearchData={setSearchData} />
       <div className="results__wrapper">
         {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}

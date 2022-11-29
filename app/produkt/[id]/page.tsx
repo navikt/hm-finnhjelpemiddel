@@ -1,22 +1,23 @@
 import { opprettProdukt } from '../../../utils/produkt-util'
-import { fetchAlleProdukter } from '../../../utils/api-util'
-import Bildeslider from './Bildeslider'
+// import { fetchAlleProdukter } from '../../../utils/api-util'
+import Bildeslider from './ImageSlider'
 import InfoAccordion from './InfoAccordion'
 import './produkt.scss'
+// import { getEnv } from '../../../utils/env'
 
 //Same as: getStaticPaths
-export async function generateStaticParams() {
-  const dataJson = await fetchAlleProdukter()
+// export async function generateStaticParams() {
+//   const dataJson = await fetchAlleProdukter()
 
-  return dataJson.hits.hits.map((hit: any) => {
-    return {
-      id: String(hit._id),
-    }
-  })
-}
+//   return dataJson.hits.hits.map((hit: any) => {
+//     return {
+//       id: String(hit._id),
+//     }
+//   })
+// }
 
 async function fetchProdukt(id: string) {
-  const res = await fetch('/product/_search', {
+  const res = await fetch('https://grunndata-search.dev-gcp.nais.io/product/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -28,7 +29,6 @@ async function fetchProdukt(id: string) {
         },
       },
     }),
-    cache: 'force-cache',
   })
 
   return res.json()
