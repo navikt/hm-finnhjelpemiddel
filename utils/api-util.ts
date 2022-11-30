@@ -1,4 +1,3 @@
-import { getEnv } from './env'
 import { opprettProdukter, Produkt } from './produkt-util'
 
 export const PAGE_SIZE = 15
@@ -60,15 +59,4 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
       const produkter: Produkt[] = opprettProdukter(data)
       return { antallProdukter: data.hits.total.value, produkter }
     })
-}
-
-export async function fetchAlleProdukter() {
-  const alleProdukter = await fetch('https://grunndata-search.dev-gcp.nais.io/product/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ size: 100 }),
-  })
-  return alleProdukter.json()
 }

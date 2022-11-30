@@ -6,7 +6,7 @@ import { ChevronLeftCircle, ChevronRightCircle } from '@navikt/ds-icons'
 import './slider.scss'
 import { useState } from 'react'
 
-type BildeSliderProps = {
+type ImageSliderProps = {
   bilder: Bilde[]
 }
 
@@ -17,7 +17,7 @@ const testBilder: Bilde[] = [
   { url: 'https://picsum.photos/id/23/300' },
 ]
 
-const Bildeslider = ({ bilder }: BildeSliderProps) => {
+const ImageSlider = ({ bilder }: ImageSliderProps) => {
   const antallBilder = testBilder.length
   let [aktiv, setAktiv] = useState(0)
 
@@ -90,4 +90,4 @@ const Bildeslider = ({ bilder }: BildeSliderProps) => {
   )
 }
 
-export default Bildeslider
+export default ImageSlider

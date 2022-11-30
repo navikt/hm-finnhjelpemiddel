@@ -1,20 +1,7 @@
 import { opprettProdukt } from '../../../utils/produkt-util'
-// import { fetchAlleProdukter } from '../../../utils/api-util'
-import Bildeslider from './ImageSlider'
+import ImageSlider from './ImageSlider'
 import InfoAccordion from './InfoAccordion'
 import './produkt.scss'
-// import { getEnv } from '../../../utils/env'
-
-//Same as: getStaticPaths
-// export async function generateStaticParams() {
-//   const dataJson = await fetchAlleProdukter()
-
-//   return dataJson.hits.hits.map((hit: any) => {
-//     return {
-//       id: String(hit._id),
-//     }
-//   })
-// }
 
 async function fetchProdukt(id: string) {
   const res = await fetch('https://grunndata-search.dev-gcp.nais.io/product/_search', {
@@ -43,7 +30,7 @@ export default async function ProduktPage({ params, searchParams }: any) {
   return (
     <article className="produkt-info">
       <section className="bilde-og-beskrivelse">
-        <aside>{produktInfo?.bilder && <Bildeslider bilder={produktInfo?.bilder} />}</aside>
+        <aside>{produktInfo?.bilder && <ImageSlider bilder={produktInfo?.bilder} />}</aside>
         <div className="produkt-beskrivelse">
           <h1>{produktInfo.tittel}</h1>
           <p>{produktInfo?.modell?.navn && produktInfo?.modell?.navn}</p>
