@@ -1,14 +1,15 @@
 'use client'
 import { Accordion } from '@navikt/ds-react'
+import React from 'react'
 import { TekniskData } from '../../../utils/produkt-util'
 import Definisjonsliste from './Definisjonsliste'
 
 const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
   const spesifikasjoner = tekniskData.map(({ key, value }, i) => (
-    <div key={key + String(i)}>
+    <React.Fragment key={key + String(i)}>
       <Definisjonsliste.Term term={key} />
       <Definisjonsliste.Definition definition={value} />
-    </div>
+    </React.Fragment>
   ))
   return (
     <Accordion>
