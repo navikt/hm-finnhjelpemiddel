@@ -44,7 +44,7 @@ const ImageSlider = ({ bilder }: ImageSliderProps) => {
         <div className="bilde-container">
           <Image
             src={testBilder[aktiv].url}
-            alt={'Bilde nummer ' + aktiv}
+            alt={'Bilde nummer ' + (aktiv + 1)}
             width={400}
             height={300}
             style={{ objectFit: 'contain' }}
