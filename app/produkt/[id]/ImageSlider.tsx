@@ -1,10 +1,9 @@
 'use client'
 import { Bilde } from '../../../utils/produkt-util'
-import Image from 'next/image'
 import { ChevronLeftCircle, ChevronRightCircle } from '@navikt/ds-icons'
-
-import './slider.scss'
 import { useState } from 'react'
+import Image from 'next/image'
+import './slider.scss'
 
 type ImageSliderProps = {
   bilder: Bilde[]
@@ -43,22 +42,13 @@ const ImageSlider = ({ bilder }: ImageSliderProps) => {
           <ChevronLeftCircle height={40} width={40} />
         </div>
         <div className="bilde-container">
-          {testBilder.map((bilde: Bilde, i: number) => {
-            if (i === aktiv) {
-              return (
-                <Image
-                  key={bilde.url}
-                  src={bilde.url}
-                  alt={'Bilde nummer ' + String(i)}
-                  width={400}
-                  height={300}
-                  style={{ objectFit: 'contain' }}
-                />
-              )
-            } else {
-              return <></>
-            }
-          })}
+          <Image
+            src={testBilder[aktiv].url}
+            alt={'Bilde nummer ' + aktiv}
+            width={400}
+            height={300}
+            style={{ objectFit: 'contain' }}
+          />
         </div>
         <div
           className="pil"

@@ -4,11 +4,11 @@ import { TekniskData } from '../../../utils/produkt-util'
 import Definisjonsliste from './Definisjonsliste'
 
 const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
-  const spesifikasjoner = tekniskData.map(({ key, value }) => (
-    <>
+  const spesifikasjoner = tekniskData.map(({ key, value }, i) => (
+    <div key={key + String(i)}>
       <Definisjonsliste.Term term={key} />
       <Definisjonsliste.Definition definition={value} />
-    </>
+    </div>
   ))
   return (
     <Accordion>

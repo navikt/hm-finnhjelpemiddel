@@ -12,6 +12,7 @@ export interface Produkt {
   hmsNr?: string
   tekniskData?: TekniskData[]
   bilder?: Bilde[]
+  supplierId: number
 }
 
 export interface Bilde {
@@ -38,6 +39,7 @@ export const opprettProdukt = (_source?: any): Produkt => {
     hmsNr: _source.hmsartNr,
     tekniskData: opprettTekniskInfo(_source.data),
     bilder: opprettBildeinfo(_source.media),
+    supplierId: _source.supplier?.id,
   }
 }
 

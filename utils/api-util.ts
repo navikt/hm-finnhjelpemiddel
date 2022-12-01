@@ -60,3 +60,19 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
       return { antallProdukter: data.hits.total.value, produkter }
     })
 }
+
+export async function getProdukt(id: string) {
+  const res = await fetch(`https://grunndata-search.dev-gcp.nais.io/product/_doc/${id}`, {
+    method: 'GET',
+  })
+
+  return res.json()
+}
+
+export async function getSupplier(id: string) {
+  const res = await fetch(`https://grunndata-search.dev-gcp.nais.io/supplier/_doc/${id}`, {
+    method: 'GET',
+  })
+
+  return res.json()
+}
