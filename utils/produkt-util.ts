@@ -7,15 +7,16 @@ export interface Produkt {
     tilleggsinfo?: string
   }
   isoKode: string
-  tilbehor?: boolean
-  del?: boolean
+  accessory: boolean
+  sparepart: boolean
   hmsNr?: string
-  tekniskData?: TekniskData[]
-  bilder?: Bilde[]
+  tekniskData: TekniskData[]
+  photos: Photo[]
+  supplierId: number
 }
 
-export interface Bilde {
-  url: string
+export interface Photo {
+  uri: string
 }
 
 export interface TekniskData {
@@ -28,25 +29,26 @@ export const opprettProdukt = (_source?: any): Produkt => {
     id: _source.id,
     tittel: _source.title,
     modell: {
-      navn: _source.description?.modelName,
-      tilleggsinfo: _source.description?.modelDescription,
+      navn: _source.description?.name,
+      tilleggsinfo: _source.description?.shortDescription,
       beskrivelse: _source.description?.text,
     },
     isoKode: _source.isoCategory,
-    tilbehor: _source.accessory,
-    del: _source.part,
+    accessory: _source.accessory,
+    sparepart: _source.sparepart,
     hmsNr: _source.hmsartNr,
     tekniskData: opprettTekniskInfo(_source.data),
-    bilder: opprettBildeinfo(_source.media),
+    photos: createPhotoInfo(_source.media),
+    supplierId: _source.supplier?.id,
   }
 }
 
-const opprettBildeinfo = (media: any): Bilde[] => {
+const createPhotoInfo = (media: any): Photo[] => {
   return media
-    .filter((image: any) => image.order && image.uri)
+    .filter((media: any) => media.type == 'IMAGE' && media.order && media.uri)
     .sort((a: any, b: any) => a.order - b.order)
     .map((image: any) => ({
-      url: image.uri,
+      uri: image.uri,
     }))
 }
 

@@ -1,18 +1,18 @@
 @use 'styles/mixins';
 
-.bilde-slider {
-  .pil {
+.photo-slider {
+  .arrow {
     cursor: pointer;
   }
 
-  .bilde-og-piler {
+  .photo-and-arrow-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
 
-  .bilde-container {
+  .photo-container {
     margin: var(--a-spacing-3);
     background-color: var(--a-gray-50);
     display: flex;
