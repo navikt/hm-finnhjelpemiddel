@@ -1,0 +1,84 @@
+'use client'
+import { Photo } from '../../../utils/produkt-util'
+import { ChevronLeftCircle, ChevronRightCircle } from '@navikt/ds-icons'
+import { useState } from 'react'
+import Image from 'next/image'
+import './slider.scss'
+
+type ImageSliderProps = {
+  photos: Photo[]
+}
+
+const PhotoSlider = ({ photos }: ImageSliderProps) => {
+  const numberOfImages = photos.length
+  let [active, setActive] = useState(0)
+
+  const prevImage = () => {
+    const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
+    setActive(prevIndex)
+  }
+
+  const nextImage = () => {
+    const nextIndex = active !== numberOfImages - 1 ? active + 1 : 0
+    setActive(nextIndex)
+  }
+
+  const photoUrl = () => {
+    if (numberOfImages == 0) {
+      return 'https://picsum.photos/id/2/320/200'
+    } else {
+      return `https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active].uri}`
+    }
+  }
+  // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
+  return (
+    <div className="photo-slider">
+      <div className="photo-and-arrow-container">
+        <div
+          className="arrow"
+          onClick={() => {
+            prevImage()
+          }}
+        >
+          <ChevronLeftCircle height={40} width={40} />
+        </div>
+        <div className="photo-container">
+          <Image
+            src={photoUrl()}
+            alt={'Bilde nummer ' + (active + 1)}
+            width={400}
+            height={300}
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
+        <div
+          className="arrow"
+          onClick={() => {
+            nextImage()
+          }}
+        >
+          <ChevronRightCircle height={40} width={40} />
+        </div>
+      </div>
+      <div className="dots">
+        {[...Array(numberOfImages).keys()].map((index) => {
+          if (index !== active) {
+            return (
+              <div
+                key={index}
+                className={'dot'}
+                onClick={() => {
+                  setActive(index)
+                }}
+              />
+            )
+          } else {
+            return <div key={index} className="activeDot" />
+          }
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default PhotoSlider

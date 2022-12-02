@@ -6,7 +6,7 @@ import Definisjonsliste from './Definisjonsliste'
 
 const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
   const spesifikasjoner = tekniskData.map(({ key, value }, i) => (
-    <React.Fragment key={key + String(i)}>
+    <React.Fragment key={`${key}${i}`}>
       <Definisjonsliste.Term term={key} />
       <Definisjonsliste.Definition definition={value} />
     </React.Fragment>

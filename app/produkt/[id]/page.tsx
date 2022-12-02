@@ -1,7 +1,7 @@
 import { createSupplier } from '../../../utils/supplier-util'
 import { getProdukt, getSupplier } from '../../../utils/api-util'
 import { opprettProdukt } from '../../../utils/produkt-util'
-import ImageSlider from './ImageSlider'
+import PhotoSlider from './PhotoSlider'
 import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
 import './produkt.scss'
@@ -28,16 +28,16 @@ export default async function ProduktPage({ params }: any) {
       </nav>
       <article className="produkt-info">
         <section className="bilde-og-beskrivelse">
-          <aside>{product.bilder && <ImageSlider bilder={product.bilder} />}</aside>
+          <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
           <div className="produkt-beskrivelse">
             <h1>{product.tittel}</h1>
-            <p>{product.modell?.navn && product?.modell?.navn}</p>
-            <p>{product.modell?.beskrivelse && product?.modell?.beskrivelse}</p>
-            <p>{product.modell?.tilleggsinfo && product?.modell?.tilleggsinfo}</p>
+            {product.modell?.navn && <p>{product.modell.navn}</p>}
+            {product.modell?.beskrivelse && <p>{product.modell.beskrivelse}</p>}
+            {product.modell?.tilleggsinfo && <p>{product.modell.tilleggsinfo}</p>}
             <div className="leverandør">
               <h2>Leverandør</h2>
               <p>{supplier.name}</p>
-              <p>{supplier.address && supplier.address}</p>
+              {supplier.address && <p>{supplier.address}</p>}
               {supplier.email && <p>{supplier.email}</p>}
               {supplier.homepageUrl && <a href={supplier.homepageUrl}>Hjemmeside</a>}
             </div>
