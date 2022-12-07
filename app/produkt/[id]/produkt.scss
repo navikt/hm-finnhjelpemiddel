@@ -4,6 +4,7 @@
   max-width: 1200px;
   margin: auto;
 }
+
 .produkt-info {
   width: 100%;
 
@@ -73,10 +74,39 @@
     }
   }
 
-  .produkt-detaljert-info {
-    padding: var(--a-spacing-16) var(--a-spacing-10);
-    .teknisk-data {
+  .product-accordion {
+    margin-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-10);
+    .info-accordion {
       max-width: 500px;
+    }
+  }
+
+  .similar-products {
+    display: flex;
+    border-top: 1px solid var(--a-gray-300);
+    margin-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-10);
+
+    .similar-products-slider {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .similar-products-container {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .similar-product {
+      background-color: var(--ac-panel-bg, var(--a-surface-default));
+      padding: var(--a-spacing-4);
+      border-radius: var(--a-border-radius-small);
+      border: 1px solid transparent;
+      margin: 15px;
+      width: 200px;
+      min-height: 200px;
+      border-color: var(--ac-panel-border, var(--a-border-default));
     }
   }
 }

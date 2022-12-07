@@ -12,7 +12,7 @@ const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
     </React.Fragment>
   ))
   return (
-    <Accordion>
+    <Accordion className="info-accordion">
       <Accordion.Item>
         <Accordion.Header>Spesifikasjoner</Accordion.Header>
         <Accordion.Content>
