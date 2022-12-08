@@ -34,16 +34,20 @@ export default async function ProduktPage({ params }: any) {
         <section className="bilde-og-beskrivelse">
           <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
           <div className="produkt-beskrivelse">
-            <h1>{product.tittel}</h1>
+            <h1 className="navds-heading navds-heading--large">{product.tittel}</h1>
             {product.description?.name && <p>{product.description.name}</p>}
             {product.description?.beskrivelse && <p>{product.description.beskrivelse}</p>}
             {product.description?.tilleggsinfo && <p>{product.description.tilleggsinfo}</p>}
             <div className="leverandør">
-              <h2>Leverandør</h2>
+              <h2 className="navds-heading navds-heading--medium">Leverandør</h2>
               <p>{supplier.name}</p>
               {supplier.address && <p>{supplier.address}</p>}
               {supplier.email && <p>{supplier.email}</p>}
-              {supplier.homepageUrl && <a href={supplier.homepageUrl}>Hjemmeside</a>}
+              {supplier.homepageUrl && (
+                <a href={supplier.homepageUrl} target="_blank">
+                  Hjemmeside(åpnes i ny side)
+                </a>
+              )}
             </div>
           </div>
         </section>

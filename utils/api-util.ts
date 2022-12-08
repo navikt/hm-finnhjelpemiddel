@@ -79,8 +79,8 @@ export async function getSupplier(id: string) {
 
 export async function getSeries(seriesId: string) {
   const query = {
-    term: {
-      'seriesId.keyword': seriesId,
+    bool: {
+      must: [{ term: { 'seriesId.keyword': seriesId } }, { exists: { field: 'data' } }],
     },
   }
 
@@ -91,6 +91,7 @@ export async function getSeries(seriesId: string) {
     },
     body: JSON.stringify({
       query,
+      size: 100,
     }),
   })
   return res.json()
