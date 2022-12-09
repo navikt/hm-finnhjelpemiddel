@@ -40,7 +40,7 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
     setActive(nextIndex)
   }
 
-  const tableHeaders = [{ id: 'key', label: 'Def' }].concat(
+  const tableHeaders = [{ id: 'key', label: 'Egenskap' }].concat(
     products.map((product) => ({ id: String(product.id), label: 'Produkt ' + product.id }))
   )
 

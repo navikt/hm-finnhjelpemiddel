@@ -12,6 +12,11 @@ type ImageSliderProps = {
 const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const numberOfImages = photos.length
   let [active, setActive] = useState(0)
+  let [src, setSrc] = useState(
+    numberOfImages == 0
+      ? '/assets/midlertidig-manglende-bilde.jpg'
+      : `https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active].uri}`
+  )
 
   const prevImage = () => {
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
@@ -23,13 +28,6 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
     setActive(nextIndex)
   }
 
-  const photoUrl = () => {
-    if (numberOfImages == 0) {
-      return 'https://picsum.photos/id/2/320/200'
-    } else {
-      return `https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active].uri}`
-    }
-  }
   // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
   return (
     <div className="photo-slider">
@@ -44,11 +42,12 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         </div>
         <div className="photo-container">
           <Image
-            src={photoUrl()}
+            src={src}
             alt={'Bilde nummer ' + (active + 1)}
             width={400}
             height={300}
             style={{ objectFit: 'contain' }}
+            onError={() => setSrc('/public/assets/idlertidig-manglende-bilde.jpg')}
           />
         </div>
         <div
