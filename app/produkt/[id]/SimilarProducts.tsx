@@ -9,11 +9,11 @@ const lagDict = (products: Product[]): TableRows => {
   let obj: TableRows = {}
 
   products.forEach((product) => {
-    product.tekniskData.forEach(({ key, value }) => {
+    product.tekniskData.forEach(({ key, value, unit }) => {
       if (key in obj) {
-        obj[key][product.id] = value
+        obj[key][product.id] = [value, unit]
       } else {
-        obj[key] = { [product.id]: value }
+        obj[key] = { [product.id]: [value, unit] }
       }
     })
   })

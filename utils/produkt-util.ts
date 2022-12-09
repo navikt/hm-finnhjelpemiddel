@@ -23,6 +23,7 @@ export interface Photo {
 export interface TekniskData {
   key: string
   value: string
+  unit: string
 }
 
 export const createProduct = (_source?: any): Produkt => {
@@ -59,7 +60,8 @@ const createTekniskInfo = (data: any): TekniskData[] => {
     .filter((data: any) => data.key && data.value)
     .map((data: any) => ({
       key: data.key,
-      value: data.unit ? data.value + ' ' + data.unit : data.value,
+      value: data.value,
+      unit: data.unit,
     }))
 }
 
