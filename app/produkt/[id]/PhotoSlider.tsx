@@ -47,7 +47,8 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             width={400}
             height={300}
             style={{ objectFit: 'contain' }}
-            onError={() => setSrc('/public/assets/idlertidig-manglende-bilde.jpg')}
+            onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
+            priority
           />
         </div>
         <div
