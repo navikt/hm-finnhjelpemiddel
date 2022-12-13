@@ -1,8 +1,8 @@
 export interface Produkt {
   id: number
   tittel: string
-  modell?: {
-    navn?: string
+  description?: {
+    name?: string
     beskrivelse?: string
     tilleggsinfo?: string
   }
@@ -13,6 +13,7 @@ export interface Produkt {
   tekniskData: TekniskData[]
   photos: Photo[]
   supplierId: number
+  seriesId: string
 }
 
 export interface Photo {
@@ -22,14 +23,15 @@ export interface Photo {
 export interface TekniskData {
   key: string
   value: string
+  unit: string
 }
 
-export const opprettProdukt = (_source?: any): Produkt => {
+export const createProduct = (_source?: any): Produkt => {
   return {
     id: _source.id,
     tittel: _source.title,
-    modell: {
-      navn: _source.description?.name,
+    description: {
+      name: _source.description?.name,
       tilleggsinfo: _source.description?.shortDescription,
       beskrivelse: _source.description?.text,
     },
@@ -37,13 +39,14 @@ export const opprettProdukt = (_source?: any): Produkt => {
     accessory: _source.accessory,
     sparepart: _source.sparepart,
     hmsNr: _source.hmsartNr,
-    tekniskData: opprettTekniskInfo(_source.data),
-    photos: createPhotoInfo(_source.media),
+    tekniskData: mapTekniskInfo(_source.data),
+    photos: mapPhotoInfo(_source.media),
     supplierId: _source.supplier?.id,
+    seriesId: _source.seriesId,
   }
 }
 
-const createPhotoInfo = (media: any): Photo[] => {
+const mapPhotoInfo = (media: any): Photo[] => {
   return media
     .filter((media: any) => media.type == 'IMAGE' && media.order && media.uri)
     .sort((a: any, b: any) => a.order - b.order)
@@ -52,18 +55,19 @@ const createPhotoInfo = (media: any): Photo[] => {
     }))
 }
 
-const opprettTekniskInfo = (data: any): TekniskData[] => {
+const mapTekniskInfo = (data: any): TekniskData[] => {
   return data
     .filter((data: any) => data.key && data.value)
     .map((data: any) => ({
       key: data.key,
-      value: data.unit ? data.value + ' ' + data.unit : data.value,
+      value: data.value,
+      unit: data.unit,
     }))
 }
 
-export const opprettProdukter = (data: any): Produkt[] => {
+export const mapProducts = (data: any): Produkt[] => {
   return data.hits.hits.map((hit: any) => {
-    const produkt = opprettProdukt(hit._source)
+    const produkt = createProduct(hit._source)
     return produkt
   })
 }

@@ -11,7 +11,9 @@ const Produkt = ({ produkt }: ProduktProps) => {
     <li>
       <LinkPanel className="product" href={`/produkt/${produkt.id}`} border>
         <LinkPanel.Title>{produkt.tittel}</LinkPanel.Title>
-        <LinkPanel.Description className="product__description">{produkt.modell?.beskrivelse}</LinkPanel.Description>
+        <LinkPanel.Description className="product__description">
+          {produkt.description?.beskrivelse}
+        </LinkPanel.Description>
       </LinkPanel>
     </li>
   )

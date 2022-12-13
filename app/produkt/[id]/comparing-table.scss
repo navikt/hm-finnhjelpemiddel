@@ -1,0 +1,25 @@
+@import '@navikt/ds-css';
+
+.comparing-table {
+  max-width: 860px;
+  overflow-x: scroll;
+  padding: var(--a-spacing-2) 0;
+
+  tr > th:first-child,
+  tr > td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: var(--a-bg-default);
+  }
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}

@@ -3,16 +3,12 @@
 .produkt-info > * {
   max-width: 1200px;
   margin: auto;
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
 }
+
 .produkt-info {
   width: 100%;
-
-  h1 {
-    font-size: var(--a-font-size-heading-2xlarge);
-    letter-spacing: -0.01em;
-    line-height: var(--a-font-line-height-heading-2xlarge);
-    margin: 0;
-  }
 
   p {
     margin-bottom: var(--a-spacing-4);
@@ -40,11 +36,11 @@
   }
 
   .bilde-og-beskrivelse::before {
-    left: 100%;
+    right: 100%;
   }
 
   .bilde-og-beskrivelse::after {
-    right: 100%;
+    left: 100%;
   }
 
   .bilde-og-beskrivelse,
@@ -60,11 +56,9 @@
 
     .leverandør {
       margin-top: var(--a-spacing-5);
-      h2 {
-        font-size: var(--a-font-size-heading-xlarge);
-        letter-spacing: -0.008em;
-        line-height: var(--a-font-line-height-heading-xlarge);
-        margin: 0;
+
+      .navds-heading {
+        margin-bottom: var(--a-spacing-2);
       }
       p {
         margin-top: 0.2rem;
@@ -73,10 +67,46 @@
     }
   }
 
-  .produkt-detaljert-info {
-    padding: var(--a-spacing-16) var(--a-spacing-10);
-    .teknisk-data {
-      max-width: 500px;
+  .product-accordion {
+    margin-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-10);
+    .info-accordion {
+      max-width: 600px;
+    }
+  }
+
+  .similar-products {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--a-gray-300);
+    margin-top: var(--a-spacing-10);
+    padding-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-20);
+
+    .navds-heading {
+      margin-bottom: var(--a-spacing-6);
+    }
+
+    &__slider {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: var(--a-spacing-10);
+    }
+
+    &__cards {
+      display: flex;
+      flex-direction: row;
+      gap: var(--a-spacing-5);
+    }
+
+    &__card {
+      border: 1.5px solid transparent;
+      border-radius: var(--a-border-radius-medium);
+      border-color: var(--ac-panel-border, var(--a-border-default));
+      padding: var(--a-spacing-3);
+      width: 200px;
+      min-height: 200px;
     }
   }
 }

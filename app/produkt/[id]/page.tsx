@@ -1,19 +1,24 @@
-import { createSupplier } from '../../../utils/supplier-util'
-import { getProdukt, getSupplier } from '../../../utils/api-util'
-import { opprettProdukt } from '../../../utils/produkt-util'
+import { mapSupplier } from '../../../utils/supplier-util'
+import { getProdukt, getSupplier, getSeries } from '../../../utils/api-util'
+import { Heading } from '@navikt/ds-react/esm/typography'
+import { createProduct, mapProducts } from '../../../utils/produkt-util'
 import PhotoSlider from './PhotoSlider'
 import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
 import './produkt.scss'
+import SimilarProducts from './SimilarProducts'
 
 export default async function ProduktPage({ params }: any) {
   const { id } = params
 
   const productData = await getProdukt(id)
-  const product = opprettProdukt(productData._source)
+  const product = createProduct(productData._source)
 
   const supplierData = await getSupplier(String(product.supplierId))
-  const supplier = createSupplier(supplierData._source)
+  const supplier = mapSupplier(supplierData._source)
+
+  const seriesData = await getSeries(String(product.seriesId))
+  const seriesProducts = mapProducts(seriesData)
 
   return (
     <>
@@ -30,22 +35,35 @@ export default async function ProduktPage({ params }: any) {
         <section className="bilde-og-beskrivelse">
           <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
           <div className="produkt-beskrivelse">
-            <h1>{product.tittel}</h1>
-            {product.modell?.navn && <p>{product.modell.navn}</p>}
-            {product.modell?.beskrivelse && <p>{product.modell.beskrivelse}</p>}
-            {product.modell?.tilleggsinfo && <p>{product.modell.tilleggsinfo}</p>}
+            <Heading level="1" size="large">
+              {product.tittel}
+            </Heading>
+            {product.description?.name && <p>{product.description.name}</p>}
+            {product.description?.beskrivelse && <p>{product.description.beskrivelse}</p>}
+            {product.description?.tilleggsinfo && <p>{product.description.tilleggsinfo}</p>}
             <div className="leverandør">
-              <h2>Leverandør</h2>
+              <Heading level="2" size="medium">
+                Leverandør
+              </Heading>
               <p>{supplier.name}</p>
               {supplier.address && <p>{supplier.address}</p>}
               {supplier.email && <p>{supplier.email}</p>}
-              {supplier.homepageUrl && <a href={supplier.homepageUrl}>Hjemmeside</a>}
+              {supplier.homepageUrl && (
+                <a href={supplier.homepageUrl} target="_blank">
+                  Hjemmeside(åpnes i ny side)
+                </a>
+              )}
             </div>
           </div>
         </section>
-        <section className="produkt-detaljert-info">
+        <section className="product-accordion">
           {product.tekniskData && <InfoAccordion tekniskData={product.tekniskData} />}
         </section>
+        {seriesProducts?.length > 0 && (
+          <section className="similar-products">
+            <SimilarProducts products={seriesProducts} />
+          </section>
+        )}
       </article>
     </>
   )

@@ -1,4 +1,4 @@
-import { opprettProdukter, Produkt } from './produkt-util'
+import { mapProducts, Produkt } from './produkt-util'
 
 export const PAGE_SIZE = 15
 
@@ -56,7 +56,7 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
   })
     .then((res) => res.json())
     .then((data) => {
-      const produkter: Produkt[] = opprettProdukter(data)
+      const produkter: Produkt[] = mapProducts(data)
       return { antallProdukter: data.hits.total.value, produkter }
     })
 }
@@ -74,5 +74,25 @@ export async function getSupplier(id: string) {
     method: 'GET',
   })
 
+  return res.json()
+}
+
+export async function getSeries(seriesId: string) {
+  const query = {
+    bool: {
+      must: [{ term: { 'seriesId.keyword': seriesId } }, { exists: { field: 'data' } }],
+    },
+  }
+
+  const res = await fetch('https://grunndata-search.dev-gcp.nais.io/product/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      size: 100,
+    }),
+  })
   return res.json()
 }
