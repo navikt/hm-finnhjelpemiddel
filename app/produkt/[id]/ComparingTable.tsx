@@ -19,12 +19,11 @@ const ComparingTable = ({ headers, rows }: TableData) => {
   const handleSort = (sortKey: string | undefined) => {
     if (sortKey) {
       setSort(
-        sort && sortKey === sort.orderBy && sort.direction === 'descending'
+        sortKey === sort?.orderBy && sort?.direction === 'descending'
           ? undefined
           : {
               orderBy: sortKey,
-              direction:
-                sort && sortKey === sort.orderBy && sort.direction === 'ascending' ? 'descending' : 'ascending',
+              direction: sortKey === sort?.orderBy && sort?.direction === 'ascending' ? 'descending' : 'ascending',
             }
       )
     } else setSort(undefined)

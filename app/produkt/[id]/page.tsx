@@ -1,6 +1,7 @@
-import { createSupplier } from '../../../utils/supplier-util'
+import { mapSupplier } from '../../../utils/supplier-util'
 import { getProdukt, getSupplier, getSeries } from '../../../utils/api-util'
-import { createProduct, createSeries } from '../../../utils/produkt-util'
+import { Heading } from '@navikt/ds-react/esm/typography'
+import { createProduct, mapProducts } from '../../../utils/produkt-util'
 import PhotoSlider from './PhotoSlider'
 import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
@@ -14,10 +15,10 @@ export default async function ProduktPage({ params }: any) {
   const product = createProduct(productData._source)
 
   const supplierData = await getSupplier(String(product.supplierId))
-  const supplier = createSupplier(supplierData._source)
+  const supplier = mapSupplier(supplierData._source)
 
   const seriesData = await getSeries(String(product.seriesId))
-  const seriesProducts = createSeries(seriesData)
+  const seriesProducts = mapProducts(seriesData)
 
   return (
     <>
@@ -34,12 +35,16 @@ export default async function ProduktPage({ params }: any) {
         <section className="bilde-og-beskrivelse">
           <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
           <div className="produkt-beskrivelse">
-            <h1 className="navds-heading navds-heading--large">{product.tittel}</h1>
+            <Heading level="1" size="large">
+              {product.tittel}
+            </Heading>
             {product.description?.name && <p>{product.description.name}</p>}
             {product.description?.beskrivelse && <p>{product.description.beskrivelse}</p>}
             {product.description?.tilleggsinfo && <p>{product.description.tilleggsinfo}</p>}
             <div className="leverandør">
-              <h2 className="navds-heading navds-heading--medium">Leverandør</h2>
+              <Heading level="2" size="medium">
+                Leverandør
+              </Heading>
               <p>{supplier.name}</p>
               {supplier.address && <p>{supplier.address}</p>}
               {supplier.email && <p>{supplier.email}</p>}

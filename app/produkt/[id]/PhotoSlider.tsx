@@ -13,7 +13,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const numberOfImages = photos.length
   let [active, setActive] = useState(0)
   let [src, setSrc] = useState(
-    numberOfImages == 0
+    numberOfImages === 0
       ? '/assets/midlertidig-manglende-bilde.jpg'
       : `https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active].uri}`
   )

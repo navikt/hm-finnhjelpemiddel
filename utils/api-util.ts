@@ -1,4 +1,4 @@
-import { createProducts, Produkt } from './produkt-util'
+import { mapProducts, Produkt } from './produkt-util'
 
 export const PAGE_SIZE = 15
 
@@ -56,7 +56,7 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
   })
     .then((res) => res.json())
     .then((data) => {
-      const produkter: Produkt[] = createProducts(data)
+      const produkter: Produkt[] = mapProducts(data)
       return { antallProdukter: data.hits.total.value, produkter }
     })
 }

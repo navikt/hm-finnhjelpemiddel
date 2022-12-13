@@ -7,7 +7,7 @@ export interface Supplier {
   homepageUrl?: string
 }
 
-export const createSupplier = (_source?: any): Supplier => {
+export const mapSupplier = (_source?: any): Supplier => {
   return {
     id: _source.id,
     name: _source.name,

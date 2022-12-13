@@ -39,14 +39,14 @@ export const createProduct = (_source?: any): Produkt => {
     accessory: _source.accessory,
     sparepart: _source.sparepart,
     hmsNr: _source.hmsartNr,
-    tekniskData: createTekniskInfo(_source.data),
-    photos: createPhotoInfo(_source.media),
+    tekniskData: mapTekniskInfo(_source.data),
+    photos: mapPhotoInfo(_source.media),
     supplierId: _source.supplier?.id,
     seriesId: _source.seriesId,
   }
 }
 
-const createPhotoInfo = (media: any): Photo[] => {
+const mapPhotoInfo = (media: any): Photo[] => {
   return media
     .filter((media: any) => media.type == 'IMAGE' && media.order && media.uri)
     .sort((a: any, b: any) => a.order - b.order)
@@ -55,7 +55,7 @@ const createPhotoInfo = (media: any): Photo[] => {
     }))
 }
 
-const createTekniskInfo = (data: any): TekniskData[] => {
+const mapTekniskInfo = (data: any): TekniskData[] => {
   return data
     .filter((data: any) => data.key && data.value)
     .map((data: any) => ({
@@ -65,14 +65,7 @@ const createTekniskInfo = (data: any): TekniskData[] => {
     }))
 }
 
-export const createProducts = (data: any): Produkt[] => {
-  return data.hits.hits.map((hit: any) => {
-    const produkt = createProduct(hit._source)
-    return produkt
-  })
-}
-
-export const createSeries = (data: any): Produkt[] => {
+export const mapProducts = (data: any): Produkt[] => {
   return data.hits.hits.map((hit: any) => {
     const produkt = createProduct(hit._source)
     return produkt

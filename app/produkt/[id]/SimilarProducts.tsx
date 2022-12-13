@@ -1,11 +1,12 @@
 'use client'
 import { Produkt as Product } from '../../../utils/produkt-util'
 import { Back, Next } from '@navikt/ds-icons'
+import { Heading } from '@navikt/ds-react/esm/typography'
 import { useState } from 'react'
 import './produkt.scss'
 import ComparingTable, { TableRows } from './ComparingTable'
 
-const lagDict = (products: Product[]): TableRows => {
+const mapDict = (products: Product[]): TableRows => {
   let obj: TableRows = {}
 
   products.forEach((product) => {
@@ -28,16 +29,16 @@ type SimilarProductsProps = {
 const SimilarProducts = ({ products }: SimilarProductsProps) => {
   const numberOfProducts = products.length
   const range = numberOfProducts >= 4 ? 4 : numberOfProducts
-  let [firstActive, setActive] = useState(0)
+  let [firstActive, setFirstActive] = useState(0)
 
   const prevProduct = () => {
     const prevIndex = firstActive !== 0 ? firstActive - 1 : 0
-    setActive(prevIndex)
+    setFirstActive(prevIndex)
   }
 
   const nextProduct = () => {
     const nextIndex = firstActive !== numberOfProducts - 1 ? firstActive + 1 : 0
-    setActive(nextIndex)
+    setFirstActive(nextIndex)
   }
 
   const tableHeaders = [{ id: 'key', label: 'Egenskap' }].concat(
@@ -47,7 +48,9 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
   // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
   return (
     <>
-      <h3 className="navds-heading navds-heading--medium">Produkter i produktserie</h3>
+      <Heading level="3" size="medium">
+        Produkter i produktserie
+      </Heading>
       <div className="similar-products__slider">
         {firstActive > 0 && (
           <div
@@ -61,12 +64,12 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
         )}
         <div className="similar-products__cards">
           {[...Array(range).keys()].map((index) => {
-            const asd = products[firstActive + index]
+            const product = products[firstActive + index]
             return (
               <div key={index} className="similar-products__card">
-                <p>{asd.tittel}</p>
-                <p>{asd.description?.name}</p>
-                <a href={`/produkt/${asd.id}`}>Les mer</a>
+                <p>{product.tittel}</p>
+                <p>{product.description?.name}</p>
+                <a href={`/produkt/${product.id}`}>Les mer</a>
               </div>
             )
           })}
@@ -82,11 +85,11 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
           </div>
         )}
       </div>
-      <h3 className="navds-heading navds-heading--medium">
+      <Heading level="3" size="medium">
         Sammenlikn teknisk data med andre produkter i produkserien
-      </h3>
+      </Heading>
       <div className="comparing-table ">
-        <ComparingTable rows={lagDict(products)} headers={tableHeaders} />
+        <ComparingTable rows={mapDict(products)} headers={tableHeaders} />
       </div>
     </>
   )
