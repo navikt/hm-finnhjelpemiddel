@@ -10,35 +10,38 @@ export default function Page() {
   return (
     <div className="veileder">
       <ul className="grid">
-        {SituationCategoryName.map((category: Category) => (
-          <React.Fragment key={category.id}>
-            <li
-              className="inngang"
-              key={category.id}
-              onClick={() => {
-                const newOpenCategory = openCategory === category.id ? null : category.id
-                setOpenCategory(newOpenCategory)
-              }}
-            >
-              <Image
-                src={category.iconUrl}
-                alt={'Bilde nummer '}
-                width={50}
-                height={50}
-                style={{ objectFit: 'contain' }}
-                priority
-              />
-              <Heading level="1" size="medium">
-                {category.name}
-              </Heading>
-            </li>
-            {openCategory === category.id && (
-              <li className="fullwidth">
-                <CategoryOpen category={category}></CategoryOpen>
+        {SituationCategoryName.map((category: Category) => {
+          const EntryClassName = category.id === openCategory ? 'entry entry__selected' : 'entry'
+          return (
+            <React.Fragment key={category.id}>
+              <li
+                className={EntryClassName}
+                key={category.id}
+                onClick={() => {
+                  const newOpenCategory = openCategory === category.id ? null : category.id
+                  setOpenCategory(newOpenCategory)
+                }}
+              >
+                <Image
+                  src={category.iconUrl}
+                  alt={'Bilde nummer '}
+                  width={50}
+                  height={50}
+                  style={{ objectFit: 'contain' }}
+                  priority
+                />
+                <Heading level="1" size="medium">
+                  {category.name}
+                </Heading>
               </li>
-            )}
-          </React.Fragment>
-        ))}
+              {openCategory === category.id && (
+                <li className="fullwidth">
+                  <CategoryOpen category={category}></CategoryOpen>
+                </li>
+              )}
+            </React.Fragment>
+          )
+        })}
       </ul>
     </div>
   )
@@ -96,6 +99,10 @@ const CategoryOpen = ({ category }: { category: Category }) => {
       </div>
     )
   } else {
-    return <div className="category">Det er ikke laget veiledning for denne kategorien enda</div>
+    return (
+      <div className="category">
+        Det er ikke laget veiledning for denne kategorien enda, kun for "Trenger tilrettelegging av bolig eller fritid"
+      </div>
+    )
   }
 }

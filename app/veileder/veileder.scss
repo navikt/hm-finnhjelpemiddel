@@ -2,6 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding-top: var(--a-spacing-10);
+  padding-bottom: var(--a-spacing-10);
   .grid {
     display: grid;
     gap: 2rem;
@@ -47,7 +48,7 @@
   }
 }
 
-.inngang {
+.entry {
   cursor: pointer;
   width: 250px;
   height: 280px;
@@ -60,5 +61,9 @@
   img {
     align-self: center;
     min-height: 80px;
+  }
+
+  &__selected {
+    border: 8px solid var(--a-surface-action-selected);
   }
 }
