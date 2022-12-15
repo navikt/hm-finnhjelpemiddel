@@ -3,7 +3,7 @@ import './veileder.scss'
 import { Category, SituationCategoryName } from '../../utils/situation-util'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { LinkPanel, Heading, BodyLong, BodyShort } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, LinkPanel, Heading } from '@navikt/ds-react'
 
 export default function Page() {
   const [openCategory, setOpenCategory] = useState<number | null>(null)
@@ -70,6 +70,7 @@ const CategoryOpen = ({ category }: { category: Category }) => {
             <BodyShort>heve- og senkemekanisme til kjøkkeninnredning og bad</BodyShort>
           </li>
         </ul>
+        <Alert variant="warning">Lenkene fungerer ikke enda, dette er et forslag om hvordan vi kan ha det</Alert>
         <LinkPanel href={''} border>
           <LinkPanel.Title>Bad</LinkPanel.Title>
           <LinkPanel.Description>Her finner du hjelpemidler til eller for bad</LinkPanel.Description>
