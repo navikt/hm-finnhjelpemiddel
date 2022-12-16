@@ -1,6 +1,6 @@
 'use client'
 import './veileder.scss'
-import { Category, SituationCategoryName } from '../../utils/situation-util'
+import { Category, SituationCategories } from '../../utils/situation-util'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { Alert, BodyLong, BodyShort, LinkPanel, Heading } from '@navikt/ds-react'
@@ -10,12 +10,12 @@ export default function Page() {
   return (
     <div className="veileder">
       <ul className="grid">
-        {SituationCategoryName.map((category: Category) => {
-          const EntryClassName = category.id === openCategory ? 'entry entry__selected' : 'entry'
+        {SituationCategories.map((category: Category) => {
+          const entryClassName = category.id === openCategory ? 'entry entry__selected' : 'entry'
           return (
             <React.Fragment key={category.id}>
               <li
-                className={EntryClassName}
+                className={entryClassName}
                 key={category.id}
                 onClick={() => {
                   const newOpenCategory = openCategory === category.id ? null : category.id

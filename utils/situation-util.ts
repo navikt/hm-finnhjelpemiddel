@@ -6,7 +6,7 @@ export type Category = {
   iconUrl: string
 }
 
-export const SituationCategoryName: Situations = [
+export const SituationCategories: Situations = [
   { id: 1, name: 'Trenger tilrettelegging på jobb eller i utdanning', iconUrl: '/assets/icons/office.svg' },
   {
     id: 2,
