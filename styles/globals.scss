@@ -21,6 +21,7 @@ main {
     height: 100%;
     max-width: 1200px;
     padding: var(--a-spacing-5);
+    text-align: center;
   }
 
   h1 {
@@ -29,8 +30,22 @@ main {
   }
 
   ul {
-    list-style: none;
+    list-style-type: none;
+    margin: 0;
     padding: 0;
+    display: inline-block;
+  }
+
+  li {
+    float: left;
+  }
+  li:not(:first-child) {
+    margin-left: 20px;
+  }
+
+  li p {
+    padding: 0;
+    margin: 0;
   }
 
   a {
@@ -112,6 +127,7 @@ main {
 .main-wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--a-spacing-5);
@@ -120,8 +136,23 @@ main {
   @include mixins.for-size(tablet-up) {
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
     padding: var(--a-spacing-5);
     margin-top: var(--a-spacing-8);
     margin-bottom: var(--a-spacing-12);
+  }
+}
+
+.WIP {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  font-size: var(--a-font-size-heading-medium);
+  background-color: var(--a-red-100);
+
+  span {
+    font-size: 3rem;
   }
 }

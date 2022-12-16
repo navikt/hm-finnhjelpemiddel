@@ -14,6 +14,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </head>
       <body>
+        <div className="WIP">
+          <p>
+            Under arbeid <span>&#128119;</span>
+          </p>
+        </div>
         <nav className="nav-topp">
           <div className="nav-topp__content">
             <ul>
@@ -21,6 +26,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                 <NextLink href="/">
                   <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
                   <b>Hjelpemiddeloversikten</b>
+                </NextLink>
+              </li>
+              <li className="nav-veileder">
+                <NextLink href="/veileder">
+                  <p>Veileder</p>
                 </NextLink>
               </li>
             </ul>
