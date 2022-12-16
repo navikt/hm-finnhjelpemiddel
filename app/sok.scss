@@ -7,37 +7,36 @@
     min-width: 288px;
     height: fit-content;
     padding: var(--a-spacing-8) var(--a-spacing-5);
-    border: 0.5px solid #ccc;
-    margin-top: var(--a-spacing-2);
-    
+    border: 0.5px solid var(--a-border-default);
+
     @include mixins.for-size(tablet-up) {
-      position: sticky;
-      top: var(--a-spacing-5);
       max-width: 366px;
       margin-right: var(--a-spacing-12);
     }
-    
-    h2 {
-      margin-bottom: var(--a-spacing-5);
-    }
   }
-  
+
+  &__input {
+    margin-bottom: var(--a-spacing-5);
+  }
 
   &__iso-category-select {
-    margin-top: var(--a-spacing-5);
+    margin-bottom: var(--a-spacing-5);
   }
 
-  &__reset-button {
-    margin-top: var(--a-spacing-5);
+  &__filters {
+    > h2 {
+      margin-bottom: var(--a-spacing-1);
+    }
+    margin-bottom: var(--a-spacing-5);
   }
 }
 
 .results {
   &__wrapper {
     .results__loader {
-        margin-top: var(--a-spacing-6);
-        align-self: center;
-        justify-self: center;
+      margin-top: var(--a-spacing-6);
+      align-self: center;
+      justify-self: center;
     }
 
     display: flex;

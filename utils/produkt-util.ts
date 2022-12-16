@@ -66,8 +66,5 @@ const mapTekniskInfo = (data: any): TekniskData[] => {
 }
 
 export const mapProducts = (data: any): Produkt[] => {
-  return data.hits.hits.map((hit: any) => {
-    const produkt = createProduct(hit._source)
-    return produkt
-  })
+  return data.hits.hits.map((hit: any) => createProduct(hit._source))
 }
