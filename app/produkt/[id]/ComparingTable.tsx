@@ -25,7 +25,10 @@ const ComparingTable = ({ headers, rows }: TableData) => {
           ? undefined
           : {
               orderBy: sortKey,
-              direction: sortKey === sort?.orderBy && sort?.direction === 'ascending' ? 'descending' : 'ascending',
+              direction:
+                sortKey === sort?.orderBy && sort?.direction === 'ascending'
+                  ? 'descending'
+                  : 'ascending',
             }
       )
     } else setSort(undefined)
@@ -86,7 +89,8 @@ const ComparingTable = ({ headers, rows }: TableData) => {
               <Table.Row key={i + key}>
                 <Table.HeaderCell scope="row">{key}</Table.HeaderCell>
                 {dataHeaders.map((header, index) => {
-                  const valueAndUnit = header.id in values ? values[header.id][0] + values[header.id][1] : '-'
+                  const valueAndUnit =
+                    header.id in values ? values[header.id][0] + values[header.id][1] : '-'
                   return (
                     <Table.DataCell
                       key={key + header.id}

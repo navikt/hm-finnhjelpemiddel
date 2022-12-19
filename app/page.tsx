@@ -50,7 +50,9 @@ export default function Page() {
             <Heading level="2" size="medium">
               Søkeresultater
             </Heading>
-            <BodyShort>{`${produkter.length} av ${data?.at(-1)?.antallProdukter} produkter vises`}</BodyShort>
+            <BodyShort>{`${produkter.length} av ${
+              data?.at(-1)?.antallProdukter
+            } produkter vises`}</BodyShort>
           </div>
           <Select label="Sortering" hideLabel={false} size="small" className="results__sort-select">
             <option value="">Alfabetisk</option>

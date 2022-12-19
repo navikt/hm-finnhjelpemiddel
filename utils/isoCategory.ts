@@ -40,7 +40,8 @@ export const isoKategorier = {
   '0409': 'Hjelpemidler for lysbehandling',
   '040903': 'Lysterapilamper med UVA-lys (ultrafiolett A)',
   '04090301': 'Lamper med UVA-lys',
-  '040906': 'Lysterapilamper med SUP (selektiv ultrafiolett fototerapi) og UVB-lys (ultrafiolett B)',
+  '040906':
+    'Lysterapilamper med SUP (selektiv ultrafiolett fototerapi) og UVB-lys (ultrafiolett B)',
   '04090601': 'Lamper med SUP(ultrafiolettfototerapi) og UVB-lys',
   '040909': 'Vernebriller til lysbehandling',
   '04090901': 'Beskyttelsesbriller ved lysbehandling',
@@ -50,7 +51,8 @@ export const isoKategorier = {
   '041506': 'Dialyseutstyr for CAPD (Continous Ambulant Peritoneal Dialysis)',
   '041512': 'Instrumentsett til dialysebehandling',
   '0419': 'Hjelpemidler for administrering av medisiner',
-  '041904': 'Hjelpemidler for oppmåling, dosering eller endring av medisin for å sikre riktig og hensiktsmessig bruk.',
+  '041904':
+    'Hjelpemidler for oppmåling, dosering eller endring av medisin for å sikre riktig og hensiktsmessig bruk.',
   '04190401': 'Dosetter',
   '04190402': 'Medisinmålere',
   '041906': 'Injeksjonspistoler',
@@ -219,7 +221,8 @@ export const isoKategorier = {
   '052706': 'Hjelpemidler for å trene på sosial atferd',
   '052709': 'Hjelpemidler for å trene på personlig sikkerhet',
   '052712': 'Hjelpemidler for reisetrening',
-  '0530': 'Hjelpemidler for å trene på styring av input-enheter og håndtering av produkter og varer',
+  '0530':
+    'Hjelpemidler for å trene på styring av input-enheter og håndtering av produkter og varer',
   '053003': 'Hjelpemidler for å trene på styring av datamus',
   '053006': 'Hjelpemidler for å trene på betjening av styrespak',
   '053009': 'Hjelpemidler for å trene på styring av brytere',
@@ -440,7 +443,8 @@ export const isoKategorier = {
   '09121501': 'Løse toalettforhøyere',
   '091218': 'Fastmonterte toalettforhøyere',
   '09121801': 'Faste toalettforhøyere',
-  '091221': 'Toalettseter med innebygd løftemekanisme som assisterer brukeren i å sette seg ned og reise seg opp',
+  '091221':
+    'Toalettseter med innebygd løftemekanisme som assisterer brukeren i å sette seg ned og reise seg opp',
   '09122101': 'Toalettløftere',
   '091224': 'Toalettmonterte armlener og ryggstøtter',
   '09122401': 'Toalettmonterte armlener og støttehåndtak',
@@ -644,7 +648,8 @@ export const isoKategorier = {
   '120705': 'Endestykker og tupper for ganghjelpemidler',
   '120712': 'Produkter for tilstrekkelig grep om ganghjelpemidler',
   '120715': 'Tilbehør til ganghjelpemidler som skal gi støtte til bestemte kroppsdeler',
-  '120718': 'Polstringer, puter og annet tilbehør for ganghjelpemidler som skal hindre merker eller skader på huden',
+  '120718':
+    'Polstringer, puter og annet tilbehør for ganghjelpemidler som skal hindre merker eller skader på huden',
   '120721': 'Seter til ganghjelpemidler',
   '120724': 'Tilbehør festet til ganghjelpemidler for å holde eller bære gjenstander',
   '120727': 'Produkter for å holde ganghjelpemidler på plass når de ikke er i bruk',
@@ -827,7 +832,8 @@ export const isoKategorier = {
   '12312401': 'Løfteseter og løftemadrasser',
   '123189': 'Løfteputer og løftestoler',
   '1236': 'Personløftere',
-  '123603': 'Mobile personløftere med seler og/eller seil til forflytning av en person i sittende stilling',
+  '123603':
+    'Mobile personløftere med seler og/eller seil til forflytning av en person i sittende stilling',
   '12360301': 'Mobile personløftere med løftefunksjon',
   '123604': 'Mobile personløftere for stående forflytning',
   '12360401': 'Mobile personløftere med ståfunksjon',
@@ -1027,7 +1033,8 @@ export const isoKategorier = {
   '181015': 'Benstøtter og fotstøtter',
   '18101501': 'Fotskamler, fothvilere og benstøtter',
   '181018': 'Kroppsstøtter og bekkenstøtter',
-  '181021': 'Puter eller putesystemer plassert i et sete som hjelper en person med å reise seg eller sette seg',
+  '181021':
+    'Puter eller putesystemer plassert i et sete som hjelper en person med å reise seg eller sette seg',
   '18102102': 'Abduksjonsklosser som ikke er tilbehør til spesielle produkter',
   '181024': 'Putebord og bord som kan festes til stoler',
   '18102401': 'Bord til rullestoler',
@@ -1559,7 +1566,8 @@ export const isoKategorier = {
   '2818': 'Innretninger for prøving og overvåking på arbeidsplasser',
   '281803': 'Måleinstrumenter og -utstyr for arbeidsplasser',
   '281806': 'Kvalitetssikringsinnretninger for arbeidsplasser',
-  '2821': 'Hjelpemidler for kontoradministrasjon og lagring og styring av informasjon på arbeidsplasser',
+  '2821':
+    'Hjelpemidler for kontoradministrasjon og lagring og styring av informasjon på arbeidsplasser',
   '282103': 'Hjelpemidler for organisering, sortering og arkivering av papirdokumenter',
   '282106': 'Hjelpemidler for å behandle post',
   '282109': 'Maskiner og utstyr til bruk i kontor',

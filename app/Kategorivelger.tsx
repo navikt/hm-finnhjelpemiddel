@@ -31,7 +31,10 @@ const Kategorivelger = ({ selectedIsoCode, setSelectedIsoCode, register }: Kateg
         const nextCategories = calculateNextAvailableIsoCategory(selectedIsoCode, level)
 
         const updateIsoCode = (iso: string, index: number) => {
-          let isocode = iso !== '' ? iso.slice(0, (index + 1) * 2) : selectedIsoCode.slice(0, (index + 1) * 2 - 2)
+          let isocode =
+            iso !== ''
+              ? iso.slice(0, (index + 1) * 2)
+              : selectedIsoCode.slice(0, (index + 1) * 2 - 2)
           setSelectedIsoCode(isocode)
         }
 
