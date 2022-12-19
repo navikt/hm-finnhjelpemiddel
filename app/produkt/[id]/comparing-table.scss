@@ -3,13 +3,44 @@
 .comparing-table {
   max-width: 860px;
   overflow-x: scroll;
-  padding: var(--a-spacing-2) 0;
+  margin: var(--a-spacing-2) 0;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
 
   tr > th:first-child,
   tr > td:first-child {
     position: sticky;
     left: 0;
+  }
+
+  tr > th:nth-child(2),
+  tr > td:nth-child(2) {
+    position: sticky;
+    left: 100px;
+  }
+
+  tbody th {
+    background-color: var(--a-bg-subtle);
+    border-right: 1px solid var(--a-bg-subtle);
+  }
+
+  thead th:first-child,
+  thead th:nth-child(2) {
     background-color: var(--a-bg-default);
+  }
+
+  thead th:nth-child(2) {
+    border-right: 1px solid var(--a-gray-400);
+  }
+
+  tr > td:nth-child(2) {
+    position: sticky;
+    left: 100px;
+    border-right: 1px solid var(--a-gray-400);
+    background-color: var(--a-bg-subtle);
   }
 }
 
