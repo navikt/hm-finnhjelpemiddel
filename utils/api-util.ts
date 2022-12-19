@@ -1,8 +1,33 @@
+import { FilterCategories } from '../app/FilterView'
 import { mapProducts, Produkt } from './produkt-util'
+import {
+  filterBredde,
+  filterLengde,
+  filterMaksBrukervekt,
+  filterMaksSetebredde,
+  filterMaksSetedybde,
+  filterMaksSetehoyde,
+  filterMinBrukervekt,
+  filterMinSetebredde,
+  filterMinSetedybde,
+  filterMinSetehoyde,
+  filterTotalvekt,
+} from './filter-util'
 
 export const PAGE_SIZE = 15
 
-export type SearchData = { searchTerm: string; isoCode: string }
+export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
+export type Bucket = { key: number | string; doc_count: number }
+
+export type FilterData = {
+  [key in FilterCategories]: {
+    buckets?: Array<Bucket>
+    values?: { sum_other_doc_count?: number; buckets?: Array<Bucket> }
+    sum_other_doc_count?: number
+  }
+}
+
+export type SearchData = { searchTerm: string; isoCode: string; filters: SelectedFilters }
 
 type FetchProps = {
   url: string
@@ -13,25 +38,54 @@ type FetchProps = {
 export type FetchResponse = {
   antallProdukter: number
   produkter: Produkt[]
+  filters: FilterData
 }
 
 export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
   const from = pageIndex * PAGE_SIZE
-  const { searchTerm, isoCode } = searchData
+  const { searchTerm, isoCode, filters } = searchData
+  const {
+    lengdeCM,
+    breddeCM,
+    totalVektKG,
+    setebreddeMinCM,
+    setebreddeMaksCM,
+    setedybdeMinCM,
+    setedybdeMaksCM,
+    setehoydeMinCM,
+    setehoydeMaksCM,
+    brukervektMinKG,
+    brukervektMaksKG,
+  } = filters
 
   const query = {
     bool: {
-      must: [
-        ...(searchTerm
-          ? [
-              {
-                simple_query_string: {
-                  query: `\"${searchTerm}*\" | (${searchTerm.split(' ').join(' + ')})`,
-                  fields: ['title^3', 'description.text^2', '*'],
-                },
+      must: {
+        bool: {
+          should: [
+            {
+              multi_match: {
+                query: searchTerm,
+                type: 'cross_fields',
+                fields: ['title^3', 'description.text^2', '*'],
+                operator: 'and',
+                tie_breaker: 0.3,
+                analyzer: 'norwegian',
+                zero_terms_query: 'all',
               },
-            ]
-          : []),
+            },
+          ],
+        },
+      },
+      should: [
+        {
+          match_phrase: {
+            title: {
+              query: searchTerm,
+              slop: 2,
+            },
+          },
+        },
       ],
       ...(isoCode && {
         filter: {
@@ -40,6 +94,24 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
           },
         },
       }),
+    },
+  }
+
+  const post_filter = {
+    bool: {
+      filter: [
+        filterLengde(lengdeCM),
+        filterBredde(breddeCM),
+        filterTotalvekt(totalVektKG),
+        filterMinSetebredde(setebreddeMinCM),
+        filterMaksSetebredde(setebreddeMaksCM),
+        filterMinSetedybde(setedybdeMinCM),
+        filterMaksSetedybde(setedybdeMaksCM),
+        filterMinSetehoyde(setehoydeMinCM),
+        filterMaksSetehoyde(setehoydeMaksCM),
+        filterMinBrukervekt(brukervektMinKG),
+        filterMaksBrukervekt(brukervektMaksKG),
+      ],
     },
   }
 
@@ -52,12 +124,246 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
       from,
       size: PAGE_SIZE,
       query,
+      post_filter,
+      aggs: {
+        lengdeCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.lengdeCM' } },
+          },
+        },
+        breddeCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.breddeCM' } },
+          },
+        },
+        totalVektKG: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.totalVektKG' } },
+          },
+        },
+        setebreddeMinCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.setebreddeMinCM' } },
+          },
+        },
+        setebreddeMaksCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.setebreddeMaksCM' } },
+          },
+        },
+        setedybdeMinCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.setedybdeMinCM' } },
+          },
+        },
+        setedybdeMaksCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.setedybdeMaksCM' } },
+          },
+        },
+        setehoydeMinCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.setehoydeMinCM' } },
+          },
+        },
+        setehoydeMaksCM: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.setehoydeMaksCM' } },
+          },
+        },
+        brukervektMinKG: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMaksBrukervekt(brukervektMaksKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.brukervektMinKG' } },
+          },
+        },
+        brukervektMaksKG: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.brukervektMaksKG' } },
+          },
+        },
+      },
     }),
   })
     .then((res) => res.json())
     .then((data) => {
       const produkter: Produkt[] = mapProducts(data)
-      return { antallProdukter: data.hits.total.value, produkter }
+      return { antallProdukter: data.hits.total.value, produkter, filters: data.aggregations }
     })
 }
 
