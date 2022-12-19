@@ -1,30 +1,19 @@
-import { useCallback } from 'react'
 import { Button, Search } from '@navikt/ds-react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { AtLeastOne } from '../utils/type-util'
 import { SearchData } from '../utils/api-util'
 
 import Kategorivelger from './Kategorivelger'
 import FilterView from './FilterView'
+import { useSearchDataStore } from '../utils/state-util'
 
-type SidebarProps = {
-  searchData: SearchData
-  setSearchData: (searchData: (prevSearchData: SearchData) => any) => void
-}
-
-const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
+const Sidebar = () => {
+  const { setSearchData, resetSearchData } = useSearchDataStore()
   const formMethods = useForm<SearchData>()
-  const { control, handleSubmit, register, reset } = formMethods
+  const { control, handleSubmit, reset: resetForm } = formMethods
 
-  const setSearch = useCallback(
-    (searchData: AtLeastOne<SearchData>) =>
-      setSearchData((prevSearchFilters) => ({ ...prevSearchFilters, ...searchData })),
-    [setSearchData]
-  )
-
-  const setSelectedIsoCode = (isoCode: string) => setSearch({ isoCode })
-
-  const onSubmit: SubmitHandler<SearchData> = (data) => setSearch({ ...searchData, ...data })
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    setSearchData({ ...data })
+  }
 
   return (
     <FormProvider {...formMethods}>
@@ -35,7 +24,7 @@ const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
               <Search
                 label="Søk etter produkt"
                 hideLabel={false}
-                onClear={() => setSearch({ searchTerm: '' })}
+                onClear={() => setSearchData({ searchTerm: '' })}
                 {...field}
               />
             )}
@@ -44,18 +33,14 @@ const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
             defaultValue=""
           />
         </div>
-        <Kategorivelger
-          selectedIsoCode={searchData.isoCode}
-          setSelectedIsoCode={setSelectedIsoCode}
-          register={register}
-        />
+        <Kategorivelger />
         <FilterView />
         <Button
           type="button"
           className="search__reset-button"
           onClick={() => {
-            setSelectedIsoCode('')
-            reset()
+            resetSearchData()
+            resetForm()
           }}
         >
           Nullstill søket

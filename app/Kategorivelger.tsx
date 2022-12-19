@@ -1,26 +1,24 @@
 import { Select } from '@navikt/ds-react'
-import { UseFormRegister } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { calculateNextAvailableIsoCategory } from '../utils/isoCategory'
 import { SearchData } from '../utils/api-util'
+import { useSearchDataStore } from '../utils/state-util'
 
-type KategorivelgerProps = {
-  selectedIsoCode: string
-  setSelectedIsoCode: (isoCode: string) => void
-  register: UseFormRegister<SearchData>
-}
+const Kategorivelger = () => {
+  const { register } = useFormContext<SearchData>()
+  const { searchData, setSearchData } = useSearchDataStore()
 
-const Kategorivelger = ({ selectedIsoCode, setSelectedIsoCode, register }: KategorivelgerProps) => {
-  const levels = selectedIsoCode.length / 2
+  const levels = searchData.isoCode.length / 2
 
   return (
     <>
       <Select
         label={`Kategori`}
         className="search__iso-category-select"
-        {...register('isoCode', { onChange: (e) => setSelectedIsoCode(e.target.value) })}
+        {...register('isoCode', { onChange: (e) => setSearchData({ isoCode: e.target.value }) })}
       >
         <option value="">Velg kategori</option>
-        {calculateNextAvailableIsoCategory(selectedIsoCode, 0).map(([isoCode, title]) => (
+        {calculateNextAvailableIsoCategory(searchData.isoCode, 0).map(([isoCode, title]) => (
           <option key={isoCode} value={isoCode}>
             {title}
           </option>
@@ -28,11 +26,11 @@ const Kategorivelger = ({ selectedIsoCode, setSelectedIsoCode, register }: Kateg
       </Select>
       {[...Array(levels).keys()].map((_level) => {
         const level = _level + 1
-        const nextCategories = calculateNextAvailableIsoCategory(selectedIsoCode, level)
+        const nextCategories = calculateNextAvailableIsoCategory(searchData.isoCode, level)
 
         const updateIsoCode = (iso: string, index: number) => {
-          let isocode = iso !== '' ? iso.slice(0, (index + 1) * 2) : selectedIsoCode.slice(0, (index + 1) * 2 - 2)
-          setSelectedIsoCode(isocode)
+          let isoCode = iso !== '' ? iso.slice(0, (index + 1) * 2) : searchData.isoCode.slice(0, (index + 1) * 2 - 2)
+          setSearchData({ isoCode })
         }
 
         return (
