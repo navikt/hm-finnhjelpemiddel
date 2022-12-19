@@ -4,6 +4,7 @@ import useSWRInfinite from 'swr/infinite'
 import { BodyShort, Select, Heading, Loader, Button, Alert } from '@navikt/ds-react'
 import { fetchProdukter, FetchResponse, PAGE_SIZE, SearchData } from '../utils/api-util'
 import { Produkt as ProduktType } from '../utils/produkt-util'
+import { initialFiltersState } from '../utils/filter-util'
 
 import Produkt from './Produkt'
 import Sidebar from './Sidebar'
@@ -11,10 +12,17 @@ import Sidebar from './Sidebar'
 import './sok.scss'
 
 export default function Page() {
-  const [searchData, setSearchData] = useState<SearchData>({ searchTerm: '', isoCode: '' })
+  const [searchData, setSearchData] = useState<SearchData>({
+    searchTerm: '',
+    isoCode: '',
+    filters: initialFiltersState,
+  })
   const { data, size, setSize } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
-    fetchProdukter
+    fetchProdukter,
+    {
+      keepPreviousData: true,
+    }
   )
 
   const produkter = data?.flatMap((d) => d.produkter)
@@ -42,7 +50,7 @@ export default function Page() {
             <Heading level="2" size="medium">
               Søkeresultater
             </Heading>
-            <BodyShort>{`${produkter.length} av ${data?.at(0)?.antallProdukter} produkter vises`}</BodyShort>
+            <BodyShort>{`${produkter.length} av ${data?.at(-1)?.antallProdukter} produkter vises`}</BodyShort>
           </div>
           <Select label="Sortering" hideLabel={false} size="small" className="results__sort-select">
             <option value="">Alfabetisk</option>

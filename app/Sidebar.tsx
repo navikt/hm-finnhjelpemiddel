@@ -1,9 +1,11 @@
-import { Button, Heading, Search } from '@navikt/ds-react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useCallback } from 'react'
+import { Button, Search } from '@navikt/ds-react'
+import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { AtLeastOne } from '../utils/type-util'
 import { SearchData } from '../utils/api-util'
 
 import Kategorivelger from './Kategorivelger'
+import FilterView from './FilterView'
 
 type SidebarProps = {
   searchData: SearchData
@@ -11,40 +13,55 @@ type SidebarProps = {
 }
 
 const Sidebar = ({ searchData, setSearchData }: SidebarProps) => {
-  const { control, handleSubmit, register, reset } = useForm<SearchData>()
+  const formMethods = useForm<SearchData>()
+  const { control, handleSubmit, register, reset } = formMethods
 
-  const setSearch = (searchData: AtLeastOne<SearchData>) =>
-    setSearchData((prevSearchFilters) => ({ ...prevSearchFilters, ...searchData }))
+  const setSearch = useCallback(
+    (searchData: AtLeastOne<SearchData>) =>
+      setSearchData((prevSearchFilters) => ({ ...prevSearchFilters, ...searchData })),
+    [setSearchData]
+  )
 
   const setSelectedIsoCode = (isoCode: string) => setSearch({ isoCode })
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => setSearch({ searchTerm: data.searchTerm })
+  const onSubmit: SubmitHandler<SearchData> = (data) => setSearch({ ...searchData, ...data })
 
   return (
-    <form className="search__side-bar" role="search" onClick={handleSubmit(onSubmit)}>
-      <Controller
-        render={({ field }) => (
-          <Search label="Søk etter produkt" hideLabel={false} className="search__input" {...field} />
-        )}
-        name="searchTerm"
-        control={control}
-        defaultValue=""
-      />
-      <Kategorivelger
-        selectedIsoCode={searchData.isoCode}
-        setSelectedIsoCode={setSelectedIsoCode}
-        register={register}
-      />
-      <Button
-        className="search__reset-button"
-        onClick={() => {
-          setSelectedIsoCode('')
-          reset()
-        }}
-      >
-        Nullstill søket
-      </Button>
-    </form>
+    <FormProvider {...formMethods}>
+      <form className="search__side-bar" role="search" onSubmit={handleSubmit(onSubmit)}>
+        <div className="search__input">
+          <Controller
+            render={({ field }) => (
+              <Search
+                label="Søk etter produkt"
+                hideLabel={false}
+                onClear={() => setSearch({ searchTerm: '' })}
+                {...field}
+              />
+            )}
+            name="searchTerm"
+            control={control}
+            defaultValue=""
+          />
+        </div>
+        <Kategorivelger
+          selectedIsoCode={searchData.isoCode}
+          setSelectedIsoCode={setSelectedIsoCode}
+          register={register}
+        />
+        <FilterView />
+        <Button
+          type="button"
+          className="search__reset-button"
+          onClick={() => {
+            setSelectedIsoCode('')
+            reset()
+          }}
+        >
+          Nullstill søket
+        </Button>
+      </form>
+    </FormProvider>
   )
 }
 
