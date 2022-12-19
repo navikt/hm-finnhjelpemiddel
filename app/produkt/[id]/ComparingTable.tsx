@@ -1,6 +1,6 @@
 'use client'
 import { Table, SortState } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import './comparing-table.scss'
 
 type TableData = {
@@ -13,8 +13,10 @@ export type TableRows = {
 }
 
 const ComparingTable = ({ headers, rows }: TableData) => {
+  const ref = useRef(null)
   const dataHeaders = [...headers].splice(1)
   const [sort, setSort] = useState<SortState | undefined>(undefined)
+  const [keyColumnWidth, setKeyColumnWidth] = useState(0)
 
   const handleSort = (sortKey: string | undefined) => {
     if (sortKey) {
@@ -48,23 +50,31 @@ const ComparingTable = ({ headers, rows }: TableData) => {
     return 1
   })
 
+  useLayoutEffect(() => {
+    setKeyColumnWidth(ref.current ? ref.current['offsetWidth'] : 0)
+  }, [])
+
   return (
     <div className="comparing-table">
       <Table sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>
         <Table.Header>
           <Table.Row>
             {headers.map((header, index) => {
-              if (index == 0) {
+              if (index === 0) {
                 return (
-                  <Table.ColumnHeader scope="col" key={index} sortKey="name" sortable>
+                  <Table.ColumnHeader scope="col" key={header.id} sortKey="name" ref={ref} sortable>
                     {header.label}
                   </Table.ColumnHeader>
                 )
               } else {
                 return (
-                  <Table.HeaderCell scope="col" key={index}>
+                  <Table.ColumnHeader
+                    scope="col"
+                    key={header.id}
+                    style={{ left: index === 1 ? keyColumnWidth : 'auto' }}
+                  >
                     {header.label}
-                  </Table.HeaderCell>
+                  </Table.ColumnHeader>
                 )
               }
             })}
@@ -76,12 +86,15 @@ const ComparingTable = ({ headers, rows }: TableData) => {
               <Table.Row key={i + key}>
                 <Table.HeaderCell scope="row">{key}</Table.HeaderCell>
                 {dataHeaders.map((header, index) => {
-                  if (header.id in values) {
-                    const valueAndUnit = values[header.id][0] + values[header.id][1]
-                    return <Table.DataCell key={index}>{valueAndUnit}</Table.DataCell>
-                  } else {
-                    return <Table.DataCell key={index}>-</Table.DataCell>
-                  }
+                  const valueAndUnit = header.id in values ? values[header.id][0] + values[header.id][1] : '-'
+                  return (
+                    <Table.DataCell
+                      key={key + header.id}
+                      style={{ left: index === 0 && keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}
+                    >
+                      {valueAndUnit}
+                    </Table.DataCell>
+                  )
                 })}
               </Table.Row>
             )

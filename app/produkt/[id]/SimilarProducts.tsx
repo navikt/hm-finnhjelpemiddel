@@ -23,11 +23,12 @@ const mapDict = (products: Product[]): TableRows => {
 }
 
 type SimilarProductsProps = {
-  products: Product[]
+  mainProduct: Product
+  seriesProducts: Product[]
 }
 
-const SimilarProducts = ({ products }: SimilarProductsProps) => {
-  const numberOfProducts = products.length
+const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) => {
+  const numberOfProducts = seriesProducts.length
   const range = numberOfProducts >= 4 ? 4 : numberOfProducts
   let [firstActive, setFirstActive] = useState(0)
 
@@ -41,8 +42,10 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
     setFirstActive(nextIndex)
   }
 
+  const allProducts = Array(mainProduct).concat(seriesProducts)
+
   const tableHeaders = [{ id: 'key', label: 'Egenskap' }].concat(
-    products.map((product) => ({ id: String(product.id), label: 'Produkt ' + product.id }))
+    allProducts.map((product) => ({ id: String(product.id), label: 'Produkt ' + product.id }))
   )
 
   // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
@@ -64,7 +67,7 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
         )}
         <div className="similar-products__cards">
           {[...Array(range).keys()].map((index) => {
-            const product = products[firstActive + index]
+            const product = seriesProducts[firstActive + index]
             return (
               <div key={index} className="similar-products__card">
                 <p>{product.tittel}</p>
@@ -89,7 +92,7 @@ const SimilarProducts = ({ products }: SimilarProductsProps) => {
         Sammenlikn teknisk data med andre produkter i produkserien
       </Heading>
       <div className="comparing-table ">
-        <ComparingTable rows={mapDict(products)} headers={tableHeaders} />
+        <ComparingTable rows={mapDict(allProducts)} headers={tableHeaders} />
       </div>
     </>
   )
