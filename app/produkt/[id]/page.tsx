@@ -61,7 +61,7 @@ export default async function ProduktPage({ params }: any) {
         </section>
         {seriesProducts?.length > 0 && (
           <section className="similar-products">
-            <SimilarProducts products={seriesProducts} />
+            <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
           </section>
         )}
       </article>
