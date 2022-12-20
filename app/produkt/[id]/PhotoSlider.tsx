@@ -1,6 +1,6 @@
 'use client'
 import { Photo } from '../../../utils/produkt-util'
-import { ChevronLeftCircle, ChevronRightCircle } from '@navikt/ds-icons'
+import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
 import { useState } from 'react'
 import Image from 'next/image'
 import './slider.scss'
@@ -11,12 +11,9 @@ type ImageSliderProps = {
 
 const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const numberOfImages = photos.length
+  const hasImages = photos.length !== 0
   let [active, setActive] = useState(0)
-  let [src, setSrc] = useState(
-    numberOfImages === 0
-      ? '/assets/midlertidig-manglende-bilde.jpg'
-      : `https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active].uri}`
-  )
+  let [src, setSrc] = useState(`https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active]?.uri}`)
 
   const prevImage = () => {
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
@@ -32,33 +29,40 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   return (
     <div className="photo-slider">
       <div className="photo-and-arrow-container">
-        <div
-          className="arrow"
-          onClick={() => {
-            prevImage()
-          }}
-        >
-          <ChevronLeftCircle height={40} width={40} />
-        </div>
-        <div className="photo-container">
-          <Image
-            src={src}
-            alt={'Bilde nummer ' + (active + 1)}
-            width={400}
-            height={300}
-            style={{ objectFit: 'contain' }}
-            onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
-            priority
-          />
-        </div>
-        <div
-          className="arrow"
-          onClick={() => {
-            nextImage()
-          }}
-        >
-          <ChevronRightCircle height={40} width={40} />
-        </div>
+        {!hasImages && (
+          <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+        )}
+        {hasImages && (
+          <>
+            <div
+              className="arrow"
+              onClick={() => {
+                prevImage()
+              }}
+            >
+              <ChevronLeftCircle height={40} width={40} />
+            </div>
+            <div className="photo-container">
+              <Image
+                src={src}
+                alt={'Bilde nummer ' + (active + 1)}
+                width={400}
+                height={300}
+                style={{ objectFit: 'contain' }}
+                onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
+                priority
+              />
+            </div>
+            <div
+              className="arrow"
+              onClick={() => {
+                nextImage()
+              }}
+            >
+              <ChevronRightCircle height={40} width={40} />
+            </div>
+          </>
+        )}
       </div>
       <div className="dots">
         {[...Array(numberOfImages).keys()].map((index) => {

@@ -13,7 +13,7 @@ const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
   ))
   return (
     <Accordion className="info-accordion">
-      <Accordion.Item>
+      <Accordion.Item defaultOpen={true}>
         <Accordion.Header>Spesifikasjoner</Accordion.Header>
         <Accordion.Content>
           <div className="teknisk-data">

@@ -1,6 +1,6 @@
 'use client'
 import useSWRInfinite from 'swr/infinite'
-import { BodyShort, Select, Heading, Loader, Button, Alert } from '@navikt/ds-react'
+import { BodyShort, Heading, Loader, Button, Alert } from '@navikt/ds-react'
 import { fetchProdukter, FetchResponse, PAGE_SIZE } from '../utils/api-util'
 import { Produkt as ProduktType } from '../utils/produkt-util'
 
@@ -48,9 +48,9 @@ export default function Page() {
             </Heading>
             <BodyShort>{`${produkter.length} av ${data?.at(-1)?.antallProdukter} produkter vises`}</BodyShort>
           </div>
-          <Select label="Sortering" hideLabel={false} size="small" className="results__sort-select">
-            <option value="">Alfabetisk</option>
-          </Select>
+          {/*<Select label="Sortering" hideLabel={false} size="small" className="results__sort-select">*/}
+          {/*  <option value="">Alfabetisk</option>*/}
+          {/*</Select>*/}
         </header>
         <ol className="results__list">
           {produkter.map((produkt) => (
