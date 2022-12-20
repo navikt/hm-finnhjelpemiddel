@@ -22,6 +22,11 @@ main {
     max-width: 1200px;
     padding: var(--a-spacing-5);
     text-align: center;
+
+    a {
+      padding: var(--a-spacing-2);
+      margin-left: calc(var(--a-spacing-2) * -1);
+    }
   }
 
   h1 {
