@@ -1,22 +1,18 @@
 'use client'
-import { useState } from 'react'
 import useSWRInfinite from 'swr/infinite'
 import { BodyShort, Select, Heading, Loader, Button, Alert } from '@navikt/ds-react'
-import { fetchProdukter, FetchResponse, PAGE_SIZE, SearchData } from '../utils/api-util'
+import { fetchProdukter, FetchResponse, PAGE_SIZE } from '../utils/api-util'
 import { Produkt as ProduktType } from '../utils/produkt-util'
-import { initialFiltersState } from '../utils/filter-util'
 
 import Produkt from './Produkt'
 import Sidebar from './Sidebar'
 
 import './sok.scss'
+import { useSearchDataStore } from '../utils/state-util'
 
 export default function Page() {
-  const [searchData, setSearchData] = useState<SearchData>({
-    searchTerm: '',
-    isoCode: '',
-    filters: initialFiltersState,
-  })
+  const { searchData } = useSearchDataStore()
+
   const { data, size, setSize } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
     fetchProdukter,
@@ -72,7 +68,7 @@ export default function Page() {
 
   return (
     <div className="main-wrapper">
-      <Sidebar searchData={searchData} setSearchData={setSearchData} />
+      <Sidebar />
       <div className="results__wrapper">
         {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
         {data && <Sokeresultater produkter={produkter} />}
