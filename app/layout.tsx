@@ -14,9 +14,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </head>
       <body>
-        <div className="WIP">
+        <div className="wip-banner">
           <p>
-            Under arbeid <span>&#128119;</span>
+            Siden er under arbeid <span>&#128119;</span>
           </p>
         </div>
         <nav className="nav-topp">
