@@ -69,8 +69,6 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
                 type: 'cross_fields',
                 fields: ['title^3', 'description.text^2', '*'],
                 operator: 'and',
-                tie_breaker: 0.3,
-                analyzer: 'norwegian',
                 zero_terms_query: 'all',
               },
             },
