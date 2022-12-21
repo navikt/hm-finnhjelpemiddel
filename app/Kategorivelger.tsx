@@ -5,8 +5,10 @@ import { SearchData } from '../utils/api-util'
 import { useSearchDataStore } from '../utils/state-util'
 
 const Kategorivelger = () => {
-  const { register } = useFormContext<SearchData>()
+  const { setValue, watch } = useFormContext<SearchData>()
   const { searchData, setSearchData } = useSearchDataStore()
+
+  watch(({ isoCode }) => isoCode && setSearchData({ isoCode }))
 
   const levels = searchData.isoCode.length / 2
 
@@ -15,7 +17,7 @@ const Kategorivelger = () => {
       <Select
         label={`Kategori`}
         className="search__iso-category-select"
-        {...register('isoCode', { onChange: (e) => setSearchData({ isoCode: e.target.value }) })}
+        onChange={(e) => setValue('isoCode', e.target.value)}
       >
         <option value="">Velg kategori</option>
         {calculateNextAvailableIsoCategory(searchData.isoCode, 0).map(([isoCode, title]) => (
@@ -30,16 +32,16 @@ const Kategorivelger = () => {
 
         const updateIsoCode = (iso: string, index: number) => {
           let isoCode = iso !== '' ? iso.slice(0, (index + 1) * 2) : searchData.isoCode.slice(0, (index + 1) * 2 - 2)
-          setSearchData({ isoCode })
+          setValue('isoCode', isoCode)
         }
 
         return (
           nextCategories.length > 0 && (
             <Select
+              key={level}
+              className="search__iso-category-select"
               label={`Underkategori ${level}`}
               onChange={(e) => updateIsoCode(e.target.value, level)}
-              className="search__iso-category-select"
-              key={level}
             >
               <option value="">Velg underkategori</option>
               {nextCategories.map(([isoCode, title]) => (
