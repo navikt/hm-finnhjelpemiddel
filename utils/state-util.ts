@@ -6,6 +6,7 @@ import { AtLeastOne } from './type-util'
 const initialState = {
   searchTerm: '',
   isoCode: '',
+  hasRammeavtale: true,
   filters: initialFiltersState,
 }
 

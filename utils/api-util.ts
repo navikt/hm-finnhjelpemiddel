@@ -27,7 +27,7 @@ export type FilterData = {
   }
 }
 
-export type SearchData = { searchTerm: string; isoCode: string; filters: SelectedFilters }
+export type SearchData = { searchTerm: string; isoCode: string; hasRammeavtale: boolean; filters: SelectedFilters }
 
 type FetchProps = {
   url: string
@@ -43,7 +43,7 @@ export type FetchResponse = {
 
 export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
   const from = pageIndex * PAGE_SIZE
-  const { searchTerm, isoCode, filters } = searchData
+  const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {
     lengdeCM,
     breddeCM,
@@ -89,6 +89,13 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
         filter: {
           match_bool_prefix: {
             isoCategory: isoCode,
+          },
+        },
+      }),
+      ...(hasRammeavtale && {
+        filter: {
+          match_bool_prefix: {
+            hasAgreement: hasRammeavtale,
           },
         },
       }),
