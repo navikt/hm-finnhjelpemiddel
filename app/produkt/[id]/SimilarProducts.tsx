@@ -3,7 +3,6 @@ import { Product as Product } from '../../../utils/product-util'
 import { Back, Next } from '@navikt/ds-icons'
 import { Heading } from '@navikt/ds-react/esm/typography'
 import { useState } from 'react'
-import './produkt.scss'
 import ComparingTable, { TableRows } from './ComparingTable'
 
 const mapDict = (products: Product[]): TableRows => {
