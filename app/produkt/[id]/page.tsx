@@ -18,7 +18,7 @@ export default async function ProduktPage({ params }: any) {
   const supplier = mapSupplier(supplierData._source)
 
   const seriesData = await getSeries(String(product.seriesId))
-  const seriesProducts = mapProducts(seriesData)
+  const seriesProducts = mapProducts(seriesData).filter((prod) => prod.id !== product.id)
 
   return (
     <>

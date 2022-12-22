@@ -47,12 +47,22 @@ export const createProduct = (_source?: any): Produkt => {
 }
 
 const mapPhotoInfo = (media: any): Photo[] => {
-  return media
-    .filter((media: any) => media.type == 'IMAGE' && media.order && media.uri)
+  const seen: { [uri: string]: boolean } = {}
+  const photos: Photo[] = media
+    .filter((media: any) => {
+      if (!(media.type == 'IMAGE' && media.order && media.uri) || seen[media.uri]) {
+        return false
+      }
+
+      seen[media.uri] = true
+      return true
+    })
     .sort((a: any, b: any) => a.order - b.order)
     .map((image: any) => ({
       uri: image.uri,
     }))
+
+  return photos
 }
 
 const mapTekniskInfo = (data: any): TekniskData[] => {
