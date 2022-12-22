@@ -1,14 +1,14 @@
 'use client'
 import { Accordion } from '@navikt/ds-react'
 import React from 'react'
-import { TekniskData } from '../../../utils/produkt-util'
-import Definisjonsliste from './Definisjonsliste'
+import { TechData } from '../../../utils/product-util'
+import DefinitionList from './DefinitionList'
 
-const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
-  const spesifikasjoner = tekniskData.map(({ key, value, unit }, i) => (
+const InfoAccordion = ({ techData }: { techData: TechData[] }) => {
+  const technicalSpesifications = techData.map(({ key, value, unit }, i) => (
     <React.Fragment key={`${key}${i}`}>
-      <Definisjonsliste.Term term={key} />
-      <Definisjonsliste.Definition definition={value + unit} />
+      <DefinitionList.Term term={key} />
+      <DefinitionList.Definition definition={value + unit} />
     </React.Fragment>
   ))
   return (
@@ -16,9 +16,7 @@ const InfoAccordion = ({ tekniskData }: { tekniskData: TekniskData[] }) => {
       <Accordion.Item defaultOpen={true}>
         <Accordion.Header>Spesifikasjoner</Accordion.Header>
         <Accordion.Content>
-          <div className="teknisk-data">
-            <Definisjonsliste>{spesifikasjoner}</Definisjonsliste>
-          </div>
+          <DefinitionList>{technicalSpesifications}</DefinitionList>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>

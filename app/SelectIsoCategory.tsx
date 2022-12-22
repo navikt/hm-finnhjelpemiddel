@@ -4,7 +4,7 @@ import { calculateNextAvailableIsoCategory } from '../utils/isoCategory'
 import { SearchData } from '../utils/api-util'
 import { useSearchDataStore } from '../utils/state-util'
 
-const Kategorivelger = () => {
+const SelectIsoCategory = () => {
   const { setValue, watch } = useFormContext<SearchData>()
   const { searchData, setSearchData } = useSearchDataStore()
 
@@ -57,4 +57,4 @@ const Kategorivelger = () => {
   )
 }
 
-export default Kategorivelger
+export default SelectIsoCategory

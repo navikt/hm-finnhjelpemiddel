@@ -1,5 +1,5 @@
 'use client'
-import { Photo } from '../../../utils/produkt-util'
+import { Photo } from '../../../utils/product-util'
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
 import { useState } from 'react'
 import Image from 'next/image'
