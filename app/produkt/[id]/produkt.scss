@@ -7,6 +7,10 @@
   padding-right: var(--a-spacing-4);
 }
 
+.produkt-info:last-child {
+  margin-bottom: var(--a-spacing-20);
+}
+
 .produkt-info {
   width: 100%;
 
@@ -81,7 +85,6 @@
     border-top: 1px solid var(--a-gray-300);
     margin-top: var(--a-spacing-10);
     padding-top: var(--a-spacing-10);
-    margin-bottom: var(--a-spacing-20);
 
     .navds-heading {
       margin-bottom: var(--a-spacing-6);

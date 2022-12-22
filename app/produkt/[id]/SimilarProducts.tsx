@@ -42,7 +42,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     setFirstActive(nextIndex)
   }
 
-  const allProducts = Array(mainProduct).concat(seriesProducts)
+  const allProducts = [mainProduct, ...seriesProducts]
 
   const tableHeaders = [{ id: 'key', label: 'Egenskap' }].concat(
     allProducts.map((product) => ({ id: String(product.id), label: 'Produkt ' + product.id }))
