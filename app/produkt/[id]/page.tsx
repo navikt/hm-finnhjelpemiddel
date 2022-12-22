@@ -20,8 +20,6 @@ export default async function ProduktPage({ params }: any) {
   const seriesData = await getSeries(String(product.seriesId))
   const seriesProducts = mapProducts(seriesData).filter((prod) => prod.id !== product.id)
 
-  const photosNoDupes = product.photos.filter((photo) => photo)
-
   return (
     <>
       <nav className="breadcrumbs">
