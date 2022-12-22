@@ -1,16 +1,16 @@
-export interface Produkt {
+export interface Product {
   id: number
-  tittel: string
+  title: string
   description?: {
     name?: string
-    beskrivelse?: string
-    tilleggsinfo?: string
+    short?: string
+    additional?: string
   }
-  isoKode: string
+  isoCode: string
   accessory: boolean
   sparepart: boolean
   hmsNr?: string
-  tekniskData: TekniskData[]
+  techData: TechData[]
   photos: Photo[]
   supplierId: number
   seriesId: string
@@ -20,26 +20,26 @@ export interface Photo {
   uri: string
 }
 
-export interface TekniskData {
+export interface TechData {
   key: string
   value: string
   unit: string
 }
 
-export const createProduct = (_source?: any): Produkt => {
+export const createProduct = (_source?: any): Product => {
   return {
     id: _source.id,
-    tittel: _source.title,
+    title: _source.title,
     description: {
       name: _source.description?.name,
-      tilleggsinfo: _source.description?.shortDescription,
-      beskrivelse: _source.description?.text,
+      additional: _source.description?.shortDescription,
+      short: _source.description?.text,
     },
-    isoKode: _source.isoCategory,
+    isoCode: _source.isoCategory,
     accessory: _source.accessory,
     sparepart: _source.sparepart,
     hmsNr: _source.hmsartNr,
-    tekniskData: mapTekniskInfo(_source.data),
+    techData: mapTechData(_source.data),
     photos: mapPhotoInfo(_source.media),
     supplierId: _source.supplier?.id,
     seriesId: _source.seriesId,
@@ -65,7 +65,7 @@ const mapPhotoInfo = (media: any): Photo[] => {
   return photos
 }
 
-const mapTekniskInfo = (data: any): TekniskData[] => {
+const mapTechData = (data: any): TechData[] => {
   return data
     .filter((data: any) => data.key && data.value)
     .map((data: any) => ({
@@ -75,6 +75,6 @@ const mapTekniskInfo = (data: any): TekniskData[] => {
     }))
 }
 
-export const mapProducts = (data: any): Produkt[] => {
+export const mapProducts = (data: any): Product[] => {
   return data.hits.hits.map((hit: any) => createProduct(hit._source))
 }

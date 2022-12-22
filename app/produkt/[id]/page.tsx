@@ -1,17 +1,17 @@
 import { mapSupplier } from '../../../utils/supplier-util'
-import { getProdukt, getSupplier, getSeries } from '../../../utils/api-util'
+import { getProduct, getSupplier, getSeries } from '../../../utils/api-util'
 import { Heading } from '@navikt/ds-react/esm/typography'
-import { createProduct, mapProducts } from '../../../utils/produkt-util'
+import { createProduct, mapProducts } from '../../../utils/product-util'
 import PhotoSlider from './PhotoSlider'
 import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
-import './produkt.scss'
+import './product-side.scss'
 import SimilarProducts from './SimilarProducts'
 
 export default async function ProduktPage({ params }: any) {
   const { id } = params
 
-  const productData = await getProdukt(id)
+  const productData = await getProduct(id)
   const product = createProduct(productData._source)
 
   const supplierData = await getSupplier(String(product.supplierId))
@@ -28,7 +28,7 @@ export default async function ProduktPage({ params }: any) {
             <Link href="/">Oversikt</Link>
             <NextIcon />
           </li>
-          <li>{product.tittel}</li>
+          <li>{product.title}</li>
         </ol>
       </nav>
       <article className="produkt-info">
@@ -36,11 +36,11 @@ export default async function ProduktPage({ params }: any) {
           <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
           <div className="produkt-beskrivelse">
             <Heading level="1" size="large">
-              {product.tittel}
+              {product.title}
             </Heading>
             {product.description?.name && <p>{product.description.name}</p>}
-            {product.description?.beskrivelse && <p>{product.description.beskrivelse}</p>}
-            {product.description?.tilleggsinfo && <p>{product.description.tilleggsinfo}</p>}
+            {product.description?.short && <p>{product.description.short}</p>}
+            {product.description?.additional && <p>{product.description.additional}</p>}
             <div className="leverandør">
               <Heading level="2" size="medium">
                 Leverandør
@@ -57,7 +57,7 @@ export default async function ProduktPage({ params }: any) {
           </div>
         </section>
         <section className="product-accordion">
-          {product.tekniskData && <InfoAccordion tekniskData={product.tekniskData} />}
+          {product.techData && <InfoAccordion tekniskData={product.techData} />}
         </section>
         {seriesProducts?.length > 0 && (
           <section className="similar-products">

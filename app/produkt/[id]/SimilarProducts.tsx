@@ -1,5 +1,5 @@
 'use client'
-import { Produkt as Product } from '../../../utils/produkt-util'
+import { Product as Product } from '../../../utils/product-util'
 import { Back, Next } from '@navikt/ds-icons'
 import { Heading } from '@navikt/ds-react/esm/typography'
 import { useState } from 'react'
@@ -10,7 +10,7 @@ const mapDict = (products: Product[]): TableRows => {
   let obj: TableRows = {}
 
   products.forEach((product) => {
-    product.tekniskData.forEach(({ key, value, unit }) => {
+    product.techData.forEach(({ key, value, unit }) => {
       if (key in obj) {
         obj[key][product.id] = [value, unit]
       } else {
@@ -70,7 +70,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
             const product = seriesProducts[firstActive + index]
             return (
               <div key={index} className="similar-products__card">
-                <p>{product.tittel}</p>
+                <p>{product.title}</p>
                 <p>{product.description?.name}</p>
                 <a href={`/produkt/${product.id}`}>Les mer</a>
               </div>

@@ -2,7 +2,7 @@ import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { SearchData } from '../utils/api-util'
 
-import Kategorivelger from './Kategorivelger'
+import IsoCategory from './IsoCategory'
 import FilterView from './FilterView'
 import { useSearchDataStore } from '../utils/state-util'
 
@@ -35,7 +35,7 @@ const Sidebar = () => {
             defaultValue=""
           />
         </div>
-        <Kategorivelger />
+        <IsoCategory />
 
         <Fieldset
           legend="Rammeavtale"

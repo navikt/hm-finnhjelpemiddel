@@ -1,5 +1,5 @@
 import { FilterCategories } from '../app/FilterView'
-import { mapProducts, Produkt } from './produkt-util'
+import { mapProducts, Product } from './product-util'
 import {
   filterBredde,
   filterLengde,
@@ -36,12 +36,12 @@ type FetchProps = {
 }
 
 export type FetchResponse = {
-  antallProdukter: number
-  produkter: Produkt[]
+  numberOfProducts: number
+  products: Product[]
   filters: FilterData
 }
 
-export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
   const from = pageIndex * PAGE_SIZE
   const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {
@@ -367,12 +367,12 @@ export const fetchProdukter = ({ url, pageIndex, searchData }: FetchProps): Prom
   })
     .then((res) => res.json())
     .then((data) => {
-      const produkter: Produkt[] = mapProducts(data)
-      return { antallProdukter: data.hits.total.value, produkter, filters: data.aggregations }
+      const products: Product[] = mapProducts(data)
+      return { numberOfProducts: data.hits.total.value, products, filters: data.aggregations }
     })
 }
 
-export async function getProdukt(id: string) {
+export async function getProduct(id: string) {
   const res = await fetch(`https://grunndata-search.dev-gcp.nais.io/product/_doc/${id}`, {
     method: 'GET',
   })
