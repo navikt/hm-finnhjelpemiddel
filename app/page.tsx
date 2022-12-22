@@ -7,7 +7,7 @@ import { Product as ProductType } from '../utils/product-util'
 import Produkt from './Produkt'
 import Sidebar from './Sidebar'
 
-import './sok.scss'
+import './search.scss'
 import { useSearchDataStore } from '../utils/state-util'
 
 export default function Page() {
@@ -26,7 +26,7 @@ export default function Page() {
   const isLoading = !data || (size > 0 && data && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
 
-  const Sokeresultater = ({ products }: { products: Array<ProductType> | undefined }) => {
+  const SearchResults = ({ products }: { products: Array<ProductType> | undefined }) => {
     if (!products?.length) {
       return (
         <>
@@ -71,7 +71,7 @@ export default function Page() {
       <Sidebar />
       <div className="results__wrapper">
         {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
-        {data && <Sokeresultater products={products} />}
+        {data && <SearchResults products={products} />}
       </div>
     </div>
   )

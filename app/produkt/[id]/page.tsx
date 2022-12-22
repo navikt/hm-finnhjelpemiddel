@@ -5,7 +5,7 @@ import { createProduct, mapProducts } from '../../../utils/product-util'
 import PhotoSlider from './PhotoSlider'
 import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
-import './product-side.scss'
+import './product-page.scss'
 import SimilarProducts from './SimilarProducts'
 
 export default async function ProduktPage({ params }: any) {
@@ -57,7 +57,7 @@ export default async function ProduktPage({ params }: any) {
           </div>
         </section>
         <section className="product-accordion">
-          {product.techData && <InfoAccordion tekniskData={product.techData} />}
+          {product.techData && <InfoAccordion techData={product.techData} />}
         </section>
         {seriesProducts?.length > 0 && (
           <section className="similar-products">

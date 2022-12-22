@@ -4,8 +4,8 @@ import React from 'react'
 import { TechData } from '../../../utils/product-util'
 import DefinitionList from './DefinitionList'
 
-const InfoAccordion = ({ tekniskData }: { tekniskData: TechData[] }) => {
-  const spesifikasjoner = tekniskData.map(({ key, value, unit }, i) => (
+const InfoAccordion = ({ techData }: { techData: TechData[] }) => {
+  const technicalSpesifications = techData.map(({ key, value, unit }, i) => (
     <React.Fragment key={`${key}${i}`}>
       <DefinitionList.Term term={key} />
       <DefinitionList.Definition definition={value + unit} />
@@ -16,9 +16,7 @@ const InfoAccordion = ({ tekniskData }: { tekniskData: TechData[] }) => {
       <Accordion.Item defaultOpen={true}>
         <Accordion.Header>Spesifikasjoner</Accordion.Header>
         <Accordion.Content>
-          <div className="teknisk-data">
-            <DefinitionList>{spesifikasjoner}</DefinitionList>
-          </div>
+          <DefinitionList>{technicalSpesifications}</DefinitionList>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
