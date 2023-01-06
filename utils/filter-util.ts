@@ -1,22 +1,5 @@
 import { FilterCategories } from '../app/FilterView'
 
-export const initialFiltersState = {
-  beregnetBarn: [],
-  breddeCM: [],
-  brukervektMaksKG: [],
-  brukervektMinKG: [],
-  fyllmateriale: [],
-  lengdeCM: [],
-  materialeTrekk: [],
-  setebreddeMaksCM: [],
-  setebreddeMinCM: [],
-  setedybdeMaksCM: [],
-  setehoydeMaksCM: [],
-  setehoydeMinCM: [],
-  setedybdeMinCM: [],
-  totalVektKG: [],
-}
-
 const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number>) => {
   const [min, max] = values
 

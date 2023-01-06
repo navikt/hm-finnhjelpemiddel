@@ -49,7 +49,7 @@ export default async function ProduktPage({ params }: any) {
               {supplier.address && <p>{supplier.address}</p>}
               {supplier.email && <p>{supplier.email}</p>}
               {supplier.homepageUrl && (
-                <a href={supplier.homepageUrl} target="_blank">
+                <a href={supplier.homepageUrl} target="_blank" rel="noreferrer">
                   Hjemmeside(åpnes i ny side)
                 </a>
               )}

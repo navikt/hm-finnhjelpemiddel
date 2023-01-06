@@ -85,20 +85,18 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
         },
       ],
-      ...(isoCode && {
-        filter: {
+      filter: [
+        isoCode && {
           match_bool_prefix: {
             isoCategory: isoCode,
           },
         },
-      }),
-      ...(hasRammeavtale && {
-        filter: {
+        {
           match_bool_prefix: {
             hasAgreement: hasRammeavtale,
           },
         },
-      }),
+      ],
     },
   }
 
