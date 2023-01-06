@@ -1,6 +1,7 @@
+import { useEffect } from 'react'
 import { Select } from '@navikt/ds-react'
 import { useFormContext } from 'react-hook-form'
-import { calculateNextAvailableIsoCategory } from '../utils/isoCategory'
+import { getIsoCodeLevels, getIsoCategoriesForLevel, getIsoCodeForLevel } from '../utils/iso-category-util'
 import { SearchData } from '../utils/api-util'
 import { useSearchDataStore } from '../utils/state-util'
 
@@ -8,9 +9,15 @@ const SelectIsoCategory = () => {
   const { setValue, watch } = useFormContext<SearchData>()
   const { searchData, setSearchData } = useSearchDataStore()
 
-  watch(({ isoCode }) => isoCode && setSearchData({ isoCode }))
+  watch(({ isoCode }) => setSearchData({ isoCode: isoCode ?? '' }))
 
-  const levels = searchData.isoCode.length / 2
+  useEffect(() => {
+    if (searchData.isoCode) {
+      setValue('isoCode', searchData.isoCode)
+    }
+  }, [searchData.isoCode, setValue])
+
+  const levels = getIsoCodeLevels(searchData.isoCode)
 
   return (
     <>
@@ -18,30 +25,32 @@ const SelectIsoCategory = () => {
         label={`Kategori`}
         className="search__iso-category-select"
         onChange={(e) => setValue('isoCode', e.target.value)}
+        value={getIsoCodeForLevel(searchData.isoCode, 1)}
       >
         <option value="">Velg kategori</option>
-        {calculateNextAvailableIsoCategory(searchData.isoCode, 0).map(([isoCode, title]) => (
+        {getIsoCategoriesForLevel(searchData.isoCode, 1).map(([isoCode, title]) => (
           <option key={isoCode} value={isoCode}>
             {title}
           </option>
         ))}
       </Select>
-      {[...Array(levels).keys()].map((_level) => {
-        const level = _level + 1
-        const nextCategories = calculateNextAvailableIsoCategory(searchData.isoCode, level)
+      {levels?.map((_, index) => {
+        const level = index + 1
+        const nextLevel = level + 1
+        const nextCategories = getIsoCategoriesForLevel(searchData.isoCode, nextLevel)
 
-        const updateIsoCode = (iso: string, index: number) => {
-          let isoCode = iso !== '' ? iso.slice(0, (index + 1) * 2) : searchData.isoCode.slice(0, (index + 1) * 2 - 2)
-          setValue('isoCode', isoCode)
+        const updateIsoCode = (isoCode: string) => {
+          setValue('isoCode', isoCode || getIsoCodeForLevel(searchData.isoCode, level))
         }
 
         return (
           nextCategories.length > 0 && (
             <Select
-              key={level}
+              key={nextLevel}
               className="search__iso-category-select"
               label={`Underkategori ${level}`}
-              onChange={(e) => updateIsoCode(e.target.value, level)}
+              onChange={(e) => updateIsoCode(e.target.value)}
+              value={getIsoCodeForLevel(searchData.isoCode, nextLevel)}
             >
               <option value="">Velg underkategori</option>
               {nextCategories.map(([isoCode, title]) => (
