@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { Heading, BodyLong, Button } from '@navikt/ds-react'
-import { Information, Next, Picture } from '@navikt/ds-icons'
+import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../utils/product-util'
 import { getIsoCategoryName } from '../utils/iso-category-util'
 import { useSearchDataStore } from '../utils/state-util'

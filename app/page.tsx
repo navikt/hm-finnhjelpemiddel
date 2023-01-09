@@ -1,6 +1,6 @@
 'use client'
 import useSWRInfinite from 'swr/infinite'
-import { BodyShort, Heading, Loader, Button, Alert, LinkPanel } from '@navikt/ds-react'
+import { BodyShort, Heading, Loader, Button, Alert } from '@navikt/ds-react'
 import { fetchProducts, FetchResponse, PAGE_SIZE } from '../utils/api-util'
 import { useSearchDataStore } from '../utils/state-util'
 
@@ -70,9 +70,6 @@ const SearchResults = ({
           </Heading>
           <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
         </div>
-        {/*<Select label="Sortering" hideLabel={false} size="small" className="results__sort-select">*/}
-        {/*  <option value="">Alfabetisk</option>*/}
-        {/*</Select>*/}
       </header>
       <ol className="results__list">
         {products.map((product) => (
