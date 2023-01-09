@@ -1,9 +1,25 @@
 import create from 'zustand'
-import { initialFiltersState } from './filter-util'
 import { SearchData } from './api-util'
 import { AtLeastOne } from './type-util'
 
-const initialState = {
+const initialFiltersState = {
+  beregnetBarn: [],
+  breddeCM: [],
+  brukervektMaksKG: [],
+  brukervektMinKG: [],
+  fyllmateriale: [],
+  lengdeCM: [],
+  materialeTrekk: [],
+  setebreddeMaksCM: [],
+  setebreddeMinCM: [],
+  setedybdeMaksCM: [],
+  setehoydeMaksCM: [],
+  setehoydeMinCM: [],
+  setedybdeMinCM: [],
+  totalVektKG: [],
+}
+
+export const initialSearchDataState = {
   searchTerm: '',
   isoCode: '',
   hasRammeavtale: true,
@@ -17,9 +33,9 @@ type SearchDataState = {
 }
 
 export const useSearchDataStore = create<SearchDataState>()((set) => ({
-  searchData: initialState,
+  searchData: initialSearchDataState,
   setSearchData: (searchData) => set((state) => ({ searchData: { ...state.searchData, ...searchData } })),
   resetSearchData: () => {
-    set({ searchData: initialState })
+    set({ searchData: initialSearchDataState })
   },
 }))

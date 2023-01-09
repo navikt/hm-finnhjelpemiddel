@@ -1,15 +1,28 @@
+import classNames from 'classnames'
 import './definitionlist.scss'
 
-const DefinitionList = ({ children }: { children: React.ReactNode }) => {
-  return <dl className="definition-list">{children}</dl>
+const DefinitionList = ({
+  children,
+  className,
+  fullWidth = false,
+}: {
+  children: React.ReactNode
+  className?: string
+  fullWidth?: boolean
+}) => {
+  return (
+    <dl className={classNames('definition-list', { 'definition-list--full-width': fullWidth }, className)}>
+      {children}
+    </dl>
+  )
 }
 
-const DeflistTerm = ({ term }: { term: string }) => {
-  return <dt className="definition-list--item">{term}</dt>
+const DeflistTerm = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return <dt className={className}>{children}</dt>
 }
 
-const DeflistDefinition = ({ definition }: { definition: string }) => {
-  return <dd className="definition-list--definition">{definition}</dd>
+const DeflistDefinition = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return <dd className={className}>{children}</dd>
 }
 
 DefinitionList.Term = DeflistTerm

@@ -1,19 +1,24 @@
 .definition-list {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, max-content) auto;
+  column-gap: var(--a-spacing-10);
+  align-items: center;
+  margin: 0;
+
+  &--full-width {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 
   > * {
-    padding-top: 0.5em;
+    padding-top: var(--a-spacing-2);
   }
+
   dt {
-    width: 35%;
     font-weight: bold;
     text-align: left;
   }
+
   dd {
-    width: 55%;
-    padding-left: 1em;
-    margin-left: 0px;
+    margin-left: 0;
   }
 }

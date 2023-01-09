@@ -7,8 +7,8 @@ import DefinitionList from './DefinitionList'
 const InfoAccordion = ({ techData }: { techData: TechData[] }) => {
   const technicalSpesifications = techData.map(({ key, value, unit }, i) => (
     <React.Fragment key={`${key}${i}`}>
-      <DefinitionList.Term term={key} />
-      <DefinitionList.Definition definition={value + unit} />
+      <DefinitionList.Term>{key}</DefinitionList.Term>
+      <DefinitionList.Definition>{value + unit}</DefinitionList.Definition>
     </React.Fragment>
   ))
   return (

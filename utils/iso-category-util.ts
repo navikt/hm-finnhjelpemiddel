@@ -1,18 +1,24 @@
-// 04 => 0403, 0406, ...
-
-// 0403 => 040303, 0403
-
 type Filters = [string, string][]
 
-export const calculateNextAvailableIsoCategory = (iso: string, level: number): Filters => {
-  const categoryIso = level === 0 ? '' : iso.slice(0, 2 * level)
-
-  return Object.entries(isoKategorier).filter(
-    ([key, _]) => key.length === categoryIso.length + 2 && key.startsWith(categoryIso)
-  )
+export const getIsoCategoriesForLevel = (isoCode: string, level: number): Filters => {
+  const isoCodeForLevel = level === 1 ? '' : getIsoCodeForLevel(isoCode, level - 1)
+  return Object.entries(IsoCategories).filter(([key, _]) => key.length === level * 2 && key.startsWith(isoCodeForLevel))
 }
 
-export const isoKategorier = {
+export function getIsoCategoryName(key: string): string | undefined {
+  return IsoCategories[key as keyof typeof IsoCategories]
+}
+
+export const getIsoCodeForLevel = (isoCode: string, level: number): string => {
+  const isoCodeArray = getIsoCodeLevels(isoCode)
+  return isoCodeArray?.at(level - 1) ? isoCodeArray.slice(0, level).join('') : ''
+}
+
+export const getIsoCodeLevels = (isoCode: string): Array<string> | null => {
+  return isoCode.match(new RegExp('.{1,2}', 'g'))
+}
+
+export const IsoCategories = {
   '04': 'Hjelpemidler for å måle, støtte, trene eller erstatte kroppsfunksjoner',
   '0403': 'Hjelpemidler for respirasjon',
   '040303': 'Luftbehandlere ved innånding',

@@ -1,21 +1,22 @@
 import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { SearchData } from '../utils/api-util'
+import { initialSearchDataState, useSearchDataStore } from '../utils/state-util'
 
 import SelectIsoCategory from './SelectIsoCategory'
 import FilterView from './FilterView'
-import { useSearchDataStore } from '../utils/state-util'
 
 const Sidebar = () => {
   const { setSearchData, resetSearchData } = useSearchDataStore()
-  const formMethods = useForm<SearchData>()
+  const formMethods = useForm<SearchData>({
+    defaultValues: initialSearchDataState,
+  })
+
   const { control, handleSubmit, reset: resetForm, setValue, watch } = formMethods
 
   watch(({ hasRammeavtale }) => setSearchData({ hasRammeavtale: !!hasRammeavtale }))
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    setSearchData({ ...data })
-  }
+  const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
 
   return (
     <FormProvider {...formMethods}>
@@ -35,6 +36,7 @@ const Sidebar = () => {
             defaultValue=""
           />
         </div>
+
         <SelectIsoCategory />
 
         <Fieldset
@@ -47,6 +49,7 @@ const Sidebar = () => {
         </Fieldset>
 
         <FilterView />
+
         <Button
           type="button"
           className="search__reset-button"
