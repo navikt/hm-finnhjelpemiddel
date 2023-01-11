@@ -1,6 +1,7 @@
 import create from 'zustand'
 import { SearchData } from './api-util'
 import { AtLeastOne } from './type-util'
+import { Product } from './product-util'
 
 const initialFiltersState = {
   beregnetBarn: [],
@@ -37,5 +38,19 @@ export const useSearchDataStore = create<SearchDataState>()((set) => ({
   setSearchData: (searchData) => set((state) => ({ searchData: { ...state.searchData, ...searchData } })),
   resetSearchData: () => {
     set({ searchData: initialSearchDataState })
+  },
+}))
+
+type ProductCompareState = {
+  productsToCompare: Product[]
+  setProductToCompare: (product: Product) => void
+  resetProductToCompare: () => void
+}
+
+export const useProducCompareDataStore = create<ProductCompareState>()((set) => ({
+  productsToCompare: [],
+  setProductToCompare: (product) => set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),
+  resetProductToCompare: () => {
+    set({ productsToCompare: [] })
   },
 }))
