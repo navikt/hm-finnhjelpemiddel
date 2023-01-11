@@ -42,14 +42,21 @@ export const useSearchDataStore = create<SearchDataState>()((set) => ({
 }))
 
 type ProductCompareState = {
+  showProductsToCompare: boolean
+  toggleShowProductsToCompare: () => void
   productsToCompare: Product[]
   setProductToCompare: (product: Product) => void
+  removeProduct: (product: Product) => void
   resetProductToCompare: () => void
 }
 
 export const useProducCompareDataStore = create<ProductCompareState>()((set) => ({
+  showProductsToCompare: false,
+  toggleShowProductsToCompare: () => set((state) => ({ showProductsToCompare: !state.showProductsToCompare })),
   productsToCompare: [],
   setProductToCompare: (product) => set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),
+  removeProduct: (product) =>
+    set((state) => ({ productsToCompare: state.productsToCompare.filter((prod) => prod.id === product.id) })),
   resetProductToCompare: () => {
     set({ productsToCompare: [] })
   },

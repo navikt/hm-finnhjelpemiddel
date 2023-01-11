@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { ChangeEventHandler, useState } from 'react'
 import Image from 'next/image'
-import { Heading, BodyLong, Button } from '@navikt/ds-react'
+import { Heading, BodyLong, Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../utils/product-util'
 import { getIsoCategoryName } from '../utils/iso-category-util'
-import { useSearchDataStore } from '../utils/state-util'
+import { useProducCompareDataStore, useSearchDataStore } from '../utils/state-util'
 import DefinitionList from './produkt/[id]/DefinitionList'
 
 type ProduktProps = {
@@ -13,6 +13,7 @@ type ProduktProps = {
 
 const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useSearchDataStore()
+  const { showProductsToCompare, setProductToCompare, removeProduct } = useProducCompareDataStore()
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
@@ -20,9 +21,23 @@ const SearchResult = ({ product }: ProduktProps) => {
   const imageLoader = ({ src }: { src: string }) => {
     return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
   }
+
+  const handlechange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    event.currentTarget.value ? setProductToCompare(product) : removeProduct(product)
+  }
+
   return (
     <li className="search-result">
       <div className="search-result__container">
+        {showProductsToCompare && (
+          <div className="compare-item">
+            <CheckboxGroup legend="asd">
+              <Checkbox hideLabel value="Sammenlikn dette produkt" onChange={handlechange}>
+                Sammenlikn
+              </Checkbox>
+            </CheckboxGroup>
+          </div>
+        )}
         <div className="search-result__image">
           {!hasImage && (
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />

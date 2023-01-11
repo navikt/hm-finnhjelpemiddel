@@ -2,7 +2,6 @@
 import useSWRInfinite from 'swr/infinite'
 import { BodyShort, Heading, Loader, Button, Alert } from '@navikt/ds-react'
 import { fetchProducts, FetchResponse, PAGE_SIZE } from '../utils/api-util'
-import { Product } from '../utils/product-util'
 
 import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
@@ -35,8 +34,7 @@ const variantsComparingSummary = {
 
 export default function Page() {
   const { searchData } = useSearchDataStore()
-  const { productsToCompare } = useProducCompareDataStore()
-  const [isOpen, setIsOpen] = useState(productsToCompare.length > 0 ? true : false)
+  const { showProductsToCompare, productsToCompare } = useProducCompareDataStore()
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
@@ -49,7 +47,7 @@ export default function Page() {
   return (
     <PageWrapper>
       <motion.div
-        animate={isOpen ? 'open' : 'closed'}
+        animate={showProductsToCompare ? 'open' : 'closed'}
         variants={variantsComparingSummary}
         className="products-to-compare products-to-compare__container"
       >
@@ -57,23 +55,22 @@ export default function Page() {
           <Heading level="2" size="medium">
             Sammenlikn følgende produkter
           </Heading>
-          <div className="products-to-compare__product">Produkt 1</div>
-          <div className="products-to-compare__product">Produkt 2</div>
-          <div className="products-to-compare__product">Produkt 3</div>
+          <div className="products-to-compare__product">
+            {productsToCompare[0] ? productsToCompare[0].title : 'ingen'}
+          </div>
+          <div className="products-to-compare__product">
+            {productsToCompare[1] ? productsToCompare[1].title : 'ingen'}
+          </div>
+          <div className="products-to-compare__product">
+            {productsToCompare[2] ? productsToCompare[2].title : 'ingen'}
+          </div>
         </div>
       </motion.div>
       <div className="main-wrapper">
         <div className="flex-column-wrap">
           <Sidebar />
           <div className="results__wrapper">
-            <SearchResults
-              data={data}
-              size={size}
-              setSize={setSize}
-              comaparingIsOpen={isOpen}
-              setComparingIsOpen={setIsOpen}
-              isLoading={isLoading}
-            />
+            <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />
           </div>
         </div>
       </div>
@@ -85,17 +82,14 @@ const SearchResults = ({
   data,
   size,
   setSize,
-  comaparingIsOpen,
-  setComparingIsOpen,
   isLoading,
 }: {
   size: number
   setSize: (size: number) => void
-  comaparingIsOpen: boolean
-  setComparingIsOpen: (isOpen: boolean) => void
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
+  const { toggleShowProductsToCompare } = useProducCompareDataStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
@@ -124,7 +118,7 @@ const SearchResults = ({
             Søkeresultater
           </Heading>
           <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
-          <Button variant="secondary" onClick={() => setComparingIsOpen(!comaparingIsOpen)}>
+          <Button variant="secondary" onClick={() => toggleShowProductsToCompare()}>
             Sammenlikn produkter
           </Button>
         </div>
