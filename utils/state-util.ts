@@ -1,4 +1,6 @@
-import create from 'zustand'
+import { create } from 'zustand'
+import { useState, useEffect } from 'react'
+import { persist, createJSONStorage } from 'zustand/middleware'
 import { SearchData } from './api-util'
 import { AtLeastOne } from './type-util'
 import { Product } from './product-util'
@@ -50,14 +52,45 @@ type ProductCompareState = {
   resetProductToCompare: () => void
 }
 
-export const useProducCompareDataStore = create<ProductCompareState>()((set) => ({
+const initialProductCompareState: ProductCompareState = {
   showProductsToCompare: false,
-  toggleShowProductsToCompare: () => set((state) => ({ showProductsToCompare: !state.showProductsToCompare })),
   productsToCompare: [],
-  setProductToCompare: (product) => set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),
-  removeProduct: (product) =>
-    set((state) => ({ productsToCompare: state.productsToCompare.filter((prod) => prod.id === product.id) })),
-  resetProductToCompare: () => {
-    set({ productsToCompare: [] })
-  },
-}))
+  toggleShowProductsToCompare: () => {},
+  setProductToCompare: (product: Product) => {},
+  removeProduct: (product: Product) => {},
+  resetProductToCompare: () => {},
+}
+
+export const useProducCompareDataStore = create<ProductCompareState>()(
+  persist(
+    (set) => ({
+      showProductsToCompare: false,
+      toggleShowProductsToCompare: () => set((state) => ({ showProductsToCompare: !state.showProductsToCompare })),
+      productsToCompare: [],
+      setProductToCompare: (product) =>
+        set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),
+      removeProduct: (product) =>
+        set((state) => ({ productsToCompare: state.productsToCompare.filter((prod) => prod.id !== product.id) })),
+      resetProductToCompare: () => {
+        set({ productsToCompare: [] })
+      },
+    }),
+    {
+      name: 'compare-storage', // unique name
+      storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+    }
+  )
+)
+
+// This a fix to ensure zustand never hydrates the store before React hydrates the page
+// otherwise it causes a mismatch between SSR and client render
+// see: https://github.com/pmndrs/zustand/issues/1145
+// https://github.com/TxnLab/use-wallet/pull/23/commits/f4c13aad62839500066d694a5b0f4a4c24c3c8d3
+export const useHydratedPCStore = () => {
+  const store = useProducCompareDataStore()
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => setHydrated(true), [])
+
+  return hydrated ? store : initialProductCompareState
+}

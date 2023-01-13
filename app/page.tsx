@@ -7,34 +7,12 @@ import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
 
 import './search.scss'
-import { useSearchDataStore, useProducCompareDataStore } from '../utils/state-util'
+import { useSearchDataStore, useHydratedPCStore } from '../utils/state-util'
 import { PageWrapper } from './page-wrapper'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
-
-const variantsComparingSummary = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 50,
-      restDelta: 2,
-    },
-  },
-  closed: {
-    opacity: 0.5,
-    y: 200,
-    delay: 0.5,
-    type: 'spring',
-    stiffness: 400,
-    damping: 40,
-  },
-}
+import ProductsToCompare from './ProductsToCompare'
 
 export default function Page() {
   const { searchData } = useSearchDataStore()
-  const { showProductsToCompare, productsToCompare } = useProducCompareDataStore()
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
@@ -46,26 +24,7 @@ export default function Page() {
 
   return (
     <PageWrapper>
-      <motion.div
-        animate={showProductsToCompare ? 'open' : 'closed'}
-        variants={variantsComparingSummary}
-        className="products-to-compare products-to-compare__container"
-      >
-        <div className="products-to-compare__content">
-          <Heading level="2" size="medium">
-            Sammenlikn følgende produkter
-          </Heading>
-          <div className="products-to-compare__product">
-            {productsToCompare[0] ? productsToCompare[0].title : 'ingen'}
-          </div>
-          <div className="products-to-compare__product">
-            {productsToCompare[1] ? productsToCompare[1].title : 'ingen'}
-          </div>
-          <div className="products-to-compare__product">
-            {productsToCompare[2] ? productsToCompare[2].title : 'ingen'}
-          </div>
-        </div>
-      </motion.div>
+      <ProductsToCompare />
       <div className="main-wrapper">
         <div className="flex-column-wrap">
           <Sidebar />
@@ -89,7 +48,7 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { toggleShowProductsToCompare } = useProducCompareDataStore()
+  const { toggleShowProductsToCompare } = useHydratedPCStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE

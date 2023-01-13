@@ -1,10 +1,10 @@
-import React, { ChangeEventHandler, useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
-import { Heading, BodyLong, Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
+import { Heading, BodyLong, Button, Checkbox } from '@navikt/ds-react'
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../utils/product-util'
 import { getIsoCategoryName } from '../utils/iso-category-util'
-import { useProducCompareDataStore, useSearchDataStore } from '../utils/state-util'
+import { useHydratedPCStore, useSearchDataStore } from '../utils/state-util'
 import DefinitionList from './produkt/[id]/DefinitionList'
 
 type ProduktProps = {
@@ -13,7 +13,7 @@ type ProduktProps = {
 
 const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useSearchDataStore()
-  const { showProductsToCompare, setProductToCompare, removeProduct } = useProducCompareDataStore()
+  const { showProductsToCompare, setProductToCompare, removeProduct, productsToCompare } = useHydratedPCStore()
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
@@ -26,16 +26,21 @@ const SearchResult = ({ product }: ProduktProps) => {
     event.currentTarget.value ? setProductToCompare(product) : removeProduct(product)
   }
 
+  const isInProductsToCompare = productsToCompare.filter((procom) => product.id === procom.id).length >= 1
+
   return (
     <li className="search-result">
       <div className="search-result__container">
         {showProductsToCompare && (
           <div className="compare-item">
-            <CheckboxGroup legend="asd">
-              <Checkbox hideLabel value="Sammenlikn dette produkt" onChange={handlechange}>
-                Sammenlikn
-              </Checkbox>
-            </CheckboxGroup>
+            <Checkbox
+              hideLabel
+              value="Sammenlikn dette produkt"
+              onChange={handlechange}
+              checked={isInProductsToCompare}
+            >
+              Sammenlikn
+            </Checkbox>
           </div>
         )}
         <div className="search-result__image">
