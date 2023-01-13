@@ -4,7 +4,7 @@ import { Heading, BodyLong, Button, Checkbox } from '@navikt/ds-react'
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../utils/product-util'
 import { getIsoCategoryName } from '../utils/iso-category-util'
-import { useHydratedPCStore, useSearchDataStore } from '../utils/state-util'
+import { useHydratedPCStore, useSearchDataStore, CompareMode } from '../utils/state-util'
 import DefinitionList from './produkt/[id]/DefinitionList'
 
 type ProduktProps = {
@@ -13,7 +13,7 @@ type ProduktProps = {
 
 const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useSearchDataStore()
-  const { showProductsToCompare, setProductToCompare, removeProduct, productsToCompare } = useHydratedPCStore()
+  const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedPCStore()
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
@@ -31,7 +31,7 @@ const SearchResult = ({ product }: ProduktProps) => {
   return (
     <li className="search-result">
       <div className="search-result__container">
-        {showProductsToCompare && (
+        {compareMode === CompareMode.Acitve && (
           <div className="compare-item">
             <Checkbox
               hideLabel

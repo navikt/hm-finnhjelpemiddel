@@ -1,12 +1,12 @@
-import { Close, Picture } from '@navikt/ds-icons'
+import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
 import Image from 'next/image'
 import { Heading, BodyShort, Button } from '@navikt/ds-react'
 import { motion } from 'framer-motion'
 import { Product } from '../utils/product-util'
-import { useHydratedPCStore } from '../utils/state-util'
+import { CompareMenuState, CompareMode, useHydratedPCStore } from '../utils/state-util'
 import './search.scss'
 
-const variantsComparingSummary = {
+const variantsCompareMenu = {
   open: {
     opacity: 1,
     y: 0,
@@ -16,8 +16,16 @@ const variantsComparingSummary = {
       restDelta: 2,
     },
   },
-  closed: {
-    opacity: 0.5,
+  minimized: {
+    opacity: 1,
+    y: '90%',
+    delay: 0.5,
+    type: 'spring',
+    stiffness: 400,
+    damping: 40,
+  },
+  deactivated: {
+    opacity: 0,
     y: '100%',
     delay: 0.5,
     type: 'spring',
@@ -27,31 +35,49 @@ const variantsComparingSummary = {
 }
 
 const ProductsToCompare = () => {
-  const { showProductsToCompare, productsToCompare, toggleShowProductsToCompare, removeProduct } = useHydratedPCStore()
+  const { compareMenuState, compareMode, productsToCompare, setCompareMenuState, removeProduct } = useHydratedPCStore()
+  const asd =
+    compareMode === CompareMode.Deactivated
+      ? 'deactivated'
+      : compareMenuState === CompareMenuState.Open
+      ? 'open'
+      : 'minimized'
+
+  const chevronButton =
+    compareMenuState === CompareMenuState.Open ? (
+      <Button
+        className="products-to-compare__minimize-button"
+        size="small"
+        variant="tertiary"
+        onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
+        icon={<Expand title="Sjul sammenlikning" />}
+      />
+    ) : (
+      <Button
+        className="products-to-compare__minimize-button"
+        size="small"
+        variant="tertiary"
+        onClick={() => setCompareMenuState(CompareMenuState.Open)}
+        icon={<Collapse title="Åpne sammenlikning" />}
+      />
+    )
 
   return (
-    <motion.div
-      animate={showProductsToCompare ? 'open' : 'closed'}
-      variants={variantsComparingSummary}
-      className="products-to-compare"
-    >
+    <motion.div animate={asd} variants={variantsCompareMenu} className="products-to-compare">
       <div className="products-to-compare__container">
-        <Heading level="2" size="medium">
-          Sammenlikn følgende produkter
-        </Heading>
+        {compareMenuState === CompareMenuState.Open && (
+          <>
+            <Heading level="2" size="medium">
+              Sammenlikn følgende produkter
+            </Heading>
 
-        {productsToCompare.length > 0 && (
-          <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
+            {productsToCompare.length > 0 && (
+              <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
+            )}
+            {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til</BodyShort>}
+          </>
         )}
-        {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til</BodyShort>}
-
-        <Button
-          className="products-to-compare__minimize-button"
-          size="small"
-          variant="tertiary"
-          onClick={toggleShowProductsToCompare}
-          icon={<Close title="Lukk sammenlikning" />}
-        />
+        {chevronButton}
       </div>
     </motion.div>
   )

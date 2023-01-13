@@ -43,9 +43,21 @@ export const useSearchDataStore = create<SearchDataState>()((set) => ({
   },
 }))
 
+export enum CompareMode {
+  Acitve = 'Acitve',
+  Deactivated = 'Deactivated',
+}
+
+export enum CompareMenuState {
+  Open = 'Open',
+  Minimized = 'Minimized',
+}
+
 type ProductCompareState = {
-  showProductsToCompare: boolean
-  toggleShowProductsToCompare: () => void
+  compareMode: CompareMode
+  setCompareMode: (mode: CompareMode) => void
+  compareMenuState: CompareMenuState
+  setCompareMenuState: (state: CompareMenuState) => void
   productsToCompare: Product[]
   setProductToCompare: (product: Product) => void
   removeProduct: (product: Product) => void
@@ -53,9 +65,11 @@ type ProductCompareState = {
 }
 
 const initialProductCompareState: ProductCompareState = {
-  showProductsToCompare: false,
+  compareMode: CompareMode.Deactivated,
+  setCompareMode: (mode: CompareMode) => {},
+  compareMenuState: CompareMenuState.Open,
+  setCompareMenuState: (menuState: CompareMenuState) => {},
   productsToCompare: [],
-  toggleShowProductsToCompare: () => {},
   setProductToCompare: (product: Product) => {},
   removeProduct: (product: Product) => {},
   resetProductToCompare: () => {},
@@ -64,8 +78,10 @@ const initialProductCompareState: ProductCompareState = {
 export const useProducCompareDataStore = create<ProductCompareState>()(
   persist(
     (set) => ({
-      showProductsToCompare: false,
-      toggleShowProductsToCompare: () => set((state) => ({ showProductsToCompare: !state.showProductsToCompare })),
+      compareMode: CompareMode.Deactivated,
+      setCompareMode: (mode) => set(() => ({ compareMode: mode })),
+      compareMenuState: CompareMenuState.Open,
+      setCompareMenuState: (menuState) => set(() => ({ compareMenuState: menuState })),
       productsToCompare: [],
       setProductToCompare: (product) =>
         set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),

@@ -7,7 +7,7 @@ import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
 
 import './search.scss'
-import { useSearchDataStore, useHydratedPCStore } from '../utils/state-util'
+import { useSearchDataStore, useHydratedPCStore, CompareMenuState, CompareMode } from '../utils/state-util'
 import { PageWrapper } from './page-wrapper'
 import ProductsToCompare from './ProductsToCompare'
 
@@ -48,10 +48,21 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { toggleShowProductsToCompare } = useHydratedPCStore()
+  const { setCompareMode, compareMode } = useHydratedPCStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
+
+  const comparingButton =
+    compareMode === CompareMode.Deactivated ? (
+      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Acitve)}>
+        Sammenlikn produkter
+      </Button>
+    ) : (
+      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
+        Slå av sammenlikning av produkter
+      </Button>
+    )
 
   if (isLoading) {
     return <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
@@ -77,9 +88,7 @@ const SearchResults = ({
             Søkeresultater
           </Heading>
           <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
-          <Button variant="secondary" onClick={() => toggleShowProductsToCompare()}>
-            Sammenlikn produkter
-          </Button>
+          {comparingButton}
         </div>
       </header>
       <ol className="results__list">
