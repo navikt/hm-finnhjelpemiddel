@@ -1,0 +1,23 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: hm-oversikt-frontend
+  namespace: teamdigihot
+  labels:
+    app: hm-oversikt-frontend
+    team: teamdigihot
+spec:
+  image: {{image}}
+  port: 3000
+  environmentname: "q1"
+  ingresses:
+    - 'https://hjelpemiddeloversikt-alpha.dev.nav.no'
+  accessPolicy:
+  outbound:
+    rules:
+      - application: hm-grunndata-search
+  env:
+    - name: RUNTIME_ENVIRONMENT
+      value: dev
+    - name: HM_SEARCH_URL
+      value: https://grunndata-search.dev-gcp.nais.io
