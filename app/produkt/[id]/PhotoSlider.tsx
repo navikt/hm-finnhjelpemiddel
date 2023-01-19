@@ -1,8 +1,9 @@
 'use client'
-import { Photo } from '../../../utils/product-util'
+import { useEffect, useState } from 'react'
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
-import { useState } from 'react'
 import Image from 'next/image'
+import { Photo } from '../../../utils/product-util'
+
 import './slider.scss'
 
 type ImageSliderProps = {
@@ -13,7 +14,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const numberOfImages = photos.length
   const hasImages = photos.length !== 0
   let [active, setActive] = useState(0)
-  let [src, setSrc] = useState(`https://www.hjelpemiddeldatabasen.no/blobs/orig/${photos[active]?.uri}`)
+  let [src, setSrc] = useState(photos[active]?.uri)
+
+  useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
+
+  const imageLoader = ({ src }: { src: string }) => {
+    return `https://www.hjelpemiddeldatabasen.no/blobs/orig/${src}`
+  }
 
   const prevImage = () => {
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
@@ -25,7 +32,6 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
     setActive(nextIndex)
   }
 
-  // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
   return (
     <div className="photo-slider">
       <div className="photo-and-arrow-container">
@@ -44,13 +50,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             </div>
             <div className="photo-container">
               <Image
+                loader={imageLoader}
                 src={src}
                 alt={'Bilde nummer ' + (active + 1)}
                 width={400}
                 height={300}
                 style={{ objectFit: 'contain' }}
                 onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
-                priority
               />
             </div>
             <div
