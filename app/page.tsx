@@ -9,7 +9,7 @@ import Sidebar from './Sidebar'
 import './search.scss'
 import { useSearchDataStore, useHydratedPCStore, CompareMenuState, CompareMode } from '../utils/state-util'
 import { PageWrapper } from './page-wrapper'
-import ProductsToCompare from './ProductsToCompare'
+import ProductsToCompareMenu from './ProductsToCompare'
 
 export default function Page() {
   const { searchData } = useSearchDataStore()
@@ -24,7 +24,7 @@ export default function Page() {
 
   return (
     <PageWrapper>
-      <ProductsToCompare />
+      <ProductsToCompareMenu />
       <div className="main-wrapper">
         <div className="flex-column-wrap">
           <Sidebar />

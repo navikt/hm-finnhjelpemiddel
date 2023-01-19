@@ -1,3 +1,4 @@
+'use client'
 import { create } from 'zustand'
 import { useState, useEffect } from 'react'
 import { persist, createJSONStorage } from 'zustand/middleware'
@@ -64,17 +65,6 @@ type ProductCompareState = {
   resetProductToCompare: () => void
 }
 
-const initialProductCompareState: ProductCompareState = {
-  compareMode: CompareMode.Deactivated,
-  setCompareMode: (mode: CompareMode) => {},
-  compareMenuState: CompareMenuState.Open,
-  setCompareMenuState: (menuState: CompareMenuState) => {},
-  productsToCompare: [],
-  setProductToCompare: (product: Product) => {},
-  removeProduct: (product: Product) => {},
-  resetProductToCompare: () => {},
-}
-
 export const useProducCompareDataStore = create<ProductCompareState>()(
   persist(
     (set) => ({
@@ -97,6 +87,17 @@ export const useProducCompareDataStore = create<ProductCompareState>()(
     }
   )
 )
+
+const initialProductCompareState: ProductCompareState = {
+  compareMode: CompareMode.Deactivated,
+  setCompareMode: (mode: CompareMode) => {},
+  compareMenuState: CompareMenuState.Open,
+  setCompareMenuState: (menuState: CompareMenuState) => {},
+  productsToCompare: [],
+  setProductToCompare: (product: Product) => {},
+  removeProduct: (product: Product) => {},
+  resetProductToCompare: () => {},
+}
 
 // This a fix to ensure zustand never hydrates the store before React hydrates the page
 // otherwise it causes a mismatch between SSR and client render

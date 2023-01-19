@@ -33,6 +33,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                   <p>Veileder</p>
                 </NextLink>
               </li>
+              <li className="nav-compare">
+                <NextLink href="/sammenlign">
+                  <p>Sammenligner</p>
+                </NextLink>
+              </li>
             </ul>
           </div>
         </nav>

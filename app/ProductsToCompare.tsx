@@ -1,12 +1,12 @@
 import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
 import Image from 'next/image'
 import { Heading, BodyShort, Button } from '@navikt/ds-react'
-import { AnimatePresence, motion, usePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Product } from '../utils/product-util'
 import { CompareMenuState, CompareMode, useHydratedPCStore } from '../utils/state-util'
 import './search.scss'
 
-const ProductsToCompare = () => {
+const ProductsToCompareMenu = () => {
   const { compareMenuState, compareMode, productsToCompare, setCompareMenuState, removeProduct } = useHydratedPCStore()
   const mode =
     compareMode === CompareMode.Deactivated
@@ -41,7 +41,7 @@ const ProductsToCompare = () => {
           <motion.div
             key="compare-menu"
             initial={{ opacity: 0, y: '100%' }}
-            animate={{ opacity: 0.9, y: 0 }}
+            animate={{ opacity: 0.97, y: 0 }}
             exit={{ opacity: 0, y: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut', when: 'afterChildren' }}
             className={'products-to-compare ' + 'products-to-compare__' + mode}
@@ -114,4 +114,4 @@ const ChosenProducts = ({
   )
 }
 
-export default ProductsToCompare
+export default ProductsToCompareMenu

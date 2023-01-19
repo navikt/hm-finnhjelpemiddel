@@ -1,7 +1,7 @@
 'use client'
 import { Table, SortState } from '@navikt/ds-react'
 import { useLayoutEffect, useRef, useState } from 'react'
-import './comparing-table.scss'
+import '../../../styles/comparing-table.scss'
 
 type TableData = {
   headers: { id: string; label: string }[]
@@ -55,7 +55,7 @@ const ComparingTable = ({ headers, rows }: TableData) => {
   }, [])
 
   return (
-    <div className="comparing-table">
+    <div className="comparing-table comparing-table__two-sticky-columns">
       <Table sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>
         <Table.Header>
           <Table.Row>
