@@ -32,7 +32,7 @@ const SearchResult = ({ product }: ProduktProps) => {
     <li className="search-result">
       <div className="search-result__container">
         {compareMode === CompareMode.Acitve && (
-          <div className="compare-item">
+          <div className="search-result__compare-checkbox">
             <Checkbox
               hideLabel
               value="Sammenlikn dette produkt"

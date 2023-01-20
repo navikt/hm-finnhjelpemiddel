@@ -1,6 +1,6 @@
 import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
 import Image from 'next/image'
-import { Heading, BodyShort, Button } from '@navikt/ds-react'
+import { Heading, BodyShort, Button, LinkPanel } from '@navikt/ds-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Product } from '../utils/product-util'
 import { CompareMenuState, CompareMode, useHydratedPCStore } from '../utils/state-util'
@@ -17,21 +17,25 @@ const ProductsToCompareMenu = () => {
 
   const chevronButton =
     compareMenuState === CompareMenuState.Open ? (
-      <Button
-        className="products-to-compare__chevron-button"
-        size="small"
-        variant="tertiary"
+      <motion.button
+        layout
         onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
-        icon={<Expand title="Sjul sammenlikning" />}
-      />
-    ) : (
-      <Button
         className="products-to-compare__chevron-button"
-        size="small"
-        variant="tertiary"
+      >
+        <span className="navds-button__icon">
+          <Expand title="Sjul sammenlikning" />
+        </span>
+      </motion.button>
+    ) : (
+      <motion.button
+        layout
         onClick={() => setCompareMenuState(CompareMenuState.Open)}
-        icon={<Collapse title="Åpne sammenlikning" />}
-      />
+        className="products-to-compare__chevron-button"
+      >
+        <span className="navds-button__icon">
+          <Collapse title="Åpne sammenlikning" />
+        </span>
+      </motion.button>
     )
 
   return (
@@ -41,7 +45,7 @@ const ProductsToCompareMenu = () => {
           <motion.div
             key="compare-menu"
             initial={{ opacity: 0, y: '100%' }}
-            animate={{ opacity: 0.97, y: 0 }}
+            animate={{ opacity: 0.99, y: 0 }}
             exit={{ opacity: 0, y: '100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut', when: 'afterChildren' }}
             className={'products-to-compare ' + 'products-to-compare__' + mode}
@@ -49,16 +53,21 @@ const ProductsToCompareMenu = () => {
             <motion.div layout className={'products-to-compare__container'}>
               {chevronButton}
               {compareMenuState === CompareMenuState.Open && (
-                <div className={'products-to-compare__container2'}>
+                <motion.div className={'products-to-compare__container2'}>
                   <Heading level="2" size="medium">
                     Sammenlikn følgende produkter
                   </Heading>
 
                   {productsToCompare.length > 0 && (
-                    <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
+                    <>
+                      <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
+                      <LinkPanel href="/sammenlign" border>
+                        <LinkPanel.Title>Sammenlign utvalg</LinkPanel.Title>
+                      </LinkPanel>
+                    </>
                   )}
                   {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til</BodyShort>}
-                </div>
+                </motion.div>
               )}
             </motion.div>
           </motion.div>

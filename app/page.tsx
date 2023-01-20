@@ -88,8 +88,8 @@ const SearchResults = ({
             Søkeresultater
           </Heading>
           <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
-          {comparingButton}
         </div>
+        {comparingButton}
       </header>
       <ol className="results__list">
         {products.map((product) => (

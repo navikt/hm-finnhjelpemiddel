@@ -13,18 +13,15 @@ import './compare.scss'
 
 export default function ComparePage({ params }: any) {
   const { productsToCompare, removeProduct } = useHydratedPCStore()
-  // const productsToCompare = []
 
   const allDataKeys = productsToCompare.flatMap((prod) => prod.techData.map((td) => td.key))
 
   return (
     <div className="main-wrapper compare-page">
-      <Heading level="1" size="large">
+      <Heading level="1" size="large" spacing>
         Sammenlign produkter
       </Heading>
-      <Heading level="2" size="medium">
-        Tekniske egenskaper
-      </Heading>
+
       <div className="comparing-table">
         <Table>
           <Table.Header>
@@ -33,16 +30,24 @@ export default function ComparePage({ params }: any) {
                 <Heading level="2" size="medium">
                   Produkter
                 </Heading>
+                <Button>Legg til flere</Button>
               </Table.ColumnHeader>
               {productsToCompare.length > 0 &&
                 productsToCompare.map((product, i) => (
-                  <Table.ColumnHeader key={product.id + i}>
+                  <Table.ColumnHeader key={product.id + i} style={{ height: '5px' }}>
                     <ProductTableHeader product={product} removeProduct={removeProduct} />
                   </Table.ColumnHeader>
                 ))}
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <Table.Row>
+              <Table.DataCell colSpan={productsToCompare.length + 1}>
+                <Heading level="2" size="medium">
+                  Tekniske egenskaper
+                </Heading>
+              </Table.DataCell>
+            </Table.Row>
             {productsToCompare.length > 0 &&
               allDataKeys.map((key) => (
                 <Table.Row>
@@ -93,7 +98,11 @@ const ProductTableHeader = ({
           <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
         )}
       </div>
-      <BodyShort>{product.title}</BodyShort>
+      <BodyShort>
+        <a className="compare-page__link" href={`/produkt/${product.id}`}>
+          {product.title}
+        </a>
+      </BodyShort>
     </div>
   )
 }

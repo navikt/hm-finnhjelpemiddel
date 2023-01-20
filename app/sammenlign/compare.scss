@@ -1,8 +1,12 @@
 .compare-page {
+  .comparing-table {
+    max-width: none;
+  }
   .product-header {
     position: relative;
     border: 1px solid var(--a-border-default);
     padding: var(--a-spacing-2);
+    height: 100%;
   }
 
   .product-image {
