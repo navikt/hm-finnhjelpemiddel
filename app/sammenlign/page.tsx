@@ -1,10 +1,11 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
+import NextLink from 'next/link'
 
 import { BodyShort, Heading } from '@navikt/ds-react/esm/typography'
 import { Button, Table } from '@navikt/ds-react'
-import { Picture, Close } from '@navikt/ds-icons'
+import { Picture, Close, Back } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { useHydratedPCStore } from '../../utils/state-util'
 
@@ -14,7 +15,9 @@ import './compare.scss'
 export default function ComparePage({ params }: any) {
   const { productsToCompare, removeProduct } = useHydratedPCStore()
 
-  const allDataKeys = productsToCompare.flatMap((prod) => prod.techData.map((td) => td.key))
+  const allDataKeys = productsToCompare
+    .flatMap((prod) => prod.techData.map((td) => td.key))
+    .filter((v, i, a) => a.indexOf(v) === i)
 
   return (
     <div className="main-wrapper compare-page">
@@ -27,14 +30,17 @@ export default function ComparePage({ params }: any) {
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader>
-                <Heading level="2" size="medium">
+                <Heading level="2" size="medium" spacing>
                   Produkter
                 </Heading>
-                <Button>Legg til flere</Button>
+                <NextLink className="back-to-search" href="/">
+                  <Back title="Tilbake til sok" />
+                  <BodyShort>Legg til flere</BodyShort>
+                </NextLink>
               </Table.ColumnHeader>
               {productsToCompare.length > 0 &&
                 productsToCompare.map((product, i) => (
-                  <Table.ColumnHeader key={product.id + i} style={{ height: '5px' }}>
+                  <Table.ColumnHeader key={'id-' + product.id} style={{ height: '5px' }}>
                     <ProductTableHeader product={product} removeProduct={removeProduct} />
                   </Table.ColumnHeader>
                 ))}
@@ -50,10 +56,10 @@ export default function ComparePage({ params }: any) {
             </Table.Row>
             {productsToCompare.length > 0 &&
               allDataKeys.map((key) => (
-                <Table.Row>
+                <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {productsToCompare.map((product) => (
-                    <Table.DataCell>
+                    <Table.DataCell key={key + '-' + product.id}>
                       {product.techDataDict[key] !== undefined
                         ? product.techDataDict[key].value + product.techDataDict[key].unit
                         : '-'}
@@ -99,9 +105,9 @@ const ProductTableHeader = ({
         )}
       </div>
       <BodyShort>
-        <a className="compare-page__link" href={`/produkt/${product.id}`}>
+        <NextLink className="compare-page__link" href={`/produkt/${product.id}`}>
           {product.title}
-        </a>
+        </NextLink>
       </BodyShort>
     </div>
   )
