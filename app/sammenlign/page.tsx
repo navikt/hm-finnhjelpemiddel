@@ -1,8 +1,15 @@
 'use client'
-import { Heading } from '@navikt/ds-react/esm/typography'
-import { Product, TechData2 } from '../../utils/product-util'
+import { useState } from 'react'
+import Image from 'next/image'
+
+import { BodyShort, Heading } from '@navikt/ds-react/esm/typography'
+import { Button, Table } from '@navikt/ds-react'
+import { Picture, Close } from '@navikt/ds-icons'
+import { Product } from '../../utils/product-util'
 import { useHydratedPCStore } from '../../utils/state-util'
+
 import '../../styles/comparing-table.scss'
+import './compare.scss'
 
 export default function ComparePage({ params }: any) {
   const { productsToCompare, removeProduct } = useHydratedPCStore()
@@ -19,43 +26,74 @@ export default function ComparePage({ params }: any) {
         Tekniske egenskaper
       </Heading>
       <div className="comparing-table">
-        <table>
-          <thead className="column">
-            <tr>
-              <th>
+        <Table>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader>
                 <Heading level="2" size="medium">
                   Produkter
                 </Heading>
-              </th>
-              {allDataKeys.length > 0 && allDataKeys.map((key, i) => <th key={key + i}>{key}</th>)}
-            </tr>
-          </thead>
-          <tbody>
+              </Table.ColumnHeader>
+              {productsToCompare.length > 0 &&
+                productsToCompare.map((product, i) => (
+                  <Table.ColumnHeader key={product.id + i}>
+                    <ProductTableHeader product={product} removeProduct={removeProduct} />
+                  </Table.ColumnHeader>
+                ))}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
             {productsToCompare.length > 0 &&
-              productsToCompare.map((product, i) => (
-                <ProductView key={product.id} product={product} dataKeys={allDataKeys} />
+              allDataKeys.map((key) => (
+                <Table.Row>
+                  <Table.HeaderCell>{key}</Table.HeaderCell>
+                  {productsToCompare.map((product) => (
+                    <Table.DataCell>
+                      {product.techDataDict[key] !== undefined
+                        ? product.techDataDict[key].value + product.techDataDict[key].unit
+                        : '-'}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
               ))}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
     </div>
   )
 }
 
-const ProductView = ({ product, dataKeys }: { product: Product; dataKeys: string[] }) => {
-  console.log(product.techDataDict)
-  console.log(dataKeys)
+const ProductTableHeader = ({
+  product,
+  removeProduct,
+}: {
+  product: Product
+  removeProduct: (product: Product) => void
+}) => {
+  const hasImage = product.photos.length !== 0
+  const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
+
+  const imageLoader = ({ src }: { src: string }) => {
+    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
+  }
   return (
-    <tr className="column">
-      <th>{product.title}</th>
-      {product.techData.length > 0 &&
-        dataKeys.map((dataKey, i) => (
-          <td key={product.id + dataKey + i}>
-            {product.techDataDict[dataKey] !== undefined
-              ? product.techDataDict[dataKey].value + product.techDataDict[dataKey].unit
-              : '-'}
-          </td>
-        ))}
-    </tr>
+    <div className="product-header">
+      <Button
+        className="remove-product-button"
+        size="small"
+        variant="tertiary"
+        onClick={() => removeProduct(product)}
+        icon={<Close title="Fjern produkt fra sammenlikning" />}
+      />
+      <div className="product-image">
+        {!hasImage && (
+          <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+        )}
+        {hasImage && (
+          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
+        )}
+      </div>
+      <BodyShort>{product.title}</BodyShort>
+    </div>
   )
 }

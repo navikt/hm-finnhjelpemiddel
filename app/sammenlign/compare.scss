@@ -1,0 +1,30 @@
+.compare-page {
+  .product-header {
+    position: relative;
+    border: 1px solid var(--a-border-default);
+    padding: var(--a-spacing-2);
+  }
+
+  .product-image {
+    width: 150px;
+    margin-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-2);
+    margin-right: auto;
+    margin-left: auto;
+
+    img {
+      width: auto;
+      max-width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .remove-product-button {
+    position: absolute;
+    top: var(--a-spacing-2);
+    right: var(--a-spacing-1);
+  }
+}
