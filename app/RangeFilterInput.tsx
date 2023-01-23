@@ -1,25 +1,30 @@
 import classNames from 'classnames'
 import { useFormContext } from 'react-hook-form'
 import { Button, Detail, ErrorMessage, TextField } from '@navikt/ds-react'
-import { SearchData } from '../utils/api-util'
+import { FilterData, SearchData } from '../utils/api-util'
 import { FilterCategories } from './FilterView'
 
 import '../styles/range-filter-input.scss'
 
-type RangeFilterInputProps = { filterKey: keyof typeof FilterCategories; className?: string }
+type RangeFilterInputProps = { filterKey: keyof typeof FilterCategories; filters: FilterData; className?: string }
 
-export const RangeFilterInput = ({ filterKey, className }: RangeFilterInputProps) => {
+export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterInputProps) => {
   const {
-    formState: { errors },
+    formState: { errors, dirtyFields },
     register,
     watch,
   } = useFormContext<SearchData>()
 
   const [min, max] = watch(`filters.${filterKey}`) || []
+  const dirty = dirtyFields.filters && !!dirtyFields.filters[filterKey]?.length
+
+  if (!(filterKey in filters)) {
+    return null
+  }
 
   return (
     <div className={classNames('range-filter', className)}>
-      <details>
+      <details open={!!min || !!max || dirty}>
         <summary>{FilterCategories[filterKey]}</summary>
         <div className="range-filter__input">
           <div>
@@ -28,6 +33,7 @@ export const RangeFilterInput = ({ filterKey, className }: RangeFilterInputProps
               type="number"
               label={`Min. ${FilterCategories[filterKey]}`}
               hideLabel
+              placeholder={filters[filterKey].min?.toString()}
               {...register(`filters.${filterKey}.0`, {
                 valueAsNumber: true,
                 validate: (value) => (min && max ? value <= max : true),
@@ -40,6 +46,7 @@ export const RangeFilterInput = ({ filterKey, className }: RangeFilterInputProps
               type="number"
               label={`Maks. ${FilterCategories[filterKey]}`}
               hideLabel
+              placeholder={filters[filterKey].max?.toString()}
               {...register(`filters.${filterKey}.1`, { valueAsNumber: true })}
             />
           </div>

@@ -24,7 +24,7 @@ const SelectIsoCategory = () => {
       <Select
         label={`Kategori`}
         className="search__iso-category-select"
-        onChange={(e) => setValue('isoCode', e.target.value)}
+        onChange={(e) => setValue('isoCode', e.target.value, { shouldDirty: true })}
         value={getIsoCodeForLevel(searchData.isoCode, 1)}
       >
         <option value="">Velg kategori</option>
@@ -40,7 +40,7 @@ const SelectIsoCategory = () => {
         const nextCategories = getIsoCategoriesForLevel(searchData.isoCode, nextLevel)
 
         const updateIsoCode = (isoCode: string) => {
-          setValue('isoCode', isoCode || getIsoCodeForLevel(searchData.isoCode, level))
+          setValue('isoCode', isoCode || getIsoCodeForLevel(searchData.isoCode, level), { shouldDirty: true })
         }
 
         return (

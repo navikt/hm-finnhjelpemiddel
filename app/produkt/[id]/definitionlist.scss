@@ -1,6 +1,6 @@
 .definition-list {
   display: grid;
-  grid-template-columns: minmax(0, max-content) auto;
+  grid-template-columns: minmax(auto, max-content) auto;
   column-gap: var(--a-spacing-10);
   align-items: center;
   margin: 0;
