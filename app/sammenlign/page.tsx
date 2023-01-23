@@ -9,8 +9,7 @@ import { Picture, Close, Back } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { useHydratedPCStore } from '../../utils/state-util'
 
-import '../../styles/comparing-table.scss'
-import './compare.scss'
+import './page.scss'
 
 export default function ComparePage({ params }: any) {
   const { productsToCompare, removeProduct } = useHydratedPCStore()

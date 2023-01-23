@@ -5,7 +5,7 @@ import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../utils/product-util'
 import { getIsoCategoryName } from '../utils/iso-category-util'
 import { useHydratedPCStore, useSearchDataStore, CompareMode } from '../utils/state-util'
-import DefinitionList from './produkt/[id]/DefinitionList'
+import DefinitionList from './DefinitionList'
 
 type ProduktProps = {
   product: Product

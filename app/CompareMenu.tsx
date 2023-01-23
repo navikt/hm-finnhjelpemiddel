@@ -6,7 +6,7 @@ import { Product } from '../utils/product-util'
 import { CompareMenuState, CompareMode, useHydratedPCStore } from '../utils/state-util'
 import './search.scss'
 
-const ProductsToCompareMenu = () => {
+const CompareMenu = () => {
   const { compareMenuState, compareMode, productsToCompare, setCompareMenuState, removeProduct } = useHydratedPCStore()
   const mode =
     compareMode === CompareMode.Deactivated
@@ -123,4 +123,4 @@ const ChosenProducts = ({
   )
 }
 
-export default ProductsToCompareMenu
+export default CompareMenu

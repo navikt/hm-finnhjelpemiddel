@@ -2,7 +2,7 @@
 import { Accordion } from '@navikt/ds-react'
 import React from 'react'
 import { TechData } from '../../../utils/product-util'
-import DefinitionList from './DefinitionList'
+import DefinitionList from '../../DefinitionList'
 
 const InfoAccordion = ({ techData }: { techData: TechData[] }) => {
   const technicalSpesifications = techData.map(({ key, value, unit }, i) => (
