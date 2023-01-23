@@ -371,7 +371,7 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
 }
 
 export async function getProduct(id: string) {
-  const res = await fetch(`https://grunndata-search.dev-gcp.nais.io/product/_doc/${id}`, {
+  const res = await fetch(process.env.HM_SEARCH_URL + `/product/_doc/${id}`, {
     method: 'GET',
   })
 
@@ -379,7 +379,7 @@ export async function getProduct(id: string) {
 }
 
 export async function getSupplier(id: string) {
-  const res = await fetch(`https://grunndata-search.dev-gcp.nais.io/supplier/_doc/${id}`, {
+  const res = await fetch(process.env.HM_SEARCH_URL + `/supplier/_doc/${id}`, {
     method: 'GET',
   })
 
@@ -393,7 +393,7 @@ export async function getSeries(seriesId: string) {
     },
   }
 
-  const res = await fetch('https://grunndata-search.dev-gcp.nais.io/product/_search', {
+  const res = await fetch(process.env.HM_SEARCH_URL + '/product/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

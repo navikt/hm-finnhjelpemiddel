@@ -15,8 +15,11 @@ const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useSearchDataStore()
 
   const hasImage = product.photos.length !== 0
-  const [firstImageUrl] = useState(`https://www.hjelpemiddeldatabasen.no/blobs/orig/${product.photos.at(0)?.uri}`)
+  const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
+  const imageLoader = ({ src }: { src: string }) => {
+    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
+  }
   return (
     <li className="search-result">
       <div className="search-result__container">
@@ -24,7 +27,9 @@ const SearchResult = ({ product }: ProduktProps) => {
           {!hasImage && (
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
           )}
-          {hasImage && <Image src={firstImageUrl} alt="Produktbilde" width="0" height="0" sizes="100vw" style={{}} />}
+          {hasImage && (
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
+          )}
         </div>
         <div className="search-result__content">
           <div className="search-result__title">

@@ -4,7 +4,6 @@ metadata:
   name: hm-oversikt-frontend
   namespace: teamdigihot
   labels:
-    app: hm-oversikt-frontend
     team: teamdigihot
 spec:
   image: {{image}}
@@ -18,5 +17,3 @@ spec:
   env:
     - name: RUNTIME_ENVIRONMENT
       value: dev
-    - name: HM_SEARCH_URL
-      value: https://grunndata-search.dev-gcp.nais.io
