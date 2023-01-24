@@ -22,9 +22,10 @@ export default function Page() {
 
   return (
     <div className="main-wrapper">
-      <Sidebar />
+      <Sidebar filters={data?.at(-1)?.filters} />
       <div className="results__wrapper">
-        <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />
+        {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
+        {data && <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
       </div>
     </div>
   )
@@ -76,11 +77,11 @@ const SearchResults = ({
           <SearchResult key={product.id} product={product} />
         ))}
       </ol>
-      {!isLastPage ? (
+      {!isLastPage && (
         <Button variant="secondary" onClick={() => setSize(size + 1)} loading={isLoadingMore}>
           Vis flere treff
         </Button>
-      ) : null}
+      )}
     </>
   )
 }

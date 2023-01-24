@@ -1,5 +1,6 @@
-import { Heading } from '@navikt/ds-react'
+import { BodyShort, Heading } from '@navikt/ds-react'
 import { RangeFilterInput } from './RangeFilterInput'
+import { FilterData } from '../utils/api-util'
 
 export enum FilterCategories {
   lengdeCM = 'Lengde (cm)',
@@ -18,24 +19,34 @@ export enum FilterCategories {
   beregnetBarn = 'Beregnet barn?',
 }
 
-const FilterView = () => {
+const FilterView = ({ filters }: { filters?: FilterData }) => {
+  if (!filters || !Object.keys(filters).length) {
+    return (
+      <div className="search__filters">
+        <Heading level="2" size="small" className="search__filter-heading">
+          Filtre
+        </Heading>
+        <BodyShort>Ingen tilgjengelige filtre</BodyShort>
+      </div>
+    )
+  }
+
   return (
     <div className="search__filters">
       <Heading level="2" size="small" className="search__filter-heading">
         Filtre
       </Heading>
-
-      <RangeFilterInput filterKey="lengdeCM" />
-      <RangeFilterInput filterKey="breddeCM" />
-      <RangeFilterInput filterKey="totalVektKG" />
-      <RangeFilterInput filterKey="setebreddeMinCM" />
-      <RangeFilterInput filterKey="setebreddeMaksCM" />
-      <RangeFilterInput filterKey="setedybdeMinCM" />
-      <RangeFilterInput filterKey="setedybdeMaksCM" />
-      <RangeFilterInput filterKey="setehoydeMinCM" />
-      <RangeFilterInput filterKey="setehoydeMaksCM" />
-      <RangeFilterInput filterKey="brukervektMinKG" />
-      <RangeFilterInput filterKey="brukervektMaksKG" />
+      <RangeFilterInput filterKey="lengdeCM" filters={filters} />
+      <RangeFilterInput filterKey="breddeCM" filters={filters} />
+      <RangeFilterInput filterKey="totalVektKG" filters={filters} />
+      <RangeFilterInput filterKey="setebreddeMinCM" filters={filters} />
+      <RangeFilterInput filterKey="setebreddeMaksCM" filters={filters} />
+      <RangeFilterInput filterKey="setedybdeMinCM" filters={filters} />
+      <RangeFilterInput filterKey="setedybdeMaksCM" filters={filters} />
+      <RangeFilterInput filterKey="setehoydeMinCM" filters={filters} />
+      <RangeFilterInput filterKey="setehoydeMaksCM" filters={filters} />
+      <RangeFilterInput filterKey="brukervektMinKG" filters={filters} />
+      <RangeFilterInput filterKey="brukervektMaksKG" filters={filters} />
     </div>
   )
 }
