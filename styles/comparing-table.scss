@@ -10,8 +10,9 @@
     border-spacing: 0;
   }
 
-  thead th:first-child {
+  thead tr > th:first-child {
     background-color: var(--a-bg-default);
+    z-index: 2;
   }
 
   tr > th:first-child,

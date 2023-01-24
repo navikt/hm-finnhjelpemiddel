@@ -6,15 +6,18 @@
   }
   .product-header {
     position: relative;
-    border: 1px solid var(--a-border-default);
+    border: 1px solid var(--a-border-subtle);
+    border-radius: var(--a-border-radius-medium);
+    box-shadow: var(--a-shadow-small);
     padding: var(--a-spacing-2);
     height: 100%;
+    width: 210px;
   }
 
   .product-image {
     width: 150px;
     margin-top: var(--a-spacing-10);
-    margin-bottom: var(--a-spacing-2);
+    margin-bottom: var(--a-spacing-6);
     margin-right: auto;
     margin-left: auto;
 
@@ -30,7 +33,7 @@
 
   .remove-product-button {
     position: absolute;
-    top: var(--a-spacing-2);
+    top: var(--a-spacing-1);
     right: var(--a-spacing-1);
   }
 

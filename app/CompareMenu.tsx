@@ -50,26 +50,28 @@ const CompareMenu = () => {
             transition={{ duration: 0.3, ease: 'easeInOut', when: 'afterChildren' }}
             className={'products-to-compare ' + 'products-to-compare__' + mode}
           >
-            <motion.div layout className={'products-to-compare__container'}>
-              {chevronButton}
-              {compareMenuState === CompareMenuState.Open && (
-                <motion.div className={'products-to-compare__container2'}>
-                  <Heading level="2" size="medium">
-                    Sammenlikn følgende produkter
-                  </Heading>
-
-                  {productsToCompare.length > 0 && (
-                    <>
-                      <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
-                      <LinkPanel href="/sammenlign" border>
-                        <LinkPanel.Title>Sammenlign utvalg</LinkPanel.Title>
-                      </LinkPanel>
-                    </>
-                  )}
-                  {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til</BodyShort>}
-                </motion.div>
-              )}
-            </motion.div>
+            {chevronButton}
+            {compareMenuState === CompareMenuState.Open && (
+              <motion.div className={'products-to-compare__products-container'}>
+                {productsToCompare.length > 1 && (
+                  <>
+                    <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
+                    <LinkPanel href="/sammenlign" border>
+                      <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
+                    </LinkPanel>
+                  </>
+                )}
+                {productsToCompare.length === 1 && (
+                  <>
+                    <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
+                    <BodyShort style={{ maxWidth: '200px' }}>
+                      Velg minst ett produkt til for å gå til sammenlikning.
+                    </BodyShort>
+                  </>
+                )}
+                {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til for sammenlikning</BodyShort>}
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -86,7 +88,7 @@ const ChosenProducts = ({
 }) => {
   console.log(productsToCompare)
   return (
-    <>
+    <div className="products-to-compare__chosen-products">
       {productsToCompare.map((product) => (
         <div className="products-to-compare__product" key={'compare-' + product.id}>
           <div className="products-to-compare__image">
@@ -109,7 +111,7 @@ const ChosenProducts = ({
               />
             )}
           </div>
-          <BodyShort>{product.hmsNr ? product.title + '(' + product.hmsNr + ')' : product.title}</BodyShort>
+          <BodyShort>{product.hmsNr ? product.title + ' (' + product.hmsNr + ')' : product.title}</BodyShort>
           <Button
             className="products-to-compare__remove-product-button"
             size="small"
@@ -119,7 +121,7 @@ const ChosenProducts = ({
           />
         </div>
       ))}
-    </>
+    </div>
   )
 }
 

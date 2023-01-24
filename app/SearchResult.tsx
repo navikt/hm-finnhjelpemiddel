@@ -22,8 +22,10 @@ const SearchResult = ({ product }: ProduktProps) => {
     return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
   }
 
-  const handlechange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    event.currentTarget.value ? setProductToCompare(product) : removeProduct(product)
+  const toggleCompare = () => {
+    productsToCompare.filter((procom) => product.id === procom.id).length === 1
+      ? removeProduct(product)
+      : setProductToCompare(product)
   }
 
   const isInProductsToCompare = productsToCompare.filter((procom) => product.id === procom.id).length >= 1
@@ -36,7 +38,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             <Checkbox
               hideLabel
               value="Sammenlikn dette produkt"
-              onChange={handlechange}
+              onChange={toggleCompare}
               checked={isInProductsToCompare}
             >
               Sammenlikn
@@ -54,9 +56,16 @@ const SearchResult = ({ product }: ProduktProps) => {
         <div className="search-result__content">
           <div className="search-result__title">
             <Heading size="medium">
-              <a className="search-result__link" href={`/produkt/${product.id}`}>
-                {product.title}
-              </a>
+              {compareMode === CompareMode.Deactivated && (
+                <a className="search-result__link" href={`/produkt/${product.id}`}>
+                  {product.title}
+                </a>
+              )}
+              {compareMode === CompareMode.Acitve && (
+                <button className="search-result__link search-result__link__button" onClick={toggleCompare}>
+                  {product.title}
+                </button>
+              )}
             </Heading>
           </div>
           <div className="search-result__description">
