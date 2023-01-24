@@ -47,17 +47,14 @@ export default function ComparePage({ params }: any) {
           </Table.Header>
           <Table.Body>
             <Table.Row style={{ position: 'sticky', left: 0 }}>
-              <Table.DataCell
-                colSpan={productsToCompare.length > 2 ? 2 : productsToCompare.length}
-                style={{ position: 'sticky', left: 0 }}
-              >
+              <Table.DataCell colSpan={2} style={{ position: 'sticky', left: 0 }}>
                 <Heading level="2" size="medium">
                   Tekniske egenskaper
                 </Heading>
               </Table.DataCell>
-              {productsToCompare.length > 3 && (
+              {productsToCompare.length > 1 && (
                 <Table.DataCell
-                  colSpan={productsToCompare.length > 2 ? productsToCompare.length - 2 : 0}
+                  colSpan={productsToCompare.length - 1}
                   style={{ position: 'sticky', left: 0 }}
                 ></Table.DataCell>
               )}

@@ -19,6 +19,7 @@
   tr > td:first-child {
     position: sticky;
     left: 0;
+    min-width: 200px;
   }
 
   tbody th {
