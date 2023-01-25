@@ -19,11 +19,23 @@ export const PAGE_SIZE = 15
 export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = { key: number | string; doc_count: number }
 
-export type FilterData = {
+export type RawFilterData = {
   [key in FilterCategories]: {
+    doc_count: number
     buckets?: Array<Bucket>
     values?: { sum_other_doc_count?: number; buckets?: Array<Bucket> }
     sum_other_doc_count?: number
+    min: { value: number }
+    max: { value: number }
+  }
+}
+
+export type FilterData = {
+  [key in FilterCategories as keyof typeof FilterCategories]: {
+    values: Array<Bucket>
+    total_doc_count?: number
+    min: number
+    max: number
   }
 }
 
@@ -148,6 +160,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.lengdeCM' } },
+            min: {
+              min: {
+                field: 'filters.lengdeCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.lengdeCM',
+              },
+            },
           },
         },
         breddeCM: {
@@ -169,6 +191,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.breddeCM' } },
+            min: {
+              min: {
+                field: 'filters.breddeCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.breddeCM',
+              },
+            },
           },
         },
         totalVektKG: {
@@ -190,6 +222,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.totalVektKG' } },
+            min: {
+              min: {
+                field: 'filters.totalVektKG',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.totalVektKG',
+              },
+            },
           },
         },
         setebreddeMinCM: {
@@ -211,6 +253,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.setebreddeMinCM' } },
+            min: {
+              min: {
+                field: 'filters.setebreddeMinCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.setebreddeMinCM',
+              },
+            },
           },
         },
         setebreddeMaksCM: {
@@ -232,6 +284,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.setebreddeMaksCM' } },
+            min: {
+              min: {
+                field: 'filters.setebreddeMaksCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.setebreddeMaksCM',
+              },
+            },
           },
         },
         setedybdeMinCM: {
@@ -253,6 +315,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.setedybdeMinCM' } },
+            min: {
+              min: {
+                field: 'filters.setedybdeMinCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.setedybdeMinCM',
+              },
+            },
           },
         },
         setedybdeMaksCM: {
@@ -274,6 +346,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.setedybdeMaksCM' } },
+            min: {
+              min: {
+                field: 'filters.setedybdeMaksCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.setedybdeMaksCM',
+              },
+            },
           },
         },
         setehoydeMinCM: {
@@ -295,6 +377,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.setehoydeMinCM' } },
+            min: {
+              min: {
+                field: 'filters.setehoydeMinCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.setehoydeMinCM',
+              },
+            },
           },
         },
         setehoydeMaksCM: {
@@ -316,6 +408,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.setehoydeMaksCM' } },
+            min: {
+              min: {
+                field: 'filters.setehoydeMaksCM',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.setehoydeMaksCM',
+              },
+            },
           },
         },
         brukervektMinKG: {
@@ -337,6 +439,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.brukervektMinKG' } },
+            min: {
+              min: {
+                field: 'filters.brukervektMinKG',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.brukervektMinKG',
+              },
+            },
           },
         },
         brukervektMaksKG: {
@@ -358,6 +470,16 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
           },
           aggs: {
             values: { terms: { field: 'filters.brukervektMaksKG' } },
+            min: {
+              min: {
+                field: 'filters.brukervektMaksKG',
+              },
+            },
+            max: {
+              max: {
+                field: 'filters.brukervektMaksKG',
+              },
+            },
           },
         },
       },
@@ -366,8 +488,28 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
     .then((res) => res.json())
     .then((data) => {
       const products: Product[] = mapProducts(data)
-      return { numberOfProducts: data.hits.total.value, products, filters: data.aggregations }
+      return { numberOfProducts: data.hits.total.value, products, filters: mapFilters(data) }
     })
+}
+
+const mapFilters = (data: any): FilterData => {
+  const rawFilterData: RawFilterData = data.aggregations
+
+  const filtered = Object.entries(rawFilterData)
+    .filter(([_, data]) => data.doc_count > 0)
+    .reduce((obj, [key, data]) => {
+      return {
+        ...obj,
+        [key]: {
+          total_doc_count: data.doc_count,
+          values: data.buckets || data.values?.buckets,
+          min: data.min.value,
+          max: data.max.value,
+        },
+      }
+    }, {} as FilterData)
+
+  return filtered
 }
 
 export async function getProduct(id: string) {

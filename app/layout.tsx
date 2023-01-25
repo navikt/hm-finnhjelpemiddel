@@ -23,15 +23,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           <div className="nav-topp__content">
             <ul>
               <li>
-                <NextLink href="/">
+                <a href="/">
                   <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
                   <b>Hjelpemiddeloversikten</b>
-                </NextLink>
+                </a>
               </li>
               <li className="nav-veileder">
-                <NextLink href="/veileder">
+                <a href="/veileder">
                   <p>Veileder</p>
-                </NextLink>
+                </a>
               </li>
               <li className="nav-compare">
                 <NextLink href="/sammenlign">

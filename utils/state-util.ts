@@ -8,19 +8,19 @@ import { Product } from './product-util'
 
 const initialFiltersState = {
   beregnetBarn: [],
-  breddeCM: [],
-  brukervektMaksKG: [],
-  brukervektMinKG: [],
+  breddeCM: [null, null],
+  brukervektMaksKG: [null, null],
+  brukervektMinKG: [null, null],
   fyllmateriale: [],
-  lengdeCM: [],
+  lengdeCM: [null, null],
   materialeTrekk: [],
-  setebreddeMaksCM: [],
-  setebreddeMinCM: [],
-  setedybdeMaksCM: [],
-  setehoydeMaksCM: [],
-  setehoydeMinCM: [],
-  setedybdeMinCM: [],
-  totalVektKG: [],
+  setebreddeMaksCM: [null, null],
+  setebreddeMinCM: [null, null],
+  setedybdeMaksCM: [null, null],
+  setehoydeMaksCM: [null, null],
+  setehoydeMinCM: [null, null],
+  setedybdeMinCM: [null, null],
+  totalVektKG: [null, null],
 }
 
 export const initialSearchDataState = {
