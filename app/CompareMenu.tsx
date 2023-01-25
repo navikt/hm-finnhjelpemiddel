@@ -1,6 +1,6 @@
 import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
 import Image from 'next/image'
-import { Heading, BodyShort, Button, LinkPanel } from '@navikt/ds-react'
+import { BodyShort, Button, LinkPanel } from '@navikt/ds-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Product } from '../utils/product-util'
 import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../utils/state-util'

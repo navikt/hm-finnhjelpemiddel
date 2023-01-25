@@ -7,7 +7,7 @@ import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
 
 import './search.scss'
-import { useSearchDataStore, useHydratedCompareStore, CompareMenuState, CompareMode } from '../utils/state-util'
+import { useSearchDataStore, useHydratedCompareStore, CompareMode } from '../utils/state-util'
 import { PageWrapper } from './animate-page-wrapper'
 import CompareMenu from './CompareMenu'
 
