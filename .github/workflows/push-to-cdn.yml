@@ -1,0 +1,27 @@
+name: 'push-to-cdn'
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: 'actions/checkout@v3'
+
+      - id: upload
+        uses: navikt/frontend/actions/cdn-upload/v1@main
+        with:
+          cdn-team-name: teamdigihot
+          source: ./public/nav-logo-black.svg
+          destination: '/hm-oversikt-frontend'
+
+      - run: echo uploaded file ${{ steps.upload.outputs.uploaded }}
+        shell: bash
