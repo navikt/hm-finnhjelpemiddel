@@ -45,7 +45,7 @@ export const useSearchDataStore = create<SearchDataState>()((set) => ({
 }))
 
 export enum CompareMode {
-  Acitve = 'Acitve',
+  Active = 'Active',
   Deactivated = 'Deactivated',
 }
 
@@ -103,7 +103,7 @@ const initialProductCompareState: ProductCompareState = {
 // otherwise it causes a mismatch between SSR and client render
 // see: https://github.com/pmndrs/zustand/issues/1145
 // https://github.com/TxnLab/use-wallet/pull/23/commits/f4c13aad62839500066d694a5b0f4a4c24c3c8d3
-export const useHydratedPCStore = () => {
+export const useHydratedCompareStore = () => {
   const store = useProducCompareDataStore()
   const [hydrated, setHydrated] = useState(false)
 

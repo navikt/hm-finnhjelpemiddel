@@ -7,8 +7,8 @@ import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
 
 import './search.scss'
-import { useSearchDataStore, useHydratedPCStore, CompareMenuState, CompareMode } from '../utils/state-util'
-import { PageWrapper } from './page-wrapper'
+import { useSearchDataStore, useHydratedCompareStore, CompareMenuState, CompareMode } from '../utils/state-util'
+import { PageWrapper } from './animate-page-wrapper'
 import CompareMenu from './CompareMenu'
 
 export default function Page() {
@@ -48,19 +48,19 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { setCompareMode, compareMode } = useHydratedPCStore()
+  const { setCompareMode, compareMode } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
 
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
-      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Acitve)}>
-        Sammenlikn produkter
+      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Active)}>
+        Sammenlign produkter
       </Button>
     ) : (
       <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
-        Slå av sammenlikning av produkter
+        Slå av sammenligning av produkter
       </Button>
     )
 

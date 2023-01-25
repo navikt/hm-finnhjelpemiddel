@@ -4,7 +4,7 @@ import { Heading, BodyLong, Button, Checkbox } from '@navikt/ds-react'
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../utils/product-util'
 import { getIsoCategoryName } from '../utils/iso-category-util'
-import { useHydratedPCStore, useSearchDataStore, CompareMode } from '../utils/state-util'
+import { useHydratedCompareStore, useSearchDataStore, CompareMode } from '../utils/state-util'
 import DefinitionList from './DefinitionList'
 
 type ProduktProps = {
@@ -13,7 +13,7 @@ type ProduktProps = {
 
 const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useSearchDataStore()
-  const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedPCStore()
+  const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
@@ -33,15 +33,15 @@ const SearchResult = ({ product }: ProduktProps) => {
   return (
     <li className="search-result">
       <div className="search-result__container">
-        {compareMode === CompareMode.Acitve && (
+        {compareMode === CompareMode.Active && (
           <div className="search-result__compare-checkbox">
             <Checkbox
               hideLabel
-              value="Sammenlikn dette produkt"
+              value="sammenlign dette produkt"
               onChange={toggleCompare}
               checked={isInProductsToCompare}
             >
-              Sammenlikn
+              sammenlign
             </Checkbox>
           </div>
         )}
@@ -61,7 +61,7 @@ const SearchResult = ({ product }: ProduktProps) => {
                   {product.title}
                 </a>
               )}
-              {compareMode === CompareMode.Acitve && (
+              {compareMode === CompareMode.Active && (
                 <button className="search-result__link search-result__link__button" onClick={toggleCompare}>
                   {product.title}
                 </button>

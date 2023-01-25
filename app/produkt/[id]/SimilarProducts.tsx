@@ -3,7 +3,7 @@ import { Product as Product } from '../../../utils/product-util'
 import { Back, Next } from '@navikt/ds-icons'
 import { Table, SortState } from '@navikt/ds-react'
 import { Heading } from '@navikt/ds-react/esm/typography'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import '../../../styles/comparing-table.scss'
 
 type SimilarProductsProps = {
@@ -32,7 +32,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
 
   const allProducts = [mainProduct, ...seriesProducts]
   const allDataKeys = allProducts
-    .flatMap((prod) => prod.techData.map((td) => td.key))
+    .flatMap((prod) => Object.keys(prod.techData))
     .filter((v, i, a) => a.indexOf(v) === i)
     .sort((keyA, keyB) => {
       if (sort) {
@@ -64,7 +64,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     } else setSort(undefined)
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setKeyColumnWidth(ref.current ? ref.current['offsetWidth'] : 0)
   }, [])
   // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
@@ -108,7 +108,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
         )}
       </div>
       <Heading level="3" size="medium">
-        Sammenlikn teknisk data med andre produkter i produkserien
+        sammenlign teknisk data med andre produkter i produkserien
       </Heading>
       <div className="comparing-table comparing-table__two-sticky-columns">
         <Table sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>
@@ -134,12 +134,12 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   <Table.DataCell style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
-                    {mainProduct.techDataDict?.[key].value + mainProduct.techDataDict?.[key].unit}
+                    {mainProduct.techData?.[key].value + mainProduct.techData?.[key].unit}
                   </Table.DataCell>
                   {seriesProducts.map((product) => (
                     <Table.DataCell key={key + '-' + product.id}>
-                      {product.techDataDict[key] !== undefined
-                        ? product.techDataDict[key].value + product.techDataDict[key].unit
+                      {product.techData[key] !== undefined
+                        ? product.techData[key].value + product.techData[key].unit
                         : '-'}
                     </Table.DataCell>
                   ))}

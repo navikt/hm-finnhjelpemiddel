@@ -10,8 +10,7 @@ export interface Product {
   accessory: boolean
   sparepart: boolean
   hmsNr?: string
-  techData: TechData[]
-  techDataDict: TechData2
+  techData: TechData
   photos: Photo[]
   supplierId: number
   seriesId: string
@@ -22,12 +21,6 @@ export interface Photo {
 }
 
 export interface TechData {
-  key: string
-  value: string
-  unit: string
-}
-
-export interface TechData2 {
   [key: string]: { value: string; unit: string }
 }
 
@@ -44,8 +37,7 @@ export const createProduct = (_source?: any): Product => {
     accessory: _source.accessory,
     sparepart: _source.sparepart,
     hmsNr: _source.hmsartNr,
-    techData: mapTechData(_source.data),
-    techDataDict: mapTechDataDict(_source.data),
+    techData: mapTechDataDict(_source.data),
     photos: mapPhotoInfo(_source.media),
     supplierId: _source.supplier?.id,
     seriesId: _source.seriesId,
@@ -71,17 +63,7 @@ const mapPhotoInfo = (media: any): Photo[] => {
   return photos
 }
 
-const mapTechData = (data: any): TechData[] => {
-  return data
-    .filter((data: any) => data.key && data.value)
-    .map((data: any) => ({
-      key: data.key,
-      value: data.value,
-      unit: data.unit,
-    }))
-}
-
-const mapTechDataDict = (data: any): TechData2 => {
+const mapTechDataDict = (data: any): TechData => {
   return Object.assign(
     {},
     ...data
