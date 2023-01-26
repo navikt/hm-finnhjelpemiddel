@@ -6,9 +6,12 @@ env:
   docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
 jobs:
-  build:
+  build-and-publish:
     name: Build and push Docker container
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -18,6 +21,18 @@ jobs:
         run: npm install
       - name: Build application
         run: npm run build
+      - name: Upload static files to NAV CDN
+        uses: navikt/frontend/actions/cdn-upload/v1@main
+        with:
+          cdn-team-name: teamdigihot
+          source: ./.next/static
+          destination: '/hm-oversikt-frontend/static'
+      - name: Upload public files to NAV CDN
+        uses: navikt/frontend/actions/cdn-upload/v1@main
+        with:
+          cdn-team-name: teamdigihot
+          source: ./public
+          destination: '/hm-oversikt-frontend/public'
       - uses: docker/setup-buildx-action@v2
       - uses: docker/login-action@v2
         with:
@@ -30,9 +45,10 @@ jobs:
           context: .
           push: true
           tags: ${{ env.docker_image }}
+  
   deploy-to-dev:
     name: Deploy to NAIS dev
-    needs: build
+    needs: build-and-publish
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
