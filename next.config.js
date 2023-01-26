@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
+
+const isProd = process.env.NODE_ENV === 'production'
+
 const nextConfig = {
+  assetPrefix: isProd ? process.env.ASSET_PREFIX : undefined,
   reactStrictMode: true,
   swcMinify: true,
   i18n: {
