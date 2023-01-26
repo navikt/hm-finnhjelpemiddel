@@ -108,7 +108,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
         )}
       </div>
       <Heading level="3" size="medium">
-        sammenlign teknisk data med andre produkter i produkserien
+        Sammenlign teknisk data med andre produkter i produkserien
       </Heading>
       <div className="comparing-table comparing-table__two-sticky-columns">
         <Table sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>

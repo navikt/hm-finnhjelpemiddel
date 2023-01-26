@@ -37,11 +37,11 @@ const SearchResult = ({ product }: ProduktProps) => {
           <div className="search-result__compare-checkbox">
             <Checkbox
               hideLabel
-              value="sammenlign dette produkt"
+              value="Sammenlign dette produkt"
               onChange={toggleCompare}
               checked={isInProductsToCompare}
             >
-              sammenlign
+              Sammenlign
             </Checkbox>
           </div>
         )}
