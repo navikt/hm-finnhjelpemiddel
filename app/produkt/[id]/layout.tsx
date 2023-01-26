@@ -1,7 +1,8 @@
 import React from 'react'
+import { PageWrapper } from '../../animate-page-wrapper'
 
 function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+  return <PageWrapper>{children}</PageWrapper>
 }
 
 export default Layout

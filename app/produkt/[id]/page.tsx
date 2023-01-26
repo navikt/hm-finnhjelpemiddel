@@ -1,3 +1,4 @@
+import './page.scss'
 import { mapSupplier } from '../../../utils/supplier-util'
 import { getProduct, getSupplier, getSeries } from '../../../utils/api-util'
 import { Heading } from '@navikt/ds-react/esm/typography'
@@ -5,7 +6,6 @@ import { createProduct, mapProducts } from '../../../utils/product-util'
 import PhotoSlider from './PhotoSlider'
 import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
-import './product-page.scss'
 import SimilarProducts from './SimilarProducts'
 
 export default async function ProduktPage({ params }: any) {

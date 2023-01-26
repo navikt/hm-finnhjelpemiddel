@@ -1,5 +1,5 @@
 'use client'
-import './veileder.scss'
+import './page.scss'
 import { Category, SituationCategories } from '../../utils/situation-util'
 import Image from 'next/image'
 import React, { useState } from 'react'
