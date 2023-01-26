@@ -26,7 +26,7 @@ jobs:
         with:
           cdn-team-name: teamdigihot
           source: ./.next/static
-          destination: '/hm-oversikt-frontend/static'
+          destination: '/hm-oversikt-frontend/_next'
       - name: Upload public files to NAV CDN
         uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
