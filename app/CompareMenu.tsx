@@ -71,7 +71,7 @@ const CompareMenu = () => {
   )
 
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {compareMenuState === CompareMenuState.Open && openView}
       {compareMenuState === CompareMenuState.Minimized && miniView}
     </AnimatePresence>

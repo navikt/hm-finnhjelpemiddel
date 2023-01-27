@@ -2,7 +2,6 @@
 import useSWRInfinite from 'swr/infinite'
 import { BodyShort, Heading, Loader, Button, Alert } from '@navikt/ds-react'
 import { fetchProducts, FetchResponse, PAGE_SIZE } from '../utils/api-util'
-import { AnimatePresence, motion } from 'framer-motion'
 
 import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
