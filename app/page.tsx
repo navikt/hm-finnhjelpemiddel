@@ -2,17 +2,19 @@
 import useSWRInfinite from 'swr/infinite'
 import { BodyShort, Heading, Loader, Button, Alert } from '@navikt/ds-react'
 import { fetchProducts, FetchResponse, PAGE_SIZE } from '../utils/api-util'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import SearchResult from './SearchResult'
 import Sidebar from './Sidebar'
+import CompareMenu from './CompareMenu'
 
 import './search.scss'
-import { useSearchDataStore, useHydratedCompareStore, CompareMode } from '../utils/state-util'
+import { useSearchDataStore, useHydratedCompareStore, CompareMode, CompareMenuState } from '../utils/state-util'
 import { PageWrapper } from './animate-page-wrapper'
-import CompareMenu from './CompareMenu'
 
 export default function Page() {
   const { searchData } = useSearchDataStore()
+  const { compareMode } = useHydratedCompareStore()
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
@@ -24,7 +26,7 @@ export default function Page() {
 
   return (
     <PageWrapper>
-      <CompareMenu />
+      {compareMode === CompareMode.Active && <CompareMenu />}
       <div className="main-wrapper">
         <div className="flex-column-wrap">
           <Sidebar filters={data?.at(-1)?.filters} />
@@ -49,14 +51,19 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { setCompareMode, compareMode } = useHydratedCompareStore()
+  const { setCompareMode, compareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
 
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
-      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Active)}>
+      <Button
+        variant="secondary"
+        onClick={() => {
+          setCompareMode(CompareMode.Active), setCompareMenuState(CompareMenuState.Open)
+        }}
+      >
         Sammenlign produkter
       </Button>
     ) : (

@@ -3,24 +3,27 @@ import Image from 'next/image'
 import { BodyShort, Button, LinkPanel } from '@navikt/ds-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Product } from '../utils/product-util'
-import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../utils/state-util'
+import { CompareMenuState, useHydratedCompareStore } from '../utils/state-util'
 import './search.scss'
 import { useState } from 'react'
 
 const CompareMenu = () => {
-  const { compareMenuState, compareMode, productsToCompare, setCompareMenuState, removeProduct } =
-    useHydratedCompareStore()
-  const mode =
-    compareMode === CompareMode.Deactivated
-      ? 'deactivated'
-      : compareMenuState === CompareMenuState.Open
-      ? 'open'
-      : 'minimized'
+  const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct } = useHydratedCompareStore()
 
-  const chevronButton =
-    compareMenuState === CompareMenuState.Open ? (
+  const ease = {
+    duration: 0.4,
+    ease: 'easeInOut',
+  }
+
+  const openView = (
+    <motion.div
+      key="modal"
+      layoutId="compare-menu"
+      transition={ease}
+      className="products-to-compare products-to-compare__open"
+    >
       <motion.button
-        layout
+        layoutId="buton"
         onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
         className="products-to-compare__chevron-button"
       >
@@ -28,9 +31,35 @@ const CompareMenu = () => {
           <Expand title="Sjul sammenligning" />
         </span>
       </motion.button>
-    ) : (
+      <motion.div className="products-to-compare__products-container">
+        {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til for sammenligning</BodyShort>}
+        <>
+          <div className="products-to-compare__chosen-products">
+            {productsToCompare.map((product) => (
+              <ChosenProductCard
+                product={product}
+                removeProduct={removeProduct}
+                key={'compare-' + product.id}
+              ></ChosenProductCard>
+            ))}
+          </div>
+          {productsToCompare.length > 1 && (
+            <LinkPanel href="/sammenlign" border>
+              <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
+            </LinkPanel>
+          )}
+          {productsToCompare.length === 1 && (
+            <BodyShort style={{ maxWidth: '200px' }}>Velg minst ett produkt til for å gå til sammenligning.</BodyShort>
+          )}
+        </>
+      </motion.div>
+    </motion.div>
+  )
+
+  const miniView = (
+    <motion.div layoutId="compare-menu" transition={ease} className="products-to-compare minimized">
       <motion.button
-        layout
+        layoutId="buton"
         onClick={() => setCompareMenuState(CompareMenuState.Open)}
         className="products-to-compare__chevron-button"
       >
@@ -38,66 +67,24 @@ const CompareMenu = () => {
           <Collapse title="Åpne sammenligning" />
         </span>
       </motion.button>
-    )
+    </motion.div>
+  )
 
   return (
-    <>
-      <AnimatePresence>
-        {compareMode === CompareMode.Active && (
-          <motion.div
-            key="compare-menu"
-            initial={{ opacity: 0, y: '100%' }}
-            animate={{ opacity: 0.99, y: 0 }}
-            exit={{ opacity: 0, y: '100%' }}
-            transition={{ duration: 0.3, ease: 'easeInOut', when: 'afterChildren' }}
-            className={'products-to-compare ' + 'products-to-compare__' + mode}
-          >
-            {chevronButton}
-            {compareMenuState === CompareMenuState.Open && (
-              <motion.div className={'products-to-compare__products-container'}>
-                {productsToCompare.length > 1 && (
-                  <>
-                    <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
-                    <LinkPanel href="/sammenlign" border>
-                      <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
-                    </LinkPanel>
-                  </>
-                )}
-                {productsToCompare.length === 1 && (
-                  <>
-                    <ChosenProducts productsToCompare={productsToCompare} removeProduct={removeProduct} />
-                    <BodyShort style={{ maxWidth: '200px' }}>
-                      Velg minst ett produkt til for å gå til sammenligning.
-                    </BodyShort>
-                  </>
-                )}
-                {productsToCompare.length === 0 && <BodyShort>Ingen produkter er lagt til for sammenligning</BodyShort>}
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <AnimatePresence>
+      {compareMenuState === CompareMenuState.Open && openView}
+      {compareMenuState === CompareMenuState.Minimized && miniView}
+    </AnimatePresence>
   )
 }
 
-const ChosenProducts = ({
-  productsToCompare,
+const ChosenProductCard = ({
+  product,
   removeProduct,
 }: {
-  productsToCompare: Product[]
+  product: Product
   removeProduct: (product: Product) => void
 }) => {
-  return (
-    <div className="products-to-compare__chosen-products">
-      {productsToCompare.map((product) => (
-        <ProductView product={product} removeProduct={removeProduct}></ProductView>
-      ))}
-    </div>
-  )
-}
-
-const ProductView = ({ product, removeProduct }: { product: Product; removeProduct: (product: Product) => void }) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
@@ -106,7 +93,7 @@ const ProductView = ({ product, removeProduct }: { product: Product; removeProdu
   }
 
   return (
-    <div className="products-to-compare__product" key={'compare-' + product.id}>
+    <div className="products-to-compare__product">
       <div className="products-to-compare__image">
         {!hasImage && (
           <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
