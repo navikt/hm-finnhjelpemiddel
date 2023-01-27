@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Product } from '../utils/product-util'
 import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../utils/state-util'
 import './search.scss'
+import { useState } from 'react'
 
 const CompareMenu = () => {
   const { compareMenuState, compareMode, productsToCompare, setCompareMenuState, removeProduct } =
@@ -90,36 +91,38 @@ const ChosenProducts = ({
   return (
     <div className="products-to-compare__chosen-products">
       {productsToCompare.map((product) => (
-        <div className="products-to-compare__product" key={'compare-' + product.id}>
-          <div className="products-to-compare__image">
-            {product.photos.length === 0 && (
-              <Picture
-                width={150}
-                height="auto"
-                style={{ background: 'white' }}
-                aria-label="Ingen bilde tilgjengelig"
-              />
-            )}
-            {product.photos.length !== 0 && (
-              <Image
-                src={`https://www.hjelpemiddeldatabasen.no/blobs/orig/${product.photos.at(0)?.uri}`}
-                alt="Produktbilde"
-                width="0"
-                height="0"
-                sizes="100vw"
-              />
-            )}
-          </div>
-          <BodyShort>{product.hmsNr ? product.title + ' (' + product.hmsNr + ')' : product.title}</BodyShort>
-          <Button
-            className="products-to-compare__remove-product-button"
-            size="small"
-            variant="tertiary"
-            onClick={() => removeProduct(product)}
-            icon={<Close title="Fjern produkt fra sammenligning" />}
-          />
-        </div>
+        <ProductView product={product} removeProduct={removeProduct}></ProductView>
       ))}
+    </div>
+  )
+}
+
+const ProductView = ({ product, removeProduct }: { product: Product; removeProduct: (product: Product) => void }) => {
+  const hasImage = product.photos.length !== 0
+  const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
+
+  const imageLoader = ({ src }: { src: string }) => {
+    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
+  }
+
+  return (
+    <div className="products-to-compare__product" key={'compare-' + product.id}>
+      <div className="products-to-compare__image">
+        {!hasImage && (
+          <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+        )}
+        {hasImage && (
+          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
+        )}
+      </div>
+      <BodyShort>{product.hmsNr ? product.title + ' (' + product.hmsNr + ')' : product.title}</BodyShort>
+      <Button
+        className="products-to-compare__remove-product-button"
+        size="small"
+        variant="tertiary"
+        onClick={() => removeProduct(product)}
+        icon={<Close title="Fjern produkt fra sammenligning" />}
+      />
     </div>
   )
 }
