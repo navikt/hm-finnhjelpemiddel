@@ -12,6 +12,7 @@ import { CompareMode, useHydratedCompareStore } from '../../utils/state-util'
 import { PageWrapper } from '../animate-page-wrapper'
 
 import './page.scss'
+import { sortAlphabetically } from '../../utils/sort-util'
 
 export default function ComparePage({ params }: any) {
   const { productsToCompare, removeProduct, setCompareMode } = useHydratedCompareStore()
@@ -59,6 +60,7 @@ const CompareTable = ({
   const allDataKeys = productsToCompare
     .flatMap((prod) => Object.keys(prod.techData))
     .filter((v, i, a) => a.indexOf(v) === i)
+    .sort((keyA, keyB) => sortAlphabetically(keyA, keyB))
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
