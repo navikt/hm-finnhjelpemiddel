@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
-import Image from 'next/image'
 import { Photo } from '../../../utils/product-util'
 
 import './slider.scss'
@@ -76,6 +75,21 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         {!hasImages && (
           <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
+        {numberOfImages === 1 && (
+          <>
+            <div style={{ width: '40px', height: '40px' }}></div>
+            <div className="photo-container">
+              <img
+                key={src}
+                src={imageLoader({ src: src })}
+                style={{ objectFit: 'contain' }}
+                onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
+              />
+            </div>
+            <div style={{ width: '40px', height: '40px' }}></div>
+          </>
+        )}
+
         {numberOfImages > 1 && (
           <>
             <div
@@ -113,8 +127,6 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                     }
                   }}
                   style={{ objectFit: 'contain' }}
-                  width="0"
-                  height="0"
                   onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
                 />
               </AnimatePresence>
