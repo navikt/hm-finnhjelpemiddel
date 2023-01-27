@@ -3,6 +3,14 @@
 .compare-page {
   .comparing-table {
     max-width: none;
+
+    tbody > .highlight {
+      background-color: var(--a-surface-action-subtle-hover);
+
+      th {
+        background-color: var(--a-surface-action-subtle-hover);
+      }
+    }
   }
   .product-header {
     position: relative;
