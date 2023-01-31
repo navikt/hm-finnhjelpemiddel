@@ -23,7 +23,7 @@ const CompareMenu = () => {
       className="products-to-compare products-to-compare__open"
     >
       <motion.button
-        layoutId="buton"
+        layoutId="chevron-button"
         onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
         className="products-to-compare__chevron-button"
       >
@@ -59,7 +59,7 @@ const CompareMenu = () => {
   const miniView = (
     <motion.div layoutId="compare-menu" transition={ease} className="products-to-compare minimized">
       <motion.button
-        layoutId="buton"
+        layoutId="chevron-button"
         onClick={() => setCompareMenuState(CompareMenuState.Open)}
         className="products-to-compare__chevron-button"
       >
