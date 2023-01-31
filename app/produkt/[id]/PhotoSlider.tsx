@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react'
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
 import { Photo } from '../../../utils/product-util'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import './slider.scss'
-import { AnimatePresence, motion } from 'framer-motion'
 
 type ImageSliderProps = {
   photos: Photo[]
