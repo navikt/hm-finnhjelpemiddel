@@ -2,6 +2,7 @@
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useInView } from 'react-intersection-observer'
 import * as queryString from 'querystring'
 import classNames from 'classnames'
 import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
@@ -10,7 +11,6 @@ import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 import { FilterData, SearchData, SelectedFilters } from '../utils/api-util'
 import { mapProductSearchParams } from '../utils/product-util'
 import { initialSearchDataState, useSearchDataStore } from '../utils/state-util'
-import { useInViewport } from '../hooks/useInViewport'
 
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
@@ -22,8 +22,7 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
   const [productSearchParams] = useState(mapProductSearchParams(searchParams))
   const [expanded, setExpanded] = useState(false)
 
-  const resetButtonRef = useRef(null)
-  const isResetButtonVisible = useInViewport(resetButtonRef)
+  const { ref: resetButtonRef, inView: isResetButtonVisible } = useInView({ threshold: 0.4 })
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
