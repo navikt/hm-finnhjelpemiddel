@@ -1,6 +1,6 @@
 name: NAIS deploy – DEV
 
-on: [push]
+on: [push, workflow_dispatch]
 
 env:
   docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
@@ -27,7 +27,7 @@ jobs:
         with:
           cdn-team-name: teamdigihot
           source: ./.next/static
-          destination: '/hm-oversikt-frontend/_next'
+          destination: '/hm-oversikt-frontend/dev/_next'
       - name: Upload public files to NAV CDN
         uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
