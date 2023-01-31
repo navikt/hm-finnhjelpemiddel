@@ -1,3 +1,4 @@
+@use 'styles/mixins';
 @import '@navikt/ds-css';
 
 .comparing-table {
@@ -19,7 +20,6 @@
   tr > td:first-child {
     position: sticky;
     left: 0;
-    min-width: 200px;
   }
 
   tbody th {
@@ -29,23 +29,25 @@
 }
 
 .comparing-table__two-sticky-columns {
-  thead th:nth-child(2) {
-    background-color: var(--a-bg-default);
-  }
+  @include mixins.for-size(tablet-up) {
+    thead th:nth-child(2) {
+      background-color: var(--a-bg-default);
+    }
 
-  thead th:nth-child(2) {
-    border-right: 1px solid var(--a-gray-400);
-  }
+    thead th:nth-child(2) {
+      border-right: 1px solid var(--a-gray-400);
+    }
 
-  tr > th:nth-child(2),
-  tr > td:nth-child(2) {
-    position: sticky;
-    left: 100px;
-  }
+    tr > th:nth-child(2),
+    tr > td:nth-child(2) {
+      position: sticky;
+      left: 100px;
+    }
 
-  tr > td:nth-child(2) {
-    border-right: 1px solid var(--a-gray-400);
-    background-color: var(--a-bg-subtle);
+    tr > td:nth-child(2) {
+      border-right: 1px solid var(--a-gray-400);
+      background-color: var(--a-bg-subtle);
+    }
   }
 }
 

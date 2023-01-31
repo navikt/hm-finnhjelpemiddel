@@ -11,6 +11,13 @@
         background-color: var(--a-purple-100);
       }
     }
+
+    tr > th:first-child,
+    tr > td:first-child {
+      position: sticky;
+      left: 0;
+      min-width: 200px;
+    }
   }
   .product-header {
     position: relative;
