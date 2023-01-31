@@ -1,19 +1,36 @@
-import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
+'use client'
+import { forwardRef, useEffect, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { FilterData, SearchData } from '../utils/api-util'
-import { initialSearchDataState, useSearchDataStore } from '../utils/state-util'
-
-import SelectIsoCategory from './SelectIsoCategory'
-import FilterView from './FilterView'
-import { useEffect, useState } from 'react'
+import * as queryString from 'querystring'
+import classNames from 'classnames'
+import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 
+import { FilterData, SearchData, SelectedFilters } from '../utils/api-util'
+import { mapProductSearchParams } from '../utils/product-util'
+import { initialSearchDataState, useSearchDataStore } from '../utils/state-util'
+import { useInViewport } from '../hooks/useInViewport'
+
+import FilterView from './FilterView'
+import SelectIsoCategory from './SelectIsoCategory'
+
 const Sidebar = ({ filters }: { filters?: FilterData }) => {
-  const { searchData, setSearchData, resetSearchData } = useSearchDataStore()
-  const formMethods = useForm<SearchData>({
-    defaultValues: initialSearchDataState,
-  })
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useSearchDataStore()
+  const [productSearchParams] = useState(mapProductSearchParams(searchParams))
   const [expanded, setExpanded] = useState(false)
+
+  const resetButtonRef = useRef(null)
+  const isResetButtonVisible = useInViewport(resetButtonRef)
+
+  const formMethods = useForm<SearchData>({
+    defaultValues: {
+      ...initialSearchDataState,
+      ...productSearchParams,
+    },
+  })
 
   const {
     control,
@@ -24,9 +41,14 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
     watch,
   } = formMethods
 
-  watch(({ hasRammeavtale }) => setSearchData({ hasRammeavtale: !!hasRammeavtale }))
+  const watchHasRammeavtale = watch('hasRammeavtale')
 
   const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
+  const onReset = () => {
+    resetSearchData()
+    resetForm(initialSearchDataState)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const Chevron = expanded ? Collapse : Expand
 
@@ -35,6 +57,26 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
       setExpanded(true)
     }
   }, [])
+
+  useEffect(() => {
+    setSearchData({ hasRammeavtale: !!watchHasRammeavtale })
+  }, [setSearchData, watchHasRammeavtale])
+
+  useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
+
+  useEffect(() => {
+    router.push(
+      '?' +
+        queryString.stringify({
+          agreement: searchData.hasRammeavtale,
+          ...(searchData.searchTerm && { term: searchData.searchTerm }),
+          ...(searchData.isoCode && { isoCode: searchData.isoCode }),
+          ...Object.entries(searchData.filters)
+            .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+            .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
+        })
+    )
+  }, [router, searchData])
 
   return (
     <div className="search__side-bar">
@@ -66,7 +108,10 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
               >
                 <Switch
                   checked={searchData.hasRammeavtale}
-                  onChange={(e) => setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })}
+                  onChange={(e) => {
+                    setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
+                    setSearchData({ hasRammeavtale: e.target.checked })
+                  }}
                 >
                   På rammeavtale
                 </Switch>
@@ -76,19 +121,10 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
             </>
           )}
 
-          {isDirty && (
-            <Button
-              type="button"
-              className="search__reset-button"
-              icon={<Delete title="Nullstill søket" />}
-              onClick={() => {
-                resetSearchData()
-                resetForm()
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-              }}
-            >
-              Nullstill søket
-            </Button>
+          <ResetButton onClick={onReset} ref={resetButtonRef} />
+
+          {(isDirty || searchDataMeta.isUnlikeInitial) && !isResetButtonVisible && (
+            <ResetButton fixed onClick={onReset} />
           )}
         </form>
       </FormProvider>
@@ -104,5 +140,22 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
     </div>
   )
 }
+
+const ResetButton = forwardRef<HTMLButtonElement, { onClick: () => void; fixed?: boolean }>(function RButton(
+  { onClick, fixed = false },
+  ref
+) {
+  return (
+    <Button
+      type="button"
+      className={classNames({ 'search__reset-button': !fixed, 'search__reset-button--fixed': fixed })}
+      icon={<Delete title="Nullstill søket" />}
+      onClick={onClick}
+      ref={ref}
+    >
+      Nullstill søket
+    </Button>
+  )
+})
 
 export default Sidebar

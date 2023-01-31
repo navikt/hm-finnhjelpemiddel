@@ -1,3 +1,6 @@
+import { FilterCategories } from '../app/FilterView'
+import { initialSearchDataState } from './state-util'
+
 export interface Product {
   id: number
   title: string
@@ -74,4 +77,20 @@ const mapTechDataDict = (data: any): TechData => {
 
 export const mapProducts = (data: any): Product[] => {
   return data.hits.hits.map((hit: any) => createProduct(hit._source))
+}
+
+export const mapProductSearchParams = (searchParams: URLSearchParams) => {
+  const searchTerm = searchParams.get('term') ?? ''
+  const isoCode = searchParams.get('isoCode') ?? ''
+  const hasRammeavtale = searchParams.get('agreement') ? searchParams.get('agreement') === 'true' : true
+
+  const filterKeys = Object.keys(FilterCategories).filter((filter) => Array.from(searchParams.keys()).includes(filter))
+  const filters = filterKeys.reduce((obj, fk) => ({ ...obj, [fk]: searchParams.getAll(fk) }), {})
+
+  return {
+    searchTerm,
+    isoCode,
+    hasRammeavtale,
+    filters: { ...initialSearchDataState.filters, ...filters },
+  }
 }

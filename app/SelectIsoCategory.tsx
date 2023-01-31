@@ -6,10 +6,13 @@ import { SearchData } from '../utils/api-util'
 import { useSearchDataStore } from '../utils/state-util'
 
 const SelectIsoCategory = () => {
-  const { setValue, watch } = useFormContext<SearchData>()
   const { searchData, setSearchData } = useSearchDataStore()
+  const { setValue, watch } = useFormContext<SearchData>()
+  const watchIsoCode = watch('isoCode')
 
-  watch(({ isoCode }) => setSearchData({ isoCode: isoCode ?? '' }))
+  useEffect(() => {
+    setSearchData({ isoCode: watchIsoCode ?? '' })
+  }, [setSearchData, watchIsoCode])
 
   useEffect(() => {
     if (searchData.isoCode) {

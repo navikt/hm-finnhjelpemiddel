@@ -68,3 +68,17 @@ export const filterBeregnetBarn = (values: Array<number>) => ({
     should: values.map((value) => ({ term: { 'filters.beregnetBarn': value } })),
   },
 })
+
+export const toMinMaxAggs = (filterKey: string) => ({
+  values: { terms: { field: filterKey } },
+  min: {
+    min: {
+      field: filterKey,
+    },
+  },
+  max: {
+    max: {
+      field: filterKey,
+    },
+  },
+})

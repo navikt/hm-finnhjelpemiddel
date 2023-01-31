@@ -2,6 +2,7 @@
 import { create } from 'zustand'
 import { useState, useEffect } from 'react'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import deepEqual from 'deep-equal'
 import { SearchData } from './api-util'
 import { AtLeastOne } from './type-util'
 import { Product } from './product-util'
@@ -34,13 +35,22 @@ type SearchDataState = {
   searchData: SearchData
   setSearchData: (searchData: AtLeastOne<SearchData>) => void
   resetSearchData: () => void
+  meta: { isUnlikeInitial: boolean }
 }
 
 export const useSearchDataStore = create<SearchDataState>()((set) => ({
+  meta: { isUnlikeInitial: false },
   searchData: initialSearchDataState,
-  setSearchData: (searchData) => set((state) => ({ searchData: { ...state.searchData, ...searchData } })),
+  setSearchData: (searchData) =>
+    set((state) => {
+      const updatedSearchData = { ...state.searchData, ...searchData }
+      return {
+        searchData: updatedSearchData,
+        meta: { isUnlikeInitial: !deepEqual(initialSearchDataState, updatedSearchData) },
+      }
+    }),
   resetSearchData: () => {
-    set({ searchData: initialSearchDataState })
+    set({ searchData: initialSearchDataState, meta: { isUnlikeInitial: false } })
   },
 }))
 
