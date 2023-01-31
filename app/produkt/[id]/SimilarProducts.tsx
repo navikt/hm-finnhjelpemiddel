@@ -5,6 +5,7 @@ import { Table, SortState } from '@navikt/ds-react'
 import { Heading } from '@navikt/ds-react/esm/typography'
 import { useEffect, useRef, useState } from 'react'
 import '../../../styles/comparing-table.scss'
+import { sortAlphabetically } from '../../../utils/sort-util'
 
 type SimilarProductsProps = {
   mainProduct: Product
@@ -36,17 +37,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     .filter((v, i, a) => a.indexOf(v) === i)
     .sort((keyA, keyB) => {
       if (sort) {
-        const comparator = (a: string, b: string) => {
-          if (a < b || b === undefined) {
-            return -1
-          }
-          if (a > b) {
-            return 1
-          }
-          return 0
-        }
-
-        return sort.direction === 'ascending' ? comparator(keyB, keyA) : comparator(keyA, keyB)
+        return sortAlphabetically(keyA, keyB, sort?.direction === 'descending')
       }
       return 1
     })

@@ -22,7 +22,7 @@ const SearchResult = ({ product }: ProduktProps) => {
     return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
   }
 
-  const toggleCompare = () => {
+  const toggleCompareProduct = () => {
     productsToCompare.filter((procom) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
@@ -38,7 +38,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             <Checkbox
               hideLabel
               value="Sammenlign dette produkt"
-              onChange={toggleCompare}
+              onChange={toggleCompareProduct}
               checked={isInProductsToCompare}
             >
               Sammenlign
@@ -62,7 +62,7 @@ const SearchResult = ({ product }: ProduktProps) => {
                 </a>
               )}
               {compareMode === CompareMode.Active && (
-                <button className="search-result__link search-result__link__button" onClick={toggleCompare}>
+                <button className="search-result__link search-result__link__button" onClick={toggleCompareProduct}>
                   {product.title}
                 </button>
               )}

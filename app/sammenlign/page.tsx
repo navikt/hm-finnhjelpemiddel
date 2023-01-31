@@ -12,6 +12,7 @@ import { CompareMode, useHydratedCompareStore } from '../../utils/state-util'
 import { PageWrapper } from '../animate-page-wrapper'
 
 import './page.scss'
+import { sortAlphabetically } from '../../utils/sort-util'
 
 export default function ComparePage({ params }: any) {
   const { productsToCompare, removeProduct, setCompareMode } = useHydratedCompareStore()
@@ -59,6 +60,22 @@ const CompareTable = ({
   const allDataKeys = productsToCompare
     .flatMap((prod) => Object.keys(prod.techData))
     .filter((v, i, a) => a.indexOf(v) === i)
+    .sort((keyA, keyB) => sortAlphabetically(keyA, keyB))
+
+  const rows: { [key: string]: string[] } = Object.assign(
+    {},
+    ...allDataKeys.map((key) => ({
+      [key]: productsToCompare.map((product) =>
+        product.techData[key] !== undefined ? product.techData[key].value + product.techData[key].unit : '-'
+      ),
+    }))
+  )
+
+  const hasDifferentValues = ({ row }: { row: string[] }) => {
+    let uniqueValues = new Set(row)
+    uniqueValues.delete('-')
+    return uniqueValues.size > 1
+  }
 
   return (
     <section className="comparing-table">
@@ -97,15 +114,11 @@ const CompareTable = ({
             )}
           </Table.Row>
           {productsToCompare.length > 0 &&
-            allDataKeys.map((key) => (
-              <Table.Row key={key + 'row'}>
+            Object.entries(rows).map(([key, row]) => (
+              <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>
                 <Table.HeaderCell>{key}</Table.HeaderCell>
-                {productsToCompare.map((product) => (
-                  <Table.DataCell key={key + '-' + product.id}>
-                    {product.techData[key] !== undefined
-                      ? product.techData[key].value + product.techData[key].unit
-                      : '-'}
-                  </Table.DataCell>
+                {row.map((value, i) => (
+                  <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
                 ))}
               </Table.Row>
             ))}

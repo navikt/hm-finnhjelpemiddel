@@ -13,14 +13,22 @@
   }
 
   .photo-container {
+    position: relative;
+    overflow: hidden;
     margin: var(--a-spacing-3);
     background-color: var(--a-gray-50);
     display: flex;
     justify-content: center;
     align-items: center;
-    @include mixins.for-size(tablet-up) {
-      width: 400px;
-      height: 300px;
+
+    width: 400px;
+    height: 300px;
+
+    img {
+      position: absolute;
+      height: 100%;
+      width: auto;
+      max-width: 400px;
     }
   }
 
