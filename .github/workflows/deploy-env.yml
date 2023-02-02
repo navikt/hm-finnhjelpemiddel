@@ -1,4 +1,4 @@
-name: NAIS deploy - ALPHA
+name: NAIS deploy - ENV
 
 on:
   workflow_dispatch:
@@ -7,7 +7,8 @@ on:
         type: choice
         description: Deploy to environment
         options:
-          - alpha
+          - DEV
+          - Alpha (DEV)
 
 env:
   docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
@@ -38,7 +39,7 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
   deploy-to-alpha:
-    name: Deploy to NAIS dev (alpha)
+    name: Deploy to NAIS (Alpha)
     needs: build
     if: github.event.inputs.environment == 'alpha'
     runs-on: ubuntu-latest
@@ -49,4 +50,17 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-alpha.yaml
+          VAR: image=${{ env.docker_image }}
+  deploy-to-dev:
+    name: Deploy to NAIS (DEV)
+    needs: build
+    if: github.event.inputs.environment == 'dev-test'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais-dev.yaml
           VAR: image=${{ env.docker_image }}
