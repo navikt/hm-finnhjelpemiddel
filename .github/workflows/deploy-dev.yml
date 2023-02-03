@@ -1,6 +1,6 @@
 name: NAIS deploy – DEV
 
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 env:
   docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
