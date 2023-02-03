@@ -16,7 +16,7 @@ env:
 jobs:
   build-alpha:
     name: Build and push Alpha Docker container
-    if: github.event.inputs.environment == 'alpha'
+    if: github.event.inputs.environment == 'Alpha (DEV)'
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -52,7 +52,7 @@ jobs:
           
   build-dev:
     name: Build and push Dev Docker container
-    if: github.event.inputs.environment == 'Alpha (DEV)'
+    if: github.event.inputs.environment == 'DEV'
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -89,7 +89,7 @@ jobs:
   deploy-to-alpha:
     name: Deploy to NAIS (Alpha)
     needs: build-alpha
-    if: github.event.inputs.environment == 'alpha'
+    if: github.event.inputs.environment == 'Alpha (DEV)'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
