@@ -17,7 +17,7 @@ COPY next.config.js .
 COPY package.json ./package.json
 
 # Build app
-RUN npm run build
+RUN npm run build:alpha
 
 FROM gcr.io/distroless/nodejs:16 as runtime
 

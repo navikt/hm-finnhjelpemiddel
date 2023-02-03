@@ -1,0 +1,36 @@
+# Base on offical Node.js Alpine image
+FROM node:18-alpine as builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json before other files
+# Utilise Docker cache to save re-installing dependencies if unchanged
+COPY package*.json /app/
+
+# Install dependencies
+RUN npm install
+
+# Copy all files
+COPY . .
+COPY next.config.js .
+COPY package.json ./package.json
+
+# Build app
+RUN npm run build:dev
+
+FROM gcr.io/distroless/nodejs:16 as runtime
+
+WORKDIR /app
+
+COPY --from=builder /app/package.json /app/
+COPY --from=builder /app/node_modules /app/node_modules
+COPY next.config.js /app/
+COPY .next /app/.next/
+COPY public /app/public/
+
+# Expose the listening port
+EXPOSE 3000
+
+# Run npm start script when container starts
+CMD ["node_modules/next/dist/bin/next", "start"]
