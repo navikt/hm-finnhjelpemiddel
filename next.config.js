@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 
-const isProd = (process.env.NODE_ENV === 'production') | (process.env.NODE_ENV === 'alpha')
+const isProd = process.env.NODE_ENV === 'production'
 const prefixAlphaOrDev =
-  process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
+  process.env.DEV_ENV === 'alpha'
+    ? process.env.NEXT_PUBLIC_ASSET_PREFIX + '/alpha'
+    : process.env.NEXT_PUBLIC_ASSET_PREFIX + '/dev'
 
+console.log('is prod', isProd)
+console.log('asset prefix', prefixAlphaOrDev)
 const nextConfig = {
   assetPrefix: isProd ? prefixAlphaOrDev : undefined,
   reactStrictMode: true,
