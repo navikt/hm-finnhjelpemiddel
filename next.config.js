@@ -6,9 +6,6 @@ const prefixAlphaOrDev =
     ? process.env.NEXT_PUBLIC_ASSET_PREFIX + '/alpha'
     : process.env.NEXT_PUBLIC_ASSET_PREFIX + '/dev'
 
-console.log('HM_SEARCH_URL', process.env.HM_SEARCH_URL)
-console.log('is prod', isProd)
-console.log('asset prefix', prefixAlphaOrDev)
 const nextConfig = {
   assetPrefix: isProd ? prefixAlphaOrDev : undefined,
   reactStrictMode: true,
@@ -19,6 +16,9 @@ const nextConfig = {
   },
   experimental: { appDir: true },
   async rewrites() {
+    console.log('HM_SEARCH_URL', process.env.HM_SEARCH_URL)
+    console.log('is prod', isProd)
+    console.log('asset prefix', prefixAlphaOrDev)
     return [
       {
         source: '/product/_search:path*',
