@@ -85,7 +85,6 @@ jobs:
           context: .
           push: true
           tags: ${{ env.docker_image }}
-  
           
   deploy-to-alpha:
     name: Deploy to NAIS (Alpha)
