@@ -48,7 +48,7 @@ jobs:
         with:
           context: .
           push: true
-          dockerfile: Dockerfile.dev
+          file: Dockerfile.dev
           tags: ${{ env.docker_image }}
           
   build-dev:
@@ -85,7 +85,7 @@ jobs:
         with:
           context: .
           push: true
-          dockerfile: Dockerfile.dev
+          file: Dockerfile.dev
           tags: ${{ env.docker_image }}
           
   deploy-to-alpha:
