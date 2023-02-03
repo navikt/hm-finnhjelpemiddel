@@ -4,10 +4,10 @@ const isProd = (process.env.NODE_ENV === 'production') | (process.env.NODE_ENV =
 const prefixAlphaOrDev =
   process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
 
-const newAssetPrefix = isProd ? prefixAlphaOrDev : undefined
+const assetPrefix = isProd ? prefixAlphaOrDev : undefined
 
 const nextConfig = {
-  assetPrefix: newAssetPrefix,
+  assetPrefix,
   reactStrictMode: true,
   swcMinify: true,
   i18n: {
