@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 
 const isProd = process.env.NODE_ENV === 'production'
+
+console.log('env', process.env.DEV_ENV)
 const prefixAlphaOrDev =
   process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
 
