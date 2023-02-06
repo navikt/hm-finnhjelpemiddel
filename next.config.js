@@ -16,9 +16,6 @@ const nextConfig = {
   },
   experimental: { appDir: true },
   async rewrites() {
-    console.log('HM_SEARCH_URL', process.env.HM_SEARCH_URL)
-    console.log('is prod', isProd)
-    console.log('asset prefix', prefixAlphaOrDev)
     return [
       {
         source: '/product/_search:path*',
