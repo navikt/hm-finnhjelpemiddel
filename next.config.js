@@ -1,12 +1,16 @@
 /** @type {import('next').NextConfig} */
 
-const isProd = process.env.NODE_ENV === 'production'
-
-const prefixAlphaOrDev =
-  process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
+const setAssetPefix = (nodeEnv, devEnv, assetPrefix) => {
+  const isProd = nodeEnv === 'production'
+  const prefixAlphaOrDev = devEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
+  console.log('env', devEnv)
+  console.log('hm-search', process.env.HM_SEARCH_URL)
+  console.log('asset', assetPrefix)
+  return isProd ? prefixAlphaOrDev : undefined
+}
 
 const nextConfig = {
-  assetPrefix: isProd ? prefixAlphaOrDev : undefined,
+  assetPrefix: setAssetPefix(process.env.NODE_ENV, process.env.DEV_ENV, process.env.ASSET_PREFIX),
   reactStrictMode: true,
   swcMinify: true,
   i18n: {
@@ -17,7 +21,6 @@ const nextConfig = {
   async rewrites() {
     console.log('env', process.env.DEV_ENV)
     console.log('hm-search', process.env.HM_SEARCH_URL)
-
     return [
       {
         source: '/product/_search:path*',
