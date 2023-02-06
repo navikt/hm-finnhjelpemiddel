@@ -48,7 +48,6 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.dev
           tags: ${{ env.docker_image }}
           build-args: |
             "BUILD_ENV=ALPHA"
@@ -87,7 +86,6 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.dev
           tags: ${{ env.docker_image }}
           build-args: |
             "BUILD_ENV=DEV"
