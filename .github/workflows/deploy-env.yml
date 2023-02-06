@@ -30,7 +30,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       - name: Build application
-        run: npm run build:alpha
+        run: npm run build
       - name: Upload static files to NAV CDN
         uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
@@ -68,7 +68,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       - name: Build application
-        run: npm run build:dev
+        run: npm run build
       - name: Upload static files to NAV CDN
         uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
