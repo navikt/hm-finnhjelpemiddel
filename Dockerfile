@@ -20,7 +20,7 @@ COPY .env.production .
 ARG BUILD_ENV
 ENV BUILD_ENV ${BUILD_ENV}
 # Build app
-RUN npm run build:${BUILD_ENV}
+RUN npm run build
 
 FROM gcr.io/distroless/nodejs:16 as runtime
 

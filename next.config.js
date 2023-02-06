@@ -10,7 +10,7 @@ const setAssetPefix = (nodeEnv, devEnv, assetPrefix) => {
 }
 
 const nextConfig = {
-  assetPrefix: setAssetPefix(process.env.NODE_ENV, process.env.DEV_ENV, process.env.ASSET_PREFIX),
+  assetPrefix: setAssetPefix(process.env.NODE_ENV, process.env.BUILD_ENV, process.env.ASSET_PREFIX),
   reactStrictMode: true,
   swcMinify: true,
   i18n: {
@@ -19,7 +19,7 @@ const nextConfig = {
   },
   experimental: { appDir: true },
   async rewrites() {
-    console.log('env', process.env.DEV_ENV)
+    console.log('env docker', process.env.BUILD_ENV)
     console.log('hm-search', process.env.HM_SEARCH_URL)
     return [
       {
