@@ -1,12 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-const setAssetPefix = (nodeEnv, devEnv, assetPrefix) => {
+const setAssetPefix = (nodeEnv, buildEnv, assetPrefix) => {
   const isProd = nodeEnv === 'production'
-  const prefixAlphaOrDev = devEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
-  console.log('env', devEnv)
-  console.log('hm-search', process.env.HM_SEARCH_URL)
-  console.log('asset', assetPrefix)
-  return isProd ? prefixAlphaOrDev : undefined
+  const prefixAlphaOrDev = buildEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
+  return isProd && buildEnv !== undefined ? prefixAlphaOrDev : undefined
 }
 
 const nextConfig = {
@@ -19,8 +16,6 @@ const nextConfig = {
   },
   experimental: { appDir: true },
   async rewrites() {
-    console.log('env docker', process.env.BUILD_ENV)
-    console.log('hm-search', process.env.HM_SEARCH_URL)
     return [
       {
         source: '/product/_search:path*',
