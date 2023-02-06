@@ -50,7 +50,9 @@ jobs:
           push: true
           file: Dockerfile.dev
           tags: ${{ env.docker_image }}
-          
+          build-args: |
+            "BUILD_ENV=ALPHA"
+
   build-dev:
     name: Build and push Dev Docker container
     if: github.event.inputs.environment == 'DEV'
@@ -87,7 +89,9 @@ jobs:
           push: true
           file: Dockerfile.dev
           tags: ${{ env.docker_image }}
-          
+          build-args: |
+            "BUILD_ENV=DEV"
+  
   deploy-to-alpha:
     name: Deploy to NAIS (Alpha)
     needs: build-alpha
