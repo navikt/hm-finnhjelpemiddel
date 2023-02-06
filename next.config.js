@@ -2,7 +2,6 @@
 
 const isProd = process.env.NODE_ENV === 'production'
 
-console.log('env', process.env.DEV_ENV)
 const prefixAlphaOrDev =
   process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
 
@@ -16,6 +15,9 @@ const nextConfig = {
   },
   experimental: { appDir: true },
   async rewrites() {
+    console.log('env', process.env.DEV_ENV)
+    console.log('hm-search', process.env.HM_SEARCH_URL)
+
     return [
       {
         source: '/product/_search:path*',
