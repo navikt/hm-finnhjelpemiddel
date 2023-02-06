@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 
-const isProd = (process.env.NODE_ENV === 'production') | (process.env.NODE_ENV === 'alpha')
-const prefixAlphaOrDev =
-  process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
-
-const assetPrefix = isProd ? prefixAlphaOrDev : undefined
+const setAssetPefix = (nodeEnv, buildEnv, assetPrefix) => {
+  const isProd = nodeEnv === 'production'
+  const prefixAlphaOrDev = buildEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
+  return isProd && buildEnv !== undefined ? prefixAlphaOrDev : undefined
+}
 
 const nextConfig = {
-  assetPrefix,
+  assetPrefix: setAssetPefix(process.env.NODE_ENV, process.env.BUILD_ENV, process.env.ASSET_PREFIX),
   reactStrictMode: true,
   swcMinify: true,
   i18n: {

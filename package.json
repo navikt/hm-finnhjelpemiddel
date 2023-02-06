@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build:dev": "next build",
-    "build:alpha": "DEV_ENV=alpha next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

@@ -15,7 +15,10 @@ RUN npm install
 COPY . .
 COPY next.config.js .
 COPY package.json ./package.json
+COPY .env.production .
 
+ARG BUILD_ENV
+ENV BUILD_ENV ${BUILD_ENV}
 # Build app
 RUN npm run build
 
@@ -28,6 +31,7 @@ COPY --from=builder /app/node_modules /app/node_modules
 COPY next.config.js /app/
 COPY .next /app/.next/
 COPY public /app/public/
+COPY .env* /app/
 
 # Expose the listening port
 EXPOSE 3000
