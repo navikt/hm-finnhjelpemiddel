@@ -1,24 +1,32 @@
 import classNames from 'classnames'
 import { useFormContext } from 'react-hook-form'
 import { Button, Detail, ErrorMessage, TextField } from '@navikt/ds-react'
-import { FilterData, SearchData } from '../utils/api-util'
+import { FilterData, SearchData, SelectedFilters } from '../utils/api-util'
+import { useSearchDataStore } from '../utils/state-util'
 import { FilterCategories } from './FilterView'
 
 import '../styles/range-filter-input.scss'
 
-type RangeFilterInputProps = { filterKey: keyof typeof FilterCategories; filters: FilterData; className?: string }
+type RangeFilterInputProps = { filterKey: keyof typeof FilterCategories; filters?: FilterData; className?: string }
 
 export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterInputProps) => {
+  const { searchData } = useSearchDataStore()
   const {
     formState: { errors, dirtyFields },
     register,
     watch,
   } = useFormContext<SearchData>()
 
+  const searchDataFilters = Object.entries(searchData.filters)
+    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+    .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters)
+
   const [min, max] = watch(`filters.${filterKey}`) || []
   const dirty = dirtyFields.filters && !!dirtyFields.filters[filterKey]?.length
 
-  if (!(filterKey in filters)) {
+  const hasFilterData = filters && filters[filterKey]?.values.length
+
+  if (!(filterKey in searchDataFilters) && !hasFilterData) {
     return null
   }
 
@@ -33,7 +41,7 @@ export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterI
               type="number"
               label={`Min. ${FilterCategories[filterKey]}`}
               hideLabel
-              placeholder={filters[filterKey].min?.toString()}
+              placeholder={hasFilterData ? filters[filterKey].min?.toString() : undefined}
               {...register(`filters.${filterKey}.0`, {
                 valueAsNumber: true,
                 validate: (value) => (min && max ? value <= max : true),
@@ -46,7 +54,7 @@ export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterI
               type="number"
               label={`Maks. ${FilterCategories[filterKey]}`}
               hideLabel
-              placeholder={filters[filterKey].max?.toString()}
+              placeholder={hasFilterData ? filters[filterKey].max?.toString() : undefined}
               {...register(`filters.${filterKey}.1`, { valueAsNumber: true })}
             />
           </div>

@@ -6,6 +6,11 @@
       list-style: none;
       padding: var(--a-spacing-2) 0;
 
+      &::marker,
+      &::-webkit-details-marker {
+        display: none;
+      }
+
       &:hover {
         text-decoration: underline;
         text-decoration-thickness: 2px;

@@ -33,10 +33,15 @@
   }
 
   &__reset-button {
-    position: fixed;
-    right: var(--a-spacing-2);
-    bottom: var(--a-spacing-4);
-    z-index: 999;
+    width: 100%;
+    margin-bottom: var(--a-spacing-4);
+
+    &--fixed {
+      position: fixed;
+      right: var(--a-spacing-4);
+      bottom: var(--a-spacing-4);
+      z-index: 999;
+    }
   }
 
   &__expand-button {
