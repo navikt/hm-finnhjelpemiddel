@@ -2,9 +2,7 @@
 
 const isProd = process.env.NODE_ENV === 'production'
 const prefixAlphaOrDev =
-  process.env.DEV_ENV === 'alpha'
-    ? process.env.NEXT_PUBLIC_ASSET_PREFIX + '/alpha'
-    : process.env.NEXT_PUBLIC_ASSET_PREFIX + '/dev'
+  process.env.DEV_ENV === 'alpha' ? process.env.ASSET_PREFIX + '/alpha' : process.env.ASSET_PREFIX + '/dev'
 
 const nextConfig = {
   assetPrefix: isProd ? prefixAlphaOrDev : undefined,
