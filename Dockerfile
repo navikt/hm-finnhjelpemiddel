@@ -17,8 +17,10 @@ COPY next.config.js .
 COPY package.json ./package.json
 COPY .env.production .
 
+ARG BUILD_ENV
+ENV BUILD_ENV ${BUILD_ENV}
 # Build app
-RUN npm run build:dev
+RUN npm run build:${BUILD_ENV}
 
 FROM gcr.io/distroless/nodejs:16 as runtime
 
