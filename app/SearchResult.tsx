@@ -69,21 +69,21 @@ const SearchResult = ({ product }: ProduktProps) => {
             </Heading>
           </div>
           <div className="search-result__description">
-            <BodyLong>{product.description?.short}</BodyLong>
+            <BodyLong>{product.attributes?.shortdescription}</BodyLong>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
               <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
-              <DefinitionList.Definition>{product.hmsNr}</DefinitionList.Definition>
+              <DefinitionList.Definition>{product.hmsartNr}</DefinitionList.Definition>
               <DefinitionList.Term>Produktkategori</DefinitionList.Term>
               <DefinitionList.Definition>
                 <Button
                   className="search-result__product-category-button"
                   variant="tertiary"
                   size="small"
-                  onClick={() => setSearchData({ isoCode: product.isoCode })}
+                  onClick={() => setSearchData({ isoCode: product.isoCategory })}
                 >
-                  {getIsoCategoryName(product.isoCode)}
+                  {getIsoCategoryName(product.isoCategory)}
                 </Button>
               </DefinitionList.Definition>
             </DefinitionList>

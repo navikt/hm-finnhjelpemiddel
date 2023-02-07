@@ -81,7 +81,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
             return (
               <div key={index} className="similar-products__card">
                 <p>{product.title}</p>
-                <p>{product.description?.name}</p>
+                <p>{product.attributes?.articlename}</p>
                 <a href={`/produkt/${product.id}`}>Les mer</a>
               </div>
             )
