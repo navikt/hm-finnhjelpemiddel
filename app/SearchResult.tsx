@@ -88,6 +88,10 @@ const SearchResult = ({ product }: ProduktProps) => {
                   {getIsoCategoryName(product.isoCategory)}
                 </Button>
               </DefinitionList.Definition>
+              <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
+              <DefinitionList.Definition>
+                {product.attributes.bestillingsordning ? 'Ja' : 'nei'}
+              </DefinitionList.Definition>
             </DefinitionList>
           </div>
         </div>
