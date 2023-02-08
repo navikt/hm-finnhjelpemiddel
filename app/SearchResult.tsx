@@ -69,7 +69,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             </Heading>
           </div>
           <div className="search-result__description">
-            <BodyLong>{product.attributes?.shortdescription}</BodyLong>
+            <BodyLong>{product.attributes?.text}</BodyLong>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
@@ -90,7 +90,7 @@ const SearchResult = ({ product }: ProduktProps) => {
               </DefinitionList.Definition>
               <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
               <DefinitionList.Definition>
-                {product.attributes.bestillingsordning ? 'Ja' : 'nei'}
+                {product.attributes.bestillingsordning ? 'Ja' : 'Nei'}
               </DefinitionList.Definition>
             </DefinitionList>
           </div>
