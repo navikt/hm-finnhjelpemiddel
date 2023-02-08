@@ -1,5 +1,12 @@
 import { FilterCategories } from '../app/FilterView'
-import { Hit, ProductSourceResponse, SearchResponse } from './response-types'
+import {
+  Hit,
+  MediaResponse,
+  MediaType,
+  ProductSourceResponse,
+  SearchResponse,
+  TechDataResponse,
+} from './response-types'
 import { initialSearchDataState } from './state-util'
 
 export interface Product {
@@ -49,31 +56,31 @@ export const createProduct = (source: ProductSourceResponse): Product => {
   }
 }
 
-const mapPhotoInfo = (media: any): Photo[] => {
+const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
   const photos: Photo[] = media
-    .filter((media: any) => {
-      if (!(media.type == 'IMAGE' && media.order && media.uri) || seen[media.uri]) {
+    .filter((media: MediaResponse) => {
+      if (!(media.type == MediaType.IMAGE && media.order && media.uri) || seen[media.uri]) {
         return false
       }
 
       seen[media.uri] = true
       return true
     })
-    .sort((a: any, b: any) => a.order - b.order)
-    .map((image: any) => ({
+    .sort((a: MediaResponse, b: MediaResponse) => a.order - b.order)
+    .map((image: MediaResponse) => ({
       uri: image.uri,
     }))
 
   return photos
 }
 
-const mapTechDataDict = (data: any): TechData => {
+const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
   return Object.assign(
     {},
     ...data
-      .filter((data: any) => data.key && data.value)
-      .map((data: any) => ({ [data.key]: { value: data.value, unit: data.unit } }))
+      .filter((data: TechDataResponse) => data.key && data.value)
+      .map((data: TechDataResponse) => ({ [data.key]: { value: data.value, unit: data.unit } }))
   )
 }
 

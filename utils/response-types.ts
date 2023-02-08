@@ -33,8 +33,8 @@ export interface ProductSourceResponse {
   accessory: boolean
   sparepart: boolean
   seriesId: string | null
-  data: Array<{ key: string; value: string; unit: string }>
-  media: Media[]
+  data: Array<TechDataResponse>
+  media: MediaResponse[]
   created: string
   updated: string
   expired: string
@@ -58,15 +58,19 @@ interface AttributeResponse {
   bestillingsordning?: boolean
 }
 
-export interface SupplierInfoResponse {
+export interface TechDataResponse {
+  key: string
+  value: string
+  unit: string
+}
+
+export interface MediaResponse {
   id: string
-  identifier: string
-  status: Status
-  name: string
-  address?: string | null
-  email?: string | null
-  phone?: string | null
-  homepage?: string | null
+  order: number
+  type: MediaType
+  uri: string
+  text?: string | null
+  source?: MediaSourceType
 }
 
 interface AgreementInfo {
@@ -76,6 +80,17 @@ interface AgreementInfo {
   postNr: number
   postIdentifier: string | null
   reference: string | null
+}
+
+export interface SupplierInfoResponse {
+  id: string
+  identifier: string
+  status: Status
+  name: string
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  homepage?: string | null
 }
 
 enum Status {
@@ -89,18 +104,9 @@ enum MediaSourceType {
   EXTERNALURL,
 }
 
-enum MediaType {
-  PDF,
-  IMAGE,
-  VIDEO,
-  OTHER,
-}
-
-interface Media {
-  id: string
-  order: number
-  type: MediaType
-  uri: string
-  text?: string | null
-  source?: MediaSourceType
+export enum MediaType {
+  PDF = 'PDF',
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
+  OTHER = 'OTHER',
 }
