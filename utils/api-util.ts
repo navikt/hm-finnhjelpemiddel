@@ -80,7 +80,7 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
               multi_match: {
                 query: searchTerm,
                 type: 'cross_fields',
-                fields: ['title^3', 'description.text^2', '*'],
+                fields: ['title^3', 'attributes.text^2', '*'],
                 operator: 'and',
                 zero_terms_query: 'all',
               },
@@ -420,7 +420,7 @@ export async function getSupplier(id: string) {
 export async function getSeries(seriesId: string) {
   const query = {
     bool: {
-      must: [{ term: { 'seriesId.keyword': seriesId } }, { exists: { field: 'data' } }],
+      must: [{ term: { seriesId } }, { exists: { field: 'data' } }],
     },
   }
 

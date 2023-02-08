@@ -1,22 +1,26 @@
 import { FilterCategories } from '../app/FilterView'
+import {
+  Hit,
+  MediaResponse,
+  MediaType,
+  ProductSourceResponse,
+  SearchResponse,
+  TechDataResponse,
+} from './response-types'
 import { initialSearchDataState } from './state-util'
 
 export interface Product {
-  id: number
+  id: string
   title: string
-  description?: {
-    name?: string
-    short?: string
-    additional?: string
-  }
-  isoCode: string
+  attributes: Attributes
+  techData: TechData
+  hmsartNr: string | null
+  supplierRef: string
+  isoCategory: string
   accessory: boolean
   sparepart: boolean
-  hmsNr?: string
-  techData: TechData
   photos: Photo[]
-  supplierId: number
-  seriesId: string
+  seriesId: string | null
 }
 
 export interface Photo {
@@ -27,56 +31,61 @@ export interface TechData {
   [key: string]: { value: string; unit: string }
 }
 
-export const createProduct = (_source?: any): Product => {
+interface Attributes {
+  manufacturer?: string
+  articlename?: string
+  series?: string
+  shortdescription?: string
+  text?: string
+  bestillingsordning?: boolean
+}
+
+export const createProduct = (source: ProductSourceResponse): Product => {
   return {
-    id: _source.id,
-    title: _source.title,
-    description: {
-      name: _source.description?.name,
-      additional: _source.description?.shortDescription,
-      short: _source.description?.text,
-    },
-    isoCode: _source.isoCategory,
-    accessory: _source.accessory,
-    sparepart: _source.sparepart,
-    hmsNr: _source.hmsartNr,
-    techData: mapTechDataDict(_source.data),
-    photos: mapPhotoInfo(_source.media),
-    supplierId: _source.supplier?.id,
-    seriesId: _source.seriesId,
+    id: source.id,
+    title: source.title,
+    attributes: source.attributes,
+    techData: mapTechDataDict(source.data),
+    hmsartNr: source.hmsartNr,
+    supplierRef: source.supplier?.id,
+    isoCategory: source.isoCategory,
+    accessory: source.accessory,
+    sparepart: source.sparepart,
+    photos: mapPhotoInfo(source.media),
+    seriesId: source.seriesId,
   }
 }
 
-const mapPhotoInfo = (media: any): Photo[] => {
+const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
   const photos: Photo[] = media
-    .filter((media: any) => {
-      if (!(media.type == 'IMAGE' && media.order && media.uri) || seen[media.uri]) {
+    .filter((media: MediaResponse) => {
+      if (!(media.type == MediaType.IMAGE && media.order && media.uri) || seen[media.uri]) {
         return false
       }
 
       seen[media.uri] = true
       return true
     })
-    .sort((a: any, b: any) => a.order - b.order)
-    .map((image: any) => ({
+    .sort((a: MediaResponse, b: MediaResponse) => a.order - b.order)
+    .map((image: MediaResponse) => ({
       uri: image.uri,
     }))
 
   return photos
 }
 
-const mapTechDataDict = (data: any): TechData => {
+const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
   return Object.assign(
     {},
     ...data
-      .filter((data: any) => data.key && data.value)
-      .map((data: any) => ({ [data.key]: { value: data.value, unit: data.unit } }))
+      .filter((data: TechDataResponse) => data.key && data.value)
+      .map((data: TechDataResponse) => ({ [data.key]: { value: data.value, unit: data.unit } }))
   )
 }
 
-export const mapProducts = (data: any): Product[] => {
-  return data.hits.hits.map((hit: any) => createProduct(hit._source))
+export const mapProducts = (data: SearchResponse): Product[] => {
+  return data.hits.hits.map((hit: Hit) => createProduct(hit._source))
 }
 
 export const mapProductSearchParams = (searchParams: URLSearchParams) => {

@@ -102,7 +102,7 @@ const ChosenProductCard = ({
           <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
         )}
       </div>
-      <BodyShort>{product.hmsNr ? product.title + ' (' + product.hmsNr + ')' : product.title}</BodyShort>
+      <BodyShort>{product.hmsartNr ? product.title + ' (' + product.hmsartNr + ')' : product.title}</BodyShort>
       <Button
         className="products-to-compare__remove-product-button"
         size="small"

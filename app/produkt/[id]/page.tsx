@@ -10,16 +10,18 @@ import SimilarProducts from './SimilarProducts'
 
 export default async function ProduktPage({ params }: any) {
   const { id } = params
-
   const productData = await getProduct(id)
+  if (!productData._source) {
+    return <h2>Feil ved lasting av produkt</h2>
+  }
+
   const product = createProduct(productData._source)
 
-  const supplierData = await getSupplier(String(product.supplierId))
-  const supplier = mapSupplier(supplierData._source)
+  const supplierData = product.supplierRef ? await getSupplier(String(product.supplierRef)) : null
+  const supplier = supplierData ? mapSupplier(supplierData._source) : null
 
-  const seriesData = await getSeries(String(product.seriesId))
-  const seriesProducts = mapProducts(seriesData).filter((prod) => prod.id !== product.id)
-
+  const seriesData = product.seriesId ? await getSeries(String(product.seriesId)) : null
+  const seriesProducts = seriesData ? mapProducts(seriesData).filter((prod) => prod.id !== product.id) : null
   return (
     <>
       <nav className="breadcrumbs">
@@ -38,20 +40,24 @@ export default async function ProduktPage({ params }: any) {
             <Heading level="1" size="large">
               {product.title}
             </Heading>
-            {product.description?.name && <p>{product.description.name}</p>}
-            {product.description?.short && <p>{product.description.short}</p>}
-            {product.description?.additional && <p>{product.description.additional}</p>}
+            {product.attributes?.articlename && <p>{product.attributes?.articlename}</p>}
+            {product.attributes?.shortdescription && <p>{product.attributes?.shortdescription}</p>}
+            {product.attributes?.text && <p>{product.attributes?.text}</p>}
             <div className="leverandør">
               <Heading level="2" size="medium">
                 Leverandør
               </Heading>
-              <p>{supplier.name}</p>
-              {supplier.address && <p>{supplier.address}</p>}
-              {supplier.email && <p>{supplier.email}</p>}
-              {supplier.homepageUrl && (
-                <a href={supplier.homepageUrl} target="_blank" rel="noreferrer">
-                  Hjemmeside(åpnes i ny side)
-                </a>
+              {supplier && (
+                <>
+                  <p>{supplier.name}</p>
+                  {supplier.address && <p>{supplier.address}</p>}
+                  {supplier.email && <p>{supplier.email}</p>}
+                  {supplier.homepageUrl && (
+                    <a href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
+                      Hjemmeside(åpnes i ny side)
+                    </a>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -59,7 +65,7 @@ export default async function ProduktPage({ params }: any) {
         <section className="product-accordion">
           {product.techData && <InfoAccordion techData={product.techData} />}
         </section>
-        {seriesProducts?.length > 0 && (
+        {seriesProducts && seriesProducts.length > 0 && (
           <section className="similar-products">
             <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
           </section>
