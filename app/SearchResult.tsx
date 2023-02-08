@@ -74,7 +74,9 @@ const SearchResult = ({ product }: ProduktProps) => {
           <div className="search-result__more-info">
             <DefinitionList>
               <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
-              <DefinitionList.Definition>{product.hmsartNr}</DefinitionList.Definition>
+              <DefinitionList.Definition>
+                {product.hmsartNr ? product.hmsartNr : 'Mangler HMS-nr'}
+              </DefinitionList.Definition>
               <DefinitionList.Term>Produktkategori</DefinitionList.Term>
               <DefinitionList.Definition>
                 <Button

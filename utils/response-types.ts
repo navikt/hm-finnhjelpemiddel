@@ -26,13 +26,13 @@ export interface ProductSourceResponse {
   title: string
   attributes: AttributeResponse
   status: Status
-  hmsartNr?: string | null
+  hmsartNr: string | null
   identifier: string
   supplierRef: string
   isoCategory: string
   accessory: boolean
   sparepart: boolean
-  seriesId?: string | null
+  seriesId: string | null
   data: Array<{ key: string; value: string; unit: string }>
   media: Media[]
   created: string
@@ -41,7 +41,7 @@ export interface ProductSourceResponse {
   createdBy: string
   updatedBy: string
   filters: object
-  agreementInfo?: AgreementInfo | null
+  agreementInfo: AgreementInfo | null
   hasAgreement: boolean
 }
 
@@ -71,12 +71,11 @@ export interface SupplierInfoResponse {
 
 interface AgreementInfo {
   id: string
-  identifier?: string | null
+  identifier: string | null
   rank: number
   postNr: number
-  postIdentifier?: string | null
-  reference?: string | null
-  expired: string
+  postIdentifier: string | null
+  reference: string | null
 }
 
 enum Status {

@@ -7,13 +7,13 @@ export interface Product {
   title: string
   attributes: Attributes
   techData: TechData
-  hmsartNr?: string | null
+  hmsartNr: string | null
   supplierRef: string
   isoCategory: string
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
-  seriesId?: string | null
+  seriesId: string | null
 }
 
 export interface Photo {
