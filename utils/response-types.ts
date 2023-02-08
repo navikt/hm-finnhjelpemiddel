@@ -1,4 +1,4 @@
-export type SearchResponse = {
+export interface SearchResponse {
   took: number
   timed_out: boolean
   _shards: object
@@ -8,7 +8,7 @@ export type SearchResponse = {
   }
 }
 
-export type Hit = {
+export interface Hit {
   _index: string
   _type: string
   _id: string
@@ -16,7 +16,7 @@ export type Hit = {
   _source: ProductSourceResponse
 }
 
-export type ProductSourceResponse = {
+export interface ProductSourceResponse {
   id: string
   supplier: {
     id: string
@@ -45,7 +45,7 @@ export type ProductSourceResponse = {
   hasAgreement: boolean
 }
 
-export interface AttributeResponse {
+interface AttributeResponse {
   manufacturer?: string
   articlename?: string
   compatible?: string[]
@@ -58,7 +58,7 @@ export interface AttributeResponse {
   bestillingsordning?: boolean
 }
 
-export type SupplierInfoResponse = {
+export interface SupplierInfoResponse {
   id: string
   identifier: string
   status: Status

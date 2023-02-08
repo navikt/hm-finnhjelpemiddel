@@ -10,13 +10,12 @@ import SimilarProducts from './SimilarProducts'
 
 export default async function ProduktPage({ params }: any) {
   const { id } = params
-
   const productData = await getProduct(id)
-  const product = productData._source !== undefined ? createProduct(productData._source) : null
-
-  if (product === null) {
+  if (!productData._source) {
     return <h2>Feil ved lasting av produkt</h2>
   }
+
+  const product = createProduct(productData._source)
 
   const supplierData = product.supplierRef ? await getSupplier(String(product.supplierRef)) : null
   const supplier = supplierData ? mapSupplier(supplierData._source) : null

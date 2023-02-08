@@ -420,7 +420,7 @@ export async function getSupplier(id: string) {
 export async function getSeries(seriesId: string) {
   const query = {
     bool: {
-      must: [{ term: { 'seriesId.keyword': seriesId } }, { exists: { field: 'data' } }],
+      must: [{ term: { seriesId } }, { exists: { field: 'data' } }],
     },
   }
 
