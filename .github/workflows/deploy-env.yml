@@ -50,7 +50,8 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
           build-args: |
-            "BUILD_ENV=alpha"
+            BUILD_ENV=alpha
+            HM_SEARCH_URL=http://hm-grunndata-search
 
   build-dev:
     name: Build and push Dev Docker container
@@ -88,7 +89,8 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
           build-args: |
-            "BUILD_ENV=dev"
+            BUILD_ENV=alpha
+            HM_SEARCH_URL=http://hm-grunndata-search
   
   deploy-to-alpha:
     name: Deploy to NAIS (Alpha)
