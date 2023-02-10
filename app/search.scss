@@ -243,13 +243,17 @@
 
   &__products-container {
     max-width: 1300px;
-    padding-top: 20px;
+    padding: 20px 0;
     display: flex;
     align-items: center;
     gap: 10px;
 
     h2 {
       max-width: 250px;
+    }
+
+    ul {
+      margin: 0;
     }
 
     @media (max-width: 800px) {
@@ -264,6 +268,7 @@
     overflow-y: scroll;
     display: flex;
     gap: 20px;
+    list-style: none;
 
     @media (max-width: 800px) {
       flex-wrap: wrap;
