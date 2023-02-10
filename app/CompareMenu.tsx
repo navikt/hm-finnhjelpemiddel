@@ -44,7 +44,7 @@ const CompareMenu = () => {
             ))}
           </div>
           {productsToCompare.length > 1 && (
-            <LinkPanel href="/sammenlign" border>
+            <LinkPanel href="/sammenlign" className="products-to-compare__link-panel" border>
               <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
             </LinkPanel>
           )}
@@ -102,7 +102,9 @@ const ChosenProductCard = ({
           <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
         )}
       </div>
-      <BodyShort>{product.hmsartNr ? product.title + ' (' + product.hmsartNr + ')' : product.title}</BodyShort>
+      <BodyShort size="small" className="products-to-compare__product-title">
+        {product.hmsartNr ? product.title + ' (' + product.hmsartNr + ')' : product.title}
+      </BodyShort>
       <Button
         className="products-to-compare__remove-product-button"
         size="small"
