@@ -1,13 +1,17 @@
 import classNames from 'classnames'
 import { useFormContext } from 'react-hook-form'
 import { Button, Detail, ErrorMessage, TextField } from '@navikt/ds-react'
-import { FilterData, SearchData, SelectedFilters } from '../utils/api-util'
-import { useSearchDataStore } from '../utils/state-util'
+import { FilterData, SearchData, SelectedFilters } from '../../utils/api-util'
+import { useSearchDataStore } from '../../utils/state-util'
 import { FilterCategories } from './FilterView'
 
 import '../styles/range-filter-input.scss'
 
-type RangeFilterInputProps = { filterKey: keyof typeof FilterCategories; filters?: FilterData; className?: string }
+type RangeFilterInputProps = {
+  filterKey: keyof typeof FilterCategories
+  filters?: FilterData
+  className?: string
+}
 
 export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterInputProps) => {
   const { searchData } = useSearchDataStore()
@@ -18,7 +22,9 @@ export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterI
   } = useFormContext<SearchData>()
 
   const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+    .filter(([_, values]) =>
+      values.some((value) => !(isNaN(value) || value === null || value === undefined))
+    )
     .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters)
 
   const [min, max] = watch(`filters.${filterKey}`) || []

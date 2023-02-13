@@ -1,8 +1,7 @@
-'use client'
 import { BodyShort, Heading } from '@navikt/ds-react'
 import { RangeFilterInput } from './RangeFilterInput'
-import { FilterData } from '../utils/api-util'
-import { useSearchDataStore } from '../utils/state-util'
+import { FilterData } from '../../utils/api-util'
+import { useSearchDataStore } from '../../utils/state-util'
 
 export enum FilterCategories {
   lengdeCM = 'Lengde (cm)',
@@ -24,7 +23,9 @@ export enum FilterCategories {
 const FilterView = ({ filters }: { filters?: FilterData }) => {
   const { searchData } = useSearchDataStore()
   const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+    .filter(([_, values]) =>
+      values.some((value) => !(isNaN(value) || value === null || value === undefined))
+    )
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
   if (!searchDataFilters.length && (!filters || !Object.keys(filters).length)) {

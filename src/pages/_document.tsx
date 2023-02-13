@@ -1,18 +1,15 @@
-import React from 'react'
+import { Html, Head, Main, NextScript } from 'next/document'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import reportAccessibility from '../utils/reportAccessibility'
-import '../styles/globals.scss'
+import Footer from '../components/Layout/Footer'
 
-import Footer from './Footer'
-
-function RootLayout({ children }: { children: React.ReactNode }) {
+export default function Document() {
   return (
-    <html lang="no">
-      <head>
-        <title>Oversikt over hjelpemidler</title>
+    <Html lang="no">
+      <Head>
+        <title>Oversikt over hjelpemidler 2</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </head>
+      </Head>
       <body>
         <div className="wip-banner">
           <p>
@@ -41,13 +38,10 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
         </nav>
-        <main>{children}</main>
+        <Main />
         <Footer />
+        <NextScript />
       </body>
-    </html>
+    </Html>
   )
 }
-
-reportAccessibility(React)
-
-export default RootLayout

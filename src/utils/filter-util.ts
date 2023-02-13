@@ -1,4 +1,19 @@
-import { FilterCategories } from '../app/FilterView'
+export enum FilterCategories {
+  lengdeCM = 'Lengde (cm)',
+  breddeCM = 'Bredde (cm)',
+  setebreddeMinCM = 'Min. setebredde (cm)',
+  setebreddeMaksCM = 'Maks. setebredde (cm)',
+  setedybdeMinCM = 'Min. setedybde (cm)',
+  setedybdeMaksCM = 'Maks. setedybde (cm)',
+  setehoydeMinCM = 'Min. setehøyde (cm)',
+  setehoydeMaksCM = 'Maks. setehøyde (cm)',
+  brukervektMinKG = 'Min. brukervekt (kg)',
+  brukervektMaksKG = 'Maks. brukervekt (kg)',
+  totalVektKG = 'Totalvekt (kg)',
+  fyllmateriale = 'Fyllmateriale',
+  materialeTrekk = 'Trekkmateriale',
+  beregnetBarn = 'Beregnet barn?',
+}
 
 const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number>) => {
   const [min, max] = values
