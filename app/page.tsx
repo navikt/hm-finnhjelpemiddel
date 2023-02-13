@@ -15,7 +15,7 @@ export default function Page() {
   const { searchData } = useSearchDataStore()
   const { compareMode } = useHydratedCompareStore()
 
-  const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
+  const { data, size, setSize, isLoading, error } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
     fetchProducts,
     {
@@ -30,8 +30,9 @@ export default function Page() {
         <div className="flex-column-wrap">
           <Sidebar filters={data?.at(-1)?.filters} />
           <div className="results__wrapper">
-            {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
             {data && <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
+            {!data && !error && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
+            {error && <Alert variant="error">Noe gikk galt. Vennligst prøv igjen.</Alert>}
           </div>
         </div>
       </div>

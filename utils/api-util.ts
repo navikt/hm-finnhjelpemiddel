@@ -381,6 +381,9 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
       const products: Product[] = mapProducts(data)
       return { numberOfProducts: data.hits.total.value, products, filters: mapFilters(data) }
     })
+    .catch(() => {
+      throw new Error('Failed to fetch search data')
+    })
 }
 
 const mapFilters = (data: any): FilterData => {
@@ -406,6 +409,10 @@ export async function getProduct(id: string) {
     method: 'GET',
   })
 
+  if (!res.ok) {
+    throw new Error('Failed to fetch product data')
+  }
+
   return res.json()
 }
 
@@ -413,6 +420,10 @@ export async function getSupplier(id: string) {
   const res = await fetch(process.env.HM_SEARCH_URL + `/supplier/_doc/${id}`, {
     method: 'GET',
   })
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch supplier data')
+  }
 
   return res.json()
 }
@@ -434,5 +445,10 @@ export async function getSeries(seriesId: string) {
       size: 100,
     }),
   })
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch series data')
+  }
+
   return res.json()
 }
