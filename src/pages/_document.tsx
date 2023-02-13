@@ -7,8 +7,9 @@ export default function Document() {
   return (
     <Html lang="no">
       <Head>
-        <title>Oversikt over hjelpemidler 2</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Oversikt over hjelpemidler</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <body>
         <div className="wip-banner">
@@ -38,7 +39,9 @@ export default function Document() {
             </ul>
           </div>
         </nav>
-        <Main />
+        <main>
+          <Main />
+        </main>
         <Footer />
         <NextScript />
       </body>

@@ -1,5 +1,5 @@
 import { BodyShort, Heading } from '@navikt/ds-react'
-import { RangeFilterInput } from './RangeFilterInput'
+import { RangeFilterInput } from '../Search/RangeFilterInput'
 import { FilterData } from '../../utils/api-util'
 import { useSearchDataStore } from '../../utils/state-util'
 
