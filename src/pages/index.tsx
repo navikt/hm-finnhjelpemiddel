@@ -5,6 +5,7 @@ import { Loader } from '@navikt/ds-react'
 
 import { useHydratedCompareStore, useSearchDataStore } from '../utils/state-util'
 import { fetchProducts, FetchResponse, PAGE_SIZE } from '../utils/api-util'
+import SearchResults from '../components/Search/SearchResults'
 
 export default function Home() {
   const { searchData } = useSearchDataStore()
@@ -35,8 +36,7 @@ export default function Home() {
                 <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
               )}
               {data && (
-                <></>
-                // <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />
+                <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />
               )}
             </div>
           </div>

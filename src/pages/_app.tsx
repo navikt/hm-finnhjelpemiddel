@@ -1,4 +1,7 @@
 import '../styles/globals.scss'
+import '../styles/comparing-table.scss'
+import '../styles/range-filter-input.scss'
+import '../styles/search.scss'
 import { AnimatePresence } from 'framer-motion'
 import type { AppProps } from 'next/app'
 
