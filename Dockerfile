@@ -1,5 +1,5 @@
 # Base on offical Node.js Alpine image
-FROM node:18-alpine as builder
+FROM node:16-alpine as builder
 
 # Set working directory
 WORKDIR /app
@@ -19,6 +19,7 @@ COPY .env.production .
 
 ARG BUILD_ENV
 ENV BUILD_ENV ${BUILD_ENV}
+
 # Build app
 RUN npm run build
 

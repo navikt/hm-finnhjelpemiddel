@@ -1,20 +1,19 @@
-import './page.scss'
-import { mapSupplier } from '../../../utils/supplier-util'
-import { getProduct, getSupplier, getSeries } from '../../../utils/api-util'
-import { Heading } from '@navikt/ds-react/esm/typography'
-import { createProduct, mapProducts } from '../../../utils/product-util'
-import PhotoSlider from './PhotoSlider'
-import InfoAccordion from './InfoAccordion'
 import Link from 'next/link'
+import { Heading } from '@navikt/ds-react/esm/typography'
+import { mapSupplier } from '../../../utils/supplier-util'
+import { getProduct, getSeries, getSupplier } from '../../../utils/api-util'
+import { createProduct, mapProducts } from '../../../utils/product-util'
+
+import InfoAccordion from './InfoAccordion'
+import PhotoSlider from './PhotoSlider'
 import SimilarProducts from './SimilarProducts'
 
-export default async function ProduktPage({ params }: any) {
-  const { id } = params
-  const productData = await getProduct(id)
-  if (!productData._source) {
-    return <h2>Feil ved lasting av produkt</h2>
-  }
+import './page.scss'
 
+export const dynamic = 'force-dynamic'
+
+export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const productData = await getProduct(id)
   const product = createProduct(productData._source)
 
   const supplierData = product.supplierRef ? await getSupplier(String(product.supplierRef)) : null
