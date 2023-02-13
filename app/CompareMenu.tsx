@@ -107,23 +107,25 @@ const CompareMenu = () => {
   )
 
   const miniView = (
-    <motion.div
-      layoutId="compare-menu"
-      variants={container}
-      initial={'hidden'}
-      animate={'show'}
-      className="products-to-compare minimized"
-    >
-      <motion.button
-        layoutId="chevron-button"
-        onClick={() => setCompareMenuState(CompareMenuState.Open)}
-        className="products-to-compare__chevron-button"
+    <AnimatePresence>
+      <motion.div
+        layoutId="compare-menu"
+        variants={container}
+        initial={'hidden'}
+        animate={'show'}
+        className="products-to-compare minimized"
       >
-        <span className="navds-button__icon">
-          <Collapse title="Åpne sammenligning" />
-        </span>
-      </motion.button>
-    </motion.div>
+        <motion.button
+          layoutId="chevron-button"
+          onClick={() => setCompareMenuState(CompareMenuState.Open)}
+          className="products-to-compare__chevron-button"
+        >
+          <span className="navds-button__icon">
+            <Collapse title="Åpne sammenligning" />
+          </span>
+        </motion.button>
+      </motion.div>
+    </AnimatePresence>
   )
 
   return (
