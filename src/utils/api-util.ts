@@ -1,5 +1,5 @@
 import { FilterCategories } from '../../app/FilterView'
-import { mapProducts, Product } from './product-util'
+import { createProduct, mapProducts, Product } from './product-util'
 import {
   filterBredde,
   filterLengde,
@@ -14,6 +14,7 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
+import { mapSupplier, Supplier } from './supplier-util'
 
 export const PAGE_SIZE = 15
 
@@ -40,7 +41,12 @@ export type FilterData = {
   }
 }
 
-export type SearchData = { searchTerm: string; isoCode: string; hasRammeavtale: boolean; filters: SelectedFilters }
+export type SearchData = {
+  searchTerm: string
+  isoCode: string
+  hasRammeavtale: boolean
+  filters: SelectedFilters
+}
 
 type FetchProps = {
   url: string
@@ -54,7 +60,11 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({
+  url,
+  pageIndex,
+  searchData,
+}: FetchProps): Promise<FetchResponse> => {
   const from = pageIndex * PAGE_SIZE
   const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {
@@ -401,30 +411,36 @@ const mapFilters = (data: any): FilterData => {
     }, {} as FilterData)
 }
 
-export async function getProduct(id: string) {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/product/_doc/${id}`, {
+export function getProduct(id: string) {
+  return fetch(process.env.HM_SEARCH_URL + `/product/_doc/${id}`, {
     method: 'GET',
   })
-
-  return res.json()
+    .then((res) => res.json())
+    .then((data) => {
+      const product: Product = createProduct(data._source)
+      return product
+    })
 }
 
-export async function getSupplier(id: string) {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/supplier/_doc/${id}`, {
+export function getSupplier(id: string) {
+  return fetch(process.env.HM_SEARCH_URL + `/supplier/_doc/${id}`, {
     method: 'GET',
   })
-
-  return res.json()
+    .then((res) => res.json())
+    .then((data) => {
+      const supplier: Supplier = mapSupplier(data._source)
+      return supplier
+    })
 }
 
-export async function getSeries(seriesId: string) {
+export function getSeries(seriesId: string) {
   const query = {
     bool: {
       must: [{ term: { seriesId } }, { exists: { field: 'data' } }],
     },
   }
 
-  const res = await fetch(process.env.HM_SEARCH_URL + '/product/_search', {
+  return fetch(process.env.HM_SEARCH_URL + '/product/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -434,5 +450,9 @@ export async function getSeries(seriesId: string) {
       size: 100,
     }),
   })
-  return res.json()
+    .then((res) => res.json())
+    .then((data) => {
+      const series: Product[] = mapProducts(data)
+      return series
+    })
 }

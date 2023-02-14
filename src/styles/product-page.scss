@@ -1,0 +1,187 @@
+@use './_mixins';
+
+.produkt-info > * {
+  max-width: 1200px;
+  margin: auto;
+
+  @include mixins.for-size(tablet-up) {
+    flex-direction: row;
+    padding-left: var(--a-spacing-4);
+    padding-right: var(--a-spacing-4);
+  }
+}
+
+.produkt-info:last-child {
+  margin-bottom: var(--a-spacing-20);
+}
+
+.produkt-info {
+  width: 100%;
+
+  p {
+    margin-bottom: var(--a-spacing-4);
+  }
+
+  .bilde-og-beskrivelse {
+    padding: var(--a-spacing-12) var(--a-spacing-2);
+    padding-top: var(--a-spacing-16);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    @include mixins.for-size(tablet-up) {
+      flex-direction: row;
+    }
+  }
+
+  .bilde-og-beskrivelse::before,
+  .bilde-og-beskrivelse::after {
+    bottom: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100vw;
+  }
+
+  .bilde-og-beskrivelse::before {
+    right: 100%;
+  }
+
+  .bilde-og-beskrivelse::after {
+    left: 100%;
+  }
+
+  .bilde-og-beskrivelse,
+  .bilde-og-beskrivelse::after,
+  .bilde-og-beskrivelse::before {
+    background-color: var(--a-gray-50);
+  }
+
+  .produkt-beskrivelse {
+    padding: var(--a-spacing-5) var(--a-spacing-5);
+    @include mixins.for-size(tablet-up) {
+      margin-left: var(--a-spacing-5);
+      border-left: 1px solid var(--a-gray-300);
+    }
+    .leverandør {
+      margin-top: var(--a-spacing-5);
+
+      .navds-heading {
+        margin-bottom: var(--a-spacing-2);
+      }
+      p {
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+      }
+    }
+  }
+
+  .product-accordion {
+    margin-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-10);
+    .info-accordion {
+      max-width: 600px;
+    }
+  }
+
+  .similar-products {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--a-gray-300);
+    margin-top: var(--a-spacing-10);
+    padding-top: var(--a-spacing-10);
+
+    .navds-heading {
+      margin-bottom: var(--a-spacing-6);
+      padding-left: var(--a-spacing-4);
+    }
+
+    &__slider {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: var(--a-spacing-10);
+      padding-left: var(--a-spacing-4);
+    }
+
+    &__cards {
+      display: flex;
+      flex-direction: row;
+      gap: var(--a-spacing-5);
+    }
+
+    &__card {
+      border: 1.5px solid transparent;
+      border-radius: var(--a-border-radius-medium);
+      border-color: var(--ac-panel-border, var(--a-border-default));
+      padding: var(--a-spacing-3);
+      width: 200px;
+      min-height: 200px;
+    }
+  }
+}
+
+.photo-slider {
+  .arrow {
+    cursor: pointer;
+  }
+
+  .photo-and-arrow-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .photo-container {
+    position: relative;
+    overflow: hidden;
+    margin: var(--a-spacing-3);
+    background-color: var(--a-gray-50);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 400px;
+    height: 300px;
+
+    img {
+      position: absolute;
+      height: 100%;
+      width: auto;
+      max-width: 400px;
+    }
+  }
+
+  .dots {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+
+  .dot {
+    width: 15px;
+    height: 15px;
+    background-color: var(--a-deepblue-100);
+    border-radius: 50%;
+    margin: 0 10px;
+  }
+
+  .dot:hover {
+    cursor: pointer;
+    background-color: var(--a-deepblue-200);
+  }
+
+  .activeDot {
+    width: 15px;
+    height: 15px;
+    background-color: var(--a-deepblue-200);
+    border-radius: 50%;
+    margin: 0 10px;
+  }
+
+  .activeDot:hover {
+    cursor: pointer;
+  }
+}
