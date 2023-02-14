@@ -1,4 +1,4 @@
-import { FilterCategories } from '../../app/FilterView'
+import { FilterCategories } from './filter-util'
 import { createProduct, mapProducts, Product } from './product-util'
 import {
   filterBredde,
