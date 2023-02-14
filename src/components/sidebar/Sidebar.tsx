@@ -1,9 +1,9 @@
-'use client'
 import { forwardRef, useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
-// import * as queryString from 'querystring'
+import * as queryString from 'querystring'
 import classNames from 'classnames'
 import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
@@ -14,9 +14,8 @@ import { initialSearchDataState, useSearchDataStore } from '../../utils/state-ut
 
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
-
 const Sidebar = ({ filters }: { filters?: FilterData }) => {
-  // const router = useRouter()
+  const router = useRouter()
   const searchParams = useSearchParams()
   const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useSearchDataStore()
   const [productSearchParams] = useState(mapProductSearchParams(searchParams))
@@ -63,29 +62,21 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
 
   useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
 
-  // useEffect(() => {
-  //   router.push(
-  //     '?' +
-  //       queryString.stringify({
-  //         agreement: searchData.hasRammeavtale,
-  //         ...(searchData.searchTerm && { term: searchData.searchTerm }),
-  //         ...(searchData.isoCode && { isoCode: searchData.isoCode }),
-  //         ...Object.entries(searchData.filters)
-  //           .filter(([_, values]) =>
-  //             values.some((value) => !(isNaN(value) || value === null || value === undefined))
-  //           )
-  //           .reduce(
-  //             (newObject, [key, values]) => ({ ...newObject, [key]: values }),
-  //             {} as SelectedFilters
-  //           ),
-  //       })
-  //   )
-  // }, [router, searchData])
-
   useEffect(() => {
-    console.log('mount')
-    return () => console.log('unmount')
-  }, [])
+    router.push(
+      '?' +
+        queryString.stringify({
+          agreement: searchData.hasRammeavtale,
+          ...(searchData.searchTerm && { term: searchData.searchTerm }),
+          ...(searchData.isoCode && { isoCode: searchData.isoCode }),
+          ...Object.entries(searchData.filters)
+            .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+            .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
+        }),
+      undefined,
+      { shallow: true }
+    )
+  }, [searchData])
 
   return (
     <div className="search__side-bar">
@@ -150,23 +141,24 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
   )
 }
 
-const ResetButton = forwardRef<HTMLButtonElement, { onClick: () => void; fixed?: boolean }>(
-  function RButton({ onClick, fixed = false }, ref) {
-    return (
-      <Button
-        type="button"
-        className={classNames({
-          'search__reset-button': !fixed,
-          'search__reset-button--fixed': fixed,
-        })}
-        icon={<Delete title="Nullstill søket" />}
-        onClick={onClick}
-        ref={ref}
-      >
-        Nullstill søket
-      </Button>
-    )
-  }
-)
+const ResetButton = forwardRef<HTMLButtonElement, { onClick: () => void; fixed?: boolean }>(function RButton(
+  { onClick, fixed = false },
+  ref
+) {
+  return (
+    <Button
+      type="button"
+      className={classNames({
+        'search__reset-button': !fixed,
+        'search__reset-button--fixed': fixed,
+      })}
+      icon={<Delete title="Nullstill søket" />}
+      onClick={onClick}
+      ref={ref}
+    >
+      Nullstill søket
+    </Button>
+  )
+})
 
 export default Sidebar

@@ -17,15 +17,15 @@ export default function Document() {
           <div className="nav-topp__content">
             <ul>
               <li>
-                <a href="/">
+                <NextLink href="/">
                   <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
                   <b>Hjelpemiddeloversikten</b>
-                </a>
+                </NextLink>
               </li>
               <li className="nav-veileder">
-                <a href="/veileder">
+                <NextLink href="/veileder">
                   <p>Veileder</p>
-                </a>
+                </NextLink>
               </li>
               <li className="nav-compare">
                 <NextLink href="/sammenlign">
