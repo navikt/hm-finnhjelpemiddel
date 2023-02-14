@@ -48,12 +48,7 @@ export default function ProduktPage() {
     isoCategory: '09122101',
     accessory: false,
     sparepart: undefined,
-    photos: [
-      { uri: '42251.jpg' },
-      { uri: '42251_2.jpg' },
-      { uri: '42251_3.jpg' },
-      { uri: '42251_4.jpg' },
-    ],
+    photos: [{ uri: '42251.jpg' }, { uri: '42251_2.jpg' }, { uri: '42251_3.jpg' }, { uri: '42251_4.jpg' }],
     seriesId: 'HMDB-42251',
   }
 

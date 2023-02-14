@@ -72,12 +72,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
     <div className="photo-slider">
       <div className="photo-and-arrow-container">
         {!hasImages && (
-          <Picture
-            width={400}
-            height={300}
-            style={{ background: 'white' }}
-            aria-label="Ingen bilde tilgjengelig"
-          />
+          <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
         {numberOfImages === 1 && (
           <>

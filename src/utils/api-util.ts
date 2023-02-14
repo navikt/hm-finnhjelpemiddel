@@ -60,11 +60,7 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({
-  url,
-  pageIndex,
-  searchData,
-}: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
   const from = pageIndex * PAGE_SIZE
   const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {

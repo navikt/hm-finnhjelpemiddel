@@ -67,9 +67,7 @@ const SearchResults = ({
           <Heading level="2" size="medium">
             Søkeresultater
           </Heading>
-          <BodyShort>{`${products.length} av ${
-            data?.at(-1)?.numberOfProducts
-          } produkter vises`}</BodyShort>
+          <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
         </div>
         {comparingButton}
       </header>
@@ -89,8 +87,7 @@ const SearchResults = ({
 
 const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useSearchDataStore()
-  const { compareMode, setProductToCompare, removeProduct, productsToCompare } =
-    useHydratedCompareStore()
+  const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
@@ -105,8 +102,7 @@ const SearchResult = ({ product }: ProduktProps) => {
       : setProductToCompare(product)
   }
 
-  const isInProductsToCompare =
-    productsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = productsToCompare.filter((procom) => product.id === procom.id).length >= 1
 
   return (
     <li className="search-result">
@@ -125,22 +121,10 @@ const SearchResult = ({ product }: ProduktProps) => {
         )}
         <div className="search-result__image">
           {!hasImage && (
-            <Picture
-              width={150}
-              height="auto"
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
+            <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
           )}
           {hasImage && (
-            <Image
-              loader={imageLoader}
-              src={firstImageSrc}
-              alt="Produktbilde"
-              width="0"
-              height="0"
-              sizes="100vw"
-            />
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
           )}
         </div>
         <div className="search-result__content">
@@ -152,10 +136,7 @@ const SearchResult = ({ product }: ProduktProps) => {
                 </a>
               )}
               {compareMode === CompareMode.Active && (
-                <button
-                  className="search-result__link search-result__link__button"
-                  onClick={toggleCompareProduct}
-                >
+                <button className="search-result__link search-result__link__button" onClick={toggleCompareProduct}>
                   {product.title}
                 </button>
               )}

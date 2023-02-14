@@ -40,10 +40,7 @@ export default function ComparePage() {
           </section>
         )}
         {productsToCompare.length > 0 && (
-          <CompareTable
-            productsToCompare={productsToCompare}
-            removeProduct={removeProduct}
-          ></CompareTable>
+          <CompareTable productsToCompare={productsToCompare} removeProduct={removeProduct}></CompareTable>
         )}
       </div>
     </AnimateLayout>
@@ -66,9 +63,7 @@ const CompareTable = ({
     {},
     ...allDataKeys.map((key) => ({
       [key]: productsToCompare.map((product) =>
-        product.techData[key] !== undefined
-          ? product.techData[key].value + product.techData[key].unit
-          : '-'
+        product.techData[key] !== undefined ? product.techData[key].value + product.techData[key].unit : '-'
       ),
     }))
   )
@@ -117,10 +112,7 @@ const CompareTable = ({
           </Table.Row>
           {productsToCompare.length > 0 &&
             Object.entries(rows).map(([key, row]) => (
-              <Table.Row
-                key={key + 'row'}
-                className={hasDifferentValues({ row }) ? 'highlight' : ''}
-              >
+              <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>
                 <Table.HeaderCell>{key}</Table.HeaderCell>
                 {row.map((value, i) => (
                   <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
@@ -157,22 +149,10 @@ const ProductTableHeader = ({
       />
       <div className="product-image">
         {!hasImage && (
-          <Picture
-            width={150}
-            height="auto"
-            style={{ background: 'white' }}
-            aria-label="Ingen bilde tilgjengelig"
-          />
+          <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
         {hasImage && (
-          <Image
-            loader={imageLoader}
-            src={firstImageSrc}
-            alt="Produktbilde"
-            width="0"
-            height="0"
-            sizes="100vw"
-          />
+          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
         )}
       </div>
       <BodyShort>

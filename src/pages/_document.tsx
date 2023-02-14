@@ -6,7 +6,7 @@ import Footer from '../components/Layout/Footer'
 export default function Document() {
   return (
     <Html lang="no">
-      <Head/>
+      <Head />
       <body>
         <div className="wip-banner">
           <p>

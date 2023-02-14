@@ -34,8 +34,7 @@ const listItem = {
 }
 
 const CompareMenu = () => {
-  const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct } =
-    useHydratedCompareStore()
+  const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct } = useHydratedCompareStore()
 
   const openView = (
     <AnimatePresence>
@@ -90,9 +89,7 @@ const CompareMenu = () => {
                 ) : null}
                 {productsToCompare.length > 1 && (
                   <LinkPanel href="/sammenlign" className="products-to-compare__link-panel" border>
-                    <LinkPanel.Title>
-                      Sammenlign {productsToCompare.length} produkter
-                    </LinkPanel.Title>
+                    <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
                   </LinkPanel>
                 )}
                 {productsToCompare.length === 1 && (
@@ -156,22 +153,10 @@ const ChosenProductCard = ({
     <div className="products-to-compare__product">
       <div className="products-to-compare__image">
         {!hasImage && (
-          <Picture
-            width={150}
-            height="auto"
-            style={{ background: 'white' }}
-            aria-label="Ingen bilde tilgjengelig"
-          />
+          <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
         {hasImage && (
-          <Image
-            loader={imageLoader}
-            src={firstImageSrc}
-            alt="Produktbilde"
-            width="0"
-            height="0"
-            sizes="100vw"
-          />
+          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
         )}
       </div>
       <BodyShort size="small" className="products-to-compare__product-title">

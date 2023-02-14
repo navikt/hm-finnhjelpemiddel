@@ -29,12 +29,8 @@ export default function Home() {
           <div className="flex-column-wrap">
             <Sidebar filters={data?.at(-1)?.filters} />
             <div className="results__wrapper">
-              {!data && (
-                <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
-              )}
-              {data && (
-                <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />
-              )}
+              {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
+              {data && <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
             </div>
           </div>
         </div>

@@ -13,23 +13,11 @@ const DefinitionList = ({
   return <dl className={styles.definitionList}>{children}</dl>
 }
 
-const DeflistTerm = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) => {
+const DeflistTerm = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <dt className={className}>{children}</dt>
 }
 
-const DeflistDefinition = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) => {
+const DeflistDefinition = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <dd className={className}>{children}</dd>
 }
 

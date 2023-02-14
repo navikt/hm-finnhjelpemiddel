@@ -7,9 +7,7 @@ const InfoAccordion = ({ techData }: { techData: TechData }) => {
   const technicalSpesifications = Object.entries(techData).map(([key, value], index) => (
     <React.Fragment key={`${key}${index}`}>
       <DefinitionList.Term>{key}</DefinitionList.Term>
-      <DefinitionList.Definition>
-        {value.value + (value.unit ? ' ' + value.unit : '')}
-      </DefinitionList.Definition>
+      <DefinitionList.Definition>{value.value + (value.unit ? ' ' + value.unit : '')}</DefinitionList.Definition>
     </React.Fragment>
   ))
   return (

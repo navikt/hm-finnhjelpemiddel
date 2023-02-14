@@ -20,9 +20,7 @@ export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterI
   } = useFormContext<SearchData>()
 
   const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) =>
-      values.some((value) => !(isNaN(value) || value === null || value === undefined))
-    )
+    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
     .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters)
 
   const [min, max] = watch(`filters.${filterKey}`) || []

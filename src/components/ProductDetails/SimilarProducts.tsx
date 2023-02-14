@@ -46,10 +46,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
           ? undefined
           : {
               orderBy: sortKey,
-              direction:
-                sortKey === sort?.orderBy && sort?.direction === 'ascending'
-                  ? 'descending'
-                  : 'ascending',
+              direction: sortKey === sort?.orderBy && sort?.direction === 'ascending' ? 'descending' : 'ascending',
             }
       )
     } else setSort(undefined)
@@ -110,9 +107,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
                   Egenskaper
                 </Heading>
               </Table.ColumnHeader>
-              <Table.ColumnHeader style={{ left: keyColumnWidth }}>
-                {'Produkt ' + mainProduct.id}
-              </Table.ColumnHeader>
+              <Table.ColumnHeader style={{ left: keyColumnWidth }}>{'Produkt ' + mainProduct.id}</Table.ColumnHeader>
               {seriesProducts.length > 0 &&
                 seriesProducts.map((product, i) => (
                   <Table.ColumnHeader key={'id-' + product.id} style={{ height: '5px' }}>

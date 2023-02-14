@@ -91,13 +91,9 @@ export const mapProducts = (data: SearchResponse): Product[] => {
 export const mapProductSearchParams = (searchParams: URLSearchParams) => {
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
-  const hasRammeavtale = searchParams.get('agreement')
-    ? searchParams.get('agreement') === 'true'
-    : true
+  const hasRammeavtale = searchParams.get('agreement') ? searchParams.get('agreement') === 'true' : true
 
-  const filterKeys = Object.keys(FilterCategories).filter((filter) =>
-    Array.from(searchParams.keys()).includes(filter)
-  )
+  const filterKeys = Object.keys(FilterCategories).filter((filter) => Array.from(searchParams.keys()).includes(filter))
   const filters = filterKeys.reduce((obj, fk) => ({ ...obj, [fk]: searchParams.getAll(fk) }), {})
 
   return {

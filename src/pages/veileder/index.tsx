@@ -12,9 +12,7 @@ export default function Page() {
       <ul className={styles.grid}>
         {SituationCategories.map((category: Category) => {
           const entryClassName =
-            category.id === openCategory
-              ? `${styles.entry} ${styles.entry__selected}`
-              : styles.entry
+            category.id === openCategory ? `${styles.entry} ${styles.entry__selected}` : styles.entry
           return (
             <React.Fragment key={category.id}>
               <li
@@ -57,9 +55,7 @@ const CategoryOpen = ({ category }: { category: Category }) => {
         <Heading level="2" size="medium">
           {category.name}
         </Heading>
-        <BodyLong spacing>
-          Rettigheter og muligheter for tilrettelegging der du bor og for fritiden din.
-        </BodyLong>
+        <BodyLong spacing>Rettigheter og muligheter for tilrettelegging der du bor og for fritiden din.</BodyLong>
         <BodyShort>Til tilpasning av boligen finnes blant annet:</BodyShort>
         <ul>
           <li>
@@ -75,20 +71,14 @@ const CategoryOpen = ({ category }: { category: Category }) => {
             <BodyShort>heve- og senkemekanisme til kjøkkeninnredning og bad</BodyShort>
           </li>
         </ul>
-        <Alert variant="warning">
-          Lenkene fungerer ikke enda, dette er et forslag om hvordan vi kan ha det
-        </Alert>
+        <Alert variant="warning">Lenkene fungerer ikke enda, dette er et forslag om hvordan vi kan ha det</Alert>
         <LinkPanel href={''} border>
           <LinkPanel.Title>Bad</LinkPanel.Title>
-          <LinkPanel.Description>
-            Her finner du hjelpemidler til eller for bad
-          </LinkPanel.Description>
+          <LinkPanel.Description>Her finner du hjelpemidler til eller for bad</LinkPanel.Description>
         </LinkPanel>
         <LinkPanel href={''} border>
           <LinkPanel.Title>Kjøkken</LinkPanel.Title>
-          <LinkPanel.Description>
-            Her finner du hjelpemidler til eller for kjøkken
-          </LinkPanel.Description>
+          <LinkPanel.Description>Her finner du hjelpemidler til eller for kjøkken</LinkPanel.Description>
         </LinkPanel>
         <LinkPanel href={''} border>
           <LinkPanel.Title>Inngang eller omgivelser</LinkPanel.Title>
@@ -113,8 +103,7 @@ const CategoryOpen = ({ category }: { category: Category }) => {
   } else {
     return (
       <div className="category">
-        Det er ikke laget veiledning for denne kategorien enda, kun for "Trenger tilrettelegging av
-        bolig eller fritid"
+        Det er ikke laget veiledning for denne kategorien enda, kun for "Trenger tilrettelegging av bolig eller fritid"
       </div>
     )
   }

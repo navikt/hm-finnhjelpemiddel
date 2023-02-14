@@ -1,11 +1,7 @@
 import { useEffect } from 'react'
 import { Select } from '@navikt/ds-react'
 import { useFormContext } from 'react-hook-form'
-import {
-  getIsoCodeLevels,
-  getIsoCategoriesForLevel,
-  getIsoCodeForLevel,
-} from '../../utils/iso-category-util'
+import { getIsoCodeLevels, getIsoCategoriesForLevel, getIsoCodeForLevel } from '../../utils/iso-category-util'
 import { SearchData } from '../../utils/api-util'
 import { useSearchDataStore } from '../../utils/state-util'
 
