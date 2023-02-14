@@ -88,13 +88,16 @@ export const mapProducts = (data: SearchResponse): Product[] => {
   return data.hits.hits.map((hit: Hit) => createProduct(hit._source))
 }
 
-export const mapProductSearchParams = (searchParams: URLSearchParams) => {
-  const searchTerm = searchParams.get('term') ?? ''
-  const isoCode = searchParams.get('isoCode') ?? ''
-  const hasRammeavtale = searchParams.get('agreement') ? searchParams.get('agreement') === 'true' : true
+export const mapProductSearchParams = (searchParams: { [key: string]: any }) => {
+  const searchTerm = searchParams.term ?? ''
+  const isoCode = searchParams.isoCode ?? ''
+  const hasRammeavtale = searchParams.agreement ? searchParams.agreement === 'true' : true
 
-  const filterKeys = Object.keys(FilterCategories).filter((filter) => Array.from(searchParams.keys()).includes(filter))
-  const filters = filterKeys.reduce((obj, fk) => ({ ...obj, [fk]: searchParams.getAll(fk) }), {})
+  const filterKeys = Object.keys(FilterCategories).filter((filter) =>
+    Array.from(Object.keys(searchParams)).includes(filter)
+  )
+
+  const filters = filterKeys.reduce((obj, fk) => ({ ...obj, [fk]: searchParams[fk] }), {})
 
   return {
     searchTerm,

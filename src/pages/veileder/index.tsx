@@ -103,7 +103,9 @@ const CategoryOpen = ({ category }: { category: Category }) => {
   } else {
     return (
       <div className="category">
-        Det er ikke laget veiledning for denne kategorien enda, kun for "Trenger tilrettelegging av bolig eller fritid"
+        {
+          'Det er ikke laget veiledning for denne kategorien enda, kun for "Trenger tilrettelegging av bolig eller fritid"'
+        }
       </div>
     )
   }

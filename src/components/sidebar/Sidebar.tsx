@@ -1,24 +1,22 @@
 import { forwardRef, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
-import * as queryString from 'querystring'
 import classNames from 'classnames'
 import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 
-import { FilterData, SearchData, SelectedFilters } from '../../utils/api-util'
+import { FilterData, SearchData } from '../../utils/api-util'
 import { mapProductSearchParams } from '../../utils/product-util'
 import { initialSearchDataState, useSearchDataStore } from '../../utils/state-util'
 
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
+
 const Sidebar = ({ filters }: { filters?: FilterData }) => {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useSearchDataStore()
-  const [productSearchParams] = useState(mapProductSearchParams(searchParams))
+  const [productSearchParams] = useState(mapProductSearchParams(router.query))
   const [expanded, setExpanded] = useState(false)
 
   const { ref: resetButtonRef, inView: isResetButtonVisible } = useInView({ threshold: 0.4 })
@@ -59,24 +57,6 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
   useEffect(() => {
     setSearchData({ hasRammeavtale: !!watchHasRammeavtale })
   }, [setSearchData, watchHasRammeavtale])
-
-  useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
-
-  useEffect(() => {
-    router.push(
-      '?' +
-        queryString.stringify({
-          agreement: searchData.hasRammeavtale,
-          ...(searchData.searchTerm && { term: searchData.searchTerm }),
-          ...(searchData.isoCode && { isoCode: searchData.isoCode }),
-          ...Object.entries(searchData.filters)
-            .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
-            .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
-        }),
-      undefined,
-      { shallow: true }
-    )
-  }, [searchData])
 
   return (
     <div className="search__side-bar">
