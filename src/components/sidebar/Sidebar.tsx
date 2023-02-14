@@ -1,5 +1,5 @@
 'use client'
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
@@ -82,6 +82,11 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
   //   )
   // }, [router, searchData])
 
+  useEffect(() => {
+    console.log('mount')
+    return () => console.log('unmount')
+  }, [])
+
   return (
     <div className="search__side-bar">
       <FormProvider {...formMethods}>
@@ -145,24 +150,23 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
   )
 }
 
-const ResetButton = forwardRef<HTMLButtonElement, { onClick: () => void; fixed?: boolean }>(function RButton(
-  { onClick, fixed = false },
-  ref
-) {
-  return (
-    <Button
-      type="button"
-      className={classNames({
-        'search__reset-button': !fixed,
-        'search__reset-button--fixed': fixed,
-      })}
-      icon={<Delete title="Nullstill søket" />}
-      onClick={onClick}
-      ref={ref}
-    >
-      Nullstill søket
-    </Button>
-  )
-})
+const ResetButton = forwardRef<HTMLButtonElement, { onClick: () => void; fixed?: boolean }>(
+  function RButton({ onClick, fixed = false }, ref) {
+    return (
+      <Button
+        type="button"
+        className={classNames({
+          'search__reset-button': !fixed,
+          'search__reset-button--fixed': fixed,
+        })}
+        icon={<Delete title="Nullstill søket" />}
+        onClick={onClick}
+        ref={ref}
+      >
+        Nullstill søket
+      </Button>
+    )
+  }
+)
 
 export default Sidebar

@@ -1,69 +1,37 @@
 import Link from 'next/link'
 import { mapSupplier } from '../../utils/supplier-util'
 import { getProduct, getSupplier, getSeries } from '../../utils/api-util'
-import { createProduct, mapProducts, Product } from '../../utils/product-util'
-import PhotoSlider from '../../components/PhotoSlider/PhotoSlider'
-import InfoAccordion from '../../components/InfoAccordion/InfoAccordion'
-import SimilarProducts from '../../components/ProductDetails/SimilarProducts'
+import { createProduct, mapProducts } from '../../utils/product-util'
+import PhotoSlider from '../../components/photo-slider/PhotoSlider'
+import InfoAccordion from '../../components/info-accordion/InfoAccordion'
+import SimilarProducts from '../../components/product-details/SimilarProducts'
 import { Heading } from '@navikt/ds-react'
-import { useRouter } from 'next/router'
+import { InferGetServerSidePropsType } from 'next'
 
-export default function ProduktPage() {
-  const router = useRouter()
-  const { id } = router.query
+export async function getServerSideProps(context: { params: { id: string } }) {
+  const productData = await getProduct(context.params.id)
+  const product = createProduct(productData._source)
 
-  //
-  // const product = createProduct(productData._source)
+  const supplierData = product.supplierRef ? await getSupplier(String(product.supplierRef)) : null
+  const supplier = supplierData ? mapSupplier(supplierData._source) : null
 
-  // const supplierData = product.supplierRef ? await getSupplier(String(product.supplierRef)) : null
-  // const supplier = supplierData ? mapSupplier(supplierData._source) : null
+  const seriesData = product.seriesId ? await getSeries(String(product.seriesId)) : null
+  const seriesProducts = seriesData
+    ? mapProducts(seriesData).filter((prod) => prod.id !== product.id)
+    : null
 
-  // const seriesData = product.seriesId ? await getSeries(String(product.seriesId)) : null
-  // const seriesProducts = seriesData ? mapProducts(seriesData).filter((prod) => prod.id !== product.id) : null
+  const serializedData = JSON.parse(JSON.stringify({ product, supplier, seriesProducts }))
 
-  const product = {
-    id: 'ea65e50f-a968-4771-9f20-d40d6bd9fcfd',
-    title: 'Aerolet skråløft',
-    attributes: {
-      articlename: 'Aerolet skråløft',
-      shortdescription: '',
-      text: 'Toalettløfter for gulv- og veggmonterte toalett. Har elektrisk skråløft. Oppfellbare armlen med bryter for hev/senk på begge sider. Maks brukervekt 150 kg. ',
-      series: ['Toalettløfter Aerolet '],
-    },
-    techData: {
-      Rettløft: { value: 'NEI', unit: '' },
-      Skråløft: { value: 'JA', unit: '' },
-      'Betjening høyre': { value: 'JA', unit: '' },
-      'Betjening venstre': { value: 'JA', unit: '' },
-      'Løftehøyde min': { value: '45', unit: 'cm' },
-      'Løftehøyde maks': { value: '100', unit: 'cm' },
-      'Understell hreg': { value: 'JA', unit: '' },
-      'Bredde innvendig': { value: '58', unit: 'cm' },
-      Totalbredde: { value: '70', unit: 'cm' },
-      Totallengde: { value: '53', unit: 'cm' },
-      'Brukervekt maks': { value: '150', unit: 'kg' },
-    },
-    hmsartNr: '062665',
-    supplierRef: '606c3c4c-a1ab-4604-b8ac-b2f9c4678afb',
-    isoCategory: '09122101',
-    accessory: false,
-    sparepart: undefined,
-    photos: [{ uri: '42251.jpg' }, { uri: '42251_2.jpg' }, { uri: '42251_3.jpg' }, { uri: '42251_4.jpg' }],
-    seriesId: 'HMDB-42251',
+  return {
+    props: { ...serializedData },
   }
+}
 
-  const supplier = {
-    id: '606c3c4c-a1ab-4604-b8ac-b2f9c4678afb',
-    identifier: 'HMDB-5003',
-    name: 'Varodd Velferdsteknologi AS',
-    address: 'P.b. 8343',
-    email: 'hjelpemidler@varodd.no',
-    phone: '38144800',
-    homepageUrl: 'http://www.varodd.no',
-  }
-
-  const seriesProducts = null
-
+export default function ProduktPage({
+  product,
+  supplier,
+  seriesProducts,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <nav className="breadcrumbs">
@@ -107,11 +75,11 @@ export default function ProduktPage() {
         <section className="product-accordion">
           {product.techData && <InfoAccordion techData={product.techData} />}
         </section>
-        {/* {seriesProducts && seriesProducts.length > 0 && (
+        {seriesProducts && seriesProducts.length > 0 && (
           <section className="similar-products">
             <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
           </section>
-        )} */}
+        )}
       </article>
     </>
   )

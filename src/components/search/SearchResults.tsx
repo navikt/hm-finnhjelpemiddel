@@ -5,7 +5,7 @@ import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { getIsoCategoryName } from '../../utils/iso-category-util'
 import { useHydratedCompareStore, useSearchDataStore, CompareMode } from '../../utils/state-util'
-import DefinitionList from '../DefinitionList/DefinitionList'
+import DefinitionList from '../definition-list/DefinitionList'
 import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
 
 type ProduktProps = {
@@ -23,7 +23,7 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { setCompareMode, compareMode, setCompareMenuState } = useHydratedCompareStore()
+  const { setCompareMode, compareMode } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
@@ -33,7 +33,7 @@ const SearchResults = ({
       <Button
         variant="secondary"
         onClick={() => {
-          setCompareMode(CompareMode.Active) //, setCompareMenuState(CompareMenuState.Open)
+          setCompareMode(CompareMode.Active)
         }}
       >
         Sammenlign produkter

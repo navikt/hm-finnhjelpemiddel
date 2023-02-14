@@ -1,7 +1,7 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import Footer from '../components/Layout/Footer'
+import Footer from '../components/layout/Footer'
 
 export default function Document() {
   return (

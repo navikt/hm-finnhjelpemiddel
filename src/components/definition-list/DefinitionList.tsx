@@ -10,7 +10,17 @@ const DefinitionList = ({
   className?: string
   fullWidth?: boolean
 }) => {
-  return <dl className={styles.definitionList}>{children}</dl>
+  return (
+    <dl
+      className={classNames(
+        styles.definitionList,
+        { [styles.definitionListFullWidth]: fullWidth },
+        className
+      )}
+    >
+      {children}
+    </dl>
+  )
 }
 
 const DeflistTerm = ({ children, className }: { children: React.ReactNode; className?: string }) => {

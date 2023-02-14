@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { Button, Detail, ErrorMessage, TextField } from '@navikt/ds-react'
 import { FilterData, SearchData, SelectedFilters } from '../../utils/api-util'
 import { useSearchDataStore } from '../../utils/state-util'
-import { FilterCategories } from '../Sidebar/FilterView'
+import { FilterCategories } from '../sidebar/FilterView'
 
 type RangeFilterInputProps = {
   filterKey: keyof typeof FilterCategories

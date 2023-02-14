@@ -1,13 +1,12 @@
-import Head from 'next/head'
-import AnimateLayout from '../components/Layout/AnimateLayout'
 import useSWRInfinite from 'swr/infinite'
 import { Loader } from '@navikt/ds-react'
-
 import { CompareMode, useHydratedCompareStore, useSearchDataStore } from '../utils/state-util'
-import { fetchProducts, FetchResponse, PAGE_SIZE } from '../utils/api-util'
-import SearchResults from '../components/Search/SearchResults'
-import Sidebar from '../components/Sidebar/Sidebar'
-import CompareMenu from '../components/CompareProducts/CompareMenu'
+import { fetchProducts, FetchResponse } from '../utils/api-util'
+
+import AnimateLayout from '../components/layout/AnimateLayout'
+import CompareMenu from '../components/compare-products/CompareMenu'
+import SearchResults from '../components/search/SearchResults'
+import Sidebar from '../components/sidebar/Sidebar'
 
 export default function Home() {
   const { searchData } = useSearchDataStore()

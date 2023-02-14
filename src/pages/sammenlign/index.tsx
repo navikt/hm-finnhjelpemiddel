@@ -9,7 +9,7 @@ import { Product } from '../../utils/product-util'
 import { CompareMode, useHydratedCompareStore } from '../../utils/state-util'
 
 import { sortAlphabetically } from '../../utils/sort-util'
-import AnimateLayout from '../../components/Layout/AnimateLayout'
+import AnimateLayout from '../../components/layout/AnimateLayout'
 
 export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMode } = useHydratedCompareStore()

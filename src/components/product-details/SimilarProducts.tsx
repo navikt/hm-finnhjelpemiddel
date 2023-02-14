@@ -55,7 +55,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   useEffect(() => {
     setKeyColumnWidth(ref.current ? ref.current['offsetWidth'] : 0)
   }, [])
-  // Det er ikke data med flere bilder enda, så venter med å sjule chevron ol før det skjer
+
   return (
     <>
       <Heading level="3" size="medium">
