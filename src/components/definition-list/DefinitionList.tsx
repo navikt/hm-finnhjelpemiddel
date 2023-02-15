@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import styles from './Definitionlist.module.scss'
+import styles from './DefinitionList.module.scss'
 
 const DefinitionList = ({
   children,
@@ -11,13 +11,7 @@ const DefinitionList = ({
   fullWidth?: boolean
 }) => {
   return (
-    <dl
-      className={classNames(
-        styles.definitionList,
-        { [styles.definitionListFullWidth]: fullWidth },
-        className
-      )}
-    >
+    <dl className={classNames(styles.definitionList, { [styles.definitionListFullWidth]: fullWidth }, className)}>
       {children}
     </dl>
   )
