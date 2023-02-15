@@ -4,47 +4,50 @@ import React, { useState } from 'react'
 import { Alert, BodyLong, BodyShort, LinkPanel, Heading } from '@navikt/ds-react'
 
 import styles from './index.module.scss'
+import AnimateLayout from '../../components/layout/AnimateLayout'
 
 export default function Page() {
   const [openCategory, setOpenCategory] = useState<number | null>(null)
   return (
-    <div className={styles.veileder}>
-      <ul className={styles.grid}>
-        {SituationCategories.map((category: Category) => {
-          const entryClassName =
-            category.id === openCategory ? `${styles.entry} ${styles.entry__selected}` : styles.entry
-          return (
-            <React.Fragment key={category.id}>
-              <li
-                className={entryClassName}
-                key={category.id}
-                onClick={() => {
-                  const newOpenCategory = openCategory === category.id ? null : category.id
-                  setOpenCategory(newOpenCategory)
-                }}
-              >
-                <Image
-                  src={category.iconUrl}
-                  alt={'Bilde nummer '}
-                  width={50}
-                  height={50}
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
-                <Heading level="1" size="medium">
-                  {category.name}
-                </Heading>
-              </li>
-              {openCategory === category.id && (
-                <li className={styles.fullwidth}>
-                  <CategoryOpen category={category}></CategoryOpen>
+    <AnimateLayout>
+      <div className={styles.veileder}>
+        <ul className={styles.grid}>
+          {SituationCategories.map((category: Category) => {
+            const entryClassName =
+              category.id === openCategory ? `${styles.entry} ${styles.entry__selected}` : styles.entry
+            return (
+              <React.Fragment key={category.id}>
+                <li
+                  className={entryClassName}
+                  key={category.id}
+                  onClick={() => {
+                    const newOpenCategory = openCategory === category.id ? null : category.id
+                    setOpenCategory(newOpenCategory)
+                  }}
+                >
+                  <Image
+                    src={category.iconUrl}
+                    alt={'Bilde nummer '}
+                    width={50}
+                    height={50}
+                    style={{ objectFit: 'contain' }}
+                    priority
+                  />
+                  <Heading level="1" size="medium">
+                    {category.name}
+                  </Heading>
                 </li>
-              )}
-            </React.Fragment>
-          )
-        })}
-      </ul>
-    </div>
+                {openCategory === category.id && (
+                  <li className={styles.fullwidth}>
+                    <CategoryOpen category={category}></CategoryOpen>
+                  </li>
+                )}
+              </React.Fragment>
+            )
+          })}
+        </ul>
+      </div>
+    </AnimateLayout>
   )
 }
 
