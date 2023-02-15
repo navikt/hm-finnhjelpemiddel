@@ -1,0 +1,24 @@
+.definitionList {
+  display: grid;
+  grid-template-columns: minmax(auto, max-content) auto;
+  column-gap: var(--a-spacing-10);
+  align-items: center;
+  margin: 0;
+
+  &--full-width {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  > * {
+    padding-top: var(--a-spacing-2);
+  }
+
+  dt {
+    font-weight: bold;
+    text-align: left;
+  }
+
+  dd {
+    margin-left: 0;
+  }
+}

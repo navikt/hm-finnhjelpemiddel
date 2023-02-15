@@ -14,7 +14,6 @@ const nextConfig = {
     locales: ['no'],
     defaultLocale: 'no',
   },
-  experimental: { appDir: true },
   async rewrites() {
     return [
       {

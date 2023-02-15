@@ -1,0 +1,63 @@
+@use './_mixins';
+@import '@navikt/ds-css';
+
+.comparing-table {
+  max-width: 860px;
+  overflow-x: scroll;
+  margin: var(--a-spacing-2) 0;
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  thead tr > th:first-child {
+    background-color: var(--a-bg-default);
+    z-index: 2;
+  }
+
+  tr > th:first-child,
+  tr > td:first-child {
+    position: sticky;
+    left: 0;
+  }
+
+  tbody th {
+    background-color: var(--a-bg-subtle);
+    border-right: 1px solid var(--a-bg-subtle);
+  }
+}
+
+.comparing-table__two-sticky-columns {
+  @include mixins.for-size(tablet-up) {
+    thead th:nth-child(2) {
+      background-color: var(--a-bg-default);
+    }
+
+    thead th:nth-child(2) {
+      border-right: 1px solid var(--a-gray-400);
+    }
+
+    tr > th:nth-child(2),
+    tr > td:nth-child(2) {
+      position: sticky;
+      left: 100px;
+    }
+
+    tr > td:nth-child(2) {
+      border-right: 1px solid var(--a-gray-400);
+      background-color: var(--a-bg-subtle);
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
