@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
+import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
 import * as queryString from 'querystring'
 import { Loader } from '@navikt/ds-react'
@@ -36,9 +37,7 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
   useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
 
   useEffect(() => {
-    window.history.pushState(
-      null,
-      '',
+    Router.push(
       '?' +
         queryString.stringify({
           agreement: searchData.hasRammeavtale,
