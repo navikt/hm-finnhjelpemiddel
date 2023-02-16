@@ -1,7 +1,8 @@
-import { Product as Product } from '../../utils/product-util'
+import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 import { Back, Next } from '@navikt/ds-icons'
 import { Table, SortState, Heading } from '@navikt/ds-react'
-import { useEffect, useRef, useState } from 'react'
+import { Product } from '../../utils/product-util'
 import { sortAlphabetically } from '../../utils/sort-util'
 
 type SimilarProductsProps = {
@@ -79,7 +80,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
               <div key={index} className="similar-products__card">
                 <p>{product.title}</p>
                 <p>{product.attributes?.articlename}</p>
-                <a href={`/produkt/${product.id}`}>Les mer</a>
+                <Link href={`/produkt/${product.id}`}>Les mer</Link>
               </div>
             )
           })}

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
+import { useState } from 'react'
 import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@navikt/ds-react'
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
@@ -97,12 +98,12 @@ const SearchResult = ({ product }: ProduktProps) => {
   }
 
   const toggleCompareProduct = () => {
-    productsToCompare.filter((procom) => product.id === procom.id).length === 1
+    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
   }
 
-  const isInProductsToCompare = productsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   return (
     <li className="search-result">
@@ -131,9 +132,9 @@ const SearchResult = ({ product }: ProduktProps) => {
           <div className="search-result__title">
             <Heading size="medium">
               {compareMode === CompareMode.Deactivated && (
-                <a className="search-result__link" href={`/produkt/${product.id}`}>
+                <Link className="search-result__link" href={`/produkt/${product.id}`}>
                   {product.title}
-                </a>
+                </Link>
               )}
               {compareMode === CompareMode.Active && (
                 <button className="search-result__link search-result__link__button" onClick={toggleCompareProduct}>

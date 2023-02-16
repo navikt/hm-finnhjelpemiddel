@@ -76,7 +76,7 @@ const CompareMenu = () => {
                     animate="show"
                     className="products-to-compare__chosen-products"
                   >
-                    {productsToCompare.map((product) => (
+                    {productsToCompare.map((product: Product) => (
                       <motion.li variants={listItem} key={'compare-' + product.id}>
                         <ChosenProductCard
                           product={product}
