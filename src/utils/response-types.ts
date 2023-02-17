@@ -26,7 +26,7 @@ export interface ProductSourceResponse {
   title: string
   attributes: AttributeResponse
   status: Status
-  hmsartNr: string | null
+  hmsArtNr: string | null
   identifier: string
   supplierRef: string
   isoCategory: string
