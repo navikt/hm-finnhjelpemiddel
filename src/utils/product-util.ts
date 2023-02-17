@@ -14,7 +14,7 @@ export interface Product {
   title: string
   attributes: Attributes
   techData: TechData
-  hmsartNr: string | null
+  hmsArtNr: string | null
   supplierRef: string
   isoCategory: string
   accessory: boolean
@@ -46,7 +46,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     title: source.title,
     attributes: source.attributes,
     techData: mapTechDataDict(source.data),
-    hmsartNr: source.hmsartNr,
+    hmsArtNr: source.hmsArtNr,
     supplierRef: source.supplier?.id,
     isoCategory: source.isoCategory,
     accessory: source.accessory,

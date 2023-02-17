@@ -408,7 +408,7 @@ const mapFilters = (data: any): FilterData => {
 }
 
 export async function getProduct(id: string) {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/product/_doc/${id}`, {
+  const res = await fetch(process.env.HM_SEARCH_URL + `/products/_doc/${id}`, {
     method: 'GET',
   })
 
@@ -416,7 +416,7 @@ export async function getProduct(id: string) {
 }
 
 export async function getSupplier(id: string) {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/supplier/_doc/${id}`, {
+  const res = await fetch(process.env.HM_SEARCH_URL + `/suppliers/_doc/${id}`, {
     method: 'GET',
   })
 
@@ -430,7 +430,7 @@ export async function getSeries(seriesId: string) {
     },
   }
 
-  const res = await fetch(process.env.HM_SEARCH_URL + '/product/_search', {
+  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
