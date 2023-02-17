@@ -32,6 +32,7 @@ const SearchResults = ({
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
       <Button
+        size="small"
         variant="secondary"
         onClick={() => {
           setCompareMode(CompareMode.Active)
@@ -40,7 +41,7 @@ const SearchResults = ({
         Sammenlign produkter
       </Button>
     ) : (
-      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
+      <Button size="small" variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
         Slå av sammenligning av produkter
       </Button>
     )
@@ -107,19 +108,19 @@ const SearchResult = ({ product }: ProduktProps) => {
 
   return (
     <li className="search-result">
+      {compareMode === CompareMode.Active && (
+        <div className="search-result__compare-checkbox">
+          <Checkbox
+            size="small"
+            value="Sammenlign dette produkt"
+            onChange={toggleCompareProduct}
+            checked={isInProductsToCompare}
+          >
+            Sammenlign
+          </Checkbox>
+        </div>
+      )}
       <div className="search-result__container">
-        {compareMode === CompareMode.Active && (
-          <div className="search-result__compare-checkbox">
-            <Checkbox
-              hideLabel
-              value="Sammenlign dette produkt"
-              onChange={toggleCompareProduct}
-              checked={isInProductsToCompare}
-            >
-              Sammenlign
-            </Checkbox>
-          </div>
-        )}
         <div className="search-result__image">
           {!hasImage && (
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
@@ -144,7 +145,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             </Heading>
           </div>
           <div className="search-result__description">
-            <BodyLong>{product.attributes?.text}</BodyLong>
+            <BodyLong size="small">{product.attributes?.text}</BodyLong>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
