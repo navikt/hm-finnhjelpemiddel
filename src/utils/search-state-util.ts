@@ -1,0 +1,80 @@
+'use client'
+import { create } from 'zustand'
+import { useState, useEffect } from 'react'
+import { persist, createJSONStorage } from 'zustand/middleware'
+import deepEqual from 'deep-equal'
+import { SearchData } from './api-util'
+import { AtLeastOne } from './type-util'
+
+const initialFiltersState = {
+  beregnetBarn: [],
+  breddeCM: [null, null],
+  brukervektMaksKG: [null, null],
+  brukervektMinKG: [null, null],
+  fyllmateriale: [],
+  lengdeCM: [null, null],
+  materialeTrekk: [],
+  setebreddeMaksCM: [null, null],
+  setebreddeMinCM: [null, null],
+  setedybdeMaksCM: [null, null],
+  setehoydeMaksCM: [null, null],
+  setehoydeMinCM: [null, null],
+  setedybdeMinCM: [null, null],
+  totalVektKG: [null, null],
+}
+
+export const initialSearchDataState = {
+  searchTerm: '',
+  isoCode: '',
+  hasRammeavtale: true,
+  filters: initialFiltersState,
+}
+
+type SearchDataState = {
+  searchData: SearchData
+  setSearchData: (searchData: AtLeastOne<SearchData>) => void
+  resetSearchData: () => void
+  meta: { isUnlikeInitial: boolean }
+}
+
+export const useSearchStore = create<SearchDataState>()(
+  persist(
+    (set) => ({
+      meta: { isUnlikeInitial: false },
+      searchData: initialSearchDataState,
+      setSearchData: (searchData) =>
+        set((state) => {
+          const updatedSearchData = { ...state.searchData, ...searchData }
+          return {
+            searchData: updatedSearchData,
+            meta: { isUnlikeInitial: !deepEqual(initialSearchDataState, updatedSearchData) },
+          }
+        }),
+      resetSearchData: () => {
+        set({ searchData: initialSearchDataState, meta: { isUnlikeInitial: false } })
+      },
+    }),
+    {
+      name: 'search-data-storage',
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+)
+
+// This a fix to ensure zustand never hydrates the store before React hydrates the page
+// otherwise it causes a mismatch between SSR and client render
+// see: https://github.com/pmndrs/zustand/issues/1145
+// https://github.com/TxnLab/use-wallet/pull/23/commits/f4c13aad62839500066d694a5b0f4a4c24c3c8d3
+export const useHydratedSearchStore = ((selector, compare) => {
+  const store = useSearchStore(selector, compare)
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+  return hydrated
+    ? store
+    : {
+        meta: { isUnlikeInitial: false },
+        searchData: initialSearchDataState,
+        setSearchData: () => undefined,
+        resetSearchData: () => undefined,
+      }
+}) as typeof useSearchStore
