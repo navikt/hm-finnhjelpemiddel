@@ -27,7 +27,7 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
   const [productSearchParams] = useState(mapProductSearchParams(query))
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
-    (index) => ({ url: `/product/_search`, pageIndex: index, searchData }),
+    (index) => ({ url: `/products/_search`, pageIndex: index, searchData }),
     fetchProducts,
     {
       keepPreviousData: true,

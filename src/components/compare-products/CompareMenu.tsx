@@ -160,7 +160,7 @@ const ChosenProductCard = ({
         )}
       </div>
       <BodyShort size="small" className="products-to-compare__product-title">
-        {product.hmsartNr ? product.title + ' (' + product.hmsartNr + ')' : product.title}
+        {product.hmsArtNr ? product.title + ' (' + product.hmsArtNr + ')' : product.title}
       </BodyShort>
       <Button
         className="products-to-compare__remove-product-button"

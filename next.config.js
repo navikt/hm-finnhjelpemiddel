@@ -17,8 +17,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/product/_search:path*',
-        destination: process.env.HM_SEARCH_URL + '/product/_search:path*',
+        source: '/products/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/products/_search:path*',
       },
     ]
   },
