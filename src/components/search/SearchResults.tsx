@@ -126,7 +126,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
           )}
           {hasImage && (
-            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
           )}
         </div>
         <div className="search-result__content">
@@ -171,7 +171,9 @@ const SearchResult = ({ product }: ProduktProps) => {
             </DefinitionList>
           </div>
         </div>
-        <Next className="search-result__chevron" aria-hidden />
+        <div className="search-result__chevron-container">
+          <Next className="search-result__chevron" aria-hidden />
+        </div>
       </div>
     </li>
   )

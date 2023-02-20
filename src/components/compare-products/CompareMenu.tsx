@@ -60,7 +60,7 @@ const CompareMenu = () => {
             variants={listConatainer}
             initial="hidden"
             animate="show"
-            className="products-to-compare__products-container"
+            className="products-to-compare__container"
           >
             {productsToCompare.length === 0 && (
               <motion.div variants={listConatainer} initial="hidden" animate="show">
@@ -156,7 +156,7 @@ const ChosenProductCard = ({
           <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
         {hasImage && (
-          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
+          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
         )}
       </div>
       <BodyShort size="small" className="products-to-compare__product-title">
