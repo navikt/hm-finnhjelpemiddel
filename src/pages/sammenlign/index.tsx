@@ -2,13 +2,12 @@ import { useState } from 'react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-
 import { Button, LinkPanel, Table, BodyShort, Heading } from '@navikt/ds-react'
 import { Picture, Close, Back } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
-import { CompareMode, useHydratedCompareStore } from '../../utils/state-util'
-
+import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { sortAlphabetically } from '../../utils/sort-util'
+
 import AnimateLayout from '../../components/layout/AnimateLayout'
 
 export default function ComparePage() {

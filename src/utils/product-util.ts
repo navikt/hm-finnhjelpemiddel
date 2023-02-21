@@ -7,7 +7,9 @@ import {
   SearchResponse,
   TechDataResponse,
 } from './response-types'
-import { initialSearchDataState } from './state-util'
+import { initialSearchDataState } from './search-state-util'
+import queryString from 'querystring'
+import { SearchData, SelectedFilters } from './api-util'
 
 export interface Product {
   id: string
@@ -58,7 +60,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
 
 const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
-  const photos: Photo[] = media
+  return media
     .filter((media: MediaResponse) => {
       if (!(media.type == MediaType.IMAGE && media.order && media.uri) || seen[media.uri]) {
         return false
@@ -71,8 +73,6 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
     .map((image: MediaResponse) => ({
       uri: image.uri,
     }))
-
-  return photos
 }
 
 const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
@@ -106,3 +106,14 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
     filters: { ...initialSearchDataState.filters, ...filters },
   }
 }
+
+export const toSearchQueryString = (searchData: SearchData) =>
+  '?' +
+  queryString.stringify({
+    agreement: searchData.hasRammeavtale,
+    ...(searchData.searchTerm && { term: searchData.searchTerm }),
+    ...(searchData.isoCode && { isoCode: searchData.isoCode }),
+    ...Object.entries(searchData.filters)
+      .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+      .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
+  })

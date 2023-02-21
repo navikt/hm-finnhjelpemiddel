@@ -5,17 +5,16 @@ import { useInView } from 'react-intersection-observer'
 import classNames from 'classnames'
 import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
-
 import { FilterData, SearchData } from '../../utils/api-util'
 import { mapProductSearchParams } from '../../utils/product-util'
-import { initialSearchDataState, useSearchDataStore } from '../../utils/state-util'
+import { initialSearchDataState, useHydratedSearchStore } from '../../utils/search-state-util'
 
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
 const Sidebar = ({ filters }: { filters?: FilterData }) => {
   const router = useRouter()
-  const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useSearchDataStore()
+  const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useHydratedSearchStore()
   const [productSearchParams] = useState(mapProductSearchParams(router.query))
   const [expanded, setExpanded] = useState(false)
 
@@ -34,12 +33,10 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
     handleSubmit,
     reset: resetForm,
     setValue,
-    watch,
   } = formMethods
 
-  const watchHasRammeavtale = watch('hasRammeavtale')
-
   const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
+
   const onReset = () => {
     resetSearchData()
     resetForm(initialSearchDataState)
@@ -53,10 +50,6 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
       setExpanded(true)
     }
   }, [])
-
-  useEffect(() => {
-    setSearchData({ hasRammeavtale: !!watchHasRammeavtale })
-  }, [setSearchData, watchHasRammeavtale])
 
   return (
     <div className="search__side-bar">

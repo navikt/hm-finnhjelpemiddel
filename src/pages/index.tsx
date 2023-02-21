@@ -4,9 +4,10 @@ import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
 import * as queryString from 'querystring'
 import { Loader } from '@navikt/ds-react'
-import { CompareMode, useHydratedCompareStore, useSearchDataStore } from '../utils/state-util'
+import { useHydratedSearchStore } from '../utils/search-state-util'
+import { CompareMode, useHydratedCompareStore } from '../utils/compare-state-util'
 import { fetchProducts, FetchResponse, SelectedFilters } from '../utils/api-util'
-import { mapProductSearchParams } from '../utils/product-util'
+import { mapProductSearchParams, toSearchQueryString } from '../utils/product-util'
 
 import AnimateLayout from '../components/layout/AnimateLayout'
 import CompareMenu from '../components/compare-products/CompareMenu'
@@ -21,10 +22,11 @@ export const getServerSideProps: (
 }
 
 export default function Home({ query }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { searchData, setSearchData } = useSearchDataStore()
+  const { searchData, setSearchData } = useHydratedSearchStore()
   const { compareMode } = useHydratedCompareStore()
 
   const [productSearchParams] = useState(mapProductSearchParams(query))
+  const [searchInitialized, setSearchInitialized] = useState(false)
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
     (index) => ({ url: `/products/_search`, pageIndex: index, searchData }),
@@ -34,21 +36,16 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
     }
   )
 
-  useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
+  useEffect(() => {
+    setSearchData(productSearchParams)
+    setSearchInitialized(true)
+  }, [productSearchParams, setSearchData])
 
   useEffect(() => {
-    Router.push(
-      '?' +
-        queryString.stringify({
-          agreement: searchData.hasRammeavtale,
-          ...(searchData.searchTerm && { term: searchData.searchTerm }),
-          ...(searchData.isoCode && { isoCode: searchData.isoCode }),
-          ...Object.entries(searchData.filters)
-            .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
-            .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
-        })
-    )
-  }, [searchData])
+    if (searchInitialized) {
+      Router.push(toSearchQueryString(searchData))
+    }
+  }, [searchInitialized, searchData])
 
   return (
     <>

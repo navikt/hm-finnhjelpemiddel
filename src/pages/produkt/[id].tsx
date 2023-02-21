@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { mapSupplier } from '../../utils/supplier-util'
 import { getProduct, getSupplier, getSeries } from '../../utils/api-util'
-import { createProduct, mapProducts } from '../../utils/product-util'
+import { createProduct, mapProducts, toSearchQueryString } from '../../utils/product-util'
+import { useHydratedSearchStore } from '../../utils/search-state-util'
 import PhotoSlider from '../../components/photo-slider/PhotoSlider'
 import InfoAccordion from '../../components/info-accordion/InfoAccordion'
 import SimilarProducts from '../../components/product-details/SimilarProducts'
@@ -31,12 +32,14 @@ export default function ProduktPage({
   supplier,
   seriesProducts,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { searchData } = useHydratedSearchStore()
+
   return (
     <>
       <nav className="breadcrumbs">
         <ol>
           <li>
-            <Link href="/">Oversikt</Link>
+            <Link href={'/' + toSearchQueryString(searchData)}>Oversikt</Link>
             <NextIcon />
           </li>
           <li>{product.title}</li>

@@ -3,10 +3,10 @@ import { Select } from '@navikt/ds-react'
 import { useFormContext } from 'react-hook-form'
 import { getIsoCodeLevels, getIsoCategoriesForLevel, getIsoCodeForLevel } from '../../utils/iso-category-util'
 import { SearchData } from '../../utils/api-util'
-import { useSearchDataStore } from '../../utils/state-util'
+import { useHydratedSearchStore } from '../../utils/search-state-util'
 
 const SelectIsoCategory = () => {
-  const { searchData, setSearchData } = useSearchDataStore()
+  const { searchData, setSearchData } = useHydratedSearchStore()
   const { setValue, watch } = useFormContext<SearchData>()
   const watchIsoCode = watch('isoCode')
 

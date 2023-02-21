@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import { useFormContext } from 'react-hook-form'
 import { Button, Detail, ErrorMessage, TextField } from '@navikt/ds-react'
+import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { FilterData, SearchData, SelectedFilters } from '../../utils/api-util'
-import { useSearchDataStore } from '../../utils/state-util'
 import { FilterCategories } from '../sidebar/FilterView'
 
 type RangeFilterInputProps = {
@@ -12,7 +12,7 @@ type RangeFilterInputProps = {
 }
 
 export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterInputProps) => {
-  const { searchData } = useSearchDataStore()
+  const { searchData } = useHydratedSearchStore()
   const {
     formState: { errors, dirtyFields },
     register,

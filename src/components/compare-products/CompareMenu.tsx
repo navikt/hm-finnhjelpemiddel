@@ -1,10 +1,10 @@
-import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
 import Image from 'next/image'
-import { BodyShort, Button, LinkPanel } from '@navikt/ds-react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Product } from '../../utils/product-util'
-import { CompareMenuState, useHydratedCompareStore } from '../../utils/state-util'
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
+import { BodyShort, Button, LinkPanel } from '@navikt/ds-react'
+import { Product } from '../../utils/product-util'
+import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-state-util'
 
 const container = {
   hidden: { opacity: 1 },
