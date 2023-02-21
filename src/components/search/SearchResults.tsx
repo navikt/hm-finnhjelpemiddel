@@ -5,7 +5,7 @@ import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { getIsoCategoryName } from '../../utils/iso-category-util'
-import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import DefinitionList from '../definition-list/DefinitionList'
 import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
@@ -25,7 +25,7 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { compareMode, setCompareMode } = useHydratedCompareStore()
+  const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
@@ -36,7 +36,7 @@ const SearchResults = ({
         size="small"
         variant="secondary"
         onClick={() => {
-          setCompareMode(CompareMode.Active)
+          setCompareMode(CompareMode.Active), setCompareMenuState(CompareMenuState.Open)
         }}
       >
         Sammenlign produkter
@@ -173,7 +173,7 @@ const SearchResult = ({ product }: ProduktProps) => {
           </div>
         </div>
         <div className="search-result__chevron-container">
-          <Next className="search-result__chevron" aria-hidden />
+          {compareMode === CompareMode.Deactivated && <Next className="search-result__chevron" aria-hidden />}
         </div>
       </div>
     </li>

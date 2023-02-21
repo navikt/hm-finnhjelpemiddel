@@ -7,12 +7,11 @@ import { Product } from '../../utils/product-util'
 import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-state-util'
 
 const container = {
-  hidden: { opacity: 1 },
+  hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
       duration: 0.1,
-      ease: 'easeInOut',
       delayChildren: 0.3,
     },
   },
@@ -38,14 +37,7 @@ const CompareMenu = () => {
 
   const openView = (
     <AnimatePresence>
-      <motion.div
-        key="modal"
-        layoutId="compare-menu"
-        variants={container}
-        initial={'hidden'}
-        animate={'show'}
-        className="products-to-compare products-to-compare__open"
-      >
+      <motion.div key="modal" layoutId="compare-menu" className="products-to-compare products-to-compare__open">
         <motion.button
           layoutId="chevron-button"
           onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
