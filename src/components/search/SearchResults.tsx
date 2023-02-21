@@ -5,7 +5,8 @@ import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { getIsoCategoryName } from '../../utils/iso-category-util'
-import { useHydratedCompareStore, useSearchDataStore, CompareMode } from '../../utils/state-util'
+import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { useHydratedSearchStore } from '../../utils/search-state-util'
 import DefinitionList from '../definition-list/DefinitionList'
 import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
 
@@ -24,7 +25,7 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { setCompareMode, compareMode } = useHydratedCompareStore()
+  const { compareMode, setCompareMode } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
@@ -87,7 +88,7 @@ const SearchResults = ({
 }
 
 const SearchResult = ({ product }: ProduktProps) => {
-  const { setSearchData } = useSearchDataStore()
+  const { setSearchData } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
 
   const hasImage = product.photos.length !== 0
