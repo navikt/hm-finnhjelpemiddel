@@ -54,7 +54,7 @@ const SearchResults = ({
   if (!products?.length) {
     return (
       <>
-        <Heading level="2" size="medium">
+        <Heading level="1" size="medium">
           Søkeresultater
         </Heading>
         <Alert variant="info" fullWidth>
@@ -67,7 +67,7 @@ const SearchResults = ({
     <>
       <header className="results__header">
         <div>
-          <Heading level="2" size="medium">
+          <Heading level="1" size="medium">
             Søkeresultater
           </Heading>
           <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
@@ -132,7 +132,7 @@ const SearchResult = ({ product }: ProduktProps) => {
         </div>
         <div className="search-result__content">
           <div className="search-result__title">
-            <Heading size="medium">
+            <Heading level="2" size="medium">
               {compareMode === CompareMode.Deactivated && (
                 <Link className="search-result__link" href={`/produkt/${product.id}`}>
                   {product.title}

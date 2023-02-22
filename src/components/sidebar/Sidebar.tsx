@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 import classNames from 'classnames'
-import { Button, Fieldset, Search, Switch } from '@navikt/ds-react'
+import { Button, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 import { FilterData, SearchData } from '../../utils/api-util'
 import { mapProductSearchParams } from '../../utils/product-util'
@@ -59,7 +59,7 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
             <Controller
               render={({ field }) => (
                 <Search
-                  label="Søk etter produkt"
+                  label="Søk etter produkter"
                   hideLabel={false}
                   onClear={() => setSearchData({ searchTerm: '' })}
                   {...field}
@@ -73,22 +73,18 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
 
           {expanded && (
             <>
-              <SelectIsoCategory />
-
-              <Fieldset
-                legend="Rammeavtale"
-                description="Dersom denne er huket av så vises kun produkter som er på aktiv rammeavtale med Nav."
+              <Switch
+                className="search__agreement-switch"
+                checked={searchData.hasRammeavtale}
+                onChange={(e) => {
+                  setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
+                  setSearchData({ hasRammeavtale: e.target.checked })
+                }}
               >
-                <Switch
-                  checked={searchData.hasRammeavtale}
-                  onChange={(e) => {
-                    setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
-                    setSearchData({ hasRammeavtale: e.target.checked })
-                  }}
-                >
-                  På rammeavtale
-                </Switch>
-              </Fieldset>
+                Vis kun produkter på rammeavtale med NAV
+              </Switch>
+
+              <SelectIsoCategory />
 
               <FilterView filters={filters} />
             </>

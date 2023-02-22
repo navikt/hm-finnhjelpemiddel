@@ -1,33 +1,34 @@
 import Image from 'next/image'
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
-import { BodyShort, Button, LinkPanel } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, LinkPanel } from '@navikt/ds-react'
 import { Product } from '../../utils/product-util'
 import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-state-util'
 
-const container = {
-  hidden: { opacity: 0 },
+const containerVariants: Variants = {
+  hidden: { opacity: 1 },
   show: {
     opacity: 1,
     transition: {
-      duration: 0.1,
+      when: 'beforeChildren',
+      duration: 0.3,
       delayChildren: 0.3,
     },
   },
 }
 
-const listConatainer = {
+const childVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      delay: 0.2,
+      delay: 0.3,
     },
   },
 }
 
-const listItem = {
+const productVariants: Variants = {
   hidden: { opacity: 0 },
   show: { opacity: 1 },
 }
@@ -36,94 +37,98 @@ const CompareMenu = () => {
   const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct } = useHydratedCompareStore()
 
   const openView = (
-    <AnimatePresence>
-      <motion.div key="modal" layoutId="compare-menu" className="products-to-compare products-to-compare__open">
-        <motion.button
-          layoutId="chevron-button"
-          onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
-          className="products-to-compare__chevron-button"
-        >
-          <span className="navds-button__icon">
-            <Expand title="Sjul sammenligning" />
-          </span>
-        </motion.button>
-        <AnimatePresence>
-          <motion.div
-            variants={listConatainer}
-            initial="hidden"
-            animate="show"
-            className="products-to-compare__container"
-          >
-            {productsToCompare.length === 0 && (
-              <motion.div variants={listConatainer} initial="hidden" animate="show">
-                <BodyShort>Ingen produkter er lagt til for sammenligning</BodyShort>
-              </motion.div>
-            )}
-            {productsToCompare.length !== 0 && (
-              <>
-                {productsToCompare ? (
-                  <motion.ul
-                    variants={listConatainer}
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      layoutId="compare-menu"
+      className="compare-menu compare-menu__open"
+    >
+      <motion.button
+        layoutId="chevron-button"
+        key="chevron"
+        onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
+        className="compare-menu__chevron-button"
+      >
+        <span className="navds-button__icon">
+          <Expand title="Sjul sammenligning" />
+        </span>
+      </motion.button>
+      <motion.div key="content" variants={childVariants} className="compare-menu__container">
+        {productsToCompare.length === 0 && (
+          <motion.div layoutId="placeholder" className="compare-menu__placeholder compare-menu__placeholder__empty">
+            <motion.p layout="position">Ingen produkter er lagt til for sammenligning</motion.p>
+          </motion.div>
+        )}
+        {productsToCompare.length !== 0 && (
+          <>
+            {productsToCompare ? (
+              <motion.ul className="compare-menu__chosen-products">
+                {productsToCompare.map((product: Product, index: number, array: Product[]) => (
+                  <motion.li
+                    key={'compare-' + array[array.length - 1 - index].id}
+                    variants={productVariants}
                     initial="hidden"
                     animate="show"
-                    className="products-to-compare__chosen-products"
+                    exit="hidden"
                   >
-                    {productsToCompare.map((product: Product) => (
-                      <motion.li variants={listItem} key={'compare-' + product.id}>
-                        <ChosenProductCard
-                          product={product}
-                          removeProduct={removeProduct}
-                          key={'compare-' + product.id}
-                        ></ChosenProductCard>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                ) : null}
-                {productsToCompare.length > 1 && (
-                  <LinkPanel href="/sammenlign" className="products-to-compare__link-panel" border>
-                    <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
-                  </LinkPanel>
-                )}
-                {productsToCompare.length === 1 && (
-                  <BodyShort style={{ maxWidth: '200px' }}>
-                    Velg minst ett produkt til for å gå til sammenligning.
-                  </BodyShort>
-                )}
-              </>
+                    <ChosenProductCard
+                      product={array[array.length - 1 - index]}
+                      removeProduct={removeProduct}
+                      key={'compare-' + array[array.length - 1 - index].id}
+                    ></ChosenProductCard>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            ) : null}
+            {productsToCompare.length > 1 && (
+              <motion.div>
+                <LinkPanel href="/sammenlign" className="compare-menu__link-panel" border>
+                  <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
+                </LinkPanel>
+              </motion.div>
             )}
-          </motion.div>
-        </AnimatePresence>
+            {productsToCompare.length === 1 && (
+              <motion.div
+                layoutId="placeholder"
+                className="compare-menu__placeholder compare-menu__placeholder__one-more"
+              >
+                <motion.p layout="position">Velg minst ett produkt til for å gå til sammenligning.</motion.p>
+              </motion.div>
+            )}
+          </>
+        )}
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   )
 
   const miniView = (
-    <AnimatePresence>
-      <motion.div
-        layoutId="compare-menu"
-        variants={container}
-        initial={'hidden'}
-        animate={'show'}
-        className="products-to-compare minimized"
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      layoutId="compare-menu"
+      className="compare-menu minimized"
+    >
+      <motion.button
+        layoutId="chevron-button"
+        onClick={() => setCompareMenuState(CompareMenuState.Open)}
+        className="compare-menu__chevron-button"
       >
-        <motion.button
-          layoutId="chevron-button"
-          onClick={() => setCompareMenuState(CompareMenuState.Open)}
-          className="products-to-compare__chevron-button"
-        >
-          <span className="navds-button__icon">
-            <Collapse title="Åpne sammenligning" />
-          </span>
-        </motion.button>
-      </motion.div>
-    </AnimatePresence>
+        <span className="navds-button__icon">
+          <Collapse title="Åpne sammenligning" />
+        </span>
+      </motion.button>
+    </motion.div>
   )
 
   return (
-    <>
+    <AnimatePresence>
       {compareMenuState === CompareMenuState.Open && openView}
       {compareMenuState === CompareMenuState.Minimized && miniView}
-    </>
+    </AnimatePresence>
   )
 }
 
@@ -142,8 +147,8 @@ const ChosenProductCard = ({
   }
 
   return (
-    <div className="products-to-compare__product">
-      <div className="products-to-compare__image">
+    <motion.div className="compare-menu__product">
+      <div className="compare-menu__image">
         {!hasImage && (
           <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
@@ -151,17 +156,25 @@ const ChosenProductCard = ({
           <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
         )}
       </div>
-      <BodyShort size="small" className="products-to-compare__product-title">
-        {product.hmsArtNr ? product.title + ' (' + product.hmsArtNr + ')' : product.title}
-      </BodyShort>
+      <div className="compare-menu__info">
+        <Heading size="xsmall" className="compare-menu__product-title">
+          {product.title}
+        </Heading>
+        <div className="compare-menu__hms-nr">
+          <BodyShort size="small">Hms-nr.</BodyShort>
+          <BodyShort size="small" className="compare-menu__product-title">
+            {product.hmsArtNr ? product.hmsArtNr : 'mangler'}
+          </BodyShort>
+        </div>
+      </div>
       <Button
-        className="products-to-compare__remove-product-button"
+        className="compare-menu__remove-product-button"
         size="small"
         variant="tertiary"
         onClick={() => removeProduct(product)}
         icon={<Close title="Fjern produkt fra sammenligning" />}
       />
-    </div>
+    </motion.div>
   )
 }
 

@@ -1,4 +1,4 @@
-import { BodyShort, Heading } from '@navikt/ds-react'
+import { BodyShort, Heading, Label } from '@navikt/ds-react'
 import { RangeFilterInput } from '../search/RangeFilterInput'
 import { FilterData } from '../../utils/api-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
@@ -29,7 +29,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   if (!searchDataFilters.length && (!filters || !Object.keys(filters).length)) {
     return (
       <div className="search__filters">
-        <Heading level="2" size="small" className="search__filter-heading">
+        <Heading level="2" size="xsmall" className="search__filter-heading">
           Filtre
         </Heading>
         <BodyShort>Ingen tilgjengelige filtre</BodyShort>
@@ -39,9 +39,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <Heading level="2" size="small" className="search__filter-heading">
-        Filtre
-      </Heading>
+      <Label className="search__filter-lable">Filtre</Label>
       <RangeFilterInput filterKey="lengdeCM" filters={filters} />
       <RangeFilterInput filterKey="breddeCM" filters={filters} />
       <RangeFilterInput filterKey="totalVektKG" filters={filters} />

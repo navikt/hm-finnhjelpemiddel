@@ -1,3 +1,4 @@
+import '../styles/compare-menu.scss'
 import '../styles/compare-page.scss'
 import '../styles/comparing-table.scss'
 import '../styles/globals.scss'
