@@ -1,10 +1,11 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { Close, Picture, Expand, Collapse } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading, LinkPanel } from '@navikt/ds-react'
+import { Picture, Expand, Collapse, Next, Delete } from '@navikt/ds-icons'
+import { BodyShort, Button, Heading } from '@navikt/ds-react'
 import { Product } from '../../utils/product-util'
 import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-state-util'
+import Link from 'next/link'
 
 const containerVariants: Variants = {
   hidden: { opacity: 1 },
@@ -84,9 +85,11 @@ const CompareMenu = () => {
             ) : null}
             {productsToCompare.length > 1 && (
               <motion.div>
-                <LinkPanel href="/sammenlign" className="compare-menu__link-panel" border>
-                  <LinkPanel.Title>Sammenlign {productsToCompare.length} produkter</LinkPanel.Title>
-                </LinkPanel>
+                <Link href="/sammenlign" passHref>
+                  <Button as="a" icon={<Next aria-hidden />} iconPosition="right">
+                    Sammenlign
+                  </Button>
+                </Link>
               </motion.div>
             )}
             {productsToCompare.length === 1 && (
@@ -149,12 +152,21 @@ const ChosenProductCard = ({
   return (
     <motion.div className="compare-menu__product">
       <div className="compare-menu__image">
-        {!hasImage && (
-          <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
-        )}
-        {hasImage && (
-          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
-        )}
+        <div className="image">
+          {!hasImage && (
+            <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+          )}
+          {hasImage && (
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
+          )}{' '}
+        </div>
+        <div className="owerlay">
+          <Button
+            className="delete-product"
+            onClick={() => removeProduct(product)}
+            icon={<Delete title="Fjern produkt fra sammenligning" />}
+          />
+        </div>
       </div>
       <div className="compare-menu__info">
         <Heading size="xsmall" className="compare-menu__product-title">
@@ -167,13 +179,6 @@ const ChosenProductCard = ({
           </BodyShort>
         </div>
       </div>
-      <Button
-        className="compare-menu__remove-product-button"
-        size="small"
-        variant="tertiary"
-        onClick={() => removeProduct(product)}
-        icon={<Close title="Fjern produkt fra sammenligning" />}
-      />
     </motion.div>
   )
 }

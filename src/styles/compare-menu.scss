@@ -29,7 +29,7 @@
     padding: 20px 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--a-spacing-6);
 
     h2 {
       max-width: 250px;
@@ -103,12 +103,6 @@
     }
   }
 
-  &__remove-product-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
   &__chevron-button {
     display: inline-flex;
     align-items: center;
@@ -129,23 +123,44 @@
   }
 
   &__image {
-    width: 100px;
-    height: 100px;
-    margin-top: var(--a-spacing-4);
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    width: 100%;
     position: relative;
 
-    @include mixins.for-size(phone-only) {
-      width: 80px;
-      height: 80px;
+    .image {
+      margin-top: var(--a-spacing-4);
+      width: 100px;
+      height: 100px;
+      position: relative;
+
+      @include mixins.for-size(phone-only) {
+        width: 80px;
+        height: 80px;
+      }
+    }
+
+    .delete-product {
+      display: none;
     }
   }
 
-  &__link-panel {
-    padding: 12px;
-    .navds-link-panel__title {
-      font-size: var(--a-font-size-heading-small);
-      letter-spacing: -0.001em;
-      line-height: var(--a-font-line-height-heading-small);
+  &__image:hover {
+    .owerlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .delete-product {
+      display: block;
+      position: absolute;
+      left: 50px;
+      top: 35px;
     }
   }
 
