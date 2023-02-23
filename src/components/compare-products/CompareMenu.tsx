@@ -14,7 +14,7 @@ const containerVariants: Variants = {
     transition: {
       when: 'beforeChildren',
       duration: 0.3,
-      delayChildren: 0.3,
+      delayChildren: 0.1,
     },
   },
 }
