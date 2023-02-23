@@ -16,12 +16,9 @@
     }
   }
 
-  &__input {
-    margin-bottom: var(--a-spacing-8);
-  }
-
+  &__input,
   &__agreement-switch {
-    margin-bottom: var(--a-spacing-12);
+    margin-bottom: var(--a-spacing-6);
   }
 
   &__iso-category-select {
@@ -84,6 +81,10 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+
+    h1 {
+      padding-bottom: var(--a-spacing-1);
+    }
   }
 
   &__sort-select {
