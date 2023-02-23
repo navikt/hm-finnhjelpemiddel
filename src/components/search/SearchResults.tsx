@@ -127,7 +127,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
           )}
           {hasImage && (
-            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" fill style={{ objectFit: 'contain' }} />
           )}
         </div>
         <div className="search-result__content">
