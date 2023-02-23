@@ -24,6 +24,10 @@ export default function Page() {
                     const newOpenCategory = openCategory === category.id ? null : category.id
                     setOpenCategory(newOpenCategory)
                   }}
+                  onKeyDown={() => {
+                    const newOpenCategory = openCategory === category.id ? null : category.id
+                    setOpenCategory(newOpenCategory)
+                  }}
                 >
                   <Image
                     src={category.iconUrl}
