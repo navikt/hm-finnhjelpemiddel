@@ -11,9 +11,9 @@ type SimilarProductsProps = {
 }
 
 const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) => {
-  const ref = useRef(null)
   const [keyColumnWidth, setKeyColumnWidth] = useState(0)
   const [sort, setSort] = useState<SortState | undefined>(undefined)
+  const colHeadRef = useRef(null)
 
   const numberOfProducts = seriesProducts.length
   const range = numberOfProducts >= 4 ? 4 : numberOfProducts
@@ -54,8 +54,8 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   }
 
   useEffect(() => {
-    setKeyColumnWidth(ref.current ? ref.current['offsetWidth'] : 0)
-  }, [])
+    setKeyColumnWidth(colHeadRef.current ? colHeadRef.current['offsetWidth'] : 0)
+  }, [colHeadRef, keyColumnWidth])
 
   return (
     <>
@@ -103,12 +103,14 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
         <Table sort={sort} onSortChange={(sortKey) => handleSort(sortKey)}>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader scope="col" sortKey="name" ref={ref} sortable>
+              <Table.ColumnHeader scope="col" sortKey="name" ref={colHeadRef} sortable>
                 <Heading level="4" size="medium" spacing>
                   Egenskaper
                 </Heading>
               </Table.ColumnHeader>
-              <Table.ColumnHeader style={{ left: keyColumnWidth }}>{'Produkt ' + mainProduct.id}</Table.ColumnHeader>
+              <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
+                {'Produkt ' + mainProduct.id}
+              </Table.ColumnHeader>
               {seriesProducts.length > 0 &&
                 seriesProducts.map((product, i) => (
                   <Table.ColumnHeader key={'id-' + product.id} style={{ height: '5px' }}>

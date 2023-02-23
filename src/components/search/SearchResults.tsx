@@ -5,7 +5,7 @@ import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { getIsoCategoryName } from '../../utils/iso-category-util'
-import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import DefinitionList from '../definition-list/DefinitionList'
 import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
@@ -25,7 +25,7 @@ const SearchResults = ({
   isLoading: boolean
   data?: Array<FetchResponse>
 }) => {
-  const { compareMode, setCompareMode } = useHydratedCompareStore()
+  const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
@@ -33,15 +33,16 @@ const SearchResults = ({
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
       <Button
+        size="small"
         variant="secondary"
         onClick={() => {
-          setCompareMode(CompareMode.Active)
+          setCompareMode(CompareMode.Active), setCompareMenuState(CompareMenuState.Open)
         }}
       >
         Sammenlign produkter
       </Button>
     ) : (
-      <Button variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
+      <Button size="small" variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
         Slå av sammenligning av produkter
       </Button>
     )
@@ -53,7 +54,7 @@ const SearchResults = ({
   if (!products?.length) {
     return (
       <>
-        <Heading level="2" size="medium">
+        <Heading level="1" size="medium">
           Søkeresultater
         </Heading>
         <Alert variant="info" fullWidth>
@@ -66,7 +67,7 @@ const SearchResults = ({
     <>
       <header className="results__header">
         <div>
-          <Heading level="2" size="medium">
+          <Heading level="1" size="medium">
             Søkeresultater
           </Heading>
           <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
@@ -108,30 +109,30 @@ const SearchResult = ({ product }: ProduktProps) => {
 
   return (
     <li className="search-result">
+      {compareMode === CompareMode.Active && (
+        <div className="search-result__compare-checkbox">
+          <Checkbox
+            size="small"
+            value="Sammenlign dette produkt"
+            onChange={toggleCompareProduct}
+            checked={isInProductsToCompare}
+          >
+            Sammenlign
+          </Checkbox>
+        </div>
+      )}
       <div className="search-result__container">
-        {compareMode === CompareMode.Active && (
-          <div className="search-result__compare-checkbox">
-            <Checkbox
-              hideLabel
-              value="Sammenlign dette produkt"
-              onChange={toggleCompareProduct}
-              checked={isInProductsToCompare}
-            >
-              Sammenlign
-            </Checkbox>
-          </div>
-        )}
         <div className="search-result__image">
           {!hasImage && (
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
           )}
           {hasImage && (
-            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" layout="fill" objectFit="contain" />
           )}
         </div>
         <div className="search-result__content">
           <div className="search-result__title">
-            <Heading size="medium">
+            <Heading level="2" size="medium">
               {compareMode === CompareMode.Deactivated && (
                 <Link className="search-result__link" href={`/produkt/${product.id}`}>
                   {product.title}
@@ -145,7 +146,7 @@ const SearchResult = ({ product }: ProduktProps) => {
             </Heading>
           </div>
           <div className="search-result__description">
-            <BodyLong>{product.attributes?.text}</BodyLong>
+            <BodyLong size="small">{product.attributes?.text}</BodyLong>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
@@ -171,7 +172,9 @@ const SearchResult = ({ product }: ProduktProps) => {
             </DefinitionList>
           </div>
         </div>
-        <Next className="search-result__chevron" aria-hidden />
+        <div className="search-result__chevron-container">
+          {compareMode === CompareMode.Deactivated && <Next className="search-result__chevron" aria-hidden />}
+        </div>
       </div>
     </li>
   )

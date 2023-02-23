@@ -4,6 +4,7 @@
   column-gap: var(--a-spacing-10);
   align-items: center;
   margin: 0;
+  font-size: 16px;
 
   &--full-width {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -16,9 +17,11 @@
   dt {
     font-weight: bold;
     text-align: left;
+    padding-top: 0;
   }
 
   dd {
     margin-left: 0;
+    padding-top: 0;
   }
 }
