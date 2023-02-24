@@ -22,11 +22,13 @@ export default function Document() {
                   <b>Hjelpemiddeloversikten</b>
                 </NextLink>
               </li>
+              {/*
+              Kommenterer ut denne enn så lenge, er ikke sikkert vi skal ha en veileder på siden
               <li className="nav-veileder">
                 <NextLink href="/veileder">
                   <p>Veileder</p>
                 </NextLink>
-              </li>
+              </li> */}
               <li className="nav-compare">
                 <NextLink href="/sammenlign">
                   <p>Sammenligner</p>

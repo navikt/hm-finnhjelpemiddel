@@ -1,7 +1,7 @@
 import { Category, SituationCategories } from '../../utils/situation-util'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { Alert, BodyLong, BodyShort, LinkPanel, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, LinkPanel, Heading, Button } from '@navikt/ds-react'
 
 import styles from './index.module.scss'
 import AnimateLayout from '../../components/layout/AnimateLayout'
@@ -17,29 +17,26 @@ export default function Page() {
               category.id === openCategory ? `${styles.entry} ${styles.entry__selected}` : styles.entry
             return (
               <React.Fragment key={category.id}>
-                <li
-                  className={entryClassName}
-                  key={category.id}
-                  onClick={() => {
-                    const newOpenCategory = openCategory === category.id ? null : category.id
-                    setOpenCategory(newOpenCategory)
-                  }}
-                  onKeyDown={() => {
-                    const newOpenCategory = openCategory === category.id ? null : category.id
-                    setOpenCategory(newOpenCategory)
-                  }}
-                >
-                  <Image
-                    src={category.iconUrl}
-                    alt={'Bilde nummer '}
-                    width={50}
-                    height={50}
-                    style={{ objectFit: 'contain' }}
-                    priority
-                  />
-                  <Heading level="1" size="medium">
-                    {category.name}
-                  </Heading>
+                <li className={entryClassName} key={category.id}>
+                  <button
+                    className={styles.categoryButton}
+                    onClick={() => {
+                      const newOpenCategory = openCategory === category.id ? null : category.id
+                      setOpenCategory(newOpenCategory)
+                    }}
+                  >
+                    <Image
+                      src={category.iconUrl}
+                      alt={'Bilde nummer '}
+                      width={50}
+                      height={50}
+                      style={{ objectFit: 'contain' }}
+                      priority
+                    />
+                    <Heading level="1" size="medium">
+                      {category.name}
+                    </Heading>
+                  </button>
                 </li>
                 {openCategory === category.id && (
                   <li className={styles.fullwidth}>
