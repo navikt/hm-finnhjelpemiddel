@@ -1,10 +1,4 @@
-import '../styles/compare-menu.scss'
-import '../styles/compare-page.scss'
-import '../styles/comparing-table.scss'
 import '../styles/globals.scss'
-import '../styles/product-page.scss'
-import '../styles/range-filter-input.scss'
-import '../styles/search.scss'
 
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
