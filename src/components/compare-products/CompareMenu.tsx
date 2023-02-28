@@ -176,9 +176,7 @@ const ChosenProductCard = ({
         </Heading>
         <div className="compare-menu__hms-nr">
           <BodyShort size="small">Hms-nr.</BodyShort>
-          <BodyShort size="small" className="compare-menu__product-title">
-            {product.hmsArtNr ? product.hmsArtNr : 'mangler'}
-          </BodyShort>
+          <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : 'mangler'}</BodyShort>
         </div>
       </div>
     </motion.div>
