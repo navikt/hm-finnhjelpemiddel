@@ -3,7 +3,6 @@ import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
 import * as queryString from 'querystring'
-import { Loader } from '@navikt/ds-react'
 import { useHydratedSearchStore } from '../utils/search-state-util'
 import { CompareMode, useHydratedCompareStore } from '../utils/compare-state-util'
 import { fetchProducts, FetchResponse, SelectedFilters } from '../utils/api-util'
@@ -55,8 +54,7 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
           <div className="flex-column-wrap">
             <Sidebar filters={data?.at(-1)?.filters} />
             <div className="results__wrapper">
-              {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
-              {data && <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
+              {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
             </div>
           </div>
         </div>

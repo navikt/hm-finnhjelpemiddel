@@ -8,12 +8,12 @@ export default function Document() {
     <Html lang="no">
       <Head />
       <body>
-        <div className="wip-banner">
-          <p>
-            Siden er under arbeid <span>&#128119;</span>
-          </p>
-        </div>
         <nav className="nav-topp">
+          <div className="wip-banner">
+            <p>
+              Siden er under arbeid <span>&#128119;</span>
+            </p>
+          </div>
           <div className="nav-topp__content">
             <ul>
               <li>

@@ -150,10 +150,10 @@
     overflow: hidden;
     width: 400px;
     height: 300px;
+    margin: var(--a-spacing-3);
 
     .div-motion {
       position: absolute;
-      margin: var(--a-spacing-3);
     }
 
     .next-image {

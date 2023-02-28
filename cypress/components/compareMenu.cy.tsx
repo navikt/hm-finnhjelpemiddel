@@ -5,8 +5,13 @@ const openMenuSelector = '[data-cy="compare-menu-open"]'
 const minimizedMenuSelector = '[data-cy="compare-menu-minimized"]'
 
 describe('<CompareMenu />', () => {
-  it('renders', () => {
-    // see: https://on.cypress.io/mounting-react
+  beforeEach(() => {
     cy.mount(<CompareMenu />)
+    cy.injectAxe()
+  })
+
+  it('mounts open menu by default and has no detectable a11y violations', () => {
+    cy.get(openMenuSelector)
+    cy.checkA11y(openMenuSelector)
   })
 })

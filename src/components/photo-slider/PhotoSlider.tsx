@@ -137,6 +137,9 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       alt={`Produktbilde nummer ${active}`}
                       fill
                       style={{ objectFit: 'contain' }}
+                      sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
                     />
                   </div>
                 </motion.div>

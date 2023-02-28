@@ -1,9 +1,11 @@
 import '../styles/globals.scss'
 
+import React from 'react'
+import reportAccessibility from '../utils/reportAccessibility'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -14,3 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
     </>
   )
 }
+
+reportAccessibility(React)
+
+export default App

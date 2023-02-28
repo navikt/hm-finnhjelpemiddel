@@ -48,7 +48,14 @@ const SearchResults = ({
     )
 
   if (isLoading) {
-    return <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+    return (
+      <>
+        <Heading level="1" size="medium">
+          Søkeresultater
+        </Heading>
+        <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+      </>
+    )
   }
 
   if (!products?.length) {
@@ -127,7 +134,15 @@ const SearchResult = ({ product }: ProduktProps) => {
             <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
           )}
           {hasImage && (
-            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" fill style={{ objectFit: 'contain' }} />
+            <Image
+              loader={imageLoader}
+              src={firstImageSrc}
+              alt="Produktbilde"
+              fill
+              style={{ objectFit: 'contain' }}
+              sizes="50vw"
+              priority
+            />
           )}
         </div>
         <div className="search-result__content">

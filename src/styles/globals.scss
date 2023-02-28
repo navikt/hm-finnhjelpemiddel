@@ -13,14 +13,40 @@ main {
   overflow: hidden;
 }
 
+.main-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  h1 {
+    text-align: center;
+    font-size: 400;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid var(--a-gray-300);
+  }
+}
+
 .nav-topp {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 80px;
   box-shadow: inset 0 -1px 0 var(--a-gray-300);
 
+  .wip-banner {
+    text-align: center;
+    width: 100%;
+    height: 84px;
+    font-size: var(--a-font-size-heading-small);
+    background-color: var(--a-red-100);
+
+    span {
+      font-size: 2rem;
+    }
+  }
+
   &__content {
+    height: 80px;
     display: flex;
     align-items: center;
     width: 100%;
@@ -156,20 +182,5 @@ main {
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-  }
-}
-
-.wip-banner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 72px;
-  font-size: var(--a-font-size-heading-small);
-  background-color: var(--a-surface-alt-1-subtle);
-  background-color: var(--a-red-100);
-
-  span {
-    font-size: 2rem;
   }
 }
