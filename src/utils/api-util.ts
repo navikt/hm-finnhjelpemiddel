@@ -1,5 +1,5 @@
 import { FilterCategories } from './filter-util'
-import { createProduct, mapProducts, Product } from './product-util'
+import { mapProducts, Product } from './product-util'
 import {
   filterBredde,
   filterLengde,
@@ -14,9 +14,8 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { mapSupplier, Supplier } from './supplier-util'
 
-export const PAGE_SIZE = 15
+export const PAGE_SIZE = 25
 
 export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = { key: number | string; doc_count: number }
@@ -48,9 +47,12 @@ export type SearchData = {
   filters: SelectedFilters
 }
 
+export type SearchParams = SearchData & { to?: number }
+
 type FetchProps = {
   url: string
-  pageIndex: number
+  from: number
+  to: number
   searchData: SearchData
 }
 
@@ -60,8 +62,7 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promise<FetchResponse> => {
-  const from = pageIndex * PAGE_SIZE
+export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {
     lengdeCM,
@@ -144,7 +145,7 @@ export const fetchProducts = ({ url, pageIndex, searchData }: FetchProps): Promi
     },
     body: JSON.stringify({
       from,
-      size: PAGE_SIZE,
+      size: to,
       query,
       post_filter,
       aggs: {
