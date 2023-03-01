@@ -3,9 +3,10 @@ import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
 import * as queryString from 'querystring'
-import { useHydratedSearchStore } from '../utils/search-state-util'
+import { Loader } from '@navikt/ds-react'
+import { initialSearchDataState, useHydratedSearchStore } from '../utils/search-state-util'
 import { CompareMode, useHydratedCompareStore } from '../utils/compare-state-util'
-import { fetchProducts, FetchResponse, SelectedFilters } from '../utils/api-util'
+import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '../utils/api-util'
 import { mapProductSearchParams, toSearchQueryString } from '../utils/product-util'
 
 import AnimateLayout from '../components/layout/AnimateLayout'
@@ -15,20 +16,29 @@ import Sidebar from '../components/sidebar/Sidebar'
 
 export const getServerSideProps: (
   context: NextPageContext
-) => Promise<{ props: { query: queryString.ParsedUrlQuery } }> = async (context: NextPageContext) => {
+) => Promise<{ props: { searchParams: SearchParams } }> = async (context: NextPageContext) => {
   const { query } = context
-  return { props: { query } }
+  return { props: { searchParams: mapProductSearchParams(query) } }
 }
 
-export default function Home({ query }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { searchData, setSearchData } = useHydratedSearchStore()
   const { compareMode } = useHydratedCompareStore()
 
-  const [productSearchParams] = useState(mapProductSearchParams(query))
+  const [initialProductSearchParams, setInitialProductSearchParams] = useState(searchParams)
   const [searchInitialized, setSearchInitialized] = useState(false)
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
-    (index) => ({ url: `/products/_search`, pageIndex: index, searchData }),
+    (index) => {
+      const from = index !== 0 ? (initialProductSearchParams.to || PAGE_SIZE) + (index - 1) * PAGE_SIZE : 0
+      const to = (index === 0 && initialProductSearchParams.to) || PAGE_SIZE
+      return {
+        url: `/products/_search`,
+        from,
+        to,
+        searchData,
+      }
+    },
     fetchProducts,
     {
       keepPreviousData: true,
@@ -41,16 +51,27 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
     ref.current?.focus()
   }
 
-  useEffect(() => {
-    setSearchData(productSearchParams)
-    setSearchInitialized(true)
-  }, [productSearchParams, setSearchData])
+  useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
+
+  useEffect(() => setSearchInitialized(true), [data])
+
+  const products = data?.flatMap((d) => d.products)
+  const numberOfProducts = products && products.length > PAGE_SIZE ? products.length : undefined
 
   useEffect(() => {
     if (searchInitialized) {
-      Router.push(toSearchQueryString(searchData))
+      Router.push(
+        toSearchQueryString({
+          ...searchData,
+          to: numberOfProducts,
+        }),
+        undefined,
+        {
+          scroll: false,
+        }
+      )
     }
-  }, [searchInitialized, searchData])
+  }, [searchInitialized, searchData, numberOfProducts])
 
   return (
     <>
@@ -58,7 +79,14 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
       <AnimateLayout>
         <div className="main-wrapper">
           <div className="flex-column-wrap">
-            <Sidebar filters={data?.at(-1)?.filters} setFocus={handleClick} />
+            <Sidebar
+              filters={data?.at(-1)?.filters}
+              onResetSearchData={() => {
+                setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
+                setSize(1)
+              }}
+              setFocus={handleClick}
+            />
             <div className="results__wrapper">
               {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} ref={ref} />}
             </div>

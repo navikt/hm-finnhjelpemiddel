@@ -1,14 +1,17 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ForwardedRef, forwardRef, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@navikt/ds-react'
-import { Next, Picture } from '@navikt/ds-icons'
+import { Next, Picture, Up } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
 import { getIsoCategoryName } from '../../utils/iso-category-util'
 import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
+import { FetchResponse } from '../../utils/api-util'
+
 import DefinitionList from '../definition-list/DefinitionList'
-import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
+import useRestoreScroll from '../../hooks/useRestoreScroll'
 
 type ProduktProps = {
   product: Product
@@ -22,16 +25,17 @@ const SearchResults = forwardRef(function SearchResults(
     isLoading,
   }: {
     size: number
-    setSize: (size: number) => void
+    setSize: (size: (s: number) => number) => void
     isLoading: boolean
     data?: Array<FetchResponse>
   },
   ref: ForwardedRef<HTMLButtonElement>
 ) {
+  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
-  const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
-  const isLastPage = data && data[data.length - 1]?.products.length < PAGE_SIZE
+
+  useRestoreScroll('search-results', !isLoading)
 
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
@@ -39,7 +43,8 @@ const SearchResults = forwardRef(function SearchResults(
         size="small"
         variant="secondary"
         onClick={() => {
-          setCompareMode(CompareMode.Active), setCompareMenuState(CompareMenuState.Open)
+          setCompareMode(CompareMode.Active)
+          setCompareMenuState(CompareMenuState.Open)
         }}
         ref={ref}
       >
@@ -74,6 +79,10 @@ const SearchResults = forwardRef(function SearchResults(
       </>
     )
   }
+
+  const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
+  const isLastPage = (data?.at(-1)?.numberOfProducts || 0) - products.length === 0
+
   return (
     <>
       <header className="results__header">
@@ -81,7 +90,9 @@ const SearchResults = forwardRef(function SearchResults(
           <Heading level="1" size="medium">
             Søkeresultater
           </Heading>
-          <BodyShort>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
+          <BodyShort ref={pageTopRef}>{`${products.length} av ${
+            data?.at(-1)?.numberOfProducts
+          } produkter vises`}</BodyShort>
         </div>
         {comparingButton}
       </header>
@@ -91,8 +102,18 @@ const SearchResults = forwardRef(function SearchResults(
         ))}
       </ol>
       {!isLastPage && (
-        <Button variant="secondary" onClick={() => setSize(size + 1)} loading={isLoadingMore}>
+        <Button variant="secondary" onClick={() => setSize((s) => s + 1)} loading={isLoadingMore}>
           Vis flere treff
+        </Button>
+      )}
+      {!isAtPageTop && (
+        <Button
+          type="button"
+          className="search__page-up-button"
+          icon={<Up title="Gå til toppen av siden" />}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          Til toppen
         </Button>
       )}
     </>
@@ -179,7 +200,10 @@ const SearchResult = ({ product }: ProduktProps) => {
                   className="search-result__product-category-button"
                   variant="tertiary"
                   size="small"
-                  onClick={() => setSearchData({ isoCode: product.isoCategory })}
+                  onClick={() => {
+                    setSearchData({ isoCode: product.isoCategory })
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
                 >
                   {getIsoCategoryName(product.isoCategory)}
                 </Button>

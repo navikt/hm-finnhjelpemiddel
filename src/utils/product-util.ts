@@ -1,3 +1,4 @@
+import queryString from 'querystring'
 import { FilterCategories } from './filter-util'
 import {
   Hit,
@@ -8,8 +9,7 @@ import {
   TechDataResponse,
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
-import queryString from 'querystring'
-import { SearchData, SelectedFilters } from './api-util'
+import { SearchParams, SelectedFilters } from './api-util'
 
 export interface Product {
   id: string
@@ -92,6 +92,7 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
   const searchTerm = searchParams.term ?? ''
   const isoCode = searchParams.isoCode ?? ''
   const hasRammeavtale = searchParams.agreement ? searchParams.agreement === 'true' : true
+  const to = parseInt(searchParams.to) ?? undefined
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) =>
     Array.from(Object.keys(searchParams)).includes(filter)
@@ -104,16 +105,18 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
     isoCode,
     hasRammeavtale,
     filters: { ...initialSearchDataState.filters, ...filters },
+    to,
   }
 }
 
-export const toSearchQueryString = (searchData: SearchData) =>
+export const toSearchQueryString = (searchParams: SearchParams) =>
   '?' +
   queryString.stringify({
-    agreement: searchData.hasRammeavtale,
-    ...(searchData.searchTerm && { term: searchData.searchTerm }),
-    ...(searchData.isoCode && { isoCode: searchData.isoCode }),
-    ...Object.entries(searchData.filters)
+    agreement: searchParams.hasRammeavtale,
+    ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
+    ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
+    ...Object.entries(searchParams.filters)
       .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
       .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
+    ...(searchParams.to && { to: searchParams.to }),
   })

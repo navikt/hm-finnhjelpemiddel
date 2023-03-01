@@ -1,8 +1,6 @@
-import { forwardRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useInView } from 'react-intersection-observer'
-import classNames from 'classnames'
 import { Button, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 import { FilterData, SearchData } from '../../utils/api-util'
@@ -12,13 +10,19 @@ import { initialSearchDataState, useHydratedSearchStore } from '../../utils/sear
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
-const Sidebar = ({ filters, setFocus }: { filters?: FilterData; setFocus: () => void }) => {
+const Sidebar = ({
+  filters,
+  onResetSearchData,
+  setFocus,
+}: {
+  filters?: FilterData
+  onResetSearchData: () => void
+  setFocus: () => void
+}) => {
   const router = useRouter()
-  const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useHydratedSearchStore()
+  const { searchData, setSearchData } = useHydratedSearchStore()
   const [productSearchParams] = useState(mapProductSearchParams(router.query))
   const [expanded, setExpanded] = useState(false)
-
-  const { ref: resetButtonRef, inView: isResetButtonVisible } = useInView({ threshold: 0.4 })
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
@@ -27,13 +31,7 @@ const Sidebar = ({ filters, setFocus }: { filters?: FilterData; setFocus: () => 
     },
   })
 
-  const {
-    control,
-    formState: { isDirty },
-    handleSubmit,
-    reset: resetForm,
-    setValue,
-  } = formMethods
+  const { control, handleSubmit, reset: resetForm, setValue } = formMethods
 
   const onSubmit: SubmitHandler<SearchData> = (data) => {
     setFocus()
@@ -41,9 +39,8 @@ const Sidebar = ({ filters, setFocus }: { filters?: FilterData; setFocus: () => 
   }
 
   const onReset = () => {
-    resetSearchData()
+    onResetSearchData()
     resetForm(initialSearchDataState)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const Chevron = expanded ? Collapse : Expand
@@ -93,11 +90,14 @@ const Sidebar = ({ filters, setFocus }: { filters?: FilterData; setFocus: () => 
             </>
           )}
 
-          <ResetButton onClick={onReset} ref={resetButtonRef} />
-
-          {(isDirty || searchDataMeta.isUnlikeInitial) && !isResetButtonVisible && (
-            <ResetButton fixed onClick={onReset} />
-          )}
+          <Button
+            type="button"
+            className="search__reset-button"
+            icon={<Delete title="Nullstill søket" />}
+            onClick={onReset}
+          >
+            Nullstill søket
+          </Button>
         </form>
       </FormProvider>
       <Button
@@ -112,25 +112,5 @@ const Sidebar = ({ filters, setFocus }: { filters?: FilterData; setFocus: () => 
     </div>
   )
 }
-
-const ResetButton = forwardRef<HTMLButtonElement, { onClick: () => void; fixed?: boolean }>(function RButton(
-  { onClick, fixed = false },
-  ref
-) {
-  return (
-    <Button
-      type="button"
-      className={classNames({
-        'search__reset-button': !fixed,
-        'search__reset-button--fixed': fixed,
-      })}
-      icon={<Delete title="Nullstill søket" />}
-      onClick={onClick}
-      ref={ref}
-    >
-      Nullstill søket
-    </Button>
-  )
-})
 
 export default Sidebar
