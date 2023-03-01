@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
@@ -35,6 +35,12 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
     }
   )
 
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const handleClick = () => {
+    ref.current?.focus()
+  }
+
   useEffect(() => {
     setSearchData(productSearchParams)
     setSearchInitialized(true)
@@ -52,9 +58,9 @@ export default function Home({ query }: InferGetServerSidePropsType<typeof getSe
       <AnimateLayout>
         <div className="main-wrapper">
           <div className="flex-column-wrap">
-            <Sidebar filters={data?.at(-1)?.filters} />
+            <Sidebar filters={data?.at(-1)?.filters} setFocus={handleClick} />
             <div className="results__wrapper">
-              {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
+              {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} ref={ref} />}
             </div>
           </div>
         </div>

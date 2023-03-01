@@ -12,7 +12,7 @@ import { initialSearchDataState, useHydratedSearchStore } from '../../utils/sear
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
-const Sidebar = ({ filters }: { filters?: FilterData }) => {
+const Sidebar = ({ filters, setFocus }: { filters?: FilterData; setFocus: () => void }) => {
   const router = useRouter()
   const { searchData, setSearchData, resetSearchData, meta: searchDataMeta } = useHydratedSearchStore()
   const [productSearchParams] = useState(mapProductSearchParams(router.query))
@@ -35,7 +35,10 @@ const Sidebar = ({ filters }: { filters?: FilterData }) => {
     setValue,
   } = formMethods
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    setFocus()
+    setSearchData({ ...data })
+  }
 
   const onReset = () => {
     resetSearchData()

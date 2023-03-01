@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { ForwardedRef, forwardRef, useState } from 'react'
 import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@navikt/ds-react'
 import { Next, Picture } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
@@ -14,17 +14,20 @@ type ProduktProps = {
   product: Product
 }
 
-const SearchResults = ({
-  data,
-  size,
-  setSize,
-  isLoading,
-}: {
-  size: number
-  setSize: (size: number) => void
-  isLoading: boolean
-  data?: Array<FetchResponse>
-}) => {
+const SearchResults = forwardRef(function SearchResults(
+  {
+    data,
+    size,
+    setSize,
+    isLoading,
+  }: {
+    size: number
+    setSize: (size: number) => void
+    isLoading: boolean
+    data?: Array<FetchResponse>
+  },
+  ref: ForwardedRef<HTMLButtonElement>
+) {
   const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
@@ -38,6 +41,7 @@ const SearchResults = ({
         onClick={() => {
           setCompareMode(CompareMode.Active), setCompareMenuState(CompareMenuState.Open)
         }}
+        ref={ref}
       >
         Sammenlign produkter
       </Button>
@@ -93,7 +97,7 @@ const SearchResults = ({
       )}
     </>
   )
-}
+})
 
 const SearchResult = ({ product }: ProduktProps) => {
   const { setSearchData } = useHydratedSearchStore()
