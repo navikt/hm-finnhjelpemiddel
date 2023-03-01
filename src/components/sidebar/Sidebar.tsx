@@ -10,6 +10,16 @@ import { initialSearchDataState, useHydratedSearchStore } from '../../utils/sear
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
+const FocusOnResultsButton = () => {
+  return (
+    <div className="search__focus-on-results">
+      <Button variant="secondary" size="small">
+        Gå til resultat
+      </Button>
+    </div>
+  )
+}
+
 const Sidebar = ({
   filters,
   onResetSearchData,
@@ -54,7 +64,7 @@ const Sidebar = ({
   return (
     <div className="search__side-bar">
       <FormProvider {...formMethods}>
-        <form role="search" onSubmit={handleSubmit(onSubmit)}>
+        <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
           <div className="search__input">
             <Controller
               render={({ field }) => (
@@ -70,6 +80,7 @@ const Sidebar = ({
               defaultValue=""
             />
           </div>
+          <FocusOnResultsButton />
 
           {expanded && (
             <>
@@ -85,6 +96,7 @@ const Sidebar = ({
               </Switch>
 
               <SelectIsoCategory />
+              <FocusOnResultsButton />
 
               <FilterView filters={filters} />
             </>

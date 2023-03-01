@@ -62,7 +62,10 @@ const SearchResults = forwardRef(function SearchResults(
         <Heading level="1" size="medium">
           Søkeresultater
         </Heading>
-        <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+
+        <div id="searchResults">
+          <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+        </div>
       </>
     )
   }
@@ -73,9 +76,11 @@ const SearchResults = forwardRef(function SearchResults(
         <Heading level="1" size="medium">
           Søkeresultater
         </Heading>
-        <Alert variant="info" fullWidth>
-          Ingen produkter funnet.
-        </Alert>
+        <div id="searchResults">
+          <Alert variant="info" fullWidth>
+            Ingen produkter funnet.
+          </Alert>
+        </div>
       </>
     )
   }
@@ -90,13 +95,13 @@ const SearchResults = forwardRef(function SearchResults(
           <Heading level="1" size="medium">
             Søkeresultater
           </Heading>
-          <BodyShort ref={pageTopRef}>{`${products.length} av ${
+          <BodyShort ref={pageTopRef} aria-live="polite">{`${products.length} av ${
             data?.at(-1)?.numberOfProducts
           } produkter vises`}</BodyShort>
         </div>
         {comparingButton}
       </header>
-      <ol className="results__list">
+      <ol className="results__list" id="searchResults">
         {products.map((product) => (
           <SearchResult key={product.id} product={product} />
         ))}

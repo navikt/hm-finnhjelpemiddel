@@ -48,6 +48,17 @@
   &__expand-button {
     align-self: center;
   }
+
+  &__focus-on-results {
+    position: absolute;
+    left: -999px;
+  }
+
+  &__focus-on-results:focus,
+  &__focus-on-results:focus-visible,
+  &__focus-on-results:focus-within {
+    position: unset;
+  }
 }
 
 .results {
