@@ -36,13 +36,13 @@
   &__reset-button {
     width: 100%;
     margin-bottom: var(--a-spacing-4);
+  }
 
-    &--fixed {
-      position: fixed;
-      right: var(--a-spacing-4);
-      bottom: var(--a-spacing-4);
-      z-index: 999;
-    }
+  &__page-up-button {
+    position: fixed;
+    top: var(--a-spacing-4);
+    right: var(--a-spacing-4);
+    z-index: 999;
   }
 
   &__expand-button {
