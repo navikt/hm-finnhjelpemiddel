@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
-import * as queryString from 'querystring'
-import { Loader } from '@navikt/ds-react'
 import { initialSearchDataState, useHydratedSearchStore } from '../utils/search-state-util'
 import { CompareMode, useHydratedCompareStore } from '../utils/compare-state-util'
 import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '../utils/api-util'
@@ -45,10 +43,12 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     }
   )
 
+  const [selectedMsg, setMessage] = useState('empty')
+
   const ref = useRef<HTMLButtonElement>(null)
 
   const handleClick = () => {
-    ref.current?.focus()
+    ref.current && ref.current.focus()
   }
 
   useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
@@ -88,7 +88,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
               setFocus={handleClick}
             />
             <div className="results__wrapper">
-              {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} ref={ref} />}
+              {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} compareButtonRef={ref} />}
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { ForwardedRef, forwardRef, useState } from 'react'
+import { RefObject, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@navikt/ds-react'
 import { Next, Picture, Up } from '@navikt/ds-icons'
@@ -17,20 +17,19 @@ type ProduktProps = {
   product: Product
 }
 
-const SearchResults = forwardRef(function SearchResults(
-  {
-    data,
-    size,
-    setSize,
-    isLoading,
-  }: {
-    size: number
-    setSize: (size: (s: number) => number) => void
-    isLoading: boolean
-    data?: Array<FetchResponse>
-  },
-  ref: ForwardedRef<HTMLButtonElement>
-) {
+const SearchResults = ({
+  data,
+  size,
+  setSize,
+  isLoading,
+  compareButtonRef,
+}: {
+  size: number
+  setSize: (size: (s: number) => number) => void
+  isLoading: boolean
+  data?: Array<FetchResponse>
+  compareButtonRef: RefObject<HTMLButtonElement>
+}) => {
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
@@ -40,18 +39,23 @@ const SearchResults = forwardRef(function SearchResults(
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
       <Button
+        ref={compareButtonRef}
         size="small"
         variant="secondary"
         onClick={() => {
           setCompareMode(CompareMode.Active)
           setCompareMenuState(CompareMenuState.Open)
         }}
-        ref={ref}
       >
         Sammenlign produkter
       </Button>
     ) : (
-      <Button size="small" variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
+      <Button
+        ref={compareButtonRef}
+        size="small"
+        variant="secondary"
+        onClick={() => setCompareMode(CompareMode.Deactivated)}
+      >
         Slå av sammenligning av produkter
       </Button>
     )
@@ -123,9 +127,9 @@ const SearchResults = forwardRef(function SearchResults(
       )}
     </>
   )
-})
+}
 
-const SearchResult = ({ product }: ProduktProps) => {
+const SearchResult = ({ product }: { product: Product }) => {
   const { setSearchData } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
 
@@ -183,6 +187,7 @@ const SearchResult = ({ product }: ProduktProps) => {
                   {product.title}
                 </Link>
               )}
+
               {compareMode === CompareMode.Active && (
                 <button className="search-result__link search-result__link__button" onClick={toggleCompareProduct}>
                   {product.title}

@@ -10,10 +10,10 @@ import { initialSearchDataState, useHydratedSearchStore } from '../../utils/sear
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
-const FocusOnResultsButton = () => {
+const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => {
   return (
     <div className="search__focus-on-results">
-      <Button variant="secondary" size="small">
+      <Button variant="secondary" size="small" onClick={setFocus}>
         Gå til resultat
       </Button>
     </div>
@@ -44,7 +44,7 @@ const Sidebar = ({
   const { control, handleSubmit, reset: resetForm, setValue } = formMethods
 
   const onSubmit: SubmitHandler<SearchData> = (data) => {
-    setFocus()
+    // setFocus()
     setSearchData({ ...data })
   }
 
@@ -80,25 +80,28 @@ const Sidebar = ({
               defaultValue=""
             />
           </div>
-          <FocusOnResultsButton />
+          <FocusOnResultsButton setFocus={setFocus} />
 
           {expanded && (
             <>
-              <Switch
-                className="search__agreement-switch"
-                checked={searchData.hasRammeavtale}
-                onChange={(e) => {
-                  setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
-                  setSearchData({ hasRammeavtale: e.target.checked })
-                }}
-              >
-                Vis kun produkter på rammeavtale med NAV
-              </Switch>
+              <div className="search__agreement-switch">
+                <Switch
+                  checked={searchData.hasRammeavtale}
+                  onChange={(e) => {
+                    setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
+                    setSearchData({ hasRammeavtale: e.target.checked })
+                  }}
+                >
+                  Vis kun produkter på rammeavtale med NAV
+                </Switch>
+                <FocusOnResultsButton setFocus={setFocus} />
+              </div>
 
               <SelectIsoCategory />
-              <FocusOnResultsButton />
+              <FocusOnResultsButton setFocus={setFocus} />
 
               <FilterView filters={filters} />
+              <FocusOnResultsButton setFocus={setFocus} />
             </>
           )}
 
