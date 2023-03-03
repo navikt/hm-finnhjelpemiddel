@@ -45,7 +45,6 @@ const CompareMenu = () => {
       exit="hidden"
       layoutId="compare-menu"
       className="compare-menu compare-menu__open"
-      data-cy="compare-menu-open"
     >
       <motion.button
         layoutId="chevron-button"
@@ -115,7 +114,6 @@ const CompareMenu = () => {
       exit="hidden"
       layoutId="compare-menu"
       className="compare-menu minimized"
-      data-cy="compare-menu-minimized"
     >
       <motion.button
         layoutId="chevron-button"

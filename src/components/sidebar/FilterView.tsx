@@ -38,7 +38,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   }
 
   return (
-    <div className="search__filters" data-cy="search-filters">
+    <div className="search__filters">
       <Label className="search__filter-lable">Filtre</Label>
       <RangeFilterInput filterKey="lengdeCM" filters={filters} />
       <RangeFilterInput filterKey="breddeCM" filters={filters} />
