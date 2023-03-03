@@ -44,7 +44,6 @@ const Sidebar = ({
   const { control, handleSubmit, reset: resetForm, setValue } = formMethods
 
   const onSubmit: SubmitHandler<SearchData> = (data) => {
-    // setFocus()
     setSearchData({ ...data })
   }
 

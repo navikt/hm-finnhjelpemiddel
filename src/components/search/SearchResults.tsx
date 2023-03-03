@@ -13,10 +13,6 @@ import { FetchResponse } from '../../utils/api-util'
 import DefinitionList from '../definition-list/DefinitionList'
 import useRestoreScroll from '../../hooks/useRestoreScroll'
 
-type ProduktProps = {
-  product: Product
-}
-
 const SearchResults = ({
   data,
   size,

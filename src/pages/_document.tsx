@@ -23,7 +23,7 @@ export default function Document() {
                 </NextLink>
               </li>
               {/*
-              Kommenterer ut denne enn så lenge, er ikke sikkert vi skal ha en veileder på siden
+              Commented out temporarily, until we know for sure we won't include a guided approach
               <li className="nav-veileder">
                 <NextLink href="/veileder">
                   <p>Veileder</p>

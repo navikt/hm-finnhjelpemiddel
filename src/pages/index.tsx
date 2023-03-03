@@ -43,12 +43,10 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     }
   )
 
-  const [selectedMsg, setMessage] = useState('empty')
+  const compareButtonRef = useRef<HTMLButtonElement>(null)
 
-  const ref = useRef<HTMLButtonElement>(null)
-
-  const handleClick = () => {
-    ref.current && ref.current.focus()
+  const setFocusOnSearchResults = () => {
+    compareButtonRef.current && compareButtonRef.current.focus()
   }
 
   useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
@@ -85,10 +83,18 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                 setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
                 setSize(1)
               }}
-              setFocus={handleClick}
+              setFocus={setFocusOnSearchResults}
             />
             <div className="results__wrapper">
-              {<SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} compareButtonRef={ref} />}
+              {
+                <SearchResults
+                  data={data}
+                  size={size}
+                  setSize={setSize}
+                  isLoading={isLoading}
+                  compareButtonRef={compareButtonRef}
+                />
+              }
             </div>
           </div>
         </div>
