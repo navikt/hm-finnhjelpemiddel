@@ -39,7 +39,9 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <Label className="search__filter-lable">Filtre</Label>
+      <Heading level="2" size="xsmall">
+        Filtre
+      </Heading>
       <RangeFilterInput filterKey="lengdeCM" filters={filters} />
       <RangeFilterInput filterKey="breddeCM" filters={filters} />
       <RangeFilterInput filterKey="totalVektKG" filters={filters} />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Search, Switch } from '@navikt/ds-react'
+import { Button, Heading, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 import { FilterData, SearchData } from '../../utils/api-util'
 import { mapProductSearchParams } from '../../utils/product-util'
@@ -61,7 +61,10 @@ const Sidebar = ({
   }, [])
 
   return (
-    <div className="search__side-bar">
+    <section className="search__side-bar">
+      <Heading level="2" size="small">
+        Søk
+      </Heading>
       <FormProvider {...formMethods}>
         <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
           <div className="search__input">
@@ -123,7 +126,7 @@ const Sidebar = ({
       >
         {expanded ? 'Vis færre filtre' : 'Vis alle filtre'}
       </Button>
-    </div>
+    </section>
   )
 }
 

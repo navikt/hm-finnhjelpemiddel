@@ -49,17 +49,18 @@ const SearchResults = ({
       <Button
         ref={compareButtonRef}
         size="small"
-        variant="secondary"
+        variant="primary"
+        aria-pressed
         onClick={() => setCompareMode(CompareMode.Deactivated)}
       >
-        Slå av sammenligning av produkter
+        Sammenlign produkter
       </Button>
     )
 
   if (isLoading) {
     return (
       <>
-        <Heading level="1" size="medium">
+        <Heading level="2" size="medium">
           Søkeresultater
         </Heading>
 
@@ -73,7 +74,7 @@ const SearchResults = ({
   if (!products?.length) {
     return (
       <>
-        <Heading level="1" size="medium">
+        <Heading level="2" size="medium">
           Søkeresultater
         </Heading>
         <div id="searchResults">
@@ -92,7 +93,7 @@ const SearchResults = ({
     <>
       <header className="results__header">
         <div>
-          <Heading level="1" size="medium">
+          <Heading level="2" size="medium">
             Søkeresultater
           </Heading>
           <BodyShort ref={pageTopRef} aria-live="polite">{`${products.length} av ${
@@ -177,15 +178,15 @@ const SearchResult = ({ product }: { product: Product }) => {
         </div>
         <div className="search-result__content">
           <div className="search-result__title">
-            <Heading level="2" size="medium">
+            <Heading level="3" size="medium">
               {compareMode === CompareMode.Deactivated && (
-                <Link className="search-result__link" href={`/produkt/${product.id}`}>
+                <Link className="search-result__link search-result__link__underline" href={`/produkt/${product.id}`}>
                   {product.title}
                 </Link>
               )}
 
               {compareMode === CompareMode.Active && (
-                <button className="search-result__link search-result__link__button" onClick={toggleCompareProduct}>
+                <button className="search-result__link__button" onClick={toggleCompareProduct}>
                   {product.title}
                 </button>
               )}

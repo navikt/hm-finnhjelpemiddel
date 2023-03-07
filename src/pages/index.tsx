@@ -11,6 +11,7 @@ import AnimateLayout from '../components/layout/AnimateLayout'
 import CompareMenu from '../components/compare-products/CompareMenu'
 import SearchResults from '../components/search/SearchResults'
 import Sidebar from '../components/sidebar/Sidebar'
+import { Heading } from '@navikt/ds-react'
 
 export const getServerSideProps: (
   context: NextPageContext
@@ -75,6 +76,11 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     <>
       {compareMode === CompareMode.Active && <CompareMenu />}
       <AnimateLayout>
+        <div className="main-header">
+          <Heading level="1" size="large">
+            Hjelpemiddel oppslag
+          </Heading>
+        </div>
         <div className="main-wrapper">
           <div className="flex-column-wrap">
             <Sidebar
@@ -85,7 +91,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
               }}
               setFocus={setFocusOnSearchResults}
             />
-            <div className="results__wrapper">
+            <section className="results__wrapper">
               {
                 <SearchResults
                   data={data}
@@ -95,7 +101,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                   compareButtonRef={compareButtonRef}
                 />
               }
-            </div>
+            </section>
           </div>
         </div>
       </AnimateLayout>
