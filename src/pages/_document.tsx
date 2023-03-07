@@ -19,7 +19,7 @@ export default function Document() {
               <li>
                 <NextLink href="/">
                   <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
-                  <b>Produktsøk</b>
+                  <b>Hjelpemiddeloppslag</b>
                 </NextLink>
               </li>
               {/*

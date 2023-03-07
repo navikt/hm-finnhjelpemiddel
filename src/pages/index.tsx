@@ -78,7 +78,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
       <AnimateLayout>
         <div className="main-header">
           <Heading level="1" size="large">
-            Hjelpemiddel oppslag
+            Hjelpemiddeloppslag
           </Heading>
         </div>
         <div className="main-wrapper">
