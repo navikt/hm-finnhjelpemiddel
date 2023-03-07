@@ -14,6 +14,16 @@
       margin-right: var(--a-spacing-12);
       padding-top: 0;
     }
+
+    h2 {
+      margin-bottom: var(--a-spacing-3);
+    }
+  }
+
+  &__input {
+    label {
+      font-weight: 400;
+    }
   }
 
   &__input,
@@ -26,9 +36,6 @@
   }
 
   &__filters {
-    > h2 {
-      margin-bottom: var(--a-spacing-1);
-    }
     margin-top: var(--a-spacing-3);
     margin-bottom: var(--a-spacing-5);
   }
@@ -47,6 +54,18 @@
 
   &__expand-button {
     align-self: center;
+  }
+
+  &__focus-on-results {
+    position: absolute;
+    left: -999px;
+  }
+
+  &__focus-on-results:focus,
+  &__focus-on-results:focus-visible,
+  &__focus-on-results:focus-within {
+    position: unset;
+    margin-bottom: 16px;
   }
 }
 
@@ -82,8 +101,8 @@
     align-items: flex-end;
     justify-content: space-between;
 
-    h1 {
-      padding-bottom: var(--a-spacing-1);
+    h2 {
+      margin-bottom: var(--a-spacing-3);
     }
   }
 
@@ -96,7 +115,7 @@
   &__list {
     list-style: none;
     padding: 0;
-    margin-top: var(--a-spacing-6);
+    margin-top: var(--a-spacing-4);
     margin-bottom: 0;
   }
 }
@@ -142,16 +161,16 @@
       z-index: 1;
     }
 
-    &:hover {
-      text-decoration: underline;
-      color: var(--ac-link-panel-hover-text, var(--a-text-action));
-    }
-
     &__button {
       border: none;
       background-color: inherit;
       padding-left: 0;
       text-align: left;
+    }
+
+    &__underline:hover {
+      text-decoration: underline;
+      color: var(--ac-link-panel-hover-text, var(--a-text-action));
     }
   }
 

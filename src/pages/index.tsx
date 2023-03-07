@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
 import useSWRInfinite from 'swr/infinite'
-import { Loader } from '@navikt/ds-react'
 import { initialSearchDataState, useHydratedSearchStore } from '../utils/search-state-util'
 import { CompareMode, useHydratedCompareStore } from '../utils/compare-state-util'
 import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '../utils/api-util'
@@ -12,6 +11,7 @@ import AnimateLayout from '../components/layout/AnimateLayout'
 import CompareMenu from '../components/compare-products/CompareMenu'
 import SearchResults from '../components/search/SearchResults'
 import Sidebar from '../components/sidebar/Sidebar'
+import { Heading } from '@navikt/ds-react'
 
 export const getServerSideProps: (
   context: NextPageContext
@@ -44,6 +44,12 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     }
   )
 
+  const compareButtonRef = useRef<HTMLButtonElement>(null)
+
+  const setFocusOnSearchResults = () => {
+    compareButtonRef.current && compareButtonRef.current.focus()
+  }
+
   useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
 
   useEffect(() => setSearchInitialized(true), [data])
@@ -70,6 +76,11 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     <>
       {compareMode === CompareMode.Active && <CompareMenu />}
       <AnimateLayout>
+        <div className="main-header">
+          <Heading level="1" size="large">
+            Hjelpemiddeloppslag
+          </Heading>
+        </div>
         <div className="main-wrapper">
           <div className="flex-column-wrap">
             <Sidebar
@@ -78,11 +89,19 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                 setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
                 setSize(1)
               }}
+              setFocus={setFocusOnSearchResults}
             />
-            <div className="results__wrapper">
-              {!data && <Loader className="results__loader" size="3xlarge" title="Laster produkter" />}
-              {data && <SearchResults data={data} size={size} setSize={setSize} isLoading={isLoading} />}
-            </div>
+            <section className="results__wrapper">
+              {
+                <SearchResults
+                  data={data}
+                  size={size}
+                  setSize={setSize}
+                  isLoading={isLoading}
+                  compareButtonRef={compareButtonRef}
+                />
+              }
+            </section>
           </div>
         </div>
       </AnimateLayout>

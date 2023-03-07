@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Search, Switch } from '@navikt/ds-react'
+import { Button, Heading, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
 import { FilterData, SearchData } from '../../utils/api-util'
 import { mapProductSearchParams } from '../../utils/product-util'
@@ -10,7 +10,25 @@ import { initialSearchDataState, useHydratedSearchStore } from '../../utils/sear
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
-const Sidebar = ({ filters, onResetSearchData }: { filters?: FilterData; onResetSearchData: () => void }) => {
+const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => {
+  return (
+    <div className="search__focus-on-results">
+      <Button variant="secondary" size="small" onClick={setFocus}>
+        Gå til resultat
+      </Button>
+    </div>
+  )
+}
+
+const Sidebar = ({
+  filters,
+  onResetSearchData,
+  setFocus,
+}: {
+  filters?: FilterData
+  onResetSearchData: () => void
+  setFocus: () => void
+}) => {
   const router = useRouter()
   const { searchData, setSearchData } = useHydratedSearchStore()
   const [productSearchParams] = useState(mapProductSearchParams(router.query))
@@ -25,7 +43,9 @@ const Sidebar = ({ filters, onResetSearchData }: { filters?: FilterData; onReset
 
   const { control, handleSubmit, reset: resetForm, setValue } = formMethods
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    setSearchData({ ...data })
+  }
 
   const onReset = () => {
     onResetSearchData()
@@ -41,9 +61,12 @@ const Sidebar = ({ filters, onResetSearchData }: { filters?: FilterData; onReset
   }, [])
 
   return (
-    <div className="search__side-bar">
+    <section className="search__side-bar">
+      <Heading level="2" size="small">
+        Søk
+      </Heading>
       <FormProvider {...formMethods}>
-        <form role="search" onSubmit={handleSubmit(onSubmit)}>
+        <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
           <div className="search__input">
             <Controller
               render={({ field }) => (
@@ -59,23 +82,28 @@ const Sidebar = ({ filters, onResetSearchData }: { filters?: FilterData; onReset
               defaultValue=""
             />
           </div>
+          <FocusOnResultsButton setFocus={setFocus} />
 
           {expanded && (
             <>
-              <Switch
-                className="search__agreement-switch"
-                checked={searchData.hasRammeavtale}
-                onChange={(e) => {
-                  setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
-                  setSearchData({ hasRammeavtale: e.target.checked })
-                }}
-              >
-                Vis kun produkter på rammeavtale med NAV
-              </Switch>
+              <div className="search__agreement-switch">
+                <Switch
+                  checked={searchData.hasRammeavtale}
+                  onChange={(e) => {
+                    setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
+                    setSearchData({ hasRammeavtale: e.target.checked })
+                  }}
+                >
+                  Vis kun produkter på rammeavtale med NAV
+                </Switch>
+                <FocusOnResultsButton setFocus={setFocus} />
+              </div>
 
               <SelectIsoCategory />
+              <FocusOnResultsButton setFocus={setFocus} />
 
               <FilterView filters={filters} />
+              <FocusOnResultsButton setFocus={setFocus} />
             </>
           )}
 
@@ -98,7 +126,7 @@ const Sidebar = ({ filters, onResetSearchData }: { filters?: FilterData; onReset
       >
         {expanded ? 'Vis færre filtre' : 'Vis alle filtre'}
       </Button>
-    </div>
+    </section>
   )
 }
 

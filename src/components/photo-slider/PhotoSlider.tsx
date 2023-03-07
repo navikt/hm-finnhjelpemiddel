@@ -1,15 +1,15 @@
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
 import { Photo } from '../../utils/product-util'
-import { AnimatePresence, motion } from 'framer-motion'
-
-import styles from './PhotoSlider.module.scss'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { Button } from '@navikt/ds-react'
 
 type ImageSliderProps = {
   photos: Photo[]
 }
 
-const variants = {
+const variants: Variants = {
   enter: (direction: number) => {
     return {
       x: direction > 0 ? 1000 : -1000,
@@ -78,11 +78,12 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
           <>
             <div style={{ width: '40px', height: '40px' }}></div>
             <div className="photo-container">
-              <img
+              <Image
                 key={src}
                 src={imageLoader({ src: src })}
                 style={{ objectFit: 'contain' }}
                 onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
+                alt={'Produktbilde'}
               />
             </div>
             <div style={{ width: '40px', height: '40px' }}></div>
@@ -91,24 +92,27 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
 
         {numberOfImages > 1 && (
           <>
-            <div
+            <Button
+              variant="tertiary-neutral"
               className="arrow"
               onClick={() => {
                 prevImage()
               }}
-            >
-              <ChevronLeftCircle height={40} width={40} />
-            </div>
+              icon={<ChevronLeftCircle height={50} width={50} />}
+            />
+
             <div className="photo-container">
               <AnimatePresence initial={false} custom={direction}>
-                <motion.img
+                <motion.div
+                  className="div-motion"
                   key={src}
-                  src={imageLoader({ src: src })}
                   custom={direction}
                   variants={variants}
                   initial="enter"
                   animate="center"
                   exit="exit"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   transition={{
                     x: { type: 'spring', stiffness: 300, damping: 30 },
                     opacity: { duration: 0.2 },
@@ -125,19 +129,30 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       prevImage()
                     }
                   }}
-                  style={{ objectFit: 'contain' }}
-                  onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
-                />
+                >
+                  <div className="next-image">
+                    <Image
+                      draggable="false"
+                      src={imageLoader({ src: src })}
+                      alt={`Produktbilde nummer ${active}`}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
+                    />
+                  </div>
+                </motion.div>
               </AnimatePresence>
             </div>
-            <div
+            <Button
+              variant="tertiary-neutral"
               className="arrow"
               onClick={() => {
                 nextImage()
               }}
-            >
-              <ChevronRightCircle height={40} width={40} />
-            </div>
+              icon={<ChevronRightCircle height={50} width={50} />}
+            />
           </>
         )}
       </div>
@@ -145,7 +160,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         {[...Array(numberOfImages).keys()].map((index) => {
           if (index !== active) {
             return (
-              <div
+              <Button
                 key={index}
                 className={'dot'}
                 onClick={() => {

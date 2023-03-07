@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Back, Next } from '@navikt/ds-icons'
-import { Table, SortState, Heading } from '@navikt/ds-react'
+import { Table, SortState, Heading, Button } from '@navikt/ds-react'
 import { Product } from '../../utils/product-util'
 import { sortAlphabetically } from '../../utils/sort-util'
 
@@ -64,14 +64,14 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       </Heading>
       <div className="similar-products__slider">
         {firstActive > 0 && (
-          <div
-            className="back"
+          <Button
+            variant="tertiary-neutral"
+            className="arrow"
             onClick={() => {
               prevProduct()
             }}
-          >
-            <Back height={30} width={30} />
-          </div>
+            icon={<Back height={30} width={30} />}
+          />
         )}
         <div className="similar-products__cards">
           {[...Array(range).keys()].map((index) => {
@@ -86,14 +86,14 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
           })}
         </div>
         {numberOfProducts - (firstActive + range) > 0 && (
-          <div
+          <Button
+            variant="tertiary-neutral"
             className="arrow"
             onClick={() => {
               nextProduct()
             }}
-          >
-            <Next height={30} width={30} />
-          </div>
+            icon={<Next height={30} width={30} />}
+          />
         )}
       </div>
       <Heading level="3" size="medium">

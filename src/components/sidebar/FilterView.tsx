@@ -29,7 +29,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   if (!searchDataFilters.length && (!filters || !Object.keys(filters).length)) {
     return (
       <div className="search__filters">
-        <Heading level="2" size="xsmall" className="search__filter-heading">
+        <Heading level="2" size="xsmall">
           Filtre
         </Heading>
         <BodyShort>Ingen tilgjengelige filtre</BodyShort>
@@ -39,7 +39,9 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <Label className="search__filter-lable">Filtre</Label>
+      <Heading level="2" size="xsmall">
+        Filtre
+      </Heading>
       <RangeFilterInput filterKey="lengdeCM" filters={filters} />
       <RangeFilterInput filterKey="breddeCM" filters={filters} />
       <RangeFilterInput filterKey="totalVektKG" filters={filters} />

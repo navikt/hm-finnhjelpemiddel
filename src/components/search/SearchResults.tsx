@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@navikt/ds-react'
 import { Next, Picture, Up } from '@navikt/ds-icons'
@@ -13,22 +13,20 @@ import { FetchResponse } from '../../utils/api-util'
 import DefinitionList from '../definition-list/DefinitionList'
 import useRestoreScroll from '../../hooks/useRestoreScroll'
 
-type ProduktProps = {
-  product: Product
-}
-
 const SearchResults = ({
   data,
   size,
   setSize,
   isLoading,
+  compareButtonRef,
 }: {
   size: number
   setSize: (size: (s: number) => number) => void
   isLoading: boolean
   data?: Array<FetchResponse>
+  compareButtonRef: RefObject<HTMLButtonElement>
 }) => {
-  const { ref, inView: isAtPageTop } = useInView({ threshold: 0.4 })
+  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
 
@@ -37,6 +35,7 @@ const SearchResults = ({
   const comparingButton =
     compareMode === CompareMode.Deactivated ? (
       <Button
+        ref={compareButtonRef}
         size="small"
         variant="secondary"
         onClick={() => {
@@ -47,24 +46,42 @@ const SearchResults = ({
         Sammenlign produkter
       </Button>
     ) : (
-      <Button size="small" variant="secondary" onClick={() => setCompareMode(CompareMode.Deactivated)}>
-        Slå av sammenligning av produkter
+      <Button
+        ref={compareButtonRef}
+        size="small"
+        variant="primary"
+        aria-pressed
+        onClick={() => setCompareMode(CompareMode.Deactivated)}
+      >
+        Sammenlign produkter
       </Button>
     )
 
   if (isLoading) {
-    return <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+    return (
+      <>
+        <Heading level="2" size="medium">
+          Søkeresultater
+        </Heading>
+
+        <div id="searchResults">
+          <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+        </div>
+      </>
+    )
   }
 
   if (!products?.length) {
     return (
       <>
-        <Heading level="1" size="medium">
+        <Heading level="2" size="medium">
           Søkeresultater
         </Heading>
-        <Alert variant="info" fullWidth>
-          Ingen produkter funnet.
-        </Alert>
+        <div id="searchResults">
+          <Alert variant="info" fullWidth>
+            Ingen produkter funnet.
+          </Alert>
+        </div>
       </>
     )
   }
@@ -76,14 +93,16 @@ const SearchResults = ({
     <>
       <header className="results__header">
         <div>
-          <Heading level="1" size="medium">
+          <Heading level="2" size="medium">
             Søkeresultater
           </Heading>
-          <BodyShort ref={ref}>{`${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}</BodyShort>
+          <BodyShort ref={pageTopRef} aria-live="polite">{`${products.length} av ${
+            data?.at(-1)?.numberOfProducts
+          } produkter vises`}</BodyShort>
         </div>
         {comparingButton}
       </header>
-      <ol className="results__list">
+      <ol className="results__list" id="searchResults">
         {products.map((product) => (
           <SearchResult key={product.id} product={product} />
         ))}
@@ -107,7 +126,7 @@ const SearchResults = ({
   )
 }
 
-const SearchResult = ({ product }: ProduktProps) => {
+const SearchResult = ({ product }: { product: Product }) => {
   const { setSearchData } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
 
@@ -150,23 +169,24 @@ const SearchResult = ({ product }: ProduktProps) => {
               loader={imageLoader}
               src={firstImageSrc}
               alt="Produktbilde"
-              priority
               fill
-              sizes="100%"
               style={{ objectFit: 'contain' }}
+              sizes="50vw"
+              priority
             />
           )}
         </div>
         <div className="search-result__content">
           <div className="search-result__title">
-            <Heading level="2" size="medium">
+            <Heading level="3" size="medium">
               {compareMode === CompareMode.Deactivated && (
-                <Link className="search-result__link" href={`/produkt/${product.id}`}>
+                <Link className="search-result__link search-result__link__underline" href={`/produkt/${product.id}`}>
                   {product.title}
                 </Link>
               )}
+
               {compareMode === CompareMode.Active && (
-                <button className="search-result__link search-result__link__button" onClick={toggleCompareProduct}>
+                <button className="search-result__link__button" onClick={toggleCompareProduct}>
                   {product.title}
                 </button>
               )}

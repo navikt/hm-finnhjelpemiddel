@@ -102,6 +102,11 @@
       align-items: center;
       margin-bottom: var(--a-spacing-10);
       padding-left: var(--a-spacing-4);
+
+      .arrow {
+        padding: 8px;
+        margin: 0 var(--a-spacing-2);
+      }
     }
 
     &__cards {
@@ -124,6 +129,13 @@
 .photo-slider {
   .arrow {
     cursor: pointer;
+    padding: 0;
+    margin: 0 var(--a-spacing-2);
+    border-radius: 50px;
+  }
+
+  .arrow:hover {
+    border-radius: 50px;
   }
 
   .photo-and-arrow-container {
@@ -136,20 +148,18 @@
   .photo-container {
     position: relative;
     overflow: hidden;
-    margin: var(--a-spacing-3);
-    background-color: var(--a-gray-50);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     width: 400px;
     height: 300px;
+    margin: var(--a-spacing-3);
 
-    img {
+    .div-motion {
       position: absolute;
-      height: 100%;
-      width: auto;
-      max-width: 400px;
+    }
+
+    .next-image {
+      position: 'relative';
+      width: 400px;
+      height: 300px;
     }
   }
 
@@ -161,6 +171,7 @@
   }
 
   .dot {
+    padding: 0;
     width: 15px;
     height: 15px;
     background-color: var(--a-deepblue-100);
@@ -182,6 +193,6 @@
   }
 
   .activeDot:hover {
-    cursor: pointer;
+    cursor: unset;
   }
 }

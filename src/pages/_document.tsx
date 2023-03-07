@@ -8,25 +8,27 @@ export default function Document() {
     <Html lang="no">
       <Head />
       <body>
-        <div className="wip-banner">
-          <p>
-            Siden er under arbeid <span>&#128119;</span>
-          </p>
-        </div>
         <nav className="nav-topp">
+          <div className="wip-banner">
+            <p>
+              Siden er under arbeid <span>&#128119;</span>
+            </p>
+          </div>
           <div className="nav-topp__content">
             <ul>
               <li>
                 <NextLink href="/">
                   <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
-                  <b>Hjelpemiddeloversikten</b>
+                  <b>Hjelpemiddeloppslag</b>
                 </NextLink>
               </li>
+              {/*
+              Commented out temporarily, until we know for sure we won't include a guided approach
               <li className="nav-veileder">
                 <NextLink href="/veileder">
                   <p>Veileder</p>
                 </NextLink>
-              </li>
+              </li> */}
               <li className="nav-compare">
                 <NextLink href="/sammenlign">
                   <p>Sammenligner</p>
