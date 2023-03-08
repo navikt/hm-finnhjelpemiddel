@@ -120,6 +120,17 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <Table.Row key={'hms-row'}>
+              <Table.HeaderCell>Hms nr</Table.HeaderCell>
+              <Table.DataCell style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
+                {mainProduct.hmsArtNr !== undefined ? mainProduct.hmsArtNr : '-'}
+              </Table.DataCell>
+              {seriesProducts.map((product) => (
+                <Table.DataCell key={'Hms-' + product.id}>
+                  {product.hmsArtNr !== undefined ? product.hmsArtNr : '-'}
+                </Table.DataCell>
+              ))}
+            </Table.Row>
             {seriesProducts.length > 0 &&
               allDataKeys.map((key) => (
                 <Table.Row key={key + 'row'}>
