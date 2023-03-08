@@ -1,18 +1,21 @@
-import { FilterCategories } from './filter-util'
 import { mapProducts, Product } from './product-util'
 import {
+  filterBeregnetBarn,
   filterBredde,
   filterLengde,
+  filterFyllmateriale,
   filterMaksBrukervekt,
   filterMaksSetebredde,
   filterMaksSetedybde,
   filterMaksSetehoyde,
+  filterMaterialeTrekk,
   filterMinBrukervekt,
   filterMinSetebredde,
   filterMinSetedybde,
   filterMinSetehoyde,
   filterTotalvekt,
   toMinMaxAggs,
+  FilterCategories,
 } from './filter-util'
 
 export const PAGE_SIZE = 25
@@ -31,13 +34,15 @@ export type RawFilterData = {
   }
 }
 
+export type Filter = {
+  values: Array<Bucket>
+  total_doc_count?: number
+  min: number
+  max: number
+}
+
 export type FilterData = {
-  [key in FilterCategories as keyof typeof FilterCategories]: {
-    values: Array<Bucket>
-    total_doc_count?: number
-    min: number
-    max: number
-  }
+  [key in FilterCategories as keyof typeof FilterCategories]: Filter
 }
 
 export type SearchData = {
@@ -76,6 +81,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
     setehoydeMaksCM,
     brukervektMinKG,
     brukervektMaksKG,
+    beregnetBarn,
+    fyllmateriale,
+    materialeTrekk,
   } = filters
 
   const query = {
@@ -134,6 +142,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
         filterMaksSetehoyde(setehoydeMaksCM),
         filterMinBrukervekt(brukervektMinKG),
         filterMaksBrukervekt(brukervektMaksKG),
+        filterBeregnetBarn(beregnetBarn),
+        filterFyllmateriale(fyllmateriale),
+        filterMaterialeTrekk(materialeTrekk),
       ],
     },
   }
@@ -164,6 +175,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -185,6 +199,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -206,6 +223,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -227,6 +247,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -248,6 +271,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -269,6 +295,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -290,6 +319,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -311,6 +343,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -332,6 +367,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMinSetehoyde(setehoydeMinCM),
                 filterMinBrukervekt(brukervektMinKG),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -353,6 +391,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMinSetehoyde(setehoydeMinCM),
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
@@ -374,11 +415,90 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 filterMinSetehoyde(setehoydeMinCM),
                 filterMaksSetehoyde(setehoydeMaksCM),
                 filterMinBrukervekt(brukervektMinKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
               ],
             },
           },
           aggs: {
             ...toMinMaxAggs('filters.brukervektMaksKG'),
+          },
+        },
+        beregnetBarn: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
+              ],
+            },
+          },
+          aggs: {
+            values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
+          },
+        },
+        fyllmateriale: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterMaterialeTrekk(materialeTrekk),
+              ],
+            },
+          },
+          aggs: {
+            values: {
+              terms: { field: 'filters.fyllmateriale', order: { _key: 'asc' }, size: 1000 },
+            },
+          },
+        },
+        materialeTrekk: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+                filterFyllmateriale(fyllmateriale),
+                filterBeregnetBarn(beregnetBarn),
+              ],
+            },
+          },
+          aggs: {
+            values: {
+              terms: { field: 'filters.materialeTrekk', order: { _key: 'asc' }, size: 1000 },
+            },
           },
         },
       },
@@ -402,8 +522,8 @@ const mapFilters = (data: any): FilterData => {
         [key]: {
           total_doc_count: data.doc_count,
           values: data.buckets || data.values?.buckets,
-          min: data.min.value,
-          max: data.max.value,
+          ...(data.min && { min: data.min.value }),
+          ...(data.max && { max: data.max.value }),
         },
       }
     }, {} as FilterData)

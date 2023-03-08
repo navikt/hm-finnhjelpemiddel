@@ -12,7 +12,7 @@ export enum FilterCategories {
   totalVektKG = 'Totalvekt (kg)',
   fyllmateriale = 'Fyllmateriale',
   materialeTrekk = 'Trekkmateriale',
-  beregnetBarn = 'Beregnet barn?',
+  beregnetBarn = 'Beregnet på barn',
 }
 
 const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number>) => {
@@ -81,6 +81,18 @@ export const filterMaksBrukervekt = (values: Array<number>) => {
 export const filterBeregnetBarn = (values: Array<number>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'filters.beregnetBarn': value } })),
+  },
+})
+
+export const filterFyllmateriale = (values: Array<number>) => ({
+  bool: {
+    should: values.map((value) => ({ term: { 'filters.fyllmateriale': value } })),
+  },
+})
+
+export const filterMaterialeTrekk = (values: Array<number>) => ({
+  bool: {
+    should: values.map((value) => ({ term: { 'filters.materialeTrekk': value } })),
   },
 })
 

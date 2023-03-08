@@ -5,6 +5,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import deepEqual from 'deep-equal'
 import { SearchData } from './api-util'
 import { AtLeastOne } from './type-util'
+import { FilterCategories } from './filter-util'
 
 const initialFiltersState = {
   beregnetBarn: [],
@@ -33,6 +34,7 @@ export const initialSearchDataState = {
 type SearchDataState = {
   searchData: SearchData
   setSearchData: (searchData: AtLeastOne<SearchData>) => void
+  setFilter: (filterKey: keyof typeof FilterCategories, values: Array<any>) => void
   resetSearchData: () => void
   meta: { isUnlikeInitial: boolean }
 }
@@ -50,9 +52,11 @@ export const useSearchStore = create<SearchDataState>()(
             meta: { isUnlikeInitial: !deepEqual(initialSearchDataState, updatedSearchData) },
           }
         }),
-      resetSearchData: () => {
-        set({ searchData: initialSearchDataState, meta: { isUnlikeInitial: false } })
-      },
+      setFilter: (filterKey, values) =>
+        set((state) => ({
+          searchData: { ...state.searchData, filters: { ...state.searchData.filters, [filterKey]: values } },
+        })),
+      resetSearchData: () => set({ searchData: initialSearchDataState, meta: { isUnlikeInitial: false } }),
     }),
     {
       name: 'search-data-storage',
@@ -75,6 +79,7 @@ export const useHydratedSearchStore = ((selector, compare) => {
         meta: { isUnlikeInitial: false },
         searchData: initialSearchDataState,
         setSearchData: () => undefined,
+        setFilter: () => undefined,
         resetSearchData: () => undefined,
       }
 }) as typeof useSearchStore

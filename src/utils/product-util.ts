@@ -106,7 +106,10 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
     Array.from(Object.keys(searchParams)).includes(filter)
   )
 
-  const filters = filterKeys.reduce((obj, fk) => ({ ...obj, [fk]: searchParams[fk] }), {})
+  const filters = filterKeys.reduce(
+    (obj, fk) => ({ ...obj, [fk]: Array.isArray(searchParams[fk]) ? searchParams[fk] : [searchParams[fk]] }),
+    {}
+  )
 
   return {
     searchTerm,
@@ -124,7 +127,7 @@ export const toSearchQueryString = (searchParams: SearchParams) =>
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)
-      .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+      .filter(([_, values]) => values.some((value) => value))
       .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
     ...(searchParams.to && { to: searchParams.to }),
   })
