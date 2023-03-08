@@ -109,7 +109,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
                 </Heading>
               </Table.ColumnHeader>
               <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
-                {'Dette produktet'}
+                Dette produktet
               </Table.ColumnHeader>
               {seriesProducts.length > 0 &&
                 seriesProducts.map((product, i) => (
