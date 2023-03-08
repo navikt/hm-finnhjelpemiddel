@@ -64,8 +64,8 @@ const SearchResults = ({
           Søkeresultater
         </Heading>
 
-        <div id="searchResults">
-          <Loader className="results__loader" size="3xlarge" title="Laster produkter" />
+        <div id="searchResults" className="results__loader">
+          <Loader size="3xlarge" title="Laster produkter" />
         </div>
       </>
     )
@@ -191,6 +191,12 @@ const SearchResult = ({ product }: { product: Product }) => {
                 </button>
               )}
             </Heading>
+            {product.agreementInfo && (
+              <div className="search-result__post-and-rank">
+                <span className="search-result__post-and-rank__post">Rangering</span>
+                <span className="search-result__post-and-rank__rank">{product.agreementInfo?.rank}</span>
+              </div>
+            )}
           </div>
           <div className="search-result__description">
             <BodyLong size="small">{product.attributes?.text}</BodyLong>
