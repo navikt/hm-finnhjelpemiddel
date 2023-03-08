@@ -146,6 +146,7 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
     body: JSON.stringify({
       from,
       size: to,
+      sort: [{ 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
       post_filter,
       aggs: {

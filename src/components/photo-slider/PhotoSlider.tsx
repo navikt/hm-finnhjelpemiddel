@@ -81,9 +81,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               <Image
                 key={src}
                 src={imageLoader({ src: src })}
+                fill
                 style={{ objectFit: 'contain' }}
                 onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
                 alt={'Produktbilde'}
+                sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
               />
             </div>
             <div style={{ width: '40px', height: '40px' }}></div>

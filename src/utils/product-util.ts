@@ -17,6 +17,7 @@ export interface Product {
   attributes: Attributes
   techData: TechData
   hmsArtNr: string | null
+  agreementInfo: AgreementInfo | null
   supplierRef: string
   isoCategory: string
   accessory: boolean
@@ -42,6 +43,12 @@ interface Attributes {
   bestillingsordning?: boolean
 }
 
+interface AgreementInfo {
+  id: string
+  rank: number
+  postNr: number
+}
+
 export const createProduct = (source: ProductSourceResponse): Product => {
   return {
     id: source.id,
@@ -49,6 +56,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     attributes: source.attributes,
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
+    agreementInfo: source.agreementInfo,
     supplierRef: source.supplier?.id,
     isoCategory: source.isoCategory,
     accessory: source.accessory,

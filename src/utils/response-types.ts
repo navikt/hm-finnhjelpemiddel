@@ -41,7 +41,7 @@ export interface ProductSourceResponse {
   createdBy: string
   updatedBy: string
   filters: object
-  agreementInfo: AgreementInfo | null
+  agreementInfo: AgreementInfoResponse | null
   hasAgreement: boolean
 }
 
@@ -73,7 +73,7 @@ export interface MediaResponse {
   source?: MediaSourceType
 }
 
-interface AgreementInfo {
+interface AgreementInfoResponse {
   id: string
   identifier: string | null
   rank: number

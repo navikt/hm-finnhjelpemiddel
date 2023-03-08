@@ -109,17 +109,28 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
                 </Heading>
               </Table.ColumnHeader>
               <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
-                {'Produkt ' + mainProduct.id}
+                Dette produktet
               </Table.ColumnHeader>
               {seriesProducts.length > 0 &&
                 seriesProducts.map((product, i) => (
                   <Table.ColumnHeader key={'id-' + product.id} style={{ height: '5px' }}>
-                    {'Produkt ' + product.id}
+                    <Link href={`/produkt/${product.id}`}>{'Produkt ' + (i + 1)}</Link>
                   </Table.ColumnHeader>
                 ))}
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <Table.Row key={'hms-row'}>
+              <Table.HeaderCell>Hms nr</Table.HeaderCell>
+              <Table.DataCell style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
+                {mainProduct.hmsArtNr !== undefined ? mainProduct.hmsArtNr : '-'}
+              </Table.DataCell>
+              {seriesProducts.map((product) => (
+                <Table.DataCell key={'Hms-' + product.id}>
+                  {product.hmsArtNr !== undefined ? product.hmsArtNr : '-'}
+                </Table.DataCell>
+              ))}
+            </Table.Row>
             {seriesProducts.length > 0 &&
               allDataKeys.map((key) => (
                 <Table.Row key={key + 'row'}>
