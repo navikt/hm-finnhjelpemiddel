@@ -3,12 +3,7 @@
 .produkt-info > * {
   max-width: 1200px;
   margin: auto;
-
-  @include mixins.for-size(tablet-up) {
-    flex-direction: row;
-    padding-left: var(--a-spacing-4);
-    padding-right: var(--a-spacing-4);
-  }
+  padding: 0 var(--a-spacing-6) ;
 }
 
 .produkt-info:last-child {
@@ -23,11 +18,10 @@
   }
 
   .bilde-og-beskrivelse {
-    padding: var(--a-spacing-12) var(--a-spacing-2);
-    padding-top: var(--a-spacing-16);
-    position: relative;
     display: flex;
     flex-direction: column;
+    position: relative;
+    padding: var(--a-spacing-10) var(--a-spacing-6);
 
     @include mixins.for-size(tablet-up) {
       flex-direction: row;
@@ -58,11 +52,12 @@
   }
 
   .produkt-beskrivelse {
-    padding: var(--a-spacing-5) var(--a-spacing-5);
     @include mixins.for-size(tablet-up) {
+      padding: var(--a-spacing-5) var(--a-spacing-5);
       margin-left: var(--a-spacing-5);
       border-left: 1px solid var(--a-gray-300);
     }
+
     .leverandør {
       margin-top: var(--a-spacing-5);
 
@@ -93,7 +88,6 @@
 
     .navds-heading {
       margin-bottom: var(--a-spacing-6);
-      padding-left: var(--a-spacing-4);
     }
 
     &__slider {
@@ -101,7 +95,6 @@
       flex-direction: row;
       align-items: center;
       margin-bottom: var(--a-spacing-10);
-      padding-left: var(--a-spacing-4);
 
       .arrow {
         padding: 8px;
@@ -116,9 +109,8 @@
     }
 
     &__card {
-      border: 1.5px solid transparent;
+      border: 1.5px solid var(--ac-panel-border, var(--a-border-default));
       border-radius: var(--a-border-radius-medium);
-      border-color: var(--ac-panel-border, var(--a-border-default));
       padding: var(--a-spacing-3);
       width: 200px;
       min-height: 200px;
@@ -157,7 +149,7 @@
     }
 
     .next-image {
-      position: 'relative';
+      position: relative;
       width: 400px;
       height: 300px;
     }

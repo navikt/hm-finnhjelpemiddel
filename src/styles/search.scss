@@ -7,7 +7,6 @@
     width: 100%;
     min-width: 288px;
     height: fit-content;
-    padding: var(--a-spacing-8) var(--a-spacing-5) var(--a-spacing-2) var(--a-spacing-5);
 
     @include mixins.for-size(tablet-up) {
       max-width: 425px;
@@ -28,16 +27,16 @@
 
   &__input,
   &__agreement-switch {
-    margin-bottom: var(--a-spacing-6);
+    margin-bottom: var(--a-spacing-4);
   }
 
   &__iso-category-select {
-    margin-bottom: var(--a-spacing-4);
+    margin-bottom: var(--a-spacing-7);
   }
 
   &__filters {
     margin-top: var(--a-spacing-3);
-    margin-bottom: var(--a-spacing-5);
+    margin-bottom: var(--a-spacing-4);
   }
 
   &__reset-button {
@@ -54,6 +53,7 @@
 
   &__expand-button {
     align-self: center;
+    margin-bottom: var(--a-spacing-5);
   }
 
   &__focus-on-results {
@@ -82,7 +82,6 @@
     }
 
     h2 {
-      margin-top: var(--a-spacing-6);
       margin-bottom: var(--a-spacing-2);
     }
 
