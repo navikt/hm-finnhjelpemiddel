@@ -104,9 +104,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader scope="col" sortKey="name" ref={colHeadRef} sortable>
-                <Heading level="4" size="medium" spacing>
-                  Egenskaper
-                </Heading>
+                Egenskaper
               </Table.ColumnHeader>
               <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
                 Dette produktet
@@ -121,7 +119,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
           </Table.Header>
           <Table.Body>
             <Table.Row key={'hms-row'}>
-              <Table.HeaderCell>Hms nr</Table.HeaderCell>
+              <Table.HeaderCell>HMS-artnr.</Table.HeaderCell>
               <Table.DataCell style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
                 {mainProduct.hmsArtNr !== undefined ? mainProduct.hmsArtNr : '-'}
               </Table.DataCell>
