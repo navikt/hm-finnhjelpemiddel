@@ -181,9 +181,11 @@ const SearchResult = ({ product }: { product: Product }) => {
               )}
             </Heading>
             {product.agreementInfo && (
-              <div className="search-result__post-and-rank">
-                <span>Rangering</span>
-                <span className="search-result__post-and-rank__rank">{product.agreementInfo?.rank}</span>
+              <div className="search-result__post-and-rank-container">
+                <div className="search-result__post-and-rank">
+                  <span>Rangering</span>
+                  <span className="search-result__post-and-rank__rank">{product.agreementInfo?.rank}</span>
+                </div>
               </div>
             )}
           </div>

@@ -245,39 +245,55 @@
 
   &__title {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: var(--a-spacing-3);
+    gap: var(--a-spacing-2);
 
-    @include mixins.for-size(phone-only) {
-      flex-direction: column;
+    h3 {
+      width: fit-content;
+    }
+
+    @include mixins.for-size(desktop-up) {
+      flex-direction: row;
+    }
+  }
+
+  &__post-and-rank-container {
+    @include mixins.for-size(desktop-up) {
+      width: 80px;
     }
   }
 
   &__post-and-rank {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--a-spacing-2);
-    margin-right: -64px;
+
+    @include mixins.for-size(desktop-up) {
+      position: absolute;
+      right: 0;
+    }
 
     &__rank {
       height: 30px;
-      width: 40px;
+      width: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
 
-      @include mixins.for-size(phone-only) {
-        width: 30px;
+      @include mixins.for-size(desktop-up) {
+        width: 40px;
       }
     }
 
     &__rank {
       background-color: var(--a-green-200);
-      border-radius: 12px 0 0 12px;
+      border-radius: 12px;
 
-      @include mixins.for-size(phone-only) {
-        border-radius: 12px;
+      @include mixins.for-size(desktop-up) {
+        border-radius: 12px 0 0 12px;
       }
     }
   }
