@@ -1,17 +1,16 @@
-import classNames from 'classnames'
 import { useFormContext } from 'react-hook-form'
 import { Button, Detail, ErrorMessage, TextField } from '@navikt/ds-react'
-import { useHydratedSearchStore } from '../../utils/search-state-util'
-import { FilterData, SearchData, SelectedFilters } from '../../utils/api-util'
-import { FilterCategories } from '../sidebar/FilterView'
+import { Filter, SearchData } from '../../../utils/api-util'
+import { FilterCategories } from '../../../utils/filter-util'
+import { useHydratedSearchStore } from '../../../utils/search-state-util'
 
 type RangeFilterInputProps = {
-  filterKey: keyof typeof FilterCategories
-  filters?: FilterData
-  className?: string
+  filter: { key: keyof typeof FilterCategories; data?: Filter }
 }
 
-export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterInputProps) => {
+export const RangeFilterInput = ({ filter }: RangeFilterInputProps) => {
+  const { key: filterKey, data: filterData } = filter
+
   const { searchData } = useHydratedSearchStore()
   const {
     formState: { errors, dirtyFields },
@@ -19,31 +18,32 @@ export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterI
     watch,
   } = useFormContext<SearchData>()
 
-  const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
-    .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters)
-
   const [min, max] = watch(`filters.${filterKey}`) || []
   const dirty = dirtyFields.filters && !!dirtyFields.filters[filterKey]?.length
 
-  const hasFilterData = filters && filters[filterKey]?.values.length
+  const searchDataFilters = Object.entries(searchData.filters)
+    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+    .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
-  if (!(filterKey in searchDataFilters) && !hasFilterData) {
+  const hasFilterData = filterData?.values.length
+
+  if (!searchDataFilters.includes(filterKey) && !hasFilterData) {
     return null
   }
 
   return (
-    <div className={classNames('range-filter', className)}>
-      <details open={!!min || !!max || dirty}>
-        <summary>{FilterCategories[filterKey]}</summary>
-        <div className="range-filter__input">
+    <details open={!!min || !!max || dirty}>
+      <summary>{FilterCategories[filterKey]}</summary>
+      <div>
+        <div className="range-filter-input">
           <div>
             <Detail>Min</Detail>
             <TextField
               type="number"
               label={`Min. ${FilterCategories[filterKey]}`}
               hideLabel
-              placeholder={hasFilterData ? filters[filterKey].min?.toString() : undefined}
+              placeholder={hasFilterData ? filterData.min?.toString() : undefined}
+              size="small"
               {...register(`filters.${filterKey}.0`, {
                 valueAsNumber: true,
                 validate: (value) => (min && max ? value <= max : true),
@@ -56,20 +56,23 @@ export const RangeFilterInput = ({ filterKey, filters, className }: RangeFilterI
               type="number"
               label={`Maks. ${FilterCategories[filterKey]}`}
               hideLabel
-              placeholder={hasFilterData ? filters[filterKey].max?.toString() : undefined}
+              placeholder={hasFilterData ? filterData.max?.toString() : undefined}
+              size="small"
               {...register(`filters.${filterKey}.1`, { valueAsNumber: true })}
             />
           </div>
           <div>
-            <Button type="submit">Søk</Button>
+            <Button type="submit" size="small">
+              Søk
+            </Button>
           </div>
         </div>
         {errors.filters && errors.filters[filterKey] && (
-          <ErrorMessage className="range-filter__error" size="small">
+          <ErrorMessage className="range-filter-input__error" size="small">
             Min-verdien må være lavere enn Maks-verdien
           </ErrorMessage>
         )}
-      </details>
-    </div>
+      </div>
+    </details>
   )
 }

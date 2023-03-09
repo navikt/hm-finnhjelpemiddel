@@ -9,7 +9,7 @@ export default function useRestoreScroll(id: string, shouldRestore: boolean) {
   /**
    * Restore previous scroll position
    */
-  useLayoutEffect(() => {
+  useEffect(() => {
     try {
       if (shouldRestore) {
         const storedValue = sessionStorage.getItem(SESSION_STORAGE_ID)

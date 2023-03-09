@@ -11,7 +11,9 @@ import AnimateLayout from '../components/layout/AnimateLayout'
 import CompareMenu from '../components/compare-products/CompareMenu'
 import SearchResults from '../components/search/SearchResults'
 import Sidebar from '../components/sidebar/Sidebar'
-import { Heading } from '@navikt/ds-react'
+import { Button, Heading } from '@navikt/ds-react'
+import { useInView } from 'react-intersection-observer'
+import { Up } from '@navikt/ds-icons'
 
 export const getServerSideProps: (
   context: NextPageContext
@@ -44,6 +46,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     }
   )
 
+  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const compareButtonRef = useRef<HTMLButtonElement>(null)
 
   const setFocusOnSearchResults = () => {
@@ -77,7 +80,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
       {compareMode === CompareMode.Active && <CompareMenu />}
       <AnimateLayout>
         <div className="main-header">
-          <Heading level="1" size="large">
+          <Heading level="1" size="large" ref={pageTopRef}>
             Hjelpemiddeloppslag
           </Heading>
         </div>
@@ -104,6 +107,16 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
             </section>
           </div>
         </div>
+        {!isAtPageTop && (
+          <Button
+            type="button"
+            className="search__page-up-button"
+            icon={<Up title="Gå til toppen av siden" />}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            Til toppen
+          </Button>
+        )}
       </AnimateLayout>
     </>
   )

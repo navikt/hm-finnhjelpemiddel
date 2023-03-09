@@ -26,7 +26,6 @@ const SearchResults = ({
   data?: Array<FetchResponse>
   compareButtonRef: RefObject<HTMLButtonElement>
 }) => {
-  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
 
@@ -96,7 +95,7 @@ const SearchResults = ({
           <Heading level="2" size="medium">
             Søkeresultater
           </Heading>
-          <BodyShort ref={pageTopRef} aria-live="polite">{`${products.length} av ${
+          <BodyShort aria-live="polite">{`${products.length} av ${
             data?.at(-1)?.numberOfProducts
           } produkter vises`}</BodyShort>
         </div>
@@ -110,16 +109,6 @@ const SearchResults = ({
       {!isLastPage && (
         <Button variant="secondary" onClick={() => setSize((s) => s + 1)} loading={isLoadingMore}>
           Vis flere treff
-        </Button>
-      )}
-      {!isAtPageTop && (
-        <Button
-          type="button"
-          className="search__page-up-button"
-          icon={<Up title="Gå til toppen av siden" />}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
-          Til toppen
         </Button>
       )}
     </>

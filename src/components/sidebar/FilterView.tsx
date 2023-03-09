@@ -1,29 +1,15 @@
+import React from 'react'
 import { BodyShort, Heading, Label } from '@navikt/ds-react'
-import { RangeFilterInput } from '../search/RangeFilterInput'
 import { FilterData } from '../../utils/api-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 
-export enum FilterCategories {
-  lengdeCM = 'Lengde (cm)',
-  breddeCM = 'Bredde (cm)',
-  setebreddeMinCM = 'Min. setebredde (cm)',
-  setebreddeMaksCM = 'Maks. setebredde (cm)',
-  setedybdeMinCM = 'Min. setedybde (cm)',
-  setedybdeMaksCM = 'Maks. setedybde (cm)',
-  setehoydeMinCM = 'Min. setehøyde (cm)',
-  setehoydeMaksCM = 'Maks. setehøyde (cm)',
-  brukervektMinKG = 'Min. brukervekt (kg)',
-  brukervektMaksKG = 'Maks. brukervekt (kg)',
-  totalVektKG = 'Totalvekt (kg)',
-  fyllmateriale = 'Fyllmateriale',
-  materialeTrekk = 'Trekkmateriale',
-  beregnetBarn = 'Beregnet barn?',
-}
+import { RangeFilterInput } from './internals/RangeFilterInput'
+import { CheckboxFilterInput } from './internals/CheckboxFilterInput'
 
 const FilterView = ({ filters }: { filters?: FilterData }) => {
   const { searchData } = useHydratedSearchStore()
   const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
+    .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
   if (!searchDataFilters.length && (!filters || !Object.keys(filters).length)) {
@@ -32,7 +18,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
         <Heading level="2" size="xsmall">
           Filtre
         </Heading>
-        <BodyShort>Ingen tilgjengelige filtre</BodyShort>
+        <BodyShort>Ingen filtre tilgjengelig</BodyShort>
       </div>
     )
   }
@@ -42,17 +28,20 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <Heading level="2" size="xsmall">
         Filtre
       </Heading>
-      <RangeFilterInput filterKey="lengdeCM" filters={filters} />
-      <RangeFilterInput filterKey="breddeCM" filters={filters} />
-      <RangeFilterInput filterKey="totalVektKG" filters={filters} />
-      <RangeFilterInput filterKey="setebreddeMinCM" filters={filters} />
-      <RangeFilterInput filterKey="setebreddeMaksCM" filters={filters} />
-      <RangeFilterInput filterKey="setedybdeMinCM" filters={filters} />
-      <RangeFilterInput filterKey="setedybdeMaksCM" filters={filters} />
-      <RangeFilterInput filterKey="setehoydeMinCM" filters={filters} />
-      <RangeFilterInput filterKey="setehoydeMaksCM" filters={filters} />
-      <RangeFilterInput filterKey="brukervektMinKG" filters={filters} />
-      <RangeFilterInput filterKey="brukervektMaksKG" filters={filters} />
+      <RangeFilterInput filter={{ key: 'lengdeCM', data: filters?.lengdeCM }} />
+      <RangeFilterInput filter={{ key: 'breddeCM', data: filters?.breddeCM }} />
+      <RangeFilterInput filter={{ key: 'totalVektKG', data: filters?.totalVektKG }} />
+      <RangeFilterInput filter={{ key: 'setebreddeMinCM', data: filters?.setebreddeMinCM }} />
+      <RangeFilterInput filter={{ key: 'setebreddeMaksCM', data: filters?.setebreddeMaksCM }} />
+      <RangeFilterInput filter={{ key: 'setedybdeMinCM', data: filters?.setedybdeMinCM }} />
+      <RangeFilterInput filter={{ key: 'setedybdeMaksCM', data: filters?.setedybdeMaksCM }} />
+      <RangeFilterInput filter={{ key: 'setehoydeMinCM', data: filters?.setehoydeMinCM }} />
+      <RangeFilterInput filter={{ key: 'setehoydeMaksCM', data: filters?.setehoydeMaksCM }} />
+      <RangeFilterInput filter={{ key: 'brukervektMinKG', data: filters?.brukervektMinKG }} />
+      <RangeFilterInput filter={{ key: 'brukervektMaksKG', data: filters?.brukervektMaksKG }} />
+      <CheckboxFilterInput filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
+      <CheckboxFilterInput filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} />
+      <CheckboxFilterInput filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} />
     </div>
   )
 }
