@@ -86,6 +86,27 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
     materialeTrekk,
   } = filters
 
+  const queryFilters: Array<any> = [
+    {
+      match_bool_prefix: {
+        hasAgreement: hasRammeavtale,
+      },
+    },
+  ]
+
+  if (isoCode) {
+    queryFilters.push({
+      match_bool_prefix: {
+        isoCategory: isoCode,
+      },
+    })
+  }
+
+  // "Probably" hmsArtNr (searchTerm is a number consisting of exactly 6 digits)
+  if (searchTerm.length === 6 && !isNaN(parseInt(searchTerm))) {
+    queryFilters.push({ match: { hmsArtNr: { query: searchTerm, boost: 10 } } })
+  }
+
   const query = {
     bool: {
       must: {
@@ -98,6 +119,14 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
                 fields: ['title^3', 'attributes.text^2', '*'],
                 operator: 'and',
                 zero_terms_query: 'all',
+              },
+            },
+            {
+              multi_match: {
+                query: searchTerm,
+                type: 'most_fields',
+                fields: ['title^3', 'attributes.text^2', '*'],
+                fuzziness: 'AUTO',
               },
             },
           ],
@@ -113,18 +142,7 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
           },
         },
       ],
-      filter: [
-        isoCode && {
-          match_bool_prefix: {
-            isoCategory: isoCode,
-          },
-        },
-        {
-          match_bool_prefix: {
-            hasAgreement: hasRammeavtale,
-          },
-        },
-      ],
+      filter: queryFilters,
     },
   }
 
@@ -157,7 +175,8 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
     body: JSON.stringify({
       from,
       size: to,
-      sort: [{ 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      track_scores: true,
+      sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
       post_filter,
       aggs: {
