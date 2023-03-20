@@ -14,14 +14,8 @@
       padding-top: 0;
     }
 
-    h2 {
+    > h2 {
       margin-bottom: var(--a-spacing-3);
-    }
-  }
-
-  &__input {
-    label {
-      font-weight: 400;
     }
   }
 
@@ -41,7 +35,6 @@
 
   &__reset-button {
     width: 100%;
-    margin-bottom: var(--a-spacing-4);
   }
 
   &__page-up-button {
@@ -53,7 +46,7 @@
 
   &__expand-button {
     align-self: center;
-    margin-bottom: var(--a-spacing-5);
+    margin-top: var(--a-spacing-3) !important; // Margin is overwritten by Button styling from Aksel
   }
 
   &__focus-on-results {

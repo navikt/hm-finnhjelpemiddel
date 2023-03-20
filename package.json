@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.5.0",
-    "@navikt/ds-css": "^2.3.1",
-    "@navikt/ds-icons": "^2.3.1",
-    "@navikt/ds-react": "^2.3.1",
+    "@navikt/ds-css": "^2.8.1",
+    "@navikt/ds-icons": "^2.8.1",
+    "@navikt/ds-react": "^2.8.1",
     "@types/deep-equal": "^1.0.1",
     "@types/node": "18.11.9",
     "@types/react": "18.0.24",
