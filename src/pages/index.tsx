@@ -55,7 +55,11 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
 
   useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
 
-  useEffect(() => setSearchInitialized(true), [data])
+  useEffect(() => {
+    if (data) {
+      setSearchInitialized(true)
+    }
+  }, [data])
 
   const products = data?.flatMap((d) => d.products)
   const numberOfProducts = products && products.length > PAGE_SIZE ? products.length : undefined
