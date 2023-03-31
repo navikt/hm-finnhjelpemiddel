@@ -1,11 +1,12 @@
-import Image from 'next/image'
 import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { Picture, Expand, Collapse, Next, Delete } from '@navikt/ds-icons'
+import { Collapse, Delete, Expand, Next } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading } from '@navikt/ds-react'
+import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '../../utils/product-util'
 import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-state-util'
-import Link from 'next/link'
 
 const containerVariants: Variants = {
   hidden: { opacity: 1 },
@@ -37,6 +38,8 @@ const productVariants: Variants = {
 const CompareMenu = () => {
   const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct } = useHydratedCompareStore()
 
+  const MotionButton = motion(Button)
+
   const openView = (
     <motion.div
       variants={containerVariants}
@@ -44,22 +47,21 @@ const CompareMenu = () => {
       animate="show"
       exit="hidden"
       layoutId="compare-menu"
-      className="compare-menu compare-menu__open"
+      className="compare-menu compare-menu--open"
     >
-      <motion.button
+      <MotionButton
         layoutId="chevron-button"
-        key="chevron"
+        variant="tertiary"
+        icon={<Expand aria-hidden />}
         onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
-        className="compare-menu__chevron-button"
       >
-        <span className="navds-button__icon">
-          <Expand title="Sjul sammenligning" />
-        </span>
-      </motion.button>
+        Skjul sammenligner
+      </MotionButton>
+
       <motion.div key="content" variants={childVariants} className="compare-menu__container">
         {productsToCompare.length === 0 && (
           <motion.div layoutId="placeholder" className="compare-menu__placeholder compare-menu__placeholder__empty">
-            <motion.p layout="position">Ingen produkter er lagt til for sammenligning</motion.p>
+            <motion.p layout="position">Ingen produkter er lagt til for sammenligning.</motion.p>
           </motion.div>
         )}
         {productsToCompare.length !== 0 && (
@@ -113,17 +115,16 @@ const CompareMenu = () => {
       animate="show"
       exit="hidden"
       layoutId="compare-menu"
-      className="compare-menu minimized"
+      className="compare-menu"
     >
-      <motion.button
+      <MotionButton
         layoutId="chevron-button"
+        variant="tertiary"
+        icon={<Collapse aria-hidden />}
         onClick={() => setCompareMenuState(CompareMenuState.Open)}
-        className="compare-menu__chevron-button"
       >
-        <span className="navds-button__icon">
-          <Collapse title="Åpne sammenligning" />
-        </span>
-      </motion.button>
+        Vis sammenligner
+      </MotionButton>
     </motion.div>
   )
 
@@ -154,13 +155,18 @@ const ChosenProductCard = ({
       <div className="compare-menu__image">
         <div className="image">
           {!hasImage && (
-            <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+            <ImageIcon
+              width="100%"
+              height="100%"
+              style={{ background: 'white' }}
+              aria-label="Ingen bilde tilgjengelig"
+            />
           )}
           {hasImage && (
             <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" fill style={{ objectFit: 'contain' }} />
-          )}{' '}
+          )}
         </div>
-        <div className="owerlay">
+        <div className="overlay">
           <Button
             className="delete-product"
             onClick={() => removeProduct(product)}
@@ -173,7 +179,7 @@ const ChosenProductCard = ({
           {product.title}
         </Heading>
         <div className="compare-menu__hms-nr">
-          <BodyShort size="small">Hms-nr.</BodyShort>
+          <BodyShort size="small">HMS-nr.</BodyShort>
           <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : 'mangler'}</BodyShort>
         </div>
       </div>
