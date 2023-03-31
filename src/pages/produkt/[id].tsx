@@ -1,14 +1,15 @@
 import Link from 'next/link'
+import { InferGetServerSidePropsType } from 'next'
+import { Heading } from '@navikt/ds-react'
+
 import { mapSupplier } from '../../utils/supplier-util'
 import { getProduct, getSupplier, getSeries } from '../../utils/api-util'
 import { createProduct, mapProducts, toSearchQueryString } from '../../utils/product-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import PhotoSlider from '../../components/photo-slider/PhotoSlider'
-import InfoAccordion from '../../components/info-accordion/InfoAccordion'
 import SimilarProducts from '../../components/product-details/SimilarProducts'
-import { Heading } from '@navikt/ds-react'
-import { InferGetServerSidePropsType } from 'next'
 import AnimateLayout from '../../components/layout/AnimateLayout'
+import InformationTabs from 'src/components/information-tabs/InformationTabs'
 
 export async function getServerSideProps(context: { params: { id: string } }) {
   const productData = await getProduct(context.params.id)
@@ -75,8 +76,8 @@ export default function ProduktPage({
               </div>
             </div>
           </section>
-          <section className="product-accordion">
-            {product.techData && <InfoAccordion techData={product.techData} />}
+          <section className="product-info-tabs">
+            <InformationTabs product={product}></InformationTabs>
           </section>
           {seriesProducts && seriesProducts.length > 0 && (
             <section className="similar-products">

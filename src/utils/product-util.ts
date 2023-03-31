@@ -23,11 +23,17 @@ export interface Product {
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
+  documents: Document[]
   seriesId: string | null
 }
 
 export interface Photo {
   uri: string
+}
+
+export interface Document {
+  uri: string
+  title: string
 }
 
 export interface TechData {
@@ -62,6 +68,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     accessory: source.accessory,
     sparepart: source.sparepart,
     photos: mapPhotoInfo(source.media),
+    documents: mapDocuments(source.media),
     seriesId: source.seriesId,
   }
 }
@@ -80,6 +87,24 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
     .sort((a: MediaResponse, b: MediaResponse) => a.order - b.order)
     .map((image: MediaResponse) => ({
       uri: image.uri,
+    }))
+}
+
+const mapDocuments = (media: MediaResponse[]): Document[] => {
+  const seen: { [uri: string]: boolean } = {}
+  return media
+    .filter((media: MediaResponse) => {
+      if (!(media.type == MediaType.PDF && media.text && media.uri) || seen[media.uri]) {
+        return false
+      }
+
+      seen[media.uri] = true
+      return true
+    })
+    .sort((a: MediaResponse, b: MediaResponse) => (a.text && b.text ? (a.text > b.text ? 1 : -1) : -1))
+    .map((doc: MediaResponse) => ({
+      uri: doc.uri,
+      title: doc.text ? doc.text : '',
     }))
 }
 

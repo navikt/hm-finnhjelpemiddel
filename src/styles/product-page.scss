@@ -3,7 +3,7 @@
 .produkt-info > * {
   max-width: 1200px;
   margin: auto;
-  padding: 0 var(--a-spacing-6) ;
+  padding: 0 var(--a-spacing-6);
 }
 
 .produkt-info:last-child {
@@ -71,18 +71,14 @@
     }
   }
 
-  .product-accordion {
+  .product-info-tabs {
     margin-top: var(--a-spacing-10);
     margin-bottom: var(--a-spacing-10);
-    .info-accordion {
-      max-width: 600px;
-    }
   }
 
   .similar-products {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--a-gray-300);
     margin-top: var(--a-spacing-10);
     padding-top: var(--a-spacing-10);
 
