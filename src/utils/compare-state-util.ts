@@ -6,7 +6,7 @@ import { Product } from './product-util'
 
 export enum CompareMode {
   Active = 'Active',
-  Deactivated = 'Deactivated',
+  Inactive = 'Inactive',
 }
 
 export enum CompareMenuState {
@@ -28,7 +28,7 @@ type ProductCompareState = {
 export const useProductCompareStore = create<ProductCompareState>()(
   persist(
     (set) => ({
-      compareMode: CompareMode.Deactivated,
+      compareMode: CompareMode.Inactive,
       compareMenuState: CompareMenuState.Open,
       productsToCompare: [],
       setCompareMode: (mode) => set(() => ({ compareMode: mode })),
@@ -59,8 +59,8 @@ export const useHydratedCompareStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        compareMode: CompareMode.Deactivated,
-        compareMenuState: CompareMenuState.Open,
+        compareMode: CompareMode.Active,
+        compareMenuState: CompareMenuState.Minimized,
         productsToCompare: [],
         setCompareMode: () => undefined,
         setCompareMenuState: () => undefined,

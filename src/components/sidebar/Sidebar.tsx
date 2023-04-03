@@ -62,26 +62,25 @@ const Sidebar = ({
 
   return (
     <section className="search__side-bar">
-      <Heading level="2" size="small">
+      <Heading level="2" size="medium">
         Søk
       </Heading>
       <FormProvider {...formMethods}>
         <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
-          <div className="search__input">
-            <Controller
-              render={({ field }) => (
-                <Search
-                  label="Søk etter produkter"
-                  hideLabel={false}
-                  onClear={() => setSearchData({ searchTerm: '' })}
-                  {...field}
-                />
-              )}
-              name="searchTerm"
-              control={control}
-              defaultValue=""
-            />
-          </div>
+          <Controller
+            render={({ field }) => (
+              <Search
+                className="search__input"
+                label="Skriv ett eller flere søkeord"
+                hideLabel={false}
+                onClear={() => setSearchData({ searchTerm: '' })}
+                {...field}
+              />
+            )}
+            name="searchTerm"
+            control={control}
+            defaultValue=""
+          />
           <FocusOnResultsButton setFocus={setFocus} />
 
           {expanded && (
@@ -109,6 +108,7 @@ const Sidebar = ({
 
           <Button
             type="button"
+            variant="secondary"
             className="search__reset-button"
             icon={<Delete title="Nullstill søket" />}
             onClick={onReset}
@@ -119,7 +119,7 @@ const Sidebar = ({
       </FormProvider>
       <Button
         type="button"
-        className="search__expand-button "
+        className="search__expand-button"
         variant="tertiary"
         icon={<Chevron title="Vis mer informasjon om produktet" />}
         onClick={() => setExpanded((prevState) => !prevState)}

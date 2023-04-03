@@ -2,8 +2,9 @@ import { useState } from 'react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Button, LinkPanel, Table, BodyShort, Heading } from '@navikt/ds-react'
-import { Picture, Close, Back } from '@navikt/ds-icons'
+import { BodyShort, Button, Heading, LinkPanel, Table } from '@navikt/ds-react'
+import { Back, Close } from '@navikt/ds-icons'
+import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '../../utils/product-util'
 import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { sortAlphabetically } from '../../utils/sort-util'
@@ -148,7 +149,7 @@ const ProductTableHeader = ({
       />
       <div className="product-image">
         {!hasImage && (
-          <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+          <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
         )}
         {hasImage && (
           <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
