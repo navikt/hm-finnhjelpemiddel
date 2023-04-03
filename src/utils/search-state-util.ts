@@ -2,7 +2,6 @@
 import { create } from 'zustand'
 import { useState, useEffect } from 'react'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import deepEqual from 'deep-equal'
 import { SearchData } from './api-util'
 import { AtLeastOne } from './type-util'
 import { FilterCategories } from './filter-util'
@@ -36,27 +35,28 @@ type SearchDataState = {
   setSearchData: (searchData: AtLeastOne<SearchData>) => void
   setFilter: (filterKey: keyof typeof FilterCategories, values: Array<any>) => void
   resetSearchData: () => void
-  meta: { isUnlikeInitial: boolean }
+  setShowProductSeriesView: (value: boolean) => void
+  meta: { showProductSeriesView: boolean }
 }
 
 export const useSearchStore = create<SearchDataState>()(
   persist(
     (set) => ({
-      meta: { isUnlikeInitial: false },
+      meta: { showProductSeriesView: false },
       searchData: initialSearchDataState,
       setSearchData: (searchData) =>
         set((state) => {
           const updatedSearchData = { ...state.searchData, ...searchData }
           return {
             searchData: updatedSearchData,
-            meta: { isUnlikeInitial: !deepEqual(initialSearchDataState, updatedSearchData) },
           }
         }),
       setFilter: (filterKey, values) =>
         set((state) => ({
           searchData: { ...state.searchData, filters: { ...state.searchData.filters, [filterKey]: values } },
         })),
-      resetSearchData: () => set({ searchData: initialSearchDataState, meta: { isUnlikeInitial: false } }),
+      resetSearchData: () => set({ searchData: initialSearchDataState }),
+      setShowProductSeriesView: (value) => set({ meta: { showProductSeriesView: value } }),
     }),
     {
       name: 'search-data-storage',
@@ -76,7 +76,7 @@ export const useHydratedSearchStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        meta: { isUnlikeInitial: false },
+        meta: { showProductSeriesView: false },
         searchData: initialSearchDataState,
         setSearchData: () => undefined,
         setFilter: () => undefined,

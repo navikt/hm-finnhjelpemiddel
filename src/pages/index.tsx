@@ -47,10 +47,10 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
   )
 
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
-  const compareButtonRef = useRef<HTMLButtonElement>(null)
+  const productViewToggleRef = useRef<HTMLButtonElement>(null)
 
   const setFocusOnSearchResults = () => {
-    compareButtonRef.current && compareButtonRef.current.focus()
+    productViewToggleRef.current && productViewToggleRef.current.focus()
   }
 
   useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
@@ -105,7 +105,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                   size={size}
                   setSize={setSize}
                   isLoading={isLoading}
-                  compareButtonRef={compareButtonRef}
+                  productViewToggleRef={productViewToggleRef}
                 />
               }
             </section>

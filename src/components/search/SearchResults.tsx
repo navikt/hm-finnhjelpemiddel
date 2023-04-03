@@ -1,60 +1,61 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { RefObject, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
-import { Heading, BodyLong, Button, Checkbox, BodyShort, Alert, Loader } from '@navikt/ds-react'
-import { Next, Picture, Up } from '@navikt/ds-icons'
+import { RefObject, useEffect, useState } from 'react'
+import { Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
+import { Next } from '@navikt/ds-icons'
+import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '../../utils/product-util'
 import { getIsoCategoryName } from '../../utils/iso-category-util'
-import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { FetchResponse } from '../../utils/api-util'
+import useRestoreScroll from '../../hooks/useRestoreScroll'
 
 import DefinitionList from '../definition-list/DefinitionList'
-import useRestoreScroll from '../../hooks/useRestoreScroll'
+
+function getProductCategories(products?: Array<Product>) {
+  return Object.entries(
+    products?.reduce(
+      (hash, obj) => ({
+        ...hash,
+        [obj.seriesId as string]: (hash[obj.seriesId as string] || []).concat(obj),
+      }),
+      {} as Record<string, Array<Product>>
+    ) ?? {}
+  ).map(([_, data]) => ({ seriesName: data.at(0)?.attributes.series?.at(0) || data.at(0)?.title, data }))
+}
 
 const SearchResults = ({
   data,
   size,
   setSize,
   isLoading,
-  compareButtonRef,
+  productViewToggleRef,
 }: {
   size: number
   setSize: (size: (s: number) => number) => void
   isLoading: boolean
   data?: Array<FetchResponse>
-  compareButtonRef: RefObject<HTMLButtonElement>
+  productViewToggleRef: RefObject<HTMLButtonElement>
 }) => {
-  const { compareMode, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
+  const {
+    meta: { showProductSeriesView },
+    setShowProductSeriesView,
+  } = useHydratedSearchStore()
+  const { setCompareMode } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
 
   useRestoreScroll('search-results', !isLoading)
 
-  const comparingButton =
-    compareMode === CompareMode.Deactivated ? (
-      <Button
-        ref={compareButtonRef}
-        size="small"
-        variant="secondary"
-        onClick={() => {
-          setCompareMode(CompareMode.Active)
-          setCompareMenuState(CompareMenuState.Open)
-        }}
-      >
-        Sammenlign produkter
-      </Button>
-    ) : (
-      <Button
-        ref={compareButtonRef}
-        size="small"
-        variant="primary"
-        aria-pressed
-        onClick={() => setCompareMode(CompareMode.Deactivated)}
-      >
-        Sammenlign produkter
-      </Button>
-    )
+  useEffect(() => {
+    if (showProductSeriesView) {
+      setCompareMode(CompareMode.Inactive)
+    } else {
+      setCompareMode(CompareMode.Active)
+    }
+  }, [showProductSeriesView, setCompareMode])
+
+  const productCategories = getProductCategories(products)
 
   if (isLoading) {
     return (
@@ -91,20 +92,46 @@ const SearchResults = ({
   return (
     <>
       <header className="results__header">
-        <div>
+        <div className="flex flex--row flex--space-between">
           <Heading level="2" size="medium">
             Søkeresultater
           </Heading>
-          <BodyShort aria-live="polite">{`${products.length} av ${
-            data?.at(-1)?.numberOfProducts
-          } produkter vises`}</BodyShort>
+          <ToggleGroup
+            className="view-toggle"
+            value={showProductSeriesView ? 'series' : 'products'}
+            onChange={(value) => setShowProductSeriesView(value === 'series')}
+            size="small"
+            variant="neutral"
+          >
+            <ToggleGroup.Item value="products" ref={productViewToggleRef}>
+              Enkeltprodukter
+            </ToggleGroup.Item>
+            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
+          </ToggleGroup>
         </div>
-        {comparingButton}
+        <div>
+          {showProductSeriesView && (
+            <BodyShort aria-live="polite">{`${productCategories?.length} produktserier vises`}</BodyShort>
+          )}
+          {!showProductSeriesView && (
+            <BodyShort aria-live="polite">{`${products.length} av ${
+              data?.at(-1)?.numberOfProducts
+            } produkter vises`}</BodyShort>
+          )}
+        </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {products.map((product) => (
-          <SearchResult key={product.id} product={product} />
-        ))}
+        {showProductSeriesView &&
+          productCategories?.map((productCategory) => (
+            <SearchResult
+              key={productCategory.seriesName}
+              product={{
+                ...productCategory.data.at(0)!,
+                title: productCategory.seriesName || products.at(0)?.title!,
+              }}
+            />
+          ))}
+        {!showProductSeriesView && products.map((product) => <SearchResult key={product.id} product={product} />)}
       </ol>
       {!isLastPage && (
         <Button variant="secondary" onClick={() => setSize((s) => s + 1)} loading={isLoadingMore}>
@@ -151,7 +178,12 @@ const SearchResult = ({ product }: { product: Product }) => {
       <div className="search-result__container">
         <div className="search-result__image">
           {!hasImage && (
-            <Picture width={150} height="auto" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+            <ImageIcon
+              width="100%"
+              height="100%"
+              style={{ background: 'white' }}
+              aria-label="Ingen bilde tilgjengelig"
+            />
           )}
           {hasImage && (
             <Image
@@ -168,17 +200,9 @@ const SearchResult = ({ product }: { product: Product }) => {
         <div className="search-result__content">
           <div className="search-result__title">
             <Heading level="3" size="medium">
-              {compareMode === CompareMode.Deactivated && (
-                <Link className="search-result__link search-result__link__underline" href={`/produkt/${product.id}`}>
-                  {product.title}
-                </Link>
-              )}
-
-              {compareMode === CompareMode.Active && (
-                <button className="search-result__link__button" onClick={toggleCompareProduct}>
-                  {product.title}
-                </button>
-              )}
+              <Link className="search-result__link search-result__link__underline" href={`/produkt/${product.id}`}>
+                {product.title}
+              </Link>
             </Heading>
             {product.agreementInfo && (
               <div className="search-result__post-and-rank-container">
@@ -220,7 +244,7 @@ const SearchResult = ({ product }: { product: Product }) => {
           </div>
         </div>
         <div className="search-result__chevron-container">
-          {compareMode === CompareMode.Deactivated && <Next className="search-result__chevron" aria-hidden />}
+          <Next className="search-result__chevron" aria-hidden />
         </div>
       </div>
     </li>
