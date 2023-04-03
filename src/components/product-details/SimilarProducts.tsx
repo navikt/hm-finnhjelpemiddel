@@ -40,6 +40,15 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       return 1
     })
 
+  const rows: { [key: string]: string[] } = Object.assign(
+    {},
+    ...allDataKeys.map((key) => ({
+      [key]: allProducts.map((product) =>
+        product.techData[key] !== undefined ? product.techData[key].value + product.techData[key].unit : '-'
+      ),
+    }))
+  )
+
   const handleSort = (sortKey: string | undefined) => {
     if (sortKey) {
       setSort(
@@ -56,6 +65,12 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   useEffect(() => {
     setKeyColumnWidth(colHeadRef.current ? colHeadRef.current['offsetWidth'] : 0)
   }, [colHeadRef, keyColumnWidth])
+
+  const hasDifferentValues = ({ row }: { row: string[] }) => {
+    let uniqueValues = new Set(row)
+    uniqueValues.delete('-')
+    return uniqueValues.size > 1
+  }
 
   return (
     <>
@@ -130,20 +145,11 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
               ))}
             </Table.Row>
             {seriesProducts.length > 0 &&
-              allDataKeys.map((key) => (
-                <Table.Row key={key + 'row'}>
+              Object.entries(rows).map(([key, row]) => (
+                <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
-                  <Table.DataCell style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
-                    {mainProduct.techData[key] !== undefined
-                      ? mainProduct.techData[key].value + mainProduct.techData[key].unit
-                      : '-'}
-                  </Table.DataCell>
-                  {seriesProducts.map((product) => (
-                    <Table.DataCell key={key + '-' + product.id}>
-                      {product.techData[key] !== undefined
-                        ? product.techData[key].value + product.techData[key].unit
-                        : '-'}
-                    </Table.DataCell>
+                  {row.map((value, i) => (
+                    <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
                   ))}
                 </Table.Row>
               ))}

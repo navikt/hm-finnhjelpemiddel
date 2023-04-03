@@ -2,14 +2,6 @@
   .comparing-table {
     max-width: none;
 
-    tbody > .highlight {
-      background-color: var(--a-purple-50);
-
-      th {
-        background-color: var(--a-purple-100);
-      }
-    }
-
     tr > th:first-child,
     tr > td:first-child {
       position: sticky;
