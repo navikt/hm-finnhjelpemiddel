@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Back, Next } from '@navikt/ds-icons'
 import { Table, SortState, Heading, Button } from '@navikt/ds-react'
 import { Product } from '../../utils/product-util'
-import { sortAlphabetically } from '../../utils/sort-util'
+import { sortAlphabetically, sortBredde } from '../../utils/sort-util'
 
 type SimilarProductsProps = {
   mainProduct: Product
@@ -29,7 +29,11 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     setFirstActive(nextIndex)
   }
 
-  const allProducts = [mainProduct, ...seriesProducts]
+  const sortedByBredde = seriesProducts.sort((productA, productB) => {
+    return sortBredde(productA.techData['Bredde min'].value, productB.techData['Bredde min'].value)
+  })
+
+  const allProducts = [mainProduct, ...sortedByBredde]
   const allDataKeys = allProducts
     .flatMap((prod) => Object.keys(prod.techData))
     .filter((v, i, a) => a.indexOf(v) === i)

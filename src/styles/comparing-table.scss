@@ -56,6 +56,12 @@
       border-right: 1px solid var(--a-gray-400);
       background-color: var(--a-bg-subtle);
     }
+
+    tbody > .highlight {
+      td:nth-child(2) {
+        background-color: var(--a-purple-100);
+      }
+    }
   }
 }
 
