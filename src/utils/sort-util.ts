@@ -8,7 +8,7 @@ const comparatoString = (a: string, b: string) => {
   return 0
 }
 
-export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = true) => {
+export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = false) => {
   return desc ? comparatoString(keyA, keyB) : comparatoString(keyB, keyA)
 }
 

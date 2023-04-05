@@ -45,6 +45,18 @@
     background-color: var(--a-surface-selected);
     color: var(--ac-button-tertiary-text);
   }
+
+  .row-with-different-values {
+    th,
+    td {
+      border-bottom: 3px solid black;
+    }
+  }
+
+  .test {
+    position: sticky;
+    left: 0;
+  }
 }
 
 .comparing-table__two-sticky-columns {

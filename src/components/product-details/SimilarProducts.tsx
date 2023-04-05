@@ -17,8 +17,7 @@ type SortColumns = {
 
 const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) => {
   const [keyColumnWidth, setKeyColumnWidth] = useState(0)
-  const [sortRows, setSortRows] = useState<SortState | undefined>(undefined)
-  const [sortColumns, setSortColumns] = useState<SortColumns | undefined>(undefined)
+  const [sortColumns, setSortColumns] = useState<SortColumns | undefined>({ orderBy: 'HMS', direction: 'ascending' })
   const colHeadRef = useRef(null)
 
   useEffect(() => {
@@ -56,12 +55,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   const allDataKeys = allProducts
     .flatMap((prod) => Object.keys(prod.techData))
     .filter((v, i, a) => a.indexOf(v) === i)
-    .sort((keyA, keyB) => {
-      if (sortRows) {
-        return sortAlphabetically(keyA, keyB, sortRows?.direction === 'descending')
-      }
-      return 1
-    })
+    .sort()
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
@@ -78,19 +72,12 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     return uniqueValues.size > 1
   }
 
-  const handleSortColumn = (sortKey: string | undefined) => {
-    if (sortKey) {
-      setSortRows(
-        sortKey === sortRows?.orderBy && sortRows?.direction === 'descending'
-          ? undefined
-          : {
-              orderBy: sortKey,
-              direction:
-                sortKey === sortRows?.orderBy && sortRows?.direction === 'ascending' ? 'descending' : 'ascending',
-            }
-      )
-    } else setSortRows(undefined)
-  }
+  const rowsWithDifferentValues: { [key: string]: string[] } = Object.fromEntries(
+    Object.entries(rows).filter(([key, row]) => hasDifferentValues({ row }))
+  )
+  const rowsWithSameValues: { [key: string]: string[] } = Object.fromEntries(
+    Object.entries(rows).filter(([key, row]) => !hasDifferentValues({ row }))
+  )
 
   const handleSortRow = (sortKey: string) => {
     setSortColumns(
@@ -118,34 +105,22 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
 
   return (
     <>
-      <Heading level="3" size="medium">
+      {/* <Heading level="3" size="medium">
         Produkter i produktserie
-      </Heading>
-      <SimilarProductsSlider seriesProducts={seriesProducts} />
+      </Heading> */}
+      {/* <SimilarProductsSlider seriesProducts={seriesProducts} /> */}
       <Heading level="3" size="medium">
-        Sammenlign teknisk data med andre produkter i produkserien
+        Produktet finnes i flere varianter
       </Heading>
+      <Heading level="4" size="small">
+        Sammenlign teknisk data med andre varianter av produktet
+      </Heading>
+      {/* <Switch size="small">Vis teknisk data med </Switch> */}
       <div className="comparing-table comparing-table__two-sticky-columns">
-        <Table sort={sortRows} onSortChange={(sortKey) => handleSortColumn(sortKey)}>
+        <Table>
           <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader scope="col" sortKey="name" ref={colHeadRef} sortable>
-                Egenskaper
-              </Table.ColumnHeader>
-              <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
-                Dette produktet
-              </Table.ColumnHeader>
-              {sortedByKey.length > 0 &&
-                sortedByKey.map((product, i) => (
-                  <Table.ColumnHeader key={'id-' + product.id} style={{ height: '5px' }}>
-                    <Link href={`/produkt/${product.id}`}>{'Produkt ' + (i + 1)}</Link>
-                  </Table.ColumnHeader>
-                ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
             <Table.Row key={'hms-row'}>
-              <Table.HeaderCell>
+              <Table.ColumnHeader ref={colHeadRef}>
                 <Button
                   className="sort-button"
                   size="small"
@@ -154,53 +129,86 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
                   onClick={() => handleSortRow('HMS')}
                   icon={iconBasedOnState('HMS')}
                 >
-                  HMS-artnr.
+                  HMS-nr.
                 </Button>
-              </Table.HeaderCell>
-              <Table.DataCell style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
+              </Table.ColumnHeader>
+              <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
                 {mainProduct.hmsArtNr !== undefined ? mainProduct.hmsArtNr : '-'}
-              </Table.DataCell>
+              </Table.ColumnHeader>
               {sortedByKey.map((product) => (
-                <Table.DataCell key={'Hms-' + product.id}>
-                  {product.hmsArtNr !== undefined ? product.hmsArtNr : '-'}
-                </Table.DataCell>
+                <Table.ColumnHeader key={'Hms-' + product.id}>
+                  {/* {product.hmsArtNr !== undefined ? product.hmsArtNr : '-'} */}
+                  <Link href={`/produkt/${product.id}`}>{product.hmsArtNr}</Link>
+                </Table.ColumnHeader>
               ))}
             </Table.Row>
-            {sortedByKey.length > 0 &&
-              Object.entries(rows)
-                .sort(([key, row]) => (hasDifferentValues({ row }) ? -1 : 1))
-                .map(([key, row]) => (
-                  <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>
-                    <Table.HeaderCell>
-                      {hasDifferentValues({ row }) ? (
-                        <Button
-                          className="sort-button"
-                          size="small"
-                          style={{ textAlign: 'left' }}
-                          variant="tertiary"
-                          onClick={() => handleSortRow(key)}
-                          icon={iconBasedOnState(key)}
-                        >
-                          {key}
-                        </Button>
-                      ) : (
-                        <p>{key}</p>
-                      )}
-                    </Table.HeaderCell>
-                    {row.map((value, i) =>
-                      i == 0 ? (
-                        <Table.DataCell
-                          key={key + '-' + i}
-                          style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}
-                        >
-                          {value}
-                        </Table.DataCell>
-                      ) : (
-                        <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
-                      )
-                    )}
-                  </Table.Row>
-                ))}
+          </Table.Header>
+          <Table.Body>
+            {Object.keys(rowsWithDifferentValues).length > 0 &&
+              Object.entries(rowsWithDifferentValues).map(([key, row], i) => (
+                <Table.Row
+                  key={key + 'row'}
+                  className={Object.keys(rowsWithDifferentValues).length == i + 1 ? 'row-with-different-values' : 'asd'}
+                >
+                  <Table.HeaderCell>
+                    <Button
+                      className="sort-button"
+                      size="small"
+                      style={{ textAlign: 'left' }}
+                      variant="tertiary"
+                      onClick={() => handleSortRow(key)}
+                      icon={iconBasedOnState(key)}
+                    >
+                      {key}
+                    </Button>
+                  </Table.HeaderCell>
+                  {row.map((value, i) =>
+                    i == 0 ? (
+                      <Table.DataCell
+                        key={key + '-' + i}
+                        style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}
+                      >
+                        {value}
+                      </Table.DataCell>
+                    ) : (
+                      <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
+                    )
+                  )}
+                </Table.Row>
+              ))}
+            <Table.Row>
+              <Table.DataCell colSpan={2} style={{ position: 'sticky', left: 0 }}>
+                <Heading level="2" size="medium">
+                  Tekniske egenskaper
+                </Heading>
+              </Table.DataCell>
+              {seriesProducts.length > 1 && (
+                <Table.DataCell
+                  colSpan={seriesProducts.length - 1}
+                  style={{ position: 'sticky', left: 0 }}
+                ></Table.DataCell>
+              )}
+            </Table.Row>
+            {Object.keys(rowsWithSameValues).length > 0 &&
+              Object.entries(rowsWithSameValues).map(([key, row]) => (
+                <Table.Row key={key + 'row'}>
+                  <Table.HeaderCell>
+                    <p>{key}</p>
+                  </Table.HeaderCell>
+                  {row.map((value, i) =>
+                    i == 0 ? (
+                      <Table.DataCell
+                        key={key + '-' + i}
+                        style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}
+                      >
+                        {value}
+                      </Table.DataCell>
+                    ) : (
+                      <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
+                    )
+                  )}
+                </Table.Row>
+              ))}
           </Table.Body>
         </Table>
       </div>
