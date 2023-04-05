@@ -8,7 +8,7 @@ export default function Document() {
     <Html lang="no">
       <Head />
       <body>
-        <nav className="nav-topp">
+        <nav className="nav-topp" title="Top navigation">
           <div className="wip-banner">
             <p>
               Siden er under arbeid <span>&#128119;</span>

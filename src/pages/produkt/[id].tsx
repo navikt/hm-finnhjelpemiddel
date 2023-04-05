@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { InferGetServerSidePropsType } from 'next'
 import { Heading } from '@navikt/ds-react'
-
+import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { mapSupplier } from '../../utils/supplier-util'
 import { getProduct, getSupplier, getSeries } from '../../utils/api-util'
 import { createProduct, mapProducts, toSearchQueryString } from '../../utils/product-util'
@@ -41,7 +41,7 @@ export default function ProduktPage({
         <ol>
           <li>
             <Link href={'/' + toSearchQueryString(searchData)}>Oversikt</Link>
-            <NextIcon />
+            <ChevronRightIcon title="right arrow" />
           </li>
           <li>{product.title}</li>
         </ol>
@@ -87,26 +87,5 @@ export default function ProduktPage({
         </article>
       </AnimateLayout>
     </>
-  )
-}
-
-const NextIcon = () => {
-  return (
-    <svg
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      focusable="false"
-      role="img"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="m17.414 12-7.707 7.707-1.414-1.414L14.586 12 8.293 5.707l1.414-1.414L17.414 12Z"
-        fill="currentColor"
-      ></path>
-    </svg>
   )
 }
