@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { ArrowsUpDownIcon, ArrowUpIcon, ArrowDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Table, SortState, Heading, Button } from '@navikt/ds-react'
+import { Table, Heading, Button, Switch } from '@navikt/ds-react'
 import { Product } from '../../utils/product-util'
-import { sortAlphabetically, sortIntWithStringFallback } from '../../utils/sort-util'
+import { sortIntWithStringFallback } from '../../utils/sort-util'
 
 type SimilarProductsProps = {
   mainProduct: Product
@@ -18,6 +18,7 @@ type SortColumns = {
 const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) => {
   const [keyColumnWidth, setKeyColumnWidth] = useState(0)
   const [sortColumns, setSortColumns] = useState<SortColumns | undefined>({ orderBy: 'HMS', direction: 'ascending' })
+  const [showAllRows, setShowAllRows] = useState<boolean>(false)
   const colHeadRef = useRef(null)
 
   useEffect(() => {
@@ -105,17 +106,21 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
 
   return (
     <>
-      {/* <Heading level="3" size="medium">
-        Produkter i produktserie
-      </Heading> */}
-      {/* <SimilarProductsSlider seriesProducts={seriesProducts} /> */}
       <Heading level="3" size="medium">
-        Produktet finnes i flere varianter
+        Produkt varianter
       </Heading>
       <Heading level="4" size="small">
-        Sammenlign teknisk data med andre varianter av produktet
+        Sammenlign variantene av produktet
       </Heading>
-      {/* <Switch size="small">Vis teknisk data med </Switch> */}
+      <Switch
+        size="small"
+        checked={showAllRows}
+        onChange={() => {
+          setShowAllRows(!showAllRows)
+        }}
+      >
+        Slå på for å vise rader med ingen forskjeller i tabellen under
+      </Switch>
       <div className="comparing-table comparing-table__two-sticky-columns">
         <Table>
           <Table.Header>
@@ -176,20 +181,9 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
                   )}
                 </Table.Row>
               ))}
-            <Table.Row>
-              <Table.DataCell colSpan={2} style={{ position: 'sticky', left: 0 }}>
-                <Heading level="2" size="medium">
-                  Tekniske egenskaper
-                </Heading>
-              </Table.DataCell>
-              {seriesProducts.length > 1 && (
-                <Table.DataCell
-                  colSpan={seriesProducts.length - 1}
-                  style={{ position: 'sticky', left: 0 }}
-                ></Table.DataCell>
-              )}
-            </Table.Row>
-            {Object.keys(rowsWithSameValues).length > 0 &&
+
+            {showAllRows &&
+              Object.keys(rowsWithSameValues).length > 0 &&
               Object.entries(rowsWithSameValues).map(([key, row]) => (
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>
