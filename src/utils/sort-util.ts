@@ -9,14 +9,13 @@ const comparatoString = (a: string, b: string) => {
 }
 
 export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = false) => {
-  return desc ? comparatoString(keyA, keyB) : comparatoString(keyB, keyA)
+  return desc ? comparatoString(keyB, keyA) : comparatoString(keyA, keyB)
 }
 
-export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: boolean = true) => {
+export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: boolean = false) => {
   if (parseInt(keyA) && parseInt(keyB)) {
     return desc ? parseInt(keyB) - parseInt(keyA) : parseInt(keyA) - parseInt(keyB)
   }
 
-  console.log(keyA, keyB, comparatoString(keyA, keyB))
-  return desc ? comparatoString(keyA, keyB) : comparatoString(keyB, keyA)
+  return desc ? comparatoString(keyB, keyA) : comparatoString(keyA, keyB)
 }

@@ -1,13 +1,20 @@
-import { FilesIcon, WrenchIcon } from '@navikt/aksel-icons'
-import { Tabs } from '@navikt/ds-react'
+import { FilesIcon, InformationSquareIcon, WrenchIcon } from '@navikt/aksel-icons'
+import { Heading, Tabs } from '@navikt/ds-react'
 import React from 'react'
+import { sortAlphabetically } from 'src/utils/sort-util'
+import { Supplier } from 'src/utils/supplier-util'
 import { Product, Document, TechData } from '../../utils/product-util'
 import DefinitionList from '../definition-list/DefinitionList'
 
-export const InformationTabs = ({ product }: { product: Product }) => {
+export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => {
   return (
-    <Tabs defaultValue="techData" selectionFollowsFocus>
+    <Tabs defaultValue="productDescription" selectionFollowsFocus>
       <Tabs.List>
+        <Tabs.Tab
+          value="productDescription"
+          label="Produktbeskrivelse fra leverandør"
+          icon={<InformationSquareIcon title="Skiftenøkkel" />}
+        />
         <Tabs.Tab value="techData" label="Teknisk data" icon={<WrenchIcon title="Skiftenøkkel" />} />
         <Tabs.Tab
           value="documents"
@@ -15,11 +22,19 @@ export const InformationTabs = ({ product }: { product: Product }) => {
           icon={<FilesIcon title="Dokumenter" />}
         />
       </Tabs.List>
-      <Tabs.Panel value="techData" className="h-24 w-full bg-gray-50 p-4">
-        {product.techData && <TechnicalSpesifications techData={product.techData} />}
-        {!product.techData && <p>Ingen teknsik data på dette produktet.</p>}
+      <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
+        <div style={{ padding: '16px' }}>
+          {product.attributes.shortdescription && <p>{product.attributes.shortdescription}</p>}
+          {product.attributes.text && <p>{product.attributes.text}</p>}{' '}
+        </div>
       </Tabs.Panel>
-      <Tabs.Panel value="documents" className="h-24 w-full bg-gray-50 p-4">
+      <Tabs.Panel value="techData" className="h-24 w-full p-4">
+        <div style={{ padding: '16px' }}>
+          {product.techData && <TechnicalSpesifications techData={product.techData} />}
+          {!product.techData && <p>Ingen teknsik data på dette produktet.</p>}
+        </div>
+      </Tabs.Panel>
+      <Tabs.Panel value="documents" className="h-24 w-full p-4">
         {product.documents.length > 0 && <Documents documents={product.documents} />}
         {product.documents.length == 0 && <p>Ingen teknsik data på dette produktet.</p>}
       </Tabs.Panel>
@@ -28,12 +43,14 @@ export const InformationTabs = ({ product }: { product: Product }) => {
 }
 
 const TechnicalSpesifications = ({ techData }: { techData: TechData }) => {
-  const technicalSpesifications = Object.entries(techData).map(([key, value], index) => (
-    <React.Fragment key={`${key}${index}`}>
-      <DefinitionList.Term>{key}</DefinitionList.Term>
-      <DefinitionList.Definition>{value.value + (value.unit ? ' ' + value.unit : '')}</DefinitionList.Definition>
-    </React.Fragment>
-  ))
+  const technicalSpesifications = Object.entries(techData)
+    .sort(([keyA, valueA], [keyB, valueB]) => sortAlphabetically(keyA, keyB))
+    .map(([key, value], index) => (
+      <React.Fragment key={`${key}${index}`}>
+        <DefinitionList.Term>{key}</DefinitionList.Term>
+        <DefinitionList.Definition>{value.value + (value.unit ? ' ' + value.unit : '')}</DefinitionList.Definition>
+      </React.Fragment>
+    ))
 
   return <DefinitionList>{technicalSpesifications}</DefinitionList>
 }

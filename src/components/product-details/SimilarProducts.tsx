@@ -119,7 +119,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
           setShowAllRows(!showAllRows)
         }}
       >
-        Slå på for å vise rader med ingen forskjeller i tabellen under
+        Vis alle egenskaper
       </Switch>
       <div className="comparing-table comparing-table__two-sticky-columns">
         <Table>

@@ -51,8 +51,10 @@ interface Attributes {
 
 interface AgreementInfo {
   id: string
+  identifier: string | null
   rank: number
   postNr: number
+  postIdentifier: string | null
 }
 
 export const createProduct = (source: ProductSourceResponse): Product => {

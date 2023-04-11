@@ -11,13 +11,51 @@
 }
 
 .produkt-info {
-  width: 100%;
-
-  p {
-    margin-bottom: var(--a-spacing-4);
+  &__tabs {
+    margin-top: var(--a-spacing-10);
+    margin-bottom: var(--a-spacing-10);
   }
 
-  .bilde-og-beskrivelse {
+  &__supplier-info {
+    margin-top: var(--a-spacing-8);
+
+    .navds-heading {
+      margin-bottom: var(--a-spacing-2);
+    }
+    p {
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+    }
+  }
+
+  &__agreement-info {
+    margin-top: var(--a-spacing-10);
+
+    display: flex;
+    justify-content: center;
+    .navds-guide-panel {
+      max-width: 800px;
+    }
+    p {
+      margin: 0px;
+    }
+  }
+
+  &__rank {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    background-color: var(--a-green-200);
+    border-radius: 12px;
+    margin-left: -11px;
+  }
+
+  width: 100%;
+
+  &__top {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -28,8 +66,8 @@
     }
   }
 
-  .bilde-og-beskrivelse::before,
-  .bilde-og-beskrivelse::after {
+  &__top::before,
+  &__top::after {
     bottom: 0;
     content: '';
     position: absolute;
@@ -37,43 +75,26 @@
     width: 100vw;
   }
 
-  .bilde-og-beskrivelse::before {
+  &__top::before {
     right: 100%;
   }
 
-  .bilde-og-beskrivelse::after {
+  &__top::after {
     left: 100%;
   }
 
-  .bilde-og-beskrivelse,
-  .bilde-og-beskrivelse::after,
-  .bilde-og-beskrivelse::before {
+  &__top,
+  &__top::after,
+  &__top::before {
     background-color: var(--a-gray-50);
   }
 
-  .produkt-beskrivelse {
+  &__top-right {
     @include mixins.for-size(tablet-up) {
       padding: var(--a-spacing-5) var(--a-spacing-5);
-      margin-left: var(--a-spacing-5);
+      margin-left: var(--a-spacing-8);
       border-left: 1px solid var(--a-gray-300);
     }
-
-    .leverandør {
-      margin-top: var(--a-spacing-5);
-
-      .navds-heading {
-        margin-bottom: var(--a-spacing-2);
-      }
-      p {
-        margin-top: 0.2rem;
-        margin-bottom: 0.2rem;
-      }
-    }
-  }
-
-  .product-info-tabs {
-    margin-top: var(--a-spacing-10);
-    margin-bottom: var(--a-spacing-10);
   }
 
   .similar-products {
