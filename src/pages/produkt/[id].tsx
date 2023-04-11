@@ -64,10 +64,10 @@ export default function ProduktPage({
         </ol>
       </nav>
       <AnimateLayout>
-        <article className="produkt-info">
-          <section className="produkt-info__top">
+        <article className="product-info">
+          <section className="product-info__top">
             <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
-            <div className="produkt-info__top-right">
+            <div className="product-info__top-right">
               <Heading level="1" size="large">
                 {product.attributes.series ? product.attributes.series : product.title}
               </Heading>
@@ -83,7 +83,7 @@ export default function ProduktPage({
                   {product.attributes.bestillingsordning ? 'Ja' : 'Nei'}
                 </DefinitionList.Definition>
               </DefinitionList>
-              <div className="produkt-info__supplier-info">
+              <div className="product-info__supplier-info">
                 <Heading level="2" size="small">
                   Leverandør
                 </Heading>
@@ -104,17 +104,18 @@ export default function ProduktPage({
           </section>
           <section>
             {product.agreementInfo && (
-              <div className="produkt-info__agreement-info">
+              <div className="product-info__agreement-info">
                 <GuidePanel>
                   Dette produktet er på avtale med Nav og er rangert som nr {product.agreementInfo.rank} under post{' '}
-                  {product.agreementInfo.postNr}: {postTitle}.<br />
+                  {product.agreementInfo.postNr}: {postTitle}.
+                  <br />
                   <br />
                   Du kan lese mer om avtalen for {agreement.title}{' '}
                   <a
                     target="_blank"
-                    href={`https://www.hjelpemiddeldatabasen.no/news.asp?newsid=${product.agreementInfo.identifier.slice(
-                      -4
-                    )}&x_newstype=7`}
+                    href={`https://www.hjelpemiddeldatabasen.no/news.asp?newsid=${
+                      product.agreementInfo.identifier ? product.agreementInfo.identifier.slice(-4) : ''
+                    }&x_newstype=7`}
                   >
                     her (åpes på ny side)
                   </a>{' '}
@@ -126,11 +127,11 @@ export default function ProduktPage({
             )}
           </section>
 
-          <section className="product-info__tabs" style={{ paddingTop: '32px' }}>
+          <section className="product-info__tabs">
             <InformationTabs product={product} supplier={supplier}></InformationTabs>
           </section>
           {seriesProducts && seriesProducts.length > 0 && (
-            <section className="similar-products">
+            <section className="product-info__similar-products">
               <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
             </section>
           )}

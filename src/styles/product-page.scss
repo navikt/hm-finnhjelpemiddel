@@ -1,21 +1,16 @@
 @use './_mixins';
 
-.produkt-info > * {
+.product-info > * {
   max-width: 1200px;
   margin: auto;
   padding: 0 var(--a-spacing-6);
 }
 
-.produkt-info:last-child {
+.product-info:last-child {
   margin-bottom: var(--a-spacing-20);
 }
 
-.produkt-info {
-  &__tabs {
-    margin-top: var(--a-spacing-10);
-    margin-bottom: var(--a-spacing-10);
-  }
-
+.product-info {
   &__supplier-info {
     margin-top: var(--a-spacing-8);
 
@@ -97,10 +92,17 @@
     }
   }
 
-  .similar-products {
+  &__tabs {
+    padding-top: var(--a-spacing-10);
+
+    &__panel {
+      margin-top: var(--a-spacing-4);
+    }
+  }
+
+  &__similar-products {
     display: flex;
     flex-direction: column;
-    margin-top: var(--a-spacing-10);
     padding-top: var(--a-spacing-10);
 
     .navds-heading {

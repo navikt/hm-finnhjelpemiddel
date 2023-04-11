@@ -23,20 +23,22 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
         />
       </Tabs.List>
       <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
-        <div style={{ padding: '16px' }}>
+        <div className="product-info__tabs__panel">
           {product.attributes.shortdescription && <p>{product.attributes.shortdescription}</p>}
           {product.attributes.text && <p>{product.attributes.text}</p>}{' '}
         </div>
       </Tabs.Panel>
       <Tabs.Panel value="techData" className="h-24 w-full p-4">
-        <div style={{ padding: '16px' }}>
+        <div className="product-info__tabs__panel">
           {product.techData && <TechnicalSpesifications techData={product.techData} />}
           {!product.techData && <p>Ingen teknsik data på dette produktet.</p>}
         </div>
       </Tabs.Panel>
       <Tabs.Panel value="documents" className="h-24 w-full p-4">
-        {product.documents.length > 0 && <Documents documents={product.documents} />}
-        {product.documents.length == 0 && <p>Ingen teknsik data på dette produktet.</p>}
+        <div className="product-info__tabs__panel">
+          {product.documents.length > 0 && <Documents documents={product.documents} />}
+          {product.documents.length == 0 && <p>Ingen teknsik data på dette produktet.</p>}
+        </div>
       </Tabs.Panel>
     </Tabs>
   )
