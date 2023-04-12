@@ -17,13 +17,14 @@ export interface Product {
   attributes: Attributes
   techData: TechData
   hmsArtNr: string | null
-  agreementInfo: AgreementInfo | null
   supplierRef: string
+  agreementInfo: AgreementInfo | null
   isoCategory: string
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
   documents: Document[]
+  supplierId: string
   seriesId: string | null
 }
 
@@ -65,13 +66,14 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
     agreementInfo: source.agreementInfo,
-    supplierRef: source.supplier?.id,
+    supplierRef: source.supplierRef,
     isoCategory: source.isoCategory,
     accessory: source.accessory,
     sparepart: source.sparepart,
     photos: mapPhotoInfo(source.media),
     documents: mapDocuments(source.media),
     seriesId: source.seriesId,
+    supplierId: source.supplier?.id,
   }
 }
 

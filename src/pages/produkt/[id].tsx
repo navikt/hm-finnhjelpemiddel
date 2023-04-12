@@ -25,7 +25,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
   const productData = await getProduct(context.params.id)
   const product = createProduct(productData._source)
 
-  const supplierData = product.supplierRef ? await getSupplier(String(product.supplierRef)) : null
+  const supplierData = product.supplierId ? await getSupplier(String(product.supplierId)) : null
   const supplier = supplierData ? mapSupplier(supplierData._source) : null
 
   const seriesData = product.seriesId ? await getSeries(String(product.seriesId)) : null
@@ -72,9 +72,13 @@ export default function ProduktPage({
                 {product.attributes.series ? product.attributes.series : product.title}
               </Heading>
               <DefinitionList>
-                <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
+                <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
                 <DefinitionList.Definition>
-                  {product.hmsArtNr ? product.hmsArtNr : 'Mangler HMS nummer'}
+                  {product.hmsArtNr ? product.hmsArtNr : 'Mangler HMS-nr.'}
+                </DefinitionList.Definition>
+                <DefinitionList.Term>Lev-artnr.</DefinitionList.Term>
+                <DefinitionList.Definition>
+                  {product.supplierRef ? product.supplierRef : 'Mangler lev-artnr.'}
                 </DefinitionList.Definition>
                 <DefinitionList.Term>Iso-klassifisering</DefinitionList.Term>
                 <DefinitionList.Definition>{getIsoCategoryName(product.isoCategory)}</DefinitionList.Definition>
