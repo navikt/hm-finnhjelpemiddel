@@ -2,9 +2,23 @@
 @import '@navikt/ds-css';
 
 .comparing-table {
-  max-width: 860px;
+  max-width: 1152px;
   overflow-x: scroll;
   margin: var(--a-spacing-2) 0;
+
+  @include mixins.for-size(tablet-up) {
+    &__width50 {
+      .navds-table {
+        width: 50%;
+      }
+    }
+
+    &__width75 {
+      .navds-table {
+        width: 75%;
+      }
+    }
+  }
 
   table {
     border-collapse: separate;
@@ -20,6 +34,7 @@
   tr > td:first-child {
     position: sticky;
     left: 0;
+    width: 250px;
   }
 
   tbody th {
@@ -52,32 +67,45 @@
       border-bottom: 3px solid black;
     }
   }
-
-  .test {
-    position: sticky;
-    left: 0;
-  }
 }
 
 .comparing-table__two-sticky-columns {
+  thead th:nth-child(2) {
+    background-color: var(--a-bg-default);
+  }
+
+  tr > td:nth-child(2) {
+    background-color: var(--a-bg-subtle);
+  }
+
+  thead th:first-child {
+    border-right: 1px solid var(--a-gray-400);
+  }
+
+  tbody th {
+    border-right: 1px solid var(--a-gray-400);
+  }
+
   @include mixins.for-size(tablet-up) {
-    thead th:nth-child(2) {
-      background-color: var(--a-bg-default);
-    }
-
-    thead th:nth-child(2) {
-      border-right: 1px solid var(--a-gray-400);
-    }
-
     tr > th:nth-child(2),
     tr > td:nth-child(2) {
       position: sticky;
-      left: 100px;
+      left: 250px;
+    }
+    thead th:nth-child(2) {
+      border-right: 1px solid var(--a-gray-400);
     }
 
     tr > td:nth-child(2) {
       border-right: 1px solid var(--a-gray-400);
-      background-color: var(--a-bg-subtle);
+    }
+
+    thead th:first-child {
+      border-right: 1px solid var(--a-surface-default);
+    }
+
+    tbody th {
+      border-right: 1px solid var(--a-gray-100);
     }
   }
 }

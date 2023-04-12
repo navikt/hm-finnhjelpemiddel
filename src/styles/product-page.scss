@@ -3,7 +3,11 @@
 .product-info > * {
   max-width: 1200px;
   margin: auto;
-  padding: 0 var(--a-spacing-6);
+  padding: 0 var(--a-spacing-3);
+
+  @include mixins.for-size(tablet-up) {
+    padding: 0 var(--a-spacing-6);
+  }
 }
 
 .product-info:last-child {

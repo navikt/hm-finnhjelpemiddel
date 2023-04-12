@@ -104,6 +104,14 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     )
   }
 
+  const tableClassName =
+    'comparing-table comparing-table__two-sticky-columns' +
+    (seriesProducts.length <= 2
+      ? ' comparing-table__width50'
+      : seriesProducts.length === 3
+      ? ' comparing-table__width75'
+      : '')
+
   return (
     <>
       <Heading level="3" size="medium">
@@ -121,7 +129,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       >
         Vis alle egenskaper
       </Switch>
-      <div className="comparing-table comparing-table__two-sticky-columns">
+      <div className={tableClassName}>
         <Table>
           <Table.Header>
             <Table.Row key={'hms-row'}>
