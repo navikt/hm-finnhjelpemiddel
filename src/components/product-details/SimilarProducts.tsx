@@ -95,7 +95,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
         <ArrowDownIcon title="Sort descending" height={30} width={30} />
       )
     ) : (
-      <ArrowsUpDownIcon title="Sort off" height={30} width={30} />
+      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} />
     )
   }
 
@@ -110,10 +110,10 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   return (
     <>
       <Heading level="3" size="medium">
-        Produkt varianter
+        Produktvarianter
       </Heading>
-      <Heading level="4" size="small">
-        Sammenlign variantene av produktet
+      <Heading level="4" size="xsmall">
+        Sammenlign med de andre variantene av produktet
       </Heading>
       <Switch
         size="small"

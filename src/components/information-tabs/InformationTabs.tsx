@@ -31,13 +31,13 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
       <Tabs.Panel value="techData" className="h-24 w-full p-4">
         <div className="product-info__tabs__panel">
           {product.techData && <TechnicalSpesifications techData={product.techData} />}
-          {!product.techData && <p>Ingen teknsik data på dette produktet.</p>}
+          {!product.techData && <p>Ingen teknisk data på dette produktet.</p>}
         </div>
       </Tabs.Panel>
       <Tabs.Panel value="documents" className="h-24 w-full p-4">
         <div className="product-info__tabs__panel">
           {product.documents.length > 0 && <Documents documents={product.documents} />}
-          {product.documents.length == 0 && <p>Ingen teknsik data på dette produktet.</p>}
+          {product.documents.length == 0 && <p>Ingen teknisk data på dette produktet.</p>}
         </div>
       </Tabs.Panel>
     </Tabs>

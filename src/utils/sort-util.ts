@@ -1,4 +1,4 @@
-const comparatoString = (a: string, b: string) => {
+const stringComparator = (a: string, b: string) => {
   if (a < b || b === undefined) {
     return -1
   }
@@ -9,7 +9,7 @@ const comparatoString = (a: string, b: string) => {
 }
 
 export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = false) => {
-  return desc ? comparatoString(keyB, keyA) : comparatoString(keyA, keyB)
+  return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
 
 export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: boolean = false) => {
@@ -17,5 +17,5 @@ export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: bool
     return desc ? parseInt(keyB) - parseInt(keyA) : parseInt(keyA) - parseInt(keyB)
   }
 
-  return desc ? comparatoString(keyB, keyA) : comparatoString(keyA, keyB)
+  return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
