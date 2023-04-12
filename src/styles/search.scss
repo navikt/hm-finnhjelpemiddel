@@ -226,6 +226,13 @@
     margin-top: var(--a-spacing-3);
     z-index: 2;
     font-size: 16px;
+    dt {
+      padding-top: 0;
+    }
+
+    dd {
+      padding-top: 0;
+    }
 
     @include mixins.for-size(phone-only) {
       display: none;

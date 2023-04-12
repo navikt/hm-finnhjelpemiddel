@@ -81,26 +81,21 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   )
 
   const handleSortRow = (sortKey: string) => {
-    setSortColumns(
-      sortKey === sortColumns?.orderBy && sortColumns?.direction === 'descending'
-        ? undefined
-        : {
-            orderBy: sortKey,
-            direction:
-              sortKey === sortColumns?.orderBy && sortColumns?.direction === 'ascending' ? 'descending' : 'ascending',
-          }
-    )
+    setSortColumns({
+      orderBy: sortKey,
+      direction: sortColumns?.direction === 'ascending' ? 'descending' : 'ascending',
+    })
   }
 
   const iconBasedOnState = (key: string) => {
     return sortColumns?.orderBy === key ? (
       sortColumns?.direction === 'ascending' ? (
-        <ArrowUpIcon title="up arrow" height={30} width={30} />
+        <ArrowUpIcon title="Sort ascending" height={30} width={30} />
       ) : (
-        <ArrowDownIcon title="up arrow" height={30} width={30} />
+        <ArrowDownIcon title="Sort descending" height={30} width={30} />
       )
     ) : (
-      <ArrowsUpDownIcon title="up and down arrow" height={30} width={30} />
+      <ArrowsUpDownIcon title="Sort off" height={30} width={30} />
     )
   }
 
@@ -150,7 +145,6 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
               </Table.ColumnHeader>
               {sortedByKey.map((product) => (
                 <Table.ColumnHeader key={'Hms-' + product.id}>
-                  {/* {product.hmsArtNr !== undefined ? product.hmsArtNr : '-'} */}
                   <Link href={`/produkt/${product.id}`}>{product.hmsArtNr}</Link>
                 </Table.ColumnHeader>
               ))}
@@ -264,7 +258,6 @@ const SimilarProductsSlider = ({ seriesProducts }: { seriesProducts: Product[] }
             nextProduct()
           }}
           icon={<ChevronRightIcon title="right arrow" height={30} width={30} />}
-          // icon={<Next height={30} width={30} />}
         />
       )}
     </div>
