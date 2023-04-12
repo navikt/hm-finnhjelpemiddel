@@ -31,9 +31,9 @@
     margin-top: var(--a-spacing-10);
 
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     .navds-guide-panel {
-      max-width: 800px;
+      // max-width: 800px;
     }
     p {
       margin: 0px;
