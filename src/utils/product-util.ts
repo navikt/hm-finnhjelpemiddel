@@ -17,17 +17,24 @@ export interface Product {
   attributes: Attributes
   techData: TechData
   hmsArtNr: string | null
-  agreementInfo: AgreementInfo | null
   supplierRef: string
+  agreementInfo: AgreementInfo | null
   isoCategory: string
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
+  documents: Document[]
+  supplierId: string
   seriesId: string | null
 }
 
 export interface Photo {
   uri: string
+}
+
+export interface Document {
+  uri: string
+  title: string
 }
 
 export interface TechData {
@@ -45,8 +52,10 @@ interface Attributes {
 
 interface AgreementInfo {
   id: string
+  identifier: string | null
   rank: number
   postNr: number
+  postIdentifier: string | null
 }
 
 export const createProduct = (source: ProductSourceResponse): Product => {
@@ -57,12 +66,14 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
     agreementInfo: source.agreementInfo,
-    supplierRef: source.supplier?.id,
+    supplierRef: source.supplierRef,
     isoCategory: source.isoCategory,
     accessory: source.accessory,
     sparepart: source.sparepart,
     photos: mapPhotoInfo(source.media),
+    documents: mapDocuments(source.media),
     seriesId: source.seriesId,
+    supplierId: source.supplier?.id,
   }
 }
 
@@ -80,6 +91,24 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
     .sort((a: MediaResponse, b: MediaResponse) => a.order - b.order)
     .map((image: MediaResponse) => ({
       uri: image.uri,
+    }))
+}
+
+const mapDocuments = (media: MediaResponse[]): Document[] => {
+  const seen: { [uri: string]: boolean } = {}
+  return media
+    .filter((media: MediaResponse) => {
+      if (!(media.type == MediaType.PDF && media.text && media.uri) || seen[media.uri]) {
+        return false
+      }
+
+      seen[media.uri] = true
+      return true
+    })
+    .sort((a: MediaResponse, b: MediaResponse) => (a.text && b.text ? (a.text > b.text ? 1 : -1) : -1))
+    .map((doc: MediaResponse) => ({
+      uri: doc.uri,
+      title: doc.text ? doc.text : '',
     }))
 }
 

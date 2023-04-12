@@ -110,3 +110,28 @@ export enum MediaType {
   VIDEO = 'VIDEO',
   OTHER = 'OTHER',
 }
+
+export interface AgreementsSourceResponse {
+  id: string
+  identifier: string
+  title: string
+  resume: string
+  text: string
+  reference: string
+  published: string
+  expired: string
+  attachments: []
+  posts: PostResponse[]
+  createdBy: string
+  updatedBy: string
+  created: string
+  updated: string
+}
+
+export interface PostResponse {
+  identifier: string
+  nr: number
+  title: string
+  description: string
+  created: string
+}

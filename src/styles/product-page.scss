@@ -1,23 +1,60 @@
 @use './_mixins';
 
-.produkt-info > * {
+.product-info > * {
   max-width: 1200px;
   margin: auto;
-  padding: 0 var(--a-spacing-6) ;
+  padding: 0 var(--a-spacing-3);
+
+  @include mixins.for-size(tablet-up) {
+    padding: 0 var(--a-spacing-6);
+  }
 }
 
-.produkt-info:last-child {
+.product-info:last-child {
   margin-bottom: var(--a-spacing-20);
 }
 
-.produkt-info {
-  width: 100%;
+.product-info {
+  &__supplier-info {
+    margin-top: var(--a-spacing-8);
 
-  p {
-    margin-bottom: var(--a-spacing-4);
+    .navds-heading {
+      margin-bottom: var(--a-spacing-2);
+    }
+    p {
+      margin-top: 0.2rem;
+      margin-bottom: 0.2rem;
+    }
   }
 
-  .bilde-og-beskrivelse {
+  &__agreement-info {
+    margin-top: var(--a-spacing-10);
+
+    display: flex;
+    justify-content: flex-start;
+    .navds-guide-panel {
+      // max-width: 800px;
+    }
+    p {
+      margin: 0px;
+    }
+  }
+
+  &__rank {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    background-color: var(--a-green-200);
+    border-radius: 12px;
+    margin-left: -11px;
+  }
+
+  width: 100%;
+
+  &__top {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -28,8 +65,8 @@
     }
   }
 
-  .bilde-og-beskrivelse::before,
-  .bilde-og-beskrivelse::after {
+  &__top::before,
+  &__top::after {
     bottom: 0;
     content: '';
     position: absolute;
@@ -37,53 +74,39 @@
     width: 100vw;
   }
 
-  .bilde-og-beskrivelse::before {
+  &__top::before {
     right: 100%;
   }
 
-  .bilde-og-beskrivelse::after {
+  &__top::after {
     left: 100%;
   }
 
-  .bilde-og-beskrivelse,
-  .bilde-og-beskrivelse::after,
-  .bilde-og-beskrivelse::before {
+  &__top,
+  &__top::after,
+  &__top::before {
     background-color: var(--a-gray-50);
   }
 
-  .produkt-beskrivelse {
+  &__top-right {
     @include mixins.for-size(tablet-up) {
       padding: var(--a-spacing-5) var(--a-spacing-5);
-      margin-left: var(--a-spacing-5);
+      margin-left: var(--a-spacing-8);
       border-left: 1px solid var(--a-gray-300);
     }
+  }
 
-    .leverandør {
-      margin-top: var(--a-spacing-5);
+  &__tabs {
+    padding-top: var(--a-spacing-10);
 
-      .navds-heading {
-        margin-bottom: var(--a-spacing-2);
-      }
-      p {
-        margin-top: 0.2rem;
-        margin-bottom: 0.2rem;
-      }
+    &__panel {
+      margin-top: var(--a-spacing-4);
     }
   }
 
-  .product-accordion {
-    margin-top: var(--a-spacing-10);
-    margin-bottom: var(--a-spacing-10);
-    .info-accordion {
-      max-width: 600px;
-    }
-  }
-
-  .similar-products {
+  &__similar-products {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--a-gray-300);
-    margin-top: var(--a-spacing-10);
     padding-top: var(--a-spacing-10);
 
     .navds-heading {

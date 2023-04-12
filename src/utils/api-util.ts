@@ -564,6 +564,14 @@ export async function getSupplier(id: string) {
   return res.json()
 }
 
+export async function getAgreement(id: string) {
+  const res = await fetch(process.env.HM_SEARCH_URL + `/agreements/_doc/${id}`, {
+    method: 'GET',
+  })
+
+  return res.json()
+}
+
 export async function getSeries(seriesId: string) {
   const query = {
     bool: {
