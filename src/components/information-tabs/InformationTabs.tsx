@@ -73,7 +73,7 @@ const Documents = ({ documents }: { documents: Document[] }) => {
   return (
     <ul>
       {documents.map((doc, index) => (
-        <li>
+        <li key={index}>
           {doc.title.length > 0 && (
             <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
               {titleCapitalized(doc.title)} (PDF)

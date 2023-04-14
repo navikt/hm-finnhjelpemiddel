@@ -117,6 +117,7 @@ export default function ProduktPage({
                   Du kan lese mer om avtalen for {agreement.title}{' '}
                   <a
                     target="_blank"
+                    rel="noreferrer"
                     href={`https://www.hjelpemiddeldatabasen.no/news.asp?newsid=${
                       product.agreementInfo.identifier ? product.agreementInfo.identifier.slice(-4) : ''
                     }&x_newstype=7`}
