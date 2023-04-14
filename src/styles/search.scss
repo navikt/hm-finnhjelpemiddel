@@ -5,14 +5,14 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-width: 288px;
     height: fit-content;
+    margin-bottom: var(--a-spacing-5);
 
-    @include mixins.for-size(phone-only) {
-      margin-bottom: var(--a-spacing-5);
+    @include mixins.for-size(desktop-up) {
+      margin-bottom: 0;
     }
 
-    @include mixins.for-size(tablet-up) {
+    @include mixins.for-size(desktop-up) {
       max-width: 425px;
       margin-right: var(--a-spacing-12);
       padding-top: 0;
@@ -45,7 +45,7 @@
     position: fixed;
     top: var(--a-spacing-4);
     right: var(--a-spacing-4);
-    z-index: 999;
+    z-index: 2;
   }
 
   &__expand-button {
@@ -55,13 +55,14 @@
 
   &__focus-on-results {
     position: absolute;
-    left: -999px;
+    opacity: 0;
   }
 
   &__focus-on-results:focus,
   &__focus-on-results:focus-visible,
   &__focus-on-results:focus-within {
     position: unset;
+    opacity: 1;
     margin-bottom: 16px;
   }
 }
@@ -82,7 +83,7 @@
       margin-bottom: var(--a-spacing-2);
     }
 
-    @include mixins.for-size(tablet-up) {
+    @include mixins.for-size(desktop-up) {
       margin-left: 0;
       margin-right: var(--a-spacing-6);
 
@@ -128,7 +129,15 @@
   display: flex;
   flex-direction: column;
 
-  &__compare-checkbox {
+  &:hover {
+    border: 1px solid var(--a-border-action);
+  }
+
+  &:focus-within {
+    box-shadow: var(--a-shadow-focus);
+  }
+
+  &__header {
     width: 100%;
     align-self: flex-start;
     padding: var(--a-spacing-1) var(--a-spacing-5);
@@ -150,7 +159,7 @@
     color: var(--ac-link-panel-text, var(--a-text-default));
     font-weight: 400;
 
-    &:hover {
+    &:hover, &:focus {
       text-decoration: underline;
       color: var(--ac-link-panel-hover-text, var(--a-text-action));
     }
@@ -164,24 +173,6 @@
       left: 0;
       z-index: 1;
     }
-  }
-
-  &:hover {
-    border: 1px solid var(--a-border-action);
-
-    .search-result__link {
-      text-decoration: underline;
-      color: var(--ac-link-panel-hover-text, var(--a-text-action));
-    }
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-within {
-    box-shadow: var(--a-shadow-focus);
-    outline: none;
   }
 
   &__chevron-container {
