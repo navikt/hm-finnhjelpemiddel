@@ -103,10 +103,10 @@ const SearchResults = ({
             size="small"
             variant="neutral"
           >
+            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
             <ToggleGroup.Item value="products" ref={productViewToggleRef}>
               Enkeltprodukter
             </ToggleGroup.Item>
-            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
           </ToggleGroup>
         </div>
         <div>
