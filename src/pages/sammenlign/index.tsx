@@ -89,7 +89,7 @@ const CompareTable = ({
             {productsToCompare.length > 0 &&
               productsToCompare.map((product) => (
                 <Table.ColumnHeader key={'id-' + product.id}>
-                  <ProductCard product={product} removeProduct={removeProduct} fullWidth />
+                  <ProductCard product={product} removeProduct={removeProduct} />
                 </Table.ColumnHeader>
               ))}
           </Table.Row>

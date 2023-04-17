@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { ArrowsUpDownIcon, ArrowUpIcon, ArrowDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
@@ -99,14 +100,6 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     )
   }
 
-  const tableClassName =
-    'comparing-table comparing-table__two-sticky-columns' +
-    (seriesProducts.length <= 2
-      ? ' comparing-table__width50'
-      : seriesProducts.length === 3
-      ? ' comparing-table__width75'
-      : '')
-
   return (
     <>
       <Heading level="3" size="medium">
@@ -124,7 +117,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       >
         Vis alle egenskaper
       </Switch>
-      <div className={tableClassName}>
+      <div className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
         <Table>
           <Table.Header>
             <Table.Row key={'hms-row'}>

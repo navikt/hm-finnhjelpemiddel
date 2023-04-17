@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import classNames from 'classnames'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { BodyShort, Button, Heading } from '@navikt/ds-react'
@@ -11,10 +10,9 @@ import { Product } from '../utils/product-util'
 type ProductCardProps = {
   product: Product
   removeProduct: (product: Product) => void
-  fullWidth?: boolean
 }
 
-const ProductCard = ({ product, removeProduct, fullWidth = false }: ProductCardProps) => {
+const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
@@ -23,7 +21,7 @@ const ProductCard = ({ product, removeProduct, fullWidth = false }: ProductCardP
   }
 
   return (
-    <motion.div className={classNames('product-card', { 'product-card--fullWidth': fullWidth })}>
+    <motion.div className="product-card">
       <div className="product-card__image">
         <div className="image">
           {!hasImage && (

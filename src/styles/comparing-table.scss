@@ -7,16 +7,9 @@
   margin: var(--a-spacing-2) 0;
 
   @include mixins.for-size(tablet-up) {
-    &__width50 {
-      .navds-table {
-        width: 50%;
-      }
-    }
-
-    &__width75 {
-      .navds-table {
-        width: 75%;
-      }
+    .navds-table {
+      width: auto;
+      min-width: 50%;
     }
   }
 
