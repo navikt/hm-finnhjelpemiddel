@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { Collapse, Delete, Expand, Next } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading } from '@navikt/ds-react'
-import { ImageIcon } from '@navikt/aksel-icons'
+import { Collapse, Expand, Next } from '@navikt/ds-icons'
+import { Button } from '@navikt/ds-react'
 import { Product } from '../../utils/product-util'
 import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-state-util'
+
+import ProductCard from '../ProductCard'
 
 const containerVariants: Variants = {
   hidden: { opacity: 1 },
@@ -43,11 +42,7 @@ const productVariants: Variants = {
     scale: 1,
     transition: {
       type: 'spring',
-      // duration: 0.4,
     },
-    // transition: {
-    //   duration: 0.2,
-    // },
   },
 }
 
@@ -95,11 +90,11 @@ const CompareMenu = () => {
                       animate="visible"
                       exit="hidden"
                     >
-                      <ChosenProductCard
+                      <ProductCard
+                        key={'compare-' + array[array.length - 1 - index].id}
                         product={array[array.length - 1 - index]}
                         removeProduct={removeProduct}
-                        key={'compare-' + array[array.length - 1 - index].id}
-                      ></ChosenProductCard>
+                      ></ProductCard>
                     </motion.li>
                   ))}
                 </AnimatePresence>
@@ -154,57 +149,6 @@ const CompareMenu = () => {
       {compareMenuState === CompareMenuState.Open && openView}
       {compareMenuState === CompareMenuState.Minimized && miniView}
     </AnimatePresence>
-  )
-}
-
-const ChosenProductCard = ({
-  product,
-  removeProduct,
-}: {
-  product: Product
-  removeProduct: (product: Product) => void
-}) => {
-  const hasImage = product.photos.length !== 0
-  const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
-
-  const imageLoader = ({ src }: { src: string }) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
-  }
-
-  return (
-    <motion.div className="compare-menu__product">
-      <div className="compare-menu__image">
-        <div className="image">
-          {!hasImage && (
-            <ImageIcon
-              width="100%"
-              height="100%"
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
-          )}
-          {hasImage && (
-            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" fill style={{ objectFit: 'contain' }} />
-          )}
-        </div>
-        <div className="overlay">
-          <Button
-            className="delete-product"
-            onClick={() => removeProduct(product)}
-            icon={<Delete title="Fjern produkt fra sammenligning" />}
-          />
-        </div>
-      </div>
-      <div className="compare-menu__info">
-        <Heading size="xsmall" className="compare-menu__product-title">
-          {product.title}
-        </Heading>
-        <div className="compare-menu__hms-nr">
-          <BodyShort size="small">HMS-nr.</BodyShort>
-          <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : 'mangler'}</BodyShort>
-        </div>
-      </div>
-    </motion.div>
   )
 }
 

@@ -1,0 +1,62 @@
+import { useState } from 'react'
+import classNames from 'classnames'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Delete } from '@navikt/ds-icons'
+import { ImageIcon } from '@navikt/aksel-icons'
+
+import { Product } from '../utils/product-util'
+
+type ProductCardProps = {
+  product: Product
+  removeProduct: (product: Product) => void
+  fullWidth?: boolean
+}
+
+const ProductCard = ({ product, removeProduct, fullWidth = false }: ProductCardProps) => {
+  const hasImage = product.photos.length !== 0
+  const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
+
+  const imageLoader = ({ src }: { src: string }) => {
+    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
+  }
+
+  return (
+    <motion.div className={classNames('product-card', { 'product-card--fullWidth': fullWidth })}>
+      <div className="product-card__image">
+        <div className="image">
+          {!hasImage && (
+            <ImageIcon
+              width="100%"
+              height="100%"
+              style={{ background: 'white' }}
+              aria-label="Ingen bilde tilgjengelig"
+            />
+          )}
+          {hasImage && (
+            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" fill style={{ objectFit: 'contain' }} />
+          )}
+        </div>
+        <div className="overlay">
+          <Button
+            className="delete-button"
+            onClick={() => removeProduct(product)}
+            icon={<Delete title="Fjern produkt fra sammenligning" />}
+          />
+        </div>
+      </div>
+      <div className="info">
+        <Heading size="xsmall" className="compare-menu__product-title">
+          {product.title}
+        </Heading>
+        <div className="hms-nr">
+          <BodyShort size="small">HMS-nr.</BodyShort>
+          <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : 'mangler'}</BodyShort>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+export default ProductCard
