@@ -10,7 +10,7 @@ import { CompareMenuState, useHydratedCompareStore } from '../../utils/compare-s
 
 const containerVariants: Variants = {
   hidden: { opacity: 1 },
-  show: {
+  visible: {
     opacity: 1,
     transition: {
       when: 'beforeChildren',
@@ -22,7 +22,7 @@ const containerVariants: Variants = {
 
 const childVariants: Variants = {
   hidden: { opacity: 0 },
-  show: {
+  visible: {
     opacity: 1,
     transition: {
       delay: 0.3,
@@ -31,8 +31,24 @@ const childVariants: Variants = {
 }
 
 const productVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1 },
+  hidden: {
+    opacity: 0,
+    scale: 0.3,
+    transition: {
+      duration: 0.1,
+    },
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      // duration: 0.4,
+    },
+    // transition: {
+    //   duration: 0.2,
+    // },
+  },
 }
 
 const CompareMenu = () => {
@@ -42,14 +58,15 @@ const CompareMenu = () => {
 
   const openView = (
     <motion.div
-      variants={containerVariants}
       initial="hidden"
-      animate="show"
+      animate="visible"
       exit="hidden"
+      variants={containerVariants}
       layoutId="compare-menu"
       className="compare-menu compare-menu--open"
     >
       <MotionButton
+        className="compare-menu__chevron-button"
         layoutId="chevron-button"
         variant="tertiary"
         icon={<Expand aria-hidden />}
@@ -68,26 +85,29 @@ const CompareMenu = () => {
           <>
             {productsToCompare ? (
               <motion.ul className="compare-menu__chosen-products">
-                {productsToCompare.map((product: Product, index: number, array: Product[]) => (
-                  <motion.li
-                    key={'compare-' + array[array.length - 1 - index].id}
-                    variants={productVariants}
-                    initial="hidden"
-                    animate="show"
-                    exit="hidden"
-                  >
-                    <ChosenProductCard
-                      product={array[array.length - 1 - index]}
-                      removeProduct={removeProduct}
+                <AnimatePresence mode="popLayout">
+                  {productsToCompare.map((product: Product, index: number, array: Product[]) => (
+                    <motion.li
+                      layout
                       key={'compare-' + array[array.length - 1 - index].id}
-                    ></ChosenProductCard>
-                  </motion.li>
-                ))}
+                      variants={productVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      <ChosenProductCard
+                        product={array[array.length - 1 - index]}
+                        removeProduct={removeProduct}
+                        key={'compare-' + array[array.length - 1 - index].id}
+                      ></ChosenProductCard>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
               </motion.ul>
             ) : null}
             {productsToCompare.length > 1 && (
               <motion.div>
-                <Link href="/sammenlign" passHref>
+                <Link href="/sammenlign" passHref legacyBehavior>
                   <Button as="a" icon={<Next aria-hidden />} iconPosition="right">
                     Sammenlign
                   </Button>
@@ -110,14 +130,15 @@ const CompareMenu = () => {
 
   const miniView = (
     <motion.div
-      variants={containerVariants}
       initial="hidden"
-      animate="show"
+      animate="visible"
       exit="hidden"
+      variants={containerVariants}
       layoutId="compare-menu"
       className="compare-menu"
     >
       <MotionButton
+        className="compare-menu__chevron-button"
         layoutId="chevron-button"
         variant="tertiary"
         icon={<Collapse aria-hidden />}

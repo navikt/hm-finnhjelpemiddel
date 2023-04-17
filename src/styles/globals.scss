@@ -206,10 +206,10 @@ details {
 
 .main-wrapper {
   max-width: 1200px;
-  padding: var(--a-spacing-5);
+  padding: var(--a-spacing-4);
   margin: 0 auto var(--a-spacing-4);
 
-  @include mixins.for-size(tablet-up) {
+  @include mixins.for-size(desktop-up) {
     padding: var(--a-spacing-5);
     margin-bottom: var(--a-spacing-5);
   }
@@ -241,7 +241,7 @@ details {
   flex-direction: column;
   align-items: center;
 
-  @include mixins.for-size(tablet-up) {
+  @include mixins.for-size(desktop-up) {
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;

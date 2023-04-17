@@ -1,15 +1,11 @@
-@mixin for-size($size) {
-  @if $size == phone-only {
-    @media (max-width: 48rem) {
-      @content;
-    }
-  } @else if $size == tablet-up {
-    @media (min-width: 64rem) {
-      @content;
-    }
-  } @else if $size == desktop-up {
-    @media (min-width: 80rem) {
-      @content;
-    }
+// Inspired by this article: https://www.freecodecamp.org/news/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862/
+
+@mixin for-size($range) {
+  @if $range == phone-only {
+    @media (max-width: 549px) { @content; }
+  } @else if $range == tablet-up {
+    @media (min-width: 550px) { @content; }
+  } @else if $range == desktop-up {
+    @media (min-width: 1100px) { @content; }
   }
 }

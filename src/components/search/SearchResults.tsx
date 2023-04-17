@@ -103,10 +103,10 @@ const SearchResults = ({
             size="small"
             variant="neutral"
           >
+            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
             <ToggleGroup.Item value="products" ref={productViewToggleRef}>
               Enkeltprodukter
             </ToggleGroup.Item>
-            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
           </ToggleGroup>
         </div>
         <div>
@@ -164,10 +164,10 @@ const SearchResult = ({ product }: { product: Product }) => {
   return (
     <li className="search-result">
       {compareMode === CompareMode.Active && (
-        <div className="search-result__compare-checkbox">
+        <div className="search-result__header">
           <Checkbox
             size="small"
-            value="Sammenlign dette produkt"
+            value="Legg produktet til sammenligning"
             onChange={toggleCompareProduct}
             checked={isInProductsToCompare}
           >
@@ -200,7 +200,7 @@ const SearchResult = ({ product }: { product: Product }) => {
         <div className="search-result__content">
           <div className="search-result__title">
             <Heading level="3" size="medium">
-              <Link className="search-result__link search-result__link__underline" href={`/produkt/${product.id}`}>
+              <Link className="search-result__link" href={`/produkt/${product.id}`}>
                 {product.title}
               </Link>
             </Heading>
@@ -235,10 +235,6 @@ const SearchResult = ({ product }: { product: Product }) => {
                 >
                   {getIsoCategoryName(product.isoCategory)}
                 </Button>
-              </DefinitionList.Definition>
-              <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
-              <DefinitionList.Definition>
-                {product.attributes.bestillingsordning ? 'Ja' : 'Nei'}
               </DefinitionList.Definition>
             </DefinitionList>
           </div>

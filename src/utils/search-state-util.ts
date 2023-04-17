@@ -42,7 +42,7 @@ type SearchDataState = {
 export const useSearchStore = create<SearchDataState>()(
   persist(
     (set) => ({
-      meta: { showProductSeriesView: false },
+      meta: { showProductSeriesView: true },
       searchData: initialSearchDataState,
       setSearchData: (searchData) =>
         set((state) => {
