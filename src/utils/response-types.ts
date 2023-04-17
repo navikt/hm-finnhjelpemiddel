@@ -66,7 +66,7 @@ export interface TechDataResponse {
 
 export interface MediaResponse {
   id: string
-  order: number
+  priority: number
   type: MediaType
   uri: string
   text?: string | null

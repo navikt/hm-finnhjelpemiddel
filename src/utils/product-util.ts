@@ -81,14 +81,14 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
   return media
     .filter((media: MediaResponse) => {
-      if (!(media.type == MediaType.IMAGE && media.order && media.uri) || seen[media.uri]) {
+      if (!(media.type == MediaType.IMAGE && media.priority && media.uri) || seen[media.uri]) {
         return false
       }
 
       seen[media.uri] = true
       return true
     })
-    .sort((a: MediaResponse, b: MediaResponse) => a.order - b.order)
+    .sort((a: MediaResponse, b: MediaResponse) => a.priority - b.priority)
     .map((image: MediaResponse) => ({
       uri: image.uri,
     }))
