@@ -5,7 +5,6 @@ import { Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Loader, ToggleGr
 import { Next } from '@navikt/ds-icons'
 import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '../../utils/product-util'
-import { getIsoCategoryName } from '../../utils/iso-category-util'
 import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { FetchResponse } from '../../utils/api-util'
@@ -233,7 +232,7 @@ const SearchResult = ({ product }: { product: Product }) => {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                 >
-                  {getIsoCategoryName(product.isoCategory)}
+                  {product.isoCategoryLongName}
                 </Button>
               </DefinitionList.Definition>
             </DefinitionList>

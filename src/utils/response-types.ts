@@ -30,6 +30,8 @@ export interface ProductSourceResponse {
   identifier: string
   supplierRef: string
   isoCategory: string
+  isoCategoryShortName: string
+  isoCategoryLongName: string
   accessory: boolean
   sparepart: boolean
   seriesId: string | null

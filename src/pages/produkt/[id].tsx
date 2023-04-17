@@ -11,7 +11,6 @@ import SimilarProducts from '../../components/product-details/SimilarProducts'
 import AnimateLayout from '../../components/layout/AnimateLayout'
 import InformationTabs from 'src/components/information-tabs/InformationTabs'
 import DefinitionList from 'src/components/definition-list/DefinitionList'
-import { getIsoCategoryName } from 'src/utils/iso-category-util'
 import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
 
 type SerializedDataType = {
@@ -81,7 +80,7 @@ export default function ProduktPage({
                   {product.supplierRef ? product.supplierRef : 'Mangler lev-artnr.'}
                 </DefinitionList.Definition>
                 <DefinitionList.Term>ISO-klassifisering</DefinitionList.Term>
-                <DefinitionList.Definition>{getIsoCategoryName(product.isoCategory)}</DefinitionList.Definition>
+                <DefinitionList.Definition>{product.isoCategoryLongName}</DefinitionList.Definition>
                 <DefinitionList.Term>På bestillingsordning</DefinitionList.Term>
                 <DefinitionList.Definition>
                   {product.attributes.bestillingsordning ? 'Ja' : 'Nei'}
