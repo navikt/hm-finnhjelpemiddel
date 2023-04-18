@@ -39,9 +39,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
-  const imageLoader = ({ src }: { src: string }) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/orig/${src}`
-  }
+  const imageLoader = ({ src }: { src: string }) => `https://www.hjelpemiddeldatabasen.no/blobs/orig/${src}`
 
   const prevImage = () => {
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
@@ -80,7 +78,8 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             <div className="photo-container">
               <Image
                 key={src}
-                src={imageLoader({ src: src })}
+                loader={imageLoader}
+                src={src}
                 fill
                 style={{ objectFit: 'contain' }}
                 onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
@@ -137,7 +136,8 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   <div className="next-image">
                     <Image
                       draggable="false"
-                      src={imageLoader({ src: src })}
+                      loader={imageLoader}
+                      src={src}
                       alt={`Produktbilde nummer ${active}`}
                       fill
                       style={{ objectFit: 'contain' }}
