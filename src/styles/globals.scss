@@ -145,6 +145,14 @@ details {
       box-shadow: var(--a-shadow-focus);
       outline: none;
     }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .nav-topp--active {
+    border-bottom: 3px solid var(--a-border-focus);
   }
 }
 
