@@ -148,9 +148,7 @@ const SearchResult = ({ product }: { product: Product }) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
-  const imageLoader = ({ src }: { src: string }) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
-  }
+  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
 
   const toggleCompareProduct = () => {
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1

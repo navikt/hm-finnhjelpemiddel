@@ -39,7 +39,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
-  const imageLoader = ({ src }: { src: string }) => `https://www.hjelpemiddeldatabasen.no/blobs/orig/${src}`
+  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
 
   const prevImage = () => {
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1

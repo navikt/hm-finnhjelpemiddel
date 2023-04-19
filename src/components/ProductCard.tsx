@@ -16,9 +16,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
-  const imageLoader = ({ src }: { src: string }) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
-  }
+  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}//${src}`
 
   return (
     <motion.div className="product-card">
