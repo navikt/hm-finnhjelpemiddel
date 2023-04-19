@@ -21,7 +21,7 @@ function getProductCategories(products?: Array<Product>) {
       }),
       {} as Record<string, Array<Product>>
     ) ?? {}
-  ).map(([_, data]) => ({ seriesName: data.at(0)?.attributes.series?.at(0) || data.at(0)?.title, data }))
+  ).map(([_, data]) => ({ seriesName: data.at(0)?.attributes.series || data.at(0)?.title, data }))
 }
 
 const SearchResults = ({
@@ -232,7 +232,7 @@ const SearchResult = ({ product }: { product: Product }) => {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                 >
-                  {product.isoCategoryLongName}
+                  {product.isoCategoryTitle}
                 </Button>
               </DefinitionList.Definition>
             </DefinitionList>

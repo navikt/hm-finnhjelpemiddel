@@ -20,8 +20,8 @@ export interface Product {
   supplierRef: string
   agreementInfo: AgreementInfo | null
   isoCategory: string
-  isoCategoryShortName: string
-  isoCategoryLongName: string
+  isoCategoryTitle: string
+  isoCategoryText: string
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
@@ -70,8 +70,8 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     agreementInfo: source.agreementInfo,
     supplierRef: source.supplierRef,
     isoCategory: source.isoCategory,
-    isoCategoryShortName: source.isoCategoryShortName,
-    isoCategoryLongName: source.isoCategoryLongName,
+    isoCategoryTitle: source.isoCategoryTitle,
+    isoCategoryText: source.isoCategoryText,
     accessory: source.accessory,
     sparepart: source.sparepart,
     photos: mapPhotoInfo(source.media),

@@ -80,7 +80,7 @@ export default function ProduktPage({
                   {product.supplierRef ? product.supplierRef : 'Mangler lev-artnr.'}
                 </DefinitionList.Definition>
                 <DefinitionList.Term>ISO-klassifisering</DefinitionList.Term>
-                <DefinitionList.Definition>{product.isoCategoryLongName}</DefinitionList.Definition>
+                <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
                 <DefinitionList.Term>På bestillingsordning</DefinitionList.Term>
                 <DefinitionList.Definition>
                   {product.attributes.bestillingsordning ? 'Ja' : 'Nei'}
