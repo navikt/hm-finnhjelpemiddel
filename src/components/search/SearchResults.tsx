@@ -141,14 +141,36 @@ const SearchResults = ({
   )
 }
 
+const ProductImage = ({ src }: { src: string }) => {
+  const [isLoading, setIsLoading] = useState(true)
+  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
+
+  if (src) {
+    return (
+      <>
+        {isLoading && <Loader size="large" />}
+        <Image
+          loader={imageLoader}
+          src={src}
+          onLoad={() => setIsLoading(true)}
+          onLoadingComplete={() => setIsLoading(false)}
+          alt="Produktbilde"
+          fill
+          style={{ objectFit: 'contain', opacity: !isLoading ? 1 : 0 }}
+          sizes="50vw"
+          priority
+        />
+      </>
+    )
+  }
+
+  return <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+}
+
 const SearchResult = ({ product }: { product: Product }) => {
   const { setSearchData } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
-
-  const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
-
-  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
 
   const toggleCompareProduct = () => {
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
@@ -174,25 +196,7 @@ const SearchResult = ({ product }: { product: Product }) => {
       )}
       <div className="search-result__container">
         <div className="search-result__image">
-          {!hasImage && (
-            <ImageIcon
-              width="100%"
-              height="100%"
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
-          )}
-          {hasImage && (
-            <Image
-              loader={imageLoader}
-              src={firstImageSrc}
-              alt="Produktbilde"
-              fill
-              style={{ objectFit: 'contain' }}
-              sizes="50vw"
-              priority
-            />
-          )}
+          <ProductImage src={firstImageSrc} />
         </div>
         <div className="search-result__content">
           <div className="search-result__title">
