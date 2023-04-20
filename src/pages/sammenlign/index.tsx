@@ -3,20 +3,24 @@ import { useRouter } from 'next/navigation'
 import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'
 import { Back } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
-import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { sortAlphabetically } from '../../utils/sort-util'
 
 import AnimateLayout from '../../components/layout/AnimateLayout'
 import ProductCard from '../../components/ProductCard'
 
 export default function ComparePage() {
-  const { productsToCompare, removeProduct, setCompareMode } = useHydratedCompareStore()
+  const { productsToCompare, removeProduct, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
+  const { setShowProductSeriesView } = useHydratedSearchStore()
   const router = useRouter()
   const href = '/'
 
   const handleClick = (event: any) => {
     event.preventDefault()
     setCompareMode(CompareMode.Active)
+    setCompareMenuState(CompareMenuState.Open)
+    setShowProductSeriesView(false)
     router.push(href)
   }
 
