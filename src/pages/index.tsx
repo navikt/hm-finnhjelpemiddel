@@ -116,7 +116,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
             type="button"
             className="search__page-up-button"
             icon={<Up title="Gå til toppen av siden" />}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => setFocusOnSearchResults()}
           >
             Til toppen
           </Button>
