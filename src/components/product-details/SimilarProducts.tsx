@@ -117,7 +117,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       >
         Vis alle egenskaper
       </Switch>
-      <div className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
+      <div id="product_variants" className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
         <Table>
           <Table.Header>
             <Table.Row key={'hms-row'}>
@@ -138,7 +138,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
               </Table.ColumnHeader>
               {sortedByKey.map((product) => (
                 <Table.ColumnHeader key={'Hms-' + product.id}>
-                  <Link href={`/produkt/${product.id}`}>{product.hmsArtNr}</Link>
+                  <Link href={`/produkt/${product.id}#product_variants`}>{product.hmsArtNr}</Link>
                 </Table.ColumnHeader>
               ))}
             </Table.Row>
