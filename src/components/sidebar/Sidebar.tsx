@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Heading, Search, Switch } from '@navikt/ds-react'
+import { Button, Heading, Popover, Search, Switch } from '@navikt/ds-react'
 import { Collapse, Delete, Expand } from '@navikt/ds-icons'
+import { FilesIcon } from '@navikt/aksel-icons'
 import { FilterData, SearchData } from '../../utils/api-util'
 import { mapProductSearchParams } from '../../utils/product-util'
 import { initialSearchDataState, useHydratedSearchStore } from '../../utils/search-state-util'
@@ -34,6 +35,9 @@ const Sidebar = ({
   const [productSearchParams] = useState(mapProductSearchParams(router.query))
   const [expanded, setExpanded] = useState(false)
 
+  const copyButtonRef = useRef<HTMLButtonElement>(null)
+  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+
   const formMethods = useForm<SearchData>({
     defaultValues: {
       ...initialSearchDataState,
@@ -62,9 +66,30 @@ const Sidebar = ({
 
   return (
     <section className="search__side-bar">
-      <Heading level="2" size="medium">
-        Søk
-      </Heading>
+      <div className="heading">
+        <Heading level="2" size="medium">
+          Søk
+        </Heading>
+        <Button
+          ref={copyButtonRef}
+          variant="secondary"
+          size="small"
+          icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+          onClick={() => {
+            navigator.clipboard.writeText(location.href)
+            setCopyPopupOpenState(true)
+          }}
+        />
+        <Popover
+          open={copyPopupOpenState}
+          onClose={() => setCopyPopupOpenState(false)}
+          anchorEl={copyButtonRef.current}
+          placement="left-end"
+        >
+          <Popover.Content>Søket er kopiert!</Popover.Content>
+        </Popover>
+      </div>
+
       <FormProvider {...formMethods}>
         <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
           <Controller

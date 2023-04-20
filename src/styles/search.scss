@@ -18,7 +18,9 @@
       padding-top: 0;
     }
 
-    > h2 {
+    > .heading {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: var(--a-spacing-3);
     }
   }
