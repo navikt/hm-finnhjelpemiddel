@@ -1,5 +1,5 @@
 import React from 'react'
-import { BodyShort, Heading, Label } from '@navikt/ds-react'
+import { BodyShort, ExpansionCard, Heading, Label } from '@navikt/ds-react'
 import { FilterData } from '../../utils/api-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 
@@ -25,7 +25,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <Heading level="2" size="xsmall">
+      <Heading level="2" size="xsmall" spacing>
         Filtre
       </Heading>
       <RangeFilterInput filter={{ key: 'lengdeCM', data: filters?.lengdeCM }} />
