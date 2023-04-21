@@ -23,7 +23,11 @@ export const getServerSideProps: (
 }
 
 export default function Home({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { searchData, setSearchData } = useHydratedSearchStore()
+  const {
+    searchData,
+    setSearchData,
+    meta: { showProductSeriesView },
+  } = useHydratedSearchStore()
   const { compareMode } = useHydratedCompareStore()
 
   const [initialProductSearchParams, setInitialProductSearchParams] = useState(searchParams)
@@ -38,6 +42,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
         from,
         to,
         searchData,
+        isProductSeriesView: showProductSeriesView,
       }
     },
     fetchProducts,

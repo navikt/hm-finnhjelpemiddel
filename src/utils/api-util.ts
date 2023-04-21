@@ -59,6 +59,7 @@ type FetchProps = {
   from: number
   to: number
   searchData: SearchData
+  isProductSeriesView: boolean
 }
 
 export type FetchResponse = {
@@ -67,7 +68,13 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({
+  url,
+  from,
+  to,
+  searchData,
+  isProductSeriesView,
+}: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {
     lengdeCM,
@@ -170,6 +177,11 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
       track_scores: true,
       sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
+      ...(isProductSeriesView && {
+        collapse: {
+          field: 'attributes.series',
+        },
+      }),
       post_filter,
       aggs: {
         lengdeCM: {

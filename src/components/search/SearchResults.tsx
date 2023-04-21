@@ -12,18 +12,6 @@ import useRestoreScroll from '../../hooks/useRestoreScroll'
 
 import DefinitionList from '../definition-list/DefinitionList'
 
-function getProductCategories(products?: Array<Product>) {
-  return Object.entries(
-    products?.reduce(
-      (hash, obj) => ({
-        ...hash,
-        [obj.seriesId as string]: (hash[obj.seriesId as string] || []).concat(obj),
-      }),
-      {} as Record<string, Array<Product>>
-    ) ?? {}
-  ).map(([_, data]) => ({ seriesName: data.at(0)?.attributes.series || data.at(0)?.title, data }))
-}
-
 const SearchResults = ({
   data,
   size,
@@ -53,8 +41,6 @@ const SearchResults = ({
       setCompareMode(CompareMode.Active)
     }
   }, [showProductSeriesView, setCompareMode])
-
-  const productCategories = getProductCategories(products)
 
   if (isLoading) {
     return (
@@ -109,28 +95,17 @@ const SearchResults = ({
           </ToggleGroup>
         </div>
         <div>
-          {showProductSeriesView && (
-            <BodyShort aria-live="polite">{`${productCategories?.length} produktserier vises`}</BodyShort>
-          )}
-          {!showProductSeriesView && (
-            <BodyShort aria-live="polite">{`${products.length} av ${
-              data?.at(-1)?.numberOfProducts
-            } produkter vises`}</BodyShort>
-          )}
+          <BodyShort aria-live="polite">
+            {showProductSeriesView
+              ? `${products?.length} produktserier vises`
+              : `${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}
+          </BodyShort>
         </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {showProductSeriesView &&
-          productCategories?.map((productCategory) => (
-            <SearchResult
-              key={productCategory.seriesName}
-              product={{
-                ...productCategory.data.at(0)!,
-                title: productCategory.seriesName || products.at(0)?.title!,
-              }}
-            />
-          ))}
-        {!showProductSeriesView && products.map((product) => <SearchResult key={product.id} product={product} />)}
+        {products.map((product) => (
+          <SearchResult key={product.id} product={product} />
+        ))}
       </ol>
       {!isLastPage && (
         <Button variant="secondary" onClick={() => setSize((s) => s + 1)} loading={isLoadingMore}>
