@@ -102,7 +102,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
 
   return (
     <>
-      <Heading level="3" size="medium">
+      <Heading id="product_variants" level="3" size="medium">
         Produktvarianter
       </Heading>
       <Heading level="4" size="xsmall">
@@ -117,7 +117,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       >
         Vis alle egenskaper
       </Switch>
-      <div id="product_variants" className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
+      <div className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
         <Table>
           <Table.Header>
             <Table.Row key={'hms-row'}>
