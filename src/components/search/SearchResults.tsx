@@ -5,25 +5,12 @@ import { Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Loader, ToggleGr
 import { Next } from '@navikt/ds-icons'
 import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '../../utils/product-util'
-import { getIsoCategoryName } from '../../utils/iso-category-util'
 import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { FetchResponse } from '../../utils/api-util'
 import useRestoreScroll from '../../hooks/useRestoreScroll'
 
 import DefinitionList from '../definition-list/DefinitionList'
-
-function getProductCategories(products?: Array<Product>) {
-  return Object.entries(
-    products?.reduce(
-      (hash, obj) => ({
-        ...hash,
-        [obj.seriesId as string]: (hash[obj.seriesId as string] || []).concat(obj),
-      }),
-      {} as Record<string, Array<Product>>
-    ) ?? {}
-  ).map(([_, data]) => ({ seriesName: data.at(0)?.attributes.series?.at(0) || data.at(0)?.title, data }))
-}
 
 const SearchResults = ({
   data,
@@ -54,8 +41,6 @@ const SearchResults = ({
       setCompareMode(CompareMode.Active)
     }
   }, [showProductSeriesView, setCompareMode])
-
-  const productCategories = getProductCategories(products)
 
   if (isLoading) {
     return (
@@ -110,28 +95,17 @@ const SearchResults = ({
           </ToggleGroup>
         </div>
         <div>
-          {showProductSeriesView && (
-            <BodyShort aria-live="polite">{`${productCategories?.length} produktserier vises`}</BodyShort>
-          )}
-          {!showProductSeriesView && (
-            <BodyShort aria-live="polite">{`${products.length} av ${
-              data?.at(-1)?.numberOfProducts
-            } produkter vises`}</BodyShort>
-          )}
+          <BodyShort aria-live="polite">
+            {showProductSeriesView
+              ? `${products?.length} produktserier vises`
+              : `${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}
+          </BodyShort>
         </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {showProductSeriesView &&
-          productCategories?.map((productCategory) => (
-            <SearchResult
-              key={productCategory.seriesName}
-              product={{
-                ...productCategory.data.at(0)!,
-                title: productCategory.seriesName || products.at(0)?.title!,
-              }}
-            />
-          ))}
-        {!showProductSeriesView && products.map((product) => <SearchResult key={product.id} product={product} />)}
+        {products.map((product) => (
+          <SearchResult key={product.id} product={product} />
+        ))}
       </ol>
       {!isLastPage && (
         <Button variant="secondary" onClick={() => setSize((s) => s + 1)} loading={isLoadingMore}>
@@ -142,16 +116,36 @@ const SearchResults = ({
   )
 }
 
+const ProductImage = ({ src }: { src: string }) => {
+  const [isLoading, setIsLoading] = useState(true)
+  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
+
+  if (src) {
+    return (
+      <>
+        {isLoading && <Loader size="large" />}
+        <Image
+          loader={imageLoader}
+          src={src}
+          onLoad={() => setIsLoading(true)}
+          onLoadingComplete={() => setIsLoading(false)}
+          alt="Produktbilde"
+          fill
+          style={{ objectFit: 'contain', opacity: !isLoading ? 1 : 0 }}
+          sizes="50vw"
+          priority
+        />
+      </>
+    )
+  }
+
+  return <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+}
+
 const SearchResult = ({ product }: { product: Product }) => {
   const { setSearchData } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
-
-  const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
-
-  const imageLoader = ({ src }: { src: string }) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
-  }
 
   const toggleCompareProduct = () => {
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
@@ -177,25 +171,7 @@ const SearchResult = ({ product }: { product: Product }) => {
       )}
       <div className="search-result__container">
         <div className="search-result__image">
-          {!hasImage && (
-            <ImageIcon
-              width="100%"
-              height="100%"
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
-          )}
-          {hasImage && (
-            <Image
-              loader={imageLoader}
-              src={firstImageSrc}
-              alt="Produktbilde"
-              fill
-              style={{ objectFit: 'contain' }}
-              sizes="50vw"
-              priority
-            />
-          )}
+          <ProductImage src={firstImageSrc} />
         </div>
         <div className="search-result__content">
           <div className="search-result__title">
@@ -233,7 +209,7 @@ const SearchResult = ({ product }: { product: Product }) => {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                 >
-                  {getIsoCategoryName(product.isoCategory)}
+                  {product.isoCategoryTitle}
                 </Button>
               </DefinitionList.Definition>
             </DefinitionList>

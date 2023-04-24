@@ -18,7 +18,9 @@
       padding-top: 0;
     }
 
-    > h2 {
+    > .heading {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: var(--a-spacing-3);
     }
   }
@@ -191,6 +193,8 @@
   }
 
   &__image {
+    display: flex;
+    justify-content: center;
     width: 150px;
     height: 150px;
     position: relative;

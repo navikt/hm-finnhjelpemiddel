@@ -20,6 +20,8 @@ export interface Product {
   supplierRef: string
   agreementInfo: AgreementInfo | null
   isoCategory: string
+  isoCategoryTitle: string
+  isoCategoryText: string
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
@@ -68,6 +70,8 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     agreementInfo: source.agreementInfo,
     supplierRef: source.supplierRef,
     isoCategory: source.isoCategory,
+    isoCategoryTitle: source.isoCategoryTitle,
+    isoCategoryText: source.isoCategoryText,
     accessory: source.accessory,
     sparepart: source.sparepart,
     photos: mapPhotoInfo(source.media),
@@ -81,14 +85,14 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
   return media
     .filter((media: MediaResponse) => {
-      if (!(media.type == MediaType.IMAGE && media.order && media.uri) || seen[media.uri]) {
+      if (!(media.type == MediaType.IMAGE && media.priority && media.uri) || seen[media.uri]) {
         return false
       }
 
       seen[media.uri] = true
       return true
     })
-    .sort((a: MediaResponse, b: MediaResponse) => a.order - b.order)
+    .sort((a: MediaResponse, b: MediaResponse) => a.priority - b.priority)
     .map((image: MediaResponse) => ({
       uri: image.uri,
     }))

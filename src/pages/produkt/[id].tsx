@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { InferGetServerSidePropsType } from 'next'
-import { Heading, GuidePanel } from '@navikt/ds-react'
+import { Heading, GuidePanel, BodyShort } from '@navikt/ds-react'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { mapSupplier, Supplier } from '../../utils/supplier-util'
 import { getProduct, getSupplier, getSeries, getAgreement } from '../../utils/api-util'
@@ -11,7 +11,6 @@ import SimilarProducts from '../../components/product-details/SimilarProducts'
 import AnimateLayout from '../../components/layout/AnimateLayout'
 import InformationTabs from 'src/components/information-tabs/InformationTabs'
 import DefinitionList from 'src/components/definition-list/DefinitionList'
-import { getIsoCategoryName } from 'src/utils/iso-category-util'
 import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
 
 type SerializedDataType = {
@@ -68,7 +67,7 @@ export default function ProduktPage({
           <section className="product-info__top">
             <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
             <div className="product-info__top-right">
-              <Heading level="1" size="large">
+              <Heading level="1" size="large" spacing>
                 {product.attributes.series ? product.attributes.series : product.title}
               </Heading>
               <DefinitionList>
@@ -80,8 +79,8 @@ export default function ProduktPage({
                 <DefinitionList.Definition>
                   {product.supplierRef ? product.supplierRef : 'Mangler lev-artnr.'}
                 </DefinitionList.Definition>
-                <DefinitionList.Term>Iso-klassifisering</DefinitionList.Term>
-                <DefinitionList.Definition>{getIsoCategoryName(product.isoCategory)}</DefinitionList.Definition>
+                <DefinitionList.Term>ISO-klassifisering</DefinitionList.Term>
+                <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
                 <DefinitionList.Term>På bestillingsordning</DefinitionList.Term>
                 <DefinitionList.Definition>
                   {product.attributes.bestillingsordning ? 'Ja' : 'Nei'}
@@ -93,13 +92,13 @@ export default function ProduktPage({
                 </Heading>
                 {supplier && (
                   <>
-                    <p>{supplier.name}</p>
-                    {supplier.address && <p>{supplier.address}</p>}
-                    {supplier.email && <p>{supplier.email}</p>}
+                    <BodyShort>{supplier.name}</BodyShort>
+                    {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
+                    {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
                     {supplier.homepageUrl && (
-                      <a href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
-                        Hjemmeside(åpnes i ny side)
-                      </a>
+                      <Link href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
+                        Hjemmeside (åpnes i ny side)
+                      </Link>
                     )}
                   </>
                 )}
@@ -133,7 +132,7 @@ export default function ProduktPage({
           </section>
 
           <section className="product-info__tabs">
-            <InformationTabs product={product} supplier={supplier}></InformationTabs>
+            <InformationTabs product={product} />
           </section>
           {seriesProducts && seriesProducts.length > 0 && (
             <section className="product-info__similar-products">

@@ -1,24 +1,26 @@
-import { useState } from 'react'
-import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BodyShort, Button, Heading, LinkPanel, Table } from '@navikt/ds-react'
-import { Back, Close } from '@navikt/ds-icons'
-import { ImageIcon } from '@navikt/aksel-icons'
+import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'
+import { Back } from '@navikt/ds-icons'
 import { Product } from '../../utils/product-util'
-import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
+import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { sortAlphabetically } from '../../utils/sort-util'
 
 import AnimateLayout from '../../components/layout/AnimateLayout'
+import ProductCard from '../../components/ProductCard'
 
 export default function ComparePage() {
-  const { productsToCompare, removeProduct, setCompareMode } = useHydratedCompareStore()
+  const { productsToCompare, removeProduct, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
+  const { setShowProductSeriesView } = useHydratedSearchStore()
   const router = useRouter()
   const href = '/'
 
   const handleClick = (event: any) => {
     event.preventDefault()
     setCompareMode(CompareMode.Active)
+    setCompareMenuState(CompareMenuState.Open)
+    setShowProductSeriesView(false)
     router.push(href)
   }
 
@@ -89,26 +91,21 @@ const CompareTable = ({
               </NextLink>
             </Table.ColumnHeader>
             {productsToCompare.length > 0 &&
-              productsToCompare.map((product, i) => (
-                <Table.ColumnHeader key={'id-' + product.id} style={{ height: '5px' }}>
-                  <ProductTableHeader product={product} removeProduct={removeProduct} />
+              productsToCompare.map((product) => (
+                <Table.ColumnHeader key={'id-' + product.id}>
+                  <ProductCard product={product} removeProduct={removeProduct} />
                 </Table.ColumnHeader>
               ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <Table.Row style={{ position: 'sticky', left: 0 }}>
-            <Table.DataCell colSpan={2} style={{ position: 'sticky', left: 0 }}>
+          <Table.Row>
+            <Table.DataCell colSpan={2}>
               <Heading level="2" size="medium">
                 Tekniske egenskaper
               </Heading>
             </Table.DataCell>
-            {productsToCompare.length > 1 && (
-              <Table.DataCell
-                colSpan={productsToCompare.length - 1}
-                style={{ position: 'sticky', left: 0 }}
-              ></Table.DataCell>
-            )}
+            {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length - 1}></Table.DataCell>}
           </Table.Row>
           {productsToCompare.length > 0 &&
             Object.entries(rows).map(([key, row]) => (
@@ -122,44 +119,5 @@ const CompareTable = ({
         </Table.Body>
       </Table>
     </section>
-  )
-}
-
-const ProductTableHeader = ({
-  product,
-  removeProduct,
-}: {
-  product: Product
-  removeProduct: (product: Product) => void
-}) => {
-  const hasImage = product.photos.length !== 0
-  const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
-
-  const imageLoader = ({ src }: { src: string }) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/snet/${src}`
-  }
-  return (
-    <div className="product-header">
-      <Button
-        className="remove-product-button"
-        size="small"
-        variant="tertiary"
-        onClick={() => removeProduct(product)}
-        icon={<Close title="Fjern produkt fra sammenligning" />}
-      />
-      <div className="product-image">
-        {!hasImage && (
-          <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
-        )}
-        {hasImage && (
-          <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" width="0" height="0" sizes="100vw" />
-        )}
-      </div>
-      <BodyShort>
-        <NextLink className="compare-page__link" href={`/produkt/${product.id}`}>
-          {product.title}
-        </NextLink>
-      </BodyShort>
-    </div>
   )
 }

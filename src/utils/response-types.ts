@@ -30,6 +30,8 @@ export interface ProductSourceResponse {
   identifier: string
   supplierRef: string
   isoCategory: string
+  isoCategoryTitle: string
+  isoCategoryText: string
   accessory: boolean
   sparepart: boolean
   seriesId: string | null
@@ -66,7 +68,7 @@ export interface TechDataResponse {
 
 export interface MediaResponse {
   id: string
-  order: number
+  priority: number
   type: MediaType
   uri: string
   text?: string | null

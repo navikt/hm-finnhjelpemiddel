@@ -59,7 +59,7 @@ export const useHydratedCompareStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        compareMode: CompareMode.Active,
+        compareMode: CompareMode.Inactive,
         compareMenuState: CompareMenuState.Minimized,
         productsToCompare: [],
         setCompareMode: () => undefined,

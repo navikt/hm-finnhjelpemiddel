@@ -32,15 +32,11 @@ const nextConfig = {
         hostname: 'www.hjelpemiddeldatabasen.no',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        pathname: '/**',
-      },
     ],
   },
   env: {
     HM_SEARCH_URL: process.env.HM_SEARCH_URL,
+    NAV_CDN_URL: process.env.NAV_CDN_URL,
   },
 }
 

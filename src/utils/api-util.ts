@@ -59,6 +59,7 @@ type FetchProps = {
   from: number
   to: number
   searchData: SearchData
+  isProductSeriesView: boolean
 }
 
 export type FetchResponse = {
@@ -67,7 +68,13 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({
+  url,
+  from,
+  to,
+  searchData,
+  isProductSeriesView,
+}: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
   const {
     lengdeCM,
@@ -116,17 +123,9 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
               multi_match: {
                 query: searchTerm,
                 type: 'cross_fields',
-                fields: ['title^3', 'attributes.text^2', '*'],
+                fields: ['isoCategoryTitle^2', 'isoCategoryText^0.5', 'title^0.3', 'attributes.text^0.1', '*'],
                 operator: 'and',
                 zero_terms_query: 'all',
-              },
-            },
-            {
-              multi_match: {
-                query: searchTerm,
-                type: 'most_fields',
-                fields: ['title^3', 'attributes.text^2', '*'],
-                fuzziness: 'AUTO',
               },
             },
           ],
@@ -178,6 +177,11 @@ export const fetchProducts = ({ url, from, to, searchData }: FetchProps): Promis
       track_scores: true,
       sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
+      ...(isProductSeriesView && {
+        collapse: {
+          field: 'attributes.series',
+        },
+      }),
       post_filter,
       aggs: {
         lengdeCM: {
