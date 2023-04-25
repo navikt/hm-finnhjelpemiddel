@@ -47,7 +47,6 @@
     justify-content: center;
     gap: var(--a-spacing-2);
     max-width: 62rem;
-    overflow-x: auto;
     list-style: none;
     margin: 0;
     padding: 0 0 var(--a-spacing-4) 0;
@@ -66,6 +65,7 @@
       --mask: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent 100%);
       -webkit-mask-image: var(--mask);
       mask-image: var(--mask);
+      overflow-x: auto;
 
       li:first-child {
         margin-left: var(--a-spacing-5);
