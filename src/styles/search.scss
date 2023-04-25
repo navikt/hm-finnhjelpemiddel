@@ -54,19 +54,6 @@
     align-self: center;
     margin-top: var(--a-spacing-3) !important; // Margin is overwritten by Button styling from Aksel
   }
-
-  &__focus-on-results {
-    position: absolute;
-    opacity: 0;
-  }
-
-  &__focus-on-results:focus,
-  &__focus-on-results:focus-visible,
-  &__focus-on-results:focus-within {
-    position: unset;
-    opacity: 1;
-    margin-bottom: 16px;
-  }
 }
 
 .results {

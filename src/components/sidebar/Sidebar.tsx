@@ -11,15 +11,11 @@ import { initialSearchDataState, useHydratedSearchStore } from '../../utils/sear
 import FilterView from './FilterView'
 import SelectIsoCategory from './SelectIsoCategory'
 
-const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => {
-  return (
-    <div className="search__focus-on-results">
-      <Button variant="secondary" size="small" type="button" onClick={setFocus}>
-        Gå til resultat
-      </Button>
-    </div>
-  )
-}
+const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
+  <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
+    Gå til resultat
+  </Button>
+)
 
 const Sidebar = ({
   filters,
