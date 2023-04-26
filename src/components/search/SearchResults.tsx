@@ -91,10 +91,10 @@ const SearchResults = ({
             size="small"
             variant="neutral"
           >
-            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
-            <ToggleGroup.Item value="products" ref={productViewToggleRef}>
-              Enkeltprodukter
+            <ToggleGroup.Item value="series" ref={productViewToggleRef}>
+              Produktserier
             </ToggleGroup.Item>
+            <ToggleGroup.Item value="products">Enkeltprodukter</ToggleGroup.Item>
           </ToggleGroup>
         </div>
         <div>
