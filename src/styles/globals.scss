@@ -7,20 +7,34 @@
 @import './forside.scss';
 @import './product-page.scss';
 @import './product-card.scss';
-@import './range-filter-input.scss';
+@import './filter-input';
 @import './search.scss';
 
+html,
+body,
+#__next {
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+}
+
 main {
-  min-height: 100vh;
-  overflow: hidden;
+  flex: auto;
 }
 
 details {
+  margin-bottom: var(--a-spacing-4);
+
   > summary {
     display: flex;
     cursor: pointer;
     list-style: none;
-    padding: var(--a-spacing-2) 0;
+    transition: margin 150ms ease-out;
 
     &::marker,
     &::-webkit-details-marker {
@@ -35,8 +49,13 @@ details {
 
     &:focus {
       outline: none;
+    }
+
+    &:focus-visible {
       box-shadow: var(--a-shadow-focus);
       border-radius: var(--a-border-radius-medium);
+      &:before {
+      }
     }
 
     &:before {
@@ -46,10 +65,17 @@ details {
       background-repeat: no-repeat;
       background-size: cover;
       margin-right: var(--a-spacing-1);
+      transition: transform 200ms ease-in-out;
     }
   }
 
+  > div {
+    margin-bottom: var(--a-spacing-5);
+  }
+
   &[open] > summary {
+    margin-bottom: var(--a-spacing-3);
+
     &:before {
       transform: rotate(180deg);
     }

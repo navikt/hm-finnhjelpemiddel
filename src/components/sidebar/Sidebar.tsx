@@ -62,32 +62,11 @@ const Sidebar = ({
 
   return (
     <section className="search__side-bar">
-      <div className="heading">
-        <Heading level="2" size="medium">
-          Søk
-        </Heading>
-        <Button
-          ref={copyButtonRef}
-          variant="secondary"
-          size="small"
-          icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-          onClick={() => {
-            navigator.clipboard.writeText(location.href)
-            setCopyPopupOpenState(true)
-          }}
-        />
-        <Popover
-          open={copyPopupOpenState}
-          onClose={() => setCopyPopupOpenState(false)}
-          anchorEl={copyButtonRef.current}
-          placement="left-end"
-        >
-          <Popover.Content>Søket er kopiert!</Popover.Content>
-        </Popover>
-      </div>
-
       <FormProvider {...formMethods}>
-        <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
+        <form className="container" role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
+          <Heading level="2" size="medium" spacing>
+            Søk
+          </Heading>
           <Controller
             render={({ field }) => (
               <Search
@@ -126,27 +105,52 @@ const Sidebar = ({
               <FocusOnResultsButton setFocus={setFocus} />
             </>
           )}
-
-          <Button
-            type="button"
-            variant="secondary"
-            className="search__reset-button"
-            icon={<Delete title="Nullstill søket" />}
-            onClick={onReset}
-          >
-            Nullstill søket
-          </Button>
         </form>
       </FormProvider>
-      <Button
-        type="button"
-        className="search__expand-button"
-        variant="tertiary"
-        icon={<Chevron title="Vis mer informasjon om produktet" />}
-        onClick={() => setExpanded((prevState) => !prevState)}
-      >
-        {expanded ? 'Vis færre filtre' : 'Vis alle filtre'}
-      </Button>
+      <div className="search__expand-container">
+        <Button
+          type="button"
+          variant="tertiary"
+          icon={<Chevron title="Vis mer informasjon om produktet" />}
+          onClick={() => setExpanded((prevState) => !prevState)}
+        >
+          {expanded ? 'Vis færre filtre' : 'Vis alle filtre'}
+        </Button>
+      </div>
+      <div className="footer">
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button
+            ref={copyButtonRef}
+            variant="tertiary"
+            size="small"
+            icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+            onClick={() => {
+              navigator.clipboard.writeText(location.href)
+              setCopyPopupOpenState(true)
+            }}
+          >
+            Kopiér søket
+          </Button>
+          <Popover
+            open={copyPopupOpenState}
+            onClose={() => setCopyPopupOpenState(false)}
+            anchorEl={copyButtonRef.current}
+            placement="right"
+          >
+            <Popover.Content>Søket er kopiert!</Popover.Content>
+          </Popover>
+        </div>
+        <Button
+          type="button"
+          variant="tertiary"
+          size="small"
+          // className="search__reset-button"
+          icon={<Delete title="Nullstill søket" />}
+          onClick={onReset}
+        >
+          Nullstill søket
+        </Button>
+      </div>
     </section>
   )
 }
