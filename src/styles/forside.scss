@@ -4,46 +4,66 @@
   flex-direction: column;
   align-items: center;
   background-color: var(--a-gray-100);
-  padding: 52px 213px;
-  gap: 52px;
+  padding: 3.25rem 5rem;
+  gap: 2.5rem;
   align-self: stretch;
   justify-content: center;
 
+  @include mixins.for-size(tablet-up) {
+    padding: 3.25rem 10rem;
+    gap: 3.25rem;
+  }
+
   @include mixins.for-size(desktop-up) {
     margin-bottom: 0;
+    padding: 3.25rem 13.31rem;
+    gap: 3.25rem;
   }
 
 
   &__heading {
     margin: 0;
-    width: 365px;
-    height: 80px;
+    width: 10rem;
+    height: 2rem;
     font-family: "Source Sans Pro", serif;
-    font-size: 40px;
+    font-size: 1.2rem;
     font-weight: 400;
-    line-height: 40px;
+    line-height: 1.2rem;
     letter-spacing: -0.008em;
     text-align: center;
-
+    @include mixins.for-size(tablet-up) {
+      width: 15rem;
+      height: 3.2rem;
+      font-size: 1.8rem;
+      line-height: 1.8rem;
+    }
+    @include mixins.for-size(desktop-up) {
+      width: 22.81rem;
+      height: 5rem;
+      font-size: 2.5rem;
+      line-height: 2.5rem;
+    }
   }
-/*  &__text {
-    width: 198px;
-    height: 24px;
-    font-family: "Source Sans Pro", serif;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 24px;
-    letter-spacing: 0px;
-    text-align: left;
 
-  }*/
   &__input {
     margin-bottom: var(--a-spacing-4);
-    width: 472px;
-    height: 48px;
-    padding: 0px 0px 0px 8px;
-    border-radius: 4px;
+    width: 15.5rem;
+    height: 1.5rem;
+    padding: 0 0 0 0.5rem;
+    border-radius: 0.25rem;
     border: 1px;
+    font-size: 50%;
+
+    @include mixins.for-size(tablet-up) {
+      font-size: 1.5rem;
+      width: 20.5rem;
+      height: 2rem;
+    }
+    @include mixins.for-size(desktop-up) {
+      font-size: 2.5rem;
+      width: 29.5rem;
+      height: 3rem;
+    }
 
   }
 }

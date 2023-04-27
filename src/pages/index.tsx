@@ -36,7 +36,8 @@ function Home(props: any) {
   return (
     <div className="searchbar">
       <div className="searchbar__heading">
-            Alt* av hjelpemidler samlet på en plass
+            {/*Alt* av hjelpemidler samlet på en plass*/}
+        Enklere å finne fram til infromasjon om hjelpemidler!
       </div>
       <div className="searchbar__input">
         <FormProvider {...formMethods}>
