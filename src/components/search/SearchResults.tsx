@@ -7,7 +7,7 @@ import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '../../utils/product-util'
 import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
-import { FetchResponse } from '../../utils/api-util'
+import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
 import useRestoreScroll from '../../hooks/useRestoreScroll'
 
 import DefinitionList from '../definition-list/DefinitionList'
@@ -72,7 +72,9 @@ const SearchResults = ({
   }
 
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
-  const isLastPage = (data?.at(-1)?.numberOfProducts || 0) - products.length === 0
+  const isLastPage =
+    (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
+    (showProductSeriesView && !isLoadingMore && products?.length < size * PAGE_SIZE)
 
   return (
     <>
