@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
-import { Photo } from '../../utils/product-util'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { Button } from '@navikt/ds-react'
+import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
+import { largeImageLoader } from '../../utils/image-util'
+import { Photo } from '../../utils/product-util'
 
 type ImageSliderProps = {
   photos: Photo[]
@@ -38,8 +39,6 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   let [src, setSrc] = useState(photos[active]?.uri)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
-
-  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
 
   const prevImage = () => {
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
@@ -78,7 +77,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             <div className="photo-container">
               <Image
                 key={src}
-                loader={imageLoader}
+                loader={largeImageLoader}
                 src={src}
                 fill
                 style={{ objectFit: 'contain' }}
@@ -136,7 +135,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   <div className="next-image">
                     <Image
                       draggable="false"
-                      loader={imageLoader}
+                      loader={largeImageLoader}
                       src={src}
                       alt={`Produktbilde nummer ${active}`}
                       fill

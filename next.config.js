@@ -36,7 +36,7 @@ const nextConfig = {
   },
   env: {
     HM_SEARCH_URL: process.env.HM_SEARCH_URL,
-    NAV_CDN_URL: process.env.NAV_CDN_URL,
+    IMAGE_PROXY_URL: process.env.IMAGE_PROXY_URL,
   },
 }
 
