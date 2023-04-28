@@ -34,10 +34,11 @@ function Home(props: any) {
   const { searchData, setSearchData } = useHydratedSearchStore()
 
   return (
+    <div>
     <div className="searchbar">
       <div className="searchbar__heading">
             {/*Alt* av hjelpemidler samlet på en plass*/}
-        Enklere å finne fram til infromasjon om hjelpemidler!
+        Lett å finne frem til informasjon om hjelpemidler!
       </div>
       <div className="searchbar__input">
         <FormProvider {...formMethods}>
@@ -58,6 +59,9 @@ function Home(props: any) {
           </form>
         </FormProvider>
       </div>
+    </div>
+  <main className="forside__content">
+  </main>
     </div>
   );
 }
