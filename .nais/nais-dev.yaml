@@ -10,7 +10,7 @@ spec:
   image: {{image}}
   port: 3000
   ingresses:
-    - 'https://hjelpemiddeloversikt.dev.nav.no'
+    - 'https://hjelpemiddeloversikt.intern.dev.nav.no'
   accessPolicy:
     outbound:
       rules:
