@@ -148,7 +148,8 @@
     color: var(--ac-link-panel-text, var(--a-text-default));
     font-weight: 400;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       text-decoration: underline;
       color: var(--ac-link-panel-hover-text, var(--a-text-action));
     }

@@ -45,6 +45,11 @@ function App({ Component, pageProps }: AppProps) {
                   <p>Veileder</p>
                 </NextLink>
               </li> */}
+            <li>
+              <NextLink href="/sok">
+                <p>Søk</p>
+              </NextLink>
+            </li>
             <li className="nav-compare">
               <NextLink href="/sammenlign" className={classNames({ 'nav-topp--active': pathname === '/sammenlign' })}>
                 Sammenligner
