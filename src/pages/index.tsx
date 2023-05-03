@@ -36,14 +36,7 @@ function Home() {
           <FormProvider {...formMethods}>
             <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
               <Controller
-                render={({ field }) => (
-                  <Search
-                    className="search__input"
-                    label="Skriv ett eller flere søkeord"
-                    hideLabel={false}
-                    {...field}
-                  />
-                )}
+                render={({ field }) => <Search label="Skriv ett eller flere søkeord" hideLabel={false} {...field} />}
                 name="searchTerm"
                 control={control}
                 defaultValue=""
