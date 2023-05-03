@@ -62,7 +62,7 @@ const Documents = ({ documents }: { documents: Document[] }) => {
   }
 
   const documentLoader = (uri: string) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/produktblade/${uri}`
+    return `https://www.hjelpemiddeldatabasen.no/blobs/${uri}`
   }
 
   const titleCapitalized = (documentTitle: string) => {
