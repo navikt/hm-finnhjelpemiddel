@@ -76,7 +76,7 @@ const Sidebar = ({
           size="small"
           icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
           onClick={() => {
-            // navigator.clipboard.writeText(location.href)
+            navigator.clipboard.writeText(location.href)
             setCopyPopupOpenState(true)
           }}
         />

@@ -45,7 +45,7 @@ function App({ Component, pageProps }: AppProps) {
                   <p>Veileder</p>
                 </NextLink>
               </li> */}
-            <li className="">
+            <li>
               <NextLink href="/sok">
                 <p>Søk</p>
               </NextLink>

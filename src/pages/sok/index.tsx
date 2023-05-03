@@ -1,19 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import useSWRInfinite from 'swr/infinite'
-import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
-import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '@/utils/api-util'
-import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+
+import { Up } from '@navikt/ds-icons'
+import { Button, Heading } from '@navikt/ds-react'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import CompareMenu from '@/components/compare-products/CompareMenu'
 import SearchResults from '@/components/search/SearchResults'
 import Sidebar from '@/components/sidebar/Sidebar'
-import { Button, Heading } from '@navikt/ds-react'
-import { useInView } from 'react-intersection-observer'
-import { Up } from '@navikt/ds-icons'
+import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
+import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '@/utils/api-util'
+import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 
 export const getServerSideProps: (
   context: NextPageContext
@@ -22,7 +23,7 @@ export const getServerSideProps: (
   return { props: { searchParams: mapProductSearchParams(query) } }
 }
 
-export default function Home({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Sok({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const {
     searchData,
     setSearchData,
