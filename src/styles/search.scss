@@ -27,7 +27,7 @@
 
   &__input,
   &__agreement-switch {
-    margin-bottom: var(--a-spacing-4);
+    margin-bottom: var(--a-spacing-0);
   }
 
   &__iso-category-select {
@@ -161,7 +161,8 @@
     color: var(--ac-link-panel-text, var(--a-text-default));
     font-weight: 400;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       text-decoration: underline;
       color: var(--ac-link-panel-hover-text, var(--a-text-action));
     }
