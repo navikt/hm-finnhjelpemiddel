@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { BodyShort, Button, Heading } from '@navikt/ds-react'
 import { Delete } from '@navikt/ds-icons'
 import { ImageIcon } from '@navikt/aksel-icons'
-
+import { smallImageLoader } from '../utils/image-util'
 import { Product } from '../utils/product-util'
 
 type ProductCardProps = {
@@ -15,8 +15,6 @@ type ProductCardProps = {
 const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
-
-  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}//${src}`
 
   return (
     <motion.div className="product-card">
@@ -31,7 +29,13 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
             />
           )}
           {hasImage && (
-            <Image loader={imageLoader} src={firstImageSrc} alt="Produktbilde" fill style={{ objectFit: 'contain' }} />
+            <Image
+              loader={smallImageLoader}
+              src={firstImageSrc}
+              alt="Produktbilde"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
           )}
         </div>
         <div className="overlay">

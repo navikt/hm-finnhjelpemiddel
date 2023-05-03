@@ -8,6 +8,7 @@ import { Product } from '../../utils/product-util'
 import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
+import { smallImageLoader } from '../../utils/image-util'
 import useRestoreScroll from '../../hooks/useRestoreScroll'
 
 import DefinitionList from '../definition-list/DefinitionList'
@@ -120,14 +121,13 @@ const SearchResults = ({
 
 const ProductImage = ({ src }: { src: string }) => {
   const [isLoading, setIsLoading] = useState(true)
-  const imageLoader = ({ src }: { src: string }) => `${process.env.NAV_CDN_URL}/${src}`
 
   if (src) {
     return (
       <>
         {isLoading && <Loader size="large" />}
         <Image
-          loader={imageLoader}
+          loader={smallImageLoader}
           src={src}
           onLoad={() => setIsLoading(true)}
           onLoadingComplete={() => setIsLoading(false)}
