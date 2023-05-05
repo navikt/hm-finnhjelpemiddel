@@ -2,9 +2,9 @@ import { useRef, useState } from 'react'
 import { Button, Popover } from '@navikt/ds-react'
 import { Delete } from '@navikt/ds-icons'
 import { FilesIcon } from '@navikt/aksel-icons'
-import { FilterData } from '../../utils/api-util'
+import { FilterData } from '@/utils/api-util'
 
-import SearchForm from '../SearchForm'
+import SearchForm, { SearchFormResetHandle } from '../SearchForm'
 
 const Sidebar = ({
   filters,
@@ -16,11 +16,18 @@ const Sidebar = ({
   setFocus: () => void
 }) => {
   const copyButtonRef = useRef<HTMLButtonElement>(null)
+  const searchFormRef = useRef<SearchFormResetHandle>(null)
+
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+
+  const onReset = () => {
+    onResetSearchData()
+    searchFormRef.current && searchFormRef.current.reset()
+  }
 
   return (
     <section className="search__side-bar">
-      <SearchForm filters={filters} setFocus={setFocus} />
+      <SearchForm filters={filters} setFocus={setFocus} ref={searchFormRef} />
       <div className="footer">
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button
@@ -49,7 +56,7 @@ const Sidebar = ({
           variant="tertiary"
           size="small"
           icon={<Delete title="Nullstill søket" />}
-          onClick={onResetSearchData}
+          onClick={onReset}
         >
           Nullstill søket
         </Button>

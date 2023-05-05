@@ -105,7 +105,6 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
   const onReset = () => {
     setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
     setSize(1)
-    searchFormRef.current && searchFormRef.current.reset()
   }
 
   return (
@@ -166,7 +165,14 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
         <div className="main-wrapper">
           <div className="flex-column-wrap">
             {showSidebar && (
-              <Sidebar filters={data?.at(-1)?.filters} onResetSearchData={onReset} setFocus={setFocusOnSearchResults} />
+              <Sidebar
+                filters={data?.at(-1)?.filters}
+                onResetSearchData={() => {
+                  onReset()
+                  searchFormRef.current && searchFormRef.current.reset()
+                }}
+                setFocus={setFocusOnSearchResults}
+              />
             )}
             <section className="results__wrapper">
               {!showSidebar && (
