@@ -76,6 +76,7 @@ const SearchResults = ({
   const isLastPage =
     (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
     (showProductSeriesView && !isLoadingMore && products?.length < size * PAGE_SIZE)
+  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
   return (
     <>
@@ -101,7 +102,7 @@ const SearchResults = ({
           <BodyShort aria-live="polite">
             {showProductSeriesView
               ? `${products?.length} produktserier vises`
-              : `${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}
+              : `${products.length} av ${totalNumberOfProducts} produkter vises`}
           </BodyShort>
         </div>
       </header>

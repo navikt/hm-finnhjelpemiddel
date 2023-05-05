@@ -301,3 +301,20 @@ details {
     @extend .visually-hidden;
   }
 }
+
+.spacing {
+  &-bottom {
+    &--small {
+      margin-bottom: var(--a-spacing-2);
+    }
+    &--medium {
+      margin-bottom: var(--a-spacing-4);
+    }
+    &--large {
+      margin-bottom: var(--a-spacing-8);
+    }
+    &--xlarge {
+      margin-bottom: var(--a-spacing-16);
+    }
+  }
+}
