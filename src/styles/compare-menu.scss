@@ -109,13 +109,17 @@
 
     &__empty {
       height: 15rem;
-      width: 100%;
+      width: 22rem;
       border-radius: 12px;
+
+      @include mixins.for-size(phone-only) {
+        width: 100%;
+      }
     }
 
     &__one-more {
       height: 15rem;
-      width: 176px;
+      width: 11rem;
       border-radius: var(--a-border-radius-large);
 
       @include mixins.for-size(phone-only) {

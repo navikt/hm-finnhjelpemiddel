@@ -13,7 +13,7 @@ import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-uti
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import CompareMenu from '@/components/compare-products/CompareMenu'
-import Modal from '@/components/Modal'
+import MobileOverlay from '@/components/MobileOverlay'
 import SearchForm, { SearchFormResetHandle } from '@/components/SearchForm'
 import SearchResults from '@/components/search/SearchResults'
 import Sidebar from '@/components/sidebar/Sidebar'
@@ -41,7 +41,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
 
   const [initialProductSearchParams, setInitialProductSearchParams] = useState(searchParams)
   const [searchInitialized, setSearchInitialized] = useState(false)
-  const [filterModalOpen, setFilterModalOpen] = useState(false)
+  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
     (index) => {
@@ -97,9 +97,8 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
   }, [searchInitialized, searchData, numberOfFetchedProducts])
 
   useEffect(() => {
-    if (window.innerWidth >= 1100) {
-      setShowSidebar(true)
-    }
+    setShowSidebar(window.innerWidth >= 1100)
+    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
   }, [])
 
   const onReset = () => {
@@ -111,16 +110,16 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     <>
       {compareMode === CompareMode.Active && <CompareMenu />}
       {!showSidebar && (
-        <Modal open={filterModalOpen}>
-          <Modal.Header>
+        <MobileOverlay open={mobileOverlayOpen}>
+          <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
             <Heading level="1" size="medium">
               Filtrer søket
             </Heading>
-          </Modal.Header>
-          <Modal.Content>
+          </MobileOverlay.Header>
+          <MobileOverlay.Content>
             <SearchForm filters={data?.at(-1)?.filters} ref={searchFormRef} />
-          </Modal.Content>
-          <Modal.Footer>
+          </MobileOverlay.Content>
+          <MobileOverlay.Footer>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginBottom: 16 }}>
               <Button
                 ref={copyButtonRef}
@@ -152,9 +151,9 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                 Nullstill søket
               </Button>
             </div>
-            <Button onClick={() => setFilterModalOpen(false)}>Vis {totalNumberOfProducts} søkeresultater</Button>
-          </Modal.Footer>
-        </Modal>
+            <Button onClick={() => setMobileOverlayOpen(false)}>Vis {totalNumberOfProducts} søkeresultater</Button>
+          </MobileOverlay.Footer>
+        </MobileOverlay>
       )}
       <AnimateLayout>
         <div className="main-header">
@@ -177,7 +176,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
             <section className="results__wrapper">
               {!showSidebar && (
                 <div className="spacing-bottom--medium">
-                  <Button variant="secondary" onClick={() => setFilterModalOpen(true)}>
+                  <Button variant="secondary" onClick={() => setMobileOverlayOpen(true)}>
                     Endre søk
                   </Button>
                 </div>
