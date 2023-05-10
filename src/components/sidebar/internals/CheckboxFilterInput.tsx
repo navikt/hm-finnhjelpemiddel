@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
-import { FilterCategories } from '../../../utils/filter-util'
-import { Filter, SearchData } from '../../../utils/api-util'
-import { useHydratedSearchStore } from '../../../utils/search-state-util'
-import { capitalize } from '../../../utils/string-util'
+import { FilterCategories } from '@/utils/filter-util'
+import { Filter, SearchData } from '@/utils/api-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { capitalize } from '@/utils/string-util'
 
 type CheckboxFilterInputProps = {
   filter: { key: keyof typeof FilterCategories; data?: Filter }
