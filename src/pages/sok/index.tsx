@@ -1,20 +1,22 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
 import Router from 'next/router'
-import { useEffect, useRef, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
 import useSWRInfinite from 'swr/infinite'
-
-import { Up } from '@navikt/ds-icons'
-import { Button, Heading } from '@navikt/ds-react'
-
-import AnimateLayout from '@/components/layout/AnimateLayout'
-import CompareMenu from '@/components/compare-products/CompareMenu'
-import SearchResults from '@/components/search/SearchResults'
-import Sidebar from '@/components/sidebar/Sidebar'
+import { Button, Heading, Popover } from '@navikt/ds-react'
+import { Delete, Up } from '@navikt/ds-icons'
+import { FilesIcon } from '@navikt/aksel-icons'
 import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '@/utils/api-util'
 import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+
+import AnimateLayout from '@/components/layout/AnimateLayout'
+import CompareMenu from '@/components/compare-products/CompareMenu'
+import MobileOverlay from '@/components/MobileOverlay'
+import SearchForm, { SearchFormResetHandle } from '@/components/SearchForm'
+import SearchResults from '@/components/search/SearchResults'
+import Sidebar from '@/components/sidebar/Sidebar'
 
 export const getServerSideProps: (
   context: NextPageContext
@@ -23,7 +25,13 @@ export const getServerSideProps: (
   return { props: { searchParams: mapProductSearchParams(query) } }
 }
 
-export default function Sok({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const copyButtonRef = useRef<HTMLButtonElement>(null)
+  const searchFormRef = useRef<SearchFormResetHandle>(null)
+
+  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false)
+
   const {
     searchData,
     setSearchData,
@@ -33,6 +41,7 @@ export default function Sok({ searchParams }: InferGetServerSidePropsType<typeof
 
   const [initialProductSearchParams, setInitialProductSearchParams] = useState(searchParams)
   const [searchInitialized, setSearchInitialized] = useState(false)
+  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
   const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
     (index) => {
@@ -68,26 +77,84 @@ export default function Sok({ searchParams }: InferGetServerSidePropsType<typeof
   }, [data])
 
   const products = data?.flatMap((d) => d.products)
-  const numberOfProducts = products && products.length > PAGE_SIZE ? products.length : undefined
+  const numberOfFetchedProducts = products && products.length > PAGE_SIZE ? products.length : undefined
+  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
   useEffect(() => {
     if (searchInitialized) {
       Router.push(
         toSearchQueryString({
           ...searchData,
-          to: numberOfProducts,
+          to: numberOfFetchedProducts,
         }),
         undefined,
         {
           scroll: false,
+          shallow: true,
         }
       )
     }
-  }, [searchInitialized, searchData, numberOfProducts])
+  }, [searchInitialized, searchData, numberOfFetchedProducts])
+
+  useEffect(() => {
+    setShowSidebar(window.innerWidth >= 1100)
+    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
+  }, [])
+
+  const onReset = () => {
+    setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
+    setSize(1)
+  }
 
   return (
     <>
       {compareMode === CompareMode.Active && <CompareMenu />}
+      {!showSidebar && (
+        <MobileOverlay open={mobileOverlayOpen}>
+          <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
+            <Heading level="1" size="medium">
+              Filtrer søket
+            </Heading>
+          </MobileOverlay.Header>
+          <MobileOverlay.Content>
+            <SearchForm filters={data?.at(-1)?.filters} ref={searchFormRef} />
+          </MobileOverlay.Content>
+          <MobileOverlay.Footer>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginBottom: 16 }}>
+              <Button
+                ref={copyButtonRef}
+                variant="tertiary"
+                size="small"
+                icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                onClick={() => {
+                  navigator.clipboard.writeText(location.href)
+                  setCopyPopupOpenState(true)
+                }}
+              >
+                Kopiér søket
+              </Button>
+              <Popover
+                open={copyPopupOpenState}
+                onClose={() => setCopyPopupOpenState(false)}
+                anchorEl={copyButtonRef.current}
+                placement="right"
+              >
+                <Popover.Content>Søket er kopiert!</Popover.Content>
+              </Popover>
+              <Button
+                type="button"
+                variant="tertiary"
+                size="small"
+                icon={<Delete title="Nullstill søket" />}
+                onClick={onReset}
+              >
+                Nullstill søket
+              </Button>
+            </div>
+            <Button onClick={() => setMobileOverlayOpen(false)}>Vis {totalNumberOfProducts} søkeresultater</Button>
+          </MobileOverlay.Footer>
+        </MobileOverlay>
+      )}
       <AnimateLayout>
         <div className="main-header">
           <Heading level="1" size="large" ref={pageTopRef}>
@@ -96,24 +163,31 @@ export default function Sok({ searchParams }: InferGetServerSidePropsType<typeof
         </div>
         <div className="main-wrapper">
           <div className="flex-column-wrap">
-            <Sidebar
-              filters={data?.at(-1)?.filters}
-              onResetSearchData={() => {
-                setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
-                setSize(1)
-              }}
-              setFocus={setFocusOnSearchResults}
-            />
+            {showSidebar && (
+              <Sidebar
+                filters={data?.at(-1)?.filters}
+                onResetSearchData={() => {
+                  onReset()
+                  searchFormRef.current && searchFormRef.current.reset()
+                }}
+                setFocus={setFocusOnSearchResults}
+              />
+            )}
             <section className="results__wrapper">
-              {
-                <SearchResults
-                  data={data}
-                  size={size}
-                  setSize={setSize}
-                  isLoading={isLoading}
-                  productViewToggleRef={productViewToggleRef}
-                />
-              }
+              {!showSidebar && (
+                <div className="spacing-bottom--medium">
+                  <Button variant="secondary" onClick={() => setMobileOverlayOpen(true)}>
+                    Endre søk
+                  </Button>
+                </div>
+              )}
+              <SearchResults
+                data={data}
+                size={size}
+                setSize={setSize}
+                isLoading={isLoading}
+                productViewToggleRef={productViewToggleRef}
+              />
             </section>
           </div>
         </div>
@@ -123,9 +197,7 @@ export default function Sok({ searchParams }: InferGetServerSidePropsType<typeof
             className="search__page-up-button"
             icon={<Up title="Gå til toppen av siden" />}
             onClick={() => setFocusOnSearchResults()}
-          >
-            Til toppen
-          </Button>
+          />
         )}
       </AnimateLayout>
     </>

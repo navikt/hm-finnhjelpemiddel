@@ -76,6 +76,7 @@ const SearchResults = ({
   const isLastPage =
     (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
     (showProductSeriesView && !isLoadingMore && products?.length < size * PAGE_SIZE)
+  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
   return (
     <>
@@ -91,17 +92,17 @@ const SearchResults = ({
             size="small"
             variant="neutral"
           >
-            <ToggleGroup.Item value="series">Produktserier</ToggleGroup.Item>
-            <ToggleGroup.Item value="products" ref={productViewToggleRef}>
-              Enkeltprodukter
+            <ToggleGroup.Item value="series" ref={productViewToggleRef}>
+              Produktserier
             </ToggleGroup.Item>
+            <ToggleGroup.Item value="products">Enkeltprodukter</ToggleGroup.Item>
           </ToggleGroup>
         </div>
         <div>
           <BodyShort aria-live="polite">
             {showProductSeriesView
               ? `${products?.length} produktserier vises`
-              : `${products.length} av ${data?.at(-1)?.numberOfProducts} produkter vises`}
+              : `${products.length} av ${totalNumberOfProducts} produkter vises`}
           </BodyShort>
         </div>
       </header>

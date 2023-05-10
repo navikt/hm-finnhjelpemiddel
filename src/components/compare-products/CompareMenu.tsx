@@ -78,7 +78,7 @@ const CompareMenu = () => {
         )}
         {productsToCompare.length !== 0 && (
           <>
-            {productsToCompare ? (
+            {productsToCompare && (
               <motion.ul className="compare-menu__chosen-products">
                 <AnimatePresence mode="popLayout">
                   {productsToCompare.map((product: Product, index: number, array: Product[]) => (
@@ -99,7 +99,7 @@ const CompareMenu = () => {
                   ))}
                 </AnimatePresence>
               </motion.ul>
-            ) : null}
+            )}
             {productsToCompare.length > 1 && (
               <motion.div>
                 <Link href="/sammenlign" passHref legacyBehavior>

@@ -12,10 +12,13 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
     .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
-  if (!searchDataFilters.length && (!filters || !Object.keys(filters).length)) {
+  const noAvailableFilters =
+    !filters || !Object.values(filters).filter((data) => data.values.length).length || !Object.keys(filters).length
+
+  if (!searchDataFilters.length && noAvailableFilters) {
     return (
       <div className="search__filters">
-        <Heading level="2" size="xsmall">
+        <Heading level="2" size="xsmall" spacing>
           Filtre
         </Heading>
         <BodyShort>Ingen filtre tilgjengelig</BodyShort>
@@ -25,7 +28,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <Heading level="2" size="xsmall">
+      <Heading level="2" size="xsmall" spacing>
         Filtre
       </Heading>
       <RangeFilterInput filter={{ key: 'lengdeCM', data: filters?.lengdeCM }} />
