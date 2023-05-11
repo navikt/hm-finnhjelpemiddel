@@ -1,4 +1,4 @@
-import '../styles/globals.scss'
+import '@/styles/globals.scss'
 
 import React, { useEffect } from 'react'
 import classNames from 'classnames'
@@ -7,9 +7,11 @@ import type { AppProps } from 'next/app'
 import NextLink from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import reportAccessibility from '../utils/reportAccessibility'
 
-import Footer from '../components/layout/Footer'
+import Footer from '@/components/layout/Footer'
+import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
+import reportAccessibility from '@/utils/reportAccessibility'
+
 
 function App({ Component, pageProps }: AppProps) {
   const pathname = usePathname()
@@ -17,6 +19,14 @@ function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
   }, [pathname])
+
+  useEffect(() => {
+    // if browser initialize amplitude
+    if (typeof window !== 'undefined') {
+      initAmplitude()
+      logOversiktForsideVist()
+    }
+  }, [])
 
   return (
     <>
