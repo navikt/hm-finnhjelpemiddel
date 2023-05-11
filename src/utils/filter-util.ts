@@ -14,6 +14,7 @@ export enum FilterCategories {
   materialeTrekk = 'Trekkmateriale',
   beregnetBarn = 'Beregnet på barn',
   leverandor = 'Leverandør',
+  produktkategori = 'Produktkategori',
 }
 
 const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number>) => {
@@ -100,6 +101,12 @@ export const filterMaterialeTrekk = (values: Array<number>) => ({
 export const filterLeverandor = (values: Array<number>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'supplier.name': value } })),
+  },
+})
+
+export const filterProduktkategori = (values: Array<number>) => ({
+  bool: {
+    should: values.map((value) => ({ term: { isoCategoryName: value } })),
   },
 })
 
