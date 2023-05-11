@@ -29,7 +29,7 @@
     }
 
     @include mixins.for-size(desktop-up) {
-      max-width: 425px;
+      max-width: 25rem;
       margin-right: var(--a-spacing-12);
     }
   }

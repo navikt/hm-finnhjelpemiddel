@@ -71,6 +71,7 @@ details {
   }
 
   > div {
+    box-sizing: border-box;
     margin-bottom: var(--a-spacing-5);
   }
 

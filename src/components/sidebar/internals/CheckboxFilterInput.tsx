@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
-import { FilterCategories } from '../../../utils/filter-util'
-import { Filter, SearchData } from '../../../utils/api-util'
-import { useHydratedSearchStore } from '../../../utils/search-state-util'
-import { capitalize } from '../../../utils/string-util'
+import { Button, Checkbox, CheckboxGroup, Detail } from '@navikt/ds-react'
+import { FilterCategories } from '@/utils/filter-util'
+import { Filter, SearchData } from '@/utils/api-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { capitalize } from '@/utils/string-util'
 
 type CheckboxFilterInputProps = {
   filter: { key: keyof typeof FilterCategories; data?: Filter }
@@ -43,6 +43,12 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
     return null
   }
 
+  const CheckboxLabel = ({ value, hitCount }: { value: string | number; hitCount: number }) => (
+    <>
+      {capitalize(String(value))} <Detail style={{ display: 'inline' }}>({String(hitCount)})</Detail>
+    </>
+  )
+
   return (
     <details open={watchFilter.length > 0 || touched}>
       <summary>{FilterCategories[filterKey]}</summary>
@@ -55,24 +61,24 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
               <CheckboxGroup legend={FilterCategories[filterKey]} hideLegend {...field} size="small">
                 {selectedUnavailableFilters?.map((f) => (
                   <Checkbox value={f} key={f}>
-                    {capitalize(String(f))} (0)
+                    <CheckboxLabel value={f} hitCount={0} />
                   </Checkbox>
                 ))}
                 {filterData?.values.slice(0, 10).map((f) => (
                   <Checkbox value={f.key} key={f.key}>
-                    {capitalize(String(f.key))} ({f.doc_count})
+                    <CheckboxLabel value={f.key} hitCount={f.doc_count} />
                   </Checkbox>
                 ))}
                 {showAllValues &&
                   filterData?.values.slice(10).map((f) => (
                     <Checkbox value={f.key} key={f.key}>
-                      {capitalize(String(f.key))} ({f.doc_count})
+                      <CheckboxLabel value={f.key} hitCount={f.doc_count} />
                     </Checkbox>
                   ))}
                 {!showAllValues &&
                   selectedInvisibleFilters?.map((f) => (
                     <Checkbox value={f.key} key={f.key}>
-                      {capitalize(String(f.key))} ({f.doc_count})
+                      <CheckboxLabel value={f.key} hitCount={f.doc_count} />
                     </Checkbox>
                   ))}
               </CheckboxGroup>

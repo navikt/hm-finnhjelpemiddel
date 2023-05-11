@@ -3,10 +3,11 @@
   align-items: flex-end;
   gap: var(--a-spacing-4);
   box-sizing: border-box;
+  max-width: 13rem;
+}
 
-  &__error {
-    margin: var(--a-spacing-2) 0;
-  }
+.single-filter-input {
+  max-width: 6rem;
 }
 
 .checkbox-filter-input {

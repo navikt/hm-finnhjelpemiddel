@@ -8,6 +8,8 @@ import { SearchData } from '@/utils/api-util'
 import { mapProductSearchParams } from '@/utils/product-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
 
+import AnimateLayout from '@/components/layout/AnimateLayout'
+
 function Home() {
   const router = useRouter()
 
@@ -24,7 +26,7 @@ function Home() {
   const { control, handleSubmit } = formMethods
 
   return (
-    <>
+    <AnimateLayout>
       <div className="searchbar">
         <div className="searchbar__heading">
           {/*Alt* av hjelpemidler samlet på en plass*/}
@@ -46,7 +48,7 @@ function Home() {
         </div>
       </div>
       <main className="forside__content"></main>
-    </>
+    </AnimateLayout>
   )
 }
 

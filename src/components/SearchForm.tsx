@@ -2,9 +2,9 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { Button, Search, Switch } from '@navikt/ds-react'
-import { FilterData, SearchData } from '../utils/api-util'
-import { initialSearchDataState, useHydratedSearchStore } from '../utils/search-state-util'
-import { mapProductSearchParams } from '../utils/product-util'
+import { FilterData, SearchData } from '@/utils/api-util'
+import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
+import { mapProductSearchParams } from '@/utils/product-util'
 
 import FilterView from './sidebar/FilterView'
 import SelectIsoCategory from './sidebar/SelectIsoCategory'
@@ -39,9 +39,7 @@ const SearchForm = forwardRef<SearchFormResetHandle, Props>(({ filters, setFocus
 
   const { control, handleSubmit, reset: resetForm, setValue } = formMethods
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    setSearchData({ ...data })
-  }
+  const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
 
   useImperativeHandle(ref, () => ({
     reset() {

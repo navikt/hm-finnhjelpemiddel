@@ -2,8 +2,9 @@ import { mapProducts, Product } from './product-util'
 import {
   filterBeregnetBarn,
   filterBredde,
-  filterLengde,
+  FilterCategories,
   filterFyllmateriale,
+  filterLengde,
   filterMaksBrukervekt,
   filterMaksSetebredde,
   filterMaksSetedybde,
@@ -15,7 +16,6 @@ import {
   filterMinSetehoyde,
   filterTotalvekt,
   toMinMaxAggs,
-  FilterCategories,
 } from './filter-util'
 
 export const PAGE_SIZE = 25
