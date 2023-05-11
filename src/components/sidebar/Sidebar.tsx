@@ -1,21 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { Button, Heading, Popover, Search, Switch } from '@navikt/ds-react'
-import { Collapse, Delete, Expand } from '@navikt/ds-icons'
+import { useRef, useState } from 'react'
+import { Button, Popover } from '@navikt/ds-react'
+import { Delete } from '@navikt/ds-icons'
 import { FilesIcon } from '@navikt/aksel-icons'
-import { FilterData, SearchData } from '../../utils/api-util'
-import { mapProductSearchParams } from '../../utils/product-util'
-import { initialSearchDataState, useHydratedSearchStore } from '../../utils/search-state-util'
+import { FilterData } from '@/utils/api-util'
 
-import FilterView from './FilterView'
-import SelectIsoCategory from './SelectIsoCategory'
-
-const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
-  <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
-    Gå til resultat
-  </Button>
-)
+import SearchForm, { SearchFormResetHandle } from '../SearchForm'
 
 const Sidebar = ({
   filters,
@@ -26,127 +15,52 @@ const Sidebar = ({
   onResetSearchData: () => void
   setFocus: () => void
 }) => {
-  const router = useRouter()
-  const { searchData, setSearchData } = useHydratedSearchStore()
-  const [productSearchParams] = useState(mapProductSearchParams(router.query))
-  const [expanded, setExpanded] = useState(false)
-
   const copyButtonRef = useRef<HTMLButtonElement>(null)
+  const searchFormRef = useRef<SearchFormResetHandle>(null)
+
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
-
-  const formMethods = useForm<SearchData>({
-    defaultValues: {
-      ...initialSearchDataState,
-      ...productSearchParams,
-    },
-  })
-
-  const { control, handleSubmit, reset: resetForm, setValue } = formMethods
-
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    setSearchData({ ...data })
-  }
 
   const onReset = () => {
     onResetSearchData()
-    resetForm(initialSearchDataState)
+    searchFormRef.current && searchFormRef.current.reset()
   }
-
-  const Chevron = expanded ? Collapse : Expand
-
-  useEffect(() => {
-    if (window.innerWidth >= 800) {
-      setExpanded(true)
-    }
-  }, [])
 
   return (
     <section className="search__side-bar">
-      <div className="heading">
-        <Heading level="2" size="medium">
-          Søk
-        </Heading>
-        <Button
-          ref={copyButtonRef}
-          variant="secondary"
-          size="small"
-          icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-          onClick={() => {
-            navigator.clipboard.writeText(location.href)
-            setCopyPopupOpenState(true)
-          }}
-        />
-        <Popover
-          open={copyPopupOpenState}
-          onClose={() => setCopyPopupOpenState(false)}
-          anchorEl={copyButtonRef.current}
-          placement="left-end"
-        >
-          <Popover.Content>Søket er kopiert!</Popover.Content>
-        </Popover>
-      </div>
-
-      <FormProvider {...formMethods}>
-        <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
-          <Controller
-            render={({ field }) => (
-              <Search
-                className="search__input"
-                label="Skriv ett eller flere søkeord"
-                hideLabel={false}
-                onClear={() => setSearchData({ searchTerm: '' })}
-                {...field}
-              />
-            )}
-            name="searchTerm"
-            control={control}
-            defaultValue=""
-          />
-          <FocusOnResultsButton setFocus={setFocus} />
-
-          {expanded && (
-            <>
-              <div className="search__agreement-switch">
-                <Switch
-                  checked={searchData.hasRammeavtale}
-                  onChange={(e) => {
-                    setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
-                    setSearchData({ hasRammeavtale: e.target.checked })
-                  }}
-                >
-                  Vis kun produkter på rammeavtale med NAV
-                </Switch>
-                <FocusOnResultsButton setFocus={setFocus} />
-              </div>
-
-              <SelectIsoCategory />
-              <FocusOnResultsButton setFocus={setFocus} />
-
-              <FilterView filters={filters} />
-              <FocusOnResultsButton setFocus={setFocus} />
-            </>
-          )}
-
+      <SearchForm filters={filters} setFocus={setFocus} ref={searchFormRef} />
+      <div className="footer">
+        <div style={{ display: 'flex', gap: '10px' }}>
           <Button
-            type="button"
-            variant="secondary"
-            className="search__reset-button"
-            icon={<Delete title="Nullstill søket" />}
-            onClick={onReset}
+            ref={copyButtonRef}
+            variant="tertiary"
+            size="small"
+            icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+            onClick={() => {
+              navigator.clipboard.writeText(location.href)
+              setCopyPopupOpenState(true)
+            }}
           >
-            Nullstill søket
+            Kopiér søket
           </Button>
-        </form>
-      </FormProvider>
-      <Button
-        type="button"
-        className="search__expand-button"
-        variant="tertiary"
-        icon={<Chevron title="Vis mer informasjon om produktet" />}
-        onClick={() => setExpanded((prevState) => !prevState)}
-      >
-        {expanded ? 'Vis færre filtre' : 'Vis alle filtre'}
-      </Button>
+          <Popover
+            open={copyPopupOpenState}
+            onClose={() => setCopyPopupOpenState(false)}
+            anchorEl={copyButtonRef.current}
+            placement="right"
+          >
+            <Popover.Content>Søket er kopiert!</Popover.Content>
+          </Popover>
+        </div>
+        <Button
+          type="button"
+          variant="tertiary"
+          size="small"
+          icon={<Delete title="Nullstill søket" />}
+          onClick={onReset}
+        >
+          Nullstill søket
+        </Button>
+      </div>
     </section>
   )
 }

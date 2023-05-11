@@ -10,10 +10,12 @@
   background-color: var(--a-surface-action-subtle-hover);
   border-radius: var(--a-border-radius-large) var(--a-border-radius-large) 0 0;
   padding: var(--a-spacing-3) var(--a-spacing-6);
+  border: 1px solid var(--a-border-divider);
   box-shadow: 0 1px 15px 4px rgba(0, 34, 82, 0.1);
 
   &--open {
     height: 100%;
+    border-radius: unset;
     overflow-y: scroll;
 
     @include mixins.for-size(desktop-up) {
@@ -26,7 +28,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--a-spacing-5);
     padding: var(--a-spacing-4) 0;
 
     h2 {
@@ -56,7 +57,8 @@
     }
 
     @include mixins.for-size(phone-only) {
-      gap: 0;
+      width: 100%;
+      gap: var(--a-spacing-5);
     }
 
     @include mixins.for-size(desktop-up) {
@@ -80,6 +82,7 @@
   @include mixins.for-size(phone-only) {
     li {
       width: 100%;
+      margin: 0;
     }
   }
 
@@ -104,17 +107,24 @@
     padding: var(--a-spacing-6);
     margin-bottom: var(--a-spacing-4);
 
-
     &__empty {
       height: 15rem;
-      width: 450px;
+      width: 22rem;
       border-radius: 12px;
+
+      @include mixins.for-size(phone-only) {
+        width: 100%;
+      }
     }
 
     &__one-more {
       height: 15rem;
-      width: 176px;
+      width: 11rem;
       border-radius: var(--a-border-radius-large);
+
+      @include mixins.for-size(phone-only) {
+        width: 100%;
+      }
     }
 
     p {

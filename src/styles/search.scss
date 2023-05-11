@@ -6,7 +6,23 @@
     flex-direction: column;
     width: 100%;
     height: fit-content;
-    margin-bottom: var(--a-spacing-5);
+    margin-bottom: var(--a-spacing-10);
+    border: 1px solid var(--a-border-divider);
+    border-radius: var(--a-border-radius-large);
+    box-shadow: var(--a-shadow-small);
+
+    > .container {
+      padding: var(--a-spacing-5) var(--a-spacing-5) 0;
+    }
+
+    > .footer {
+      display: flex;
+      justify-content: space-between;
+      background-color: var(--a-deepblue-50);
+      border-bottom-left-radius: var(--a-border-radius-large);
+      border-bottom-right-radius: var(--a-border-radius-large);
+      padding: var(--a-spacing-3) var(--a-spacing-5);
+    }
 
     @include mixins.for-size(desktop-up) {
       margin-bottom: 0;
@@ -15,17 +31,9 @@
     @include mixins.for-size(desktop-up) {
       max-width: 425px;
       margin-right: var(--a-spacing-12);
-      padding-top: 0;
-    }
-
-    > .heading {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: var(--a-spacing-3);
     }
   }
 
-  &__input,
   &__agreement-switch {
     margin-bottom: var(--a-spacing-4);
   }
@@ -49,11 +57,6 @@
     right: var(--a-spacing-4);
     z-index: 2;
   }
-
-  &__expand-button {
-    align-self: center;
-    margin-top: var(--a-spacing-3) !important; // Margin is overwritten by Button styling from Aksel
-  }
 }
 
 .results {
@@ -61,6 +64,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    width: 100%;
 
     .results__loader {
       margin-top: var(--a-spacing-12);
