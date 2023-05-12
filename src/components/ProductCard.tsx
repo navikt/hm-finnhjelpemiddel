@@ -52,7 +52,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
         </Heading>
         <div className="hms-nr">
           <BodyShort size="small">HMS-nr.</BodyShort>
-          <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : 'mangler'}</BodyShort>
+          <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : '–'}</BodyShort>
         </div>
       </div>
     </motion.div>

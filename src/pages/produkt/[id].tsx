@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { InferGetServerSidePropsType } from 'next'
-import { Heading, GuidePanel, BodyShort } from '@navikt/ds-react'
+import { BodyShort, GuidePanel, Heading } from '@navikt/ds-react'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { mapSupplier, Supplier } from '../../utils/supplier-util'
-import { getProduct, getSupplier, getSeries, getAgreement } from '../../utils/api-util'
+import { getAgreement, getProduct, getSeries, getSupplier } from '../../utils/api-util'
 import { createProduct, mapProducts, Product, toSearchQueryString } from '../../utils/product-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import PhotoSlider from '../../components/photo-slider/PhotoSlider'
@@ -72,13 +72,9 @@ export default function ProduktPage({
               </Heading>
               <DefinitionList>
                 <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
-                <DefinitionList.Definition>
-                  {product.hmsArtNr ? product.hmsArtNr : 'Mangler HMS-nr.'}
-                </DefinitionList.Definition>
+                <DefinitionList.Definition>{product.hmsArtNr ? product.hmsArtNr : '–'}</DefinitionList.Definition>
                 <DefinitionList.Term>Lev-artnr.</DefinitionList.Term>
-                <DefinitionList.Definition>
-                  {product.supplierRef ? product.supplierRef : 'Mangler lev-artnr.'}
-                </DefinitionList.Definition>
+                <DefinitionList.Definition>{product.supplierRef ? product.supplierRef : '–'}</DefinitionList.Definition>
                 <DefinitionList.Term>ISO-klassifisering</DefinitionList.Term>
                 <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
                 <DefinitionList.Term>På bestillingsordning</DefinitionList.Term>
