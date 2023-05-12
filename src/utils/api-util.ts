@@ -97,6 +97,11 @@ export const fetchProducts = ({
 
   const queryFilters: Array<any> = [
     {
+      match: {
+        status: 'ACTIVE',
+      },
+    },
+    {
       match_bool_prefix: {
         hasAgreement: hasRammeavtale,
       },
