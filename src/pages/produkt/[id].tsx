@@ -154,7 +154,7 @@ export default function ProduktPage({
                   </Heading>
                   <div className="product-info__products-on-post-list">
                     {productsOnPost.map((product) => (
-                      <div className="product-card">
+                      <div className="product-card" key={product.id}>
                         <div className="product-card__image">
                           <div className="image">
                             {product.photos.length === 0 && (
