@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import { BodyShort, Link } from '@navikt/ds-react'
-import { Up } from '@navikt/ds-icons'
 
 const Footer = () => (
   <footer className="nav-bunn">
@@ -10,9 +9,9 @@ const Footer = () => (
         <Image src="/nav-logo-black.svg" alt="Test" width={60} height={37} />
         <div>
           <BodyShort>
-            <b>Hjelpemiddeloversikten</b>
+            <b>Finn hjelpemidler</b>
           </BodyShort>
-          <BodyShort>Hjelpemiddeloversikten er en tjeneste fra NAV</BodyShort>
+          <BodyShort>Finn hjelpemidler er en tjeneste fra NAV</BodyShort>
           <Link href="#">Om nettstedet</Link>
           <Link href="#">Kontaktinformasjon</Link>
         </div>
