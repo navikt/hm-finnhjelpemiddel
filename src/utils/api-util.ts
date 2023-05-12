@@ -674,7 +674,7 @@ export async function getAgreement(id: string) {
 export async function getSeries(seriesId: string) {
   const query = {
     bool: {
-      must: [{ term: { seriesId } }, { exists: { field: 'data' } }],
+      must: [{ term: { seriesId } }, { exists: { field: 'seriesId' } }],
     },
   }
 
@@ -686,6 +686,29 @@ export async function getSeries(seriesId: string) {
     body: JSON.stringify({
       query,
       size: 100,
+    }),
+  })
+  return res.json()
+}
+
+export async function getProductInPost(postIdentifier: string) {
+  const query = {
+    bool: {
+      must: [{ term: { 'agreementInfo.postIdentifier': { value: postIdentifier } } }],
+    },
+  }
+
+  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      size: 100,
+      collapse: {
+        field: 'attributes.series',
+      },
     }),
   })
   return res.json()
