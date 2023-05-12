@@ -9,7 +9,7 @@ spec:
   image: {{image}}
   port: 3000
   ingresses:
-    - 'https://hjelpemiddeloversikt-alpha.intern.dev.nav.no'
+    - 'https://finnhjelpemidler-alpha.intern.dev.nav.no'
   accessPolicy:
     outbound:
       rules:
