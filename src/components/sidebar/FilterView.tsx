@@ -45,6 +45,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <CheckboxFilterInput filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
       <CheckboxFilterInput filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} />
       <CheckboxFilterInput filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} />
+      <CheckboxFilterInput filter={{ key: 'leverandor', data: filters?.leverandor }} />
     </div>
   )
 }

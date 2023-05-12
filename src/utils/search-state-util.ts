@@ -21,6 +21,7 @@ const initialFiltersState = {
   setehoydeMinCM: [null, null],
   setedybdeMinCM: [null, null],
   totalVektKG: [null, null],
+  leverandor: [],
 }
 
 export const initialSearchDataState = {
