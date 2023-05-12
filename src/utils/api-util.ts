@@ -691,7 +691,7 @@ export async function getSeries(seriesId: string) {
   return res.json()
 }
 
-export async function getProductInPost(postIdentifier: string) {
+export async function getProductsInPost(postIdentifier: string) {
   const query = {
     bool: {
       must: [{ term: { 'agreementInfo.postIdentifier': { value: postIdentifier } } }],

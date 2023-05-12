@@ -4,7 +4,7 @@ import { InferGetServerSidePropsType } from 'next'
 import { Heading, Button, BodyShort, Alert } from '@navikt/ds-react'
 import { ArrowDownIcon, ChevronRightIcon, ImageIcon } from '@navikt/aksel-icons'
 import { mapSupplier, Supplier } from '@/utils/supplier-util'
-import { getProduct, getSupplier, getSeries, getAgreement, getProductInPost } from '@/utils/api-util'
+import { getProduct, getSupplier, getSeries, getAgreement, getProductsInPost } from '@/utils/api-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { createProduct, mapProducts, Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
@@ -39,7 +39,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
   const agreement = agreementData ? mapAgreement(agreementData._source) : null
 
   const productsOnPostData = product.agreementInfo
-    ? await getProductInPost(String(product.agreementInfo?.postIdentifier))
+    ? await getProductsInPost(String(product.agreementInfo?.postIdentifier))
     : null
   const productsOnPost = productsOnPostData
     ? mapProducts(productsOnPostData)
