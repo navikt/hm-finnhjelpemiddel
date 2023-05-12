@@ -99,7 +99,7 @@ export const fetchProducts = ({
 
   const queryFilters: Array<any> = [
     {
-      match: {
+      term: {
         status: 'ACTIVE',
       },
     },
