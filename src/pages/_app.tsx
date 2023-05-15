@@ -72,7 +72,7 @@ function App({ Component, pageProps }: AppProps) {
             <div>
               <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
               <BodyShort>
-                <b>Hei!</b> Dette er en bare en prototype til testing og utvikling.{' '}
+                <b>Hei!</b> Dette er bare en prototype til testing og utvikling.{' '}
                 <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link> om
                 du har kommet feil.
               </BodyShort>
