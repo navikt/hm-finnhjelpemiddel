@@ -37,7 +37,9 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
     (f) => !(filterData?.values.map((f) => f.key) || []).includes(f)
   )
 
-  const selectedInvisibleFilters = filterData?.values.slice(10).filter((f) => watchFilter.includes(f.key))
+  const selectedInvisibleFilters = filterData?.values
+    .slice(10)
+    .filter((f) => watchFilter.includes(f.key) || searchData.filters[filterKey].includes(f.key))
 
   if (!searchDataFilters.includes(filterKey) && !hasFilterData) {
     return null
@@ -50,7 +52,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   )
 
   return (
-    <details open={watchFilter.length > 0 || touched}>
+    <details open={watchFilter.length > 0 || searchData.filters[filterKey].length > 0 || touched}>
       <summary>{FilterCategories[filterKey]}</summary>
       <div>
         <div className="checkbox-filter-input">
@@ -58,7 +60,13 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
             control={control}
             name={`filters.${filterKey}`}
             render={({ field }) => (
-              <CheckboxGroup legend={FilterCategories[filterKey]} hideLegend {...field} size="small">
+              <CheckboxGroup
+                legend={FilterCategories[filterKey]}
+                hideLegend
+                {...field}
+                size="small"
+                value={searchData.filters[filterKey]}
+              >
                 {selectedUnavailableFilters?.map((f) => (
                   <Checkbox value={f} key={f}>
                     <CheckboxLabel value={f} hitCount={0} />
