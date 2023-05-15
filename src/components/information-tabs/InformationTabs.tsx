@@ -63,7 +63,7 @@ const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Suppl
 
     {!product.attributes.shortdescription &&
       !product.attributes.text &&
-      'Ingen beskrivelse fra leverandør, ta kontakt med leverandør for mer informasjon.'}
+      'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
   </div>
 )
 

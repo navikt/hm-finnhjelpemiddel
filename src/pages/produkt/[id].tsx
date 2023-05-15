@@ -98,7 +98,7 @@ export default function ProduktPage({
                   <div className="product-info__agreement-short">
                     <AgreementIcon number={product.agreementInfo.rank} />
                     <div className="content">
-                      <BodyShort>Produktet er nr {product.agreementInfo.rank} på avtale med Nav</BodyShort>
+                      <BodyShort>Produktet er nr. {product.agreementInfo.rank} på avtale med Nav</BodyShort>
                       <Button
                         variant="tertiary"
                         onClick={scrollToAgreementInfo}
@@ -132,7 +132,7 @@ export default function ProduktPage({
               {product.agreementInfo && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <AgreementIcon number={product.agreementInfo.rank} />
-                  <BodyShort>Rangert som nr {product.agreementInfo.rank}</BodyShort>
+                  <BodyShort>Rangert som nr. {product.agreementInfo.rank}</BodyShort>
                 </div>
               )}
               <DefinitionList>

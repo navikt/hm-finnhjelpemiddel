@@ -1,32 +1,5 @@
 @use './_mixins';
 
-.max-width {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 var(--a-spacing-3);
-
-  @include mixins.for-size(desktop-up) {
-    padding: 0 var(--a-spacing-6);
-  }
-}
-
-.icon-wrapper {
-  width: 50px;
-  height: 50px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.icon-wrapper.green {
-  background-image: url('/assets/icons/agreementMarkGreen.svg');
-}
-.icon-wrapper.grey {
-  background-image: url('/assets/icons/agreementMarkGrey.svg');
-}
-
 .product-info {
   width: 100%;
   &__agreement-short {
