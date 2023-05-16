@@ -1,7 +1,14 @@
+import classNames from 'classnames'
+
 const AgreementIcon = ({ number }: { number: number }) => {
-  const color = number === 1 ? 'green' : 'grey'
   return (
-    <div className={'icon-wrapper ' + color} title="Agreement rank">
+    <div
+      className={classNames('icon-wrapper', {
+        green: number === 1,
+        grey: number !== 1,
+      })}
+      title="Agreement rank"
+    >
       {number}
     </div>
   )
