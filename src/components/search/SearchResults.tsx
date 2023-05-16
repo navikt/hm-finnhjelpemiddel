@@ -120,31 +120,6 @@ const SearchResults = ({
   )
 }
 
-const ProductImage = ({ src }: { src: string }) => {
-  const [isLoading, setIsLoading] = useState(true)
-
-  if (src) {
-    return (
-      <>
-        {isLoading && <Loader size="large" />}
-        <Image
-          loader={smallImageLoader}
-          src={src}
-          onLoad={() => setIsLoading(true)}
-          onLoadingComplete={() => setIsLoading(false)}
-          alt="Produktbilde"
-          fill
-          style={{ objectFit: 'contain', opacity: !isLoading ? 1 : 0 }}
-          sizes="50vw"
-          priority
-        />
-      </>
-    )
-  }
-
-  return <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
-}
-
 const SearchResult = ({ product }: { product: Product }) => {
   const { setFilter } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
@@ -222,6 +197,31 @@ const SearchResult = ({ product }: { product: Product }) => {
       </div>
     </li>
   )
+}
+
+const ProductImage = ({ src }: { src: string }) => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  if (src) {
+    return (
+      <>
+        {isLoading && <Loader size="large" />}
+        <Image
+          loader={smallImageLoader}
+          src={src}
+          onLoad={() => setIsLoading(true)}
+          onLoadingComplete={() => setIsLoading(false)}
+          alt="Produktbilde"
+          fill
+          style={{ objectFit: 'contain', opacity: !isLoading ? 1 : 0 }}
+          sizes="50vw"
+          priority
+        />
+      </>
+    )
+  }
+
+  return <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
 }
 
 export default SearchResults

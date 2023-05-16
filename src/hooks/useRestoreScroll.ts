@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useDebounce from './useDebounce'
 
 export default function useRestoreScroll(id: string, shouldRestore: boolean) {

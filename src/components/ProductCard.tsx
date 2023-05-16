@@ -47,7 +47,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
         </div>
       </div>
       <div className="info">
-        <Heading size="xsmall" className="compare-menu__product-title">
+        <Heading size="xsmall" className="product-card__product-title">
           {product.title}
         </Heading>
         <div className="hms-nr">
