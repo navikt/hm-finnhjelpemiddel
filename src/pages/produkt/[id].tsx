@@ -210,7 +210,9 @@ const KeyInformation = ({ product, supplierName }: { product: Product; supplierN
       <DefinitionList.Term>Lev-artnr.</DefinitionList.Term>
       <DefinitionList.Definition>{product.supplierRef ? product.supplierRef : '-'}</DefinitionList.Definition>
       <DefinitionList.Term>ISO-klassifisering</DefinitionList.Term>
-      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
+      <DefinitionList.Definition>
+        {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}
+      </DefinitionList.Definition>
       <DefinitionList.Term>På bestillingsordning</DefinitionList.Term>
       <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
     </DefinitionList>
