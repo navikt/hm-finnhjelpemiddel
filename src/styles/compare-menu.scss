@@ -86,17 +86,6 @@
     }
   }
 
-  &__product-title {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
-    display: -moz-box;
-    -moz-box-orient: vertical;
-
-    overflow: hidden;
-  }
-
   &__placeholder {
     display: flex;
     justify-content: center;

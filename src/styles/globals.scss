@@ -373,10 +373,12 @@ details {
 .max-width {
   max-width: 1200px;
   margin: auto;
-  padding: 0 var(--a-spacing-3);
+  padding-left: var(--a-spacing-3);
+  padding-right: var(--a-spacing-3);
 
   @include mixins.for-size(desktop-up) {
-    padding: 0 var(--a-spacing-6);
+    padding-left: var(--a-spacing-6);
+    padding-right: var(--a-spacing-6);
   }
 }
 

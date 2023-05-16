@@ -43,7 +43,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
     : null
   const productsOnPost = productsOnPostData
     ? mapProducts(productsOnPostData)
-        .filter((postProduct) => postProduct.agreementInfo?.rank !== product.agreementInfo?.rank)
+        .filter((postProduct) => postProduct.id !== product.id)
         .sort((productA, productB) =>
           productA.agreementInfo && productB.agreementInfo
             ? productA.agreementInfo?.rank - productB.agreementInfo?.rank
@@ -178,7 +178,9 @@ export default function ProduktPage({
                         </div>
                         <div className="info">
                           <Link className="search-result__link" href={`/produkt/${product.id}`}>
-                            {product.title}
+                            <Heading size="xsmall" className="product-card__product-title">
+                              {product.title}
+                            </Heading>
                           </Link>
                           {product.agreementInfo && <AgreementIcon number={product.agreementInfo.rank} />}
                         </div>
