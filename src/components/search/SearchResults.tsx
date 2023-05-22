@@ -4,14 +4,14 @@ import { RefObject, useEffect, useState } from 'react'
 import { Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
 import { Next } from '@navikt/ds-icons'
 import { ImageIcon } from '@navikt/aksel-icons'
-import { Product } from '../../utils/product-util'
-import { CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
-import { useHydratedSearchStore } from '../../utils/search-state-util'
-import { FetchResponse, PAGE_SIZE } from '../../utils/api-util'
-import { smallImageLoader } from '../../utils/image-util'
-import useRestoreScroll from '../../hooks/useRestoreScroll'
+import { Product } from '@/utils/product-util'
+import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { FetchResponse, PAGE_SIZE } from '@/utils/api-util'
+import { smallImageLoader } from '@/utils/image-util'
+import useRestoreScroll from '@/hooks/useRestoreScroll'
 
-import DefinitionList from '../definition-list/DefinitionList'
+import DefinitionList from '@/components/definition-list/DefinitionList'
 
 const SearchResults = ({
   data,
@@ -146,7 +146,7 @@ const ProductImage = ({ src }: { src: string }) => {
 }
 
 const SearchResult = ({ product }: { product: Product }) => {
-  const { setSearchData } = useHydratedSearchStore()
+  const { setFilter } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
@@ -206,7 +206,7 @@ const SearchResult = ({ product }: { product: Product }) => {
                   variant="tertiary"
                   size="small"
                   onClick={() => {
-                    setSearchData({ isoCode: product.isoCategory })
+                    setFilter('produktkategori', [product.isoCategoryTitle])
                     window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                 >

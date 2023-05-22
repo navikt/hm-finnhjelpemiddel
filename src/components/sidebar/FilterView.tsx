@@ -31,8 +31,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <Heading level="2" size="xsmall" spacing>
         Filtre
       </Heading>
-      <RangeFilterInput filter={{ key: 'lengdeCM', data: filters?.lengdeCM }} />
-      <RangeFilterInput filter={{ key: 'breddeCM', data: filters?.breddeCM }} />
+      <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />
       <RangeFilterInput variant="min" filter={{ key: 'setebreddeMinCM', data: filters?.setebreddeMinCM }} />
       <RangeFilterInput variant="max" filter={{ key: 'setebreddeMaksCM', data: filters?.setebreddeMaksCM }} />
       <RangeFilterInput variant="min" filter={{ key: 'setedybdeMinCM', data: filters?.setedybdeMinCM }} />
@@ -41,6 +40,8 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <RangeFilterInput variant="max" filter={{ key: 'setehoydeMaksCM', data: filters?.setehoydeMaksCM }} />
       <RangeFilterInput variant="min" filter={{ key: 'brukervektMinKG', data: filters?.brukervektMinKG }} />
       <RangeFilterInput variant="max" filter={{ key: 'brukervektMaksKG', data: filters?.brukervektMaksKG }} />
+      <RangeFilterInput filter={{ key: 'lengdeCM', data: filters?.lengdeCM }} />
+      <RangeFilterInput filter={{ key: 'breddeCM', data: filters?.breddeCM }} />
       <RangeFilterInput filter={{ key: 'totalVektKG', data: filters?.totalVektKG }} />
       <CheckboxFilterInput filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
       <CheckboxFilterInput filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} />

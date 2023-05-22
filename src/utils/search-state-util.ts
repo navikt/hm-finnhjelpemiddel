@@ -22,6 +22,7 @@ const initialFiltersState = {
   setedybdeMinCM: [null, null],
   totalVektKG: [null, null],
   leverandor: [],
+  produktkategori: [],
 }
 
 export const initialSearchDataState = {

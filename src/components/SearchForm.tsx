@@ -7,7 +7,6 @@ import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-s
 import { mapProductSearchParams } from '@/utils/product-util'
 
 import FilterView from './sidebar/FilterView'
-import SelectIsoCategory from './sidebar/SelectIsoCategory'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
   <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
@@ -79,9 +78,6 @@ const SearchForm = forwardRef<SearchFormResetHandle, Props>(({ filters, setFocus
           </Switch>
           {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
         </div>
-
-        <SelectIsoCategory />
-        {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
 
         <FilterView filters={filters} />
         {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
