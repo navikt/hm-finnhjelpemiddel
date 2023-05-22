@@ -1,23 +1,35 @@
 @use './_mixins';
 
-.product-info > * {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 var(--a-spacing-3);
-
-  @include mixins.for-size(desktop-up) {
-    padding: 0 var(--a-spacing-6);
-  }
-}
-
-.product-info:last-child {
-  margin-bottom: var(--a-spacing-20);
-}
-
 .product-info {
-  &__supplier-info {
-    margin-top: var(--a-spacing-8);
+  width: 100%;
+  &__agreement-short {
+    display: flex;
+    width: 100%;
+    margin-bottom: var(--a-spacing-4);
 
+    p {
+      padding-left: var(--a-spacing-3);
+    }
+
+    .content {
+      display: 'flex';
+      flex-direction: 'column';
+      align-items: 'flex-start';
+    }
+  }
+
+  &__key-information {
+    display: flex;
+    padding: 8px 8px;
+    flex-direction: column;
+    align-items: flex-start;
+
+    border-radius: var(--a-border-radius-large);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  &__supplier-info {
     .navds-heading {
       margin-bottom: var(--a-spacing-2);
     }
@@ -27,14 +39,39 @@
     }
   }
 
-  &__agreement-info {
-    margin-top: var(--a-spacing-10);
+  &__agreement-long {
+    margin-top: var(--a-spacing-16);
+    background-color: #faefee;
+    width: 100%;
+  }
 
+  &__agreement-long-content {
+    padding-top: var(--a-spacing-6);
+    padding-bottom: var(--a-spacing-16);
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    gap: var(--a-spacing-4);
+  }
 
-    p {
-      margin: 0px;
+  &__products-on-post,
+  &__products-on-post-list {
+    display: flex;
+    gap: var(--a-spacing-4);
+  }
+
+  &__products-on-post-list {
+    flex-wrap: wrap;
+  }
+
+  &__products-on-post {
+    flex-direction: column;
+
+    margin-top: var(--a-spacing-4);
+
+    .product-card {
+      .icon-wrapper {
+        align-self: center;
+      }
     }
   }
 
@@ -50,40 +87,19 @@
     margin-left: -11px;
   }
 
-  width: 100%;
-
   &__top {
+    background-color: var(--a-gray-50);
+    width: 100%;
+  }
+
+  &__top-content {
     display: flex;
     flex-direction: column;
-    position: relative;
     padding: var(--a-spacing-10) var(--a-spacing-6);
 
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
     }
-  }
-
-  &__top::before,
-  &__top::after {
-    bottom: 0;
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100vw;
-  }
-
-  &__top::before {
-    right: 100%;
-  }
-
-  &__top::after {
-    left: 100%;
-  }
-
-  &__top,
-  &__top::after,
-  &__top::before {
-    background-color: var(--a-gray-50);
   }
 
   &__top-right {
@@ -105,36 +121,10 @@
   &__similar-products {
     display: flex;
     flex-direction: column;
-    padding-top: var(--a-spacing-10);
+    padding-top: var(--a-spacing-12);
 
     .navds-heading {
       margin-bottom: var(--a-spacing-6);
-    }
-
-    &__slider {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-bottom: var(--a-spacing-10);
-
-      .arrow {
-        padding: 8px;
-        margin: 0 var(--a-spacing-2);
-      }
-    }
-
-    &__cards {
-      display: flex;
-      flex-direction: row;
-      gap: var(--a-spacing-5);
-    }
-
-    &__card {
-      border: 1.5px solid var(--ac-panel-border, var(--a-border-default));
-      border-radius: var(--a-border-radius-medium);
-      padding: var(--a-spacing-3);
-      width: 200px;
-      min-height: 200px;
     }
   }
 }

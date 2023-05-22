@@ -1,11 +1,13 @@
-import { FilesIcon, InformationSquareIcon, WrenchIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Tabs } from '@navikt/ds-react'
 import React from 'react'
+import Link from 'next/link'
+import { FilesIcon, InformationSquareIcon, WrenchIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
 import { sortAlphabetically } from 'src/utils/sort-util'
-import { Product, Document, TechData } from '../../utils/product-util'
+import { Product, Document, TechData } from '@/utils/product-util'
+import { Supplier } from '@/utils/supplier-util'
 import DefinitionList from '../definition-list/DefinitionList'
 
-export const InformationTabs = ({ product }: { product: Product }) => (
+export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
     <Tabs.List>
       <Tabs.Tab
@@ -22,8 +24,7 @@ export const InformationTabs = ({ product }: { product: Product }) => (
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
-        {product.attributes.shortdescription && <BodyLong spacing>{product.attributes.shortdescription}</BodyLong>}
-        {product.attributes.text && <BodyLong>{product.attributes.text}</BodyLong>}
+        <SupplierInfo product={product} supplier={supplier} />
       </div>
     </Tabs.Panel>
     <Tabs.Panel value="techData" className="h-24 w-full p-4">
@@ -37,6 +38,33 @@ export const InformationTabs = ({ product }: { product: Product }) => (
       </div>
     </Tabs.Panel>
   </Tabs>
+)
+
+const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+  <div className="product-info__supplier-info">
+    <Heading level="3" size="small">
+      Leverandør
+    </Heading>
+    <>
+      <BodyShort>{supplier.name}</BodyShort>
+      {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
+      {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
+      {supplier.homepageUrl && (
+        <Link href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
+          Hjemmeside (åpnes i ny side)
+        </Link>
+      )}
+    </>
+    <Heading level="3" size="small" style={{ marginTop: '16px' }}>
+      Beskrivelse
+    </Heading>
+    {product.attributes.shortdescription && <BodyLong spacing>{product.attributes.shortdescription}</BodyLong>}
+    {product.attributes.text && <BodyLong>{product.attributes.text}</BodyLong>}
+
+    {!product.attributes.shortdescription &&
+      !product.attributes.text &&
+      'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
+  </div>
 )
 
 const TechnicalSpecifications = ({ techData }: { techData: TechData }) => {

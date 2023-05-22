@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'
 import { Back } from '@navikt/ds-icons'
-import { Product } from '../../utils/product-util'
+import { Product, toSearchQueryString } from '../../utils/product-util'
 import { CompareMenuState, CompareMode, useHydratedCompareStore } from '../../utils/compare-state-util'
 import { useHydratedSearchStore } from '../../utils/search-state-util'
 import { sortAlphabetically } from '../../utils/sort-util'
@@ -12,9 +12,9 @@ import ProductCard from '../../components/ProductCard'
 
 export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
-  const { setShowProductSeriesView } = useHydratedSearchStore()
+  const { setShowProductSeriesView, searchData } = useHydratedSearchStore()
   const router = useRouter()
-  const href = '/'
+  const href = '/sok' + toSearchQueryString(searchData)
 
   const handleClick = (event: any) => {
     event.preventDefault()
@@ -33,7 +33,7 @@ export default function ComparePage() {
 
         {productsToCompare.length === 0 && (
           <section>
-            <LinkPanel href={href} onClick={handleClick} border>
+            <LinkPanel href={'/sok' + toSearchQueryString(searchData)} onClick={handleClick} border>
               <LinkPanel.Title>Legg til produkter for sammenligning</LinkPanel.Title>
               <LinkPanel.Description>
                 For å kunne sammenligne produkter må de velges til sammenligning på søkesiden
@@ -42,7 +42,7 @@ export default function ComparePage() {
           </section>
         )}
         {productsToCompare.length > 0 && (
-          <CompareTable productsToCompare={productsToCompare} removeProduct={removeProduct}></CompareTable>
+          <CompareTable productsToCompare={productsToCompare} removeProduct={removeProduct} href={href}></CompareTable>
         )}
       </div>
     </AnimateLayout>
@@ -52,9 +52,11 @@ export default function ComparePage() {
 const CompareTable = ({
   productsToCompare,
   removeProduct,
+  href,
 }: {
   productsToCompare: Product[]
   removeProduct: (product: Product) => void
+  href: string
 }) => {
   const allDataKeys = productsToCompare
     .flatMap((prod) => Object.keys(prod.techData))
@@ -85,7 +87,7 @@ const CompareTable = ({
               <Heading level="2" size="medium" spacing>
                 Produkter
               </Heading>
-              <NextLink className="back-to-search" href="/">
+              <NextLink className="back-to-search" href={href}>
                 <Back title="Tilbake til søk" />
                 <BodyShort>Legg til flere</BodyShort>
               </NextLink>
