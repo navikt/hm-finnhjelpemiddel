@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BodyLong, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Heading, Link } from '@navikt/ds-react'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 function AboutUs() {
@@ -12,23 +12,32 @@ function AboutUs() {
             <Heading level="1" size="large" spacing>
               Om nettstedet
             </Heading>
-            <BodyLong>
-              Dette er en bare en prototype til testing og utvikling. Her er lenken til hjelpemiddeldatabasen.no om du
-              har kommet feil. Finnhjelpemidler er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og
-              reservedeler både på og utenfor rammeavtale. Denne nettsiden skal erstatte hjelpemiddeldatabasen.no
+            <BodyLong spacing>
+              <Alert variant="warning">
+                Dette er bare en prototype til testing og utvikling. Her er lenken til{' '}
+                <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no</Link> om du har kommet feil.
+              </Alert>
+            </BodyLong>
+            <BodyLong spacing>
+              Finnhjelpemidler er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og reservedeler både
+              på og utenfor rammeavtale. Denne nettsiden skal erstatte{' '}
+              <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no.</Link>
+            </BodyLong>
+            <BodyLong spacing>
               Informasjon om produktene du finner her er lagt inn av NAV og av de ulike leverandørene. Dersom du er
               leverandør og ønsker å legge inn dine produkter, ta kontakt med NAV Hjelpemidler og tilrettelegging for
-              mer informasjon (lenke til eposten til hjelpemiddeldatabasen, Marit?)
+              mer informasjon: <Link href="mailto:hjelpemiddeldatabasen@nav.no">hjelpemiddeldatabasen@nav.no</Link>
             </BodyLong>
           </article>
           <article className="contact-us max-width">
-            <Heading level="2" size="medium" spacing>
+            <Heading level="1" size="large" spacing>
               Kontakt oss
             </Heading>
-            <BodyLong>
+            <BodyLong spacing>
               Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
-              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på nav.no. Gjelder det
-              spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på digihot@nav.no. Unngå å oppgi
+              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
+              <Link href="https://www.nav.no">nav.no</Link>. Gjelder det spørsmål eller tilbakemelding om denne
+              nettsiden, kan vi kontaktes på <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi
               sensitiv informasjon på e-post.
             </BodyLong>
           </article>
