@@ -5,6 +5,8 @@ import { Filter, SearchData } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 
+import ShowMore from '@/components/ShowMore'
+
 type FilterProps = {
   filter: { key: keyof typeof FilterCategories; data?: Filter }
   variant?: 'min-max' | 'min' | 'max'
@@ -47,114 +49,108 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
 
   if (variant === 'min' || variant === 'max') {
     return (
-      <details open={!!min || !!max || dirty}>
-        <summary>{FilterCategories[filterKey]}</summary>
-        <div>
-          <div className="single-filter-input">
-            <Controller
-              control={control}
-              name={`filters.${filterKey}.${variant === 'min' ? 0 : 1}`}
-              render={({ field }) => (
-                <TextField
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  label={FilterCategories[filterKey]}
-                  hideLabel
-                  placeholder={
-                    hasFilterData
-                      ? variant === 'min'
-                        ? filterData.min?.toString()
-                        : filterData.max?.toString()
-                      : undefined
+      <ShowMore title={FilterCategories[filterKey]} open={!!min || !!max || dirty} spacing>
+        <div className="single-filter-input">
+          <Controller
+            control={control}
+            name={`filters.${filterKey}.${variant === 'min' ? 0 : 1}`}
+            render={({ field }) => (
+              <TextField
+                inputMode="numeric"
+                pattern="[0-9]*"
+                label={FilterCategories[filterKey]}
+                hideLabel
+                placeholder={
+                  hasFilterData
+                    ? variant === 'min'
+                      ? filterData.min?.toString()
+                      : filterData.max?.toString()
+                    : undefined
+                }
+                size="small"
+                {...field}
+                value={field.value || ''}
+                onBlur={(event) => {
+                  if (dirty) {
+                    setFilter(filterKey, [
+                      variant === 'min' ? event.target.value : null,
+                      variant === 'max' ? event.target.value : null,
+                    ])
                   }
-                  size="small"
-                  {...field}
-                  value={field.value || ''}
-                  onBlur={(event) => {
-                    if (dirty) {
-                      setFilter(filterKey, [
-                        variant === 'min' ? event.target.value : null,
-                        variant === 'max' ? event.target.value : null,
-                      ])
-                    }
-                  }}
-                />
-              )}
-            />
-          </div>
+                }}
+              />
+            )}
+          />
         </div>
-      </details>
+      </ShowMore>
     )
   }
 
   return (
-    <details open={!!min || !!max || dirty || touched}>
-      <summary>{FilterCategories[filterKey]}</summary>
-      <div>
-        <div className="range-filter-input">
-          <div>
-            <Detail>Min</Detail>
-            <Controller
-              control={control}
-              name={`filters.${filterKey}.0`}
-              rules={{ validate: (value) => (min && max ? Number(value) <= max : true) }}
-              render={({ field }) => (
-                <TextField
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  label={`Min. ${FilterCategories[filterKey]}`}
-                  hideLabel
-                  placeholder={hasFilterData ? filterData.min?.toString() : undefined}
-                  size="small"
-                  {...field}
-                  value={field.value || ''}
-                  onBlur={async (event) => {
-                    if (dirty) {
-                      const valid = await trigger([`filters.${filterKey}.0`])
-                      if (valid) {
-                        setFilter(filterKey, [event.target.value, max])
-                      } else {
-                        setFilter(filterKey, [event.target.value, event.target.value])
-                        setValue(`filters.${filterKey}`, [event.target.value, event.target.value])
-                      }
+    <ShowMore title={FilterCategories[filterKey]} open={!!min || !!max || dirty || touched} spacing>
+      <div className="range-filter-input">
+        <div>
+          <Detail>Min</Detail>
+          <Controller
+            control={control}
+            name={`filters.${filterKey}.0`}
+            rules={{ validate: (value) => (min && max ? Number(value) <= max : true) }}
+            render={({ field }) => (
+              <TextField
+                inputMode="numeric"
+                pattern="[0-9]*"
+                label={`Min. ${FilterCategories[filterKey]}`}
+                hideLabel
+                placeholder={hasFilterData ? filterData.min?.toString() : undefined}
+                size="small"
+                {...field}
+                value={field.value || ''}
+                onBlur={async (event) => {
+                  if (dirty) {
+                    const valid = await trigger([`filters.${filterKey}.0`])
+                    if (valid) {
+                      setFilter(filterKey, [event.target.value, max])
+                    } else {
+                      setFilter(filterKey, [event.target.value, event.target.value])
+                      setValue(`filters.${filterKey}`, [event.target.value, event.target.value])
                     }
-                  }}
-                />
-              )}
-            />
-          </div>
-          <div>
-            <Detail>Maks</Detail>
-            <Controller
-              control={control}
-              name={`filters.${filterKey}.1`}
-              render={({ field }) => (
-                <TextField
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  label={`Maks. ${FilterCategories[filterKey]}`}
-                  hideLabel
-                  placeholder={hasFilterData ? filterData.max?.toString() : undefined}
-                  size="small"
-                  {...field}
-                  value={field.value || ''}
-                  onBlur={async (event) => {
-                    if (dirty) {
-                      const valid = await trigger([`filters.${filterKey}.0`])
-                      if (valid) {
-                        setFilter(filterKey, [min, event.target.value])
-                      } else {
-                        setFilter(filterKey, [min, min])
-                        setValue(`filters.${filterKey}.1`, min)
-                      }
+                  }
+                }}
+              />
+            )}
+          />
+        </div>
+        <div>
+          <Detail>Maks</Detail>
+          <Controller
+            control={control}
+            name={`filters.${filterKey}.1`}
+            render={({ field }) => (
+              <TextField
+                inputMode="numeric"
+                pattern="[0-9]*"
+                label={`Maks. ${FilterCategories[filterKey]}`}
+                hideLabel
+                placeholder={hasFilterData ? filterData.max?.toString() : undefined}
+                size="small"
+                {...field}
+                value={field.value || ''}
+                onBlur={async (event) => {
+                  if (dirty) {
+                    const valid = await trigger([`filters.${filterKey}.0`])
+                    if (valid) {
+                      setFilter(filterKey, [min, event.target.value])
+                    } else {
+                      setFilter(filterKey, [min, min])
+                      setValue(`filters.${filterKey}.1`, min)
                     }
-                  }}
-                />
-              )}
-            />
-          </div>
+                  }
+                }}
+              />
+            )}
+          />
         </div>
       </div>
-    </details>
+    </ShowMore>
   )
 }
