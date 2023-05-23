@@ -5,6 +5,8 @@ import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
 import { sortAlphabetically } from 'src/utils/sort-util'
 import { Product, Document, TechData } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
+import { toValueAndUnit } from '@/utils/string-util'
+
 import DefinitionList from '../definition-list/DefinitionList'
 
 export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
@@ -73,7 +75,7 @@ const TechnicalSpecifications = ({ techData }: { techData: TechData }) => {
     .map(([key, value], index) => (
       <React.Fragment key={`${key}${index}`}>
         <DefinitionList.Term>{key}</DefinitionList.Term>
-        <DefinitionList.Definition>{value.value + (value.unit ? ' ' + value.unit : '')}</DefinitionList.Definition>
+        <DefinitionList.Definition>{toValueAndUnit(value.value, value.unit)}</DefinitionList.Definition>
       </React.Fragment>
     ))
 

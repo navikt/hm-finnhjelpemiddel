@@ -121,7 +121,10 @@ const SearchResults = ({
 }
 
 const SearchResult = ({ product }: { product: Product }) => {
-  const { setFilter } = useHydratedSearchStore()
+  const {
+    setFilter,
+    meta: { showProductSeriesView },
+  } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
@@ -155,7 +158,7 @@ const SearchResult = ({ product }: { product: Product }) => {
           <div className="search-result__title">
             <Heading level="3" size="medium">
               <Link className="search-result__link" href={`/produkt/${product.id}`}>
-                {product.title}
+                {showProductSeriesView ? product.title : product.articleName}
               </Link>
             </Heading>
             {product.agreementInfo && (

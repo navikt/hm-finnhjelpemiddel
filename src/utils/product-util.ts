@@ -13,6 +13,7 @@ import { SearchParams, SelectedFilters } from './api-util'
 
 export interface Product {
   id: string
+  articleName: string
   title: string
   attributes: Attributes
   techData: TechData
@@ -27,7 +28,9 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+  supplierRef: string
   seriesId: string | null
+  filters: { [key: string]: string | number }
 }
 
 export interface Photo {
@@ -58,18 +61,19 @@ interface AgreementInfo {
   rank: number
   postNr: number
   postIdentifier: string | null
+  postTitle: string
 }
 
 export const createProduct = (source: ProductSourceResponse): Product => {
   return {
     id: source.id,
+    articleName: source.articleName,
     title: source.title,
     attributes: source.attributes,
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
     hasAgreement: source.hasAgreement,
     agreementInfo: source.agreementInfo,
-    supplierRef: source.supplierRef,
     isoCategory: source.isoCategory,
     isoCategoryTitle: source.isoCategoryTitle,
     isoCategoryText: source.isoCategoryText,
@@ -79,6 +83,8 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     documents: mapDocuments(source.media),
     seriesId: source.seriesId,
     supplierId: source.supplier?.id,
+    supplierRef: source.supplierRef,
+    filters: source.filters,
   }
 }
 

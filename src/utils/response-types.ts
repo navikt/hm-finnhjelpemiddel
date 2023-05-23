@@ -18,6 +18,7 @@ export interface Hit {
 
 export interface ProductSourceResponse {
   id: string
+  articleName: string
   supplier: {
     id: string
     identifier: string
@@ -42,7 +43,7 @@ export interface ProductSourceResponse {
   expired: string
   createdBy: string
   updatedBy: string
-  filters: object
+  filters: { [key: string]: string }
   agreementInfo: AgreementInfoResponse | null
   hasAgreement: boolean
 }
@@ -80,6 +81,7 @@ interface AgreementInfoResponse {
   identifier: string | null
   rank: number
   postNr: number
+  postTitle: string
   postIdentifier: string | null
   reference: string | null
 }

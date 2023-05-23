@@ -1,10 +1,11 @@
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { ArrowsUpDownIcon, ArrowUpIcon, ArrowDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Table, Heading, Button, Switch } from '@navikt/ds-react'
-import { Product } from '../../utils/product-util'
-import { sortIntWithStringFallback } from '../../utils/sort-util'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Switch, Table } from '@navikt/ds-react'
+import { Product } from '@/utils/product-util'
+import { sortIntWithStringFallback } from '@/utils/sort-util'
+import { toValueAndUnit } from '@/utils/string-util'
 
 type SimilarProductsProps = {
   mainProduct: Product
@@ -63,7 +64,9 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     {},
     ...allDataKeys.map((key) => ({
       [key]: allProducts.map((product) =>
-        product.techData[key] !== undefined ? product.techData[key].value + product.techData[key].unit : '-'
+        product.techData[key] !== undefined
+          ? toValueAndUnit(product.techData[key].value, product.techData[key].unit)
+          : '-'
       ),
     }))
   )
