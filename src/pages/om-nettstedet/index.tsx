@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Alert, BodyLong, BodyShort, Heading, Link } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Link } from '@navikt/ds-react'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 function AboutUs() {
@@ -12,12 +12,12 @@ function AboutUs() {
             <Heading level="1" size="large" spacing>
               Om nettstedet
             </Heading>
-            <BodyLong spacing>
-              <Alert variant="warning">
+            <Alert variant="warning">
+              <BodyLong spacing>
                 Dette er bare en prototype til testing og utvikling. Her er lenken til{' '}
                 <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no</Link> om du har kommet feil.
-              </Alert>
-            </BodyLong>
+              </BodyLong>
+            </Alert>
             <BodyLong spacing>
               Finnhjelpemidler er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og reservedeler både
               på og utenfor rammeavtale. Denne nettsiden skal erstatte{' '}

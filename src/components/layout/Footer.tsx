@@ -14,7 +14,6 @@ const Footer = () => (
           </BodyShort>
           <BodyShort>Finn hjelpemidler er en tjeneste fra NAV</BodyShort>
           <NextLink href="/om-nettstedet">Om nettstedet</NextLink>
-          <NextLink href="/om-nettstedet">Kontaktinformasjon</NextLink>
         </div>
       </div>
     </div>
