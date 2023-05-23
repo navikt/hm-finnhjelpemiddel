@@ -141,7 +141,6 @@
 
   &__container {
     display: flex;
-    align-items: center;
     gap: var(--a-spacing-4);
     padding: var(--a-spacing-5) var(--a-spacing-5);
   }
@@ -171,6 +170,7 @@
 
   &__chevron-container {
     margin-right: var(--a-spacing-1);
+    align-self: center;
   }
 
   &__chevron {
@@ -210,15 +210,19 @@
 
   &__more-info {
     position: relative;
-    margin-top: var(--a-spacing-3);
+    margin-top: var(--a-spacing-4);
     z-index: 2;
-    font-size: 16px;
+
     dt {
       padding-top: 0;
     }
 
     dd {
       padding-top: 0;
+    }
+
+    details {
+      margin-top: var(--a-spacing-4);
     }
 
     @include mixins.for-size(phone-only) {
@@ -257,6 +261,7 @@
     display: flex;
     align-items: baseline;
     gap: var(--a-spacing-2);
+    font-size: 16px;
 
     @include mixins.for-size(desktop-up) {
       position: absolute;

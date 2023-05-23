@@ -1,6 +1,6 @@
+import React, { RefObject, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { RefObject, useEffect, useState } from 'react'
 import { Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
 import { Next } from '@navikt/ds-icons'
 import { ImageIcon } from '@navikt/aksel-icons'
@@ -8,10 +8,14 @@ import { Product } from '@/utils/product-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { FetchResponse, PAGE_SIZE } from '@/utils/api-util'
+import { capitalize } from '@/utils/string-util'
+import { FilterCategories } from '@/utils/filter-util'
 import { smallImageLoader } from '@/utils/image-util'
+import { sortAlphabetically } from '@/utils/sort-util'
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
+import ShowMore from '@/components/ShowMore'
 
 const SearchResults = ({
   data,
@@ -32,6 +36,7 @@ const SearchResults = ({
   } = useHydratedSearchStore()
   const { setCompareMode } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
+  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
   useRestoreScroll('search-results', !isLoading)
 
@@ -75,8 +80,7 @@ const SearchResults = ({
   const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
   const isLastPage =
     (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
-    (showProductSeriesView && !isLoadingMore && products?.length < size * PAGE_SIZE)
-  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
+    (showProductSeriesView && !isLoadingMore && products.length < size * PAGE_SIZE)
 
   return (
     <>
@@ -101,7 +105,7 @@ const SearchResults = ({
         <div>
           <BodyShort aria-live="polite">
             {showProductSeriesView
-              ? `${products?.length} produktserier vises`
+              ? `${products.length} produktserier vises`
               : `${products.length} av ${totalNumberOfProducts} produkter vises`}
           </BodyShort>
         </div>
@@ -126,6 +130,7 @@ const SearchResult = ({ product }: { product: Product }) => {
     meta: { showProductSeriesView },
   } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+  const productFilters = Object.entries(product.filters)
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
   const toggleCompareProduct = () => {
@@ -135,6 +140,8 @@ const SearchResult = ({ product }: { product: Product }) => {
   }
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+  const showSpecsButton = !showProductSeriesView && productFilters.length > 0
+  const postText = product.agreementInfo?.postTitle.substring(product.agreementInfo?.postTitle.indexOf(':') + 1).trim() // Removes "Post X:" prefix
 
   return (
     <li className="search-result">
@@ -171,12 +178,16 @@ const SearchResult = ({ product }: { product: Product }) => {
             )}
           </div>
           <div className="search-result__description">
-            <BodyLong size="small">{product.attributes?.text}</BodyLong>
+            <BodyLong>{postText ?? product.attributes?.text}</BodyLong>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
-              <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
-              <DefinitionList.Definition>{product.hmsArtNr ? product.hmsArtNr : '–'}</DefinitionList.Definition>
+              {!showProductSeriesView && (
+                <>
+                  <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
+                  <DefinitionList.Definition>{product.hmsArtNr ? product.hmsArtNr : '–'}</DefinitionList.Definition>
+                </>
+              )}
               <DefinitionList.Term>Produktkategori</DefinitionList.Term>
               <DefinitionList.Definition>
                 <Button
@@ -192,6 +203,23 @@ const SearchResult = ({ product }: { product: Product }) => {
                 </Button>
               </DefinitionList.Definition>
             </DefinitionList>
+
+            {showSpecsButton && (
+              <ShowMore title="Spesifikasjoner">
+                <DefinitionList>
+                  {productFilters
+                    .sort(([keyA], [keyB]) => sortAlphabetically(keyA, keyB))
+                    .map(([key, value]) => (
+                      <>
+                        <DefinitionList.Term>
+                          {FilterCategories[key as keyof typeof FilterCategories]}
+                        </DefinitionList.Term>
+                        <DefinitionList.Definition>{capitalize(String(value))}</DefinitionList.Definition>
+                      </>
+                    ))}
+                </DefinitionList>
+              </ShowMore>
+            )}
           </div>
         </div>
         <div className="search-result__chevron-container">
