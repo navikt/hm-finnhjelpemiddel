@@ -48,7 +48,6 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
       const from = index !== 0 ? (initialProductSearchParams.to || PAGE_SIZE) + (index - 1) * PAGE_SIZE : 0
       const to = (index === 0 && initialProductSearchParams.to) || PAGE_SIZE
       return {
-        url: `/products/_search`,
         from,
         to,
         searchData,

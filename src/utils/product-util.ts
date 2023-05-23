@@ -16,8 +16,8 @@ export interface Product {
   title: string
   attributes: Attributes
   techData: TechData
+  hasAgreement: boolean
   hmsArtNr: string | null
-  supplierRef: string
   agreementInfo: AgreementInfo | null
   isoCategory: string
   isoCategoryTitle: string
@@ -67,6 +67,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     attributes: source.attributes,
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
+    hasAgreement: source.hasAgreement,
     agreementInfo: source.agreementInfo,
     supplierRef: source.supplierRef,
     isoCategory: source.isoCategory,
@@ -132,7 +133,8 @@ export const mapProducts = (data: SearchResponse): Product[] => {
 export const mapProductSearchParams = (searchParams: { [key: string]: any }) => {
   const searchTerm = searchParams.term ?? ''
   const isoCode = searchParams.isoCode ?? ''
-  const hasRammeavtale = searchParams.agreement ? searchParams.agreement === 'true' : true
+  const hasAgreementsOnly = searchParams.agreement ? searchParams.agreement === 'true' : true
+
   const to = parseInt(searchParams.to) ?? undefined
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) =>
@@ -147,7 +149,7 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
   return {
     searchTerm,
     isoCode,
-    hasRammeavtale,
+    hasAgreementsOnly,
     filters: { ...initialSearchDataState.filters, ...filters },
     to,
   }
@@ -156,7 +158,7 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
 export const toSearchQueryString = (searchParams: SearchParams) =>
   '?' +
   queryString.stringify({
-    agreement: searchParams.hasRammeavtale,
+    agreement: searchParams.hasAgreementsOnly,
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)
