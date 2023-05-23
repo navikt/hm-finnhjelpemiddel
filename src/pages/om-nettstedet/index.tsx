@@ -12,13 +12,13 @@ function AboutUs() {
             <Heading level="1" size="large" spacing>
               Om nettstedet
             </Heading>
-            <Alert variant="warning">
-              <BodyLong spacing>
+            <Alert variant="warning" className="spacing-bottom--large">
+              <BodyLong>
                 Dette er bare en prototype til testing og utvikling. Her er lenken til{' '}
                 <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no</Link> om du har kommet feil.
               </BodyLong>
             </Alert>
-            <BodyLong spacing>
+            <BodyLong spacing className="about-us-page__content">
               Finnhjelpemidler er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og reservedeler både
               på og utenfor rammeavtale. Denne nettsiden skal erstatte{' '}
               <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no.</Link>
