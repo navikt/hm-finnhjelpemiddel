@@ -7,8 +7,8 @@ function AboutUs() {
   return (
     <div className="about-us-page">
       <AnimateLayout>
-        <div className="about-us-page__content">
-          <article className="about-us max-width">
+        <div className="about-us-page__content spacing-top--xlarge spacing-bottom--xlarge">
+          <article className="about-us-page max-width">
             <Heading level="1" size="large" spacing>
               Om nettstedet
             </Heading>
@@ -30,7 +30,7 @@ function AboutUs() {
             </BodyLong>
           </article>
           <article className="contact-us max-width">
-            <Heading level="1" size="large" spacing>
+            <Heading level="1" size="large" spacing className="spacing-top--xlarge">
               Kontakt oss
             </Heading>
             <BodyLong spacing>

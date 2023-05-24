@@ -355,6 +355,23 @@ details {
 }
 
 .spacing {
+  &-top {
+    &--small {
+      margin-top: var(--a-spacing-2);
+    }
+    &--medium {
+      margin-top: var(--a-spacing-4);
+    }
+    &--large {
+      margin-top: var(--a-spacing-8);
+    }
+    &--xlarge {
+      margin-top: var(--a-spacing-16);
+    }
+  }
+}
+
+.spacing {
   &-bottom {
     &--small {
       margin-bottom: var(--a-spacing-2);
