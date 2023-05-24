@@ -18,7 +18,7 @@ function AboutUs() {
                 <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no</Link> om du har kommet feil.
               </BodyLong>
             </Alert>
-            <BodyLong spacing className="about-us-page__content">
+            <BodyLong spacing>
               Finnhjelpemidler er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og reservedeler både
               på og utenfor rammeavtale. Denne nettsiden skal erstatte{' '}
               <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no.</Link>
@@ -36,9 +36,11 @@ function AboutUs() {
             <BodyLong spacing>
               Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
               NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
-              <Link href="https://www.nav.no">nav.no</Link>. Gjelder det spørsmål eller tilbakemelding om denne
-              nettsiden, kan vi kontaktes på <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi
-              sensitiv informasjon på e-post.
+              <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
+                nav.no
+              </Link>
+              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på{' '}
+              <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
             </BodyLong>
           </article>
         </div>

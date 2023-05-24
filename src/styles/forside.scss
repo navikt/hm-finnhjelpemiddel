@@ -57,12 +57,13 @@
 .about-us-page {
   width: 100%;
   height: 100%;
-  background-color: #f2f8fb;
+  background-color: var(--a-lightblue-50);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   align-content: center;
+  text-align: center;
 
   &__content {
     max-width: 600px;
