@@ -5,7 +5,7 @@
 @import './compare-page.scss';
 @import './comparing-table.scss';
 @import './filter-input.scss';
-@import './forside.scss';
+@import './home-page.scss';
 @import './mobile-overlay';
 @import './product-card.scss';
 @import './product-page.scss';
@@ -385,6 +385,18 @@ details {
     &--xlarge {
       margin-bottom: var(--a-spacing-16);
     }
+  }
+}
+
+.max-height {
+  max-height: 1200px;
+  margin: auto;
+  padding-top: var(--a-spacing-3);
+  padding-bottom: var(--a-spacing-3);
+
+  @include mixins.for-size(desktop-up) {
+    padding-top: var(--a-spacing-6);
+    padding-bottom: var(--a-spacing-6);
   }
 }
 

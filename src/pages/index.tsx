@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
-import { Heading, Search } from '@navikt/ds-react'
+import { BodyShort, BodyLong, Heading, Panel, Search } from '@navikt/ds-react'
 
 import { SearchData } from '@/utils/api-util'
 import { mapProductSearchParams } from '@/utils/product-util'
@@ -26,29 +26,40 @@ function Home() {
   const { control, handleSubmit } = formMethods
 
   return (
-    <AnimateLayout>
-      <div className="searchbar">
-        <div className="searchbar__heading">
-          {/*Alt* av hjelpemidler samlet på en plass*/}
-          <Heading level="1" size="large">
-            Lett å finne frem til informasjon om hjelpemidler!
-          </Heading>
+    <div className="home-page">
+      <AnimateLayout>
+        <div className="home-page__container">
+          <div className="home-page__heading max-width">
+            <Heading level="1" size="large" className="spacing-top--small spacing-bottom--small">
+              Finne informasjon om hjelpemidler!
+            </Heading>
+            <BodyShort> Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</BodyShort>
+          </div>
+          <div className="home-page__input">
+            <FormProvider {...formMethods}>
+              <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
+                <Controller
+                  render={({ field }) => <Search label="Skriv ett eller flere søkeord" hideLabel={false} {...field} />}
+                  name="searchTerm"
+                  control={control}
+                  defaultValue=""
+                />
+              </form>
+            </FormProvider>
+          </div>
+          <Panel className="home-page__border">
+            <BodyLong spacing className="home-page__content">
+              Hjelpemidlene du finner på denne siden er lagt inn av NAV og de ulike leverandørene. Det betyr at det:
+              <div className="list-style-type:disc">
+                <li> også er hjelpemidler i denne oversikten som NAV ikke låner ut </li>
+                <li> ikke er en komplett oversikt over alle hjelpemidler som finnes </li>
+              </div>
+              Du kan ikke søke om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre.{' '}
+            </BodyLong>
+          </Panel>
         </div>
-        <div className="searchbar__input">
-          <FormProvider {...formMethods}>
-            <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
-              <Controller
-                render={({ field }) => <Search label="Skriv ett eller flere søkeord" hideLabel={false} {...field} />}
-                name="searchTerm"
-                control={control}
-                defaultValue=""
-              />
-            </form>
-          </FormProvider>
-        </div>
-      </div>
-      <main className="forside__content"></main>
-    </AnimateLayout>
+      </AnimateLayout>
+    </div>
   )
 }
 
