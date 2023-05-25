@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-import { BodyShort, Link } from '@navikt/ds-react'
+import NextLink from 'next/link'
+import { BodyShort } from '@navikt/ds-react'
 
 const Footer = () => (
   <footer className="nav-bunn">
@@ -12,8 +13,7 @@ const Footer = () => (
             <b>Finn hjelpemidler</b>
           </BodyShort>
           <BodyShort>Finn hjelpemidler er en tjeneste fra NAV</BodyShort>
-          <Link href="#">Om nettstedet</Link>
-          <Link href="#">Kontaktinformasjon</Link>
+          <NextLink href="/om-nettstedet">Om nettstedet</NextLink>
         </div>
       </div>
     </div>
