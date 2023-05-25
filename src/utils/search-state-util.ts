@@ -28,7 +28,7 @@ const initialFiltersState = {
 export const initialSearchDataState = {
   searchTerm: '',
   isoCode: '',
-  hasRammeavtale: true,
+  hasAgreementsOnly: true,
   filters: initialFiltersState,
 }
 

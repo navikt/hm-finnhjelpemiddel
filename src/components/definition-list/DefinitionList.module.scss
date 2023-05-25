@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: minmax(auto, max-content) auto;
   column-gap: var(--a-spacing-10);
+  row-gap: var(--a-spacing-1);
   align-items: baseline;
   margin: 0;
 

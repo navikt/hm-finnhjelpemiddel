@@ -68,13 +68,13 @@ const SearchForm = forwardRef<SearchFormResetHandle, Props>(({ filters, setFocus
 
         <div className="search__agreement-switch">
           <Switch
-            checked={searchData.hasRammeavtale}
+            checked={searchData.hasAgreementsOnly}
             onChange={(e) => {
-              setValue('hasRammeavtale', e.target.checked, { shouldDirty: true })
-              setSearchData({ hasRammeavtale: e.target.checked })
+              setValue('hasAgreementsOnly', e.target.checked, { shouldDirty: true })
+              setSearchData({ hasAgreementsOnly: e.target.checked })
             }}
           >
-            Vis kun produkter på rammeavtale med NAV
+            Vis kun produkter på avtale med NAV
           </Switch>
           {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
         </div>

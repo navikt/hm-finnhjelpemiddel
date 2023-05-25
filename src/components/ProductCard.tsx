@@ -48,7 +48,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
       </div>
       <div className="info">
         <Heading size="xsmall" className="product-card__product-title">
-          {product.title}
+          {product.articleName}
         </Heading>
         <div className="hms-nr">
           <BodyShort size="small">HMS-nr.</BodyShort>

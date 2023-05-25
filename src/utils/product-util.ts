@@ -1,6 +1,7 @@
 import queryString from 'querystring'
 import { FilterCategories } from './filter-util'
 import {
+  AgreementInfoResponse,
   Hit,
   MediaResponse,
   MediaType,
@@ -10,14 +11,16 @@ import {
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
 import { SearchParams, SelectedFilters } from './api-util'
+import { getPostTitle } from './agreement-util'
 
 export interface Product {
   id: string
+  articleName: string
   title: string
   attributes: Attributes
   techData: TechData
+  hasAgreement: boolean
   hmsArtNr: string | null
-  supplierRef: string
   agreementInfo: AgreementInfo | null
   isoCategory: string
   isoCategoryTitle: string
@@ -27,7 +30,9 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+  supplierRef: string
   seriesId: string | null
+  filters: { [key: string]: string | number }
 }
 
 export interface Photo {
@@ -58,17 +63,19 @@ interface AgreementInfo {
   rank: number
   postNr: number
   postIdentifier: string | null
+  postTitle: string
 }
 
 export const createProduct = (source: ProductSourceResponse): Product => {
   return {
     id: source.id,
+    articleName: source.articleName,
     title: source.title,
     attributes: source.attributes,
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
-    agreementInfo: source.agreementInfo,
-    supplierRef: source.supplierRef,
+    hasAgreement: source.hasAgreement,
+    agreementInfo: mapAgreementInfo(source.agreementInfo),
     isoCategory: source.isoCategory,
     isoCategoryTitle: source.isoCategoryTitle,
     isoCategoryText: source.isoCategoryText,
@@ -78,6 +85,8 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     documents: mapDocuments(source.media),
     seriesId: source.seriesId,
     supplierId: source.supplier?.id,
+    supplierRef: source.supplierRef,
+    filters: source.filters,
   }
 }
 
@@ -125,6 +134,15 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
   )
 }
 
+const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
+  id: data.id,
+  identifier: data.identifier,
+  postIdentifier: data.postIdentifier,
+  postNr: data.postNr,
+  postTitle: getPostTitle(data.postTitle, data.postNr),
+  rank: data.rank,
+})
+
 export const mapProducts = (data: SearchResponse): Product[] => {
   return data.hits.hits.map((hit: Hit) => createProduct(hit._source))
 }
@@ -132,7 +150,8 @@ export const mapProducts = (data: SearchResponse): Product[] => {
 export const mapProductSearchParams = (searchParams: { [key: string]: any }) => {
   const searchTerm = searchParams.term ?? ''
   const isoCode = searchParams.isoCode ?? ''
-  const hasRammeavtale = searchParams.agreement ? searchParams.agreement === 'true' : true
+  const hasAgreementsOnly = searchParams.agreement ? searchParams.agreement === 'true' : true
+
   const to = parseInt(searchParams.to) ?? undefined
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) =>
@@ -147,7 +166,7 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
   return {
     searchTerm,
     isoCode,
-    hasRammeavtale,
+    hasAgreementsOnly,
     filters: { ...initialSearchDataState.filters, ...filters },
     to,
   }
@@ -156,7 +175,7 @@ export const mapProductSearchParams = (searchParams: { [key: string]: any }) => 
 export const toSearchQueryString = (searchParams: SearchParams) =>
   '?' +
   queryString.stringify({
-    agreement: searchParams.hasRammeavtale,
+    agreement: searchParams.hasAgreementsOnly,
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)

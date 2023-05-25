@@ -50,14 +50,13 @@ export type FilterData = {
 export type SearchData = {
   searchTerm: string
   isoCode: string
-  hasRammeavtale: boolean
+  hasAgreementsOnly: boolean
   filters: SelectedFilters
 }
 
 export type SearchParams = SearchData & { to?: number }
 
 type FetchProps = {
-  url: string
   from: number
   to: number
   searchData: SearchData
@@ -70,14 +69,8 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({
-  url,
-  from,
-  to,
-  searchData,
-  isProductSeriesView,
-}: FetchProps): Promise<FetchResponse> => {
-  const { searchTerm, isoCode, hasRammeavtale, filters } = searchData
+export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: FetchProps): Promise<FetchResponse> => {
+  const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
   const {
     lengdeCM,
     breddeCM,
@@ -103,12 +96,15 @@ export const fetchProducts = ({
         status: 'ACTIVE',
       },
     },
-    {
-      match_bool_prefix: {
-        hasAgreement: hasRammeavtale,
-      },
-    },
   ]
+
+  if (hasAgreementsOnly) {
+    queryFilters.push({
+      match_bool_prefix: {
+        hasAgreement: hasAgreementsOnly,
+      },
+    })
+  }
 
   if (isoCode) {
     queryFilters.push({
@@ -120,7 +116,7 @@ export const fetchProducts = ({
 
   // "Probably" hmsArtNr (searchTerm is a number consisting of exactly 6 digits)
   if (searchTerm.length === 6 && !isNaN(parseInt(searchTerm))) {
-    queryFilters.push({ match: { hmsArtNr: { query: searchTerm, boost: 10 } } })
+    queryFilters.push({ match: { hmsArtNr: { query: searchTerm } } })
   }
 
   const query = {
@@ -132,7 +128,7 @@ export const fetchProducts = ({
               multi_match: {
                 query: searchTerm,
                 type: 'cross_fields',
-                fields: ['isoCategoryTitle^2', 'isoCategoryText^0.5', 'title^0.3', 'attributes.text^0.1', '*'],
+                fields: ['isoCategoryTitle^2', 'isoCategoryText^0.5', 'title^0.3', 'attributes.text^0.1'],
                 operator: 'and',
                 zero_terms_query: 'all',
               },
@@ -177,7 +173,7 @@ export const fetchProducts = ({
     },
   }
 
-  return fetch(url, {
+  return fetch('/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

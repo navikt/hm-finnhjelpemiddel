@@ -1,5 +1,5 @@
 import React from 'react'
-import { BodyShort, Heading } from '@navikt/ds-react'
+import { BodyShort } from '@navikt/ds-react'
 import { FilterData } from '@/utils/api-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 
@@ -18,9 +18,6 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   if (!searchDataFilters.length && noAvailableFilters) {
     return (
       <div className="search__filters">
-        <Heading level="2" size="xsmall" spacing>
-          Filtre
-        </Heading>
         <BodyShort>Ingen filtre tilgjengelig</BodyShort>
       </div>
     )
@@ -28,9 +25,6 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <Heading level="2" size="xsmall" spacing>
-        Filtre
-      </Heading>
       <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />
       <RangeFilterInput variant="min" filter={{ key: 'setebreddeMinCM', data: filters?.setebreddeMinCM }} />
       <RangeFilterInput variant="max" filter={{ key: 'setebreddeMaksCM', data: filters?.setebreddeMaksCM }} />
