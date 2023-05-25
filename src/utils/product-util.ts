@@ -1,6 +1,7 @@
 import queryString from 'querystring'
 import { FilterCategories } from './filter-util'
 import {
+  AgreementInfoResponse,
   Hit,
   MediaResponse,
   MediaType,
@@ -10,6 +11,7 @@ import {
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
 import { SearchParams, SelectedFilters } from './api-util'
+import { getPostTitle } from './agreement-util'
 
 export interface Product {
   id: string
@@ -73,7 +75,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
     hasAgreement: source.hasAgreement,
-    agreementInfo: source.agreementInfo,
+    agreementInfo: mapAgreementInfo(source.agreementInfo),
     isoCategory: source.isoCategory,
     isoCategoryTitle: source.isoCategoryTitle,
     isoCategoryText: source.isoCategoryText,
@@ -131,6 +133,15 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
       .map((data: TechDataResponse) => ({ [data.key]: { value: data.value, unit: data.unit } }))
   )
 }
+
+const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
+  id: data.id,
+  identifier: data.identifier,
+  postIdentifier: data.postIdentifier,
+  postNr: data.postNr,
+  postTitle: getPostTitle(data.postTitle, data.postNr),
+  rank: data.rank,
+})
 
 export const mapProducts = (data: SearchResponse): Product[] => {
   return data.hits.hits.map((hit: Hit) => createProduct(hit._source))

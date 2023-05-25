@@ -44,7 +44,7 @@ export interface ProductSourceResponse {
   createdBy: string
   updatedBy: string
   filters: { [key: string]: string }
-  agreementInfo: AgreementInfoResponse | null
+  agreementInfo: AgreementInfoResponse
   hasAgreement: boolean
 }
 
@@ -76,7 +76,7 @@ export interface MediaResponse {
   source?: MediaSourceType
 }
 
-interface AgreementInfoResponse {
+export interface AgreementInfoResponse {
   id: string
   identifier: string | null
   rank: number

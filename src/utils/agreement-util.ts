@@ -1,8 +1,15 @@
 import { AgreementsSourceResponse, PostResponse } from './response-types'
 
-export const getPostTitle = (posts: Post[], postNr: number): string | undefined => {
+export function getPostTitle(post: string, postNr: number): string
+export function getPostTitle(posts: Post[], postNr: number): string | undefined
+export function getPostTitle(post: unknown, postNr: number): string | undefined {
   const prefix = `Post ${postNr}: `
-  return posts.find((post) => post.nr === postNr)?.title.substring(prefix.length)
+  if (typeof post === 'string') {
+    return post.substring(prefix.length)
+  } else if (Array.isArray(post)) {
+    return post.find((post) => post.nr === postNr)?.title.substring(prefix.length)
+  }
+  throw new Error('Could not get postTitle')
 }
 
 export interface Agreement {

@@ -141,7 +141,6 @@ const SearchResult = ({ product }: { product: Product }) => {
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
   const showSpecsButton = !showProductSeriesView && productFilters.length > 0
-  const postText = product.agreementInfo?.postTitle.substring(product.agreementInfo?.postTitle.indexOf(':') + 1).trim() // Removes "Post X:" prefix
 
   return (
     <li className="search-result">
@@ -178,7 +177,7 @@ const SearchResult = ({ product }: { product: Product }) => {
             )}
           </div>
           <div className="search-result__description">
-            <BodyLong>{postText ?? product.attributes?.text}</BodyLong>
+            <BodyLong>{product.agreementInfo?.postTitle ?? product.attributes?.text}</BodyLong>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
