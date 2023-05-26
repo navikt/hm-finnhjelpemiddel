@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
-import { BodyShort, BodyLong, Heading, Panel, Search } from '@navikt/ds-react'
+import { BodyLong, Heading, Ingress, Panel, Search } from '@navikt/ds-react'
 
 import { SearchData } from '@/utils/api-util'
 import { mapProductSearchParams } from '@/utils/product-util'
@@ -28,12 +28,15 @@ function Home() {
   return (
     <div className="home-page">
       <AnimateLayout>
-        <div className="home-page__container">
+        <div className="home-page__container spacing-top--large">
           <div className="home-page__heading max-width">
-            <Heading level="1" size="large" className="spacing-top--small spacing-bottom--small">
-              Finne informasjon om hjelpemidler!
+            <Heading level="1" size="large" spacing>
+              Finn informasjon om hjelpemidler!
             </Heading>
-            <BodyShort> Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</BodyShort>
+            <Ingress spacing>
+              {' '}
+              Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.
+            </Ingress>
           </div>
           <div className="home-page__input">
             <FormProvider {...formMethods}>
@@ -51,10 +54,10 @@ function Home() {
             <BodyLong spacing className="home-page__content">
               Hjelpemidlene du finner på denne siden er lagt inn av NAV og de ulike leverandørene. Det betyr at det:
               <div className="list-style-type:disc">
-                <li> også er hjelpemidler i denne oversikten som NAV ikke låner ut </li>
-                <li> ikke er en komplett oversikt over alle hjelpemidler som finnes </li>
+                <li> også er hjelpemidler i denne oversikten som NAV ikke låner ut</li>
+                <li> ikke er en komplett oversikt over alle hjelpemidler som finnes</li>
               </div>
-              Du kan ikke søke om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre.{' '}
+              Du kan ikke søke om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre.
             </BodyLong>
           </Panel>
         </div>
