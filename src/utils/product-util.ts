@@ -75,7 +75,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     techData: mapTechDataDict(source.data),
     hmsArtNr: source.hmsArtNr,
     hasAgreement: source.hasAgreement,
-    agreementInfo: mapAgreementInfo(source.agreementInfo),
+    agreementInfo: source.agreementInfo ? mapAgreementInfo(source.agreementInfo) : null,
     isoCategory: source.isoCategory,
     isoCategoryTitle: source.isoCategoryTitle,
     isoCategoryText: source.isoCategoryText,
