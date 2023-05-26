@@ -134,14 +134,19 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
   )
 }
 
-const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
-  id: data.id,
-  identifier: data.identifier,
-  postIdentifier: data.postIdentifier,
-  postNr: data.postNr,
-  postTitle: getPostTitle(data.postTitle, data.postNr),
-  rank: data.rank,
-})
+const mapAgreementInfo = (data?: AgreementInfoResponse): AgreementInfo | null => {
+  if (data) {
+    return {
+      id: data.id,
+      identifier: data.identifier,
+      postIdentifier: data.postIdentifier,
+      postNr: data.postNr,
+      postTitle: getPostTitle(data.postTitle, data.postNr),
+      rank: data.rank,
+    }
+  }
+  return null
+}
 
 export const mapProducts = (data: SearchResponse): Product[] => {
   return data.hits.hits.map((hit: Hit) => createProduct(hit._source))

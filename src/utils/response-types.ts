@@ -44,7 +44,7 @@ export interface ProductSourceResponse {
   createdBy: string
   updatedBy: string
   filters: { [key: string]: string }
-  agreementInfo: AgreementInfoResponse
+  agreementInfo?: AgreementInfoResponse
   hasAgreement: boolean
 }
 
