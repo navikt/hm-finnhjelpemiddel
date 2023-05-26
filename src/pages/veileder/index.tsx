@@ -64,7 +64,7 @@ const CategoryOpen = ({ category }: { category: Category }) => {
         <ul>
           <li>
             <BodyShort>døråpnere og annen omgivelseskontroll</BodyShort>
-          </li>{' '}
+          </li>
           <li>
             <BodyShort>ramper og trappeheiser</BodyShort>
           </li>

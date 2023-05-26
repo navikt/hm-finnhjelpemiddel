@@ -1,16 +1,33 @@
 import classNames from 'classnames'
 
-const AgreementIcon = ({ number }: { number: number }) => {
+const AgreementIcon = ({
+  rank,
+  className,
+  size = 'medium',
+}: {
+  rank: number
+  className?: string
+  size?: 'small' | 'medium'
+}) => {
+  if (!rank) {
+    return null
+  }
+
   return (
-    <div
-      className={classNames('icon-wrapper', {
-        green: number === 1,
-        grey: number !== 1,
-      })}
+    <span
+      className={classNames(
+        'icon-wrapper',
+        {
+          'icon-wrapper--green': rank === 1,
+          'icon-wrapper--grey': rank !== 1,
+          'icon-wrapper--small': size === 'small',
+        },
+        className
+      )}
       title="Agreement rank"
     >
-      {number}
-    </div>
+      {rank}
+    </span>
   )
 }
 
