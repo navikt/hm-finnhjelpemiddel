@@ -16,6 +16,7 @@ import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import ShowMore from '@/components/ShowMore'
+import AgreementIcon from '@/components/AgreementIcon'
 
 const SearchResults = ({
   data,
@@ -167,17 +168,17 @@ const SearchResult = ({ product }: { product: Product }) => {
                 {showProductSeriesView ? product.title : product.articleName}
               </Link>
             </Heading>
-            {product.agreementInfo && (
-              <div className="search-result__post-and-rank-container">
-                <div className="search-result__post-and-rank">
-                  <span>Rangering</span>
-                  <span className="search-result__post-and-rank__rank">{product.agreementInfo?.rank}</span>
-                </div>
+            {product.agreementInfo?.rank && (
+              <div className="search-result__rank-container">
+                <AgreementIcon rank={product.agreementInfo?.rank} size="small" />
               </div>
             )}
           </div>
           <div className="search-result__description">
-            <BodyLong>{product.agreementInfo?.postTitle ?? product.attributes?.text}</BodyLong>
+            <div className="search-result__post-container">
+              {product.agreementInfo?.rank && <AgreementIcon rank={product.agreementInfo?.rank} />}
+              <BodyShort>{product.agreementInfo?.postTitle ?? product.attributes?.text}</BodyShort>
+            </div>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>

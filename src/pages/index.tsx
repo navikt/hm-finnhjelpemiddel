@@ -27,38 +27,38 @@ function Home() {
 
   return (
     <div className="home-page">
-      {/*<AnimateLayout>*/}
-      <div className="home-page__container spacing-top--large">
-        <div className="home-page__heading">
-          <Heading level="1" size="large" spacing>
-            Finn informasjon om hjelpemidler!
-          </Heading>
-          <Ingress>Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</Ingress>
+      <AnimateLayout>
+        <div className="home-page__container spacing-top--large">
+          <div className="home-page__heading">
+            <Heading level="1" size="large" spacing>
+              Finn informasjon om hjelpemidler!
+            </Heading>
+            <Ingress>Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</Ingress>
+          </div>
+          <div className="home-page__input">
+            <FormProvider {...formMethods}>
+              <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
+                <Controller
+                  render={({ field }) => <Search label="Skriv ett eller flere søkeord" hideLabel={false} {...field} />}
+                  name="searchTerm"
+                  control={control}
+                  defaultValue=""
+                />
+              </form>
+            </FormProvider>
+          </div>
+          <Panel className="home-page__border">
+            <BodyLong>
+              Hjelpemidlene du finner på denne siden er lagt inn av NAV og de ulike leverandørene. Det betyr at det:
+            </BodyLong>
+            <ul>
+              <li> også er hjelpemidler i denne oversikten som NAV ikke låner ut</li>
+              <li> ikke er en komplett oversikt over alle hjelpemidler som finnes</li>
+            </ul>
+            <BodyLong>Du kan ikke søke om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre.</BodyLong>
+          </Panel>
         </div>
-        <div className="home-page__input">
-          <FormProvider {...formMethods}>
-            <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
-              <Controller
-                render={({ field }) => <Search label="Skriv ett eller flere søkeord" hideLabel={false} {...field} />}
-                name="searchTerm"
-                control={control}
-                defaultValue=""
-              />
-            </form>
-          </FormProvider>
-        </div>
-        <Panel className="home-page__border">
-          <BodyLong>
-            Hjelpemidlene du finner på denne siden er lagt inn av NAV og de ulike leverandørene. Det betyr at det:
-          </BodyLong>
-          <ul>
-            <li> også er hjelpemidler i denne oversikten som NAV ikke låner ut</li>
-            <li> ikke er en komplett oversikt over alle hjelpemidler som finnes</li>
-          </ul>
-          <BodyLong>Du kan ikke søke om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre.</BodyLong>
-        </Panel>
-      </div>
-      {/*</AnimateLayout>*/}
+      </AnimateLayout>
     </div>
   )
 }

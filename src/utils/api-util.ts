@@ -128,24 +128,32 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
               multi_match: {
                 query: searchTerm,
                 type: 'cross_fields',
-                fields: ['isoCategoryTitle^2', 'isoCategoryText^0.5', 'title^0.3', 'attributes.text^0.1'],
+                fields: [
+                  'isoCategoryTitle^2',
+                  'isoCategoryText^0.5',
+                  'title^0.3',
+                  'attributes.text^0.1',
+                  'keywords_bag^0.1',
+                ],
                 operator: 'and',
                 zero_terms_query: 'all',
+              },
+            },
+            {
+              query_string: {
+                query: `*${searchTerm}`,
+                boost: '0.1',
+              },
+            },
+            {
+              query_string: {
+                query: `${searchTerm}*`,
+                boost: '0.1',
               },
             },
           ],
         },
       },
-      should: [
-        {
-          match_phrase: {
-            title: {
-              query: searchTerm,
-              slop: 2,
-            },
-          },
-        },
-      ],
       filter: queryFilters,
     },
   }
