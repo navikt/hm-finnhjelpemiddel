@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
-import { Heading, Search } from '@navikt/ds-react'
+import { BodyLong, Heading, Ingress, Panel, Search } from '@navikt/ds-react'
 
 import { SearchData } from '@/utils/api-util'
 import { mapProductSearchParams } from '@/utils/product-util'
@@ -26,15 +26,16 @@ function Home() {
   const { control, handleSubmit } = formMethods
 
   return (
-    <AnimateLayout>
-      <div className="searchbar">
-        <div className="searchbar__heading">
-          {/*Alt* av hjelpemidler samlet på en plass*/}
-          <Heading level="1" size="large">
-            Lett å finne frem til informasjon om hjelpemidler!
+    <div className="home-page">
+      {/*<AnimateLayout>*/}
+      <div className="home-page__container spacing-top--large">
+        <div className="home-page__heading">
+          <Heading level="1" size="large" spacing>
+            Finn informasjon om hjelpemidler!
           </Heading>
+          <Ingress>Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</Ingress>
         </div>
-        <div className="searchbar__input">
+        <div className="home-page__input">
           <FormProvider {...formMethods}>
             <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
               <Controller
@@ -46,9 +47,19 @@ function Home() {
             </form>
           </FormProvider>
         </div>
+        <Panel className="home-page__border">
+          <BodyLong>
+            Hjelpemidlene du finner på denne siden er lagt inn av NAV og de ulike leverandørene. Det betyr at det:
+          </BodyLong>
+          <ul>
+            <li> også er hjelpemidler i denne oversikten som NAV ikke låner ut</li>
+            <li> ikke er en komplett oversikt over alle hjelpemidler som finnes</li>
+          </ul>
+          <BodyLong>Du kan ikke søke om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre.</BodyLong>
+        </Panel>
       </div>
-      <main className="forside__content"></main>
-    </AnimateLayout>
+      {/*</AnimateLayout>*/}
+    </div>
   )
 }
 
