@@ -388,18 +388,6 @@ details {
   }
 }
 
-.max-height {
-  max-height: 1200px;
-  margin: auto;
-  padding-top: var(--a-spacing-3);
-  padding-bottom: var(--a-spacing-3);
-
-  @include mixins.for-size(desktop-up) {
-    padding-top: var(--a-spacing-6);
-    padding-bottom: var(--a-spacing-6);
-  }
-}
-
 .max-width {
   max-width: 1200px;
   margin: auto;
