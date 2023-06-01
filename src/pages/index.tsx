@@ -14,7 +14,8 @@ function Home() {
   const router = useRouter()
 
   const onSubmit: SubmitHandler<SearchData> = (data) => {
-    router.push('/sok?term=' + data.searchTerm)
+    // router.push('/sok?term=' + data.searchTerm)
+    router.push(`/sok?term=${data.searchTerm}`)
   }
   const [productSearchParams] = useState(mapProductSearchParams(router.query))
   const formMethods = useForm<SearchData>({
