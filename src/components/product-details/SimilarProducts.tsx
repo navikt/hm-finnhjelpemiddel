@@ -19,7 +19,7 @@ type SortColumns = {
 
 const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) => {
   const [keyColumnWidth, setKeyColumnWidth] = useState(0)
-  const [sortColumns, setSortColumns] = useState<SortColumns | undefined>({ orderBy: 'HMS', direction: 'ascending' })
+  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })
   const [showAllRows, setShowAllRows] = useState<boolean>(false)
   const colHeadRef = useRef(null)
 
@@ -29,7 +29,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
 
   const sortColumnsByRowKey = (products: Product[]) => {
     return products.sort((productA, productB) => {
-      if (sortColumns?.orderBy == 'HMS') {
+      if (sortColumns.orderBy === 'HMS') {
         if (productA.hmsArtNr && productB.hmsArtNr) {
           return sortIntWithStringFallback(
             productA.hmsArtNr,
@@ -40,14 +40,14 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
         return -1
       }
       if (
-        sortColumns?.orderBy &&
-        productA.techData[sortColumns?.orderBy].value &&
-        productB.techData[sortColumns?.orderBy].value
+        sortColumns.orderBy &&
+        productA.techData[sortColumns.orderBy].value &&
+        productB.techData[sortColumns.orderBy].value
       ) {
         return sortIntWithStringFallback(
-          productA.techData[sortColumns?.orderBy].value,
-          productB.techData[sortColumns?.orderBy].value,
-          sortColumns?.direction === 'descending'
+          productA.techData[sortColumns.orderBy].value,
+          productB.techData[sortColumns.orderBy].value,
+          sortColumns.direction === 'descending'
         )
       } else return -1
     })
@@ -87,13 +87,18 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
   const handleSortRow = (sortKey: string) => {
     setSortColumns({
       orderBy: sortKey,
-      direction: sortColumns?.direction === 'ascending' ? 'descending' : 'ascending',
+      direction:
+        sortKey === sortColumns.orderBy
+          ? sortColumns.direction === 'ascending'
+            ? 'descending'
+            : 'ascending'
+          : 'ascending',
     })
   }
 
   const iconBasedOnState = (key: string) => {
-    return sortColumns?.orderBy === key ? (
-      sortColumns?.direction === 'ascending' ? (
+    return sortColumns.orderBy === key ? (
+      sortColumns.direction === 'ascending' ? (
         <ArrowUpIcon title="Sort ascending" height={30} width={30} />
       ) : (
         <ArrowDownIcon title="Sort descending" height={30} width={30} />
