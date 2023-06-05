@@ -113,7 +113,7 @@ export default function ProduktPage({
                   </div>
                 )}
                 <div className="product-info__expired-propducts">
-                  {new Date(product.expired).getTime() < Date.now() && (
+                  {new Date(product.expired).getTime() <= Date.now() && (
                     <Alert variant="warning">Dette produktet er utgått</Alert>
                   )}
                 </div>
