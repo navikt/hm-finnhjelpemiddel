@@ -33,6 +33,7 @@ export interface Product {
   supplierRef: string
   seriesId: string | null
   filters: { [key: string]: string | number }
+  expired: string
 }
 
 export interface Photo {
@@ -87,6 +88,7 @@ export const createProduct = (source: ProductSourceResponse): Product => {
     supplierId: source.supplier?.id,
     supplierRef: source.supplierRef,
     filters: source.filters,
+    expired: source.expired,
   }
 }
 
