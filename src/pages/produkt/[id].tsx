@@ -112,6 +112,11 @@ export default function ProduktPage({
                     </div>
                   </div>
                 )}
+                <div className="product-info__expired-propducts">
+                  {new Date(product.expired).getTime() <= Date.now() && (
+                    <Alert variant="warning">Dette produktet er utgått</Alert>
+                  )}
+                </div>
                 <KeyInformation product={product} supplierName={supplier ? supplier.name : null} />
               </div>
             </div>

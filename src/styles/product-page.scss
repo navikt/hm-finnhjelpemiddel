@@ -2,6 +2,7 @@
 
 .product-info {
   width: 100%;
+
   &__agreement-short {
     display: flex;
     width: 100%;
@@ -33,6 +34,7 @@
     .navds-heading {
       margin-bottom: var(--a-spacing-2);
     }
+
     p {
       margin-top: 0.2rem;
       margin-bottom: 0.2rem;
@@ -126,6 +128,12 @@
     .navds-heading {
       margin-bottom: var(--a-spacing-6);
     }
+  }
+
+  &__expired-propducts {
+    margin-bottom: var(--a-spacing-6);
+    margin-top: var(--a-spacing-6);
+    max-width: 60%;
   }
 }
 
