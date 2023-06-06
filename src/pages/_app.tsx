@@ -12,7 +12,7 @@ import Footer from '@/components/layout/Footer'
 import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 import { ExclamationmarkTriangleIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Link } from '@navikt/ds-react'
+import { BodyLong, Button, Link } from '@navikt/ds-react'
 
 function App({ Component, pageProps }: AppProps) {
   const pathname = usePathname()
@@ -71,11 +71,11 @@ function App({ Component, pageProps }: AppProps) {
           <aside className="wip-banner">
             <div>
               <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
-              <BodyShort>
+              <BodyLong>
                 <b>Hei!</b> Dette er bare en prototype til testing og utvikling.{' '}
                 <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link> om
                 du har kommet feil.
-              </BodyShort>
+              </BodyLong>
             </div>
           </aside>
           <div className="nav-topp__content">
