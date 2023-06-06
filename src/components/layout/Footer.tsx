@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { BodyLong, BodyShort } from '@navikt/ds-react'
+import { BodyLong } from '@navikt/ds-react'
 
 const Footer = () => (
   <footer className="nav-bunn">
