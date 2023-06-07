@@ -60,6 +60,10 @@
 }
 
 .results {
+  &__chips {
+    margin-bottom: var(--a-spacing-8);
+  }
+
   &__wrapper {
     display: flex;
     flex-direction: column;

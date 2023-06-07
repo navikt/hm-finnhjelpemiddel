@@ -4,7 +4,6 @@ import { Button, Checkbox, CheckboxGroup, Detail } from '@navikt/ds-react'
 import { FilterCategories } from '@/utils/filter-util'
 import { Filter, SearchData } from '@/utils/api-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
-import { capitalize } from '@/utils/string-util'
 
 import ShowMore from '@/components/ShowMore'
 
@@ -18,8 +17,8 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   const { searchData, setFilter } = useHydratedSearchStore()
   const {
     control,
-    watch,
     formState: { touchedFields },
+    watch,
   } = useFormContext<SearchData>()
   const watchFilter = watch(`filters.${filterKey}`)
   const touched = touchedFields.filters && !!touchedFields.filters[filterKey]
@@ -49,7 +48,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
 
   const CheckboxLabel = ({ value, hitCount }: { value: string | number; hitCount: number }) => (
     <>
-      {capitalize(String(value))} <Detail style={{ display: 'inline' }}>({String(hitCount)})</Detail>
+      {value} <Detail style={{ display: 'inline' }}>({hitCount})</Detail>
     </>
   )
 
@@ -67,8 +66,8 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
             <CheckboxGroup
               legend={FilterCategories[filterKey]}
               hideLegend
-              {...field}
               size="small"
+              {...field}
               value={searchData.filters[filterKey]}
             >
               {selectedUnavailableFilters?.map((f) => (

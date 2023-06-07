@@ -1,13 +1,14 @@
 import React, { RefObject, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Alert, BodyLong, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
+import { useFormContext } from 'react-hook-form'
+import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
 import { Next } from '@navikt/ds-icons'
 import { ImageIcon } from '@navikt/aksel-icons'
 import { Product } from '@/utils/product-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
-import { FetchResponse, PAGE_SIZE } from '@/utils/api-util'
+import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { capitalize } from '@/utils/string-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { smallImageLoader } from '@/utils/image-util'
@@ -127,10 +128,11 @@ const SearchResults = ({
 
 const SearchResult = ({ product }: { product: Product }) => {
   const {
-    setFilter,
     meta: { showProductSeriesView },
   } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+  const { setValue } = useFormContext<SearchData>()
+
   const productFilters = Object.entries(product.filters)
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
@@ -194,10 +196,7 @@ const SearchResult = ({ product }: { product: Product }) => {
                   className="search-result__product-category-button"
                   variant="tertiary"
                   size="small"
-                  onClick={() => {
-                    setFilter('produktkategori', [product.isoCategoryTitle])
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }}
+                  onClick={() => setValue(`filters.produktkategori`, [product.isoCategoryTitle])}
                 >
                   {product.isoCategoryTitle}
                 </Button>
