@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { FormProvider, useForm } from 'react-hook-form'
 import { InferGetServerSidePropsType, NextPageContext } from 'next'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import useSWRInfinite from 'swr/infinite'
-import { Button, Heading, Popover } from '@navikt/ds-react'
+import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 import { Delete, Up } from '@navikt/ds-icons'
 import { FilesIcon } from '@navikt/aksel-icons'
 import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { fetchProducts, FetchResponse, PAGE_SIZE, SearchParams } from '@/utils/api-util'
+import { fetchProducts, FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters } from '@/utils/api-util'
 import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { FilterCategories } from '@/utils/filter-util'
+import { Entries } from '@/utils/type-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import CompareMenu from '@/components/compare-products/CompareMenu'
@@ -26,6 +29,8 @@ export const getServerSideProps: (
 }
 
 export default function Home({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter()
+
   const copyButtonRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<SearchFormResetHandle>(null)
 
@@ -34,10 +39,21 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
 
   const {
     searchData,
+    setFilter,
     setSearchData,
     meta: { showProductSeriesView },
   } = useHydratedSearchStore()
   const { compareMode } = useHydratedCompareStore()
+  const [productSearchParams] = useState(mapProductSearchParams(router.query))
+
+  const formMethods = useForm<SearchData>({
+    defaultValues: {
+      ...initialSearchDataState,
+      ...productSearchParams,
+    },
+  })
+
+  const { setValue } = formMethods
 
   const [initialProductSearchParams, setInitialProductSearchParams] = useState(searchParams)
   const [searchInitialized, setSearchInitialized] = useState(false)
@@ -105,8 +121,18 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     setSize(1)
   }
 
+  const filterValues = Object.values(searchData.filters)
+    .flat()
+    .filter((val) => val)
+
+  const filterChips = (Object.entries(searchData.filters) as Entries<SelectedFilters>).flatMap(([key, values]) => ({
+    key,
+    values,
+    label: FilterCategories[key],
+  }))
+
   return (
-    <>
+    <FormProvider {...formMethods}>
       {compareMode === CompareMode.Active && <CompareMenu />}
       {!showSidebar && (
         <MobileOverlay open={mobileOverlayOpen}>
@@ -180,6 +206,36 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                   </Button>
                 </div>
               )}
+              {filterValues.length > 0 && (
+                <>
+                  <Heading level="2" size="small">
+                    Valgte filtre
+                  </Heading>
+                  <Chips className="results__chips">
+                    {filterChips.map(({ key, label, values }, index) => {
+                      return values
+                        .filter((v) => v)
+                        .map((value) => (
+                          <Chips.Removable
+                            key={index}
+                            onClick={() => {
+                              setFilter(
+                                key,
+                                values.filter((val) => val !== value)
+                              )
+                              setValue(
+                                `filters.${key}`,
+                                values.filter((val) => val !== value)
+                              )
+                            }}
+                          >
+                            {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
+                          </Chips.Removable>
+                        ))
+                    })}
+                  </Chips>
+                </>
+              )}
               <SearchResults
                 data={data}
                 size={size}
@@ -199,6 +255,6 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
           />
         )}
       </AnimateLayout>
-    </>
+    </FormProvider>
   )
 }
