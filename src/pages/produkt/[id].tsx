@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { InferGetServerSidePropsType } from 'next'
-import { Heading, Button, BodyShort, Alert, BodyLong } from '@navikt/ds-react'
+import { Heading, Button, BodyShort, Alert } from '@navikt/ds-react'
 import { ArrowDownIcon, ChevronRightIcon, ImageIcon } from '@navikt/aksel-icons'
 import { mapSupplier, Supplier } from '@/utils/supplier-util'
 import { getProduct, getSupplier, getSeries, getAgreement, getProductsInPost } from '@/utils/api-util'
@@ -99,7 +99,7 @@ export default function ProduktPage({
                   <div className="product-info__agreement-short">
                     <AgreementIcon rank={product.agreementInfo.rank} />
                     <div className="content">
-                      <BodyLong>Produktet er nr. {product.agreementInfo.rank} på avtale med Nav</BodyLong>
+                      <BodyShort>Produktet er nr. {product.agreementInfo.rank} på avtale med Nav</BodyShort>
                       <Button
                         variant="tertiary"
                         onClick={scrollToAgreementInfo}
