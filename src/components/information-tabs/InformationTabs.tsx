@@ -48,9 +48,9 @@ const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Suppl
       Leverandør
     </Heading>
     <>
-      <BodyLong>{supplier.name}</BodyLong>
-      {supplier.address && <BodyLong>{supplier.address}</BodyLong>}
-      {supplier.email && <BodyLong>{supplier.email}</BodyLong>}
+      <BodyShort>{supplier.name}</BodyShort>
+      {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
+      {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
       {supplier.homepageUrl && (
         <Link href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
           Hjemmeside (åpnes i ny side)
