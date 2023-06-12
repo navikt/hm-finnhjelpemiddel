@@ -10,6 +10,7 @@ import ShowMore from '@/components/ShowMore'
 type CheckboxFilterInputProps = {
   filter: { key: keyof typeof FilterCategories; data?: Filter }
 }
+
 export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   const { key: filterKey, data: filterData } = filter
   const [showAllValues, setShowAllValues] = useState(false)
@@ -77,19 +78,19 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
               ))}
               {filterData?.values.slice(0, 10).map((f) => (
                 <Checkbox value={f.key} key={f.key}>
-                  <CheckboxLabel value={f.key} hitCount={f.doc_count} />
+                  <CheckboxLabel value={f.label || f.key} hitCount={f.doc_count} />
                 </Checkbox>
               ))}
               {showAllValues &&
                 filterData?.values.slice(10).map((f) => (
                   <Checkbox value={f.key} key={f.key}>
-                    <CheckboxLabel value={f.key} hitCount={f.doc_count} />
+                    <CheckboxLabel value={f.label || f.key} hitCount={f.doc_count} />
                   </Checkbox>
                 ))}
               {!showAllValues &&
                 selectedInvisibleFilters?.map((f) => (
                   <Checkbox value={f.key} key={f.key}>
-                    <CheckboxLabel value={f.key} hitCount={f.doc_count} />
+                    <CheckboxLabel value={f.label || f.key} hitCount={f.doc_count} />
                   </Checkbox>
                 ))}
             </CheckboxGroup>
