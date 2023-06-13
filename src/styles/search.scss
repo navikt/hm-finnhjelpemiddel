@@ -1,27 +1,29 @@
 @use './_mixins';
 
+@import '@navikt/ds-tokens/dist/tokens';
+
 .search {
   &__side-bar {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: fit-content;
-    margin-bottom: var(--a-spacing-10);
-    border: 1px solid var(--a-border-divider);
-    border-radius: var(--a-border-radius-large);
-    box-shadow: var(--a-shadow-small);
+    margin-bottom: $a-spacing-10;
+    border: 1px solid $a-border-divider;
+    border-radius: $a-border-radius-large;
+    box-shadow: $a-shadow-small;
 
     > .container {
-      padding: var(--a-spacing-5) var(--a-spacing-5) 0;
+      padding: $a-spacing-5 $a-spacing-5 0;
     }
 
     > .footer {
       display: flex;
       justify-content: space-between;
-      background-color: var(--a-deepblue-50);
-      border-bottom-left-radius: var(--a-border-radius-large);
-      border-bottom-right-radius: var(--a-border-radius-large);
-      padding: var(--a-spacing-3) var(--a-spacing-5);
+      background-color: $a-deepblue-50;
+      border-bottom-left-radius: $a-border-radius-large;
+      border-bottom-right-radius: $a-border-radius-large;
+      padding: $a-spacing-3 $a-spacing-5;
     }
 
     @include mixins.for-size(desktop-up) {
@@ -30,21 +32,21 @@
 
     @include mixins.for-size(desktop-up) {
       max-width: 25rem;
-      margin-right: var(--a-spacing-12);
+      margin-right: $a-spacing-12;
     }
   }
 
   &__agreement-switch {
-    margin-bottom: var(--a-spacing-4);
+    margin-bottom: $a-spacing-4;
   }
 
   &__iso-category-select {
-    margin-bottom: var(--a-spacing-7);
+    margin-bottom: $a-spacing-7;
   }
 
   &__filters {
-    margin-top: var(--a-spacing-3);
-    margin-bottom: var(--a-spacing-4);
+    margin-top: $a-spacing-3;
+    margin-bottom: $a-spacing-4;
   }
 
   &__reset-button {
@@ -53,15 +55,15 @@
 
   &__page-up-button {
     position: fixed;
-    top: var(--a-spacing-4);
-    right: var(--a-spacing-4);
+    top: $a-spacing-4;
+    right: $a-spacing-4;
     z-index: 2;
   }
 }
 
 .results {
   &__chips {
-    margin-bottom: var(--a-spacing-8);
+    margin-bottom: $a-spacing-8;
   }
 
   &__wrapper {
@@ -71,18 +73,18 @@
     width: 100%;
 
     .results__loader {
-      margin-top: var(--a-spacing-12);
+      margin-top: $a-spacing-12;
       align-self: center;
       justify-self: center;
     }
 
     h2 {
-      margin-bottom: var(--a-spacing-2);
+      margin-bottom: $a-spacing-2;
     }
 
     @include mixins.for-size(desktop-up) {
       margin-left: 0;
-      margin-right: var(--a-spacing-6);
+      margin-right: $a-spacing-6;
 
       h2 {
         margin-top: 0;
@@ -92,12 +94,12 @@
 
   &__header {
     h2 {
-      margin-bottom: var(--a-spacing-3);
+      margin-bottom: $a-spacing-3;
     }
 
     @include mixins.for-size(phone-only) {
       .view-toggle {
-        margin-bottom: var(--a-spacing-3);
+        margin-bottom: $a-spacing-3;
       }
     }
   }
@@ -111,59 +113,59 @@
   &__list {
     list-style: none;
     padding: 0;
-    margin-top: var(--a-spacing-4);
+    margin-top: $a-spacing-4;
     margin-bottom: 0;
   }
 }
 
 .search-result {
   position: relative;
-  border-radius: var(--a-border-radius-large);
-  margin-bottom: var(--a-spacing-3);
-  background-color: var(--a-surface-default);
-  border: 1px solid var(--a-border-divider);
-  box-shadow: var(--a-shadow-small);
+  border-radius: $a-border-radius-large;
+  margin-bottom: $a-spacing-3;
+  background-color: $a-surface-default;
+  border: 1px solid $a-border-divider;
+  box-shadow: $a-shadow-small;
   display: flex;
   flex-direction: column;
 
   &:hover {
-    border: 1px solid var(--a-border-action);
+    border: 1px solid $a-border-action;
   }
 
   &:focus-within {
-    box-shadow: var(--a-shadow-focus);
+    box-shadow: $a-shadow-focus;
   }
 
   &__header {
     width: 100%;
     align-self: flex-start;
-    padding: var(--a-spacing-1) var(--a-spacing-5);
-    border-radius: var(--a-border-radius-large) var(--a-border-radius-large) 0 0;
-    background-color: var(--a-surface-selected);
+    padding: $a-spacing-1 $a-spacing-5;
+    border-radius: $a-border-radius-large $a-border-radius-large 0 0;
+    background-color: $a-surface-selected;
     z-index: 2;
   }
 
   &__container {
     display: flex;
-    gap: var(--a-spacing-3);
-    padding: var(--a-spacing-4);
+    gap: $a-spacing-3;
+    padding: $a-spacing-4;
 
     @include mixins.for-size(tablet-up) {
-      gap: var(--a-spacing-4);
-      padding: var(--a-spacing-5);
+      gap: $a-spacing-4;
+      padding: $a-spacing-5;
     }
   }
 
   &__link {
     outline: none;
     text-decoration: none;
-    color: var(--ac-link-panel-text, var(--a-text-default));
+    color: $a-text-default;
     font-weight: 400;
 
     &:hover,
     &:focus {
       text-decoration: underline;
-      color: var(--ac-link-panel-hover-text, var(--a-text-action));
+      color: $a-text-action;
     }
 
     &::after {
@@ -178,7 +180,7 @@
   }
 
   &__chevron-container {
-    margin-right: var(--a-spacing-1);
+    margin-right: $a-spacing-1;
     align-self: center;
   }
 
@@ -219,7 +221,7 @@
 
   &__more-info {
     position: relative;
-    margin-top: var(--a-spacing-4);
+    margin-top: $a-spacing-4;
     z-index: 2;
 
     dt {
@@ -231,7 +233,7 @@
     }
 
     details {
-      margin-top: var(--a-spacing-4);
+      margin-top: $a-spacing-4;
     }
 
     @include mixins.for-size(phone-only) {
@@ -245,7 +247,7 @@
   }
 
   &__title {
-    margin-bottom: var(--a-spacing-3);
+    margin-bottom: $a-spacing-3;
 
     h3 {
       width: fit-content;
@@ -254,8 +256,8 @@
 
   &__rank-container {
     position: absolute;
-    right: var(--a-spacing-1);
-    top: var(--a-spacing-1);
+    right: $a-spacing-1;
+    top: $a-spacing-1;
 
     span {
       @include mixins.for-size(tablet-up) {
@@ -266,7 +268,7 @@
 
   &__post-container {
     display: flex;
-    gap: var(--a-spacing-2);
+    gap: $a-spacing-2;
     flex-direction: column;
 
     span {
