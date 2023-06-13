@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { Button } from '@navikt/ds-react'
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
-import { largeImageLoader } from '../../utils/image-util'
-import { Photo } from '../../utils/product-util'
+import { largeImageLoader } from '@/utils/image-util'
+import { Photo } from '@/utils/product-util'
 
 type ImageSliderProps = {
   photos: Photo[]
