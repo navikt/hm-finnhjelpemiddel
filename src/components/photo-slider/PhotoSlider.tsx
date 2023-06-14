@@ -95,6 +95,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         {numberOfImages > 1 && (
           <>
             <Button
+              aria-label="Forrige bilde"
               variant="tertiary-neutral"
               className="arrow"
               onClick={() => {
@@ -149,6 +150,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               </AnimatePresence>
             </div>
             <Button
+              aria-label="Neste bilde"
               variant="tertiary-neutral"
               className="arrow"
               onClick={() => {
@@ -164,6 +166,8 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
           if (index !== active) {
             return (
               <Button
+                aria-selected="false"
+                aria-label="bilde"
                 key={index}
                 className={'dot'}
                 onClick={() => {
@@ -172,7 +176,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               />
             )
           } else {
-            return <div key={index} className="activeDot" />
+            return <div aria-selected="true" aria-label="bilde" key={index} className="activeDot" />
           }
         })}
       </div>
