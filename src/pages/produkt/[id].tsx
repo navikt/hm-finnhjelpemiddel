@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { InferGetServerSidePropsType } from 'next'
-import { Heading, Button, BodyShort, Alert } from '@navikt/ds-react'
+import { Heading, Button, BodyShort, Alert, BodyLong } from '@navikt/ds-react'
 import { ArrowDownIcon, ChevronRightIcon, ImageIcon } from '@navikt/aksel-icons'
 import { mapSupplier, Supplier } from '@/utils/supplier-util'
 import { getProduct, getSupplier, getSeries, getAgreement, getProductsInPost } from '@/utils/api-util'
@@ -15,7 +15,7 @@ import InformationTabs from '@/components/InformationTabs'
 import DefinitionList from 'src/components/definition-list/DefinitionList'
 import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
 import AgreementIcon from '@/components/AgreementIcon'
-import { useRef } from 'react'
+import { RefObject, useRef } from 'react'
 
 type SerializedDataType = {
   product: Product
@@ -68,8 +68,7 @@ export default function ProduktPage({
   productsOnPost,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { searchData } = useHydratedSearchStore()
-  const postTitle =
-    product.agreementInfo?.postNr && agreement ? getPostTitle(agreement.posts, product.agreementInfo.postNr) : ''
+
   const agreementHeadingRef = useRef<HTMLHeadingElement>(null)
 
   const scrollToAgreementInfo = () => {
@@ -96,9 +95,9 @@ export default function ProduktPage({
                   {product.attributes.series ? product.attributes.series : product.title}
                 </Heading>
                 {product.agreementInfo && (
-                  <div className="product-info__agreement-short">
+                  <div className="agreement-summary">
                     <AgreementIcon rank={product.agreementInfo.rank} />
-                    <div className="content">
+                    <div className="agreement-summary__content">
                       <BodyShort>Produktet er nr. {product.agreementInfo.rank} på avtale med NAV</BodyShort>
                       <Button
                         variant="tertiary"
@@ -130,78 +129,119 @@ export default function ProduktPage({
               <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
             </section>
           )}
-          {agreement && (
-            <section className="product-info__agreement-long">
-              <div className="product-info__agreement-long-content max-width">
-                <Heading level="3" size="large" ref={agreementHeadingRef}>
-                  Avtale med NAV
-                </Heading>
-                {product.agreementInfo && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <AgreementIcon rank={product.agreementInfo.rank} />
-                    <BodyShort>Rangert som nr. {product.agreementInfo.rank}</BodyShort>
-                  </div>
-                )}
-                <DefinitionList>
-                  <DefinitionList.Term>Avtale</DefinitionList.Term>
-                  <DefinitionList.Definition>{agreement.title}</DefinitionList.Definition>
-                  <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
-                  <DefinitionList.Definition>{postTitle}</DefinitionList.Definition>
-                </DefinitionList>
-                {product.agreementInfo && product.agreementInfo.rank > 1 && (
-                  <Alert variant="warning" inline>
-                    Den er rangert som nummer {product.agreementInfo.rank} i delkontrakten. Ta en titt på høyere
-                    rangerte produkter for å se om det passer ditt behov.
-                  </Alert>
-                )}
-                {productsOnPost.length > 1 && (
-                  <div className="product-info__products-on-post">
-                    <Heading level="4" size="medium" ref={agreementHeadingRef} spacing>
-                      Andre produkter på samme delkontrakt
-                    </Heading>
-                    <div className="product-info__products-on-post-list">
-                      {productsOnPost.map((product) => (
-                        <div className="product-card" key={product.id}>
-                          <div className="product-card__image">
-                            <div className="image">
-                              {product.photos.length === 0 && (
-                                <ImageIcon
-                                  width="100%"
-                                  height="100%"
-                                  style={{ background: 'white' }}
-                                  aria-label="Ingen bilde tilgjengelig"
-                                />
-                              )}
-                              {product.photos.length !== 0 && (
-                                <Image
-                                  loader={smallImageLoader}
-                                  src={product.photos.at(0)?.uri || ''}
-                                  alt="Produktbilde"
-                                  fill
-                                  style={{ objectFit: 'contain' }}
-                                />
-                              )}
-                            </div>
-                          </div>
-                          <div className="info">
-                            <Link className="search-result__link" href={`/produkt/${product.id}`}>
-                              <Heading size="xsmall" className="product-card__product-title">
-                                {product.title}
-                              </Heading>
-                            </Link>
-                            {product.agreementInfo && <AgreementIcon rank={product.agreementInfo.rank} />}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
-          )}
+          <AgreementInfo
+            product={product}
+            agreement={agreement}
+            productsOnPost={productsOnPost}
+            agreementHeadingRef={agreementHeadingRef}
+          />
         </article>
       </AnimateLayout>
     </>
+  )
+}
+
+type AgreementInfoProps = {
+  product: Product
+  agreement: Agreement | null
+  productsOnPost: Product[]
+  agreementHeadingRef: RefObject<HTMLHeadingElement>
+}
+
+const AgreementInfo = ({ product, agreement, productsOnPost, agreementHeadingRef }: AgreementInfoProps) => {
+  const postTitle =
+    product.agreementInfo?.postNr && agreement ? getPostTitle(agreement.posts, product.agreementInfo.postNr) : ''
+
+  if (!agreement) {
+    return (
+      <section className="agreement-details">
+        <div className="agreement-details__content max-width">
+          <Heading level="3" size="large">
+            Avtale med Nav
+          </Heading>
+
+          <Alert className="alert--fit-content" variant="error">
+            Dette produktet er ikke på avtale med NAV
+          </Alert>
+
+          <BodyLong>
+            Produkter som ikke er på avtale på NAV blir ikke prioritert. Dersom du ønsker å få støtte lønner det seg å
+            se på de andre produktene som er i samme kategori for å se om de passer behovene dine
+          </BodyLong>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section className="agreement-details">
+      <div className="agreement-details__content max-width">
+        <Heading level="3" size="large" ref={agreementHeadingRef}>
+          Avtale med Nav
+        </Heading>
+
+        {product.agreementInfo && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AgreementIcon rank={product.agreementInfo.rank} />
+            <BodyShort>Rangert som nr. {product.agreementInfo.rank}</BodyShort>
+          </div>
+        )}
+        <DefinitionList>
+          <DefinitionList.Term>Avtale</DefinitionList.Term>
+          <DefinitionList.Definition>{agreement.title}</DefinitionList.Definition>
+          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
+          <DefinitionList.Definition>{postTitle}</DefinitionList.Definition>
+        </DefinitionList>
+        {product.agreementInfo && product.agreementInfo.rank > 1 && (
+          <Alert variant="warning" inline>
+            Den er rangert som nummer {product.agreementInfo.rank} i delkontrakten. Ta en titt på høyere rangerte
+            produkter for å se om det passer ditt behov.
+          </Alert>
+        )}
+        {productsOnPost.length > 1 && (
+          <div className="product-info__products-on-post">
+            <Heading level="4" size="medium" ref={agreementHeadingRef} spacing>
+              Andre produkter på samme delkontrakt
+            </Heading>
+            <div className="product-info__products-on-post-list">
+              {productsOnPost.map((product) => (
+                <div className="product-card" key={product.id}>
+                  <div className="product-card__image">
+                    <div className="image">
+                      {product.photos.length === 0 && (
+                        <ImageIcon
+                          width="100%"
+                          height="100%"
+                          style={{ background: 'white' }}
+                          aria-label="Ingen bilde tilgjengelig"
+                        />
+                      )}
+                      {product.photos.length !== 0 && (
+                        <Image
+                          loader={smallImageLoader}
+                          src={product.photos.at(0)?.uri || ''}
+                          alt="Produktbilde"
+                          fill
+                          style={{ objectFit: 'contain' }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="info">
+                    <Link className="search-result__link" href={`/produkt/${product.id}`}>
+                      <Heading size="xsmall" className="product-card__product-title">
+                        {product.title}
+                      </Heading>
+                    </Link>
+                    {product.agreementInfo && <AgreementIcon rank={product.agreementInfo.rank} />}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
   )
 }
 

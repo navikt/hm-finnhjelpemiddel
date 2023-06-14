@@ -5,22 +5,6 @@
 .product-info {
   width: 100%;
 
-  &__agreement-short {
-    display: flex;
-    width: 100%;
-    margin-bottom: $a-spacing-4;
-
-    p {
-      padding-left: $a-spacing-3;
-    }
-
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-
   &__key-information {
     display: flex;
     padding: 8px 8px;
@@ -41,20 +25,6 @@
       margin-top: 0.2rem;
       margin-bottom: 0.2rem;
     }
-  }
-
-  &__agreement-long {
-    margin-top: $a-spacing-16;
-    background-color: #faefee;
-    width: 100%;
-  }
-
-  &__agreement-long-content {
-    padding-top: $a-spacing-6;
-    padding-bottom: $a-spacing-16;
-    display: flex;
-    flex-direction: column;
-    gap: $a-spacing-4;
   }
 
   &__products-on-post,
@@ -139,6 +109,36 @@
   }
 }
 
+.agreement-summary {
+  display: flex;
+  width: 100%;
+  margin-bottom: var(--a-spacing-4);
+
+  p {
+    padding-left: var(--a-spacing-3);
+  }
+
+  &__content {
+    display: 'flex';
+    flex-direction: 'column';
+    align-items: 'flex-start';
+  }
+}
+
+.agreement-details {
+  margin-top: var(--a-spacing-16);
+  background-color: #faefee;
+  width: 100%;
+
+  &__content {
+    padding-top: var(--a-spacing-10);
+    padding-bottom: var(--a-spacing-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--a-spacing-4);
+  }
+}
+
 .photo-slider {
   .arrow {
     cursor: pointer;
@@ -205,4 +205,8 @@
   .activeDot:hover {
     cursor: unset;
   }
+}
+
+.alert--fit-content {
+  width: fit-content;
 }
