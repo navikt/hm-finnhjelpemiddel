@@ -15,10 +15,10 @@ import { FilterCategories } from '@/utils/filter-util'
 import { Entries } from '@/utils/type-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import CompareMenu from '@/components/compare-products/CompareMenu'
+import CompareMenu from '@/components/CompareMenu'
 import MobileOverlay from '@/components/MobileOverlay'
 import SearchForm, { SearchFormResetHandle } from '@/components/SearchForm'
-import SearchResults from '@/components/search/SearchResults'
+import SearchResults from '@/components/SearchResults'
 import Sidebar from '@/components/sidebar/Sidebar'
 
 export const getServerSideProps: (

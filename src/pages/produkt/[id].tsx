@@ -8,10 +8,10 @@ import { getProduct, getSupplier, getSeries, getAgreement, getProductsInPost } f
 import { smallImageLoader } from '@/utils/image-util'
 import { createProduct, mapProducts, Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
-import PhotoSlider from '@/components/photo-slider/PhotoSlider'
-import SimilarProducts from '@/components/product-details/SimilarProducts'
+import PhotoSlider from '@/components/PhotoSlider'
+import SimilarProducts from '@/components/SimilarProducts'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import InformationTabs from 'src/components/information-tabs/InformationTabs'
+import InformationTabs from '@/components/InformationTabs'
 import DefinitionList from 'src/components/definition-list/DefinitionList'
 import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
 import AgreementIcon from '@/components/AgreementIcon'
@@ -99,7 +99,7 @@ export default function ProduktPage({
                   <div className="product-info__agreement-short">
                     <AgreementIcon rank={product.agreementInfo.rank} />
                     <div className="content">
-                      <BodyShort>Produktet er nr. {product.agreementInfo.rank} på avtale med Nav</BodyShort>
+                      <BodyShort>Produktet er nr. {product.agreementInfo.rank} på avtale med NAV</BodyShort>
                       <Button
                         variant="tertiary"
                         onClick={scrollToAgreementInfo}
@@ -130,11 +130,11 @@ export default function ProduktPage({
               <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
             </section>
           )}
-          {agreement ? (
+          {agreement && (
             <section className="product-info__agreement-long">
               <div className="product-info__agreement-long-content max-width">
                 <Heading level="3" size="large" ref={agreementHeadingRef}>
-                  Avtale med Nav
+                  Avtale med NAV
                 </Heading>
                 {product.agreementInfo && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -198,8 +198,6 @@ export default function ProduktPage({
                 )}
               </div>
             </section>
-          ) : (
-            <></>
           )}
         </article>
       </AnimateLayout>

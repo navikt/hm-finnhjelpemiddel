@@ -1,21 +1,23 @@
 @use './_mixins';
 
+@import '@navikt/ds-tokens/dist/tokens';
+
 .product-info {
   width: 100%;
 
   &__agreement-short {
     display: flex;
     width: 100%;
-    margin-bottom: var(--a-spacing-4);
+    margin-bottom: $a-spacing-4;
 
     p {
-      padding-left: var(--a-spacing-3);
+      padding-left: $a-spacing-3;
     }
 
     .content {
-      display: 'flex';
-      flex-direction: 'column';
-      align-items: 'flex-start';
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 
@@ -25,14 +27,14 @@
     flex-direction: column;
     align-items: flex-start;
 
-    border-radius: var(--a-border-radius-large);
+    border-radius: $a-border-radius-large;
     border: 1px solid rgba(0, 0, 0, 0.08);
     background: rgba(255, 255, 255, 0.5);
   }
 
   &__supplier-info {
     .navds-heading {
-      margin-bottom: var(--a-spacing-2);
+      margin-bottom: $a-spacing-2;
     }
 
     p {
@@ -42,23 +44,23 @@
   }
 
   &__agreement-long {
-    margin-top: var(--a-spacing-16);
+    margin-top: $a-spacing-16;
     background-color: #faefee;
     width: 100%;
   }
 
   &__agreement-long-content {
-    padding-top: var(--a-spacing-6);
-    padding-bottom: var(--a-spacing-16);
+    padding-top: $a-spacing-6;
+    padding-bottom: $a-spacing-16;
     display: flex;
     flex-direction: column;
-    gap: var(--a-spacing-4);
+    gap: $a-spacing-4;
   }
 
   &__products-on-post,
   &__products-on-post-list {
     display: flex;
-    gap: var(--a-spacing-4);
+    gap: $a-spacing-4;
   }
 
   &__products-on-post-list {
@@ -68,7 +70,7 @@
   &__products-on-post {
     flex-direction: column;
 
-    margin-top: var(--a-spacing-4);
+    margin-top: $a-spacing-4;
 
     .product-card {
       .icon-wrapper {
@@ -84,20 +86,20 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    background-color: var(--a-green-200);
+    background-color: $a-green-200;
     border-radius: 12px;
     margin-left: -11px;
   }
 
   &__top {
-    background-color: var(--a-gray-50);
+    background-color: $a-gray-50;
     width: 100%;
   }
 
   &__top-content {
     display: flex;
     flex-direction: column;
-    padding: var(--a-spacing-10) var(--a-spacing-6);
+    padding: $a-spacing-10 $a-spacing-6;
 
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
@@ -106,33 +108,33 @@
 
   &__top-right {
     @include mixins.for-size(desktop-up) {
-      padding: var(--a-spacing-5) var(--a-spacing-5);
-      margin-left: var(--a-spacing-8);
-      border-left: 1px solid var(--a-gray-300);
+      padding: $a-spacing-5 $a-spacing-5;
+      margin-left: $a-spacing-8;
+      border-left: 1px solid $a-gray-300;
     }
   }
 
   &__tabs {
-    padding-top: var(--a-spacing-10);
+    padding-top: $a-spacing-10;
 
     &__panel {
-      margin-top: var(--a-spacing-4);
+      margin-top: $a-spacing-4;
     }
   }
 
   &__similar-products {
     display: flex;
     flex-direction: column;
-    padding-top: var(--a-spacing-12);
+    padding-top: $a-spacing-12;
 
     .navds-heading {
-      margin-bottom: var(--a-spacing-6);
+      margin-bottom: $a-spacing-6;
     }
   }
 
   &__expired-propducts {
-    margin-bottom: var(--a-spacing-6);
-    margin-top: var(--a-spacing-6);
+    margin-bottom: $a-spacing-6;
+    margin-top: $a-spacing-6;
     max-width: 60%;
   }
 }
@@ -141,7 +143,7 @@
   .arrow {
     cursor: pointer;
     padding: 0;
-    margin: 0 var(--a-spacing-2);
+    margin: 0 $a-spacing-2;
     border-radius: 50px;
   }
 
@@ -158,7 +160,7 @@
     overflow: hidden;
     width: 400px;
     height: 300px;
-    margin: var(--a-spacing-3);
+    margin: $a-spacing-3;
 
     .div-motion {
       position: absolute;
@@ -182,20 +184,20 @@
     padding: 0;
     width: 15px;
     height: 15px;
-    background-color: var(--a-deepblue-100);
+    background-color: $a-deepblue-100;
     border-radius: 50%;
     margin: 0 10px;
   }
 
   .dot:hover {
     cursor: pointer;
-    background-color: var(--a-deepblue-200);
+    background-color: $a-deepblue-200;
   }
 
   .activeDot {
     width: 15px;
     height: 15px;
-    background-color: var(--a-deepblue-200);
+    background-color: $a-deepblue-200;
     border-radius: 50%;
     margin: 0 10px;
   }

@@ -208,13 +208,13 @@ const SearchResult = ({ product }: { product: Product }) => {
                 <DefinitionList>
                   {productFilters
                     .sort(([keyA], [keyB]) => sortAlphabetically(keyA, keyB))
-                    .map(([key, value]) => (
-                      <>
+                    .map(([key, value], index) => (
+                      <React.Fragment key={index}>
                         <DefinitionList.Term>
                           {FilterCategories[key as keyof typeof FilterCategories]}
                         </DefinitionList.Term>
                         <DefinitionList.Definition>{capitalize(String(value))}</DefinitionList.Definition>
-                      </>
+                      </React.Fragment>
                     ))}
                 </DefinitionList>
               </ShowMore>

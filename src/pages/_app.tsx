@@ -37,13 +37,6 @@ function App({ Component, pageProps }: AppProps) {
           Finn hjelpemidler
         </NextLink>
       </li>
-      {/*
-              Commented out temporarily, until we know for sure we won't include a guided approach
-              <li className="nav-veileder">
-                <NextLink href="/veileder">
-                  <p>Veileder</p>
-                </NextLink>
-              </li> */}
       <li>
         <NextLink href="/sok" className={classNames('page-link', { 'page-link--active': pathname === '/sok' })}>
           Søk
