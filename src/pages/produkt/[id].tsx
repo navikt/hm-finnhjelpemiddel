@@ -1,9 +1,3 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { InferGetServerSidePropsType } from 'next'
-import { Heading, Button, BodyShort, Alert, BodyLong } from '@navikt/ds-react'
-import { ArrowDownIcon, ChevronRightIcon, ImageIcon } from '@navikt/aksel-icons'
-import { mapSupplier, Supplier } from '@/utils/supplier-util'
 import { getProduct, getSupplier, getSeries, getAgreement, getProductsInPost } from '@/utils/api-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { createProduct, mapProducts, Product, toSearchQueryString } from '@/utils/product-util'
@@ -15,6 +9,12 @@ import InformationTabs from '@/components/InformationTabs'
 import DefinitionList from 'src/components/definition-list/DefinitionList'
 import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
 import AgreementIcon from '@/components/AgreementIcon'
+import { mapSupplier, Supplier } from '@/utils/supplier-util'
+import { ArrowDownIcon, ChevronRightIcon, ImageIcon } from '@navikt/aksel-icons'
+import { Heading, Button, BodyShort, Alert, BodyLong } from '@navikt/ds-react'
+import { InferGetServerSidePropsType } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
 import { RefObject, useRef } from 'react'
 
 type SerializedDataType = {
@@ -160,7 +160,7 @@ const AgreementInfo = ({ product, agreement, productsOnPost, agreementHeadingRef
             Avtale med Nav
           </Heading>
 
-          <Alert className="alert--fit-content" variant="error">
+          <Alert className="alert--fit-content" variant="warning">
             Dette produktet er ikke på avtale med NAV
           </Alert>
 
