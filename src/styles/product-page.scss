@@ -112,10 +112,10 @@
 .agreement-summary {
   display: flex;
   width: 100%;
-  margin-bottom: var(--a-spacing-4);
+  margin-bottom: $a-spacing-4;
 
   p {
-    padding-left: var(--a-spacing-3);
+    padding-left: $a-spacing-3;
   }
 
   &__content {
@@ -126,16 +126,16 @@
 }
 
 .agreement-details {
-  margin-top: var(--a-spacing-16);
+  margin-top: $a-spacing-16;
   background-color: #faefee;
   width: 100%;
 
   &__content {
-    padding-top: var(--a-spacing-10);
-    padding-bottom: var(--a-spacing-10);
+    padding-top: $a-spacing-10;
+    padding-bottom: $a-spacing-10;
     display: flex;
     flex-direction: column;
-    gap: var(--a-spacing-4);
+    gap: $a-spacing-4;
   }
 }
 
