@@ -157,7 +157,7 @@ const AgreementInfo = ({ product, agreement, productsOnPost, agreementHeadingRef
       <section className="agreement-details">
         <div className="agreement-details__content max-width">
           <Heading level="3" size="large">
-            Avtale med Nav
+            Avtale med NAV
           </Heading>
 
           <Alert className="alert--fit-content" variant="warning">
