@@ -1,21 +1,24 @@
-import Link from 'next/link'
-import Image from 'next/image'
+import { useRef } from 'react'
+
 import { InferGetServerSidePropsType } from 'next'
-import { Heading, Button, BodyShort, Alert } from '@navikt/ds-react'
+import Image from 'next/image'
+import Link from 'next/link'
+
 import { ArrowDownIcon, ChevronRightIcon, ImageIcon } from '@navikt/aksel-icons'
-import { mapSupplier, Supplier } from '@/utils/supplier-util'
-import { getProduct, getSupplier, getSeries, getAgreement, getProductsInPost } from '@/utils/api-util'
-import { smallImageLoader } from '@/utils/image-util'
-import { createProduct, mapProducts, Product, toSearchQueryString } from '@/utils/product-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react'
+import DefinitionList from 'src/components/definition-list/DefinitionList'
+import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
+
+import AgreementIcon from '@/components/AgreementIcon'
+import InformationTabs from '@/components/InformationTabs'
 import PhotoSlider from '@/components/PhotoSlider'
 import SimilarProducts from '@/components/SimilarProducts'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import InformationTabs from '@/components/InformationTabs'
-import DefinitionList from 'src/components/definition-list/DefinitionList'
-import { Agreement, getPostTitle, mapAgreement } from 'src/utils/agreement-util'
-import AgreementIcon from '@/components/AgreementIcon'
-import { useRef } from 'react'
+import { getAgreement, getProduct, getProductsInPost, getSeries, getSupplier } from '@/utils/api-util'
+import { smallImageLoader } from '@/utils/image-util'
+import { Product, createProduct, mapProducts, toSearchQueryString } from '@/utils/product-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { Supplier, mapSupplier } from '@/utils/supplier-util'
 
 type SerializedDataType = {
   product: Product
@@ -103,7 +106,7 @@ export default function ProduktPage({
                       <Button
                         variant="tertiary"
                         onClick={scrollToAgreementInfo}
-                        icon={<ArrowDownIcon />}
+                        icon={<ArrowDownIcon title="Pil ned" />}
                         iconPosition="right"
                         size="small"
                       >
