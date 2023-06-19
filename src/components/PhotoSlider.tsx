@@ -1,8 +1,11 @@
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { Button } from '@navikt/ds-react'
+
+import Image from 'next/image'
+
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
+import { Button } from '@navikt/ds-react'
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
 
@@ -101,7 +104,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               onClick={() => {
                 prevImage()
               }}
-              icon={<ChevronLeftCircle height={50} width={50} />}
+              icon={<ChevronLeftCircle title="Pil mot venstre" height={50} width={50} />}
             />
 
             <div className="photo-container">
@@ -156,7 +159,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               onClick={() => {
                 nextImage()
               }}
-              icon={<ChevronRightCircle height={50} width={50} />}
+              icon={<ChevronRightCircle title="Pil mot høyre" height={50} width={50} />}
             />
           </>
         )}
