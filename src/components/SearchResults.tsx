@@ -1,33 +1,37 @@
 import React, { RefObject, useEffect, useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
 import { useFormContext } from 'react-hook-form'
-import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
-import { Next } from '@navikt/ds-icons'
+
+import Image from 'next/image'
+import Link from 'next/link'
+
 import { ImageIcon } from '@navikt/aksel-icons'
-import { Product } from '@/utils/product-util'
-import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { Next } from '@navikt/ds-icons'
+import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
+
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
-import { capitalize } from '@/utils/string-util'
+import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { smallImageLoader } from '@/utils/image-util'
+import { Product } from '@/utils/product-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
+import { capitalize } from '@/utils/string-util'
+
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
-import DefinitionList from '@/components/definition-list/DefinitionList'
-import ShowMore from '@/components/ShowMore'
 import AgreementIcon from '@/components/AgreementIcon'
+import ShowMore from '@/components/ShowMore'
+import DefinitionList from '@/components/definition-list/DefinitionList'
 
 const SearchResults = ({
   data,
-  size,
-  setSize,
+  page,
+  setPage,
   isLoading,
   productViewToggleRef,
 }: {
-  size: number
-  setSize: (size: (s: number) => number) => void
+  page: number
+  setPage: (p: number) => void
   isLoading: boolean
   data?: Array<FetchResponse>
   productViewToggleRef: RefObject<HTMLButtonElement>
@@ -79,10 +83,10 @@ const SearchResults = ({
     )
   }
 
-  const isLoadingMore = !data || (size > 0 && typeof data[size - 1] === 'undefined')
+  const isLoadingMore = !data || (page > 0 && typeof data[page - 1] === 'undefined')
   const isLastPage =
     (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
-    (showProductSeriesView && !isLoadingMore && products.length < size * PAGE_SIZE)
+    (showProductSeriesView && !isLoadingMore && products.length < page * PAGE_SIZE)
 
   return (
     <>
@@ -113,12 +117,12 @@ const SearchResults = ({
         </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {products.map((product) => (
-          <SearchResult key={product.id} product={product} />
+        {products.map((product, i) => (
+          <SearchResult key={i} product={product} />
         ))}
       </ol>
       {!isLastPage && (
-        <Button variant="secondary" onClick={() => setSize((s) => s + 1)} loading={isLoadingMore}>
+        <Button variant="secondary" onClick={() => setPage(page + 1)} loading={isLoadingMore}>
           Vis flere treff
         </Button>
       )}

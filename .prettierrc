@@ -9,9 +9,12 @@
   "importOrder": [
     "^react",
     "^next",
+    "^[a-z]",
     "^@?\\w",
 
-    "^(@|components)(/.*|$)",
+    "^@/utils",
+    "^@/hooks",
+    "^@/components",
 
     "^\\u0000",
 
@@ -22,7 +25,7 @@
     "^\\.(?!/?$)",
     "^\\./?$",
 
-    "^.+\\.?(css)$"
+    "^.+\\.?(scss)$"
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true

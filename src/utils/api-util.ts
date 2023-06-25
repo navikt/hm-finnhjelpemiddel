@@ -1,8 +1,7 @@
-import { mapProducts, Product } from './product-util'
 import {
+  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
-  FilterCategories,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -19,6 +18,7 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
+import { Product, mapProducts } from './product-util'
 
 export const PAGE_SIZE = 25
 

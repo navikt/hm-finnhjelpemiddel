@@ -14,9 +14,6 @@ const nextConfig = {
     locales: ['no'],
     defaultLocale: 'no',
   },
-  experimental: {
-    scrollRestoration: true,
-  },
   async rewrites() {
     return [
       {
