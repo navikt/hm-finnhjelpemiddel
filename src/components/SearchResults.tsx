@@ -117,8 +117,8 @@ const SearchResults = ({
         </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {products.map((product, i) => (
-          <SearchResult key={i} product={product} />
+        {products.map((product) => (
+          <SearchResult key={product.id} product={product} />
         ))}
       </ol>
       {!isLastPage && (

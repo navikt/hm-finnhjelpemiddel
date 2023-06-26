@@ -89,17 +89,20 @@ export default function Home() {
   const numberOfFetchedProducts = products && products.length > PAGE_SIZE ? products.length : undefined
   const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
-  //Midlertidig bruk av history pushState siden det er en bug i Next som gjør at scroll position ikke beholdes
-  //selv når page state beholdes. Se: https://github.com/vercel/next.js/issues/49087.
-  //Må følge med på issue og oppdatere useEffect nedenfor til å gjøre router.push() slik at vi ikke risikerer å kludre til router sin state.
-  //Fungerer foreløpig bra
+  //Det er en bug i Next som gjør at scroll position ikke beholdes
+  //selv når page state beholdes. Dette er kun et problem i Produktserier på stor skjerm.
+  //Se: https://github.com/vercel/next.js/issues/49087.
+  //Må følge med på issue og gjøre eventuelle endringer dersom det løses av Next.
+
   useEffect(() => {
     if (searchInitialized) {
-      const queryString = toSearchQueryString({
-        ...searchData,
-        to: numberOfFetchedProducts,
-      })
-      window.history.pushState('', '', pathname + queryString)
+      router.push(
+        pathname +
+          toSearchQueryString({
+            ...searchData,
+            to: numberOfFetchedProducts,
+          })
+      )
     }
   }, [router, searchInitialized, searchData, numberOfFetchedProducts, pathname])
 
