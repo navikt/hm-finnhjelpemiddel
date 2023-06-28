@@ -1,5 +1,3 @@
-import { Filter } from '@/utils/api-util'
-
 import { AgreementsSourceResponse, PostResponse } from './response-types'
 
 export function getPostTitle(post: string, postNr: number): string
@@ -46,167 +44,43 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-const agreementTitles = [
-  {
-    identifier: 'HMDB-6427',
-    title: 'Kalendere og planleggingssystemer',
-  },
-  {
-    identifier: 'HMDB-7490',
-    title: 'Varmehjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8692',
-    title: 'TEST UU',
-  },
-  {
-    identifier: 'HMDB-8590',
-    title: 'Senger, madrasser, hjertebrett, sengebord og hjelpemidler for overflytting og vending',
-  },
-  {
-    identifier: 'HMDB-8615',
-    title: 'Elektrisk hev- og senkfunksjon til innredning på kjøkken og bad',
-  },
-  {
-    identifier: 'HMDB-7449',
-    title: 'Elektriske rullestoler ',
-  },
-  {
-    identifier: 'HMDB-8582',
-    title: 'Omgivelseskontroll',
-  },
-  {
-    identifier: 'HMDB-8594',
-    title: 'Ganghjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8570',
-    title: 'Høreapparater, ørepropper og tinnitusmaskerere ',
-  },
-  {
-    identifier: 'HMDB-8601',
-    title:
-      'Sykler med og uten hjelpemotor, sykkelfronter med hjelpemotor, støttehjul til tohjulssykkel og sykler for personer med nedsatt funksjon i overkroppen',
-  },
-  {
-    identifier: 'HMDB-8607',
-    title: 'Arbeidsstoler, arbeidsbord, trillebord og spesielle sittemøbler',
-  },
-  {
-    identifier: 'HMDB-8612',
-    title: 'Vogner og hjelpemidler til sport og aktivitet',
-  },
-  {
-    identifier: 'HMDB-8617',
-    title: 'Manuelle rullestoler, drivhjul  med elektrisk motor og drivaggregat',
-  },
-  {
-    identifier: 'HMDB-8628',
-    title: 'Madrasser med trykksårforebyggende egenskaper',
-  },
-  {
-    identifier: 'HMDB-8639',
-    title: 'Løfteplattformer og hjelpemidler til trapp',
-  },
-  {
-    identifier: 'HMDB-8641',
-    title: 'Varslingshjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8645',
-    title: 'Kommunikasjonshjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8646',
-    title: 'Kjøreposer, varmeposer og regncape',
-  },
-  {
-    identifier: 'HMDB-8648',
-    title: 'Ståstativ og arm-, kropps- og bentreningshjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8654',
-    title: 'Hørselshjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8660',
-    title: 'Synstekniske hjelpemidler',
-  },
-  {
-    identifier: 'HMDB-8669',
-    title: 'Hjelpemidler for seksuallivet',
-  },
-  {
-    identifier: 'HMDB-8672',
-    title: 'Overflyttingsplattformer og personløftere',
-  },
-  {
-    identifier: 'HMDB-8673',
-    title: 'Biler',
-  },
-  {
-    identifier: 'HMDB-8679',
-    title: 'Moduloppbygde sittesystemer',
-  },
-  {
-    identifier: 'HMDB-8682',
-    title: 'Førerhunder og servicehunder ',
-  },
-  {
-    identifier: 'HMDB-8683',
-    title: 'Kjøreramper',
-  },
-  {
-    identifier: 'HMDB-8685',
-    title: 'Bilombygg',
-  },
-  {
-    identifier: 'HMDB-8686',
-    title: 'Hygienehjelpemidler og støttestang',
-  },
-  {
-    identifier: 'HMDB-8688',
-    title: 'Stoler med oppreisingsfunksjon',
-  },
-  {
-    identifier: 'HMDB-8709',
-    title: 'Sitteputer med trykksårforebyggende egenskaper',
-  },
-  {
-    identifier: 'HMDB-8710',
-    title: 'Elektriske rullestoler ',
-  },
-  {
-    identifier: 'HMDB-8712',
-    title: 'Kalendere, dagsplanleggere og tidtakere',
-  },
-  {
-    identifier: 'HMDB-8713',
-    title: 'Varmehjelpemidler for hender og føtter',
-  },
-  {
-    identifier: 'HMDB-8716',
-    title: 'Elektrisk hev- og senkfunksjon til innredning på kjøkken og bad ',
-  },
-  {
-    identifier: 'HMDB-8725',
-    title: 'Senger, sengebunner, madrasser, hjertebrett og sengebord ',
-  },
-  {
-    identifier: 'HMDB-8726',
-    title: 'Hjelpemidler for overflytting, vending og posisjonering',
-  },
-  {
-    identifier: 'HMDB-8734',
-    title: 'A Høreapparater, ørepropper og tinnitusmaskerere',
-  },
-]
-
-export const mapAgreementTitle = (filter?: Filter) =>
-  filter && {
-    ...filter,
-    values: filter?.values.map((f) => ({
-      ...f,
-      label: agreementTitles.find((agreement) => agreement.identifier === f.key)?.title,
-    })),
-  }
+export const agreementKeyLabels: Record<string, string> = {
+  'HMDB-6427': 'Kalendere',
+  'HMDB-7490': 'Varmehjelpemidler',
+  'HMDB-8590': 'Senger',
+  'HMDB-8615': 'Innredning kjøkken og bad',
+  'HMDB-7449': 'Elektriske rullestoler ',
+  'HMDB-8582': 'Omgivelseskontroll',
+  'HMDB-8594': 'Ganghjelpemidler',
+  'HMDB-8570': 'Høreapparater',
+  'HMDB-8601': 'Sykler',
+  'HMDB-8607': 'Stoler og bord',
+  'HMDB-8612': 'Vogner og aktivitetshjelpemidler',
+  'HMDB-8617': 'Manuelle rullestoler',
+  'HMDB-8628': 'Madrasser',
+  'HMDB-8639': 'Hjelpemidler til trapp',
+  'HMDB-8641': 'Varsling',
+  'HMDB-8645': 'Kommunikasjon',
+  'HMDB-8646': 'Kjøreposer, varmeposer og regncape',
+  'HMDB-8648': 'Ståstativ og treningshjelpemidler',
+  'HMDB-8654': 'Hørsel',
+  'HMDB-8660': 'Syn',
+  'HMDB-8669': 'Seksuallivet',
+  'HMDB-8672': 'Plattformer og personløftere',
+  'HMDB-8673': 'Biler',
+  'HMDB-8679': 'Sittesystem',
+  'HMDB-8682': 'Førerhunder og servicehunder',
+  'HMDB-8683': 'Kjøreramper',
+  'HMDB-8685': 'Bilombygg',
+  'HMDB-8686': 'Hygienehjelpemidler og støttestang',
+  'HMDB-8688': 'Stoler med oppreisingsfunksjon',
+  'HMDB-8709': 'Sitteputer',
+  'HMDB-8710': 'Elektriske rullestoler ',
+  'HMDB-8712': 'Kalendere',
+  'HMDB-8713': 'Varmehjelpemidler',
+  'HMDB-8716': 'Innredning kjøkken og bad',
+  'HMDB-8725': 'Senger',
+  'HMDB-8726': 'Overflytting, vending og posisjonering',
+  'HMDB-8734': 'Høreapparater',
+  'HMDB-8692': 'TEST UU',
+}

@@ -1,11 +1,9 @@
-import React from 'react'
-import { BodyShort } from '@navikt/ds-react'
-import { FilterData } from '@/utils/api-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
-import { mapAgreementTitle } from '@/utils/agreement-util'
-
 import { CheckboxFilterInput } from './internals/CheckboxFilterInput'
 import { RangeFilterInput } from './internals/RangeFilterInput'
+import { FilterData } from '@/utils/api-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { BodyShort } from '@navikt/ds-react'
+import React from 'react'
 
 const FilterView = ({ filters }: { filters?: FilterData }) => {
   const { searchData } = useHydratedSearchStore()
@@ -26,7 +24,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <div className="search__filters">
-      <CheckboxFilterInput filter={{ key: 'rammeavtale', data: mapAgreementTitle(filters?.rammeavtale) }} />
+      <CheckboxFilterInput filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} />
       <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />
       <RangeFilterInput variant="min" filter={{ key: 'setebreddeMinCM', data: filters?.setebreddeMinCM }} />
       <RangeFilterInput variant="max" filter={{ key: 'setebreddeMaksCM', data: filters?.setebreddeMaksCM }} />

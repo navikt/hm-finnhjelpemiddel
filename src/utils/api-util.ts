@@ -1,4 +1,4 @@
-import { mapProducts, Product } from './product-util'
+import { agreementKeyLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
   filterBredde,
@@ -20,6 +20,7 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
+import { mapProducts, Product } from './product-util'
 
 export const PAGE_SIZE = 25
 
@@ -668,17 +669,26 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
     })
 }
 
+//Midlertidig der hvor vi ikke har en tittel som passer seg å vise i UI
+const bucketMapper: Record<string, (b: Bucket) => Bucket> = {
+  rammeavtale: (bucket: Bucket) => {
+    bucket.label = bucket.key in agreementKeyLabels ? agreementKeyLabels[bucket.key] : undefined
+    return bucket
+  },
+}
+
 const mapFilters = (data: any): FilterData => {
   const rawFilterData: RawFilterData = data.aggregations
 
   return Object.entries(rawFilterData)
     .filter(([_, data]) => data.doc_count > 0)
     .reduce((obj, [key, data]) => {
+      const mapBucket = key in bucketMapper ? bucketMapper[key] : (v: Bucket) => v
       return {
         ...obj,
         [key]: {
           total_doc_count: data.doc_count,
-          values: data.buckets || data.values?.buckets,
+          values: (data.buckets || data.values?.buckets || []).map(mapBucket),
           ...(data.min && { min: data.min.value }),
           ...(data.max && { max: data.max.value }),
         },

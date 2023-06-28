@@ -1,23 +1,22 @@
-import React, { RefObject, useEffect, useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { useFormContext } from 'react-hook-form'
-import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
-import { Next } from '@navikt/ds-icons'
-import { ImageIcon } from '@navikt/aksel-icons'
-import { Product } from '@/utils/product-util'
-import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import AgreementIcon from '@/components/AgreementIcon'
+import ShowMore from '@/components/ShowMore'
+import DefinitionList from '@/components/definition-list/DefinitionList'
+import useRestoreScroll from '@/hooks/useRestoreScroll'
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
-import { capitalize } from '@/utils/string-util'
+import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { smallImageLoader } from '@/utils/image-util'
+import { Product } from '@/utils/product-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
-import useRestoreScroll from '@/hooks/useRestoreScroll'
-
-import DefinitionList from '@/components/definition-list/DefinitionList'
-import ShowMore from '@/components/ShowMore'
-import AgreementIcon from '@/components/AgreementIcon'
+import { capitalize } from '@/utils/string-util'
+import { ImageIcon } from '@navikt/aksel-icons'
+import { Next } from '@navikt/ds-icons'
+import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import React, { Fragment, RefObject, useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 const SearchResults = ({
   data,
@@ -209,12 +208,12 @@ const SearchResult = ({ product }: { product: Product }) => {
                   {productFilters
                     .sort(([keyA], [keyB]) => sortAlphabetically(keyA, keyB))
                     .map(([key, value]) => (
-                      <>
+                      <Fragment key={key}>
                         <DefinitionList.Term>
                           {FilterCategories[key as keyof typeof FilterCategories]}
                         </DefinitionList.Term>
                         <DefinitionList.Definition>{capitalize(String(value))}</DefinitionList.Definition>
-                      </>
+                      </Fragment>
                     ))}
                 </DefinitionList>
               </ShowMore>
