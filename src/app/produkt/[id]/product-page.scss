@@ -1,25 +1,9 @@
-@use './_mixins';
+@use 'src/styles/mixins';
 
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
   width: 100%;
-
-  &__agreement-short {
-    display: flex;
-    width: 100%;
-    margin-bottom: $a-spacing-4;
-
-    p {
-      padding-left: $a-spacing-3;
-    }
-
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
 
   &__key-information {
     display: flex;
@@ -41,20 +25,6 @@
       margin-top: 0.2rem;
       margin-bottom: 0.2rem;
     }
-  }
-
-  &__agreement-long {
-    margin-top: $a-spacing-16;
-    background-color: #faefee;
-    width: 100%;
-  }
-
-  &__agreement-long-content {
-    padding-top: $a-spacing-6;
-    padding-bottom: $a-spacing-16;
-    display: flex;
-    flex-direction: column;
-    gap: $a-spacing-4;
   }
 
   &__products-on-post,
@@ -204,5 +174,35 @@
 
   .dot:disabled:hover {
     cursor: unset;
+  }
+}
+
+.agreement-summary {
+  display: flex;
+  width: 100%;
+  margin-bottom: $a-spacing-4;
+
+  p {
+    padding-left: $a-spacing-3;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.agreement-details {
+  width: 100%;
+  margin-top: $a-spacing-16;
+  background-color: #faefee;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $a-spacing-4;
+    padding-top: $a-spacing-10;
+    padding-bottom: $a-spacing-10;
   }
 }

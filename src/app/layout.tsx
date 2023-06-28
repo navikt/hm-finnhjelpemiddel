@@ -1,9 +1,9 @@
+'use client'
+
 import '@/styles/globals.scss'
 
 import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
-import Head from 'next/head'
-import type { AppProps } from 'next/app'
 import NextLink from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -14,7 +14,7 @@ import reportAccessibility from '@/utils/reportAccessibility'
 import { ExclamationmarkTriangleIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Link } from '@navikt/ds-react'
 
-function App({ Component, pageProps }: AppProps) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -54,46 +54,46 @@ function App({ Component, pageProps }: AppProps) {
   )
 
   return (
-    <>
-      <Head>
+    <html lang="no">
+      <head>
         <title>Oversikt over hjelpemidler</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <header>
-        <nav className="nav-topp">
-          <aside className="wip-banner">
-            <div>
-              <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
-              <BodyLong>
-                <b>Hei!</b> Dette er bare en prototype til testing og utvikling.{' '}
-                <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link> om
-                du har kommet feil.
-              </BodyLong>
+      </head>
+      <body>
+        <header>
+          <nav className="nav-topp">
+            <aside className="wip-banner">
+              <div>
+                <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
+                <BodyLong>
+                  <b>Hei!</b> Dette er bare en prototype til testing og utvikling.{' '}
+                  <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link>{' '}
+                  om du har kommet feil.
+                </BodyLong>
+              </div>
+            </aside>
+            <div className="nav-topp__content">
+              <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
+              <PageNavigation />
+              <Button
+                className="nav-topp__menu-button"
+                icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
+                variant="tertiary"
+                onClick={() => setMenuOpen(!menuOpen)}
+              />
             </div>
-          </aside>
-          <div className="nav-topp__content">
-            <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
-            <PageNavigation />
-            <Button
-              className="nav-topp__menu-button"
-              icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
-              variant="tertiary"
-              onClick={() => setMenuOpen(!menuOpen)}
-            />
-          </div>
-          <div className={classNames('nav-topp__menu-content', { open: menuOpen })}>
-            {menuOpen && <PageNavigation />}
-          </div>
-        </nav>
-      </header>
-      <main>
-        <Component {...pageProps} />
-      </main>
-      <Footer />
-    </>
+            <div className={classNames('nav-topp__menu-content', { open: menuOpen })}>
+              {menuOpen && <PageNavigation />}
+            </div>
+          </nav>
+        </header>
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
   )
 }
 
 reportAccessibility(React)
 
-export default App
+export default RootLayout

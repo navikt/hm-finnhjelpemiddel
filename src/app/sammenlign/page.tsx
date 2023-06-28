@@ -1,3 +1,5 @@
+'use client'
+
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'

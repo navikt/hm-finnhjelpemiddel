@@ -1,3 +1,4 @@
+'use client'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const AnimateLayout = ({ children }: { children: React.ReactNode }) => (

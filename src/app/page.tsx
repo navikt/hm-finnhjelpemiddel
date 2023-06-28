@@ -1,6 +1,9 @@
-import { useRouter } from 'next/router'
+'use client'
+
 import React, { useState } from 'react'
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { BodyLong, Heading, Ingress, Panel, Search } from '@navikt/ds-react'
 
@@ -12,11 +15,10 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 function Home() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    router.push('/sok?term=' + data.searchTerm)
-  }
-  const [productSearchParams] = useState(mapProductSearchParams(router.query))
+  const [productSearchParams] = useState(mapProductSearchParams(searchParams))
+
   const formMethods = useForm<SearchData>({
     defaultValues: {
       ...initialSearchDataState,
@@ -24,6 +26,10 @@ function Home() {
     },
   })
   const { control, handleSubmit } = formMethods
+
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    router.push('/sok?term=' + data.searchTerm)
+  }
 
   return (
     <div className="home-page">

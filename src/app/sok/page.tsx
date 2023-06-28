@@ -1,41 +1,44 @@
+'use client'
+
 import React, { useEffect, useRef, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
 import { FormProvider, useForm } from 'react-hook-form'
-import { InferGetServerSidePropsType, NextPageContext } from 'next'
-import Router, { useRouter } from 'next/router'
+import { useInView } from 'react-intersection-observer'
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import useSWRInfinite from 'swr/infinite'
-import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
-import { Delete, Up } from '@navikt/ds-icons'
+
 import { FilesIcon } from '@navikt/aksel-icons'
-import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
+import { Delete, Up } from '@navikt/ds-icons'
+import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
+
+import { FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters, fetchProducts } from '@/utils/api-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { fetchProducts, FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters } from '@/utils/api-util'
-import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { FilterCategories } from '@/utils/filter-util'
+import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
 import { Entries } from '@/utils/type-util'
 
-import AnimateLayout from '@/components/layout/AnimateLayout'
 import CompareMenu from '@/components/CompareMenu'
 import MobileOverlay from '@/components/MobileOverlay'
 import SearchForm, { SearchFormResetHandle } from '@/components/SearchForm'
 import SearchResults from '@/components/SearchResults'
+import AnimateLayout from '@/components/layout/AnimateLayout'
 import Sidebar from '@/components/sidebar/Sidebar'
 
-export const getServerSideProps: (
-  context: NextPageContext
-) => Promise<{ props: { searchParams: SearchParams } }> = async (context: NextPageContext) => {
-  const { query } = context
-  return { props: { searchParams: mapProductSearchParams(query) } }
-}
-
-export default function Home({ searchParams }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home() {
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const copyButtonRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<SearchFormResetHandle>(null)
 
-  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+  const [searchInitialized, setSearchInitialized] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
+  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
+  const [productSearchParams, setProductSearchParams] = useState<SearchParams>(mapProductSearchParams(searchParams))
 
   const {
     searchData,
@@ -43,8 +46,8 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     setSearchData,
     meta: { showProductSeriesView },
   } = useHydratedSearchStore()
+
   const { compareMode } = useHydratedCompareStore()
-  const [productSearchParams] = useState(mapProductSearchParams(router.query))
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
@@ -53,16 +56,15 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     },
   })
 
-  const { setValue } = formMethods
-
-  const [initialProductSearchParams, setInitialProductSearchParams] = useState(searchParams)
-  const [searchInitialized, setSearchInitialized] = useState(false)
-  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
-
-  const { data, size, setSize, isLoading } = useSWRInfinite<FetchResponse>(
+  const {
+    data,
+    size: page,
+    setSize: setPage,
+    isLoading,
+  } = useSWRInfinite<FetchResponse>(
     (index) => {
-      const from = index !== 0 ? (initialProductSearchParams.to || PAGE_SIZE) + (index - 1) * PAGE_SIZE : 0
-      const to = (index === 0 && initialProductSearchParams.to) || PAGE_SIZE
+      const from = index !== 0 ? (productSearchParams.to || PAGE_SIZE) + (index - 1) * PAGE_SIZE : 0
+      const to = (index === 0 && productSearchParams.to) || PAGE_SIZE
       return {
         from,
         to,
@@ -83,7 +85,31 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     productViewToggleRef.current && productViewToggleRef.current.focus()
   }
 
-  useEffect(() => setSearchData(initialProductSearchParams), [initialProductSearchParams, setSearchData])
+  const products = data?.flatMap((d) => d.products)
+  const numberOfFetchedProducts = products && products.length > PAGE_SIZE ? products.length : undefined
+  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
+
+  //Det er en bug i Next som gjør at scroll position ikke beholdes
+  //selv når page state beholdes. Dette er kun et problem i Produktserier på stor skjerm.
+  //Se: https://github.com/vercel/next.js/issues/49087.
+  //Må følge med på issue og gjøre eventuelle endringer dersom det løses av Next.
+
+  useEffect(() => {
+    if (searchInitialized) {
+      router.push(
+        pathname +
+          toSearchQueryString({
+            ...searchData,
+            to: numberOfFetchedProducts,
+          })
+      )
+    }
+  }, [router, searchInitialized, searchData, numberOfFetchedProducts, pathname])
+
+  useEffect(() => {
+    setShowSidebar(window.innerWidth >= 1100)
+    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
+  }, [])
 
   useEffect(() => {
     if (data) {
@@ -91,34 +117,11 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
     }
   }, [data])
 
-  const products = data?.flatMap((d) => d.products)
-  const numberOfFetchedProducts = products && products.length > PAGE_SIZE ? products.length : undefined
-  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
-
-  useEffect(() => {
-    if (searchInitialized) {
-      Router.push(
-        toSearchQueryString({
-          ...searchData,
-          to: numberOfFetchedProducts,
-        }),
-        undefined,
-        {
-          scroll: false,
-          shallow: true,
-        }
-      )
-    }
-  }, [searchInitialized, searchData, numberOfFetchedProducts])
-
-  useEffect(() => {
-    setShowSidebar(window.innerWidth >= 1100)
-    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
-  }, [])
+  useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
 
   const onReset = () => {
-    setInitialProductSearchParams({ ...initialSearchDataState, to: undefined })
-    setSize(1)
+    setProductSearchParams({ ...initialSearchDataState, to: undefined })
+    setPage(1)
   }
 
   const filterValues = Object.values(searchData.filters)
@@ -223,7 +226,7 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
                                 key,
                                 values.filter((val) => val !== value)
                               )
-                              setValue(
+                              formMethods.setValue(
                                 `filters.${key}`,
                                 values.filter((val) => val !== value)
                               )
@@ -238,8 +241,8 @@ export default function Home({ searchParams }: InferGetServerSidePropsType<typeo
               )}
               <SearchResults
                 data={data}
-                size={size}
-                setSize={setSize}
+                page={page}
+                setPage={setPage}
                 isLoading={isLoading}
                 productViewToggleRef={productViewToggleRef}
               />

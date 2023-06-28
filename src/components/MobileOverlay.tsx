@@ -1,6 +1,8 @@
 import React from 'react'
+
 import classNames from 'classnames'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 

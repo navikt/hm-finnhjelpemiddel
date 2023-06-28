@@ -1,8 +1,14 @@
-import classNames from 'classnames'
-import Link from 'next/link'
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+
+import Link from 'next/link'
+
+import classNames from 'classnames'
+
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Switch, Table } from '@navikt/ds-react'
+
 import { Product } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
 import { toValueAndUnit } from '@/utils/string-util'
@@ -128,7 +134,7 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       <div className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
         <Table>
           <Table.Header>
-            <Table.Row key={'hms-row'}>
+            <Table.Row key="hms-row">
               <Table.ColumnHeader ref={colHeadRef}>
                 <Button
                   className="sort-button"

@@ -1,4 +1,9 @@
+import { ReadonlyURLSearchParams } from 'next/navigation'
+
 import queryString from 'querystring'
+
+import { getPostTitle } from './agreement-util'
+import { SearchParams, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
@@ -10,8 +15,6 @@ import {
   TechDataResponse,
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
-import { SearchParams, SelectedFilters } from './api-util'
-import { getPostTitle } from './agreement-util'
 
 export interface Product {
   id: string
@@ -68,7 +71,7 @@ interface AgreementInfo {
   postTitle: string
 }
 
-export const createProduct = (source: ProductSourceResponse): Product => {
+export const mapProduct = (source: ProductSourceResponse): Product => {
   return {
     id: source.id,
     articleName: source.articleName,
@@ -148,22 +151,26 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
 })
 
 export const mapProducts = (data: SearchResponse): Product[] => {
-  return data.hits.hits.map((hit: Hit) => createProduct(hit._source))
+  return data.hits.hits.map((hit: Hit) => mapProduct(hit._source))
 }
 
-export const mapProductSearchParams = (searchParams: { [key: string]: any }) => {
-  const searchTerm = searchParams.term ?? ''
-  const isoCode = searchParams.isoCode ?? ''
-  const hasAgreementsOnly = searchParams.agreement ? searchParams.agreement === 'true' : true
+export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams | null): SearchParams => {
+  const searchTerm = searchParams?.get('term') ?? ''
+  const isoCode = searchParams?.get('isoCode') ?? ''
+  const agreement = searchParams?.get('agreement')
 
-  const to = parseInt(searchParams.to) ?? undefined
+  //default value is true when initiating search
+  const hasAgreementsOnly = agreement ? agreement === 'true' : true
 
-  const filterKeys = Object.keys(FilterCategories).filter((filter) =>
-    Array.from(Object.keys(searchParams)).includes(filter)
-  )
+  const to = parseInt(searchParams?.get('to') ?? '') ?? undefined
+
+  const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
 
   const filters = filterKeys.reduce(
-    (obj, fk) => ({ ...obj, [fk]: Array.isArray(searchParams[fk]) ? searchParams[fk] : [searchParams[fk]] }),
+    (obj, fk) => ({
+      ...obj,
+      [fk]: searchParams?.getAll(fk),
+    }),
     {}
   )
 

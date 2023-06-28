@@ -1,10 +1,13 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
 import { Button } from '@navikt/ds-react'
-import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
