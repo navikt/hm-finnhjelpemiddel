@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
 import { Button, Search, Switch } from '@navikt/ds-react'
@@ -28,6 +28,10 @@ const SearchForm = forwardRef<SearchFormResetHandle, Props>(({ filters, setFocus
   const { control, handleSubmit, reset: resetForm, setValue } = useFormContext<SearchData>()
 
   const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
+
+  useEffect(() => {
+    setValue('searchTerm', searchData.searchTerm)
+  }, [searchData.searchTerm, setValue])
 
   useImperativeHandle(ref, () => ({
     reset() {

@@ -118,6 +118,10 @@ export default function Home() {
     }
   }, [data])
 
+  useEffect(() => {
+    setProductSearchParams(mapProductSearchParams(searchParams))
+  }, [searchParams, setProductSearchParams])
+
   useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
 
   const onReset = () => {
