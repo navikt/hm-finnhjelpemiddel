@@ -31,8 +31,10 @@ export type Bucket = {
   label?: string
 }
 
-export type RawFilterData = {
-  [key in FilterCategories]: {
+type FilterCategoryKey = keyof typeof FilterCategories
+
+type RawFilterData = {
+  [key in FilterCategoryKey]: {
     doc_count: number
     buckets?: Array<Bucket>
     values?: { sum_other_doc_count?: number; buckets?: Array<Bucket> }
@@ -50,7 +52,7 @@ export type Filter = {
 }
 
 export type FilterData = {
-  [key in FilterCategories as keyof typeof FilterCategories]: Filter
+  [key in FilterCategoryKey]: Filter
 }
 
 export type SearchData = {
@@ -669,30 +671,27 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
     })
 }
 
-//Midlertidig der hvor vi ikke har en tittel som passer seg å vise i UI
-const bucketMapper: Record<string, (b: Bucket) => Bucket> = {
-  rammeavtale: (bucket: Bucket) => {
-    bucket.label = bucket.key in agreementKeyLabels ? agreementKeyLabels[bucket.key] : undefined
-    return bucket
-  },
-}
-
 const mapFilters = (data: any): FilterData => {
   const rawFilterData: RawFilterData = data.aggregations
 
   return Object.entries(rawFilterData)
     .filter(([_, data]) => data.doc_count > 0)
-    .reduce((obj, [key, data]) => {
-      const mapBucket = key in bucketMapper ? bucketMapper[key] : (v: Bucket) => v
-      return {
-        ...obj,
-        [key]: {
-          total_doc_count: data.doc_count,
-          values: (data.buckets || data.values?.buckets || []).map(mapBucket),
-          ...(data.min && { min: data.min.value }),
-          ...(data.max && { max: data.max.value }),
-        },
+    .reduce((obj, [k, data]) => {
+      const key = k as FilterCategoryKey
+      obj[key] = {
+        total_doc_count: data.doc_count,
+        values: data.buckets || data.values?.buckets || [],
+        ...(data.min && { min: data.min.value }),
+        ...(data.max && { max: data.max.value }),
       }
+      //Midlertidig der hvor vi ikke har en tittel som passer seg å vise i UI
+      if (key === 'rammeavtale') {
+        obj[key].values = obj[key].values.map((bucket) => {
+          bucket.label = bucket.key in agreementKeyLabels ? agreementKeyLabels[bucket.key] : undefined
+          return bucket
+        })
+      }
+      return obj
     }, {} as FilterData)
 }
 
