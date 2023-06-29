@@ -12,6 +12,7 @@ import { FilesIcon } from '@navikt/aksel-icons'
 import { Delete, Up } from '@navikt/ds-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
+import { agreementKeyLabels } from '@/utils/agreement-util'
 import { FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters, fetchProducts } from '@/utils/api-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { FilterCategories } from '@/utils/filter-util'
@@ -209,6 +210,7 @@ export default function Home() {
                   </Button>
                 </div>
               )}
+
               {filterValues.length > 0 && (
                 <>
                   <Heading level="2" size="small">
@@ -218,23 +220,29 @@ export default function Home() {
                     {filterChips.map(({ key, label, values }, index) => {
                       return values
                         .filter((v) => v)
-                        .map((value) => (
-                          <Chips.Removable
-                            key={index}
-                            onClick={() => {
-                              setFilter(
-                                key,
-                                values.filter((val) => val !== value)
-                              )
-                              formMethods.setValue(
-                                `filters.${key}`,
-                                values.filter((val) => val !== value)
-                              )
-                            }}
-                          >
-                            {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
-                          </Chips.Removable>
-                        ))
+                        .map((value) => {
+                          let valueLabel = value
+                          if (key === 'rammeavtale') {
+                            valueLabel = agreementKeyLabels[value]
+                          }
+                          return (
+                            <Chips.Removable
+                              key={index}
+                              onClick={() => {
+                                setFilter(
+                                  key,
+                                  values.filter((val) => val !== value)
+                                )
+                                formMethods.setValue(
+                                  `filters.${key}`,
+                                  values.filter((val) => val !== value)
+                                )
+                              }}
+                            >
+                              {label === FilterCategories.produktkategori ? value : `${label}: ${valueLabel}`}
+                            </Chips.Removable>
+                          )
+                        })
                     })}
                   </Chips>
                 </>

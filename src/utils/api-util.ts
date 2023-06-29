@@ -1,3 +1,4 @@
+import { agreementKeyLabels } from './agreement-util'
 import {
   FilterCategories,
   filterBeregnetBarn,
@@ -15,6 +16,7 @@ import {
   filterMinSetedybde,
   filterMinSetehoyde,
   filterProduktkategori,
+  filterRammeavtale,
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
@@ -23,10 +25,16 @@ import { Product, mapProducts } from './product-util'
 export const PAGE_SIZE = 25
 
 export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
-export type Bucket = { key: number | string; doc_count: number }
+export type Bucket = {
+  key: number | string
+  doc_count: number
+  label?: string
+}
 
-export type RawFilterData = {
-  [key in FilterCategories]: {
+type FilterCategoryKey = keyof typeof FilterCategories
+
+type RawFilterData = {
+  [key in FilterCategoryKey]: {
     doc_count: number
     buckets?: Array<Bucket>
     values?: { sum_other_doc_count?: number; buckets?: Array<Bucket> }
@@ -44,7 +52,7 @@ export type Filter = {
 }
 
 export type FilterData = {
-  [key in FilterCategories as keyof typeof FilterCategories]: Filter
+  [key in FilterCategoryKey]: Filter
 }
 
 export type SearchData = {
@@ -88,7 +96,28 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
     materialeTrekk,
     leverandor,
     produktkategori,
+    rammeavtale,
   } = filters
+
+  const allFilters = [
+    filterLengde(lengdeCM),
+    filterBredde(breddeCM),
+    filterTotalvekt(totalVektKG),
+    filterMinSetebredde(setebreddeMinCM),
+    filterMaksSetebredde(setebreddeMaksCM),
+    filterMinSetedybde(setedybdeMinCM),
+    filterMaksSetedybde(setedybdeMaksCM),
+    filterMinSetehoyde(setehoydeMinCM),
+    filterMaksSetehoyde(setehoydeMaksCM),
+    filterMinBrukervekt(brukervektMinKG),
+    filterMaksBrukervekt(brukervektMaksKG),
+    filterBeregnetBarn(beregnetBarn),
+    filterFyllmateriale(fyllmateriale),
+    filterMaterialeTrekk(materialeTrekk),
+    filterLeverandor(leverandor),
+    filterProduktkategori(produktkategori),
+    filterRammeavtale(rammeavtale),
+  ]
 
   const queryFilters: Array<any> = [
     {
@@ -158,29 +187,6 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
     },
   }
 
-  const post_filter = {
-    bool: {
-      filter: [
-        filterLengde(lengdeCM),
-        filterBredde(breddeCM),
-        filterTotalvekt(totalVektKG),
-        filterMinSetebredde(setebreddeMinCM),
-        filterMaksSetebredde(setebreddeMaksCM),
-        filterMinSetedybde(setedybdeMinCM),
-        filterMaksSetedybde(setedybdeMaksCM),
-        filterMinSetehoyde(setehoydeMinCM),
-        filterMaksSetehoyde(setehoydeMaksCM),
-        filterMinBrukervekt(brukervektMinKG),
-        filterMaksBrukervekt(brukervektMaksKG),
-        filterBeregnetBarn(beregnetBarn),
-        filterFyllmateriale(fyllmateriale),
-        filterMaterialeTrekk(materialeTrekk),
-        filterLeverandor(leverandor),
-        filterProduktkategori(produktkategori),
-      ],
-    },
-  }
-
   return fetch('/products/_search', {
     method: 'POST',
     headers: {
@@ -197,28 +203,16 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
           field: 'attributes.series',
         },
       }),
-      post_filter,
+      post_filter: {
+        bool: {
+          filter: allFilters,
+        },
+      },
       aggs: {
         lengdeCM: {
           filter: {
             bool: {
-              filter: [
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-              ],
+              filter: allFilters,
             },
           },
           aggs: {
@@ -244,6 +238,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -270,6 +265,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -296,6 +292,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -322,6 +319,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -348,6 +346,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -374,6 +373,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -400,6 +400,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -426,6 +427,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -452,6 +454,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -478,6 +481,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -504,6 +508,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -530,6 +535,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -558,6 +564,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterBeregnetBarn(beregnetBarn),
                 filterLeverandor(leverandor),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -586,6 +593,7 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterFyllmateriale(fyllmateriale),
                 filterMaterialeTrekk(materialeTrekk),
                 filterProduktkategori(produktkategori),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
@@ -614,12 +622,42 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
                 filterFyllmateriale(fyllmateriale),
                 filterMaterialeTrekk(materialeTrekk),
                 filterLeverandor(leverandor),
+                filterRammeavtale(rammeavtale),
               ],
             },
           },
           aggs: {
             values: {
               terms: { field: 'isoCategoryName', size: 100 },
+            },
+          },
+        },
+        rammeavtale: {
+          filter: {
+            bool: {
+              filter: [
+                filterLengde(lengdeCM),
+                filterBredde(breddeCM),
+                filterTotalvekt(totalVektKG),
+                filterMinSetebredde(setebreddeMinCM),
+                filterMaksSetebredde(setebreddeMaksCM),
+                filterMinSetedybde(setedybdeMinCM),
+                filterMaksSetedybde(setedybdeMaksCM),
+                filterMinSetehoyde(setehoydeMinCM),
+                filterMaksSetehoyde(setehoydeMaksCM),
+                filterMinBrukervekt(brukervektMinKG),
+                filterMaksBrukervekt(brukervektMaksKG),
+                filterBeregnetBarn(beregnetBarn),
+                filterFyllmateriale(fyllmateriale),
+                filterMaterialeTrekk(materialeTrekk),
+                filterLeverandor(leverandor),
+                filterProduktkategori(produktkategori),
+              ],
+            },
+          },
+          aggs: {
+            values: {
+              terms: { field: 'agreementInfo.identifier', size: 100 },
             },
           },
         },
@@ -638,16 +676,22 @@ const mapFilters = (data: any): FilterData => {
 
   return Object.entries(rawFilterData)
     .filter(([_, data]) => data.doc_count > 0)
-    .reduce((obj, [key, data]) => {
-      return {
-        ...obj,
-        [key]: {
-          total_doc_count: data.doc_count,
-          values: data.buckets || data.values?.buckets,
-          ...(data.min && { min: data.min.value }),
-          ...(data.max && { max: data.max.value }),
-        },
+    .reduce((obj, [k, data]) => {
+      const key = k as FilterCategoryKey
+      obj[key] = {
+        total_doc_count: data.doc_count,
+        values: data.buckets || data.values?.buckets || [],
+        ...(data.min && { min: data.min.value }),
+        ...(data.max && { max: data.max.value }),
       }
+      //Midlertidig der hvor vi ikke har en tittel som passer seg å vise i UI
+      if (key === 'rammeavtale') {
+        obj[key].values = obj[key].values.map((bucket) => {
+          bucket.label = bucket.key in agreementKeyLabels ? agreementKeyLabels[bucket.key] : undefined
+          return bucket
+        })
+      }
+      return obj
     }, {} as FilterData)
 }
 

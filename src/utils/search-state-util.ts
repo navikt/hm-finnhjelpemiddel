@@ -26,6 +26,7 @@ const initialFiltersState = {
   totalVektKG: [null, null],
   leverandor: [],
   produktkategori: [],
+  rammeavtale: [],
 }
 
 export const initialSearchDataState = {
