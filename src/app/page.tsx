@@ -34,7 +34,7 @@ function Home() {
   return (
     <div className="home-page">
       <AnimateLayout>
-        <div className="home-page__background-container">
+        <div className="home-page__background-container blue">
           <div className="home-page__search-container">
             <div className="home-page__heading">
               <Heading level="1" size="xlarge" spacing>
@@ -56,6 +56,22 @@ function Home() {
                 </form>
               </FormProvider>
             </div>
+          </div>
+        </div>
+        <div className="home-page__background-container red">
+          <div className="polygon-shape"></div>
+          <div className="home-page__agreement-container">
+            <div className="home-page__heading">
+              <Heading level="2" size="large" spacing>
+                Produkter på avtale med NAV
+              </Heading>
+              <Ingress>
+                NAV kjøper og eier hjelpemidlene som formidles gjennom hjelpemiddelsentralene. På noen produktområder
+                inngår NAV rammeavtaler med leverandørene. Produktene i rammeavtalene er det nasjonale sortimentet av
+                hjelpemidler.
+              </Ingress>
+            </div>
+            <div className="home-page__agreement-links"></div>
           </div>
         </div>
       </AnimateLayout>
