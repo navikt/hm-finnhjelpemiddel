@@ -1,7 +1,9 @@
+@import '@navikt/ds-tokens/dist/tokens';
+
 .range-filter-input {
   display: flex;
   align-items: flex-end;
-  gap: var(--a-spacing-4);
+  gap: $a-spacing-4;
   box-sizing: border-box;
   max-width: 13rem;
 }
@@ -11,5 +13,5 @@
 }
 
 .checkbox-filter-input {
-  margin-bottom: var(--a-spacing-3);
+  margin-bottom: $a-spacing-3;
 }

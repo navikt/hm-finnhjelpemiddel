@@ -1,10 +1,13 @@
 'use client'
-import { create } from 'zustand'
+
 import { useEffect, useState } from 'react'
+
+import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+
 import { SearchData } from './api-util'
-import { AtLeastOne } from './type-util'
 import { FilterCategories } from './filter-util'
+import { AtLeastOne } from './type-util'
 
 const initialFiltersState = {
   beregnetBarn: [],
@@ -42,7 +45,7 @@ type SearchDataState = {
   meta: { showProductSeriesView: boolean }
 }
 
-export const useSearchStore = create<SearchDataState>()(
+const useSearchStore = create<SearchDataState>()(
   persist(
     (set) => ({
       meta: { showProductSeriesView: true },

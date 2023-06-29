@@ -1,13 +1,18 @@
+'use client'
+
 import React from 'react'
+
 import Link from 'next/link'
+
 import { FilesIcon, InformationSquareIcon, WrenchIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
-import { sortAlphabetically } from 'src/utils/sort-util'
-import { Product, Document, TechData } from '@/utils/product-util'
-import { Supplier } from '@/utils/supplier-util'
-import { toValueAndUnit } from '@/utils/string-util'
 
-import DefinitionList from '../definition-list/DefinitionList'
+import { Document, Product, TechData } from '@/utils/product-util'
+import { sortAlphabetically } from '@/utils/sort-util'
+import { toValueAndUnit } from '@/utils/string-util'
+import { Supplier } from '@/utils/supplier-util'
+
+import DefinitionList from './definition-list/DefinitionList'
 
 export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>

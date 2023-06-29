@@ -1,5 +1,7 @@
 @use './_mixins';
 
+@import '@navikt/ds-tokens/dist/tokens';
+
 .compare-menu {
   position: fixed;
   bottom: 0;
@@ -7,16 +9,15 @@
   display: flex;
   flex-direction: column;
   z-index: 3;
-  background-color: var(--a-surface-action-subtle-hover);
-  border-radius: var(--a-border-radius-large) var(--a-border-radius-large) 0 0;
-  padding: var(--a-spacing-3) var(--a-spacing-6);
-  border: 1px solid var(--a-border-divider);
+  background-color: $a-surface-action-subtle-hover;
+  border-radius: $a-border-radius-large $a-border-radius-large 0 0;
+  padding: $a-spacing-3 $a-spacing-6;
+  border: 1px solid $a-border-divider;
   box-shadow: 0 1px 15px 4px rgba(0, 34, 82, 0.1);
 
   &--open {
     height: 100%;
     border-radius: unset;
-    overflow-y: scroll;
 
     @include mixins.for-size(desktop-up) {
       height: auto;
@@ -28,7 +29,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: var(--a-spacing-4) 0;
+    padding: $a-spacing-4 0;
 
     h2 {
       max-width: 250px;
@@ -37,7 +38,7 @@
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
       justify-content: center;
-      padding: var(--a-spacing-4) var(--a-spacing-5) var(--a-spacing-5) 0;
+      padding: $a-spacing-4 $a-spacing-5 $a-spacing-5 0;
     }
   }
 
@@ -46,35 +47,35 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    gap: var(--a-spacing-2);
+    gap: $a-spacing-2;
     max-width: 62rem;
     list-style: none;
     margin: 0;
-    padding: 0 0 var(--a-spacing-4) 0;
+    padding: 0 0 $a-spacing-4 0;
 
     li {
-      margin: var(--a-spacing-2);
+      margin: $a-spacing-2;
     }
 
     @include mixins.for-size(phone-only) {
       width: 100%;
-      gap: var(--a-spacing-5);
+      gap: $a-spacing-5;
     }
 
     @include mixins.for-size(desktop-up) {
       flex-wrap: nowrap;
       justify-content: initial;
-      --mask: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent 100%);
-      -webkit-mask-image: var(--mask);
-      mask-image: var(--mask);
+      $mask: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent 100%);
+      -webkit-mask-image: $mask;
+      mask-image: $mask;
       overflow-x: auto;
 
       li:first-child {
-        margin-left: var(--a-spacing-5);
+        margin-left: $a-spacing-5;
       }
 
       li:last-child {
-        margin-right: var(--a-spacing-5);
+        margin-right: $a-spacing-5;
       }
     }
   }
@@ -91,10 +92,10 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: var(--a-surface-action-subtle);
-    border: 1px dashed var(--a-surface-action);
-    padding: var(--a-spacing-6);
-    margin-bottom: var(--a-spacing-4);
+    background-color: $a-surface-action-subtle;
+    border: 1px dashed $a-surface-action;
+    padding: $a-spacing-6;
+    margin-bottom: $a-spacing-4;
 
     &__empty {
       height: 15rem;
@@ -109,7 +110,7 @@
     &__one-more {
       height: 15rem;
       width: 11rem;
-      border-radius: var(--a-border-radius-large);
+      border-radius: $a-border-radius-large;
 
       @include mixins.for-size(phone-only) {
         width: 100%;
@@ -117,10 +118,10 @@
     }
 
     p {
-      font-size: var(--a-font-size-large);
-      font-weight: var(--a-font-weight-regular);
+      font-size: $a-font-size-large;
+      font-weight: $a-font-weight-regular;
       letter-spacing: 0;
-      line-height: var(--a-font-line-height-large);
+      line-height: $a-font-line-height-large;
       margin: 0;
       max-width: 200px;
     }

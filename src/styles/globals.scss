@@ -1,6 +1,7 @@
 @use './_mixins';
 
 @import '@navikt/ds-css';
+@import '@navikt/ds-tokens/dist/tokens';
 @import './compare-menu.scss';
 @import './compare-page.scss';
 @import './comparing-table.scss';
@@ -8,20 +9,15 @@
 @import './home-page.scss';
 @import './mobile-overlay';
 @import './product-card.scss';
-@import './product-page.scss';
 @import './search.scss';
 
 html,
-body,
-#__next {
+body {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   height: 100%;
   min-height: 100%;
-}
-
-#__next {
-  display: flex;
-  flex-direction: column;
 }
 
 main {
@@ -31,11 +27,11 @@ main {
 details {
   > summary {
     display: flex;
-    gap: var(--a-spacing-1);
+    gap: $a-spacing-1;
     list-style: none;
-    padding: var(--a-spacing-1) 0;
+    padding: $a-spacing-1 0;
     transition: margin 150ms ease-out;
-    font-weight: var(--a-font-weight-bold);
+    font-weight: $a-font-weight-bold;
     cursor: pointer;
     user-select: none;
 
@@ -43,9 +39,9 @@ details {
       display: grid;
       align-self: center;
       place-content: center;
-      border-radius: var(--a-border-radius-medium);
-      height: var(--a-spacing-6);
-      width: var(--a-spacing-6);
+      border-radius: $a-border-radius-medium;
+      height: $a-spacing-6;
+      width: $a-spacing-6;
 
       svg {
         transition: transform 200ms ease-in-out;
@@ -60,10 +56,10 @@ details {
     &:hover {
       text-decoration: underline;
       text-decoration-thickness: 2px;
-      text-decoration-color: var(--a-text-default);
+      text-decoration-color: $a-text-default;
 
       .chevron-wrapper {
-        background-color: var(--ac-accordion-header-icon-bg-hover, var(--a-surface-neutral-subtle-hover));
+        background-color: $a-surface-neutral-subtle-hover;
       }
     }
 
@@ -72,23 +68,23 @@ details {
     }
 
     &:focus-visible {
-      box-shadow: var(--a-shadow-focus);
-      border-radius: var(--a-border-radius-medium);
+      box-shadow: $a-shadow-focus;
+      border-radius: $a-border-radius-medium;
     }
   }
 
   &.spacing {
-    margin-bottom: var(--a-spacing-2);
+    margin-bottom: $a-spacing-2;
   }
 
   > div {
     box-sizing: border-box;
-    margin-bottom: var(--a-spacing-5);
-    padding-left: var(--a-spacing-7);
+    margin-bottom: $a-spacing-5;
+    padding-left: $a-spacing-7;
   }
 
   &[open] > summary {
-    margin-bottom: var(--a-spacing-3);
+    margin-bottom: $a-spacing-3;
 
     .chevron-wrapper {
       svg {
@@ -102,12 +98,12 @@ details {
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: var(--a-gray-50);
+  background-color: $a-gray-50;
 
   h1 {
     text-align: center;
     font-weight: 400;
-    margin: var(--a-spacing-5) 0;
+    margin: $a-spacing-5 0;
   }
 }
 
@@ -115,21 +111,21 @@ details {
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: inset 0 -1px 0 var(--a-gray-300);
+  box-shadow: inset 0 -1px 0 $a-gray-300;
 
   .wip-banner {
     width: 100%;
-    font-size: var(--a-font-size-heading-small);
-    background-color: var(--a-surface-warning-subtle);
+    font-size: $a-font-size-heading-small;
+    background-color: $a-surface-warning-subtle;
     border-top: 8px solid;
     border-image: repeating-linear-gradient(-64deg, #ffc166, #ffc166 10px, #00243a 0, #00243a 20px) 20;
 
     div {
       display: flex;
       align-items: center;
-      gap: var(--a-spacing-3);
+      gap: $a-spacing-3;
       max-width: 1200px;
-      padding: var(--a-spacing-5);
+      padding: $a-spacing-5;
       margin: 0 auto;
 
       p {
@@ -160,7 +156,7 @@ details {
     justify-content: space-between;
     width: 100%;
     max-width: 1200px;
-    padding: 0 var(--a-spacing-5);
+    padding: 0 $a-spacing-5;
     text-align: center;
 
     @include mixins.for-size(tablet-up) {
@@ -177,7 +173,7 @@ details {
   }
 
   &__menu-button {
-    margin: var(--a-spacing-3) 0;
+    margin: $a-spacing-3 0;
 
     @include mixins.for-size(tablet-up) {
       display: none;
@@ -188,8 +184,8 @@ details {
     display: none;
     width: 100%;
     max-width: 1200px;
-    padding: 0 var(--a-spacing-5);
-    margin-bottom: var(--a-spacing-3);
+    padding: 0 $a-spacing-5;
+    margin-bottom: $a-spacing-3;
 
     &.open {
       display: block;
@@ -201,7 +197,7 @@ details {
   }
 
   img {
-    margin-right: var(--a-spacing-5);
+    margin-right: $a-spacing-5;
   }
 
   h1 {
@@ -210,7 +206,7 @@ details {
   }
 
   ul {
-    gap: var(--a-spacing-5);
+    gap: $a-spacing-5;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -219,23 +215,24 @@ details {
   .page-link {
     display: block;
     text-decoration: none;
-    padding: var(--a-spacing-3) 0;
+    padding: $a-spacing-3 0;
+    border-bottom: 4px solid $a-transparent;
 
     @include mixins.for-size(tablet-up) {
-      padding: var(--a-spacing-5) var(--a-spacing-1);
+      padding: $a-spacing-5 $a-spacing-1;
     }
 
     &:focus-visible {
       background-color: transparent;
       border-color: transparent;
-      border-radius: var(--a-border-radius-medium);
-      box-shadow: var(--a-shadow-focus);
+      border-radius: $a-border-radius-medium;
+      box-shadow: $a-shadow-focus;
       outline: none;
     }
 
     &:hover:not(.page-link--active) {
       @include mixins.for-size(tablet-up) {
-        border-bottom: 4px solid var(--a-border-subtle-hover);
+        border-bottom: 4px solid $a-border-subtle-hover;
       }
     }
 
@@ -246,8 +243,7 @@ details {
 
       @include mixins.for-size(tablet-up) {
         text-decoration: unset;
-
-        border-bottom: 4px solid var(--a-border-focus);
+        border-bottom: 4px solid $a-border-focus;
       }
     }
   }
@@ -258,8 +254,8 @@ details {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: var(--a-spacing-12) var(--a-spacing-5);
-  background: var(--a-deepblue-800);
+  padding: $a-spacing-16 $a-spacing-5;
+  background: $a-deepblue-800;
 
   &__content {
     display: flex;
@@ -271,54 +267,42 @@ details {
   &__info {
     display: flex;
     flex-direction: row;
-    gap: var(--a-spacing-4);
-    margin-top: var(--a-spacing-10);
+    gap: $a-spacing-4;
     width: 100%;
     max-width: 1200px;
-    color: var(--a-gray-200);
+    color: $a-gray-200;
+
+    a {
+      color: $a-white;
+      --ac-link-active-text: black;
+      --ac-link-active-bg: white;
+      --ac-link-focus-text: black;
+      --ac-link-focus-bg: white;
+    }
 
     div {
       display: flex;
       flex-direction: column;
-      gap: var(--a-spacing-2);
+      gap: $a-spacing-2;
     }
   }
 }
 
-.breadcrumbs {
+.back-button {
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--a-spacing-5);
-
-  ol {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    align-items: center;
-    display: flex;
-  }
-
-  a {
-    padding: 0.5rem 0;
-    margin: 0.25rem 0.25rem 0.25rem 0;
-  }
+  padding: $a-spacing-5;
 }
 
 .main-wrapper {
   max-width: 1200px;
-  padding: var(--a-spacing-4);
-  margin: 0 auto var(--a-spacing-4);
+  padding: $a-spacing-4;
+  margin: 0 auto $a-spacing-4;
 
   @include mixins.for-size(desktop-up) {
-    padding: var(--a-spacing-5);
-    margin-bottom: var(--a-spacing-5);
+    padding: $a-spacing-5;
+    margin-bottom: $a-spacing-5;
   }
 }
 
@@ -375,16 +359,16 @@ details {
 .spacing {
   &-top {
     &--small {
-      margin-top: var(--a-spacing-2);
+      margin-top: $a-spacing-2;
     }
     &--medium {
-      margin-top: var(--a-spacing-4);
+      margin-top: $a-spacing-4;
     }
     &--large {
-      margin-top: var(--a-spacing-8);
+      margin-top: $a-spacing-8;
     }
     &--xlarge {
-      margin-top: var(--a-spacing-16);
+      margin-top: $a-spacing-16;
     }
   }
 }
@@ -392,16 +376,16 @@ details {
 .spacing {
   &-bottom {
     &--small {
-      margin-bottom: var(--a-spacing-2);
+      margin-bottom: $a-spacing-2;
     }
     &--medium {
-      margin-bottom: var(--a-spacing-4);
+      margin-bottom: $a-spacing-4;
     }
     &--large {
-      margin-bottom: var(--a-spacing-8);
+      margin-bottom: $a-spacing-8;
     }
     &--xlarge {
-      margin-bottom: var(--a-spacing-16);
+      margin-bottom: $a-spacing-16;
     }
   }
 }
@@ -409,12 +393,12 @@ details {
 .max-width {
   max-width: 1200px;
   margin: auto;
-  padding-left: var(--a-spacing-3);
-  padding-right: var(--a-spacing-3);
+  padding-left: $a-spacing-3;
+  padding-right: $a-spacing-3;
 
   @include mixins.for-size(desktop-up) {
-    padding-left: var(--a-spacing-6);
-    padding-right: var(--a-spacing-6);
+    padding-left: $a-spacing-6;
+    padding-right: $a-spacing-6;
   }
 }
 

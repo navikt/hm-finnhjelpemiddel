@@ -1,10 +1,16 @@
-import Image from 'next/image'
+'use client'
+
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { Button } from '@navikt/ds-react'
+
+import Image from 'next/image'
+
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
-import { largeImageLoader } from '../../utils/image-util'
-import { Photo } from '../../utils/product-util'
+import { Button } from '@navikt/ds-react'
+
+import { largeImageLoader } from '@/utils/image-util'
+import { Photo } from '@/utils/product-util'
 
 type ImageSliderProps = {
   photos: Photo[]
@@ -95,12 +101,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         {numberOfImages > 1 && (
           <>
             <Button
+              aria-label="Forrige bilde"
               variant="tertiary-neutral"
               className="arrow"
               onClick={() => {
                 prevImage()
               }}
-              icon={<ChevronLeftCircle height={50} width={50} />}
+              icon={<ChevronLeftCircle title="Pil mot venstre" height={50} width={50} />}
             />
 
             <div className="photo-container">
@@ -149,12 +156,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               </AnimatePresence>
             </div>
             <Button
+              aria-label="Neste bilde"
               variant="tertiary-neutral"
               className="arrow"
               onClick={() => {
                 nextImage()
               }}
-              icon={<ChevronRightCircle height={50} width={50} />}
+              icon={<ChevronRightCircle title="Pil mot høyre" height={50} width={50} />}
             />
           </>
         )}
@@ -164,6 +172,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
           if (index !== active) {
             return (
               <Button
+                aria-label="bilde"
                 key={index}
                 className={'dot'}
                 onClick={() => {
@@ -172,7 +181,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               />
             )
           } else {
-            return <div key={index} className="activeDot" />
+            return <Button disabled={true} aria-label="valgt bilde" key={index} className={'dot'} />
           }
         })}
       </div>

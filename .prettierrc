@@ -5,5 +5,28 @@
   "arrowParens": "always",
   "trailingComma": "es5",
   "endOfLine": "auto",
-  "tabWidth": 2
+  "tabWidth": 2,
+  "importOrder": [
+    "^react",
+    "^next",
+    "^[a-z]",
+    "^@?\\w",
+
+    "^@/utils",
+    "^@/hooks",
+    "^@/components",
+
+    "^\\u0000",
+
+    "^\\.\\.(?!/?$)",
+    "^\\.\\./?$",
+
+    "^\\./(?=.*/)(?!/?$)",
+    "^\\.(?!/?$)",
+    "^\\./?$",
+
+    "^.+\\.?(scss)$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

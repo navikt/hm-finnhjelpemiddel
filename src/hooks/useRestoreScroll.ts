@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import useDebounce from './useDebounce'
 
 export default function useRestoreScroll(id: string, shouldRestore: boolean) {
@@ -19,9 +20,9 @@ export default function useRestoreScroll(id: string, shouldRestore: boolean) {
       }
     } catch (error) {
       // ignore sessionStorage error
+      console.log(error)
     }
   }, [SESSION_STORAGE_ID, shouldRestore])
-
   /**
    * Listen to scroll event, and track current scroll position
    */
@@ -29,11 +30,9 @@ export default function useRestoreScroll(id: string, shouldRestore: boolean) {
     try {
       if (shouldRestore) {
         function handleScroll() {
-          setScrollTop(Math.round(window.pageYOffset || document.documentElement.scrollTop))
+          setScrollTop(Math.round(window.scrollY || document.documentElement.scrollTop))
         }
-
         window.addEventListener('scroll', handleScroll)
-
         return () => {
           window.removeEventListener('scroll', handleScroll)
         }
@@ -42,7 +41,6 @@ export default function useRestoreScroll(id: string, shouldRestore: boolean) {
       // ignore sessionStorage error
     }
   }, [shouldRestore])
-
   /**
    * Store current scroll position
    */

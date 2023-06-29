@@ -1,8 +1,8 @@
 import { agreementKeyLabels } from './agreement-util'
 import {
+  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
-  FilterCategories,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -20,7 +20,7 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { mapProducts, Product } from './product-util'
+import { Product, mapProducts } from './product-util'
 
 export const PAGE_SIZE = 25
 

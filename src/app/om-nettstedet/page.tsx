@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Alert, BodyLong, Heading, Link } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Link } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 function AboutUs() {

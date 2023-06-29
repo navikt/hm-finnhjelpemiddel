@@ -1,6 +1,8 @@
 import React, { forwardRef, useImperativeHandle } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
+
 import { Button, Search, Switch } from '@navikt/ds-react'
+
 import { FilterData, SearchData } from '@/utils/api-util'
 import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
 
