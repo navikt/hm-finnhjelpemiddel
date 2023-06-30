@@ -5,6 +5,7 @@
 .home-page {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 
   &__background-container {
     width: 100%;
@@ -95,8 +96,8 @@
   &__agreement-links {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: $a-spacing-4;
+    max-width: 816px;
 
     @include mixins.for-size(tablet-up) {
     }
@@ -132,14 +133,23 @@
   height: 100%;
   background-color: $a-deepblue-50;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  align-content: center;
-  text-align: center;
 
   &__content {
     max-width: 600px;
+    display: flex;
+    flex-direction: column;
+
+    article {
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1,
+    h2 {
+      align-self: center;
+      font-weight: 400;
+    }
   }
 }
 
