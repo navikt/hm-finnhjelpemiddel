@@ -51,7 +51,7 @@ export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8709': 'Sitteputer',
   'HMDB-8607': 'Stoler og bord',
   'HMDB-8594': 'Ganghjelpemidler',
-  'HMDB-8725': 'Senger',
+  'HMDB-8590': 'Senger',
   'HMDB-8688': 'Stoler med oppreisingsfunksjon',
   'HMDB-8712': 'Kalendere',
   'HMDB-8601': 'Sykler',
@@ -81,6 +81,6 @@ export const agreementKeyLabels: Record<string, string> = {
   // 'HMDB-8570': 'Høreapparater (duplicate)',
   // 'HMDB-8615': 'Innredning kjøkken og bad (duplicate)',
   // 'HMDB-6427': 'Kalendere (duplicate)',
-  // 'HMDB-8590': 'Senger (duplicate)',
+  // 'HMDB-8725': 'Senger (duplicate)',
   // 'HMDB-7490': 'Varmehjelpemidler (duplicate)',
 }
