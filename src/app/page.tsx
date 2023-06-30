@@ -86,7 +86,7 @@ function Home() {
               <Ingress>
                 NAV kjøper og eier hjelpemidlene som formidles gjennom hjelpemiddelsentralene. På noen produktområder
                 inngår NAV rammeavtaler med leverandørene. Produktene i rammeavtalene er det nasjonale sortimentet av
-                hjelpemidler. Lenkene under tar deg til søket med produkter innenfor valgt avtale.
+                hjelpemidler. Lenkene nedenfor tar deg til produkter innenfor valgt avtale.
               </Ingress>
             </div>
             <div className="home-page__agreement-links">
