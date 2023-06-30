@@ -11,7 +11,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: $a-spacing-8 $a-spacing-1;
+    padding: $a-spacing-8 $a-spacing-4;
 
     @include mixins.for-size(tablet-up) {
       padding: $a-spacing-12 $a-spacing-1;
@@ -34,6 +34,7 @@
   }
 
   &__search-container {
+    z-index: 2;
     max-width: 640px;
     display: flex;
     flex-direction: column;
@@ -49,12 +50,12 @@
   }
 
   &__agreement-container {
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 500px;
     gap: $a-spacing-8;
-    z-index: 2;
     padding-left: $a-spacing-1;
     padding-right: $a-spacing-1;
 
@@ -68,7 +69,6 @@
     }
 
     .home-page__heading {
-      gap: 0;
       max-width: 800px;
 
       @include mixins.for-size(tablet-up) {
