@@ -41,7 +41,7 @@ function Home() {
   const agreementLink = (key: string, value: string) => {
     let href = `/sok?agreement=true&rammeavtale=${key}`
     return (
-      <div className="agreement-link" key={key}>
+      <div className="home-page__agreement-link" key={key}>
         <NextLink className="back-to-search" href={href}>
           <BodyShort> {value} </BodyShort>
         </NextLink>
