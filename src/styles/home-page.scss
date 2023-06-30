@@ -97,9 +97,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: $a-spacing-4;
-    max-width: 816px;
+    justify-content: center;
 
-    @include mixins.for-size(tablet-up) {
+    @include mixins.for-size(desktop-up) {
+      justify-content: flex-start;
     }
   }
 
@@ -123,7 +124,7 @@
     p {
       color: var(--nav-gra-nav-mork-gra, #262626);
       text-decoration-line: underline;
-      font-size: 20px;
+      font-size: 1.25rem;
     }
   }
 }
