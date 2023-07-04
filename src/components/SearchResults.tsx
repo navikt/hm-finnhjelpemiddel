@@ -4,23 +4,17 @@ import { useFormContext } from 'react-hook-form'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { ImageIcon } from '@navikt/aksel-icons'
 import { Next } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
 
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { FilterCategories } from '@/utils/filter-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
-import { sortAlphabetically } from '@/utils/sort-util'
-import { capitalize } from '@/utils/string-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import ShowMore from '@/components/ShowMore'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 
 const SearchResults = ({
@@ -28,7 +22,6 @@ const SearchResults = ({
   page,
   setPage,
   isLoading,
-  productViewToggleRef,
 }: {
   page: number
   setPage: (p: number) => void
@@ -36,23 +29,9 @@ const SearchResults = ({
   data?: Array<FetchResponse>
   productViewToggleRef: RefObject<HTMLButtonElement>
 }) => {
-  const {
-    meta: { showProductSeriesView },
-    setShowProductSeriesView,
-  } = useHydratedSearchStore()
-  const { setCompareMode } = useHydratedCompareStore()
   const products = data?.flatMap((d) => d.products)
-  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
   useRestoreScroll('search-results', !isLoading)
-
-  useEffect(() => {
-    if (showProductSeriesView) {
-      setCompareMode(CompareMode.Inactive)
-    } else {
-      setCompareMode(CompareMode.Active)
-    }
-  }, [showProductSeriesView, setCompareMode])
 
   if (isLoading) {
     return (
@@ -86,7 +65,7 @@ const SearchResults = ({
   const isLoadingMore = !data || (page > 0 && typeof data[page - 1] === 'undefined')
   const isLastPage =
     (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
-    (showProductSeriesView && !isLoadingMore && products.length < page * PAGE_SIZE)
+    (!isLoadingMore && products.length < page * PAGE_SIZE)
 
   return (
     <>
@@ -95,25 +74,9 @@ const SearchResults = ({
           <Heading level="2" size="medium">
             Søkeresultater
           </Heading>
-          <ToggleGroup
-            className="view-toggle"
-            value={showProductSeriesView ? 'series' : 'products'}
-            onChange={(value) => setShowProductSeriesView(value === 'series')}
-            size="small"
-            variant="neutral"
-          >
-            <ToggleGroup.Item value="series" ref={productViewToggleRef}>
-              Produktserier
-            </ToggleGroup.Item>
-            <ToggleGroup.Item value="products">Enkeltprodukter</ToggleGroup.Item>
-          </ToggleGroup>
         </div>
         <div>
-          <BodyShort aria-live="polite">
-            {showProductSeriesView
-              ? `${products.length} produktserier vises`
-              : `${products.length} av ${totalNumberOfProducts} produkter vises`}
-          </BodyShort>
+          <BodyShort aria-live="polite">{`${products.length} produkter vises`}</BodyShort>
         </div>
       </header>
       <ol className="results__list" id="searchResults">
@@ -131,9 +94,6 @@ const SearchResults = ({
 }
 
 const SearchResult = ({ product }: { product: Product }) => {
-  const {
-    meta: { showProductSeriesView },
-  } = useHydratedSearchStore()
   const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
   const { setValue } = useFormContext<SearchData>()
 
@@ -147,7 +107,6 @@ const SearchResult = ({ product }: { product: Product }) => {
   }
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
-  const showSpecsButton = !showProductSeriesView && productFilters.length > 0
 
   return (
     <li className="search-result">
@@ -171,7 +130,7 @@ const SearchResult = ({ product }: { product: Product }) => {
           <div className="search-result__title">
             <Heading level="3" size="medium">
               <Link className="search-result__link" href={`/produkt/${product.id}`}>
-                {showProductSeriesView ? product.title : product.articleName}
+                {product.title}
               </Link>
             </Heading>
             {product.agreementInfo?.rank && (
@@ -234,9 +193,10 @@ const SearchResult = ({ product }: { product: Product }) => {
 }
 
 const ProductImage = ({ src }: { src: string }) => {
+  const [loadingError, setLoadingError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  if (src) {
+  if (!loadingError) {
     return (
       <>
         {isLoading && <Loader size="large" />}
@@ -245,6 +205,10 @@ const ProductImage = ({ src }: { src: string }) => {
           src={src}
           onLoad={() => setIsLoading(true)}
           onLoadingComplete={() => setIsLoading(false)}
+          onError={() => {
+            setLoadingError(true)
+            setIsLoading(false)
+          }}
           alt="Produktbilde"
           fill
           style={{ objectFit: 'contain', opacity: !isLoading ? 1 : 0 }}
@@ -253,9 +217,18 @@ const ProductImage = ({ src }: { src: string }) => {
         />
       </>
     )
+  } else {
+    return (
+      <Image
+        src={'/assets/image-error.png'}
+        alt="Produktbilde mangler"
+        fill
+        style={{ padding: '10px' }}
+        sizes="50vw"
+        priority
+      ></Image>
+    )
   }
-
-  return <ImageIcon width="100%" height="100%" style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
 }
 
 export default SearchResults

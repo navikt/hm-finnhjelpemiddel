@@ -41,8 +41,6 @@ type SearchDataState = {
   setSearchData: (searchData: AtLeastOne<SearchData>) => void
   setFilter: (filterKey: keyof typeof FilterCategories, values: Array<any>) => void
   resetSearchData: () => void
-  setShowProductSeriesView: (value: boolean) => void
-  meta: { showProductSeriesView: boolean }
 }
 
 const useSearchStore = create<SearchDataState>()(
@@ -62,7 +60,6 @@ const useSearchStore = create<SearchDataState>()(
           searchData: { ...state.searchData, filters: { ...state.searchData.filters, [filterKey]: values } },
         })),
       resetSearchData: () => set({ searchData: initialSearchDataState }),
-      setShowProductSeriesView: (value) => set({ meta: { showProductSeriesView: value } }),
     }),
     {
       name: 'search-data-storage',

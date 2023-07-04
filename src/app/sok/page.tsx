@@ -41,12 +41,7 @@ export default function Home() {
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
   const [productSearchParams, setProductSearchParams] = useState<SearchParams>(mapProductSearchParams(searchParams))
 
-  const {
-    searchData,
-    setFilter,
-    setSearchData,
-    meta: { showProductSeriesView },
-  } = useHydratedSearchStore()
+  const { searchData, setFilter, setSearchData } = useHydratedSearchStore()
 
   const { compareMode } = useHydratedCompareStore()
 
@@ -70,7 +65,6 @@ export default function Home() {
         from,
         to,
         searchData,
-        isProductSeriesView: showProductSeriesView,
       }
     },
     fetchProducts,

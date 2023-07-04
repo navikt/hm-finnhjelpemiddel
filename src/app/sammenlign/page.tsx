@@ -2,20 +2,22 @@
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'
+
 import { Back } from '@navikt/ds-icons'
-import { Product, toSearchQueryString } from '@/utils/product-util'
+import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'
+
 import { CompareMenuState, CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { toValueAndUnit } from '@/utils/string-util'
 
-import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
+import AnimateLayout from '@/components/layout/AnimateLayout'
 
 export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
-  const { setShowProductSeriesView, searchData } = useHydratedSearchStore()
+  const { searchData } = useHydratedSearchStore()
   const router = useRouter()
   const href = '/sok' + toSearchQueryString(searchData)
 
@@ -23,7 +25,6 @@ export default function ComparePage() {
     event.preventDefault()
     setCompareMode(CompareMode.Active)
     setCompareMenuState(CompareMenuState.Open)
-    setShowProductSeriesView(false)
     router.push(href)
   }
 

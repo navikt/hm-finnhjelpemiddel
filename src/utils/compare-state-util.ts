@@ -1,7 +1,10 @@
 'use client'
+
+import { useEffect, useState } from 'react'
+
 import { create } from 'zustand'
-import { useState, useEffect } from 'react'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
+
 import { Product } from './product-util'
 
 export enum CompareMode {
@@ -28,8 +31,8 @@ type ProductCompareState = {
 export const useProductCompareStore = create<ProductCompareState>()(
   persist(
     (set) => ({
-      compareMode: CompareMode.Inactive,
-      compareMenuState: CompareMenuState.Open,
+      compareMode: CompareMode.Active,
+      compareMenuState: CompareMenuState.Minimized,
       productsToCompare: [],
       setCompareMode: (mode) => set(() => ({ compareMode: mode })),
       setCompareMenuState: (menuState) => set(() => ({ compareMenuState: menuState })),
