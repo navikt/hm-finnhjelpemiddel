@@ -142,17 +142,14 @@ const SearchResult = ({ product }: { product: Product }) => {
           <div className="search-result__description">
             <div className="search-result__post-container">
               {product.agreementInfo?.rank && <AgreementIcon rank={product.agreementInfo?.rank} />}
-              <BodyShort>{product.agreementInfo?.postTitle ?? product.attributes?.text}</BodyShort>
+              <BodyShort>
+                {'Dk ' + product.agreementInfo?.postNr + ': ' + product.agreementInfo?.postTitle ??
+                  product.attributes?.text}
+              </BodyShort>
             </div>
           </div>
           <div className="search-result__more-info">
             <DefinitionList>
-              {!showProductSeriesView && (
-                <>
-                  <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
-                  <DefinitionList.Definition>{product.hmsArtNr ? product.hmsArtNr : '–'}</DefinitionList.Definition>
-                </>
-              )}
               <DefinitionList.Term>Produktkategori</DefinitionList.Term>
               <DefinitionList.Definition>
                 <Button
@@ -165,23 +162,6 @@ const SearchResult = ({ product }: { product: Product }) => {
                 </Button>
               </DefinitionList.Definition>
             </DefinitionList>
-
-            {showSpecsButton && (
-              <ShowMore title="Spesifikasjoner">
-                <DefinitionList>
-                  {productFilters
-                    .sort(([keyA], [keyB]) => sortAlphabetically(keyA, keyB))
-                    .map(([key, value], index) => (
-                      <React.Fragment key={index}>
-                        <DefinitionList.Term>
-                          {FilterCategories[key as keyof typeof FilterCategories]}
-                        </DefinitionList.Term>
-                        <DefinitionList.Definition>{capitalize(String(value))}</DefinitionList.Definition>
-                      </React.Fragment>
-                    ))}
-                </DefinitionList>
-              </ShowMore>
-            )}
           </div>
         </div>
         <div className="search-result__chevron-container">
