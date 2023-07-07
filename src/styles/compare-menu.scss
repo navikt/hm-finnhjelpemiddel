@@ -18,6 +18,7 @@
   &--open {
     height: 100%;
     border-radius: unset;
+    overflow-x: scroll;
 
     @include mixins.for-size(desktop-up) {
       height: auto;
@@ -38,7 +39,7 @@
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
       justify-content: center;
-      padding: $a-spacing-4 $a-spacing-5 $a-spacing-5 0;
+      padding: $a-spacing-4 $a-spacing-5;
     }
   }
 
@@ -129,5 +130,11 @@
 
   &__chevron-button {
     align-self: center;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: $a-spacing-2;
   }
 }
