@@ -46,7 +46,6 @@ type SearchDataState = {
 const useSearchStore = create<SearchDataState>()(
   persist(
     (set) => ({
-      meta: { showProductSeriesView: true },
       searchData: initialSearchDataState,
       setSearchData: (searchData) =>
         set((state) => {
@@ -79,7 +78,6 @@ export const useHydratedSearchStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        meta: { showProductSeriesView: false },
         searchData: initialSearchDataState,
         setSearchData: () => undefined,
         setFilter: () => undefined,
