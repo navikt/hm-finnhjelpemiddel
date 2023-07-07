@@ -8,7 +8,7 @@ import { Next } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
-import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
@@ -94,7 +94,7 @@ const SearchResults = ({
 }
 
 const SearchResult = ({ product }: { product: Product }) => {
-  const { compareMode, setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
   const { setValue } = useFormContext<SearchData>()
 
   const productFilters = Object.entries(product.filters)
@@ -110,18 +110,16 @@ const SearchResult = ({ product }: { product: Product }) => {
 
   return (
     <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>
-      {compareMode === CompareMode.Active && (
-        <div className="search-result__compare-checkbox">
-          <Checkbox
-            size="small"
-            value="Legg produktet til sammenligning"
-            onChange={toggleCompareProduct}
-            checked={isInProductsToCompare}
-          >
-            Sammenlign
-          </Checkbox>
-        </div>
-      )}
+      <div className="search-result__compare-checkbox">
+        <Checkbox
+          size="small"
+          value="Legg produktet til sammenligning"
+          onChange={toggleCompareProduct}
+          checked={isInProductsToCompare}
+        >
+          Sammenlign
+        </Checkbox>
+      </div>
       <div className="search-result__container">
         <div className="search-result__image">
           <ProductImage src={firstImageSrc} />

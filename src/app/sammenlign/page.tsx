@@ -3,7 +3,7 @@
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { CompareMenuState, CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
@@ -14,14 +14,13 @@ import { BodyShort, ChevronLeftIcon, Heading, LinkPanel, Table } from '@/compone
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 export default function ComparePage() {
-  const { productsToCompare, removeProduct, setCompareMode, setCompareMenuState } = useHydratedCompareStore()
+  const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
   const { searchData } = useHydratedSearchStore()
   const router = useRouter()
   const href = '/sok' + toSearchQueryString(searchData)
 
   const handleClick = (event: any) => {
     event.preventDefault()
-    setCompareMode(CompareMode.Active)
     setCompareMenuState(CompareMenuState.Open)
     router.push(href)
   }

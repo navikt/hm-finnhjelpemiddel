@@ -14,7 +14,7 @@ import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
 import { agreementKeyLabels } from '@/utils/agreement-util'
 import { FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters, fetchProducts } from '@/utils/api-util'
-import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { useHydratedCompareStore } from '@/utils/compare-state-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
@@ -44,8 +44,6 @@ export default function Home() {
   const [productSearchParams, setProductSearchParams] = useState<SearchParams>(mapProductSearchParams(searchParams))
 
   const { searchData, setFilter, setSearchData } = useHydratedSearchStore()
-
-  const { compareMode } = useHydratedCompareStore()
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
@@ -137,7 +135,7 @@ export default function Home() {
 
   return (
     <FormProvider {...formMethods}>
-      {compareMode === CompareMode.Active && <CompareMenu />}
+      <CompareMenu />
       {!showSidebar && (
         <MobileOverlay open={mobileOverlayOpen}>
           <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
