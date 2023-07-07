@@ -1,11 +1,11 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
 import { Next } from '@navikt/ds-icons'
-import { Alert, BodyShort, Button, Checkbox, Heading, Loader, ToggleGroup } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
@@ -109,9 +109,9 @@ const SearchResult = ({ product }: { product: Product }) => {
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   return (
-    <li className="search-result">
+    <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>
       {compareMode === CompareMode.Active && (
-        <div className="search-result__header">
+        <div className="search-result__compare-checkbox">
           <Checkbox
             size="small"
             value="Legg produktet til sammenligning"

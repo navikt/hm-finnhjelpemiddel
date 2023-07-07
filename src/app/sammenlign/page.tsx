@@ -3,9 +3,6 @@
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { Back } from '@navikt/ds-icons'
-import { BodyShort, Heading, LinkPanel, Table } from '@navikt/ds-react'
-
 import { CompareMenuState, CompareMode, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
@@ -13,6 +10,7 @@ import { sortAlphabetically } from '@/utils/sort-util'
 import { toValueAndUnit } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
+import { BodyShort, ChevronLeftIcon, Heading, LinkPanel, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 export default function ComparePage() {
@@ -94,7 +92,7 @@ const CompareTable = ({
                 Produkter
               </Heading>
               <NextLink className="back-to-search" href={href}>
-                <Back title="Tilbake til søk" />
+                <ChevronLeftIcon title="Tilbake til søk" />
                 <BodyShort>Legg til flere</BodyShort>
               </NextLink>
             </Table.ColumnHeader>

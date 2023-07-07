@@ -7,7 +7,7 @@ import NextLink from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, Ingress, Link, Search } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Ingress, Search } from '@navikt/ds-react'
 
 import { agreementKeyLabels } from '@/utils/agreement-util'
 import { SearchData } from '@/utils/api-util'

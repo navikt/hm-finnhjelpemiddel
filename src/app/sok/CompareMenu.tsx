@@ -1,11 +1,14 @@
 import Link from 'next/link'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
 import { Collapse, Expand, Next } from '@navikt/ds-icons'
 import { Button } from '@navikt/ds-react'
-import { Product } from '@/utils/product-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 
-import ProductCard from './ProductCard'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { Product } from '@/utils/product-util'
+
+import ProductCard from '@/components/ProductCard'
 
 const containerVariants: Variants = {
   hidden: { opacity: 1 },

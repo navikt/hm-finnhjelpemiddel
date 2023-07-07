@@ -4,15 +4,15 @@ import { Product, mapProduct, mapProducts } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import { BackButton } from '@/components/BackButton'
-import InformationTabs from '@/components/InformationTabs'
-import PhotoSlider from '@/components/PhotoSlider'
-import SimilarProducts from '@/components/SimilarProducts'
 import { Alert, Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import { AgreementInfo } from './AgreementInfo'
 import { AgreementSummary } from './AgreementSummary'
+import InformationTabs from './InformationTabs'
+import PhotoSlider from './PhotoSlider'
+import SimilarProducts from './SimilarProducts'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: productId } }: { params: { id: string } }) {

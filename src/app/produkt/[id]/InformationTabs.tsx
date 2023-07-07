@@ -12,7 +12,7 @@ import { sortAlphabetically } from '@/utils/sort-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import DefinitionList from './definition-list/DefinitionList'
+import DefinitionList from '../../../components/definition-list/DefinitionList'
 
 export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>

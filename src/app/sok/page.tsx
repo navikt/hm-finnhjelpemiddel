@@ -20,12 +20,14 @@ import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-uti
 import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
 import { Entries } from '@/utils/type-util'
 
-import CompareMenu from '@/components/CompareMenu'
 import MobileOverlay from '@/components/MobileOverlay'
-import SearchForm, { SearchFormResetHandle } from '@/components/SearchForm'
-import SearchResults from '@/components/SearchResults'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import Sidebar from '@/components/sidebar/Sidebar'
+
+import SearchForm, { SearchFormResetHandle } from './sidebar/SearchForm'
+import Sidebar from './sidebar/Sidebar'
+
+import CompareMenu from './CompareMenu'
+import SearchResults from './SearchResults'
 
 export default function Home() {
   const router = useRouter()

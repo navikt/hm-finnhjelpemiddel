@@ -96,18 +96,6 @@
     h2 {
       margin-bottom: $a-spacing-3;
     }
-
-    @include mixins.for-size(phone-only) {
-      .view-toggle {
-        margin-bottom: $a-spacing-3;
-      }
-    }
-  }
-
-  &__sort-select {
-    display: flex;
-    white-space: nowrap;
-    align-items: baseline;
   }
 
   &__list {
@@ -132,16 +120,16 @@
     border: 1px solid $a-border-action;
   }
 
-  &:focus-within {
-    box-shadow: $a-shadow-focus;
-  }
+  // Maybe we need it?
+  // &:focus-within {
+  //   box-shadow: $a-shadow-focus;
+  // }
 
-  &__header {
+  &__compare-checkbox {
     width: 100%;
     align-self: flex-start;
-    padding: $a-spacing-1 $a-spacing-5;
-    border-radius: $a-border-radius-large $a-border-radius-large 0 0;
-    background-color: $a-surface-selected;
+    padding-top: $a-spacing-3;
+    padding-left: $a-spacing-4;
     z-index: 2;
   }
 
@@ -149,10 +137,12 @@
     display: flex;
     gap: $a-spacing-3;
     padding: $a-spacing-4;
+    padding-top: $a-spacing-2;
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-4;
       padding: $a-spacing-5;
+      padding-top: $a-spacing-2;
     }
   }
 
@@ -284,4 +274,8 @@
       align-items: center;
     }
   }
+}
+
+.search-result.checked {
+  outline: 2px solid $a-border-selected;
 }
