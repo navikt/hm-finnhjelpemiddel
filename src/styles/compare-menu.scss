@@ -130,6 +130,12 @@
 
   &__chevron-button {
     align-self: center;
+    color: $a-blue-700;
+  }
+
+  &__chevron-button:hover {
+    color: $a-blue-700;
+    background-color: $a-surface-action-subtle;
   }
 
   &__buttons {
