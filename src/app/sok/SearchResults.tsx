@@ -8,7 +8,7 @@ import { Next } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
-import { useHydratedCompareStore } from '@/utils/compare-state-util'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
@@ -30,6 +30,7 @@ const SearchResults = ({
   productViewToggleRef: RefObject<HTMLButtonElement>
 }) => {
   const products = data?.flatMap((d) => d.products)
+  const [firstChecked, setFirstChecked] = useState<boolean>(true)
 
   useRestoreScroll('search-results', !isLoading)
 
@@ -81,7 +82,12 @@ const SearchResults = ({
       </header>
       <ol className="results__list" id="searchResults">
         {products.map((product) => (
-          <SearchResult key={product.id} product={product} />
+          <SearchResult
+            key={product.id}
+            product={product}
+            firstChecked={firstChecked}
+            setFirstChecked={setFirstChecked}
+          />
         ))}
       </ol>
       {!isLastPage && (
@@ -93,17 +99,29 @@ const SearchResults = ({
   )
 }
 
-const SearchResult = ({ product }: { product: Product }) => {
-  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+const SearchResult = ({
+  product,
+  firstChecked,
+  setFirstChecked,
+}: {
+  product: Product
+  firstChecked: boolean
+  setFirstChecked: (first: boolean) => void
+}) => {
+  const { setProductToCompare, removeProduct, productsToCompare, setCompareMenuState } = useHydratedCompareStore()
   const { setValue } = useFormContext<SearchData>()
 
-  const productFilters = Object.entries(product.filters)
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
   const toggleCompareProduct = () => {
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
+
+    if (firstChecked) {
+      setCompareMenuState(CompareMenuState.Open)
+      setFirstChecked(false)
+    }
   }
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
