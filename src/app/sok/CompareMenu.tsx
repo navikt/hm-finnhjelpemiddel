@@ -116,7 +116,9 @@ const CompareMenu = () => {
                 <MotionButton
                   variant="secondary"
                   icon={<TrashIcon aria-hidden />}
-                  onClick={() => resetProductToCompare()}
+                  onClick={() => {
+                    resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized)
+                  }}
                 >
                   Nullstill
                 </MotionButton>
