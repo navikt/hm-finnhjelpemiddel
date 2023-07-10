@@ -41,14 +41,11 @@ type SearchDataState = {
   setSearchData: (searchData: AtLeastOne<SearchData>) => void
   setFilter: (filterKey: keyof typeof FilterCategories, values: Array<any>) => void
   resetSearchData: () => void
-  setShowProductSeriesView: (value: boolean) => void
-  meta: { showProductSeriesView: boolean }
 }
 
 const useSearchStore = create<SearchDataState>()(
   persist(
     (set) => ({
-      meta: { showProductSeriesView: true },
       searchData: initialSearchDataState,
       setSearchData: (searchData) =>
         set((state) => {
@@ -62,7 +59,6 @@ const useSearchStore = create<SearchDataState>()(
           searchData: { ...state.searchData, filters: { ...state.searchData.filters, [filterKey]: values } },
         })),
       resetSearchData: () => set({ searchData: initialSearchDataState }),
-      setShowProductSeriesView: (value) => set({ meta: { showProductSeriesView: value } }),
     }),
     {
       name: 'search-data-storage',
@@ -82,7 +78,6 @@ export const useHydratedSearchStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        meta: { showProductSeriesView: false },
         searchData: initialSearchDataState,
         setSearchData: () => undefined,
         setFilter: () => undefined,

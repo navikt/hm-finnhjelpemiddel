@@ -1,9 +1,12 @@
 import { useState } from 'react'
+
 import Image from 'next/image'
+
 import { motion } from 'framer-motion'
-import { BodyShort, Button, Heading } from '@navikt/ds-react'
+
 import { Delete } from '@navikt/ds-icons'
-import { ImageIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Heading } from '@navikt/ds-react'
+
 import { smallImageLoader } from '../utils/image-util'
 import { Product } from '../utils/product-util'
 
@@ -15,27 +18,32 @@ type ProductCardProps = {
 const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
+  const [imageLoadingError, setImageLoadingError] = useState(false)
 
   return (
     <motion.div className="product-card">
       <div className="product-card__image">
         <div className="image">
-          {!hasImage && (
-            <ImageIcon
-              width="100%"
-              height="100%"
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
-          )}
-          {hasImage && (
+          {hasImage && !imageLoadingError ? (
             <Image
               loader={smallImageLoader}
               src={firstImageSrc}
+              onError={() => {
+                setImageLoadingError(true)
+              }}
               alt="Produktbilde"
               fill
               style={{ objectFit: 'contain' }}
             />
+          ) : (
+            <Image
+              src={'/assets/image-error.png'}
+              alt="Produktbilde"
+              fill
+              style={{ padding: '10px' }}
+              sizes="50vw"
+              priority
+            ></Image>
           )}
         </div>
         <div className="overlay">

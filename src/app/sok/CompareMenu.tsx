@@ -1,11 +1,14 @@
 import Link from 'next/link'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { Collapse, Expand, Next } from '@navikt/ds-icons'
-import { Button } from '@navikt/ds-react'
-import { Product } from '@/utils/product-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 
-import ProductCard from './ProductCard'
+import { AnimatePresence, Variants, motion } from 'framer-motion'
+
+import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Button } from '@navikt/ds-react'
+
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { Product } from '@/utils/product-util'
+
+import ProductCard from '@/components/ProductCard'
 
 const containerVariants: Variants = {
   hidden: { opacity: 1 },
@@ -47,9 +50,11 @@ const productVariants: Variants = {
 }
 
 const CompareMenu = () => {
-  const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct } = useHydratedCompareStore()
+  const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct, resetProductToCompare } =
+    useHydratedCompareStore()
 
   const MotionButton = motion(Button)
+  const toggleButtonText = `Produkter til sammenligning (${productsToCompare.length})`
 
   const openView = (
     <motion.div
@@ -64,10 +69,11 @@ const CompareMenu = () => {
         className="compare-menu__chevron-button"
         layoutId="chevron-button"
         variant="tertiary"
-        icon={<Expand aria-hidden />}
+        iconPosition="right"
+        icon={<ChevronDownIcon aria-hidden />}
         onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
       >
-        Skjul sammenligner
+        {toggleButtonText}
       </MotionButton>
 
       <motion.div key="content" variants={childVariants} className="compare-menu__container">
@@ -101,12 +107,21 @@ const CompareMenu = () => {
               </motion.ul>
             )}
             {productsToCompare.length > 1 && (
-              <motion.div>
+              <motion.div className="compare-menu__buttons">
                 <Link href="/sammenlign" passHref legacyBehavior>
-                  <Button as="a" icon={<Next aria-hidden />} iconPosition="right">
+                  <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
                     Sammenlign
                   </Button>
                 </Link>
+                <MotionButton
+                  variant="secondary"
+                  icon={<TrashIcon aria-hidden />}
+                  onClick={() => {
+                    resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized)
+                  }}
+                >
+                  Nullstill
+                </MotionButton>
               </motion.div>
             )}
             {productsToCompare.length === 1 && (
@@ -136,10 +151,11 @@ const CompareMenu = () => {
         className="compare-menu__chevron-button"
         layoutId="chevron-button"
         variant="tertiary"
-        icon={<Collapse aria-hidden />}
+        iconPosition="right"
+        icon={<ChevronUpIcon aria-hidden />}
         onClick={() => setCompareMenuState(CompareMenuState.Open)}
       >
-        Vis sammenligner
+        {toggleButtonText}
       </MotionButton>
     </motion.div>
   )

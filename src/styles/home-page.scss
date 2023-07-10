@@ -101,6 +101,7 @@
 
     @include mixins.for-size(desktop-up) {
       justify-content: flex-start;
+      max-width: calc(800px + 1rem);
     }
   }
 

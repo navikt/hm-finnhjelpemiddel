@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react'
-import { Button, Popover } from '@navikt/ds-react'
-import { Delete } from '@navikt/ds-icons'
+
 import { FilesIcon } from '@navikt/aksel-icons'
+import { Delete } from '@navikt/ds-icons'
+import { Button, Popover } from '@navikt/ds-react'
+
 import { FilterData } from '@/utils/api-util'
 
-import SearchForm, { SearchFormResetHandle } from '../SearchForm'
+import SearchForm, { SearchFormResetHandle } from './SearchForm'
 
 const Sidebar = ({
   filters,

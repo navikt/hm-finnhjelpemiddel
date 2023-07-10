@@ -1,13 +1,11 @@
 'use client'
-import { create } from 'zustand'
-import { useState, useEffect } from 'react'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import { Product } from './product-util'
 
-export enum CompareMode {
-  Active = 'Active',
-  Inactive = 'Inactive',
-}
+import { useEffect, useState } from 'react'
+
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
+
+import { Product } from './product-util'
 
 export enum CompareMenuState {
   Open = 'Open',
@@ -15,8 +13,6 @@ export enum CompareMenuState {
 }
 
 type ProductCompareState = {
-  compareMode: CompareMode
-  setCompareMode: (mode: CompareMode) => void
   compareMenuState: CompareMenuState
   setCompareMenuState: (state: CompareMenuState) => void
   productsToCompare: Product[]
@@ -28,10 +24,8 @@ type ProductCompareState = {
 export const useProductCompareStore = create<ProductCompareState>()(
   persist(
     (set) => ({
-      compareMode: CompareMode.Inactive,
-      compareMenuState: CompareMenuState.Open,
+      compareMenuState: CompareMenuState.Minimized,
       productsToCompare: [],
-      setCompareMode: (mode) => set(() => ({ compareMode: mode })),
       setCompareMenuState: (menuState) => set(() => ({ compareMenuState: menuState })),
       setProductToCompare: (product) =>
         set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),
@@ -59,10 +53,8 @@ export const useHydratedCompareStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        compareMode: CompareMode.Inactive,
         compareMenuState: CompareMenuState.Minimized,
         productsToCompare: [],
-        setCompareMode: () => undefined,
         setCompareMenuState: () => undefined,
         setProductToCompare: () => undefined,
         removeProduct: () => undefined,

@@ -1,18 +1,22 @@
 'use client'
 
-import '@/styles/globals.scss'
-
 import React, { useEffect, useState } from 'react'
-import classNames from 'classnames'
-import NextLink from 'next/link'
+
 import Image from 'next/image'
+import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import Footer from '@/components/layout/Footer'
-import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
-import reportAccessibility from '@/utils/reportAccessibility'
+import classNames from 'classnames'
+
 import { ExclamationmarkTriangleIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Link } from '@navikt/ds-react'
+
+import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
+import reportAccessibility from '@/utils/reportAccessibility'
+
+import Footer from '@/components/layout/Footer'
+
+import '@/styles/globals.scss'
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -60,18 +64,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
+        <aside className="wip-banner">
+          <div>
+            <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
+            <BodyLong>
+              <b>Hei!</b> Dette er bare en prototype til testing og utvikling.{' '}
+              <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link> om du
+              har kommet feil.
+            </BodyLong>
+          </div>
+        </aside>
         <header>
           <nav className="nav-topp">
-            <aside className="wip-banner">
-              <div>
-                <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
-                <BodyLong>
-                  <b>Hei!</b> Dette er bare en prototype til testing og utvikling.{' '}
-                  <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link>{' '}
-                  om du har kommet feil.
-                </BodyLong>
-              </div>
-            </aside>
             <div className="nav-topp__content">
               <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
               <PageNavigation />
