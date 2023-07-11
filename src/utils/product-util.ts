@@ -34,7 +34,7 @@ export interface Product {
   documents: Document[]
   supplierId: string
   supplierRef: string
-  seriesId: string | null
+  seriesId: string
   filters: { [key: string]: string | number }
   expired: string
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
@@ -70,7 +70,7 @@ interface AgreementInfo {
   postIdentifier: string | null
   postTitle: string
 }
-
+// TODO: Add error handling when data is not as expected
 export const mapProduct = (source: ProductSourceResponse): Product => {
   return {
     id: source.id,

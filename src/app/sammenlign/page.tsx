@@ -3,8 +3,9 @@
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import { getSeries } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { Product, toSearchQueryString } from '@/utils/product-util'
+import { Product, mapProducts, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { toValueAndUnit } from '@/utils/string-util'
@@ -13,15 +14,25 @@ import ProductCard from '@/components/ProductCard'
 import { BodyShort, ChevronLeftIcon, Heading, LinkPanel, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-export default function ComparePage() {
-  const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
-  const { searchData } = useHydratedSearchStore()
+export default async function ComparePage({}) {
+  // const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
+  // const { searchData } = useHydratedSearchStore()
   const router = useRouter()
-  const href = '/sok' + toSearchQueryString(searchData)
+  const productsToCompare: Product[] = []
 
+  const href = '/sok'
+  // const href = '/sok' + toSearchQueryString(searchData)
+
+  let seriesProducts = null
+  if (productsToCompare.length > 0) {
+    const oneprod = productsToCompare[0]
+    seriesProducts = mapProducts(await getSeries(String(oneprod.seriesId))).filter((prod) => prod.id !== oneprod.id)
+  }
+
+  console.log('allllllle', seriesProducts)
   const handleClick = (event: any) => {
     event.preventDefault()
-    setCompareMenuState(CompareMenuState.Open)
+    // setCompareMenuState(CompareMenuState.Open)
     router.push(href)
   }
 
@@ -34,7 +45,7 @@ export default function ComparePage() {
 
         {productsToCompare.length === 0 && (
           <section>
-            <LinkPanel href={'/sok' + toSearchQueryString(searchData)} onClick={handleClick} border>
+            <LinkPanel href={href} onClick={handleClick} border>
               <LinkPanel.Title>Legg til produkter for sammenligning</LinkPanel.Title>
               <LinkPanel.Description>
                 For å kunne sammenligne produkter må de velges til sammenligning på søkesiden
@@ -43,7 +54,7 @@ export default function ComparePage() {
           </section>
         )}
         {productsToCompare.length > 0 && (
-          <CompareTable productsToCompare={productsToCompare} removeProduct={removeProduct} href={href}></CompareTable>
+          <CompareTable productsToCompare={productsToCompare} href={href}></CompareTable>
         )}
       </div>
     </AnimateLayout>
@@ -52,11 +63,11 @@ export default function ComparePage() {
 
 const CompareTable = ({
   productsToCompare,
-  removeProduct,
+  // removeProduct,
   href,
 }: {
   productsToCompare: Product[]
-  removeProduct: (product: Product) => void
+  // removeProduct: (product: Product) => void
   href: string
 }) => {
   const allDataKeys = productsToCompare
@@ -98,7 +109,7 @@ const CompareTable = ({
             {productsToCompare.length > 0 &&
               productsToCompare.map((product) => (
                 <Table.ColumnHeader key={'id-' + product.id}>
-                  <ProductCard product={product} removeProduct={removeProduct} />
+                  <ProductCard product={product} />
                 </Table.ColumnHeader>
               ))}
           </Table.Row>

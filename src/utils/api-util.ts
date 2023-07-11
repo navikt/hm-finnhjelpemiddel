@@ -20,7 +20,8 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { Product, mapProducts } from './product-util'
+import { Product, mapProduct, mapProducts } from './product-util'
+import { SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -737,6 +738,38 @@ export async function getSeries(seriesId: string) {
     }),
   })
   return res.json()
+}
+
+export async function getPluralSeries(seriesIds: string[]) {
+  const query = {
+    bool: {
+      must: [{ terms: { seriesIds } }, { exists: { field: 'seriesId' } }],
+    },
+  }
+
+  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      size: 1000,
+      aggs: {
+        series: {
+          term: {
+            field: 'seriesId',
+            size: 150,
+          },
+        },
+      },
+    }),
+  })
+  return res.json()
+}
+
+export const mapASD = (data: any): Product[] => {
+  return data.aggregations.series.buckets.map((hit: any) => hit.hits.map((hit: any) => mapProduct(hit._source)))
 }
 
 export async function getProductsInPost(postIdentifier: string) {

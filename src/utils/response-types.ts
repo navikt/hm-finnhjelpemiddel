@@ -6,6 +6,7 @@ export interface SearchResponse {
     total: object
     hits: Hit[]
   }
+  aggregations: object
 }
 
 export interface Hit {
@@ -35,7 +36,7 @@ export interface ProductSourceResponse {
   isoCategoryText: string
   accessory: boolean
   sparepart: boolean
-  seriesId: string | null
+  seriesId: string
   data: Array<TechDataResponse>
   media: MediaResponse[]
   created: string
