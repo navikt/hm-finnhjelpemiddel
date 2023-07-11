@@ -24,10 +24,6 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const env = process.env.NODE_ENV
 
-  if (env == 'production') {
-    hotjar.initialize(118350, 6)
-  }
-
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
   }, [pathname])
@@ -37,6 +33,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       initAmplitude()
       logOversiktForsideVist()
+      if (env == 'production') {
+        hotjar.initialize(118350, 6)
+      }
     }
   }, [])
 
