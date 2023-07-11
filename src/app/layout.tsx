@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { hotjar } from 'react-hotjar'
 
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -21,6 +22,11 @@ import '@/styles/globals.scss'
 function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
+  const env = process.env.NODE_ENV
+
+  if (env == 'production') {
+    hotjar.initialize(118350, 6)
+  }
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
