@@ -12,10 +12,10 @@ import { Product } from '../utils/product-util'
 
 type ProductCardProps = {
   product: Product
-  // removeProduct: (product: Product) => void
+  removeProduct: (product: Product) => void
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
   const [imageLoadingError, setImageLoadingError] = useState(false)
@@ -49,7 +49,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="overlay">
           <Button
             className="delete-button"
-            onClick={() => {}}
+            onClick={() => removeProduct(product)}
             icon={<Delete title="Fjern produkt fra sammenligning" />}
           />
         </div>

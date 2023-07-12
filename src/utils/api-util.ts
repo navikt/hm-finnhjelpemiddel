@@ -78,6 +78,7 @@ export type FetchResponse = {
   filters: FilterData
 }
 
+//SWR fetcher
 export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
   const {
@@ -740,32 +741,46 @@ export async function getSeries(seriesId: string) {
   return res.json()
 }
 
-export async function getPluralSeries(seriesIds: string[]) {
-  const query = {
-    bool: {
-      must: [{ terms: { seriesIds } }, { exists: { field: 'seriesId' } }],
-    },
-  }
+//SWR fetcher
+export const fetchSeries = (seriesIds: string[]): Promise<any> => {
+  console.log('fetch:', seriesIds)
 
-  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+  return fetch('/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      query,
-      size: 1000,
-      aggs: {
-        series: {
-          term: {
-            field: 'seriesId',
-            size: 150,
+      size: 0,
+      query: {
+        terms: {
+          seriesId: seriesIds,
+        },
+      },
+      aggregations: {
+        series_buckets: {
+          composite: {
+            sources: [
+              {
+                seriesId: {
+                  terms: {
+                    field: 'seriesId',
+                  },
+                },
+              },
+            ],
+          },
+          aggregations: {
+            products: {
+              top_hits: {
+                size: 150,
+              },
+            },
           },
         },
       },
     }),
-  })
-  return res.json()
+  }).then((res) => res.json())
 }
 
 export const mapASD = (data: any): Product[] => {
