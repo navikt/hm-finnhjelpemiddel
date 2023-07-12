@@ -69,7 +69,6 @@ type FetchProps = {
   from: number
   to: number
   searchData: SearchData
-  isProductSeriesView: boolean
 }
 
 export type FetchResponse = {
@@ -78,8 +77,7 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-//SWR fetcher
-export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
   const {
     lengdeCM,
@@ -200,11 +198,9 @@ export const fetchProducts = ({ from, to, searchData, isProductSeriesView }: Fet
       track_scores: true,
       sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
-      ...(isProductSeriesView && {
-        collapse: {
-          field: 'attributes.series',
-        },
-      }),
+      collapse: {
+        field: 'seriesId',
+      },
       post_filter: {
         bool: {
           filter: allFilters,
@@ -803,7 +799,7 @@ export async function getProductsInPost(postIdentifier: string) {
       query,
       size: 100,
       collapse: {
-        field: 'attributes.series',
+        field: 'seriesId',
       },
     }),
   })
