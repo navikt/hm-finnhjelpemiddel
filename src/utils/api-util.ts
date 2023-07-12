@@ -198,7 +198,7 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
       sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
       collapse: {
-        field: 'attributes.series',
+        field: 'seriesId',
       },
       post_filter: {
         bool: {
@@ -752,7 +752,7 @@ export async function getProductsInPost(postIdentifier: string) {
       query,
       size: 100,
       collapse: {
-        field: 'attributes.series',
+        field: 'seriesId',
       },
     }),
   })
