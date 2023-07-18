@@ -1,10 +1,12 @@
 import React from 'react'
+
 import Image from 'next/image'
 import NextLink from 'next/link'
+
 import { BodyShort, Link } from '@navikt/ds-react'
 
 const Footer = () => (
-  <footer className="nav-bunn">
+  <footer className="nav-bunn" aria-label="Footer">
     <div className="nav-bunn__content">
       <div className="nav-bunn__info">
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />

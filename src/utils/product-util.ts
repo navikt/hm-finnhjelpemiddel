@@ -1,20 +1,24 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
 
 import queryString from 'querystring'
+import { NULL } from 'sass'
 
 import { getPostTitle } from './agreement-util'
 import { SearchParams, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
+  BucketResponse,
   Hit,
   MediaResponse,
   MediaType,
   ProductSourceResponse,
   SearchResponse,
+  SeriesAggregationResponse,
   TechDataResponse,
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
+import { capitalize } from './string-util'
 
 export interface Product {
   id: string
@@ -40,6 +44,48 @@ export interface Product {
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
+//id = seriesId
+export interface ProductWithVariants {
+  id: string
+  title: string
+  attributes: Attributes
+  applicableAgreementInfo: AgreementInfo | null
+  variantCount: number
+  variants: ProductVariant[]
+  compareData: ComparingData
+  isoCategory: string
+  isoCategoryTitle: string
+  isoCategoryText: string
+  accessory: boolean
+  sparepart: boolean
+  photos: Photo[]
+  documents: Document[]
+  supplierId: string
+  /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
+}
+
+export interface ComparingData {
+  techDataRange: TechDataRange
+  agreementRank: number | null
+}
+
+export interface TechDataRange {
+  [key: string]: { minValue: string; maxValue: string | null; unit: string }
+}
+
+export interface ProductVariant {
+  id: string
+  hmsArtNr: string | null
+  supplierRef: string
+  articleName: string
+  techData: TechData
+  hasAgreement: boolean
+  agreementInfo: AgreementInfo | null
+  filters: { [key: string]: string | number }
+  expired: string
+  /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
+}
+
 export interface Photo {
   uri: string
 }
@@ -60,9 +106,10 @@ interface Attributes {
   shortdescription?: string
   text?: string
   bestillingsordning?: boolean
+  commonCharacteristics?: { key: string; value: string }[]
 }
 
-interface AgreementInfo {
+export interface AgreementInfo {
   id: string
   identifier: string | null
   rank: number
@@ -70,6 +117,7 @@ interface AgreementInfo {
   postIdentifier: string | null
   postTitle: string
 }
+
 // TODO: Add error handling when data is not as expected
 export const mapProduct = (source: ProductSourceResponse): Product => {
   return {
@@ -91,6 +139,95 @@ export const mapProduct = (source: ProductSourceResponse): Product => {
     seriesId: source.seriesId,
     supplierId: source.supplier?.id,
     supplierRef: source.supplierRef,
+    filters: source.filters,
+    expired: source.expired,
+    /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
+  }
+}
+
+export const mapProductsWithVariants = (data: SeriesAggregationResponse): ProductWithVariants[] => {
+  const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
+    mapProductWithVariants(bucket.products.hits.hits, bucket.key.seriesId)
+  )
+  return buckets
+}
+
+export const mapProductWithVariants = (hits: Hit[], seriesId: string): ProductWithVariants => {
+  const filteredOnSeriesId = hits.filter((hit) => hit._source.seriesId === seriesId)
+  if (filteredOnSeriesId.length != hits.length) {
+    console.log(
+      'Something is wrong: i get %d on requested series id and %d that do not match',
+      filteredOnSeriesId.length,
+      hits.length
+    )
+  }
+
+  let applicableAgreementInfo: AgreementInfo | null = null
+  const variants = hits.map((hit) => {
+    if (
+      hit._source.agreementInfo &&
+      (applicableAgreementInfo === null || hit._source.agreementInfo.rank < applicableAgreementInfo.rank)
+    ) {
+      applicableAgreementInfo = mapAgreementInfo(hit._source.agreementInfo)
+    }
+
+    return mapProductVariant(hit._source)
+  })
+
+  const variantsCopy = variants
+  const allTechKeys = [...new Set(variantsCopy.flatMap((variant) => Object.keys(variant.techData)))]
+
+  let commonCharacteristics: { key: string; value: string }[] = []
+  for (const key of allTechKeys) {
+    const fieldValues = variants
+      .map((obj) => {
+        if (obj.techData[key] && obj.techData[key].unit === '') {
+          return obj.techData[key].value
+        }
+      })
+      .filter((field) => field)
+    let uniqueValues = new Set(fieldValues)
+    const [first] = uniqueValues
+    if (uniqueValues.size == 1 && first) {
+      commonCharacteristics.push({
+        key: key,
+        value: first.length > 1 ? capitalize(first) : first,
+      })
+    }
+  }
+  // TODO: Should we use the first variant? Values should be the same but should we check that they are?
+  const firstVariant = hits[0]._source
+  return {
+    id: firstVariant.seriesId,
+    title: firstVariant.title,
+    attributes: { ...firstVariant.attributes, commonCharacteristics },
+    applicableAgreementInfo: applicableAgreementInfo,
+    variantCount: hits.length,
+    variants: variants,
+    compareData: {
+      techDataRange: {},
+      agreementRank: null,
+    },
+    isoCategory: firstVariant.isoCategory,
+    isoCategoryTitle: firstVariant.isoCategoryTitle,
+    isoCategoryText: firstVariant.isoCategoryText,
+    accessory: firstVariant.accessory,
+    sparepart: firstVariant.sparepart,
+    photos: mapPhotoInfo(firstVariant.media),
+    documents: mapDocuments(firstVariant.media),
+    supplierId: firstVariant.supplier?.id,
+  }
+}
+
+export const mapProductVariant = (source: ProductSourceResponse): ProductVariant => {
+  return {
+    id: source.id,
+    hmsArtNr: source.hmsArtNr,
+    supplierRef: source.supplierRef,
+    articleName: source.articleName,
+    techData: mapTechDataDict(source.data),
+    hasAgreement: source.hasAgreement,
+    agreementInfo: source.agreementInfo ? mapAgreementInfo(source.agreementInfo) : null,
     filters: source.filters,
     expired: source.expired,
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */

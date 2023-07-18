@@ -1,15 +1,15 @@
 import { mapAgreement } from '@/utils/agreement-util'
-import { getAgreement, getProduct, getProductsInPost, getSeries, getSupplier } from '@/utils/api-util'
-import { Product, mapProduct, mapProducts } from '@/utils/product-util'
+import { getAgreement, getProduct, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
+import { ProductWithVariants, mapProduct, mapProductWithVariants, mapProducts } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
+import AgreementIcon from '@/components/AgreementIcon'
 import { BackButton } from '@/components/BackButton'
 import { Alert, Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import { AgreementInfo } from './AgreementInfo'
-import { AgreementSummary } from './AgreementSummary'
 import InformationTabs from './InformationTabs'
 import PhotoSlider from './PhotoSlider'
 import SimilarProducts from './SimilarProducts'
@@ -18,10 +18,14 @@ import './product-page.scss'
 export default async function ProduktPage({ params: { id: productId } }: { params: { id: string } }) {
   const product = mapProduct((await getProduct(productId))._source)
   const supplier = mapSupplier((await getSupplier(String(product.supplierId)))._source)
-  const seriesProducts = mapProducts(await getSeries(String(product.seriesId))).filter((prod) => prod.id !== product.id)
+  const productWithVariants = mapProductWithVariants(
+    (await getProductWithVariants(String(product.seriesId))).hits.hits,
+    product.seriesId
+  )
 
   const agreement =
-    product.agreementInfo?.id && mapAgreement((await getAgreement(String(product.agreementInfo?.id)))._source)
+    productWithVariants.applicableAgreementInfo &&
+    mapAgreement((await getAgreement(productWithVariants.applicableAgreementInfo.id))._source)
 
   const productsOnPost =
     product.agreementInfo &&
@@ -37,33 +41,56 @@ export default async function ProduktPage({ params: { id: productId } }: { param
     <>
       <BackButton />
       <AnimateLayout>
-        <article className="product-info">
-          <section className="product-info__top">
+        <article className="product-info" aria-label="Produktinformasjon">
+          <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
             <div className="product-info__top-content max-width">
-              <aside>{product.photos && <PhotoSlider photos={product.photos} />}</aside>
+              <div>{productWithVariants.photos && <PhotoSlider photos={productWithVariants.photos} />}</div>
               <div className="product-info__top-right">
-                <Heading level="1" size="large" spacing>
-                  {product.attributes.series ? product.attributes.series : product.title}
-                </Heading>
-                <AgreementSummary product={product} />
-                <div className="product-info__expired-propducts">
-                  {new Date(product.expired).getTime() <= Date.now() && (
-                    <Alert variant="warning">Dette produktet er utgått</Alert>
+                <div className="product-info__heading-container">
+                  <Heading level="1" size="large" spacing>
+                    {productWithVariants.title}
+                  </Heading>
+                  {productWithVariants.applicableAgreementInfo && (
+                    <AgreementIcon rank={productWithVariants.applicableAgreementInfo.rank} />
                   )}
                 </div>
-                <KeyInformation product={product} supplierName={supplier ? supplier.name : null} />
+                <div className="product-info__expired-propducts">
+                  {/* TODO: check all expired dates */}
+                  {new Date(productWithVariants.variants[0].expired).getTime() <= Date.now() ? (
+                    <Alert variant="warning">Dette produktet er utgått</Alert>
+                  ) : (
+                    ''
+                  )}
+                </div>
+                <KeyInformation
+                  product={productWithVariants}
+                  supplierName={supplier ? supplier.name : null}
+                  agreementTitle={agreement ? agreement.title : null}
+                />
               </div>
             </div>
           </section>
 
-          <section className="product-info__tabs max-width">
-            <InformationTabs product={product} supplier={supplier} />
+          <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
+            <InformationTabs product={productWithVariants} supplier={supplier} />
           </section>
-          {seriesProducts.length > 0 && (
-            <section className="product-info__similar-products max-width">
-              <SimilarProducts mainProduct={product} seriesProducts={seriesProducts} />
-            </section>
-          )}
+          <section
+            className="product-info__characteristics max-width"
+            aria-label="Produktegenskaper som alle produktvariantene har til felles"
+          >
+            <Heading level="2" size="medium" spacing>
+              Produktegenskaper
+            </Heading>
+            <TechnicalSpecifications product={productWithVariants} />
+          </section>
+
+          <section
+            className="product-info__similar-products max-width"
+            aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
+          >
+            <SimilarProducts product={productWithVariants} />
+          </section>
+
           {agreement && <AgreementInfo product={product} agreement={agreement} productsOnPost={productsOnPost} />}
         </article>
       </AnimateLayout>
@@ -71,24 +98,55 @@ export default async function ProduktPage({ params: { id: productId } }: { param
   )
 }
 
-const KeyInformation = ({ product, supplierName }: { product: Product; supplierName: string | null }) => (
+const KeyInformation = ({
+  product,
+  supplierName,
+  agreementTitle,
+}: {
+  product: ProductWithVariants
+  supplierName: string | null
+  agreementTitle: string | null
+}) => (
   <div className="product-info__key-information">
     <Heading level="2" size="medium">
       Nøkkelinfo
     </Heading>
     <DefinitionList>
-      <DefinitionList.Term>HMS-nr.</DefinitionList.Term>
-      <DefinitionList.Definition>{product.hmsArtNr ? product.hmsArtNr : '-'}</DefinitionList.Definition>
+      {product.applicableAgreementInfo && <DefinitionList.Term>Rangering</DefinitionList.Term>}
+      {product.applicableAgreementInfo && (
+        <DefinitionList.Definition>{product.applicableAgreementInfo?.rank}</DefinitionList.Definition>
+      )}
+      {product.applicableAgreementInfo && <DefinitionList.Term>Delkontrakt</DefinitionList.Term>}
+      {product.applicableAgreementInfo && (
+        <DefinitionList.Definition>
+          {'Nr ' + product.applicableAgreementInfo?.postNr + ': ' + product.applicableAgreementInfo?.postTitle ??
+            product.attributes?.text}
+        </DefinitionList.Definition>
+      )}
+
+      {agreementTitle && <DefinitionList.Term>Avtale</DefinitionList.Term>}
+      {agreementTitle && <DefinitionList.Definition>{agreementTitle}</DefinitionList.Definition>}
       <DefinitionList.Term>Leverandør</DefinitionList.Term>
       <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-      <DefinitionList.Term>Lev-artnr.</DefinitionList.Term>
-      <DefinitionList.Definition>{product.supplierRef ? product.supplierRef : '-'}</DefinitionList.Definition>
-      <DefinitionList.Term>ISO-klassifisering</DefinitionList.Term>
-      <DefinitionList.Definition>
-        {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}
-      </DefinitionList.Definition>
-      <DefinitionList.Term>På bestillingsordning</DefinitionList.Term>
+      <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
       <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
     </DefinitionList>
   </div>
 )
+
+const TechnicalSpecifications = ({ product }: { product: ProductWithVariants }) => {
+  return (
+    <DefinitionList>
+      <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
+      <DefinitionList.Definition>
+        {product.isoCategoryTitle + '(' + product.isoCategory + ')'}
+      </DefinitionList.Definition>
+      {product.attributes?.commonCharacteristics?.map((data) => (
+        <>
+          <DefinitionList.Term>{data.key}</DefinitionList.Term>
+          <DefinitionList.Definition>{data.value}</DefinitionList.Definition>
+        </>
+      ))}
+    </DefinitionList>
+  )
+}

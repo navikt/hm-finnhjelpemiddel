@@ -1,45 +1,31 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-
-import Link from 'next/link'
+import { useState } from 'react'
 
 import classNames from 'classnames'
 
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Switch, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Heading, Table } from '@navikt/ds-react'
 
-import { Product } from '@/utils/product-util'
+import { ProductVariant, ProductWithVariants } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
-import { toValueAndUnit } from '@/utils/string-util'
-
-type SimilarProductsProps = {
-  mainProduct: Product
-  seriesProducts: Product[]
-}
+import { capitalize, toValueAndUnit } from '@/utils/string-util'
 
 type SortColumns = {
-  orderBy: string
+  orderBy: string | null
   direction: 'ascending' | 'descending'
 }
 
-const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) => {
-  const [keyColumnWidth, setKeyColumnWidth] = useState(0)
+const SimilarProducts = ({ product }: { product: ProductWithVariants }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })
-  const [showAllRows, setShowAllRows] = useState<boolean>(false)
-  const colHeadRef = useRef(null)
 
-  useEffect(() => {
-    setKeyColumnWidth(colHeadRef.current ? colHeadRef.current['offsetWidth'] : 0)
-  }, [colHeadRef, keyColumnWidth])
-
-  const sortColumnsByRowKey = (products: Product[]) => {
-    return products.sort((productA, productB) => {
+  const sortColumnsByRowKey = (variants: ProductVariant[]) => {
+    return variants.sort((variantA, variantB) => {
       if (sortColumns.orderBy === 'HMS') {
-        if (productA.hmsArtNr && productB.hmsArtNr) {
+        if (variantA.hmsArtNr && variantB.hmsArtNr) {
           return sortIntWithStringFallback(
-            productA.hmsArtNr,
-            productB.hmsArtNr,
+            variantA.hmsArtNr,
+            variantB.hmsArtNr,
             sortColumns?.direction === 'descending'
           )
         }
@@ -47,31 +33,30 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
       }
       if (
         sortColumns.orderBy &&
-        productA.techData[sortColumns.orderBy].value &&
-        productB.techData[sortColumns.orderBy].value
+        variantA.techData[sortColumns.orderBy].value &&
+        variantB.techData[sortColumns.orderBy].value
       ) {
         return sortIntWithStringFallback(
-          productA.techData[sortColumns.orderBy].value,
-          productB.techData[sortColumns.orderBy].value,
+          variantA.techData[sortColumns.orderBy].value,
+          variantB.techData[sortColumns.orderBy].value,
           sortColumns.direction === 'descending'
         )
       } else return -1
     })
   }
 
-  let sortedByKey = sortColumnsByRowKey(seriesProducts)
-  const allProducts = [mainProduct, ...sortedByKey]
-  const allDataKeys = allProducts
-    .flatMap((prod) => Object.keys(prod.techData))
-    .filter((v, i, a) => a.indexOf(v) === i)
-    .sort()
+  let sortedByKey = sortColumnsByRowKey(product.variants)
+
+  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].filter(
+    (key) => !product.attributes.commonCharacteristics?.find((common) => common.key === key)
+  )
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
     ...allDataKeys.map((key) => ({
-      [key]: allProducts.map((product) =>
-        product.techData[key] !== undefined
-          ? toValueAndUnit(product.techData[key].value, product.techData[key].unit)
+      [key]: product.variants.map((variant) =>
+        variant.techData[key] !== undefined
+          ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
       ),
     }))
@@ -82,13 +67,6 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     uniqueValues.delete('-')
     return uniqueValues.size > 1
   }
-
-  const rowsWithDifferentValues: { [key: string]: string[] } = Object.fromEntries(
-    Object.entries(rows).filter(([key, row]) => hasDifferentValues({ row }))
-  )
-  const rowsWithSameValues: { [key: string]: string[] } = Object.fromEntries(
-    Object.entries(rows).filter(([key, row]) => !hasDifferentValues({ row }))
-  )
 
   const handleSortRow = (sortKey: string) => {
     setSortColumns({
@@ -114,160 +92,82 @@ const SimilarProducts = ({ mainProduct, seriesProducts }: SimilarProductsProps) 
     )
   }
 
+  const variantTitle = (title: string) => {
+    const replacedStr = title.replace(product.title, '')
+    return replacedStr === '' ? '-' : replacedStr
+  }
+
   return (
     <>
-      <Heading id="product_variants" level="3" size="medium">
+      <Heading id="product_variants" level="3" size="medium" spacing>
         Produktvarianter
       </Heading>
-      <Heading level="4" size="xsmall">
-        Sammenlign med de andre variantene av produktet
-      </Heading>
-      <Switch
-        size="small"
-        checked={showAllRows}
-        onChange={() => {
-          setShowAllRows(!showAllRows)
-        }}
-      >
-        Vis alle egenskaper
-      </Switch>
-      <div className={classNames('comparing-table', 'comparing-table__two-sticky-columns')}>
+      <BodyShort>
+        Produktet finnes i flere varianter, under finner man en oversikt over de forskjellige. Radene hvor
+        produktvariantene har forskjellige verdier kan sorteres og vil fremheves når de er sortert.
+      </BodyShort>
+
+      <div className="comparing-table">
         <Table>
           <Table.Header>
             <Table.Row key="hms-row">
-              <Table.ColumnHeader ref={colHeadRef}>
-                <Button
-                  className="sort-button"
-                  size="small"
-                  style={{ textAlign: 'left' }}
-                  variant="tertiary"
-                  onClick={() => handleSortRow('HMS')}
-                  icon={iconBasedOnState('HMS')}
-                >
-                  HMS-nr.
-                </Button>
-              </Table.ColumnHeader>
-              <Table.ColumnHeader style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}>
-                {mainProduct.hmsArtNr !== undefined ? mainProduct.hmsArtNr : '-'}
-              </Table.ColumnHeader>
-              {sortedByKey.map((product) => (
-                <Table.ColumnHeader key={'Hms-' + product.id}>
-                  <Link href={`/produkt/${product.id}#product_variants`}>{product.hmsArtNr}</Link>
-                </Table.ColumnHeader>
+              <Table.ColumnHeader>Tittel</Table.ColumnHeader>
+              {sortedByKey.map((variant) => (
+                <Table.ColumnHeader key={variant.id}>{variantTitle(variant.articleName)}</Table.ColumnHeader>
               ))}
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {Object.keys(rowsWithDifferentValues).length > 0 &&
-              Object.entries(rowsWithDifferentValues).map(([key, row], i) => (
-                <Table.Row
-                  key={key + 'row'}
-                  className={Object.keys(rowsWithDifferentValues).length == i + 1 ? 'row-with-different-values' : 'asd'}
-                >
-                  <Table.HeaderCell>
-                    <Button
-                      className="sort-button"
-                      size="small"
-                      style={{ textAlign: 'left' }}
-                      variant="tertiary"
-                      onClick={() => handleSortRow(key)}
-                      icon={iconBasedOnState(key)}
-                    >
-                      {key}
-                    </Button>
-                  </Table.HeaderCell>
-                  {row.map((value, i) =>
-                    i == 0 ? (
-                      <Table.DataCell
-                        key={key + '-' + i}
-                        style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}
-                      >
-                        {value}
-                      </Table.DataCell>
-                    ) : (
-                      <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
-                    )
-                  )}
-                </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.hmsArtNr}</Table.DataCell>
               ))}
-
-            {showAllRows &&
-              Object.keys(rowsWithSameValues).length > 0 &&
-              Object.entries(rowsWithSameValues).map(([key, row]) => (
-                <Table.Row key={key + 'row'}>
-                  <Table.HeaderCell>
-                    <p>{key}</p>
-                  </Table.HeaderCell>
-                  {row.map((value, i) =>
-                    i == 0 ? (
-                      <Table.DataCell
-                        key={key + '-' + i}
-                        style={{ left: keyColumnWidth > 0 ? keyColumnWidth : 'auto' }}
-                      >
-                        {value}
-                      </Table.DataCell>
-                    ) : (
-                      <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
-                    )
-                  )}
-                </Table.Row>
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
               ))}
+            </Table.Row>
+            {Object.keys(rows).length > 0 &&
+              Object.entries(rows).map(([key, row], i) => {
+                const isSortableRow = hasDifferentValues({ row })
+                return (
+                  <Table.Row
+                    key={key + 'row' + i}
+                    className={classNames(
+                      { 'comparing-table__sorted-row': key === sortColumns.orderBy },
+                      { 'comparing-table__sortable-row': isSortableRow }
+                    )}
+                  >
+                    <Table.HeaderCell>
+                      {isSortableRow ? (
+                        <Button
+                          className="sort-button"
+                          size="xsmall"
+                          style={{ textAlign: 'left' }}
+                          variant="tertiary"
+                          onClick={() => handleSortRow(key)}
+                          iconPosition="right"
+                          icon={iconBasedOnState(key)}
+                        >
+                          {key}
+                        </Button>
+                      ) : (
+                        key
+                      )}
+                    </Table.HeaderCell>
+                    {row.map((value, i) => (
+                      <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )
+              })}
           </Table.Body>
         </Table>
       </div>
     </>
-  )
-}
-
-const SimilarProductsSlider = ({ seriesProducts }: { seriesProducts: Product[] }) => {
-  const numberOfProducts = seriesProducts.length
-  const range = numberOfProducts >= 4 ? 4 : numberOfProducts
-  let [firstActive, setFirstActive] = useState(0)
-
-  const prevProduct = () => {
-    const prevIndex = firstActive !== 0 ? firstActive - 1 : 0
-    setFirstActive(prevIndex)
-  }
-
-  const nextProduct = () => {
-    const nextIndex = firstActive !== numberOfProducts - 1 ? firstActive + 1 : 0
-    setFirstActive(nextIndex)
-  }
-  return (
-    <div className="similar-products__slider">
-      {firstActive > 0 && (
-        <Button
-          variant="tertiary-neutral"
-          className="arrow"
-          onClick={() => {
-            prevProduct()
-          }}
-          icon={<ChevronLeftIcon title="left arrow" height={30} width={30} />}
-        />
-      )}
-      <div className="similar-products__cards">
-        {[...Array(range).keys()].map((index) => {
-          const product = seriesProducts[firstActive + index]
-          return (
-            <div key={index} className="similar-products__card">
-              <p>{product.title}</p>
-              <p>{product.attributes?.articlename}</p>
-              <Link href={`/produkt/${product.id}`}>Les mer</Link>
-            </div>
-          )
-        })}
-      </div>
-      {numberOfProducts - (firstActive + range) > 0 && (
-        <Button
-          variant="tertiary-neutral"
-          className="arrow"
-          onClick={() => {
-            nextProduct()
-          }}
-          icon={<ChevronRightIcon title="right arrow" height={30} width={30} />}
-        />
-      )}
-    </div>
   )
 }
 

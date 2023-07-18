@@ -100,18 +100,20 @@ function Home() {
             </div>
             {showAllAgreements ? (
               <Button
+                className="home-page__chevron-button"
                 variant="tertiary"
                 iconPosition="right"
-                icon={<ChevronUpIcon></ChevronUpIcon>}
+                icon={<ChevronUpIcon aria-hidden />}
                 onClick={() => setShowAllAgreements(false)}
               >
                 Skjul visning av alle avtaler
               </Button>
             ) : (
               <Button
+                className="home-page__chevron-button"
                 variant="tertiary"
                 iconPosition="right"
-                icon={<ChevronDownIcon></ChevronDownIcon>}
+                icon={<ChevronDownIcon aria-hidden />}
                 onClick={() => setShowAllAgreements(true)}
               >
                 Vis alle avtaler
