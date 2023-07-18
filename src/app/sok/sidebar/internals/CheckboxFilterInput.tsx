@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+
 import { Button, Checkbox, CheckboxGroup, Detail } from '@navikt/ds-react'
-import { FilterCategories } from '@/utils/filter-util'
+
+import { agreementKeyLabels } from '@/utils/agreement-util'
 import { Filter, SearchData } from '@/utils/api-util'
+import { FilterCategories } from '@/utils/filter-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 
 import ShowMore from '@/components/ShowMore'
@@ -22,6 +25,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
     watch,
   } = useFormContext<SearchData>()
   const watchFilter = watch(`filters.${filterKey}`)
+
   const touched = touchedFields.filters && !!touchedFields.filters[filterKey]
 
   useEffect(() => {
@@ -73,7 +77,8 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
             >
               {selectedUnavailableFilters?.map((f) => (
                 <Checkbox value={f} key={f}>
-                  <CheckboxLabel value={f} hitCount={0} />
+                  {/* Midlertidig mapping av agreement label frem frem til backend er riktig */}
+                  <CheckboxLabel value={f.includes('HMDB') ? agreementKeyLabels[f] : f} hitCount={0} />
                 </Checkbox>
               ))}
               {filterData?.values.slice(0, 10).map((f) => (
