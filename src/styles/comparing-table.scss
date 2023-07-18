@@ -18,17 +18,13 @@
     }
   }
 
-  thead tr {
-    background-color: $a-surface-selected;
-  }
-
   table {
     border-collapse: separate;
     border-spacing: 0;
   }
 
   thead tr > th:first-child {
-    background-color: $a-surface-selected;
+    background-color: white;
     z-index: 2;
   }
 

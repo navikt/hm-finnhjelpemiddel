@@ -3,6 +3,17 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
+  .comparing-table {
+    thead tr {
+      background-color: $a-surface-selected;
+    }
+
+    thead tr > th:first-child {
+      background-color: $a-surface-selected;
+      z-index: 2;
+    }
+  }
+
   width: 100%;
 
   &__heading-container {

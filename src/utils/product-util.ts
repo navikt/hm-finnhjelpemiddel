@@ -1,7 +1,6 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
 
 import queryString from 'querystring'
-import { NULL } from 'sass'
 
 import { getPostTitle } from './agreement-util'
 import { SearchParams, SelectedFilters } from './api-util'
