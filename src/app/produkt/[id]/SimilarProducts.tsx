@@ -5,11 +5,11 @@ import { useState } from 'react'
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, Table } from '@navikt/ds-react'
+import { BodyLong, Button, Heading, Table } from '@navikt/ds-react'
 
 import { ProductVariant, ProductWithVariants } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
-import { capitalize, toValueAndUnit } from '@/utils/string-util'
+import { toValueAndUnit } from '@/utils/string-util'
 
 type SortColumns = {
   orderBy: string | null
@@ -102,10 +102,10 @@ const SimilarProducts = ({ product }: { product: ProductWithVariants }) => {
       <Heading id="product_variants" level="3" size="medium" spacing>
         Produktvarianter
       </Heading>
-      <BodyShort>
+      <BodyLong>
         Produktet finnes i flere varianter, under finner man en oversikt over de forskjellige. Radene hvor
         produktvariantene har forskjellige verdier kan sorteres og vil fremheves når de er sortert.
-      </BodyShort>
+      </BodyLong>
 
       <div className="comparing-table">
         <Table>
