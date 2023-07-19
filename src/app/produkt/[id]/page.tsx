@@ -12,7 +12,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import { AgreementInfo } from './AgreementInfo'
 import InformationTabs from './InformationTabs'
 import PhotoSlider from './PhotoSlider'
-import SimilarProducts from './ProductVariants'
+import ProductVariants from './ProductVariants'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: productId } }: { params: { id: string } }) {
@@ -41,7 +41,7 @@ export default async function ProduktPage({ params: { id: productId } }: { param
     <>
       <BackButton />
       <AnimateLayout>
-        <article className="product-info" aria-label="Produktinformasjon">
+        <article className="product-info">
           <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
             <div className="product-info__top-content max-width">
               <div>{productWithVariants.photos && <PhotoSlider photos={productWithVariants.photos} />}</div>
@@ -85,10 +85,10 @@ export default async function ProduktPage({ params: { id: productId } }: { param
           </section>
 
           <section
-            className="product-info__similar-products max-width"
+            className="product-info__product-variants max-width"
             aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
           >
-            <SimilarProducts product={productWithVariants} />
+            <ProductVariants product={productWithVariants} />
           </section>
 
           {agreement && <AgreementInfo product={product} agreement={agreement} productsOnPost={productsOnPost} />}

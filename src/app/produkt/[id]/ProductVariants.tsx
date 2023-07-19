@@ -16,7 +16,7 @@ type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-const SimilarProducts = ({ product }: { product: ProductWithVariants }) => {
+const ProductVariants = ({ product }: { product: ProductWithVariants }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })
 
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
@@ -171,4 +171,4 @@ const SimilarProducts = ({ product }: { product: ProductWithVariants }) => {
   )
 }
 
-export default SimilarProducts
+export default ProductVariants

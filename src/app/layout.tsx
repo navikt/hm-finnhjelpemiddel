@@ -69,7 +69,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
-        <aside className="wip-banner" aria-label="wip-banner">
+        <aside className="wip-banner">
           <div>
             <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
             <BodyLong>
