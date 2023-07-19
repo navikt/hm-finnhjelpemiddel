@@ -34,7 +34,7 @@ const SearchResults = ({
 
   useRestoreScroll('search-results', !isLoading)
 
-  if (isLoading) {
+  if (!data) {
     return (
       <>
         <Heading level="2" size="medium">
