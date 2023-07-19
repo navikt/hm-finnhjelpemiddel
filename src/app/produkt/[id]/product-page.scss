@@ -3,7 +3,24 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
+  .comparing-table {
+    thead tr {
+      background-color: $a-surface-selected;
+    }
+
+    thead tr > th:first-child {
+      background-color: $a-surface-selected;
+      z-index: 2;
+    }
+  }
+
   width: 100%;
+
+  &__heading-container {
+    display: flex;
+    align-items: baseline;
+    gap: $a-spacing-2;
+  }
 
   &__key-information {
     display: flex;
@@ -17,14 +34,7 @@
   }
 
   &__supplier-info {
-    .navds-heading {
-      margin-bottom: $a-spacing-2;
-    }
-
-    p {
-      margin-top: 0.2rem;
-      margin-bottom: 0.2rem;
-    }
+    margin-bottom: $a-spacing-1;
   }
 
   &__products-on-post,
@@ -88,18 +98,19 @@
     padding-top: $a-spacing-10;
 
     &__panel {
-      margin-top: $a-spacing-4;
+      border-bottom: 1px solid $a-border-default;
+      padding: $a-spacing-4 0;
     }
   }
 
-  &__similar-products {
+  &__characteristics {
+    padding-top: $a-spacing-8;
+  }
+
+  &__product-variants {
     display: flex;
     flex-direction: column;
-    padding-top: $a-spacing-12;
-
-    .navds-heading {
-      margin-bottom: $a-spacing-6;
-    }
+    padding-top: $a-spacing-8;
   }
 
   &__expired-propducts {
@@ -123,6 +134,8 @@
 
   .photo-and-arrow-container {
     display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .photo-container {

@@ -1,6 +1,8 @@
 import React from 'react'
+
 import Image from 'next/image'
 import NextLink from 'next/link'
+
 import { BodyShort, Link } from '@navikt/ds-react'
 
 const Footer = () => (

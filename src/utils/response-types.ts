@@ -8,9 +8,39 @@ export interface SearchResponse {
   }
 }
 
+export interface SeriesAggregationResponse {
+  took: number
+  timed_out: boolean
+  _shards: object
+  hits: object
+  aggregations: {
+    series_buckets: SeriesBucketsResponse
+  }
+}
+
+export interface SeriesBucketsResponse {
+  after_key: {
+    seriesId: string
+  }
+  buckets: BucketResponse[]
+}
+
+export interface BucketResponse {
+  key: {
+    seriesId: string
+  }
+  doc_count: number
+  products: {
+    hits: {
+      total: object
+      hits: Hit[]
+    }
+  }
+}
+
 export interface Hit {
   _index: string
-  _type: string
+  _type: string | null
   _id: string
   _score: string
   _source: ProductSourceResponse
@@ -35,7 +65,7 @@ export interface ProductSourceResponse {
   isoCategoryText: string
   accessory: boolean
   sparepart: boolean
-  seriesId: string | null
+  seriesId: string
   data: Array<TechDataResponse>
   media: MediaResponse[]
   created: string

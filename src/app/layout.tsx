@@ -37,7 +37,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         hotjar.initialize(118350, 6)
       }
     }
-  }, [])
+  }, [env])
 
   const PageNavigation = () => (
     <ul>

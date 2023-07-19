@@ -2,10 +2,14 @@
 
 @import '@navikt/ds-tokens/dist/tokens';
 
+.comparing-table * {
+  font-size: 1rem;
+}
+
 .comparing-table {
   max-width: 1152px;
   overflow-x: scroll;
-  margin: $a-spacing-2 0;
+  margin: $a-spacing-4 0;
 
   @include mixins.for-size(tablet-up) {
     .navds-table {
@@ -20,7 +24,7 @@
   }
 
   thead tr > th:first-child {
-    background-color: $a-bg-default;
+    background-color: white;
     z-index: 2;
   }
 
@@ -32,12 +36,12 @@
   }
 
   tbody th {
-    background-color: $a-bg-subtle;
+    background-color: white;
     border-right: 1px solid $a-bg-subtle;
   }
 
-  tbody > .highlight {
-    background-color: $a-purple-50;
+  tbody .navds-table__row--shade-on-hover:hover th {
+    background-color: $a-bg-subtle;
   }
 
   .sort-button {
@@ -55,51 +59,25 @@
     color: $a-text-action;
   }
 
-  .row-with-different-values {
+  .navds-table__header-cell,
+  .navds-table__data-cell {
+    padding: $a-spacing-3 $a-spacing-3;
+  }
+
+  &__sortable-row {
+    .navds-table__header-cell {
+      padding: 6px $a-spacing-1;
+    }
+  }
+
+  tbody &__sorted-row {
     th,
     td {
-      border-bottom: 3px solid black;
-    }
-  }
-}
-
-.comparing-table__two-sticky-columns {
-  thead th:nth-child(2) {
-    background-color: $a-bg-default;
-  }
-
-  tr > td:nth-child(2) {
-    background-color: $a-bg-subtle;
-  }
-
-  thead th:first-child {
-    border-right: 1px solid $a-gray-400;
-  }
-
-  tbody th {
-    border-right: 1px solid $a-gray-400;
-  }
-
-  @include mixins.for-size(tablet-up) {
-    tr > th:nth-child(2),
-    tr > td:nth-child(2) {
-      position: sticky;
-      left: 250px;
-    }
-    thead th:nth-child(2) {
-      border-right: 1px solid $a-gray-400;
+      background-color: $a-purple-50;
     }
 
-    tr > td:nth-child(2) {
-      border-right: 1px solid $a-gray-400;
-    }
-
-    thead th:first-child {
-      border-right: 1px solid $a-surface-default;
-    }
-
-    tbody th {
-      border-right: 1px solid $a-gray-100;
+    .navds-button--xsmall .navds-button__icon {
+      --ac-button-icon-margin: -6px;
     }
   }
 }

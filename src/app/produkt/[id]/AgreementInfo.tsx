@@ -22,7 +22,7 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
     product.agreementInfo?.postNr && agreement ? getPostTitle(agreement.posts, product.agreementInfo.postNr) : ''
 
   return (
-    <section className="agreement-details">
+    <section className="agreement-details" aria-label="Informasjon om rammeavtalen produktet er på">
       <div className="agreement-details__content max-width">
         <Heading level="3" size="large" id="agreement-info">
           Avtale med Nav

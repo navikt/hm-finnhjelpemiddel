@@ -4,17 +4,13 @@ import React from 'react'
 
 import Link from 'next/link'
 
-import { FilesIcon, InformationSquareIcon, WrenchIcon } from '@navikt/aksel-icons'
+import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
 
-import { Document, Product, TechData } from '@/utils/product-util'
-import { sortAlphabetically } from '@/utils/sort-util'
-import { toValueAndUnit } from '@/utils/string-util'
+import { Document, ProductWithVariants } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import DefinitionList from '@/components/definition-list/DefinitionList'
-
-export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+export const InformationTabs = ({ product, supplier }: { product: ProductWithVariants; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
     <Tabs.List>
       <Tabs.Tab
@@ -22,7 +18,6 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
         label="Produktbeskrivelse fra leverandør"
         icon={<InformationSquareIcon title="Skiftenøkkel" />}
       />
-      <Tabs.Tab value="techData" label="Teknisk data" icon={<WrenchIcon title="Skiftenøkkel" />} />
       <Tabs.Tab
         value="documents"
         label={`Tilhørende dokumenter (${product.documents.length})`}
@@ -34,11 +29,6 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
         <SupplierInfo product={product} supplier={supplier} />
       </div>
     </Tabs.Panel>
-    <Tabs.Panel value="techData" className="h-24 w-full p-4">
-      <div className="product-info__tabs__panel">
-        <TechnicalSpecifications techData={product.techData} />
-      </div>
-    </Tabs.Panel>
     <Tabs.Panel value="documents" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
         <Documents documents={product.documents} />
@@ -47,9 +37,19 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
   </Tabs>
 )
 
-const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+const SupplierInfo = ({ product, supplier }: { product: ProductWithVariants; supplier: Supplier }) => (
   <div className="product-info__supplier-info">
-    <Heading level="3" size="small">
+    <Heading level="2" size="xsmall">
+      Produktbeskrivelse
+    </Heading>
+    {product.attributes.shortdescription && <BodyLong spacing>{product.attributes.shortdescription}</BodyLong>}
+    {product.attributes.text && <BodyLong>{product.attributes.text}</BodyLong>}
+
+    {!product.attributes.shortdescription &&
+      !product.attributes.text &&
+      'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
+
+    <Heading level="2" size="xsmall" style={{ marginTop: '1.5rem' }}>
       Leverandør
     </Heading>
     <>
@@ -62,34 +62,8 @@ const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Suppl
         </Link>
       )}
     </>
-    <Heading level="3" size="small" style={{ marginTop: '16px' }}>
-      Beskrivelse
-    </Heading>
-    {product.attributes.shortdescription && <BodyLong spacing>{product.attributes.shortdescription}</BodyLong>}
-    {product.attributes.text && <BodyLong>{product.attributes.text}</BodyLong>}
-
-    {!product.attributes.shortdescription &&
-      !product.attributes.text &&
-      'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
   </div>
 )
-
-const TechnicalSpecifications = ({ techData }: { techData: TechData }) => {
-  const technicalSpesifications = Object.entries(techData)
-    .sort(([keyA, valueA], [keyB]) => sortAlphabetically(keyA, keyB))
-    .map(([key, value], index) => (
-      <React.Fragment key={`${key}${index}`}>
-        <DefinitionList.Term>{key}</DefinitionList.Term>
-        <DefinitionList.Definition>{toValueAndUnit(value.value, value.unit)}</DefinitionList.Definition>
-      </React.Fragment>
-    ))
-
-  if (!technicalSpesifications.length) {
-    return <BodyShort>Ingen teknisk data på dette produktet.</BodyShort>
-  }
-
-  return <DefinitionList>{technicalSpesifications}</DefinitionList>
-}
 
 const Documents = ({ documents }: { documents: Document[] }) => {
   if (!documents.length) {

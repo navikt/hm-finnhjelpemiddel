@@ -20,7 +20,8 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { Product, mapProducts } from './product-util'
+import { Product, ProductWithVariants, mapProduct, mapProducts, mapProductsWithVariants } from './product-util'
+import { SearchResponse, SeriesAggregationResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -716,24 +717,73 @@ export async function getAgreement(id: string) {
   return res.json()
 }
 
-export async function getSeries(seriesId: string) {
-  const query = {
-    bool: {
-      must: [{ term: { seriesId } }, { exists: { field: 'seriesId' } }],
-    },
-  }
-
+export async function getProductWithVariants(seriesId: string) {
   const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      query,
-      size: 100,
+      query: {
+        term: {
+          seriesId: seriesId,
+        },
+      },
+      size: 150,
     }),
   })
   return res.json()
+}
+
+export type FetchSeriesResponse = {
+  products: ProductWithVariants[]
+}
+
+//SWR fetcher
+export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
+  return fetch('/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      query: {
+        terms: {
+          seriesId: seriesIds,
+        },
+      },
+      sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      aggregations: {
+        series_buckets: {
+          composite: {
+            sources: [
+              {
+                seriesId: {
+                  terms: {
+                    field: 'seriesId',
+                  },
+                },
+              },
+            ],
+          },
+          aggregations: {
+            products: {
+              top_hits: {
+                size: 150,
+              },
+            },
+          },
+        },
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: mapProductsWithVariants(data),
+      }
+    })
 }
 
 export async function getProductsInPost(postIdentifier: string) {

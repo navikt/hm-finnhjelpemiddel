@@ -107,7 +107,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               onClick={() => {
                 prevImage()
               }}
-              icon={<ChevronLeftCircle title="Pil mot venstre" height={50} width={50} />}
+              icon={<ChevronLeftCircle aria-hidden height={50} width={50} />}
             />
 
             <div className="photo-container">
@@ -162,7 +162,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               onClick={() => {
                 nextImage()
               }}
-              icon={<ChevronRightCircle title="Pil mot høyre" height={50} width={50} />}
+              icon={<ChevronRightCircle aria-hidden height={50} width={50} />}
             />
           </>
         )}

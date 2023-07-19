@@ -1,4 +1,4 @@
-export const capitalize = (str: string) => str.toLowerCase().charAt(0).toUpperCase() + str.toLowerCase().slice(1)
+export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
 // Rules from Språkrådet: https://www.sprakradet.no/sprakhjelp/Skriveregler/Mellomrom/
 export const toValueAndUnit = (value: string, unit: string) => {
