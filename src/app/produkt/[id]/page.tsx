@@ -12,7 +12,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import { AgreementInfo } from './AgreementInfo'
 import InformationTabs from './InformationTabs'
 import PhotoSlider from './PhotoSlider'
-import SimilarProducts from './SimilarProducts'
+import SimilarProducts from './ProductVariants'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: productId } }: { params: { id: string } }) {
