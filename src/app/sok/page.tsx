@@ -73,10 +73,10 @@ export default function Home() {
   )
 
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
-  const productViewToggleRef = useRef<HTMLButtonElement>(null)
+  const searchResultRef = useRef<HTMLHeadingElement>(null)
 
   const setFocusOnSearchResults = () => {
-    productViewToggleRef.current && productViewToggleRef.current.focus()
+    searchResultRef.current && searchResultRef.current.scrollIntoView()
   }
 
   const products = data?.flatMap((d) => d.products)
@@ -249,7 +249,7 @@ export default function Home() {
                 page={page}
                 setPage={setPage}
                 isLoading={isLoading}
-                productViewToggleRef={productViewToggleRef}
+                searchResultRef={searchResultRef}
               />
             </section>
           </div>
