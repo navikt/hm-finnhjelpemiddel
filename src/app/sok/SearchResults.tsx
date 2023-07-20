@@ -22,12 +22,13 @@ const SearchResults = ({
   page,
   setPage,
   isLoading,
+  searchResultRef,
 }: {
   page: number
   setPage: (p: number) => void
   isLoading: boolean
   data?: Array<FetchResponse>
-  productViewToggleRef: RefObject<HTMLButtonElement>
+  searchResultRef: RefObject<HTMLHeadingElement>
 }) => {
   const products = data?.flatMap((d) => d.products)
   const [firstChecked, setFirstChecked] = useState<boolean>(true)
@@ -37,7 +38,7 @@ const SearchResults = ({
   if (!data) {
     return (
       <>
-        <Heading level="2" size="medium">
+        <Heading level="2" size="medium" ref={searchResultRef}>
           Søkeresultater
         </Heading>
 
@@ -51,7 +52,7 @@ const SearchResults = ({
   if (!products?.length) {
     return (
       <>
-        <Heading level="2" size="medium">
+        <Heading level="2" size="medium" ref={searchResultRef}>
           Søkeresultater
         </Heading>
         <div id="searchResults">
@@ -72,7 +73,7 @@ const SearchResults = ({
     <>
       <header className="results__header">
         <div className="flex flex--row flex--space-between">
-          <Heading level="2" size="medium">
+          <Heading level="2" size="medium" ref={searchResultRef}>
             Søkeresultater
           </Heading>
         </div>
