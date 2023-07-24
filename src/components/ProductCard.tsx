@@ -3,10 +3,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { motion } from 'framer-motion'
-
 import { MultiplyIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Button, Heading } from '@navikt/ds-react'
 
 import { smallImageLoader } from '../utils/image-util'
 import { Product } from '../utils/product-util'
