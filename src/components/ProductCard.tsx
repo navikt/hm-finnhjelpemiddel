@@ -25,6 +25,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   return (
     <div className="product-card">
       <Button
+        variant="tertiary-neutral"
         className="remove-button"
         onClick={() => removeProduct(product)}
         icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
