@@ -5,14 +5,11 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import Tab from '@navikt/ds-react/esm/tabs/Tab'
-
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { Product, ProductWithVariants, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
-import { sortAlphabetically } from '@/utils/sort-util'
-import { toValueAndUnit, tryParseNumber } from '@/utils/string-util'
+import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
 import { BodyShort, ChevronLeftIcon, Heading, LinkPanel, Loader, Table } from '@/components/aksel-client'
@@ -107,7 +104,7 @@ const CompareTable = ({
     if (values.length === 0) return
 
     if (values.some((value) => isNaN(tryParseNumber(value)))) {
-      return values[0]
+      return findUniqueStringValues(values)
     }
 
     const numberList = values.map(tryParseNumber)
@@ -117,8 +114,9 @@ const CompareTable = ({
     return `${min} - ${max}`
   }
 
-  const sortedProductsWithVariantsToCompare = productsToCompareWithVariants.sort((a, b) => a.id.localeCompare(b.id))
-  const sortedProductsToCompare = productsToCompare.sort((a, b) => a.seriesId.localeCompare(b.seriesId))
+  const sortedProductsWithVariantsToCompare = productsToCompare.map(
+    (pr) => productsToCompareWithVariants.find((p) => p.id === pr.seriesId)!
+  )
 
   const productRowKeyValue = sortedProductsWithVariantsToCompare.reduce((rowKeyValue, product) => {
     rowKeyValue[product.id] = allDataKeysVariants.reduce((keysVariants, key) => {
@@ -153,7 +151,7 @@ const CompareTable = ({
                 <BodyShort>Legg til flere</BodyShort>
               </NextLink>
             </Table.ColumnHeader>
-            {sortedProductsToCompare.map((product) => (
+            {productsToCompare.map((product) => (
               <Table.ColumnHeader key={'id-' + product.seriesId}>
                 <ProductCard product={product} removeProduct={removeProduct} />
               </Table.ColumnHeader>
@@ -164,7 +162,7 @@ const CompareTable = ({
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
-            {sortedProductsToCompare.map((product) => (
+            {productsToCompare.map((product) => (
               <Table.DataCell key={product.seriesId}>{product.agreementInfo?.rank || '-'}</Table.DataCell>
             ))}
           </Table.Row>
@@ -187,7 +185,7 @@ const CompareTable = ({
           {allDataKeysVariants.map((key, i) => (
             <Table.Row key={i}>
               <Table.HeaderCell>{key}</Table.HeaderCell>
-              {sortedProductsToCompare.map((product) => (
+              {productsToCompare.map((product) => (
                 <Table.DataCell key={key + product.seriesId}>
                   {productRowKeyValue[product.seriesId][key]}
                 </Table.DataCell>
