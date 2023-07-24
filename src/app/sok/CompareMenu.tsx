@@ -6,7 +6,6 @@ import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@na
 import { Button } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { Product } from '@/utils/product-util'
 
 import ProductCard from '@/components/ProductCard'
 
@@ -56,6 +55,8 @@ const CompareMenu = () => {
   const MotionButton = motion(Button)
   const toggleButtonText = `Produkter til sammenligning (${productsToCompare.length})`
 
+  const reversedProductsToCompare = productsToCompare.slice().reverse()
+
   const openView = (
     <motion.div
       initial="hidden"
@@ -84,28 +85,27 @@ const CompareMenu = () => {
         )}
         {productsToCompare.length !== 0 && (
           <>
-            {productsToCompare && (
-              <motion.ul className="compare-menu__chosen-products">
-                <AnimatePresence mode="popLayout">
-                  {productsToCompare.map((product: Product, index: number, array: Product[]) => (
-                    <motion.li
-                      layout
-                      key={'compare-' + array[array.length - 1 - index].id}
-                      variants={productVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      <ProductCard
-                        key={'compare-' + array[array.length - 1 - index].id}
-                        product={array[array.length - 1 - index]}
-                        removeProduct={removeProduct}
-                      ></ProductCard>
-                    </motion.li>
-                  ))}
-                </AnimatePresence>
-              </motion.ul>
-            )}
+            <motion.ul className="compare-menu__chosen-products">
+              <AnimatePresence mode="popLayout">
+                {reversedProductsToCompare.map((product) => (
+                  <motion.li
+                    layout
+                    key={'compare-' + product.id}
+                    variants={productVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <ProductCard
+                      key={'compare-' + product.id}
+                      product={product}
+                      removeProduct={removeProduct}
+                    ></ProductCard>
+                  </motion.li>
+                ))}
+              </AnimatePresence>
+            </motion.ul>
+
             {productsToCompare.length > 1 && (
               <motion.div className="compare-menu__buttons">
                 <Link href="/sammenlign" passHref legacyBehavior>
