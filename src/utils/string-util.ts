@@ -8,3 +8,10 @@ export const toValueAndUnit = (value: string, unit: string) => {
 
   return `${value} ${unit}`
 }
+
+export const tryParseNumber = (value: string) => {
+  try {
+    return Number(value)
+  } catch {}
+  return NaN
+}

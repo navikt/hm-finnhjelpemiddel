@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
+import Tab from '@navikt/ds-react/esm/tabs/Tab'
+
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { Product, ProductWithVariants, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
-import { toValueAndUnit } from '@/utils/string-util'
+import { toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
 import { BodyShort, ChevronLeftIcon, Heading, LinkPanel, Loader, Table } from '@/components/aksel-client'
@@ -24,10 +26,13 @@ export default function ComparePage() {
   const href = '/sok' + toSearchQueryString(searchData)
   const series = productsToCompare.map((product) => product.seriesId)
 
+  //TODO: error handling
   const { data, error, isLoading } = useSWR<FetchSeriesResponse>(
     series,
     productsToCompare.length > 0 ? fetchProductsWithVariants : null
   )
+
+  const productsToCompareWithVariants: ProductWithVariants[] | undefined = data?.products
 
   const handleClick = (event: any) => {
     event.preventDefault()
@@ -66,10 +71,10 @@ export default function ComparePage() {
             </LinkPanel>
           </section>
         )}
-        {productsToCompare.length > 0 && data?.products && (
+        {productsToCompare && productsToCompareWithVariants && (
           <CompareTable
             productsToCompare={productsToCompare}
-            productsWithVariants={data.products}
+            productsToCompareWithVariants={productsToCompareWithVariants}
             removeProduct={removeProduct}
             href={href}
           ></CompareTable>
@@ -79,41 +84,60 @@ export default function ComparePage() {
   )
 }
 
-{
-  /* TODO: use products with variants */
-}
 const CompareTable = ({
   productsToCompare,
-  productsWithVariants,
+  productsToCompareWithVariants,
   removeProduct,
   href,
 }: {
   productsToCompare: Product[]
-  productsWithVariants: ProductWithVariants[]
+  productsToCompareWithVariants: ProductWithVariants[]
   removeProduct: (product: Product) => void
   href: string
 }) => {
-  const allDataKeys = productsToCompare
-    .flatMap((prod) => Object.keys(prod.techData))
-    .filter((v, i, a) => a.indexOf(v) === i)
-    .sort((keyA, keyB) => sortAlphabetically(keyA, keyB))
+  const allDataKeysVariants = [
+    ...new Set(
+      productsToCompareWithVariants.flatMap((product) =>
+        product.variants.flatMap((variant) => Object.keys(variant.techData))
+      )
+    ),
+  ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
-  const rows: { [key: string]: string[] } = Object.assign(
-    {},
-    ...allDataKeys.map((key) => ({
-      [key]: productsToCompare.map((product) =>
-        product.techData[key] !== undefined
-          ? toValueAndUnit(product.techData[key].value, product.techData[key].unit)
-          : '-'
-      ),
-    }))
-  )
+  const findValueRangeForProductRowKey = (values: string[]) => {
+    if (values.length === 0) return
 
-  const hasDifferentValues = ({ row }: { row: string[] }) => {
-    let uniqueValues = new Set(row)
-    uniqueValues.delete('-')
-    return uniqueValues.size > 1
+    if (values.some((value) => isNaN(tryParseNumber(value)))) {
+      return values[0]
+    }
+
+    const numberList = values.map(tryParseNumber)
+    const min = Math.min(...numberList)
+    const max = Math.max(...numberList)
+    if (min === max) return String(min)
+    return `${min} - ${max}`
   }
+
+  const sortedProductsWithVariantsToCompare = productsToCompareWithVariants.sort((a, b) => a.id.localeCompare(b.id))
+  const sortedProductsToCompare = productsToCompare.sort((a, b) => a.seriesId.localeCompare(b.seriesId))
+
+  const productRowKeyValue = sortedProductsWithVariantsToCompare.reduce((rowKeyValue, product) => {
+    rowKeyValue[product.id] = allDataKeysVariants.reduce((keysVariants, key) => {
+      const values = product.variants
+        .filter((variant) => key in variant.techData)
+        .map((variant) => variant.techData[key].value)
+
+      let unit = values.length ? product.variants[0].techData[key].unit : ''
+      let value = findValueRangeForProductRowKey(values)
+      if (key.includes('intervall') && value === '0') {
+        value = '-'
+        unit = ''
+      }
+
+      keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
+      return keysVariants
+    }, {} as Record<string, string>)
+    return rowKeyValue
+  }, {} as Record<string, Record<string, string>>)
 
   return (
     <section className="comparing-table">
@@ -129,34 +153,51 @@ const CompareTable = ({
                 <BodyShort>Legg til flere</BodyShort>
               </NextLink>
             </Table.ColumnHeader>
-            {productsToCompare.length > 0 &&
-              productsToCompare.map((product) => (
-                <Table.ColumnHeader key={'id-' + product.id}>
-                  <ProductCard product={product} removeProduct={removeProduct} />
-                </Table.ColumnHeader>
-              ))}
+            {sortedProductsToCompare.map((product) => (
+              <Table.ColumnHeader key={'id-' + product.seriesId}>
+                <ProductCard product={product} removeProduct={removeProduct} />
+              </Table.ColumnHeader>
+            ))}
           </Table.Row>
         </Table.Header>
+
         <Table.Body>
           <Table.Row>
-            <Table.DataCell colSpan={2}>
+            <Table.HeaderCell>Rangering</Table.HeaderCell>
+            {sortedProductsToCompare.map((product) => (
+              <Table.DataCell key={product.seriesId}>{product.agreementInfo?.rank || '-'}</Table.DataCell>
+            ))}
+          </Table.Row>
+          <Table.Row>
+            <Table.HeaderCell>Antall varianter</Table.HeaderCell>
+            {sortedProductsWithVariantsToCompare.map((productWithVariants) => (
+              <Table.DataCell key={productWithVariants.id}>{productWithVariants.variantCount}</Table.DataCell>
+            ))}
+          </Table.Row>
+
+          <Table.Row>
+            <Table.DataCell>
               <Heading level="2" size="medium">
                 Tekniske egenskaper
               </Heading>
             </Table.DataCell>
-            {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length - 1}></Table.DataCell>}
+            {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length + 1}></Table.DataCell>}
           </Table.Row>
-          {productsToCompare.length > 0 &&
-            Object.entries(rows).map(([key, row]) => (
-              <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>
-                <Table.HeaderCell>{key}</Table.HeaderCell>
-                {row.map((value, i) => (
-                  <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
-                ))}
-              </Table.Row>
-            ))}
+
+          {allDataKeysVariants.map((key, i) => (
+            <Table.Row key={i}>
+              <Table.HeaderCell>{key}</Table.HeaderCell>
+              {sortedProductsToCompare.map((product) => (
+                <Table.DataCell key={key + product.seriesId}>
+                  {productRowKeyValue[product.seriesId][key]}
+                </Table.DataCell>
+              ))}
+            </Table.Row>
+          ))}
         </Table.Body>
       </Table>
     </section>
   )
 }
+
+// // <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>

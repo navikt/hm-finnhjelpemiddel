@@ -16,40 +16,32 @@
   border: 1px solid $a-border-default;
   border-radius: $a-border-radius-large;
   background-color: $a-white;
-  padding: $a-spacing-4 $a-spacing-3;
+  padding: 0 $a-spacing-4 $a-spacing-3;
 
   &--fullWidth {
     width: 100%;
     min-width: 11rem;
   }
 
+  &__link {
+    outline: none;
+    text-decoration: none;
+    color: $a-text-default;
+    font-weight: 400;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+      color: $a-text-action;
+    }
+  }
+
   &:focus-within,
   &:hover {
-    box-shadow: $a-shadow-focus;
-
     .image {
       $mask: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent 100%);
       mask-image: $mask;
       -webkit-mask-image: $mask;
-    }
-
-    .overlay {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(255, 255, 255, 0.9);
-    }
-  }
-
-  &:hover {
-    .delete-button {
-      position: unset;
-      opacity: 1;
     }
   }
 
@@ -57,6 +49,23 @@
     height: 100%;
     width: 100%;
     min-width: 150px;
+  }
+
+  .remove-button {
+    display: flex;
+    align-self: flex-end;
+    background: none;
+    color: $a-text-default;
+    padding: 0;
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    &:hover {
+      background-color: $a-surface-neutral-subtle-hover;
+    }
   }
 
   &__image {
@@ -77,35 +86,10 @@
     }
   }
 
-  .delete-button {
-    position: absolute;
-    opacity: 0;
-
-    &:focus,
-    &:focus-visible,
-    &:focus-within {
-      position: unset;
-      opacity: 1;
-    }
-  }
-
   .info {
     display: flex;
-    flex: 1;
     flex-direction: column;
     justify-content: space-between;
-  }
-
-  .hms-nr {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding-bottom: 8px;
-    align-items: flex-end;
-
-    :first-child {
-      font-weight: $a-font-weight-bold;
-    }
   }
 
   &__product-title {
