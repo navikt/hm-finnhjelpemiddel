@@ -8,3 +8,21 @@ export const toValueAndUnit = (value: string, unit: string) => {
 
   return `${value} ${unit}`
 }
+
+export const tryParseNumber = (value: string) => {
+  try {
+    return Number(value)
+  } catch {}
+  return NaN
+}
+
+export function findUniqueStringValues(arr: string[]): string {
+  const uniqueValuesSet: Set<string> = new Set(arr)
+  const uniqueValuesArray: string[] = Array.from(uniqueValuesSet)
+
+  if (uniqueValuesArray.length === 1) {
+    return uniqueValuesArray[0]
+  } else {
+    return uniqueValuesArray.join(', ')
+  }
+}

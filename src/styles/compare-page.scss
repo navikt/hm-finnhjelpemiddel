@@ -4,11 +4,14 @@
   .comparing-table {
     max-width: none;
 
-    tr > th:first-child,
-    tr > td:first-child {
-      position: sticky;
-      left: 0;
-      min-width: 9rem;
+    tbody {
+      tr > th:first-child,
+      tr > td:first-child {
+        position: sticky;
+        left: 0;
+        text-align: right;
+        font-weight: normal;
+      }
     }
   }
 
