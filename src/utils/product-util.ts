@@ -149,18 +149,30 @@ export const mapProducts = (data: SearchResponse): Product[] => {
   return data.hits.hits.map((hit: Hit) => mapProduct(hit._source))
 }
 
+/**
+ * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
+ */
 export const mapProductsFromCollapse = (data: SearchResponse): ProductWithVariants[] => {
   return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source)))
 }
 
+/**
+ * Maps results from search for seriesId one product with all variants
+ */
 export const mapProductFromSeriesId = (data: SearchResponse): ProductWithVariants => {
   return mapProductWithVariants(data.hits.hits.map((h) => h._source))
 }
 
+/**
+ * Maps result from indexed _doc endpoint into one product with one variant (indexed on productvariants)
+ */
 export const mapProductFromDoc = (data: ProductDocResponse): ProductWithVariants => {
   return mapProductWithVariants(Array(data._source))
 }
 
+/**
+ * Maps results from search with aggregation into products with all variants
+ */
 export const mapProductsFromAggregation = (data: SeriesAggregationResponse): ProductWithVariants[] => {
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source))
