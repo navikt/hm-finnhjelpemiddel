@@ -69,11 +69,7 @@ export default function ComparePage() {
           </section>
         )}
         {productsToCompareWithVariants && (
-          <CompareTable
-            productsToCompareWithVariants={productsToCompareWithVariants}
-            removeProduct={removeProduct}
-            href={href}
-          />
+          <CompareTable productsToCompare={productsToCompareWithVariants} removeProduct={removeProduct} href={href} />
         )}
       </div>
     </AnimateLayout>
@@ -81,19 +77,17 @@ export default function ComparePage() {
 }
 
 const CompareTable = ({
-  productsToCompareWithVariants,
+  productsToCompare,
   removeProduct,
   href,
 }: {
-  productsToCompareWithVariants: ProductWithVariants[]
-  removeProduct: (productWithVariants: ProductWithVariants) => void
+  productsToCompare: ProductWithVariants[]
+  removeProduct: (product: ProductWithVariants) => void
   href: string
 }) => {
   const allDataKeysVariants = [
     ...new Set(
-      productsToCompareWithVariants.flatMap((product) =>
-        product.variants.flatMap((variant) => Object.keys(variant.techData))
-      )
+      productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
     ),
   ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
@@ -111,7 +105,7 @@ const CompareTable = ({
     return `${min} - ${max}`
   }
 
-  const productRowKeyValue = productsToCompareWithVariants.reduce((rowKeyValue, product) => {
+  const productRowKeyValue = productsToCompare.reduce((rowKeyValue, product) => {
     rowKeyValue[product.id] = allDataKeysVariants.reduce((keysVariants, key) => {
       const values = product.variants
         .filter((variant) => key in variant.techData)
@@ -145,7 +139,7 @@ const CompareTable = ({
                 <BodyShort>Legg til flere</BodyShort>
               </NextLink>
             </Table.ColumnHeader>
-            {productsToCompareWithVariants.map((product) => (
+            {productsToCompare.map((product) => (
               <Table.ColumnHeader key={'id-' + product.id}>
                 <ProductCard product={product} removeProduct={removeProduct} />
               </Table.ColumnHeader>
@@ -156,13 +150,13 @@ const CompareTable = ({
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
-            {productsToCompareWithVariants.map((product) => (
+            {productsToCompare.map((product) => (
               <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank || '-'}</Table.DataCell>
             ))}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell>Antall varianter</Table.HeaderCell>
-            {productsToCompareWithVariants.map((product) => (
+            {productsToCompare.map((product) => (
               <Table.DataCell key={product.id}>{product.variantCount}</Table.DataCell>
             ))}
           </Table.Row>
@@ -173,15 +167,13 @@ const CompareTable = ({
                 Tekniske egenskaper
               </Heading>
             </Table.DataCell>
-            {productsToCompareWithVariants.length > 1 && (
-              <Table.DataCell colSpan={productsToCompareWithVariants.length + 1}></Table.DataCell>
-            )}
+            {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length + 1}></Table.DataCell>}
           </Table.Row>
 
           {allDataKeysVariants.map((key, i) => (
             <Table.Row key={i}>
               <Table.HeaderCell>{key}</Table.HeaderCell>
-              {productsToCompareWithVariants.map((product) => (
+              {productsToCompare.map((product) => (
                 <Table.DataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</Table.DataCell>
               ))}
             </Table.Row>

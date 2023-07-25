@@ -30,7 +30,7 @@ const SearchResults = ({
   data?: Array<FetchResponse>
   searchResultRef: RefObject<HTMLHeadingElement>
 }) => {
-  const productsWithVariants = data?.flatMap((d) => d.products)
+  const products = data?.flatMap((d) => d.products)
 
   const [firstChecked, setFirstChecked] = useState<boolean>(true)
 
@@ -50,7 +50,7 @@ const SearchResults = ({
     )
   }
 
-  if (!productsWithVariants?.length) {
+  if (!products?.length) {
     return (
       <>
         <Heading level="2" size="medium" ref={searchResultRef}>
@@ -67,8 +67,8 @@ const SearchResults = ({
 
   const isLoadingMore = !data || (page > 0 && typeof data[page - 1] === 'undefined')
   const isLastPage =
-    (data?.at(-1)?.numberOfProducts || 0) - productsWithVariants.length === 0 ||
-    (!isLoadingMore && productsWithVariants.length < page * PAGE_SIZE)
+    (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
+    (!isLoadingMore && products.length < page * PAGE_SIZE)
 
   return (
     <>
@@ -79,11 +79,11 @@ const SearchResults = ({
           </Heading>
         </div>
         <div>
-          <BodyShort aria-live="polite">{`${productsWithVariants.length} produkter vises`}</BodyShort>
+          <BodyShort aria-live="polite">{`${products.length} produkter vises`}</BodyShort>
         </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {productsWithVariants.map((product) => (
+        {products.map((product) => (
           <SearchResult
             key={product.id}
             product={product}
