@@ -124,7 +124,8 @@ const CompareTable = ({
         .filter((variant) => key in variant.techData)
         .map((variant) => variant.techData[key].value)
 
-      let unit = values.length ? product.variants[0].techData[key].unit : ''
+      let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
+
       let value = findValueRangeForProductRowKey(values)
       if (key.includes('intervall') && value === '0') {
         value = '-'
