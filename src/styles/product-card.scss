@@ -32,12 +32,6 @@
     }
   }
 
-  @include mixins.for-size(phone-only) {
-    height: 100%;
-    width: 100%;
-    min-width: 150px;
-  }
-
   .remove-button {
     align-self: flex-end;
     padding: 0;
@@ -59,11 +53,6 @@
       width: 140px;
       height: 108px;
       position: relative;
-
-      @include mixins.for-size(phone-only) {
-        width: 60vw;
-        height: 60vw;
-      }
     }
   }
 

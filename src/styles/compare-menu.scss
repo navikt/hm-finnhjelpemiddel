@@ -79,6 +79,21 @@
         margin-right: $a-spacing-5;
       }
     }
+
+    .product-card {
+      @include mixins.for-size(phone-only) {
+        height: 100%;
+        width: 100%;
+        min-width: 150px;
+      }
+
+      .image {
+        @include mixins.for-size(phone-only) {
+          width: 60vw;
+          height: 60vw;
+        }
+      }
+    }
   }
 
   @include mixins.for-size(phone-only) {
