@@ -71,15 +71,4 @@
     padding: $a-spacing-1 $a-spacing-2;
     min-height: 3rem;
   }
-
-  &__product-title {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
-    display: -moz-box;
-    -moz-box-orient: vertical;
-
-    overflow: hidden;
-  }
 }

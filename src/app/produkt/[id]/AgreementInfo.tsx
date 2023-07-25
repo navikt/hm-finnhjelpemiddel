@@ -49,14 +49,14 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
           </Alert>
         )}
         {productsOnPost && productsOnPost.length > 1 && (
-          <div className="product-info__products-on-post">
+          <div className="agreement-details__products-on-post">
             <Heading level="4" size="medium" spacing>
               Andre produkter på samme delkontrakt
             </Heading>
-            <div className="product-info__products-on-post-list">
+            <div className="agreement-details__products-on-post-list">
               {productsOnPost.map((product) => (
-                <div className="product-card" key={product.id}>
-                  <div className="product-card__image">
+                <div className="agreement-details__product-on-post" key={product.id}>
+                  <div className="image-container">
                     <div className="image">
                       {product.photos.length === 0 && (
                         <ImageIcon
@@ -79,7 +79,7 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
                   </div>
                   <div className="info">
                     <Link className="search-result__link" href={`/produkt/${product.id}`}>
-                      <Heading size="xsmall" className="product-card__product-title">
+                      <Heading size="xsmall" className="text-line-clamp">
                         {product.title}
                       </Heading>
                     </Link>

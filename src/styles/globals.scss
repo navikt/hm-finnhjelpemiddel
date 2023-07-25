@@ -426,3 +426,14 @@ details {
     }
   }
 }
+
+.text-line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  display: -moz-box;
+  -moz-box-orient: vertical;
+
+  overflow: hidden;
+}
