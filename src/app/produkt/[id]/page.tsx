@@ -1,6 +1,6 @@
 import { mapAgreement } from '@/utils/agreement-util'
-import { getAgreement, getProduct, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
-import { ProductWithVariants, mapProduct, mapProductWithVariants, mapProducts } from '@/utils/product-util'
+import { getAgreement, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
+import { ProductWithVariants, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
@@ -15,27 +15,21 @@ import PhotoSlider from './PhotoSlider'
 import ProductVariants from './ProductVariants'
 import './product-page.scss'
 
-export default async function ProduktPage({ params: { id: productId } }: { params: { id: string } }) {
-  const product = mapProduct((await getProduct(productId))._source)
-  const supplier = mapSupplier((await getSupplier(String(product.supplierId)))._source)
-  const productWithVariants = mapProductWithVariants(
-    (await getProductWithVariants(String(product.seriesId))).hits.hits,
-    product.seriesId
-  )
-
+export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
+  const product = mapProductFromSeriesId(await getProductWithVariants(String(seriesId)))
+  const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
   const agreement =
-    productWithVariants.applicableAgreementInfo &&
-    mapAgreement((await getAgreement(productWithVariants.applicableAgreementInfo.id))._source)
+    product.applicableAgreementInfo && mapAgreement((await getAgreement(product.applicableAgreementInfo.id))._source)
 
-  const productsOnPost =
-    product.agreementInfo &&
-    mapProducts(await getProductsInPost(String(product.agreementInfo?.postIdentifier)))
-      .filter((postProduct) => postProduct.id !== product.id)
-      .sort((productA, productB) =>
-        productA.agreementInfo && productB.agreementInfo
-          ? productA.agreementInfo?.rank - productB.agreementInfo?.rank
-          : -1
-      )
+  const productsOnPost = product.applicableAgreementInfo?.postIdentifier
+    ? mapProductsFromCollapse(await getProductsInPost(product.applicableAgreementInfo?.postIdentifier))
+        .filter((postProduct) => postProduct.id !== product.id)
+        .sort((productA, productB) =>
+          productA.applicableAgreementInfo && productB.applicableAgreementInfo
+            ? productA.applicableAgreementInfo?.rank - productB.applicableAgreementInfo?.rank
+            : -1
+        )
+    : null
 
   return (
     <>
@@ -44,26 +38,24 @@ export default async function ProduktPage({ params: { id: productId } }: { param
         <article className="product-info">
           <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
             <div className="product-info__top-content max-width">
-              <div>{productWithVariants.photos && <PhotoSlider photos={productWithVariants.photos} />}</div>
+              <div>{product.photos && <PhotoSlider photos={product.photos} />}</div>
               <div className="product-info__top-right">
                 <div className="product-info__heading-container">
                   <Heading level="1" size="large" spacing>
-                    {productWithVariants.title}
+                    {product.title}
                   </Heading>
-                  {productWithVariants.applicableAgreementInfo && (
-                    <AgreementIcon rank={productWithVariants.applicableAgreementInfo.rank} />
-                  )}
+                  {product.applicableAgreementInfo && <AgreementIcon rank={product.applicableAgreementInfo.rank} />}
                 </div>
                 <div className="product-info__expired-propducts">
                   {/* TODO: check all expired dates */}
-                  {new Date(productWithVariants.variants[0].expired).getTime() <= Date.now() ? (
+                  {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
                     <Alert variant="warning">Dette produktet er utgått</Alert>
                   ) : (
                     ''
                   )}
                 </div>
                 <KeyInformation
-                  product={productWithVariants}
+                  product={product}
                   supplierName={supplier ? supplier.name : null}
                   agreementTitle={agreement ? agreement.title : null}
                 />
@@ -72,7 +64,7 @@ export default async function ProduktPage({ params: { id: productId } }: { param
           </section>
 
           <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
-            <InformationTabs product={productWithVariants} supplier={supplier} />
+            <InformationTabs product={product} supplier={supplier} />
           </section>
           <section
             className="product-info__characteristics max-width"
@@ -81,14 +73,14 @@ export default async function ProduktPage({ params: { id: productId } }: { param
             <Heading level="2" size="medium" spacing>
               Produktegenskaper
             </Heading>
-            <TechnicalSpecifications product={productWithVariants} />
+            <TechnicalSpecifications product={product} />
           </section>
 
           <section
             className="product-info__product-variants max-width"
             aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
           >
-            <ProductVariants product={productWithVariants} />
+            <ProductVariants product={product} />
           </section>
 
           {agreement && <AgreementInfo product={product} agreement={agreement} productsOnPost={productsOnPost} />}
