@@ -1,11 +1,10 @@
 import { useState } from 'react'
 
 import Image from 'next/image'
+import Link from 'next/link'
 
-import { motion } from 'framer-motion'
-
-import { Delete } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading } from '@navikt/ds-react'
+import { MultiplyIcon } from '@navikt/aksel-icons'
+import { Button, Heading } from '@navikt/ds-react'
 
 import { smallImageLoader } from '../utils/image-util'
 import { Product } from '../utils/product-util'
@@ -18,10 +17,17 @@ type ProductCardProps = {
 const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
+
   const [imageLoadingError, setImageLoadingError] = useState(false)
 
   return (
-    <motion.div className="product-card">
+    <div className="product-card">
+      <Button
+        variant="tertiary-neutral"
+        className="remove-button"
+        onClick={() => removeProduct(product)}
+        icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
+      />
       <div className="product-card__image">
         <div className="image">
           {hasImage && !imageLoadingError ? (
@@ -43,27 +49,18 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
               style={{ padding: '10px' }}
               sizes="50vw"
               priority
-            ></Image>
+            />
           )}
-        </div>
-        <div className="overlay">
-          <Button
-            className="delete-button"
-            onClick={() => removeProduct(product)}
-            icon={<Delete title="Fjern produkt fra sammenligning" />}
-          />
         </div>
       </div>
       <div className="info">
-        <Heading size="xsmall" className="product-card__product-title">
-          {product.articleName}
-        </Heading>
-        <div className="hms-nr">
-          <BodyShort size="small">HMS-nr.</BodyShort>
-          <BodyShort size="small">{product.hmsArtNr ? product.hmsArtNr : '–'}</BodyShort>
-        </div>
+        <Link className="product-card__link" href={`/produkt/${product.id}`} aria-label="Gå til produktet">
+          <Heading size="xsmall" className="product-card__product-title">
+            {product.title}
+          </Heading>
+        </Link>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
