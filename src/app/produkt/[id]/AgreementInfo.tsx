@@ -78,7 +78,7 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
                     </div>
                   </div>
                   <div className="info">
-                    <Link className="search-result__link" href={`/produkt/${product.id}`}>
+                    <Link className="link" href={`/produkt/${product.id}`}>
                       <Heading size="xsmall" className="text-line-clamp">
                         {product.title}
                       </Heading>
