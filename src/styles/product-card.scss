@@ -3,20 +3,16 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: $a-spacing-2;
-  width: 11rem;
-  height: 15rem;
+  width: 10rem;
+  height: 13rem;
   text-align: center;
   box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
   border: 1px solid $a-border-default;
   border-radius: $a-border-radius-large;
   background-color: $a-white;
-  padding: $a-spacing-4 $a-spacing-3;
 
   &--fullWidth {
     width: 100%;
@@ -36,15 +32,6 @@
     }
   }
 
-  &:focus-within,
-  &:hover {
-    .image {
-      $mask: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent 100%);
-      mask-image: $mask;
-      -webkit-mask-image: $mask;
-    }
-  }
-
   @include mixins.for-size(phone-only) {
     height: 100%;
     width: 100%;
@@ -52,10 +39,9 @@
   }
 
   .remove-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    align-self: flex-end;
     padding: 0;
+    margin: $a-spacing-1;
 
     svg {
       width: 2rem;
@@ -70,21 +56,20 @@
     position: relative;
 
     .image {
-      width: 100px;
-      height: 100px;
+      width: 140px;
+      height: 108px;
       position: relative;
 
       @include mixins.for-size(phone-only) {
-        width: 80px;
-        height: 80px;
+        width: 60vw;
+        height: 60vw;
       }
     }
   }
 
   .info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: $a-spacing-1 $a-spacing-2;
+    min-height: 3rem;
   }
 
   &__product-title {

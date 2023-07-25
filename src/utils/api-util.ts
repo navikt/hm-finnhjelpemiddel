@@ -20,8 +20,8 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { Product, ProductWithVariants, mapProduct, mapProducts, mapProductsWithVariants } from './product-util'
-import { SearchResponse, SeriesAggregationResponse } from './response-types'
+import { Product, ProductWithVariants, mapProducts, mapProductsFromAggregation } from './product-util'
+import { ProductDocResponse, SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -693,7 +693,7 @@ const mapFilters = (data: any): FilterData => {
     }, {} as FilterData)
 }
 
-export async function getProduct(id: string) {
+export async function getProduct(id: string): Promise<ProductDocResponse> {
   const res = await fetch(process.env.HM_SEARCH_URL + `/products/_doc/${id}`, {
     method: 'GET',
   })
@@ -717,7 +717,7 @@ export async function getAgreement(id: string) {
   return res.json()
 }
 
-export async function getProductWithVariants(seriesId: string) {
+export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
   const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
@@ -781,12 +781,12 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     .then((res) => res.json())
     .then((data) => {
       return {
-        products: mapProductsWithVariants(data),
+        products: mapProductsFromAggregation(data),
       }
     })
 }
 
-export async function getProductsInPost(postIdentifier: string) {
+export async function getProductsInPost(postIdentifier: string): Promise<SearchResponse> {
   const query = {
     bool: {
       must: [{ term: { 'agreementInfo.postIdentifier': { value: postIdentifier } } }],

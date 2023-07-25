@@ -146,7 +146,7 @@ const SearchResult = ({
         <div className="search-result__content">
           <div className="search-result__title">
             <Heading level="3" size="medium">
-              <Link className="search-result__link" href={`/produkt/${product.id}`}>
+              <Link className="search-result__link" href={`/produkt/${product.seriesId}`}>
                 {product.title}
               </Link>
             </Heading>

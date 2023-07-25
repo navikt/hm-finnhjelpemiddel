@@ -11,6 +11,7 @@ import {
   Hit,
   MediaResponse,
   MediaType,
+  ProductDocResponse,
   ProductSourceResponse,
   SearchResponse,
   SeriesAggregationResponse,
@@ -144,33 +145,52 @@ export const mapProduct = (source: ProductSourceResponse): Product => {
   }
 }
 
-export const mapProductsWithVariants = (data: SeriesAggregationResponse): ProductWithVariants[] => {
+export const mapProducts = (data: SearchResponse): Product[] => {
+  return data.hits.hits.map((hit: Hit) => mapProduct(hit._source))
+}
+
+/**
+ * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
+ */
+export const mapProductsFromCollapse = (data: SearchResponse): ProductWithVariants[] => {
+  return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source)))
+}
+
+/**
+ * Maps results from search for seriesId one product with all variants
+ */
+export const mapProductFromSeriesId = (data: SearchResponse): ProductWithVariants => {
+  return mapProductWithVariants(data.hits.hits.map((h) => h._source))
+}
+
+/**
+ * Maps result from indexed _doc endpoint into one product with one variant (indexed on productvariants)
+ */
+export const mapProductFromDoc = (data: ProductDocResponse): ProductWithVariants => {
+  return mapProductWithVariants(Array(data._source))
+}
+
+/**
+ * Maps results from search with aggregation into products with all variants
+ */
+export const mapProductsFromAggregation = (data: SeriesAggregationResponse): ProductWithVariants[] => {
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
-    mapProductWithVariants(bucket.products.hits.hits, bucket.key.seriesId)
+    mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source))
   )
   return buckets
 }
 
-export const mapProductWithVariants = (hits: Hit[], seriesId: string): ProductWithVariants => {
-  const filteredOnSeriesId = hits.filter((hit) => hit._source.seriesId === seriesId)
-  if (filteredOnSeriesId.length != hits.length) {
-    console.log(
-      'Something is wrong: i get %d on requested series id and %d that do not match',
-      filteredOnSeriesId.length,
-      hits.length
-    )
-  }
-
+export const mapProductWithVariants = (sources: ProductSourceResponse[]): ProductWithVariants => {
   let applicableAgreementInfo: AgreementInfo | null = null
-  const variants = hits.map((hit) => {
+  const variants = sources.map((source) => {
     if (
-      hit._source.agreementInfo &&
-      (applicableAgreementInfo === null || hit._source.agreementInfo.rank < applicableAgreementInfo.rank)
+      source.agreementInfo &&
+      (applicableAgreementInfo === null || source.agreementInfo.rank < applicableAgreementInfo.rank)
     ) {
-      applicableAgreementInfo = mapAgreementInfo(hit._source.agreementInfo)
+      applicableAgreementInfo = mapAgreementInfo(source.agreementInfo)
     }
 
-    return mapProductVariant(hit._source)
+    return mapProductVariant(source)
   })
 
   const variantsCopy = variants
@@ -195,13 +215,13 @@ export const mapProductWithVariants = (hits: Hit[], seriesId: string): ProductWi
     }
   }
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
-  const firstVariant = hits[0]._source
+  const firstVariant = sources[0]
   return {
     id: firstVariant.seriesId,
     title: firstVariant.title,
     attributes: { ...firstVariant.attributes, commonCharacteristics },
     applicableAgreementInfo: applicableAgreementInfo,
-    variantCount: hits.length,
+    variantCount: sources.length,
     variants: variants,
     compareData: {
       techDataRange: {},
@@ -285,10 +305,6 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   postTitle: getPostTitle(data.postTitle, data.postNr),
   rank: data.rank,
 })
-
-export const mapProducts = (data: SearchResponse): Product[] => {
-  return data.hits.hits.map((hit: Hit) => mapProduct(hit._source))
-}
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams | null): SearchParams => {
   const searchTerm = searchParams?.get('term') ?? ''
