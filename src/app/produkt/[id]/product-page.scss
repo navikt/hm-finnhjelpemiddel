@@ -37,40 +37,6 @@
     margin-bottom: $a-spacing-1;
   }
 
-  &__products-on-post,
-  &__products-on-post-list {
-    display: flex;
-    gap: $a-spacing-4;
-  }
-
-  &__products-on-post-list {
-    flex-wrap: wrap;
-  }
-
-  &__products-on-post {
-    flex-direction: column;
-
-    margin-top: $a-spacing-4;
-
-    .product-card {
-      .icon-wrapper {
-        align-self: center;
-      }
-    }
-  }
-
-  &__rank {
-    height: 30px;
-    width: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    background-color: $a-green-200;
-    border-radius: 12px;
-    margin-left: -11px;
-  }
-
   &__top {
     background-color: $a-gray-50;
     width: 100%;
@@ -217,5 +183,74 @@
     gap: $a-spacing-4;
     padding-top: $a-spacing-10;
     padding-bottom: $a-spacing-10;
+  }
+
+  &__products-on-post,
+  &__products-on-post-list {
+    display: flex;
+    gap: $a-spacing-4;
+  }
+
+  &__products-on-post-list {
+    flex-wrap: wrap;
+  }
+
+  &__products-on-post {
+    flex-direction: column;
+
+    margin-top: $a-spacing-4;
+  }
+
+  &__product-on-post {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 10rem;
+    height: 14.5rem;
+    text-align: center;
+    box-shadow: $a-shadow-small;
+    border-radius: $a-border-radius-large;
+    background-color: $a-white;
+
+    .image-container {
+      display: flex;
+      padding: $a-spacing-2;
+      padding-bottom: 0;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+
+      .image {
+        width: 140px;
+        height: 108px;
+        position: relative;
+      }
+    }
+
+    .info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: $a-spacing-1 $a-spacing-2;
+      padding-bottom: $a-spacing-2;
+
+      span {
+        align-self: center;
+      }
+
+      .link {
+        outline: none;
+        text-decoration: none;
+        color: $a-text-default;
+        font-weight: 400;
+
+        &:hover,
+        &:focus {
+          text-decoration: underline;
+          color: $a-text-action;
+        }
+      }
+    }
   }
 }
