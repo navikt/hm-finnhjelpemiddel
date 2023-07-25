@@ -40,7 +40,8 @@
 
   .remove-button {
     align-self: flex-end;
-    padding: $a-spacing-1 $a-spacing-1;
+    padding: 0;
+    margin: $a-spacing-1;
 
     svg {
       width: 2rem;
