@@ -20,31 +20,6 @@ import {
 import { initialSearchDataState } from './search-state-util'
 import { capitalize } from './string-util'
 
-export interface Product {
-  id: string
-  articleName: string
-  title: string
-  attributes: Attributes
-  techData: TechData
-  hasAgreement: boolean
-  hmsArtNr: string | null
-  agreementInfo: AgreementInfo | null
-  isoCategory: string
-  isoCategoryTitle: string
-  isoCategoryText: string
-  accessory: boolean
-  sparepart: boolean
-  photos: Photo[]
-  documents: Document[]
-  supplierId: string
-  supplierRef: string
-  seriesId: string
-  filters: { [key: string]: string | number }
-  expired: string
-  /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
-}
-
-//id = seriesId
 export interface ProductWithVariants {
   id: string
   title: string
@@ -116,37 +91,6 @@ export interface AgreementInfo {
   postNr: number
   postIdentifier: string | null
   postTitle: string
-}
-
-// TODO: Add error handling when data is not as expected
-export const mapProduct = (source: ProductSourceResponse): Product => {
-  return {
-    id: source.id,
-    articleName: source.articleName,
-    title: source.title,
-    attributes: source.attributes,
-    techData: mapTechDataDict(source.data),
-    hmsArtNr: source.hmsArtNr,
-    hasAgreement: source.hasAgreement,
-    agreementInfo: source.agreementInfo ? mapAgreementInfo(source.agreementInfo) : null,
-    isoCategory: source.isoCategory,
-    isoCategoryTitle: source.isoCategoryTitle,
-    isoCategoryText: source.isoCategoryText,
-    accessory: source.accessory,
-    sparepart: source.sparepart,
-    photos: mapPhotoInfo(source.media),
-    documents: mapDocuments(source.media),
-    seriesId: source.seriesId,
-    supplierId: source.supplier?.id,
-    supplierRef: source.supplierRef,
-    filters: source.filters,
-    expired: source.expired,
-    /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
-  }
-}
-
-export const mapProducts = (data: SearchResponse): Product[] => {
-  return data.hits.hits.map((hit: Hit) => mapProduct(hit._source))
 }
 
 /**

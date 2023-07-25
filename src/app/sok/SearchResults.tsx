@@ -10,7 +10,7 @@ import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
-import { Product } from '@/utils/product-util'
+import { ProductWithVariants } from '@/utils/product-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
@@ -30,7 +30,8 @@ const SearchResults = ({
   data?: Array<FetchResponse>
   searchResultRef: RefObject<HTMLHeadingElement>
 }) => {
-  const products = data?.flatMap((d) => d.products)
+  const productsWithVariants = data?.flatMap((d) => d.products)
+
   const [firstChecked, setFirstChecked] = useState<boolean>(true)
 
   useRestoreScroll('search-results', !isLoading)
@@ -49,7 +50,7 @@ const SearchResults = ({
     )
   }
 
-  if (!products?.length) {
+  if (!productsWithVariants?.length) {
     return (
       <>
         <Heading level="2" size="medium" ref={searchResultRef}>
@@ -66,8 +67,8 @@ const SearchResults = ({
 
   const isLoadingMore = !data || (page > 0 && typeof data[page - 1] === 'undefined')
   const isLastPage =
-    (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
-    (!isLoadingMore && products.length < page * PAGE_SIZE)
+    (data?.at(-1)?.numberOfProducts || 0) - productsWithVariants.length === 0 ||
+    (!isLoadingMore && productsWithVariants.length < page * PAGE_SIZE)
 
   return (
     <>
@@ -78,11 +79,11 @@ const SearchResults = ({
           </Heading>
         </div>
         <div>
-          <BodyShort aria-live="polite">{`${products.length} produkter vises`}</BodyShort>
+          <BodyShort aria-live="polite">{`${productsWithVariants.length} produkter vises`}</BodyShort>
         </div>
       </header>
       <ol className="results__list" id="searchResults">
-        {products.map((product) => (
+        {productsWithVariants.map((product) => (
           <SearchResult
             key={product.id}
             product={product}
@@ -105,7 +106,7 @@ const SearchResult = ({
   firstChecked,
   setFirstChecked,
 }: {
-  product: Product
+  product: ProductWithVariants
   firstChecked: boolean
   setFirstChecked: (first: boolean) => void
 }) => {
@@ -115,7 +116,7 @@ const SearchResult = ({
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
   const toggleCompareProduct = () => {
-    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
+    productsToCompare.filter((procom: ProductWithVariants) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
 
@@ -125,7 +126,8 @@ const SearchResult = ({
     }
   }
 
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+  const isInProductsToCompare =
+    productsToCompare.filter((procom: ProductWithVariants) => product.id === procom.id).length >= 1
 
   return (
     <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>
@@ -146,21 +148,21 @@ const SearchResult = ({
         <div className="search-result__content">
           <div className="search-result__title">
             <Heading level="3" size="medium">
-              <Link className="search-result__link" href={`/produkt/${product.seriesId}`}>
+              <Link className="search-result__link" href={`/produkt/${product.id}`}>
                 {product.title}
               </Link>
             </Heading>
-            {product.agreementInfo?.rank && (
+            {product.applicableAgreementInfo?.rank && (
               <div className="search-result__rank-container">
-                <AgreementIcon rank={product.agreementInfo?.rank} size="small" />
+                <AgreementIcon rank={product.applicableAgreementInfo?.rank} size="small" />
               </div>
             )}
           </div>
           <div className="search-result__description">
             <div className="search-result__post-container">
-              {product.agreementInfo?.rank && <AgreementIcon rank={product.agreementInfo?.rank} />}
+              {product.applicableAgreementInfo?.rank && <AgreementIcon rank={product.applicableAgreementInfo?.rank} />}
               <BodyShort>
-                {'Dk ' + product.agreementInfo?.postNr + ': ' + product.agreementInfo?.postTitle ??
+                {'Dk ' + product.applicableAgreementInfo?.postNr + ': ' + product.applicableAgreementInfo?.postTitle ??
                   product.attributes?.text}
               </BodyShort>
             </div>
@@ -223,7 +225,7 @@ const ProductImage = ({ src }: { src: string }) => {
         style={{ padding: '10px' }}
         sizes="50vw"
         priority
-      ></Image>
+      />
     )
   }
 }

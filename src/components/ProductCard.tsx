@@ -7,11 +7,11 @@ import { MultiplyIcon } from '@navikt/aksel-icons'
 import { Button, Heading } from '@navikt/ds-react'
 
 import { smallImageLoader } from '../utils/image-util'
-import { Product } from '../utils/product-util'
+import { ProductWithVariants } from '../utils/product-util'
 
 type ProductCardProps = {
-  product: Product
-  removeProduct: (product: Product) => void
+  product: ProductWithVariants
+  removeProduct: (product: ProductWithVariants) => void
 }
 
 const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
@@ -54,7 +54,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
         </div>
       </div>
       <div className="info">
-        <Link className="product-card__link" href={`/produkt/${product.seriesId}`} aria-label="Gå til produktet">
+        <Link className="product-card__link" href={`/produkt/${product.id}`} aria-label="Gå til produktet">
           <Heading size="xsmall" className="product-card__product-title">
             {product.title}
           </Heading>
