@@ -124,8 +124,8 @@
     }
 
     &__one-more {
-      height: 15rem;
-      width: 11rem;
+      height: 13rem;
+      width: 10rem;
       border-radius: $a-border-radius-large;
 
       @include mixins.for-size(phone-only) {
