@@ -55,7 +55,7 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
       </div>
       <div className="info">
         <Link className="product-card__link" href={`/produkt/${product.id}`} aria-label="Gå til produktet">
-          <Heading size="xsmall" className="product-card__product-title">
+          <Heading size="xsmall" className="text-line-clamp">
             {product.title}
           </Heading>
         </Link>
