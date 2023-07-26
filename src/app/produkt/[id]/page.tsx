@@ -1,6 +1,6 @@
 import { mapAgreement } from '@/utils/agreement-util'
 import { getAgreement, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
-import { ProductWithVariants, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
+import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
@@ -95,7 +95,7 @@ const KeyInformation = ({
   supplierName,
   agreementTitle,
 }: {
-  product: ProductWithVariants
+  product: Product
   supplierName: string | null
   agreementTitle: string | null
 }) => (
@@ -126,7 +126,7 @@ const KeyInformation = ({
   </div>
 )
 
-const TechnicalSpecifications = ({ product }: { product: ProductWithVariants }) => {
+const TechnicalSpecifications = ({ product }: { product: Product }) => {
   return (
     <DefinitionList>
       <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>

@@ -79,14 +79,10 @@ export default function Home() {
     searchResultRef.current && searchResultRef.current.scrollIntoView()
   }
 
-  const products = data?.flatMap((d) => d.products)
-  const numberOfFetchedProducts = products && products.length > PAGE_SIZE ? products.length : undefined
+  const productsWithVariants = data?.flatMap((d) => d.products)
+  const numberOfFetchedProducts =
+    productsWithVariants && productsWithVariants.length > PAGE_SIZE ? productsWithVariants.length : undefined
   const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
-
-  //Det er en bug i Next som gjør at scroll position ikke beholdes
-  //selv når page state beholdes. Dette er kun et problem i Produktserier på stor skjerm.
-  //Se: https://github.com/vercel/next.js/issues/49087.
-  //Må følge med på issue og gjøre eventuelle endringer dersom det løses av Next.
 
   useEffect(() => {
     if (searchInitialized) {

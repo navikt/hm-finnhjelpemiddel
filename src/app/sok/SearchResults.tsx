@@ -31,6 +31,7 @@ const SearchResults = ({
   searchResultRef: RefObject<HTMLHeadingElement>
 }) => {
   const products = data?.flatMap((d) => d.products)
+
   const [firstChecked, setFirstChecked] = useState<boolean>(true)
 
   useRestoreScroll('search-results', !isLoading)
@@ -146,21 +147,21 @@ const SearchResult = ({
         <div className="search-result__content">
           <div className="search-result__title">
             <Heading level="3" size="medium">
-              <Link className="search-result__link" href={`/produkt/${product.seriesId}`}>
+              <Link className="search-result__link" href={`/produkt/${product.id}`}>
                 {product.title}
               </Link>
             </Heading>
-            {product.agreementInfo?.rank && (
+            {product.applicableAgreementInfo?.rank && (
               <div className="search-result__rank-container">
-                <AgreementIcon rank={product.agreementInfo?.rank} size="small" />
+                <AgreementIcon rank={product.applicableAgreementInfo?.rank} size="small" />
               </div>
             )}
           </div>
           <div className="search-result__description">
             <div className="search-result__post-container">
-              {product.agreementInfo?.rank && <AgreementIcon rank={product.agreementInfo?.rank} />}
+              {product.applicableAgreementInfo?.rank && <AgreementIcon rank={product.applicableAgreementInfo?.rank} />}
               <BodyShort>
-                {'Dk ' + product.agreementInfo?.postNr + ': ' + product.agreementInfo?.postTitle ??
+                {'Dk ' + product.applicableAgreementInfo?.postNr + ': ' + product.applicableAgreementInfo?.postTitle ??
                   product.attributes?.text}
               </BodyShort>
             </div>
@@ -223,7 +224,7 @@ const ProductImage = ({ src }: { src: string }) => {
         style={{ padding: '10px' }}
         sizes="50vw"
         priority
-      ></Image>
+      />
     )
   }
 }

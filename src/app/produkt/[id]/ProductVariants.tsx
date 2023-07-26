@@ -7,7 +7,7 @@ import classNames from 'classnames'
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Heading, Table } from '@navikt/ds-react'
 
-import { ProductVariant, ProductWithVariants } from '@/utils/product-util'
+import { Product, ProductVariant } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
 import { toValueAndUnit } from '@/utils/string-util'
 
@@ -16,7 +16,7 @@ type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-const ProductVariants = ({ product }: { product: ProductWithVariants }) => {
+const ProductVariants = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })
 
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {

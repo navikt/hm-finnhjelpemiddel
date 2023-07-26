@@ -7,7 +7,7 @@ import useSWR from 'swr'
 
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { Product, ProductWithVariants, toSearchQueryString } from '@/utils/product-util'
+import { Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
@@ -29,7 +29,7 @@ export default function ComparePage() {
   const router = useRouter()
 
   const href = '/sok' + toSearchQueryString(searchData)
-  const series = productsToCompare.map((product) => product.seriesId)
+  const series = productsToCompare.map((product) => product.id)
 
   //TODO: error handling
   const { data, error, isLoading } = useSWR<FetchSeriesResponse>(
@@ -37,7 +37,7 @@ export default function ComparePage() {
     productsToCompare.length > 0 ? fetchProductsWithVariants : null
   )
 
-  const productsToCompareWithVariants: ProductWithVariants[] | undefined = data?.products
+  const productsToCompareWithVariants: Product[] | undefined = data?.products
 
   const handleClick = (event: any) => {
     event.preventDefault()
@@ -84,13 +84,8 @@ export default function ComparePage() {
             </NextLink>
           </section>
         )}
-        {productsToCompare && productsToCompareWithVariants && (
-          <CompareTable
-            productsToCompare={productsToCompare}
-            productsToCompareWithVariants={productsToCompareWithVariants}
-            removeProduct={removeProduct}
-            href={href}
-          ></CompareTable>
+        {productsToCompareWithVariants && (
+          <CompareTable productsToCompare={productsToCompareWithVariants} removeProduct={removeProduct} href={href} />
         )}
       </div>
     </AnimateLayout>
@@ -99,20 +94,16 @@ export default function ComparePage() {
 
 const CompareTable = ({
   productsToCompare,
-  productsToCompareWithVariants,
   removeProduct,
   href,
 }: {
   productsToCompare: Product[]
-  productsToCompareWithVariants: ProductWithVariants[]
   removeProduct: (product: Product) => void
   href: string
 }) => {
   const allDataKeysVariants = [
     ...new Set(
-      productsToCompareWithVariants.flatMap((product) =>
-        product.variants.flatMap((variant) => Object.keys(variant.techData))
-      )
+      productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
     ),
   ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
@@ -130,11 +121,7 @@ const CompareTable = ({
     return `${min} - ${max}`
   }
 
-  const sortedProductsWithVariantsToCompare = productsToCompare.map(
-    (pr) => productsToCompareWithVariants.find((p) => p.id === pr.seriesId)!
-  )
-
-  const productRowKeyValue = sortedProductsWithVariantsToCompare.reduce((rowKeyValue, product) => {
+  const productRowKeyValue = productsToCompare.reduce((rowKeyValue, product) => {
     rowKeyValue[product.id] = allDataKeysVariants.reduce((keysVariants, key) => {
       const values = product.variants
         .filter((variant) => key in variant.techData)
@@ -169,7 +156,7 @@ const CompareTable = ({
               </NextLink>
             </Table.ColumnHeader>
             {productsToCompare.map((product) => (
-              <Table.ColumnHeader key={'id-' + product.seriesId}>
+              <Table.ColumnHeader key={'id-' + product.id}>
                 <ProductCard product={product} removeProduct={removeProduct} />
               </Table.ColumnHeader>
             ))}
@@ -180,13 +167,13 @@ const CompareTable = ({
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
             {productsToCompare.map((product) => (
-              <Table.DataCell key={product.seriesId}>{product.agreementInfo?.rank || '-'}</Table.DataCell>
+              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank || '-'}</Table.DataCell>
             ))}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell>Antall varianter</Table.HeaderCell>
-            {sortedProductsWithVariantsToCompare.map((productWithVariants) => (
-              <Table.DataCell key={productWithVariants.id}>{productWithVariants.variantCount}</Table.DataCell>
+            {productsToCompare.map((product) => (
+              <Table.DataCell key={product.id}>{product.variantCount}</Table.DataCell>
             ))}
           </Table.Row>
 
@@ -203,9 +190,7 @@ const CompareTable = ({
             <Table.Row key={i}>
               <Table.HeaderCell>{key}</Table.HeaderCell>
               {productsToCompare.map((product) => (
-                <Table.DataCell key={key + product.seriesId}>
-                  {productRowKeyValue[product.seriesId][key]}
-                </Table.DataCell>
+                <Table.DataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</Table.DataCell>
               ))}
             </Table.Row>
           ))}
@@ -214,5 +199,3 @@ const CompareTable = ({
     </section>
   )
 }
-
-// // <Table.Row key={key + 'row'} className={hasDifferentValues({ row }) ? 'highlight' : ''}>

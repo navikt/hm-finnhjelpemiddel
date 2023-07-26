@@ -20,7 +20,7 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { Product, ProductWithVariants, mapProducts, mapProductsFromAggregation } from './product-util'
+import { Product, mapProductsFromAggregation, mapProductsFromCollapse } from './product-util'
 import { ProductDocResponse, SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
@@ -664,7 +664,7 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
   })
     .then((res) => res.json())
     .then((data) => {
-      const products: Product[] = mapProducts(data)
+      const products: Product[] = mapProductsFromCollapse(data)
       return { numberOfProducts: data.hits.total.value, products, filters: mapFilters(data) }
     })
 }
@@ -736,7 +736,7 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
 }
 
 export type FetchSeriesResponse = {
-  products: ProductWithVariants[]
+  products: Product[]
 }
 
 //SWR fetcher
