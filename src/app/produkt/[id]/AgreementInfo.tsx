@@ -5,15 +5,15 @@ import Link from 'next/link'
 
 import { Agreement, getPostTitle } from '@/utils/agreement-util'
 import { smallImageLoader } from '@/utils/image-util'
-import { ProductWithVariants } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
 import { Alert, BodyShort, Heading, ImageIcon } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 
 type AgreementInfoProps = {
-  product: ProductWithVariants
-  productsOnPost: ProductWithVariants[] | null
+  product: Product
+  productsOnPost: Product[] | null
   agreement: Agreement
 }
 
