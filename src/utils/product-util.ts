@@ -20,7 +20,7 @@ import {
 import { initialSearchDataState } from './search-state-util'
 import { capitalize } from './string-util'
 
-export interface ProductWithVariants {
+export interface Product {
   id: string
   title: string
   attributes: Attributes
@@ -96,35 +96,35 @@ export interface AgreementInfo {
 /**
  * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
  */
-export const mapProductsFromCollapse = (data: SearchResponse): ProductWithVariants[] => {
+export const mapProductsFromCollapse = (data: SearchResponse): Product[] => {
   return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source)))
 }
 
 /**
  * Maps results from search for seriesId one product with all variants
  */
-export const mapProductFromSeriesId = (data: SearchResponse): ProductWithVariants => {
+export const mapProductFromSeriesId = (data: SearchResponse): Product => {
   return mapProductWithVariants(data.hits.hits.map((h) => h._source))
 }
 
 /**
  * Maps result from indexed _doc endpoint into one product with one variant (indexed on productvariants)
  */
-export const mapProductFromDoc = (data: ProductDocResponse): ProductWithVariants => {
+export const mapProductFromDoc = (data: ProductDocResponse): Product => {
   return mapProductWithVariants(Array(data._source))
 }
 
 /**
  * Maps results from search with aggregation into products with all variants
  */
-export const mapProductsFromAggregation = (data: SeriesAggregationResponse): ProductWithVariants[] => {
+export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Product[] => {
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source))
   )
   return buckets
 }
 
-export const mapProductWithVariants = (sources: ProductSourceResponse[]): ProductWithVariants => {
+export const mapProductWithVariants = (sources: ProductSourceResponse[]): Product => {
   let applicableAgreementInfo: AgreementInfo | null = null
   const variants = sources.map((source) => {
     if (

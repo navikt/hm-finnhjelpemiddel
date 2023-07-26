@@ -10,7 +10,7 @@ import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-
 import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
-import { ProductWithVariants } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
@@ -106,7 +106,7 @@ const SearchResult = ({
   firstChecked,
   setFirstChecked,
 }: {
-  product: ProductWithVariants
+  product: Product
   firstChecked: boolean
   setFirstChecked: (first: boolean) => void
 }) => {
@@ -116,7 +116,7 @@ const SearchResult = ({
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
   const toggleCompareProduct = () => {
-    productsToCompare.filter((procom: ProductWithVariants) => product.id === procom.id).length === 1
+    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
 
@@ -126,8 +126,7 @@ const SearchResult = ({
     }
   }
 
-  const isInProductsToCompare =
-    productsToCompare.filter((procom: ProductWithVariants) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   return (
     <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>

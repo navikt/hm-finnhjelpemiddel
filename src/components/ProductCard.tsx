@@ -7,11 +7,11 @@ import { MultiplyIcon } from '@navikt/aksel-icons'
 import { Button, Heading } from '@navikt/ds-react'
 
 import { smallImageLoader } from '../utils/image-util'
-import { ProductWithVariants } from '../utils/product-util'
+import { Product } from '../utils/product-util'
 
 type ProductCardProps = {
-  product: ProductWithVariants
-  removeProduct: (product: ProductWithVariants) => void
+  product: Product
+  removeProduct: (product: Product) => void
 }
 
 const ProductCard = ({ product, removeProduct }: ProductCardProps) => {

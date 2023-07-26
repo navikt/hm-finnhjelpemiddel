@@ -7,7 +7,7 @@ import useSWR from 'swr'
 
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { ProductWithVariants, toSearchQueryString } from '@/utils/product-util'
+import { Product, toSearchQueryString } from '@/utils/product-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
@@ -29,7 +29,7 @@ export default function ComparePage() {
     productsToCompare.length > 0 ? fetchProductsWithVariants : null
   )
 
-  const productsToCompareWithVariants: ProductWithVariants[] | undefined = data?.products
+  const productsToCompareWithVariants: Product[] | undefined = data?.products
 
   const handleClick = (event: any) => {
     event.preventDefault()
@@ -81,8 +81,8 @@ const CompareTable = ({
   removeProduct,
   href,
 }: {
-  productsToCompare: ProductWithVariants[]
-  removeProduct: (product: ProductWithVariants) => void
+  productsToCompare: Product[]
+  removeProduct: (product: Product) => void
   href: string
 }) => {
   const allDataKeysVariants = [
