@@ -7,10 +7,10 @@ import Link from 'next/link'
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
 
-import { Document, ProductWithVariants } from '@/utils/product-util'
+import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
-export const InformationTabs = ({ product, supplier }: { product: ProductWithVariants; supplier: Supplier }) => (
+export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
     <Tabs.List>
       <Tabs.Tab
@@ -37,7 +37,7 @@ export const InformationTabs = ({ product, supplier }: { product: ProductWithVar
   </Tabs>
 )
 
-const SupplierInfo = ({ product, supplier }: { product: ProductWithVariants; supplier: Supplier }) => (
+const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <div className="product-info__supplier-info">
     <Heading level="2" size="xsmall">
       Produktbeskrivelse
