@@ -103,8 +103,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
         Produktvarianter
       </Heading>
       <BodyLong>
-        Produktet finnes i flere varianter, under finner man en oversikt over de forskjellige. Radene hvor
-        produktvariantene har forskjellige verdier kan sorteres og vil fremheves når de er sortert.
+        Produktet finnes i flere varianter. Nedenfor finner man en oversikt over de forskjellige. Radene hvor variantene
+        har ulike verdier kan sorteres og vil fremheves når de er sortert.
       </BodyLong>
 
       <div className="comparing-table">
@@ -124,6 +124,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Table.DataCell key={variant.id}>{variant.hmsArtNr}</Table.DataCell>
               ))}
             </Table.Row>
+
+            {product.applicableAgreementInfo && (
+              <Table.Row>
+                <Table.HeaderCell>Rangering</Table.HeaderCell>
+                {sortedByKey.map((variant) => (
+                  <Table.DataCell key={variant.id}>{variant.agreementInfo?.rank || '-'}</Table.DataCell>
+                ))}
+              </Table.Row>
+            )}
+
             <Table.Row>
               <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
               {sortedByKey.map((variant) => (
