@@ -31,6 +31,16 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
         )
     : null
 
+  const variantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
+  const variantsWithoutAgreement = product.variantCount - variantsOnAgreement
+
+  const textAllVariantsOnAgreement = `${product.title} finnes i ${variantsOnAgreement} varianter på avtale med NAV.`
+  const textViantsWithAndWithoutAgreement = `${
+    product.title
+  } finnes i ${variantsOnAgreement} varianter på avtale med NAV, og ${variantsWithoutAgreement} ${
+    variantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+  } som ikke er på avtale med NAV.`
+
   return (
     <>
       <BackButton />
@@ -46,6 +56,12 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
                   </Heading>
                   {product.applicableAgreementInfo && <AgreementIcon rank={product.applicableAgreementInfo.rank} />}
                 </div>
+                {product.applicableAgreementInfo && (
+                  <Alert inline={true} variant="info">
+                    {variantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}
+                  </Alert>
+                )}
+
                 <div className="product-info__expired-propducts">
                   {/* TODO: check all expired dates */}
                   {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
