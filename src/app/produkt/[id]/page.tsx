@@ -31,14 +31,14 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
         )
     : null
 
-  const variantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
-  const variantsWithoutAgreement = product.variantCount - variantsOnAgreement
+  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
+  const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
 
-  const textAllVariantsOnAgreement = `${product.title} finnes i ${variantsOnAgreement} varianter på avtale med NAV.`
+  const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV.`
   const textViantsWithAndWithoutAgreement = `${
     product.title
-  } finnes i ${variantsOnAgreement} varianter på avtale med NAV, og ${variantsWithoutAgreement} ${
-    variantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+  } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
+    numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
   } som ikke er på avtale med NAV.`
 
   return (
@@ -58,7 +58,9 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
                 </div>
                 {product.applicableAgreementInfo && (
                   <Alert inline={true} variant="info">
-                    {variantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}
+                    {numberOfvariantsWithoutAgreement > 0
+                      ? textViantsWithAndWithoutAgreement
+                      : textAllVariantsOnAgreement}
                   </Alert>
                 )}
 
