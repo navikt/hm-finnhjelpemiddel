@@ -30,22 +30,10 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
           Avtale med Nav
         </Heading>
 
-        {product.applicableAgreementInfo && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <AgreementIcon rank={product.applicableAgreementInfo.rank} />
-            <BodyShort>Rangert som nr. {product.applicableAgreementInfo.rank}</BodyShort>
-          </div>
-        )}
-        <DefinitionList>
-          <DefinitionList.Term>Avtale</DefinitionList.Term>
-          <DefinitionList.Definition>{agreement.title}</DefinitionList.Definition>
-          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
-          <DefinitionList.Definition>{postTitle}</DefinitionList.Definition>
-        </DefinitionList>
         {product.applicableAgreementInfo && product.applicableAgreementInfo.rank > 1 && (
-          <Alert variant="warning" inline>
-            Den er rangert som nummer {product.applicableAgreementInfo.rank} i delkontrakten. Ta en titt på høyere
-            rangerte produkter for å se om det passer ditt behov.
+          <Alert variant="info" inline>
+            Dette produktet er rangert som nummer {product.applicableAgreementInfo.rank} i delkontrakten. Ta en titt på
+            høyere rangerte produkter for å se om det passer ditt behov.
           </Alert>
         )}
         {productsOnPost && productsOnPost.length > 1 && (
