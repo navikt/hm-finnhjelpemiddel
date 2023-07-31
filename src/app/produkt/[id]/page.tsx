@@ -34,7 +34,9 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
 
-  const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV.`
+  const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} ${
+    numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
+  } på avtale med NAV.`
   const textViantsWithAndWithoutAgreement = `${
     product.title
   } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
