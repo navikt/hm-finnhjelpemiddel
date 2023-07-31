@@ -102,10 +102,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <Heading id="product_variants" level="3" size="medium" spacing>
         Produktvarianter
       </Heading>
-      <BodyLong>
-        Produktet finnes i flere varianter. Nedenfor finner man en oversikt over de forskjellige. Radene hvor variantene
-        har ulike verdier kan sorteres og vil fremheves når de er sortert.
-      </BodyLong>
+      {product.variantCount > 1 && (
+        <BodyLong>
+          Produktet finnes i flere varianter. Nedenfor finner man en oversikt over de forskjellige. Radene hvor
+          variantene har ulike verdier kan sorteres og vil fremheves når de er sortert.
+        </BodyLong>
+      )}
 
       <div className="comparing-table">
         <Table>
