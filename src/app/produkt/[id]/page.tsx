@@ -103,7 +103,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
             <ProductVariants product={product} />
           </section>
 
-          {agreement && <AgreementInfo product={product} agreement={agreement} productsOnPost={productsOnPost} />}
+          {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}
         </article>
       </AnimateLayout>
     </>

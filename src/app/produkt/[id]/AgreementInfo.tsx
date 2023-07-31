@@ -3,26 +3,21 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Agreement, getPostTitle } from '@/utils/agreement-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import { Alert, BodyShort, Heading, ImageIcon } from '@/components/aksel-client'
-import DefinitionList from '@/components/definition-list/DefinitionList'
+import { Alert, Heading, ImageIcon } from '@/components/aksel-client'
 
 type AgreementInfoProps = {
   product: Product
   productsOnPost: Product[] | null
-  agreement: Agreement
 }
 
-export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementInfoProps) => {
-  const postTitle =
-    product.applicableAgreementInfo?.postNr && agreement
-      ? getPostTitle(agreement.posts, product.applicableAgreementInfo.postNr)
-      : ''
-
+export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) => {
+  if (productsOnPost?.length === 0 && product.applicableAgreementInfo?.rank === 1) {
+    return null
+  }
   return (
     <section className="agreement-details" aria-label="Informasjon om rammeavtalen produktet er på">
       <div className="agreement-details__content max-width">
@@ -36,7 +31,7 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
             høyere rangerte produkter for å se om det passer ditt behov.
           </Alert>
         )}
-        {productsOnPost && productsOnPost.length > 1 && (
+        {productsOnPost && (
           <div className="agreement-details__products-on-post">
             <Heading level="4" size="medium" spacing>
               Andre produkter på samme delkontrakt
