@@ -3,26 +3,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Agreement, getPostTitle } from '@/utils/agreement-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import { Alert, BodyShort, Heading, ImageIcon } from '@/components/aksel-client'
-import DefinitionList from '@/components/definition-list/DefinitionList'
+import { Alert, BodyLong, BodyShort, Heading, ImageIcon } from '@/components/aksel-client'
 
 type AgreementInfoProps = {
   product: Product
   productsOnPost: Product[] | null
-  agreement: Agreement
 }
 
-export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementInfoProps) => {
-  const postTitle =
-    product.applicableAgreementInfo?.postNr && agreement
-      ? getPostTitle(agreement.posts, product.applicableAgreementInfo.postNr)
-      : ''
-
+export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) => {
   return (
     <section className="agreement-details" aria-label="Informasjon om rammeavtalen produktet er på">
       <div className="agreement-details__content max-width">
@@ -30,31 +22,20 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
           Avtale med Nav
         </Heading>
 
-        {product.applicableAgreementInfo && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <AgreementIcon rank={product.applicableAgreementInfo.rank} />
-            <BodyShort>Rangert som nr. {product.applicableAgreementInfo.rank}</BodyShort>
-          </div>
-        )}
-        <DefinitionList>
-          <DefinitionList.Term>Avtale</DefinitionList.Term>
-          <DefinitionList.Definition>{agreement.title}</DefinitionList.Definition>
-          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
-          <DefinitionList.Definition>{postTitle}</DefinitionList.Definition>
-        </DefinitionList>
         {product.applicableAgreementInfo && product.applicableAgreementInfo.rank > 1 && (
-          <Alert variant="warning" inline>
-            Den er rangert som nummer {product.applicableAgreementInfo.rank} i delkontrakten. Ta en titt på høyere
-            rangerte produkter for å se om det passer ditt behov.
+          <Alert variant="info" inline>
+            Dette produktet er rangert som nummer {product.applicableAgreementInfo.rank} i delkontrakten. Ta en titt på
+            høyere rangerte produkter for å se om det passer ditt behov.
           </Alert>
         )}
-        {productsOnPost && productsOnPost.length > 1 && (
-          <div className="agreement-details__products-on-post">
-            <Heading level="4" size="medium" spacing>
-              Andre produkter på samme delkontrakt
-            </Heading>
+
+        <div className="agreement-details__products-on-post">
+          <Heading level="4" size="medium" spacing>
+            Andre produkter på samme delkontrakt
+          </Heading>
+          {productsOnPost && productsOnPost.length > 0 ? (
             <div className="agreement-details__products-on-post-list">
-              {productsOnPost.map((product) => (
+              {productsOnPost?.map((product) => (
                 <div className="agreement-details__product-on-post" key={product.id}>
                   <div className="image-container">
                     <div className="image">
@@ -88,8 +69,10 @@ export const AgreementInfo = ({ product, agreement, productsOnPost }: AgreementI
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <BodyLong>Det finnes ingen andre produkter på samme delkontrakt</BodyLong>
+          )}
+        </div>
       </div>
     </section>
   )
