@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useCallback, useState } from 'react'
-import { SubmitHandler } from 'react-hook-form'
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'

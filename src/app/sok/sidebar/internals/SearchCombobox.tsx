@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 
 import { SuggestionsResponse, fetchSuggestions } from '@/utils/api-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
 
 type Props = {
   initialValue: string
@@ -14,20 +15,34 @@ type Props = {
 const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   const [inputValue, setInputValue] = useState(initialValue)
   const [selectedOption, setSelectedOption] = useState('')
+  const { searchData } = useHydratedSearchStore()
 
   const { data: suggestionData } = useSWR<SuggestionsResponse>(inputValue, fetchSuggestions, {
     keepPreviousData: true,
   })
 
-  const suggestions = useMemo(
-    () => suggestionData?.suggestions.map((suggestion) => suggestion.text) || [],
+  //hasAgreementOnly === true comes first.
+  const allSuggestionsSortedonAgreementValue = useMemo(
+    () =>
+      suggestionData?.suggestions
+        .map((suggestion) => suggestion)
+        .sort((a, b) => (b.data.hasAgreement === a.data.hasAgreement ? 0 : a ? -1 : 1))
+        .map((suggestion) => suggestion.text) || [],
+    [suggestionData]
+  )
+
+  const suggestionsWithAgreementOnly = useMemo(
+    () =>
+      suggestionData?.suggestions
+        .filter((suggestion) => suggestion.data.hasAgreement === true)
+        .map((suggestion) => suggestion.text) || [],
     [suggestionData]
   )
 
   return (
     <UNSAFE_Combobox
       label="Skriv ett eller flere søkeord"
-      options={suggestions}
+      options={searchData.hasAgreementsOnly ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue}
       value={inputValue}
       selectedOptions={selectedOption ? [selectedOption] : []}
       clearButton={true}

@@ -32,7 +32,7 @@ const initialFiltersState = {
 export const initialSearchDataState = {
   searchTerm: '',
   isoCode: '',
-  hasAgreementsOnly: true,
+  hasAgreementsOnly: false,
   filters: initialFiltersState,
 }
 
