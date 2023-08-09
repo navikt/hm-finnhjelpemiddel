@@ -7,6 +7,8 @@ import { UNSAFE_Combobox } from '@navikt/ds-react'
 import { SuggestionsResponse, fetchSuggestions } from '@/utils/api-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
 
+import useDebounce from '@/hooks/useDebounce'
+
 type Props = {
   initialValue: string
   onSearch(searchTerm: string): void
@@ -16,8 +18,9 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   const [inputValue, setInputValue] = useState(initialValue)
   const [selectedOption, setSelectedOption] = useState('')
   const { searchData } = useHydratedSearchStore()
+  const debouncedSearchValue = useDebounce<string>(inputValue)
 
-  const { data: suggestionData } = useSWR<SuggestionsResponse>(inputValue, fetchSuggestions, {
+  const { data: suggestionData } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
     keepPreviousData: true,
   })
 
