@@ -1,0 +1,46 @@
+@use './_mixins';
+
+@import '@navikt/ds-tokens/dist/tokens';
+
+.not-found {
+  width: 100%;
+  height: 100%;
+  background-color: $a-orange-50;
+  padding-top: 60px;
+  display: flex;
+  justify-content: center;
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    padding-bottom: $a-spacing-4;
+
+    @include mixins.for-size(tablet-up) {
+      flex-direction: row;
+
+      h1 {
+        padding-right: $a-spacing-4;
+        margin-bottom: $a-spacing-4;
+        border-right: 1px solid grey;
+      }
+      p {
+        padding-left: $a-spacing-4;
+      }
+    }
+  }
+
+  &__container {
+    background-color: white;
+    border-radius: $a-border-radius-xlarge;
+    max-width: 700px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: $a-spacing-8 $a-spacing-3;
+
+    @include mixins.for-size(tablet-up) {
+      padding: $a-spacing-12 $a-spacing-5;
+    }
+  }
+}
