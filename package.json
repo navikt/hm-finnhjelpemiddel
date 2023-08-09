@@ -11,9 +11,9 @@
   "dependencies": {
     "@axe-core/react": "^4.7.2",
     "@navikt/aksel-icons": "^4.1.2",
-    "@navikt/ds-css": "^4.1.2",
+    "@navikt/ds-css": "^4.7.2",
     "@navikt/ds-icons": "^3.4.3",
-    "@navikt/ds-react": "^4.1.2",
+    "@navikt/ds-react": "^4.7.2",
     "@navikt/ds-tokens": "^4.1.2",
     "@types/deep-equal": "^1.0.1",
     "@types/node": "18.11.9",

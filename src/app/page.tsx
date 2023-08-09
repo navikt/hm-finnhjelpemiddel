@@ -1,39 +1,30 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import React, { useCallback, useState } from 'react'
+import { SubmitHandler } from 'react-hook-form'
 
 import NextLink from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, Ingress, Search } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Ingress } from '@navikt/ds-react'
 
 import { agreementKeyLabels } from '@/utils/agreement-util'
-import { SearchData } from '@/utils/api-util'
-import { mapProductSearchParams } from '@/utils/product-util'
-import { initialSearchDataState } from '@/utils/search-state-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
+import SearchCombobox from './sok/sidebar/internals/SearchCombobox'
+
 function Home() {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
-  const [productSearchParams] = useState(mapProductSearchParams(searchParams))
   const [showAllAgreements, setShowAllAgreements] = useState<boolean>(false)
-
-  const formMethods = useForm<SearchData>({
-    defaultValues: {
-      ...initialSearchDataState,
-      ...productSearchParams,
+  const onSearch = useCallback(
+    (searchTerm: string) => {
+      router.push('/sok?term=' + searchTerm)
     },
-  })
-  const { control, handleSubmit } = formMethods
-
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    router.push('/sok?term=' + data.searchTerm)
-  }
+    [router]
+  )
 
   let first9Agreements = Object.entries(agreementKeyLabels)
   const lastAgreements = first9Agreements.splice(10)
@@ -61,18 +52,7 @@ function Home() {
               <Ingress>Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</Ingress>
             </div>
             <div className="home-page__input">
-              <FormProvider {...formMethods}>
-                <form role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
-                  <Controller
-                    render={({ field }) => (
-                      <Search label="Skriv ett eller flere søkeord" hideLabel={false} {...field} />
-                    )}
-                    name="searchTerm"
-                    control={control}
-                    defaultValue=""
-                  />
-                </form>
-              </FormProvider>
+              <SearchCombobox onSearch={onSearch} initialValue="" />
             </div>
           </div>
         </div>

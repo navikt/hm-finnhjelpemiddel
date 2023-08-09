@@ -11,6 +11,7 @@ import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
+import { useHydratedSearchStore } from '@/utils/search-state-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
