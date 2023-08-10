@@ -255,8 +255,8 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams | n
   const isoCode = searchParams?.get('isoCode') ?? ''
   const agreement = searchParams?.get('agreement')
 
-  //default value is true when initiating search
-  const hasAgreementsOnly = agreement ? agreement === 'true' : true
+  //default value is false when initiating search
+  const hasAgreementsOnly = agreement ? agreement === 'true' : false
 
   const to = parseInt(searchParams?.get('to') ?? '') ?? undefined
 

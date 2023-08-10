@@ -1,10 +1,14 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
-import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
+import React, { forwardRef, useImperativeHandle } from 'react'
+import { SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Search, Switch } from '@navikt/ds-react'
+import { useSearchParams } from 'next/navigation'
+
+import { Button, Switch } from '@navikt/ds-react'
 
 import { FilterData, SearchData } from '@/utils/api-util'
 import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
+
+import SearchCombobox from './internals/SearchCombobox'
 
 import FilterView from './FilterView'
 
@@ -24,14 +28,13 @@ type Props = {
 }
 
 const SearchForm = forwardRef<SearchFormResetHandle, Props>(({ filters, setFocus }, ref) => {
+  const searchParams = useSearchParams()
   const { searchData, setSearchData } = useHydratedSearchStore()
-  const { control, handleSubmit, reset: resetForm, setValue } = useFormContext<SearchData>()
+  const { handleSubmit, reset: resetForm, setValue } = useFormContext<SearchData>()
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => setSearchData({ ...data })
-
-  useEffect(() => {
-    setValue('searchTerm', searchData.searchTerm)
-  }, [searchData.searchTerm, setValue])
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    setSearchData({ ...data })
+  }
 
   useImperativeHandle(ref, () => ({
     reset() {
@@ -42,18 +45,11 @@ const SearchForm = forwardRef<SearchFormResetHandle, Props>(({ filters, setFocus
   return (
     <form className="container" role="search" onSubmit={handleSubmit(onSubmit)} aria-controls="searchResults">
       <div className="spacing-bottom--medium">
-        <Controller
-          render={({ field }) => (
-            <Search
-              label="Skriv ett eller flere søkeord"
-              hideLabel={false}
-              onClear={() => setSearchData({ searchTerm: '' })}
-              {...field}
-            />
-          )}
-          name="searchTerm"
-          control={control}
-          defaultValue=""
+        <SearchCombobox
+          initialValue={searchParams.get('term') || ''}
+          onSearch={(searchTerm) => {
+            setSearchData({ ...searchData, searchTerm })
+          }}
         />
       </div>
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}

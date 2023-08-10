@@ -20,7 +20,13 @@ import {
   filterTotalvekt,
   toMinMaxAggs,
 } from './filter-util'
-import { Product, mapProductsFromAggregation, mapProductsFromCollapse } from './product-util'
+import {
+  Product,
+  ProductVariant,
+  mapProductVariant,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
+} from './product-util'
 import { ProductDocResponse, SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
@@ -810,4 +816,42 @@ export async function getProductsInPost(postIdentifier: string): Promise<SearchR
     }),
   })
   return res.json()
+}
+
+export type Suggestions = Array<{ text: string; data: ProductVariant }>
+export type SuggestionsResponse = { suggestions: Suggestions }
+
+//TODO: Bør denne returnere Product? Vet ikke om vi trenger det
+export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => {
+  return fetch('/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      suggest: {
+        keywords_suggest: {
+          prefix: term,
+          completion: {
+            field: 'keywords_suggest',
+            skip_duplicates: true,
+            contexts: {
+              status: 'ACTIVE',
+            },
+            size: 100,
+            fuzzy: {
+              fuzziness: 'AUTO',
+            },
+          },
+        },
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      const suggestions: Suggestions = data.suggest.keywords_suggest
+        .at(0)
+        .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
+      return { suggestions }
+    })
 }
