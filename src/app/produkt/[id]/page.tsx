@@ -50,7 +50,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
         <article className="product-info">
           <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
             <div className="product-info__top-content max-width">
-              <div>{product.photos && <PhotoSlider photos={product.photos} />}</div>
+              <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
               <div className="product-info__top-right">
                 <div className="product-info__heading-container">
                   <Heading level="1" size="large" spacing>

@@ -52,11 +52,18 @@
     }
   }
 
+  &__top-left {
+    @include mixins.for-size(desktop-up) {
+      padding: $a-spacing-5 $a-spacing-5;
+      flex: 1;
+    }
+  }
+
   &__top-right {
     @include mixins.for-size(desktop-up) {
       padding: $a-spacing-5 $a-spacing-5;
-      margin-left: $a-spacing-8;
       border-left: 1px solid $a-gray-300;
+      flex: 1;
     }
   }
 
@@ -82,7 +89,6 @@
   &__expired-propducts {
     margin-bottom: $a-spacing-6;
     margin-top: $a-spacing-6;
-    max-width: 60%;
   }
 }
 
