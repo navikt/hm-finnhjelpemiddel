@@ -97,6 +97,18 @@ const ProductVariants = ({ product }: { product: Product }) => {
     return replacedStr === '' ? '-' : replacedStr
   }
 
+  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
+  const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
+
+  const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} ${
+    numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
+  } på avtale med NAV.`
+  const textViantsWithAndWithoutAgreement = `${
+    product.title
+  } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
+    numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+  } som ikke er på avtale med NAV.`
+
   return (
     <>
       <Heading id="product_variants" level="3" size="medium" spacing>
@@ -104,8 +116,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
       </Heading>
       {product.variantCount > 1 && (
         <BodyLong>
-          Produktet finnes i flere varianter. Nedenfor finner man en oversikt over de forskjellige. Radene hvor
-          variantene har ulike verdier kan sorteres og vil fremheves når de er sortert.
+          {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
+          Nedenfor finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan
+          sorteres og vil fremheves når de er sortert.
         </BodyLong>
       )}
 

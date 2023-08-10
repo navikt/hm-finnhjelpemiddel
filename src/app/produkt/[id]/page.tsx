@@ -31,18 +31,6 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
         )
     : null
 
-  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
-  const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
-
-  const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} ${
-    numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
-  } på avtale med NAV.`
-  const textViantsWithAndWithoutAgreement = `${
-    product.title
-  } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
-    numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-  } som ikke er på avtale med NAV.`
-
   return (
     <>
       <BackButton />
@@ -104,11 +92,6 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
             aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
           >
             <ProductVariants product={product} />
-            {product.applicableAgreementInfo && (
-              <Alert inline={true} variant="info">
-                {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}
-              </Alert>
-            )}
           </section>
 
           {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}
