@@ -703,6 +703,7 @@ export async function getProduct(id: string): Promise<ProductDocResponse> {
 
 export async function getSupplier(id: string) {
   const res = await fetch(process.env.HM_SEARCH_URL + `/suppliers/_doc/${id}`, {
+    next: { revalidate: 900 },
     method: 'GET',
   })
 
@@ -711,6 +712,7 @@ export async function getSupplier(id: string) {
 
 export async function getAgreement(id: string) {
   const res = await fetch(process.env.HM_SEARCH_URL + `/agreements/_doc/${id}`, {
+    next: { revalidate: 900 },
     method: 'GET',
   })
 
@@ -719,6 +721,7 @@ export async function getAgreement(id: string) {
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
   const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
