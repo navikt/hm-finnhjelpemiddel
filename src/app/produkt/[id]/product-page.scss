@@ -36,10 +36,10 @@
   &__top-content {
     display: flex;
     flex-direction: column;
-    padding: $a-spacing-10 $a-spacing-6;
 
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
+      padding: $a-spacing-10 $a-spacing-6;
     }
   }
 
@@ -55,6 +55,16 @@
       padding: $a-spacing-5 $a-spacing-5;
       border-left: 1px solid $a-gray-300;
       flex: 1;
+    }
+  }
+
+  &__agreement-rank {
+    display: flex;
+    align-items: center;
+    gap: $a-spacing-1;
+
+    p {
+      font-weight: $a-font-weight-bold;
     }
   }
 

@@ -5,7 +5,7 @@ import { mapSupplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
 import { BackButton } from '@/components/BackButton'
-import { Alert, Heading } from '@/components/aksel-client'
+import { Alert, BodyShort, Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
@@ -56,14 +56,17 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
                   <Heading level="1" size="large" spacing>
                     {product.title}
                   </Heading>
-                  {product.applicableAgreementInfo && <AgreementIcon rank={product.applicableAgreementInfo.rank} />}
                 </div>
+
                 {product.applicableAgreementInfo && (
-                  <Alert inline={true} variant="info">
-                    {numberOfvariantsWithoutAgreement > 0
-                      ? textViantsWithAndWithoutAgreement
-                      : textAllVariantsOnAgreement}
-                  </Alert>
+                  <div className="product-info__agreement-rank">
+                    <AgreementIcon rank={product.applicableAgreementInfo.rank} />
+                    <BodyShort>
+                      {product.applicableAgreementInfo.rank === 99
+                        ? 'Tilbehøret på avtale med NAV - ingen rangering'
+                        : `Rangert som nr ${product.applicableAgreementInfo.rank} på avtale med Nav`}
+                    </BodyShort>
+                  </div>
                 )}
 
                 <div className="product-info__expired-propducts">
@@ -101,6 +104,11 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
             aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
           >
             <ProductVariants product={product} />
+            {product.applicableAgreementInfo && (
+              <Alert inline={true} variant="info">
+                {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}
+              </Alert>
+            )}
           </section>
 
           {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}

@@ -112,7 +112,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <div className="comparing-table">
         <Table>
           <Table.Header>
-            <Table.Row key="hms-row">
+            <Table.Row>
               <Table.ColumnHeader>Tittel</Table.ColumnHeader>
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>{variantTitle(variant.articleName)}</Table.ColumnHeader>
@@ -123,7 +123,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
             <Table.Row>
               <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
               {sortedByKey.map((variant) => (
-                <Table.DataCell key={variant.id}>{variant.hmsArtNr}</Table.DataCell>
+                <Table.DataCell key={variant.id}>{variant.hmsArtNr ?? '-'}</Table.DataCell>
               ))}
             </Table.Row>
 
