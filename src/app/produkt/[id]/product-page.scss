@@ -3,6 +3,8 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
+  padding-bottom: 2.5rem;
+
   .comparing-table {
     thead tr {
       background-color: $a-surface-selected;

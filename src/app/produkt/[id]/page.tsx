@@ -85,14 +85,17 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
               Produktegenskaper
             </Heading>
             <TechnicalSpecifications product={product} />
+            {/*test denne http://localhost:3000/produkt/9c68e99a-a730-4048-ad2c-2ba8ff466b8f */}
           </section>
 
-          <section
-            className="product-info__product-variants max-width"
-            aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
-          >
-            <ProductVariants product={product} />
-          </section>
+          {product.variantCount > 1 && (
+            <section
+              className="product-info__product-variants max-width"
+              aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
+            >
+              <ProductVariants product={product} />
+            </section>
+          )}
 
           {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}
         </article>
