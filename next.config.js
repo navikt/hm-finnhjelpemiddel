@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const setAssetPefix = (nodeEnv, buildEnv, assetPrefix) => {
-  const isProd = nodeEnv === 'production'
+  const isProd = nodeEnv === 'prod'
   const prefixAlphaOrDev = buildEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
   return isProd && buildEnv !== undefined ? prefixAlphaOrDev : undefined
 }
