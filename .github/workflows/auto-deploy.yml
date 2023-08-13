@@ -16,6 +16,9 @@ jobs:
       contents: 'read'
       id-token: 'write'
       packages: 'write'
+    env:
+      BUILD_ENV: prod
+      IMAGE_PROXY_URL: https://finnhjelpemidler.nav.no/imageproxy
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -44,8 +47,8 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
           build-args: |
-            BUILD_ENV=prod
-            IMAGE_PROXY_URL=https://finnhjelpemidler.nav.no/imageproxy
+            BUILD_ENV=${{ env.BUILD_ENV }}
+            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
 
   deploy-to-prod:
     name: Deploy to NAIS (PROD)
