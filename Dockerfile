@@ -13,12 +13,13 @@ RUN npm install
 
 # Copy all files
 COPY . .
-COPY next.config.js .
-COPY package.json ./package.json
-COPY .env.production .
 
 ARG BUILD_ENV
 ENV BUILD_ENV ${BUILD_ENV}
+
+ARG IMAGE_PROXY_URL
+ENV IMAGE_PROXY_URL ${IMAGE_PROXY_URL}
+
 # Build app
 RUN npm run build
 

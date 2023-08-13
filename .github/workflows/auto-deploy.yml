@@ -45,7 +45,7 @@ jobs:
           tags: ${{ env.docker_image }}
           build-args: |
             BUILD_ENV=prod
-            HM_SEARCH_URL=http://hm-grunndata-search
+            IMAGE_PROXY_URL=https://finnhjelpemidler.nav.no/imageproxy
 
   deploy-to-prod:
     name: Deploy to NAIS (PROD)
