@@ -14,6 +14,9 @@ RUN npm install
 # Copy all files
 COPY . .
 
+# Copy hidden files
+COPY .env.production .
+
 ARG BUILD_ENV
 ENV BUILD_ENV ${BUILD_ENV}
 
