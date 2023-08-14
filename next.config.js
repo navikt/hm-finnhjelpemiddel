@@ -33,8 +33,7 @@ const nextConfig = {
   },
   env: {
     HM_SEARCH_URL: process.env.HM_SEARCH_URL,
-    IMAGE_PROXY_URL:
-      process.env.BUILD_ENV === 'production' ? process.env.IMAGE_PROXY_URL : process.env.IMAGE_PROXY_INTERN_URL,
+    IMAGE_PROXY_URL: process.env.IMAGE_PROXY_URL,
   },
 }
 
