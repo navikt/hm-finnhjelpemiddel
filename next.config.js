@@ -7,6 +7,7 @@ const setAssetPefix = (nodeEnv, buildEnv, assetPrefix) => {
 }
 
 const nextConfig = {
+  output: 'standalone', // see: https://github.com/vercel/next.js/tree/canary/examples/with-docker
   assetPrefix: setAssetPefix(process.env.NODE_ENV, process.env.BUILD_ENV, process.env.ASSET_PREFIX),
   reactStrictMode: true,
   swcMinify: true,

@@ -4,12 +4,14 @@ FROM node:18-alpine as builder
 # Set working directory
 WORKDIR /app
 
+ENV NEXT_TELEMETRY_DISABLED 1
+
 # Copy package.json and package-lock.json before other files
 # Utilise Docker cache to save re-installing dependencies if unchanged
-COPY package*.json .
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy all files
 COPY . .
@@ -26,19 +28,17 @@ ENV IMAGE_PROXY_URL ${IMAGE_PROXY_URL}
 # Build app
 RUN npm run build
 
-FROM gcr.io/distroless/nodejs:16 as runtime
+FROM gcr.io/distroless/nodejs:18 as runtime
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json .
-COPY --from=builder /app/next.config.js .
-COPY --from=builder /app/.env.production .
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
+# Copy only needed files for next app
+# see: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 # Expose the listening port
 EXPOSE 3000
 
-# Run npm start script when container starts
-CMD ["node_modules/next/dist/bin/next", "start"]
+CMD ["server.js"]
