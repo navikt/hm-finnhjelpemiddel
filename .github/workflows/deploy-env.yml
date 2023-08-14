@@ -23,6 +23,9 @@ jobs:
       contents: 'read'
       id-token: 'write'
       packages: 'write'
+    env:
+      BUILD_ENV: alpha
+      IMAGE_PROXY_URL: https://finnhjelpemidler.intern.dev.nav.no/imageproxy
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -51,8 +54,8 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
           build-args: |
-            BUILD_ENV=alpha
-            HM_SEARCH_URL=http://hm-grunndata-search
+            BUILD_ENV=${{ env.BUILD_ENV }}
+            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
 
   build-dev:
     name: Build and push Dev Docker container
@@ -62,6 +65,9 @@ jobs:
       contents: 'read'
       id-token: 'write'
       packages: 'write'
+    env:
+      BUILD_ENV: dev
+      IMAGE_PROXY_URL: https://finnhjelpemidler.intern.dev.nav.no/imageproxy
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -90,8 +96,8 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
           build-args: |
-            BUILD_ENV=alpha
-            HM_SEARCH_URL=http://hm-grunndata-search
+            BUILD_ENV=${{ env.BUILD_ENV }}
+            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
 
   build-prod:
     name: Build and push Prod Docker container
@@ -101,6 +107,9 @@ jobs:
       contents: 'read'
       id-token: 'write'
       packages: 'write'
+    env:
+      BUILD_ENV: prod
+      IMAGE_PROXY_URL: https://finnhjelpemidler.nav.no/imageproxy
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -129,8 +138,8 @@ jobs:
           push: true
           tags: ${{ env.docker_image }}
           build-args: |
-            BUILD_ENV=prod
-            HM_SEARCH_URL=http://hm-grunndata-search
+            BUILD_ENV=${{ env.BUILD_ENV }}
+            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
 
   deploy-to-alpha:
     name: Deploy to NAIS (Alpha)
