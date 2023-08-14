@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy package.json and package-lock.json before other files
 # Utilise Docker cache to save re-installing dependencies if unchanged
-COPY package*.json /app/
+COPY package*.json .
 
 # Install dependencies
 RUN npm install
@@ -30,12 +30,12 @@ FROM gcr.io/distroless/nodejs:16 as runtime
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json /app/
-COPY --from=builder /app/node_modules /app/node_modules
-COPY next.config.js /app/
-COPY .next /app/.next/
-COPY public /app/public/
-COPY .env* /app/
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/next.config.js .
+COPY --from=builder /app/.env.production .
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
 
 # Expose the listening port
 EXPOSE 3000
