@@ -2,8 +2,8 @@
 
 const setAssetPefix = (nodeEnv, buildEnv, assetPrefix) => {
   const isProd = nodeEnv === 'production'
-  const prefixAlphaOrDev = buildEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
-  return isProd && buildEnv !== undefined ? prefixAlphaOrDev : undefined
+  // const prefixAlphaOrDev = buildEnv === 'prod' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
+  return isProd && buildEnv === 'prod' ? assetPrefix : undefined
 }
 
 const nextConfig = {
