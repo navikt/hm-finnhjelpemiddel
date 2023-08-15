@@ -1,1 +1,14 @@
 node_modules
+Dockerfile
+npm-debug.log
+README.md
+.dockerignore
+.next
+.git
+.github
+.idea
+.nais
+.gitignore
+.editorconfig
+.eslintrc.json
+.prettierrc
