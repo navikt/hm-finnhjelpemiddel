@@ -48,7 +48,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   let sortedByKey = sortColumnsByRowKey(product.variants)
   const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
   const techDataKeys = product.attributes.commonCharacteristics
-    ? allDataKeys.filter((key) => product.attributes.commonCharacteristics[key] === undefined)
+    ? allDataKeys.filter((key) => product.attributes.commonCharacteristics![key] === undefined)
     : allDataKeys
 
   const rows: { [key: string]: string[] } = Object.assign(
