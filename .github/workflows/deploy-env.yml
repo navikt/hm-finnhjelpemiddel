@@ -73,6 +73,10 @@ jobs:
     name: Build and push Prod Docker container
     if: github.event.inputs.environment == 'PROD'
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      packages: 'write'
     env:
       BUILD_ENV: prod
       IMAGE_PROXY_URL: https://finnhjelpemidler.nav.no/imageproxy
