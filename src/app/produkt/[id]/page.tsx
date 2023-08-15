@@ -1,6 +1,7 @@
 import { mapAgreement } from '@/utils/agreement-util'
 import { getAgreement, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
+import { toValueAndUnit } from '@/utils/string-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
@@ -16,7 +17,7 @@ import ProductVariants from './ProductVariants'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
-  const product = mapProductFromSeriesId(await getProductWithVariants(String(seriesId)))
+  const product = mapProductFromSeriesId(await getProductWithVariants(seriesId))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
   const agreement =
     product.applicableAgreementInfo && mapAgreement((await getAgreement(product.applicableAgreementInfo.id))._source)
@@ -84,8 +85,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
             <Heading level="2" size="medium" spacing>
               Produktegenskaper
             </Heading>
-            <TechnicalSpecifications product={product} />
-            {/*test denne http://localhost:3000/produkt/9c68e99a-a730-4048-ad2c-2ba8ff466b8f */}
+            <Characteristics product={product} />
           </section>
 
           {product.variantCount > 1 && (
@@ -140,19 +140,23 @@ const KeyInformation = ({
   </div>
 )
 
-const TechnicalSpecifications = ({ product }: { product: Product }) => {
+const Characteristics = ({ product }: { product: Product }) => {
+  const common = product.attributes?.commonCharacteristics
   return (
     <DefinitionList>
       <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
       <DefinitionList.Definition>
         {product.isoCategoryTitle + '(' + product.isoCategory + ')'}
       </DefinitionList.Definition>
-      {product.attributes?.commonCharacteristics?.map((data) => (
-        <>
-          <DefinitionList.Term>{data.key}</DefinitionList.Term>
-          <DefinitionList.Definition>{data.value}</DefinitionList.Definition>
-        </>
-      ))}
+      {common &&
+        Object.keys(common).map((key, i) => (
+          <>
+            <DefinitionList.Term>{key}</DefinitionList.Term>
+            <DefinitionList.Definition>
+              {common[key] !== undefined ? toValueAndUnit(common[key].value, common[key].unit) : '-'}
+            </DefinitionList.Definition>
+          </>
+        ))}
     </DefinitionList>
   )
 }

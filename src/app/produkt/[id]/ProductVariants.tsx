@@ -46,14 +46,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
   }
 
   let sortedByKey = sortColumnsByRowKey(product.variants)
-
-  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].filter(
-    (key) => !product.attributes.commonCharacteristics?.find((common) => common.key === key)
-  )
+  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
+  const techDataKeys = product.attributes.commonCharacteristics
+    ? allDataKeys.filter((key) => product.attributes.commonCharacteristics[key] === undefined)
+    : allDataKeys
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
-    ...allDataKeys.map((key) => ({
+    ...techDataKeys.map((key) => ({
       [key]: product.variants.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
