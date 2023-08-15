@@ -49,6 +49,8 @@ jobs:
           build-args: |
             BUILD_ENV=${{ env.BUILD_ENV }}
             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy-to-prod:
     name: Deploy to NAIS (PROD)
