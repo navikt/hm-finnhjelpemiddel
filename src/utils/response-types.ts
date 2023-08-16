@@ -43,7 +43,7 @@ export interface Hit {
   _type: string | null
   _id: string
   _score: string
-  _source: ProductSourceResponse
+  _source: ProductSourceResponse | AgreementsSourceResponse
 }
 
 export interface ProductDocResponse {

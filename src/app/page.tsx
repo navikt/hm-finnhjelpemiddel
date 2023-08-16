@@ -29,10 +29,12 @@ function Home() {
   const lastAgreements = first9Agreements.splice(10)
 
   const agreementLink = (key: string, value: string) => {
-    let href = `/sok?agreement=true&rammeavtale=${key}`
+    let hrefSok = `/sok?agreement=true&rammeavtale=${key}`
+    let hrefAgreement = `/rammeavtale/${key}`
+
     return (
       <div className="home-page__agreement-link" key={key}>
-        <NextLink className="back-to-search" href={href}>
+        <NextLink className="back-to-search" href={hrefAgreement}>
           <BodyShort> {value} </BodyShort>
         </NextLink>
       </div>

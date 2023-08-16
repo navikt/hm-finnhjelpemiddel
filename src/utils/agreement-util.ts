@@ -1,4 +1,5 @@
-import { AgreementsSourceResponse, PostResponse } from './response-types'
+import { Document, mapDocuments } from './product-util'
+import { AgreementsSourceResponse, Hit, PostResponse, SearchResponse } from './response-types'
 
 export function getPostTitle(post: string, postNr: number): string
 export function getPostTitle(posts: Post[], postNr: number): string | undefined
@@ -16,7 +17,11 @@ export interface Agreement {
   id: string
   identifier: string
   title: string
+  text: string //html
+  published: string //date
+  expired: string //date
   posts: Post[]
+  attachments: Document[]
 }
 
 export interface Post {
@@ -26,12 +31,23 @@ export interface Post {
   description: string
 }
 
+/**
+ * Maps top result from opensearch into agreement info
+ */
+export const mapAgreementFromSearch = (data: SearchResponse): Agreement => {
+  return data.hits.hits.map((hit: Hit) => mapAgreement(hit._source as AgreementsSourceResponse))[0]
+}
+
 export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
   return {
     id: source.id,
     identifier: source.identifier,
     title: source.title,
+    text: source.text,
+    published: source.published,
+    expired: source.expired,
     posts: mapPosts(source.posts),
+    attachments: mapDocuments(source.attachments),
   }
 }
 

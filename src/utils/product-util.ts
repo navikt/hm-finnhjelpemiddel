@@ -97,14 +97,14 @@ export interface AgreementInfo {
  * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
  */
 export const mapProductsFromCollapse = (data: SearchResponse): Product[] => {
-  return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source)))
+  return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
 }
 
 /**
  * Maps results from search for seriesId one product with all variants
  */
 export const mapProductFromSeriesId = (data: SearchResponse): Product => {
-  return mapProductWithVariants(data.hits.hits.map((h) => h._source))
+  return mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
 }
 
 /**
@@ -119,7 +119,7 @@ export const mapProductFromDoc = (data: ProductDocResponse): Product => {
  */
 export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Product[] => {
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
-    mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source))
+    mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
   return buckets
 }
@@ -214,7 +214,7 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
     }))
 }
 
-const mapDocuments = (media: MediaResponse[]): Document[] => {
+export const mapDocuments = (media: MediaResponse[]): Document[] => {
   const seen: { [uri: string]: boolean } = {}
   return media
     .filter((media: MediaResponse) => {
