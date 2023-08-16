@@ -17,9 +17,9 @@ export interface Agreement {
   id: string
   identifier: string
   title: string
-  text: string //html
-  published: string //date
-  expired: string //date
+  descriptionHtml: string //html
+  published: Date //date
+  expired: Date //date
   posts: Post[]
   attachments: Document[]
 }
@@ -43,9 +43,9 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     id: source.id,
     identifier: source.identifier,
     title: source.title,
-    text: source.text,
-    published: source.published,
-    expired: source.expired,
+    descriptionHtml: source.text,
+    published: new Date(Date.parse(source.published)) ?? '',
+    expired: new Date(Date.parse(source.expired)) ?? '',
     posts: mapPosts(source.posts),
     attachments: mapDocuments(source.attachments),
   }

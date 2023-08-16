@@ -26,3 +26,11 @@ export function findUniqueStringValues(arr: string[]): string {
     return uniqueValuesArray.join(', ')
   }
 }
+
+export const dateToString = (date: Date): string => {
+  const day = date.getDate()
+  const month = date.getMonth()
+  const year = date.getFullYear()
+
+  return `${day}.${month}.${year}`
+}
