@@ -18,7 +18,7 @@ const AgreementIcon = ({
       className={classNames(
         'icon-wrapper',
         {
-          'icon-wrapper--green': rank === 1,
+          'icon-wrapper--green': rank === 1 || rank === 99,
           'icon-wrapper--grey': rank !== 1,
           'icon-wrapper--small': size === 'small',
         },
@@ -26,7 +26,7 @@ const AgreementIcon = ({
       )}
       title="Agreement rank"
     >
-      {rank}
+      {rank === 99 ? '-' : rank}
     </span>
   )
 }

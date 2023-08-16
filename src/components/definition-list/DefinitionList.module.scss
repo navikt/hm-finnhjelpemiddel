@@ -1,27 +1,31 @@
+@use '../../styles/_mixins';
 @import '@navikt/ds-tokens/dist/tokens';
 
 .definitionList {
   display: grid;
-  grid-template-columns: minmax(auto, max-content) auto;
-  column-gap: $a-spacing-10;
-  row-gap: $a-spacing-1;
+  grid-template-columns: 1fr;
+  column-gap: $a-spacing-6;
   align-items: baseline;
   margin: 0;
-
-  &--full-width {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  > * {
-    padding-top: $a-spacing-2;
-  }
 
   dt {
     font-weight: bold;
     text-align: left;
+    padding-top: $a-spacing-3;
   }
 
   dd {
     margin-left: 0;
+    padding-top: 0;
+  }
+
+  @include mixins.for-size(tablet-up) {
+    grid-template-columns: minmax(auto, max-content) auto;
+    row-gap: $a-spacing-1;
+
+    dd,
+    dt {
+      padding-top: $a-spacing-2;
+    }
   }
 }
