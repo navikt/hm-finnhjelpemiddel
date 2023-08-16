@@ -152,19 +152,25 @@ const SearchResult = ({
               </Link>
             </Heading>
             {product.applicableAgreementInfo?.rank && (
-              <div className="search-result__rank-container">
+              <div className="search-result__rank-on-mobile">
                 <AgreementIcon rank={product.applicableAgreementInfo?.rank} size="small" />
               </div>
             )}
           </div>
           <div className="search-result__description">
-            <div className="search-result__post-container">
-              {product.applicableAgreementInfo?.rank && <AgreementIcon rank={product.applicableAgreementInfo?.rank} />}
-              <BodyShort>
-                {'Dk ' + product.applicableAgreementInfo?.postNr + ': ' + product.applicableAgreementInfo?.postTitle ??
-                  product.attributes?.text}
-              </BodyShort>
-            </div>
+            {product.applicableAgreementInfo ? (
+              <div className="search-result__post-container">
+                <AgreementIcon rank={product.applicableAgreementInfo?.rank} />
+                <BodyShort>
+                  {'Dk ' +
+                    product.applicableAgreementInfo?.postNr +
+                    ': ' +
+                    product.applicableAgreementInfo?.postTitle ?? product.attributes?.text}
+                </BodyShort>
+              </div>
+            ) : (
+              <div>{product.attributes.text ?? 'Produkt mangler beskrivelse'}</div>
+            )}
           </div>
           <div className="search-result__more-info">
             <DefinitionList>

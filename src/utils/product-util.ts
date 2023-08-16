@@ -81,7 +81,7 @@ interface Attributes {
   shortdescription?: string
   text?: string
   bestillingsordning?: boolean
-  commonCharacteristics?: { key: string; value: string }[]
+  commonCharacteristics?: TechData
 }
 
 export interface AgreementInfo {
@@ -101,7 +101,7 @@ export const mapProductsFromCollapse = (data: SearchResponse): Product[] => {
 }
 
 /**
- * Maps results from search for seriesId one product with all variants
+ * Maps results from search for seriesId into one product with all variants
  */
 export const mapProductFromSeriesId = (data: SearchResponse): Product => {
   return mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
@@ -140,24 +140,27 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   const variantsCopy = variants
   const allTechKeys = [...new Set(variantsCopy.flatMap((variant) => Object.keys(variant.techData)))]
 
-  let commonCharacteristics: { key: string; value: string }[] = []
+  let commonCharacteristics: TechData = {}
+
   for (const key of allTechKeys) {
-    const fieldValues = variants
-      .map((obj) => {
-        if (obj.techData[key] && obj.techData[key].unit === '') {
-          return obj.techData[key].value
-        }
-      })
-      .filter((field) => field)
-    let uniqueValues = new Set(fieldValues)
-    const [first] = uniqueValues
-    if (uniqueValues.size == 1 && first) {
-      commonCharacteristics.push({
-        key: key,
-        value: first.length > 1 ? capitalize(first) : first,
+    let firstObj = variants[0].techData[key]
+    const allTheSame =
+      variants.length > 1
+        ? variants.find(
+            (obj) =>
+              obj.techData[key].value !== firstObj.value ||
+              obj.techData[key].unit !== firstObj.unit ||
+              obj.techData[key].unit !== ''
+          ) === undefined
+        : true
+
+    if (allTheSame) {
+      Object.assign(commonCharacteristics, {
+        [key]: { value: firstObj.value.length > 1 ? capitalize(firstObj.value) : firstObj.value, unit: firstObj.unit },
       })
     }
   }
+
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
   const firstVariant = sources[0]
   return {
