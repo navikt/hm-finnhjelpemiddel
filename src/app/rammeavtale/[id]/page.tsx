@@ -4,6 +4,8 @@ import { mapAgreementFromSearch } from '@/utils/agreement-util'
 import { getAgreementFromIdentifier } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
+import AgreementIcon from '@/components/AgreementIcon'
+import ReadMore from '@/components/ReadMore'
 import { BodyLong, ChevronRightIcon, Heading, Link } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
@@ -14,6 +16,9 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
   const agreement = mapAgreementFromSearch(await getAgreementFromIdentifier(agreementId))
   const hrefSok = `/sok?agreement=true&rammeavtale=${agreementId}`
 
+  const documentLoader = (uri: string) => {
+    return `https://www.hjelpemiddeldatabasen.no/blobs/${uri}`
+  }
   return (
     <div className="agreement-page">
       <AnimateLayout>
@@ -38,38 +43,75 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
             <AgreementDescription agreement={agreement} />
           </article>
           <article>
-            <div>
-              <Heading level="1" size="medium">
-                Slik kan du se at et hjelpemiddel er på avtale med NAV
-              </Heading>
-              {/* <Heading level="2" size="small">
+            <Heading level="1" size="large">
+              Slik kan du se at et hjelpemiddel er på avtale med NAV
+            </Heading>
+
+            <div className="agreement-page__icon-containers">
+              <div className="agreement-page__icon-container">
+                <AgreementIcon rank={99} />
+                <BodyLong>Er på avtale med NAV, men har ikke en spesifikk rangering</BodyLong>
+              </div>
+              <div className="agreement-page__icon-container">
+                <AgreementIcon rank={1} />
+                <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
+              </div>
+              <div className="agreement-page__icon-container">
+                <AgreementIcon rank={4} />
+                <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
+              </div>
+            </div>
+            {/* <Heading level="2" size="small">
                 Hvordan man ser at et produkt, tilbehør eller en reservedel er på avtale med NAV:
               </Heading> */}
-            </div>
-            <div></div>
-            <BodyLong spacing>
-              Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
-              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
-              <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
-                nav.no
-              </Link>
-              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på{' '}
-              <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
-            </BodyLong>
+
+            <ReadMore
+              content={
+                <>
+                  <Heading level="2" size="small">
+                    Hva om produktet jeg mener passer for meg ikke har denne merkingen?
+                  </Heading>
+                  <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
+                  <Heading level="2" size="small">
+                    Hva om produktet jeg mener passer for meg er rangert som nummer 2, 3 eller 4?
+                  </Heading>
+                  <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
+                  <Heading level="2" size="small">
+                    Hva vil det si at et produkt ikke har spesifikk rangering?
+                  </Heading>
+                  <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>
+                </>
+              }
+              buttonOpen={'Les mer om betydning av dette for søknad om produkt'}
+              buttonClose={'Les mindre om betydning av dette for søknad om produkt'}
+            />
           </article>
           <article>
-            <Heading level="1" size="large" spacing className="spacing-top--xlarge">
+            <Heading level="1" size="large" spacing>
               Dokumenter
             </Heading>
-            <BodyLong spacing>
-              Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
-              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
-              <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
-                nav.no
-              </Link>
-              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på{' '}
-              <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
-            </BodyLong>
+            {agreement.attachments.map((attachment) => (
+              <>
+                <Heading level="2" size="small" spacing>
+                  {attachment.title}
+                </Heading>
+                <BodyLong>{attachment.description}</BodyLong>
+                {attachment.documents.map((doc, index) => (
+                  <li key={index}>
+                    {doc.title.length > 0 && (
+                      <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
+                        {doc.title} (PDF)
+                      </a>
+                    )}
+                    {doc.title.length == 0 && (
+                      <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
+                        Dokument uten navn (PDF)
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </>
+            ))}
           </article>
         </div>
       </AnimateLayout>

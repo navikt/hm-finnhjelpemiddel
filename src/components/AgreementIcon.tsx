@@ -13,13 +13,15 @@ const AgreementIcon = ({
     return null
   }
 
+  const isGreen = rank === 1 || rank === 99
+
   return (
     <span
       className={classNames(
         'icon-wrapper',
         {
-          'icon-wrapper--green': rank === 1 || rank === 99,
-          'icon-wrapper--grey': rank !== 1,
+          'icon-wrapper--green': isGreen,
+          'icon-wrapper--grey': !isGreen,
           'icon-wrapper--small': size === 'small',
         },
         className

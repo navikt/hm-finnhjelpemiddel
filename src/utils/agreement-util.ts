@@ -1,5 +1,5 @@
 import { Document, mapDocuments } from './product-util'
-import { AgreementsSourceResponse, Hit, PostResponse, SearchResponse } from './response-types'
+import { AgreementsSourceResponse, AttachmentsResponse, Hit, PostResponse, SearchResponse } from './response-types'
 
 export function getPostTitle(post: string, postNr: number): string
 export function getPostTitle(posts: Post[], postNr: number): string | undefined
@@ -21,7 +21,13 @@ export interface Agreement {
   published: Date //date
   expired: Date //date
   posts: Post[]
-  attachments: Document[]
+  attachments: Attachments[]
+}
+
+interface Attachments {
+  title: string
+  description: string
+  documents: Document[]
 }
 
 export interface Post {
@@ -47,8 +53,16 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     published: new Date(Date.parse(source.published)) ?? '',
     expired: new Date(Date.parse(source.expired)) ?? '',
     posts: mapPosts(source.posts),
-    attachments: mapDocuments(source.attachments),
+    attachments: mapAttachments(source.attachments),
   }
+}
+
+const mapAttachments = (attachments: AttachmentsResponse[]): Attachments[] => {
+  return attachments.map((attachments: AttachmentsResponse) => ({
+    title: attachments.title,
+    description: attachments.description,
+    documents: mapDocuments(attachments.media),
+  }))
 }
 
 const mapPosts = (posts: PostResponse[]): Post[] => {
