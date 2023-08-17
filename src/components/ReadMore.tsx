@@ -1,24 +1,42 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 
-export const FullDescription = ({ descriptionHtml }: { descriptionHtml: string }) => {
+export const ReadMore = ({
+  content,
+  buttonOpen,
+  buttonClose,
+  setFocus,
+}: {
+  content: ReactNode
+  buttonOpen: string
+  buttonClose: string
+  setFocus?: () => void
+}) => {
   const [showFullDescription, setShowFullDescription] = useState<boolean>(false)
   return (
-    <>
-      {showFullDescription && <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />}
+    <div className="read-more">
+      {showFullDescription && content}
       {showFullDescription ? (
         <Button
           className="home-page__chevron-button"
           variant="tertiary"
           iconPosition="right"
           icon={<ChevronUpIcon aria-hidden />}
-          onClick={() => setShowFullDescription(false)}
+          onClick={() => {
+            if (setFocus) {
+              setShowFullDescription(false)
+              setFocus()
+            } else {
+              setShowFullDescription(false)
+            }
+          }}
         >
-          Les mer om betydning av dette for søknad om produkt
+          {buttonClose}
+          {/* Les mindre om betydning av dette for søknad om produkt */}
         </Button>
       ) : (
         <Button
@@ -28,11 +46,11 @@ export const FullDescription = ({ descriptionHtml }: { descriptionHtml: string }
           icon={<ChevronDownIcon aria-hidden />}
           onClick={() => setShowFullDescription(true)}
         >
-          Les mindre om betydning av dette for søknad om produkt
+          {buttonOpen}
         </Button>
       )}
-    </>
+    </div>
   )
 }
 
-export default FullDescription
+export default ReadMore

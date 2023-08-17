@@ -428,6 +428,20 @@ details {
   }
 }
 
+.read-more {
+  width: 100%;
+
+  button {
+    width: 100%;
+    align-self: center;
+    color: $a-blue-700;
+  }
+
+  button:hover {
+    color: $a-blue-700;
+  }
+}
+
 .text-line-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 2;

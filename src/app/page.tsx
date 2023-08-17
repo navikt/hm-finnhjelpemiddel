@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -10,12 +10,18 @@ import { BodyShort, Button, Heading, Ingress } from '@navikt/ds-react'
 
 import { agreementKeyLabels } from '@/utils/agreement-util'
 
+import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import SearchCombobox from './sok/sidebar/internals/SearchCombobox'
 
 function Home() {
   const router = useRouter()
+  const agreementHeadingRef = useRef<HTMLHeadingElement>(null)
+
+  const setFocusOnHeading = () => {
+    agreementHeadingRef.current && agreementHeadingRef.current.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const [showAllAgreements, setShowAllAgreements] = useState<boolean>(false)
   const onSearch = useCallback(
@@ -61,7 +67,7 @@ function Home() {
           <div className="polygon-shape"></div>
           <div className="home-page__agreement-container">
             <div className="home-page__heading">
-              <Heading level="2" size="large" spacing>
+              <Heading level="2" size="large" spacing ref={agreementHeadingRef}>
                 Produkter på avtale med NAV
               </Heading>
               <Ingress>
@@ -70,36 +76,25 @@ function Home() {
                 hjelpemidler. Lenkene nedenfor tar deg til produkter innenfor valgt avtale.
               </Ingress>
             </div>
-            <div className="home-page__agreement-links">
-              {first9Agreements.map(([key, value]) => {
-                return agreementLink(key, value)
-              })}
-              {showAllAgreements &&
-                lastAgreements.map(([key, value]) => {
+            <div>
+              <div className="home-page__agreement-links spacing-bottom--medium">
+                {first9Agreements.map(([key, value]) => {
                   return agreementLink(key, value)
                 })}
+              </div>
+              <ReadMore
+                content={
+                  <div className="home-page__agreement-links read-more-content">
+                    {lastAgreements.map(([key, value]) => {
+                      return agreementLink(key, value)
+                    })}
+                  </div>
+                }
+                buttonOpen={'Vis alle avtaler'}
+                buttonClose={'Skjul visning av alle avtaler'}
+                setFocus={setFocusOnHeading}
+              />
             </div>
-            {showAllAgreements ? (
-              <Button
-                className="home-page__chevron-button"
-                variant="tertiary"
-                iconPosition="right"
-                icon={<ChevronUpIcon aria-hidden />}
-                onClick={() => setShowAllAgreements(false)}
-              >
-                Skjul visning av alle avtaler
-              </Button>
-            ) : (
-              <Button
-                className="home-page__chevron-button"
-                variant="tertiary"
-                iconPosition="right"
-                icon={<ChevronDownIcon aria-hidden />}
-                onClick={() => setShowAllAgreements(true)}
-              >
-                Vis alle avtaler
-              </Button>
-            )}
           </div>
         </div>
       </AnimateLayout>
