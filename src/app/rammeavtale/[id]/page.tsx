@@ -17,7 +17,7 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
   const hrefSok = `/sok?agreement=true&rammeavtale=${agreementId}`
 
   const documentLoader = (uri: string) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/${uri}`
+    return `${process.env.CDN_URL}${uri}`
   }
   return (
     <div className="agreement-page">

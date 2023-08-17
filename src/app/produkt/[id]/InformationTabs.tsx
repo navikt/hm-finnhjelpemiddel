@@ -71,7 +71,7 @@ const Documents = ({ documents }: { documents: Document[] }) => {
   }
 
   const documentLoader = (uri: string) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/${uri}`
+    return `${process.env.CDN_URL}${uri}`
   }
 
   const titleCapitalized = (documentTitle: string) => {
