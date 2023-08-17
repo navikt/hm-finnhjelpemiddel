@@ -5,8 +5,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, Ingress } from '@navikt/ds-react'
+import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
 
 import { agreementKeyLabels } from '@/utils/agreement-util'
 
@@ -23,7 +22,6 @@ function Home() {
     agreementHeadingRef.current && agreementHeadingRef.current.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const [showAllAgreements, setShowAllAgreements] = useState<boolean>(false)
   const onSearch = useCallback(
     (searchTerm: string) => {
       router.push('/sok?term=' + searchTerm)
@@ -35,7 +33,6 @@ function Home() {
   const lastAgreements = first9Agreements.splice(10)
 
   const agreementLink = (key: string, value: string) => {
-    let hrefSok = `/sok?agreement=true&rammeavtale=${key}`
     let hrefAgreement = `/rammeavtale/${key}`
 
     return (

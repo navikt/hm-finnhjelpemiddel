@@ -4,8 +4,7 @@ import { mapAgreementFromSearch } from '@/utils/agreement-util'
 import { getAgreementFromIdentifier } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
-import ReadMore from '@/components/ReadMore'
-import { BodyLong, BodyShort, ChevronRightIcon, Heading, Link } from '@/components/aksel-client'
+import { BodyLong, ChevronRightIcon, Heading, Link } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import AgreementDescription from './AgreementDescription'
