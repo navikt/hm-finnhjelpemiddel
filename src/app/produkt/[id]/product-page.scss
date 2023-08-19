@@ -3,6 +3,8 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
+  padding-bottom: 2.5rem;
+
   .comparing-table {
     thead tr {
       background-color: $a-surface-selected;
@@ -13,8 +15,6 @@
     }
   }
 
-  width: 100%;
-
   &__heading-container {
     display: flex;
     align-items: baseline;
@@ -23,39 +23,49 @@
 
   &__key-information {
     display: flex;
-    padding: 8px 8px;
     flex-direction: column;
     align-items: flex-start;
-
+    padding: $a-spacing-2;
+    border: 1px solid $a-border-subtle;
     border-radius: $a-border-radius-large;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(255, 255, 255, 0.5);
   }
 
   &__supplier-info {
     margin-bottom: $a-spacing-1;
   }
 
-  &__top {
-    background-color: $a-gray-50;
-    width: 100%;
-  }
-
   &__top-content {
     display: flex;
     flex-direction: column;
-    padding: $a-spacing-10 $a-spacing-6;
 
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
+      padding: $a-spacing-10 $a-spacing-6;
+    }
+  }
+
+  &__top-left {
+    @include mixins.for-size(desktop-up) {
+      padding: $a-spacing-5 $a-spacing-5;
+      flex: 1;
     }
   }
 
   &__top-right {
     @include mixins.for-size(desktop-up) {
       padding: $a-spacing-5 $a-spacing-5;
-      margin-left: $a-spacing-8;
       border-left: 1px solid $a-gray-300;
+      flex: 1;
+    }
+  }
+
+  &__agreement-rank {
+    display: flex;
+    align-items: center;
+    gap: $a-spacing-1;
+
+    p {
+      font-weight: $a-font-weight-bold;
     }
   }
 
@@ -81,7 +91,6 @@
   &__expired-propducts {
     margin-bottom: $a-spacing-6;
     margin-top: $a-spacing-6;
-    max-width: 60%;
   }
 }
 

@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-const setAssetPefix = (nodeEnv, buildEnv, assetPrefix) => {
-  const isProd = nodeEnv === 'production'
-  const prefixAlphaOrDev = buildEnv === 'alpha' ? assetPrefix + '/alpha' : assetPrefix + '/dev'
-  return isProd && buildEnv !== undefined ? prefixAlphaOrDev : undefined
-}
-
 const nextConfig = {
-  assetPrefix: setAssetPefix(process.env.NODE_ENV, process.env.BUILD_ENV, process.env.ASSET_PREFIX),
+  output: 'standalone', // see: https://github.com/vercel/next.js/tree/canary/examples/with-docker
   reactStrictMode: true,
   swcMinify: true,
   i18n: {
@@ -33,8 +27,7 @@ const nextConfig = {
   },
   env: {
     HM_SEARCH_URL: process.env.HM_SEARCH_URL,
-    IMAGE_PROXY_URL:
-      process.env.BUILD_ENV === 'production' ? process.env.IMAGE_PROXY_URL : process.env.IMAGE_PROXY_INTERN_URL,
+    IMAGE_PROXY_URL: process.env.IMAGE_PROXY_URL,
   },
 }
 
