@@ -1,5 +1,7 @@
 'use client'
 
+import StyledComponentsRegistry from '@/lib/registry'
+
 import React, { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 
@@ -96,7 +98,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             </div>
           </nav>
         </header>
-        <main>{children}</main>
+        <main>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </main>
         <Footer />
       </body>
     </html>
