@@ -42,9 +42,6 @@ const PhotoSliderModal = ({
   const firstFocusableElementRef = useRef<HTMLElement | null>(null)
   const lastFocusableElementRef = useRef<HTMLElement | null>(null)
 
-  console.log('First', firstFocusableElementRef)
-  console.log('Last', lastFocusableElementRef)
-
   useEffect(() => {
     const modalElement = modalRef.current
     if (modalElement) {
