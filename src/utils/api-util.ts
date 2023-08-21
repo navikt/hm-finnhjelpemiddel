@@ -180,58 +180,56 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
     negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
   }
 
-  const searchTermQuery = searchTerm.length
-    ? {
-        must: {
-          bool: {
-            should: [
-              {
-                boosting: {
-                  positive: {
-                    multi_match: {
-                      query: searchTerm,
-                      type: 'cross_fields',
-                      fields: [
-                        'isoCategoryTitle^2',
-                        'isoCategoryText^0.5',
-                        'title^0.3',
-                        'attributes.text^0.1',
-                        'keywords_bag^0.1',
-                      ],
-                      operator: 'and',
-                      zero_terms_query: 'all',
-                    },
-                  },
-                  ...commonBoosting,
+  const searchTermQuery = {
+    must: {
+      bool: {
+        should: [
+          {
+            boosting: {
+              positive: {
+                multi_match: {
+                  query: searchTerm,
+                  type: 'cross_fields',
+                  fields: [
+                    'isoCategoryTitle^2',
+                    'isoCategoryText^0.5',
+                    'title^0.3',
+                    'attributes.text^0.1',
+                    'keywords_bag^0.1',
+                  ],
+                  operator: 'and',
+                  zero_terms_query: 'all',
                 },
               },
-              {
-                boosting: {
-                  positive: {
-                    query_string: {
-                      query: `*${searchTerm}`,
-                      boost: '0.1',
-                    },
-                  },
-                  ...commonBoosting,
-                },
-              },
-              {
-                boosting: {
-                  positive: {
-                    query_string: {
-                      query: `${searchTerm}*`,
-                      boost: '0.1',
-                    },
-                  },
-                  ...commonBoosting,
-                },
-              },
-            ],
+              ...commonBoosting,
+            },
           },
-        },
-      }
-    : {}
+          {
+            boosting: {
+              positive: {
+                query_string: {
+                  query: `*${searchTerm}`,
+                  boost: '0.1',
+                },
+              },
+              ...commonBoosting,
+            },
+          },
+          {
+            boosting: {
+              positive: {
+                query_string: {
+                  query: `${searchTerm}*`,
+                  boost: '0.1',
+                },
+              },
+              ...commonBoosting,
+            },
+          },
+        ],
+      },
+    },
+  }
 
   const query = {
     bool: {
