@@ -54,30 +54,53 @@ const PhotoSliderModal = ({
         firstFocusableElementRef.current.focus()
       }
     }
-  }, [modalIsOpen])
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Tab') {
-      if (event.shiftKey) {
-        if (document.activeElement === firstFocusableElementRef.current) {
-          event.preventDefault()
-          lastFocusableElementRef.current?.focus()
-        }
-      } else {
-        if (document.activeElement === lastFocusableElementRef.current) {
-          event.preventDefault()
-          firstFocusableElementRef.current?.focus()
+    const handleTabKey = (event: KeyboardEvent) => {
+      if (event.key === 'Tab') {
+        if (event.shiftKey) {
+          if (document.activeElement === firstFocusableElementRef.current) {
+            event.preventDefault()
+            lastFocusableElementRef.current?.focus()
+          }
+        } else {
+          if (document.activeElement === lastFocusableElementRef.current) {
+            event.preventDefault()
+            firstFocusableElementRef.current?.focus()
+          }
         }
       }
     }
-  }
+
+    const handleArrowKeys = (event: KeyboardEvent) => {
+      if (modalIsOpen && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        event.preventDefault()
+        if (event.key === 'ArrowLeft') {
+          prevImage()
+        } else if (event.key === 'ArrowRight') {
+          nextImage()
+        }
+      } else if (modalIsOpen && event.key === 'Enter' && event.target instanceof HTMLImageElement) {
+        event.preventDefault()
+        // Handle the logic for changing the active image here.
+        // You might want to call a function similar to nextImage or prevImage.
+      }
+    }
+    // Add event listener for Arrow keys
+    window.addEventListener('keydown', handleArrowKeys)
+    window.addEventListener('keydown', handleTabKey)
+
+    // Remove event listener for Arrow keys when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleArrowKeys)
+      window.addEventListener('keydown', handleTabKey)
+    }
+  }, [modalIsOpen, prevImage, nextImage])
 
   if (!photos.length) {
     return (
       <Modal ref={modalRef}>
         <ModalContent>
           <CloseButton
-            onKeyDown={handleKeyDown}
             tabIndex={0}
             variant="tertiary-neutral"
             onClick={closeModal}
@@ -98,7 +121,6 @@ const PhotoSliderModal = ({
     <Modal ref={modalRef}>
       <ModalContent>
         <CloseButton
-          onKeyDown={handleKeyDown}
           tabIndex={0}
           variant="tertiary-neutral"
           onClick={closeModal}
@@ -108,7 +130,6 @@ const PhotoSliderModal = ({
         <PhotoAndArrowsContainer>
           {photos.length > 1 && (
             <ArrowButton
-              onKeyDown={handleKeyDown}
               tabIndex={0}
               aria-label="Forrige bilde"
               variant="tertiary-neutral"
@@ -145,7 +166,6 @@ const PhotoSliderModal = ({
               }}
             >
               <Image
-                onKeyDown={handleKeyDown}
                 tabIndex={0}
                 draggable="false"
                 loader={largeImageLoader}
@@ -159,7 +179,6 @@ const PhotoSliderModal = ({
 
           {photos.length > 1 && (
             <ArrowButton
-              onKeyDown={handleKeyDown}
               tabIndex={0}
               aria-label="Neste bilde"
               variant="tertiary-neutral"
@@ -184,7 +203,6 @@ const PhotoSliderModal = ({
                   role="button"
                   key={i}
                   tabIndex={0}
-                  onKeyDown={handleKeyDown}
                   onClick={() => setActive(i)}
                   loader={largeImageLoader}
                   src={photo.uri}
@@ -197,14 +215,12 @@ const PhotoSliderModal = ({
                   role="button"
                   key={i}
                   tabIndex={0}
-                  onKeyDown={handleKeyDown}
                   onClick={() => setActive(i)}
                   loader={largeImageLoader}
                   src={photo.uri}
                   alt={`Produktbilde nummer ${i + 1} av totalt ${photos.length} bilder`}
                   fill
                   style={{ objectFit: 'scale-down' }}
-                  onKeyDownCapture={(event) => event.key === 'Enter' && setActive(i)}
                 />
               )
             )}
@@ -316,7 +332,7 @@ const PreviewAllPhotosContainer = styled.div`
     height: 100px !important;
     cursor: pointer;
     position: relative !important;
-    margin-top: 1rem;
+    margin-top: 10px;
     background: white;
     border-radius: var(--a-border-radius-medium);
     opacity: 0.5;
@@ -325,7 +341,7 @@ const PreviewAllPhotosContainer = styled.div`
       opacity: 1;
       cursor: not-allowed;
       position: relative !important;
-      width: 150px !important;
+      width: 170px !important;
       height: 120px !important;
       margin-top: 0;
       background: white;
