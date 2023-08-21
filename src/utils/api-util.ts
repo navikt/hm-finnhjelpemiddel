@@ -154,41 +154,88 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
     queryFilters.push({ match: { hmsArtNr: { query: searchTerm } } })
   }
 
-  const query = {
-    bool: {
-      must: {
-        bool: {
-          should: [
-            {
-              multi_match: {
-                query: searchTerm,
-                type: 'cross_fields',
-                fields: [
-                  'isoCategoryTitle^2',
-                  'isoCategoryText^0.5',
-                  'title^0.3',
-                  'attributes.text^0.1',
-                  'keywords_bag^0.1',
-                ],
-                operator: 'and',
-                zero_terms_query: 'all',
+  //Seksualhjelpemidler boostes negativt slik at de kommer langt ned i listen når søk ikke er initiert
+  const negativeIsoCategories = ['09540601', '09540901', '09540301']
+
+  const searchDataFilters = Object.entries(searchData.filters)
+    .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
+    .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
+
+  const commonBoosting = {
+    negative: {
+      bool: {
+        must: {
+          bool: {
+            should: negativeIsoCategories.map((isoCategory) => ({
+              match: {
+                isoCategory,
               },
-            },
-            {
-              query_string: {
-                query: `*${searchTerm}`,
-                boost: '0.1',
-              },
-            },
-            {
-              query_string: {
-                query: `${searchTerm}*`,
-                boost: '0.1',
-              },
-            },
-          ],
+            })),
+          },
         },
       },
+    },
+    //Dersom man har gjort et søk eller valgt et filter ønsker vi ikke negativ boost på seksualhjelpemidler
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
+  }
+
+  const searchTermQuery = searchTerm.length
+    ? {
+        must: {
+          bool: {
+            should: [
+              {
+                boosting: {
+                  positive: {
+                    multi_match: {
+                      query: searchTerm,
+                      type: 'cross_fields',
+                      fields: [
+                        'isoCategoryTitle^2',
+                        'isoCategoryText^0.5',
+                        'title^0.3',
+                        'attributes.text^0.1',
+                        'keywords_bag^0.1',
+                      ],
+                      operator: 'and',
+                      zero_terms_query: 'all',
+                    },
+                  },
+                  ...commonBoosting,
+                },
+              },
+              {
+                boosting: {
+                  positive: {
+                    query_string: {
+                      query: `*${searchTerm}`,
+                      boost: '0.1',
+                    },
+                  },
+                  ...commonBoosting,
+                },
+              },
+              {
+                boosting: {
+                  positive: {
+                    query_string: {
+                      query: `${searchTerm}*`,
+                      boost: '0.1',
+                    },
+                  },
+                  ...commonBoosting,
+                },
+              },
+            ],
+          },
+        },
+      }
+    : {}
+
+  const query = {
+    bool: {
+      ...searchTermQuery,
       filter: queryFilters,
     },
   }
