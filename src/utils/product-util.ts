@@ -143,15 +143,18 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   let commonCharacteristics: TechData = {}
 
   for (const key of allTechKeys) {
-    let firstObj = variants[0].techData[key]
+    const firstObj = variants.find((v) => key in v.techData)!.techData[key]
+
     const allTheSame =
       variants.length > 1
-        ? variants.find(
-            (obj) =>
-              obj.techData[key].value !== firstObj.value ||
-              obj.techData[key].unit !== firstObj.unit ||
-              obj.techData[key].unit !== ''
-          ) === undefined
+        ? variants
+            .filter((variant) => key in variant.techData)
+            .find(
+              (obj) =>
+                obj.techData[key].value !== firstObj.value ||
+                obj.techData[key].unit !== firstObj.unit ||
+                obj.techData[key].unit !== ''
+            ) === undefined
         : true
 
     if (allTheSame) {
