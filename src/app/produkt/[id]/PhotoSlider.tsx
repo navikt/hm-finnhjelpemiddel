@@ -54,16 +54,6 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [src, setSrc] = useState(photos[active]?.uri)
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const openModal = () => {
-    setModalIsOpen(true)
-    document.body.style.overflow = 'hidden' // Disable scrolling on the body
-  }
-
-  const closeModal = () => {
-    setModalIsOpen(false)
-    document.body.style.overflow = 'auto' // Re-enable scrolling on the body
-  }
-
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
   const prevImage = () => {
@@ -92,7 +82,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
       <PhotoSliderModal
         photos={photos}
         modalIsOpen={modalIsOpen}
-        closeModal={closeModal}
+        setModalIsOpen={setModalIsOpen}
         prevImage={prevImage}
         nextImage={nextImage}
         active={active}
@@ -125,7 +115,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                onClick={openModal}
+                onClick={() => setModalIsOpen(true)}
               />
             </div>
             <div style={{ width: '40px', height: '40px' }}></div>
@@ -176,16 +166,17 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   <div className="next-image">
                     <Image
                       role="button"
+                      aria-label="Forstørr bildet"
                       draggable="false"
                       loader={largeImageLoader}
                       src={src}
-                      alt={`Produktbilde nummer ${active + 1} av totalt ${photos.length} bilder`}
+                      alt={`Produktbilde ${active + 1} av ${photos.length}`}
                       fill
                       style={{ objectFit: 'contain' }}
                       sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                      onClick={openModal}
+                      onClick={() => setModalIsOpen(true)}
                     />
                   </div>
                 </motion.div>
