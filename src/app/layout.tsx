@@ -75,7 +75,8 @@ function RootLayout({ children }: { children: React.ReactNode }) {
           <div>
             <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
             <BodyLong>
-              <b>Hei!</b> Dette er en prototype som på sikt erstatte hjelpemiddeldatasen
+              <b>Hei!</b> Dette er en prototype hvor utvikling og forbedringer vil skje kontinuerlig. Nettsiden skal på
+              sikt erstatte hjelpemiddeldatasen.
               <Link href="https://www.hjelpemiddeldatabasen.no/">Her er lenken til hjelpemiddeldatabasen.no</Link>
             </BodyLong>
           </div>
