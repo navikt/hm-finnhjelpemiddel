@@ -6,17 +6,26 @@ import Image from 'next/image'
 
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
-import { ChevronLeftCircle, ChevronRightCircle, Picture } from '@navikt/ds-icons'
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { Picture } from '@navikt/ds-icons'
 import { Button } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
 
+import PhotoSliderModal from './PhotoSliderModal'
+
 type ImageSliderProps = {
   photos: Photo[]
 }
 
-const variants: Variants = {
+export const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity
+}
+
+export const SWIPE_CONFIDENCE_THRESHOLD = 1000
+
+export const variants: Variants = {
   enter: (direction: number) => {
     return {
       x: direction > 0 ? 1000 : -1000,
@@ -40,9 +49,10 @@ const variants: Variants = {
 const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const numberOfImages = photos.length
   const hasImages = photos.length !== 0
-  let [active, setActive] = useState(0)
-  let [direction, setDirection] = useState(0)
-  let [src, setSrc] = useState(photos[active]?.uri)
+  const [active, setActive] = useState(0)
+  const [direction, setDirection] = useState(0)
+  const [src, setSrc] = useState(photos[active]?.uri)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
@@ -66,13 +76,25 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
    *
    * src: https://codesandbox.io/s/framer-motion-image-gallery-pqvx3?from-embed=&file=/src/Example.tsx:1480-1488
    */
-  const swipeConfidenceThreshold = 10000
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity
+
+  if (modalIsOpen) {
+    return (
+      <PhotoSliderModal
+        photos={photos}
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        prevImage={prevImage}
+        nextImage={nextImage}
+        active={active}
+        direction={direction}
+        src={src}
+        setActive={setActive}
+      />
+    )
   }
 
   return (
-    <div className="photo-slider">
+    <div className="photo-slider-small">
       <div className="photo-and-arrow-container">
         {!hasImages && (
           <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
@@ -82,6 +104,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             <div style={{ width: '40px', height: '40px' }}></div>
             <div className="photo-container">
               <Image
+                role="button"
                 key={src}
                 loader={largeImageLoader}
                 src={src}
@@ -92,6 +115,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
+                onClick={() => setModalIsOpen(true)}
               />
             </div>
             <div style={{ width: '40px', height: '40px' }}></div>
@@ -107,7 +131,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               onClick={() => {
                 prevImage()
               }}
-              icon={<ChevronLeftCircle aria-hidden height={50} width={50} />}
+              icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
             />
 
             <div className="photo-container">
@@ -132,24 +156,27 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   onDragEnd={(e, { offset, velocity }) => {
                     const swipe = swipePower(offset.x, velocity.x)
 
-                    if (swipe < -swipeConfidenceThreshold) {
+                    if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
                       nextImage()
-                    } else if (swipe > swipeConfidenceThreshold) {
+                    } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
                       prevImage()
                     }
                   }}
                 >
                   <div className="next-image">
                     <Image
+                      role="button"
+                      aria-label="Forstørr bildet"
                       draggable="false"
                       loader={largeImageLoader}
                       src={src}
-                      alt={`Produktbilde nummer ${active}`}
+                      alt={`Produktbilde ${active + 1} av ${photos.length}`}
                       fill
                       style={{ objectFit: 'contain' }}
                       sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
+                      onClick={() => setModalIsOpen(true)}
                     />
                   </div>
                 </motion.div>
@@ -162,7 +189,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               onClick={() => {
                 nextImage()
               }}
-              icon={<ChevronRightCircle aria-hidden height={50} width={50} />}
+              icon={<ChevronRightIcon aria-hidden height={50} width={50} />}
             />
           </>
         )}
