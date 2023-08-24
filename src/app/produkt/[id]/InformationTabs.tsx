@@ -5,7 +5,7 @@ import React from 'react'
 import Link from 'next/link'
 
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
 
 import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
@@ -35,6 +35,27 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
       </div>
     </Tabs.Panel>
   </Tabs>
+)
+
+export const InformationAccordion = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+  <Accordion>
+    <Accordion.Item>
+      <Accordion.Header>Produktbeskrivelse fra leverandør</Accordion.Header>
+      <Accordion.Content>
+        <div className="product-info__accordion">
+          <SupplierInfo product={product} supplier={supplier} />
+        </div>
+      </Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item>
+      <Accordion.Header>Tilhørende dokumenter ({product.documents.length})</Accordion.Header>
+      <Accordion.Content>
+        <div className="product-info__accordion">
+          <Documents documents={product.documents} />
+        </div>
+      </Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
 )
 
 const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
