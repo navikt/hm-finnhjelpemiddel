@@ -83,7 +83,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
           </section>
 
           <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
-            {!isMobileDevice ? (
+            {isMobileDevice ? (
               <InformationAccordion product={product} supplier={supplier} />
             ) : (
               <InformationTabs product={product} supplier={supplier} />
