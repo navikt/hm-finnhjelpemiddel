@@ -269,6 +269,6 @@ const ThumbnailImageContainer = styled.div`
     position: relative !important;
     border-radius: var(--a-border-radius-medium);
     max-height: 100px !important;
-    object-fit: content;
+    object-fit: contain;
   }
 `
