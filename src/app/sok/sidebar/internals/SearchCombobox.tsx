@@ -61,7 +61,7 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
         setInputValue('')
       }}
       onChange={(event) => {
-        setInputValue(event.target.value)
+        event && setInputValue(event.target.value)
       }}
       onToggleSelected={(option, isSelected) => {
         if (isSelected) {
