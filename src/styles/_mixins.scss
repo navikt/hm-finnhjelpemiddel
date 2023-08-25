@@ -2,10 +2,16 @@
 
 @mixin for-size($range) {
   @if $range == phone-only {
-    @media (max-width: 549px) { @content; }
+    @media (max-width: 549px) {
+      @content;
+    }
   } @else if $range == tablet-up {
-    @media (min-width: 550px) { @content; }
+    @media (min-width: 550px) {
+      @content;
+    }
   } @else if $range == desktop-up {
-    @media (min-width: 1100px) { @content; }
+    @media (min-width: 1024px) {
+      @content;
+    }
   }
 }

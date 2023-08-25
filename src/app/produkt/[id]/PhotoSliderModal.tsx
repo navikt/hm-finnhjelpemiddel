@@ -117,9 +117,6 @@ const PhotoSliderModal = ({
                 alt={`Produktbilde ${active + 1} av ${photos.length}`}
                 fill
                 style={{ objectFit: 'contain' }}
-                sizes="(min-width: 66em) 33vw,
-                (min-width: 44em) 40vw,
-                100vw"
               />
             </motion.div>
           </ImageContainer>
@@ -152,9 +149,7 @@ const PhotoSliderModal = ({
                   src={photo.uri}
                   alt={`Produktbilde ${i + 1} av ${photos.length}`}
                   fill
-                  sizes="(min-width: 66em) 33vw,
-                  (min-width: 44em) 40vw,
-                  100vw"
+                  sizes=""
                 />
               </ThumbnailImageContainer>
             ))}
@@ -173,47 +168,45 @@ const StyledModal = styled(Modal)`
   height: 100vh;
 
   @media (min-width: ${minWidthTabletUp}) {
-    max-height: 80%;
+    max-height: 90% !important;
     max-width: 90% !important;
-  }
-
-  @media (min-width: ${minWidthDesktopUp}) {
-    max-width: 70% !important;
   }
 `
 const ModalBody = styled(Modal.Body)`
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  padding: 0;
   flex: 2;
+  flex-direction: column;
+  padding: 0;
+  height: 90%;
+  width: 100%;
+
+  @media (min-width: ${minWidthTabletUp}) {
+    justify-content: space-between;
+  }
 `
 
 const PhotoAndArrowsContainer = styled.div`
-  flex: 2;
+  width: 100%;
+  height: 75%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-
-  @media (min-width: ${minWidthTabletUp}) {
-    margin: 0 1rem;
-  }
 `
 
 const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
-  flex: 2;
+  width: 100%;
+  height: 100%;
 
   div {
-    flex: 2;
+    width: 100%;
 
     img {
       position: relative !important;
       border-radius: var(--a-border-radius-medium);
       object-fit: contain;
-      max-height: 400px;
     }
   }
 `
@@ -244,6 +237,10 @@ const NumberOfTotal = styled.div`
 
 const PreviewAllPhotosContainer = styled.div`
   @media (max-width: ${maxWidthPhoneOnly}) {
+    display: none;
+  }
+
+  @media (max-height: 500px) {
     display: none;
   }
   display: flex;
