@@ -111,6 +111,7 @@ export interface MediaResponse {
   uri: string
   text?: string | null
   source?: MediaSourceType
+  updated: string
 }
 
 export interface AgreementInfoResponse {

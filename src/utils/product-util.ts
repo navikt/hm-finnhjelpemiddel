@@ -68,6 +68,7 @@ export interface Photo {
 export interface Document {
   uri: string
   title: string
+  updated: Date
 }
 
 export interface TechData {
@@ -232,6 +233,7 @@ export const mapDocuments = (media: MediaResponse[]): Document[] => {
     .map((doc: MediaResponse) => ({
       uri: doc.uri,
       title: doc.text ? doc.text : '',
+      updated: new Date(Date.parse(doc.updated)) ?? '',
     }))
 }
 

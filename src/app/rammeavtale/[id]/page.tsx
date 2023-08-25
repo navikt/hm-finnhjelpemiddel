@@ -5,6 +5,7 @@ import { getAgreementFromIdentifier } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
+import File from '@/components/File'
 import ReadMore from '@/components/ReadMore'
 import { BodyLong, ChevronRightIcon, Heading, Link } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -32,25 +33,27 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
             <ChevronRightIcon aria-hidden fontSize="1.5rem" />
           </div>
           <article>
-            <Heading level="1" size="large">
-              {agreement.title}
-            </Heading>
-            <BodyLong spacing>
-              {`Avtaleperiode: fra ${dateToString(agreement.published)} til
+            <div>
+              <Heading level="1" size="large" className="spacing-bottom--small">
+                {agreement.title}
+              </Heading>
+              <BodyLong>
+                {`Avtaleperiode: fra ${dateToString(agreement.published)} til
              ${dateToString(agreement.expired)}`}
-            </BodyLong>
+              </BodyLong>
+            </div>
 
             <AgreementDescription agreement={agreement} />
           </article>
           <article>
-            <Heading level="1" size="large">
+            <Heading level="1" size="medium">
               Slik kan du se at et hjelpemiddel er på avtale med NAV
             </Heading>
 
             <div className="agreement-page__icon-containers">
               <div className="agreement-page__icon-container">
                 <AgreementIcon rank={99} />
-                <BodyLong>Er på avtale med NAV, men har ikke en spesifikk rangering</BodyLong>
+                <BodyLong>Er på avtale med NAV uten spesifikk rangering.</BodyLong>
               </div>
               <div className="agreement-page__icon-container">
                 <AgreementIcon rank={1} />
@@ -61,9 +64,6 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                 <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
               </div>
             </div>
-            {/* <Heading level="2" size="small">
-                Hvordan man ser at et produkt, tilbehør eller en reservedel er på avtale med NAV:
-              </Heading> */}
 
             <ReadMore
               content={
@@ -87,30 +87,35 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
             />
           </article>
           <article>
-            <Heading level="1" size="large" spacing>
+            <Heading level="1" size="medium">
               Dokumenter
             </Heading>
             {agreement.attachments.map((attachment) => (
-              <>
-                <Heading level="2" size="small" spacing>
+              <div key={attachment.title}>
+                <Heading level="2" size="small">
                   {attachment.title}
                 </Heading>
                 <BodyLong>{attachment.description}</BodyLong>
-                {attachment.documents.map((doc, index) => (
-                  <li key={index}>
-                    {doc.title.length > 0 && (
-                      <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
-                        {doc.title} (PDF)
-                      </a>
-                    )}
-                    {doc.title.length == 0 && (
-                      <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
-                        Dokument uten navn (PDF)
-                      </a>
-                    )}
-                  </li>
-                ))}
-              </>
+
+                {attachment.documents.length === 1 && (
+                  <div className="document-list">
+                    <File
+                      title={attachment.documents[0].title}
+                      path={attachment.documents[0].uri}
+                      date={attachment.documents[0].updated}
+                    />
+                  </div>
+                )}
+                {attachment.documents.length > 1 && (
+                  <ul className="document-list">
+                    {attachment.documents.map((doc, index) => (
+                      <li key={index}>
+                        <File title={doc.title} path={doc.uri} date={doc.updated} />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             ))}
           </article>
         </div>

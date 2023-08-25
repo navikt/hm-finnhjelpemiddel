@@ -15,12 +15,12 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
     headingRef.current && headingRef.current.scrollIntoView({ behavior: 'smooth' })
   }
   return (
-    <div>
+    <div className="agreement-description">
       <Heading level="2" size="small" ref={headingRef}>
         Om avtalen med NAV
       </Heading>
-      <BodyLong spacing>
-        {`NAV har avtale med flere leverandører for å kunne skaffe et bredt utvalg av ${agreement.title} til
+      <BodyLong>
+        {`NAV har avtale med flere leverandører for å kunne skaffe et bredt utvalg av produkter innenfor området "${agreement.title}" til
   innbyggerne våres. På denne siden finner du alle produktene som inngår i denne avtalen og dokumenter som
   hører til avtalen. Informasjon om leverandør finner man på
   siden til produktene.`}

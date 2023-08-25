@@ -34,3 +34,13 @@ export const dateToString = (date: Date): string => {
 
   return `${day}.${month}.${year}`
 }
+
+export const titleCapitalized = (title: string) => {
+  if (title.length === 0) {
+    return title
+  }
+  if (title.length === 1) {
+    return title.charAt(0).toUpperCase()
+  }
+  return title.charAt(0).toUpperCase() + title.slice(1)
+}
