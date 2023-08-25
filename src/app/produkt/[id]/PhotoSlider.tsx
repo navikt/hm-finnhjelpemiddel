@@ -195,7 +195,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             if (index !== active) {
               return (
                 <Button
-                  aria-label="bilde"
+                  aria-label={`bilde ${index + 1} av ${numberOfImages}`}
                   key={index}
                   className={'dot'}
                   onClick={() => {
@@ -204,7 +204,14 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 />
               )
             } else {
-              return <Button disabled={true} aria-label="valgt bilde" key={index} className={'dot'} />
+              return (
+                <Button
+                  disabled={true}
+                  aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
+                  key={index}
+                  className={'dot'}
+                />
+              )
             }
           })}
         </div>
