@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 import Image from 'next/image'
@@ -117,6 +117,9 @@ const PhotoSliderModal = ({
                 alt={`Produktbilde ${active + 1} av ${photos.length}`}
                 fill
                 style={{ objectFit: 'contain' }}
+                sizes="(min-width: 66em) 33vw,
+                (min-width: 44em) 40vw,
+                100vw"
               />
             </motion.div>
           </ImageContainer>
@@ -149,6 +152,9 @@ const PhotoSliderModal = ({
                   src={photo.uri}
                   alt={`Produktbilde ${i + 1} av ${photos.length}`}
                   fill
+                  sizes="(min-width: 66em) 33vw,
+                  (min-width: 44em) 40vw,
+                  100vw"
                 />
               </ThumbnailImageContainer>
             ))}
