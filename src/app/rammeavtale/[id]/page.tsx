@@ -18,13 +18,10 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
   const agreement = mapAgreementFromSearch(await getAgreementFromIdentifier(agreementId))
   const hrefSok = `/sok?agreement=true&rammeavtale=${agreementId}`
 
-  const documentLoader = (uri: string) => {
-    return `${process.env.CDN_URL}${uri}`
-  }
   return (
     <div className="agreement-page">
       <AnimateLayout>
-        <div className="agreement-page__content spacing-top--xlarge spacing-bottom--xlarge">
+        <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
           <div className="agreement-page__link-to-search">
             <NextLink href={hrefSok}>
               <Heading level="1" size="medium">

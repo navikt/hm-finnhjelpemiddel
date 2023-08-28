@@ -58,11 +58,16 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
 }
 
 const mapAttachments = (attachments: AttachmentsResponse[]): Attachments[] => {
-  return attachments.map((attachments: AttachmentsResponse) => ({
-    title: attachments.title,
-    description: attachments.description,
-    documents: mapDocuments(attachments.media),
-  }))
+  console.log(attachments)
+  return attachments
+    .map((attachments: AttachmentsResponse) => ({
+      title: attachments.title,
+      description: attachments.description,
+      documents: mapDocuments(attachments.media),
+    }))
+    .filter((attachments) => {
+      return attachments.title !== 'Hurtigoversikt '
+    })
 }
 
 const mapPosts = (posts: PostResponse[]): Post[] => {
