@@ -58,7 +58,6 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
 }
 
 const mapAttachments = (attachments: AttachmentsResponse[]): Attachments[] => {
-  console.log(attachments)
   return attachments
     .map((attachments: AttachmentsResponse) => ({
       title: attachments.title,
@@ -66,7 +65,7 @@ const mapAttachments = (attachments: AttachmentsResponse[]): Attachments[] => {
       documents: mapDocuments(attachments.media),
     }))
     .filter((attachments) => {
-      return attachments.title !== 'Hurtigoversikt '
+      return attachments.title !== 'Hurtigoversikt ' && attachments.title !== 'Hurtigoversikt'
     })
 }
 
@@ -92,7 +91,6 @@ export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8601': 'Sykler',
   'HMDB-8726': 'Overflytting, vending og posisjonering',
   'HMDB-8716': 'Innredning kjøkken og bad',
-  'HMDB-8582': 'Omgivelseskontroll',
   'HMDB-8612': 'Vogner og aktivitetshjelpemidler',
   'HMDB-8734': 'Høreapparater',
   'HMDB-8628': 'Madrasser',
@@ -105,11 +103,12 @@ export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8660': 'Syn',
   'HMDB-8672': 'Plattformer og personløftere',
   'HMDB-8713': 'Varmehjelpemidler',
-  'HMDB-8673': 'Biler',
+  'HMDB-8582': 'Omgivelseskontroll',
   'HMDB-8679': 'Sittesystem',
-  //'HMDB-8682': 'Førerhunder og servicehunder',
   'HMDB-8683': 'Kjøreramper',
-  // 'HMDB-8685': 'Bilombygg',
+  'HMDB-8682': 'Førerhunder og servicehunder',
+  'HMDB-8673': 'Biler',
+  'HMDB-8685': 'Bilombygg',
   'HMDB-8669': 'Seksuallivet',
   // 'HMDB-7449': 'Elektriske rullestoler (duplicate)',
   // 'HMDB-8692': 'TEST UU',
@@ -119,6 +118,12 @@ export const agreementKeyLabels: Record<string, string> = {
   // 'HMDB-8725': 'Senger (duplicate)',
   // 'HMDB-7490': 'Varmehjelpemidler (duplicate)',
 }
+
+export const agreementHasNoProducts = (key: string) => {
+  return agreementWithNoProducts.includes(key)
+}
+
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685']
 
 export const agreementAttachmentLabels: Record<string, string> = {
   Tilbehør: 'Tilbehør for hver leverandør',

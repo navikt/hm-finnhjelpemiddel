@@ -1,6 +1,11 @@
 import NextLink from 'next/link'
 
-import { getAttachmentLabel, mapAgreementFromSearch } from '@/utils/agreement-util'
+import {
+  agreementHasNoProducts,
+  agreementKeyLabels,
+  getAttachmentLabel,
+  mapAgreementFromSearch,
+} from '@/utils/agreement-util'
 import { getAgreementFromIdentifier } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
@@ -22,14 +27,16 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
     <div className="agreement-page">
       <AnimateLayout>
         <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
-          <div className="agreement-page__link-to-search">
-            <NextLink href={hrefSok}>
-              <Heading level="1" size="medium">
-                Se produkter under avtale: Manuelle rullestoler
-              </Heading>
-            </NextLink>
-            <ChevronRightIcon aria-hidden fontSize="1.5rem" />
-          </div>
+          {!agreementHasNoProducts(agreement.identifier) && (
+            <div className="agreement-page__link-to-search">
+              <NextLink href={hrefSok}>
+                <Heading level="1" size="medium">
+                  Se produkter under avtale: {agreementKeyLabels[agreement.identifier]}
+                </Heading>
+              </NextLink>
+              <ChevronRightIcon aria-hidden fontSize="1.5rem" />
+            </div>
+          )}
           <article>
             <div>
               <Heading level="1" size="large" className="spacing-bottom--small">
@@ -43,47 +50,49 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
 
             <AgreementDescription agreement={agreement} />
           </article>
-          <article>
-            <Heading level="1" size="medium">
-              Slik kan du se at et hjelpemiddel er på avtale med NAV
-            </Heading>
+          {!agreementHasNoProducts(agreement.identifier) && (
+            <article>
+              <Heading level="1" size="medium">
+                Slik kan du se at et hjelpemiddel er på avtale med NAV
+              </Heading>
 
-            <div className="agreement-page__icon-containers">
-              <div className="agreement-page__icon-container">
-                <AgreementIcon rank={99} />
-                <BodyLong>Er på avtale med NAV uten spesifikk rangering.</BodyLong>
+              <div className="agreement-page__icon-containers">
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={99} />
+                  <BodyLong>Er på avtale med NAV uten spesifikk rangering.</BodyLong>
+                </div>
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={1} />
+                  <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
+                </div>
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={4} />
+                  <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
+                </div>
               </div>
-              <div className="agreement-page__icon-container">
-                <AgreementIcon rank={1} />
-                <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
-              </div>
-              <div className="agreement-page__icon-container">
-                <AgreementIcon rank={4} />
-                <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
-              </div>
-            </div>
 
-            <ReadMore
-              content={
-                <>
-                  <Heading level="2" size="small">
-                    Hva om produktet jeg mener passer for meg ikke har denne merkingen?
-                  </Heading>
-                  <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
-                  <Heading level="2" size="small">
-                    Hva om produktet jeg mener passer for meg er rangert som nummer 2, 3 eller 4?
-                  </Heading>
-                  <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
-                  <Heading level="2" size="small">
-                    Hva vil det si at et produkt ikke har spesifikk rangering?
-                  </Heading>
-                  <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>
-                </>
-              }
-              buttonOpen={'Les mer om betydning av dette for søknad om produkt'}
-              buttonClose={'Les mindre om betydning av dette for søknad om produkt'}
-            />
-          </article>
+              <ReadMore
+                content={
+                  <>
+                    <Heading level="2" size="small">
+                      Hva om produktet jeg mener passer for meg ikke har denne merkingen?
+                    </Heading>
+                    <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
+                    <Heading level="2" size="small">
+                      Hva om produktet jeg mener passer for meg er rangert som nummer 2, 3 eller 4?
+                    </Heading>
+                    <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
+                    <Heading level="2" size="small">
+                      Hva vil det si at et produkt ikke har spesifikk rangering?
+                    </Heading>
+                    <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>
+                  </>
+                }
+                buttonOpen={'Les mer om betydning av dette for søknad om produkt'}
+                buttonClose={'Les mindre om betydning av dette for søknad om produkt'}
+              />
+            </article>
+          )}
           <article>
             <Heading level="1" size="medium">
               Dokumenter
