@@ -1,3 +1,5 @@
+import { headers } from 'next/dist/client/components/headers'
+
 import { mapAgreement } from '@/utils/agreement-util'
 import { getAgreement, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
@@ -11,12 +13,17 @@ import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import { AgreementInfo } from './AgreementInfo'
-import InformationTabs from './InformationTabs'
+import InformationTabs, { InformationAccordion } from './InformationTabs'
 import PhotoSlider from './PhotoSlider'
 import ProductVariants from './ProductVariants'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
+  const headersList = headers()
+
+  const userAgent = headersList.get('user-agent')
+  const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
+
   const product = mapProductFromSeriesId(await getProductWithVariants(seriesId))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
   const agreement =
@@ -76,7 +83,11 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
           </section>
 
           <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
-            <InformationTabs product={product} supplier={supplier} />
+            {isMobileDevice ? (
+              <InformationAccordion product={product} supplier={supplier} />
+            ) : (
+              <InformationTabs product={product} supplier={supplier} />
+            )}
           </section>
           <section
             className="product-info__characteristics max-width"
