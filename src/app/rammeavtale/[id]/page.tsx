@@ -1,6 +1,6 @@
 import NextLink from 'next/link'
 
-import { mapAgreementFromSearch } from '@/utils/agreement-util'
+import { getAttachmentLabel, mapAgreementFromSearch } from '@/utils/agreement-util'
 import { getAgreementFromIdentifier } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
@@ -11,6 +11,7 @@ import { BodyLong, ChevronRightIcon, Heading, Link } from '@/components/aksel-cl
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import AgreementDescription from './AgreementDescription'
+import DocumentAccordion from './DocumentAccordion'
 import './agreement-page.scss'
 
 export default async function AgreementPage({ params: { id: agreementId } }: { params: { id: string } }) {
@@ -93,7 +94,7 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
             {agreement.attachments.map((attachment) => (
               <div key={attachment.title}>
                 <Heading level="2" size="small">
-                  {attachment.title}
+                  {getAttachmentLabel(attachment.title) ?? attachment.title}
                 </Heading>
                 <BodyLong>{attachment.description}</BodyLong>
 

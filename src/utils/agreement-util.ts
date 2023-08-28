@@ -24,7 +24,7 @@ export interface Agreement {
   attachments: Attachments[]
 }
 
-interface Attachments {
+export interface Attachments {
   title: string
   description: string
   documents: Document[]
@@ -113,4 +113,21 @@ export const agreementKeyLabels: Record<string, string> = {
   // 'HMDB-6427': 'Kalendere (duplicate)',
   // 'HMDB-8725': 'Senger (duplicate)',
   // 'HMDB-7490': 'Varmehjelpemidler (duplicate)',
+}
+
+export const agreementAttachmentLabels: Record<string, string> = {
+  Tilbehør: 'Tilbehør for hver leverandør',
+  Tjenester: 'Tjenester for hver leverandør',
+  Reservedeler: 'Reservedeler for hver leverandør',
+  Endringskatalog: 'Endringskataloger for hver leverandør',
+}
+
+export function getAttachmentLabel(key: string): string | undefined {
+  const matchingKey = Object.keys(agreementAttachmentLabels).find((labelKey) => key.startsWith(labelKey))
+
+  if (matchingKey) {
+    return agreementAttachmentLabels[matchingKey]
+  }
+
+  return undefined
 }
