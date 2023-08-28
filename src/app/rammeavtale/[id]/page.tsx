@@ -99,7 +99,7 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                 <BodyLong>{attachment.description}</BodyLong>
 
                 {attachment.documents.length === 1 && (
-                  <div className="document-list">
+                  <div className="document-list spacing-top--small spacing-bottom--medium">
                     <File
                       title={attachment.documents[0].title}
                       path={attachment.documents[0].uri}
@@ -108,7 +108,7 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                   </div>
                 )}
                 {attachment.documents.length > 1 && (
-                  <ul className="document-list">
+                  <ul className="document-list spacing-top--small spacing-bottom--medium">
                     {attachment.documents.map((doc, index) => (
                       <li key={index}>
                         <File title={doc.title} path={doc.uri} date={doc.updated} />
