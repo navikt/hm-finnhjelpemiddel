@@ -77,8 +77,8 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
    * src: https://codesandbox.io/s/framer-motion-image-gallery-pqvx3?from-embed=&file=/src/Example.tsx:1480-1488
    */
 
-  if (modalIsOpen) {
-    return (
+  return (
+    <>
       <PhotoSliderModal
         photos={photos}
         modalIsOpen={modalIsOpen}
@@ -90,129 +90,133 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         src={src}
         setActive={setActive}
       />
-    )
-  }
-
-  return (
-    <div className="photo-slider-small">
-      <div className="photo-and-arrow-container">
-        {!hasImages && (
-          <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
-        )}
-        {numberOfImages === 1 && (
-          <>
-            <div style={{ width: '40px', height: '40px' }}></div>
-            <div className="photo-container">
-              <Image
-                role="button"
-                key={src}
-                loader={largeImageLoader}
-                src={src}
-                fill
-                style={{ objectFit: 'contain' }}
-                onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
-                alt={'Produktbilde'}
-                sizes="(min-width: 66em) 33vw,
-                      (min-width: 44em) 40vw,
-                      100vw"
-                onClick={() => setModalIsOpen(true)}
-              />
-            </div>
-            <div style={{ width: '40px', height: '40px' }}></div>
-          </>
-        )}
-
-        {numberOfImages > 1 && (
-          <>
-            <Button
-              aria-label="Forrige bilde"
-              variant="tertiary-neutral"
-              className="arrow"
-              onClick={() => {
-                prevImage()
-              }}
-              icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
-            />
-
-            <div className="photo-container">
-              <AnimatePresence initial={false} custom={direction}>
-                <motion.div
-                  className="div-motion"
+      <div className="photo-slider-small">
+        <div className="photo-and-arrow-container">
+          {!hasImages && (
+            <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+          )}
+          {numberOfImages === 1 && (
+            <>
+              <div style={{ width: '40px', height: '40px' }}></div>
+              <div className="photo-container">
+                <Image
+                  role="button"
                   key={src}
-                  custom={direction}
-                  variants={variants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  transition={{
-                    x: { type: 'spring', stiffness: 300, damping: 30 },
-                    opacity: { duration: 0.2 },
-                  }}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={1}
-                  onDragEnd={(e, { offset, velocity }) => {
-                    const swipe = swipePower(offset.x, velocity.x)
-
-                    if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
-                      nextImage()
-                    } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
-                      prevImage()
-                    }
-                  }}
-                >
-                  <div className="next-image">
-                    <Image
-                      role="button"
-                      aria-label="Forstørr bildet"
-                      draggable="false"
-                      loader={largeImageLoader}
-                      src={src}
-                      alt={`Produktbilde ${active + 1} av ${photos.length}`}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                      sizes="(min-width: 66em) 33vw,
+                  loader={largeImageLoader}
+                  src={src}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
+                  alt={'Produktbilde'}
+                  sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                      onClick={() => setModalIsOpen(true)}
-                    />
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <Button
-              aria-label="Neste bilde"
-              variant="tertiary-neutral"
-              className="arrow"
-              onClick={() => {
-                nextImage()
-              }}
-              icon={<ChevronRightIcon aria-hidden height={50} width={50} />}
-            />
-          </>
-        )}
-      </div>
-      <div className="dots">
-        {[...Array(numberOfImages).keys()].map((index) => {
-          if (index !== active) {
-            return (
+                  onClick={() => setModalIsOpen(true)}
+                />
+              </div>
+              <div style={{ width: '40px', height: '40px' }}></div>
+            </>
+          )}
+
+          {numberOfImages > 1 && (
+            <>
               <Button
-                aria-label="bilde"
-                key={index}
-                className={'dot'}
+                aria-label="Forrige bilde"
+                variant="tertiary-neutral"
+                className="arrow"
                 onClick={() => {
-                  setActive(index)
+                  prevImage()
                 }}
+                icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
               />
-            )
-          } else {
-            return <Button disabled={true} aria-label="valgt bilde" key={index} className={'dot'} />
-          }
-        })}
+
+              <div className="photo-container">
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    className="div-motion"
+                    key={src}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{
+                      x: { type: 'spring', stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 },
+                    }}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={1}
+                    onDragEnd={(e, { offset, velocity }) => {
+                      const swipe = swipePower(offset.x, velocity.x)
+
+                      if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
+                        nextImage()
+                      } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
+                        prevImage()
+                      }
+                    }}
+                  >
+                    <div className="next-image">
+                      <Image
+                        role="button"
+                        aria-label="Forstørr bildet"
+                        draggable="false"
+                        loader={largeImageLoader}
+                        src={src}
+                        alt={`Produktbilde ${active + 1} av ${photos.length}`}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
+                        onClick={() => setModalIsOpen(true)}
+                      />
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+              <Button
+                aria-label="Neste bilde"
+                variant="tertiary-neutral"
+                className="arrow"
+                onClick={() => {
+                  nextImage()
+                }}
+                icon={<ChevronRightIcon aria-hidden height={50} width={50} />}
+              />
+            </>
+          )}
+        </div>
+        <div className="dots">
+          {[...Array(numberOfImages).keys()].map((index) => {
+            if (index !== active) {
+              return (
+                <Button
+                  aria-label={`bilde ${index + 1} av ${numberOfImages}`}
+                  key={index}
+                  className={'dot'}
+                  onClick={() => {
+                    setActive(index)
+                  }}
+                />
+              )
+            } else {
+              return (
+                <Button
+                  disabled={true}
+                  aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
+                  key={index}
+                  className={'dot'}
+                />
+              )
+            }
+          })}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

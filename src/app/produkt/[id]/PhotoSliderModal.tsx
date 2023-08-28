@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 import Image from 'next/image'
 
@@ -37,8 +38,6 @@ const PhotoSliderModal = ({
   nextImage,
   setActive,
 }: PhotoSliderModalProps) => {
-  const ref = useRef<HTMLDialogElement>(null)
-
   useEffect(() => {
     const handleArrowKeys = (event: KeyboardEvent) => {
       if (modalIsOpen && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
@@ -57,16 +56,21 @@ const PhotoSliderModal = ({
     }
   }, [modalIsOpen, prevImage, nextImage])
 
-  return (
-    <Modal
-      ref={ref}
-      closeButton={true}
+  const modalContainer = document.getElementById('modal-container')
+  if (!modalContainer) return null
+
+  return createPortal(
+    <StyledModal
       open={modalIsOpen}
+      header={{
+        heading: '',
+        closeButton: true,
+      }}
       onClose={() => setModalIsOpen(false)}
-      aria-label="Modal demo"
-      aria-labelledby="modal-heading"
+      aria-label="Modal"
+      aria-labelledby="stor bildevisning"
     >
-      <ModalContent>
+      <ModalBody>
         <PhotoAndArrowsContainer>
           {photos.length > 1 && (
             <ArrowButton
@@ -76,7 +80,7 @@ const PhotoSliderModal = ({
               onClick={() => {
                 prevImage()
               }}
-              icon={<ChevronLeftIcon aria-hidden width={30} height={30} />}
+              icon={<ChevronLeftIcon aria-hidden width={50} height={50} />}
             />
           )}
 
@@ -125,7 +129,7 @@ const PhotoSliderModal = ({
               onClick={() => {
                 nextImage()
               }}
-              icon={<ChevronRightIcon aria-hidden width={30} height={30} />}
+              icon={<ChevronRightIcon aria-hidden width={50} height={50} />}
             />
           )}
         </PhotoAndArrowsContainer>
@@ -136,80 +140,80 @@ const PhotoSliderModal = ({
 
         {photos.length > 1 && (
           <PreviewAllPhotosContainer>
-            {photos.map((photo, i) =>
-              i === active ? (
+            {photos.map((photo, i) => (
+              <ThumbnailImageContainer key={i} tabIndex={0} data-active={i === active ? '' : undefined}>
                 <Image
-                  data-active
                   aria-selected={true}
-                  key={i}
-                  tabIndex={0}
                   onClick={() => setActive(i)}
                   loader={largeImageLoader}
                   src={photo.uri}
                   alt={`Produktbilde ${i + 1} av ${photos.length}`}
                   fill
-                  style={{ objectFit: 'scale-down' }}
+                  sizes=""
                 />
-              ) : (
-                <Image
-                  role="button"
-                  key={i}
-                  tabIndex={0}
-                  onClick={() => setActive(i)}
-                  loader={largeImageLoader}
-                  src={photo.uri}
-                  alt={`Produktbilde ${i + 1} av ${photos.length}`}
-                  fill
-                  style={{ objectFit: 'scale-down' }}
-                />
-              )
-            )}
+              </ThumbnailImageContainer>
+            ))}
           </PreviewAllPhotosContainer>
         )}
-      </ModalContent>
-    </Modal>
+      </ModalBody>
+    </StyledModal>,
+    modalContainer
   )
 }
 
 export default PhotoSliderModal
 
-const ModalContent = styled(Modal.Content)`
-  margin: 2rem;
-  padding: 0;
+const StyledModal = styled(Modal)`
+  width: 100vw;
+  height: 100vh;
 
   @media (min-width: ${minWidthTabletUp}) {
-    margin: 0;
+    max-height: 90% !important;
+    max-width: 90% !important;
+  }
+`
+const ModalBody = styled(Modal.Body)`
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  padding: 0;
+  height: 90%;
+  width: 100%;
+
+  @media (min-width: ${minWidthTabletUp}) {
+    justify-content: space-between;
   }
 `
 
 const PhotoAndArrowsContainer = styled.div`
+  width: 100%;
+  height: 75%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin: 0 1rem;
+  justify-content: center;
+  gap: 0.5rem;
 `
 
 const ImageContainer = styled.div`
-  img {
-    width: 300px !important;
-    height: 300px !important;
-    position: relative !important;
-    border-radius: var(--a-border-radius-medium);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 
-    @media (min-width: ${minWidthTabletUp}) {
-      width: 600px !important;
-      height: 400px !important;
-    }
+  div {
+    width: 100%;
 
-    @media (min-width: ${minWidthDesktopUp}) {
-      width: 1000px !important;
-      height: 600px !important;
+    img {
+      position: relative !important;
+      border-radius: var(--a-border-radius-medium);
+      object-fit: contain;
     }
   }
 `
 
 const ArrowButton = styled(Button)`
+  padding: 0;
+  flex: 0;
   cursor: pointer;
   color: black;
 
@@ -236,33 +240,38 @@ const PreviewAllPhotosContainer = styled.div`
     display: none;
   }
 
+  @media (max-height: 500px) {
+    display: none;
+  }
   display: flex;
   justify-content: center;
-  justify-self: center;
+  align-items: center;
   gap: 1rem;
   width: 100%;
   border-top: rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
+  padding: 2rem 1rem;
   background-color: #edac9e;
+`
+
+const ThumbnailImageContainer = styled.div`
+  height: 80%;
+  width: 150px !important;
+  cursor: pointer;
+  position: relative !important;
+  border-radius: var(--a-border-radius-medium);
+  background: white;
+
+  &[data-active] {
+    height: 100%;
+    cursor: not-allowed;
+    box-shadow: var(--a-shadow-medium);
+    width: 170px !important;
+  }
 
   img {
-    width: 150px !important;
-    height: 100px !important;
-    cursor: pointer;
     position: relative !important;
     border-radius: var(--a-border-radius-medium);
-    margin-top: 15px;
-    background: white;
-
-    &[data-active] {
-      background: white;
-      margin-top: 0;
-      width: 150px !important;
-      height: 130px !important;
-      cursor: not-allowed;
-      position: relative !important;
-      border-radius: var(--a-border-radius-medium);
-      box-shadow: var(--a-shadow-small);
-    }
+    max-height: 100px !important;
+    object-fit: contain;
   }
 `
