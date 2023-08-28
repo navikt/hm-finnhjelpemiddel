@@ -220,7 +220,7 @@ export default function Home() {
                           }
                           return (
                             <Chips.Removable
-                              key={index}
+                              key={key + value}
                               onClick={() => {
                                 setFilter(
                                   key,
