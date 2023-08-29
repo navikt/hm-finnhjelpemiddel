@@ -117,6 +117,7 @@ export interface MediaResponse {
 export interface AgreementInfoResponse {
   id: string
   identifier: string | null
+  title: string
   rank: number
   postNr: number
   postTitle: string

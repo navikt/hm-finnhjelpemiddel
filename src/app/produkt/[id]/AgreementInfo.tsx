@@ -1,13 +1,14 @@
 'use client'
 
 import Image from 'next/image'
+import NextLink from 'next/link'
 import Link from 'next/link'
 
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import { Alert, BodyLong, BodyShort, Heading, ImageIcon } from '@/components/aksel-client'
+import { Alert, BodyLong, ChevronRightIcon, Heading, ImageIcon } from '@/components/aksel-client'
 
 type AgreementInfoProps = {
   product: Product
@@ -72,6 +73,13 @@ export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) =
           ) : (
             <BodyLong>Det finnes ingen andre produkter på samme delkontrakt</BodyLong>
           )}
+          <div className="agreement-details__agreement-link spacing-top--small">
+            <BodyLong>
+              <NextLink href={`/rammeavtale/${product.applicableAgreementInfo?.identifier}`} className="link">
+                Les mer om {product.applicableAgreementInfo?.title} <ChevronRightIcon aria-hidden fontSize={'1.5rem'} />
+              </NextLink>
+            </BodyLong>
+          </div>
         </div>
       </div>
     </section>

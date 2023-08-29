@@ -37,7 +37,7 @@ function Home() {
 
     return (
       <div className="home-page__agreement-link" key={key}>
-        <NextLink className="back-to-search" href={hrefAgreement}>
+        <NextLink href={hrefAgreement}>
           <BodyShort> {value} </BodyShort>
         </NextLink>
       </div>

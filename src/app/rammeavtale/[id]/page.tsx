@@ -58,10 +58,6 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
 
               <div className="agreement-page__icon-containers">
                 <div className="agreement-page__icon-container">
-                  <AgreementIcon rank={99} />
-                  <BodyLong>Er på avtale med NAV uten spesifikk rangering.</BodyLong>
-                </div>
-                <div className="agreement-page__icon-container">
                   <AgreementIcon rank={1} />
                   <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
                 </div>
@@ -69,28 +65,34 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                   <AgreementIcon rank={4} />
                   <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
                 </div>
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={99} />
+                  <BodyLong>Er på avtale med NAV uten rangering.</BodyLong>
+                </div>
               </div>
-
-              <ReadMore
-                content={
-                  <>
-                    <Heading level="2" size="small">
-                      Hva om produktet jeg mener passer for meg ikke har denne merkingen?
-                    </Heading>
-                    <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
-                    <Heading level="2" size="small">
-                      Hva om produktet jeg mener passer for meg er rangert som nummer 2, 3 eller 4?
-                    </Heading>
-                    <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
-                    <Heading level="2" size="small">
-                      Hva vil det si at et produkt ikke har spesifikk rangering?
-                    </Heading>
-                    <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>
-                  </>
-                }
-                buttonOpen={'Les mer om betydning av dette for søknad om produkt'}
-                buttonClose={'Les mindre om betydning av dette for søknad om produkt'}
-              />
+              {/* Skal vises når vi har tekst */}
+              {false && (
+                <ReadMore
+                  content={
+                    <>
+                      <Heading level="2" size="small">
+                        Hva om produktet ikke har denne merkingen?
+                      </Heading>
+                      <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
+                      <Heading level="2" size="small">
+                        Hva om produktet er rangert som nummer 2, 3 eller 4?
+                      </Heading>
+                      <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
+                      <Heading level="2" size="small">
+                        Hva vil det si at et produkt ikke har rangering?
+                      </Heading>
+                      <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>
+                    </>
+                  }
+                  buttonOpen={'Les mer om betydning av dette for søknad om produkt'}
+                  buttonClose={'Les mindre om betydning av dette for søknad om produkt'}
+                />
+              )}
             </article>
           )}
           <article>

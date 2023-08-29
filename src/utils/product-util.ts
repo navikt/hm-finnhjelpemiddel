@@ -88,6 +88,7 @@ interface Attributes {
 export interface AgreementInfo {
   id: string
   identifier: string | null
+  title: string
   rank: number
   postNr: number
   postIdentifier: string | null
@@ -252,6 +253,7 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
 const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   id: data.id,
   identifier: data.identifier,
+  title: data.title,
   postIdentifier: data.postIdentifier,
   postNr: data.postNr,
   postTitle: getPostTitle(data.postTitle, data.postNr),

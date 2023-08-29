@@ -24,16 +24,13 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
       )}
       {!agreementHasNoProducts(agreement.identifier) && (
         <BodyLong>
-          {`NAV har avtale med flere leverandører for å kunne skaffe et bredt utvalg av produkter innenfor området "${agreement.title}" til
-  innbyggerne våres. På denne siden finner du alle produktene som inngår i denne avtalen og dokumenter som
-  hører til avtalen. Informasjon om leverandør finner man på
-  siden til produktene.`}
+          {`NAV har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor området "${agreement.title}". På denne siden finner du informasjon om avtalen, dokumenter, tilbehør, eventuelle tjenester og reservedeler. Informasjon om leverandør finner man på siden til hjelpemiddelet.`}
         </BodyLong>
       )}
       {!agreementHasNoProducts(agreement.identifier) && (
         <ReadMore
           content={<div dangerouslySetInnerHTML={{ __html: agreement.descriptionHtml }} />}
-          buttonOpen={'Vis alle avtaler'}
+          buttonOpen={'Les mer om avtalen'}
           buttonClose={'Les mindre om avtalen'}
           setFocus={setFocusOnHeading}
         />
