@@ -7,7 +7,7 @@ import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import { Alert, BodyLong, BodyShort, Heading, ImageIcon } from '@/components/aksel-client'
+import { Alert, BodyLong, Heading, ImageIcon } from '@/components/aksel-client'
 
 type AgreementInfoProps = {
   product: Product

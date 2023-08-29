@@ -1,11 +1,13 @@
 import { mapAgreement } from '@/utils/agreement-util'
 import { getAgreement, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
+import { accessoryMockResponse, sparePartMockResponse } from '@/utils/mock-data'
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
 import { BackButton } from '@/components/BackButton'
+import SparePartAccessoryCard from '@/components/SparePartAccessoryCard'
 import { Alert, BodyShort, Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -14,6 +16,7 @@ import { AgreementInfo } from './AgreementInfo'
 import InformationTabs from './InformationTabs'
 import PhotoSlider from './PhotoSlider'
 import ProductVariants from './ProductVariants'
+import SparePartsAndAccessoriesInfo from './SparePartsAndAccessoriesInfo'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
@@ -31,6 +34,9 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
             : -1
         )
     : null
+
+  const spareParts = sparePartMockResponse
+  const accessories = accessoryMockResponse
 
   return (
     <>
@@ -98,6 +104,13 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
           )}
 
           {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}
+
+          {accessories && accessories.length > 0 && (
+            <SparePartsAndAccessoriesInfo products={accessories} type={'Accessories'} />
+          )}
+          {spareParts && spareParts.length > 0 && (
+            <SparePartsAndAccessoriesInfo products={spareParts} type={'Spare parts'} />
+          )}
         </article>
       </AnimateLayout>
     </>

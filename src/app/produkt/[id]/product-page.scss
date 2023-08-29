@@ -275,3 +275,28 @@
     }
   }
 }
+
+.spareparts-and-accessories {
+  padding: $a-spacing-4;
+  margin-top: $a-spacing-4;
+
+  &__accessories {
+    background: #fff9f0;
+  }
+
+  &__spare-parts {
+    background-color: $a-deepblue-50;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
