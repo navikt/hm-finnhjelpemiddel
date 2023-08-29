@@ -104,6 +104,10 @@
     }
   }
 
+  &__agreement-links.read-more-content {
+    padding-bottom: $a-spacing-4;
+  }
+
   &__agreement-link {
     display: flex;
     width: 100%;
@@ -126,15 +130,6 @@
       text-decoration-line: underline;
       font-size: 1.25rem;
     }
-  }
-
-  &__chevron-button {
-    align-self: center;
-    color: $a-blue-700;
-  }
-
-  &__chevron-button:hover {
-    color: $a-blue-700;
   }
 }
 

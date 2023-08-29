@@ -5,10 +5,13 @@ import React from 'react'
 import Link from 'next/link'
 
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
 
 import { Document, Product } from '@/utils/product-util'
+import { titleCapitalized } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
+
+import File from '@/components/File'
 
 export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
@@ -35,6 +38,27 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
       </div>
     </Tabs.Panel>
   </Tabs>
+)
+
+export const InformationAccordion = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+  <Accordion>
+    <Accordion.Item>
+      <Accordion.Header>Produktbeskrivelse fra leverandør</Accordion.Header>
+      <Accordion.Content>
+        <div className="product-info__accordion">
+          <SupplierInfo product={product} supplier={supplier} />
+        </div>
+      </Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item>
+      <Accordion.Header>Tilhørende dokumenter ({product.documents.length})</Accordion.Header>
+      <Accordion.Content>
+        <div className="product-info__accordion">
+          <Documents documents={product.documents} />
+        </div>
+      </Accordion.Content>
+    </Accordion.Item>
+  </Accordion>
 )
 
 const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
@@ -70,32 +94,11 @@ const Documents = ({ documents }: { documents: Document[] }) => {
     return <BodyShort>Ingen dokumenter på dette produktet.</BodyShort>
   }
 
-  const documentLoader = (uri: string) => {
-    return `https://www.hjelpemiddeldatabasen.no/blobs/${uri}`
-  }
-
-  const titleCapitalized = (documentTitle: string) => {
-    const title = documentTitle
-    if (title.length == 1) {
-      return title.charAt(0).toUpperCase()
-    }
-    return title.charAt(0).toUpperCase() + title.slice(1)
-  }
-
   return (
-    <ul>
+    <ul className="document-list">
       {documents.map((doc, index) => (
         <li key={index}>
-          {doc.title.length > 0 && (
-            <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
-              {titleCapitalized(doc.title)} (PDF)
-            </a>
-          )}
-          {doc.title.length == 0 && (
-            <a href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
-              Dokument uten navn (PDF)
-            </a>
-          )}
+          <File title={titleCapitalized(doc.title)} path={doc.uri} />
         </li>
       ))}
     </ul>
