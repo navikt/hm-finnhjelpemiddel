@@ -3,7 +3,7 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
-  padding-bottom: 2.5rem;
+  padding-bottom: $a-spacing-4;
 
   .comparing-table {
     thead tr {
@@ -209,6 +209,15 @@
     gap: $a-spacing-4;
     padding-top: $a-spacing-10;
     padding-bottom: $a-spacing-10;
+  }
+
+  &__agreement-link {
+    .link {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      text-decoration: none;
+    }
   }
 
   &__products-on-post,

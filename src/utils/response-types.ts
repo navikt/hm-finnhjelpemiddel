@@ -43,7 +43,7 @@ export interface Hit {
   _type: string | null
   _id: string
   _score: string
-  _source: ProductSourceResponse
+  _source: ProductSourceResponse | AgreementsSourceResponse
 }
 
 export interface ProductDocResponse {
@@ -111,11 +111,13 @@ export interface MediaResponse {
   uri: string
   text?: string | null
   source?: MediaSourceType
+  updated: string
 }
 
 export interface AgreementInfoResponse {
   id: string
   identifier: string | null
+  title: string
   rank: number
   postNr: number
   postTitle: string
@@ -161,7 +163,7 @@ export interface AgreementsSourceResponse {
   reference: string
   published: string
   expired: string
-  attachments: []
+  attachments: AttachmentsResponse[]
   posts: PostResponse[]
   createdBy: string
   updatedBy: string
@@ -175,4 +177,10 @@ export interface PostResponse {
   title: string
   description: string
   created: string
+}
+
+export interface AttachmentsResponse {
+  title: string
+  media: MediaResponse[]
+  description: string
 }

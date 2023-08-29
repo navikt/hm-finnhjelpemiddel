@@ -770,6 +770,28 @@ export async function getAgreement(id: string) {
   return res.json()
 }
 
+//OBS Identifier skal utfases
+export async function getAgreementFromIdentifier(identifier: string): Promise<SearchResponse> {
+  const res = await fetch(process.env.HM_SEARCH_URL + `/agreements/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        term: {
+          identifier: {
+            value: identifier,
+          },
+        },
+      },
+    }),
+  })
+
+  return res.json()
+}
+
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
   const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
     next: { revalidate: 900 },

@@ -424,6 +424,39 @@ details {
   }
 }
 
+.read-more {
+  width: 100%;
+
+  button {
+    width: 100%;
+    align-self: center;
+    color: $a-blue-700;
+  }
+
+  button:hover {
+    color: $a-blue-700;
+  }
+}
+
+.file-container {
+  display: flex;
+  gap: $a-spacing-1;
+
+  &__with-date {
+    padding: 1px 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.document-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $a-spacing-2;
+  padding-left: $a-spacing-2;
+}
+
 .text-line-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 2;
