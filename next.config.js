@@ -14,7 +14,7 @@ const nextConfig = {
         source: '/products/_search:path*',
         destination: process.env.HM_SEARCH_URL + '/products/_search:path*',
       },
-      { source: '/rammeavtale/blobs/:path*', destination: 'https://www.hjelpemiddeldatabasen.no/blobs/:path*' },
+      { source: '/rammeavtale/blobs/:path*', destination: 'https://cdn.nav.no/teamdigihot/grunndata/media/v1/:path*' },
     ]
   },
   images: {
