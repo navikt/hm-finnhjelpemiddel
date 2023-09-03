@@ -7,11 +7,12 @@ import Link from 'next/link'
 
 import styled from 'styled-components'
 
-import { CheckmarkIcon } from '@navikt/aksel-icons'
 import { BodyLong, Heading } from '@navikt/ds-react'
 
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
+
+import AgreementIcon from './AgreementIcon'
 
 interface CardProps {
   product: Product
@@ -21,19 +22,11 @@ const SparePartAccessoryCard = ({ product }: CardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
-  // const address = 'https://finnhjelpemidler.intern.dev.nav.no/imageproxy/400d/orig/54382.jpg'
-
   const [imageLoadingError, setImageLoadingError] = useState(false)
 
   return (
     <CardContainer>
-      <FirstColumn>
-        {product.applicableAgreementInfo && (
-          <span className="icon-wrapper icon-wrapper--green">
-            <CheckmarkIcon title="a11y-title" fontSize="1.5rem" />
-          </span>
-        )}
-      </FirstColumn>
+      <FirstColumn>{product.applicableAgreementInfo && <AgreementIcon rank={99} />}</FirstColumn>
       <ImageContainer>
         {hasImage && !imageLoadingError ? (
           <Image
@@ -58,9 +51,9 @@ const SparePartAccessoryCard = ({ product }: CardProps) => {
       </ImageContainer>
       <InfoContainer>
         <Link className="product-card__link" href={`/produkt/${product.id}`} aria-label="Gå til produktet">
-          <Heading size="xsmall">{product.title}</Heading>
+          <StyledHeading size="xsmall">{product.title}</StyledHeading>
         </Link>
-        <StyledBodyLong>{product.isoCategoryText}</StyledBodyLong>
+        <StyledBodyLong>{product.attributes.text}</StyledBodyLong>
       </InfoContainer>
     </CardContainer>
   )
@@ -72,7 +65,7 @@ const CardContainer = styled.div`
   max-width: 25rem;
   height: 10rem;
   display: grid;
-  grid-template-columns: 0.3fr 0.5fr 1fr;
+  grid-template-columns: 0.3fr 1fr 1fr;
   grid-column-gap: var(--a-spacing-2);
   border-radius: var(--a-border-radius-medium);
   padding: var(--a-spacing-4);
@@ -100,9 +93,13 @@ const InfoContainer = styled.div`
   flex-direction: column;
 `
 
+const StyledHeading = styled(Heading)`
+  white-space: nowrap;
+`
+
 const StyledBodyLong = styled(BodyLong)`
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

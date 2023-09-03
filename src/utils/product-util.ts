@@ -36,6 +36,7 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -83,6 +84,8 @@ interface Attributes {
   text?: string
   bestillingsordning?: boolean
   commonCharacteristics?: TechData
+  //Temporary until we know how to connect spareParts/accessories to matching products
+  matchingProducts?: string[]
 }
 
 export interface AgreementInfo {

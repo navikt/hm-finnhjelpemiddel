@@ -5,7 +5,7 @@ import React, { ReactNode, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 
-export const ReadMore = ({
+const ReadMore = ({
   content,
   buttonOpen,
   buttonClose,
