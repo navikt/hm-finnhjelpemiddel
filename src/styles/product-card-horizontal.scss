@@ -1,0 +1,46 @@
+@import '@navikt/ds-tokens/dist/tokens';
+.product-card-horizontal {
+  &__card-container {
+    display: grid;
+    max-width: 25rem;
+    height: 10rem;
+    grid-template-columns: 0.3fr 1fr 1fr;
+    grid-column-gap: $a-spacing-2;
+    border-radius: $a-border-radius-medium;
+    padding: $a-spacing-4;
+    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    background: white;
+  }
+
+  &__first-column {
+    display: flex;
+    justify-content: center;
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+
+  &__image-container {
+    display: flex;
+    justify-self: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__info-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__heading {
+    white-space: nowrap;
+  }
+
+  &__product-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -6,8 +6,10 @@ import { BodyLong, Heading } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
 
+import ProductCardHorizontal from '@/components/ProductCardHorizontal'
 import ReadMore from '@/components/ReadMore'
-import SparePartAccessoryCard from '@/components/SparePartAccessoryCard'
+
+import './product-page.scss'
 
 type Props = {
   products: Product[]
@@ -53,14 +55,14 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
         </Heading>
         <div className="spareparts-and-accessories__card-container">
           {firstProducts.map((acc, i) => (
-            <SparePartAccessoryCard key={i} product={acc} />
+            <ProductCardHorizontal key={i} product={acc} />
           ))}
           {lastProducts && (
             <ReadMore
               content={
                 <div className="spareparts-and-accessories__card-container">
                   {lastProducts.map((acc, i) => (
-                    <SparePartAccessoryCard key={i} product={acc} />
+                    <ProductCardHorizontal key={i} product={acc} />
                   ))}
                 </div>
               }
