@@ -816,8 +816,8 @@ export type FetchSeriesResponse = {
 }
 
 //SWR fetcher
-export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
-  return fetch('/products/_search', {
+export const fetchProductsWithVariants = (seriesIds: string[], url?: string): Promise<FetchSeriesResponse> => {
+  return fetch(url || '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
