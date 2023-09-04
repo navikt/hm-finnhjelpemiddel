@@ -817,7 +817,7 @@ export type FetchSeriesResponse = {
 
 //SWR fetcher
 export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
-  return fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+  return fetch('/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -890,7 +890,7 @@ export type SuggestionsResponse = { suggestions: Suggestions }
 
 //TODO: Bør denne returnere Product? Vet ikke om vi trenger det
 export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => {
-  return fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+  return fetch('/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
