@@ -155,6 +155,15 @@ const Characteristics = ({ product }: { product: Product }) => {
   const common = product.attributes?.commonCharacteristics
   return (
     <DefinitionList>
+      {product.variantCount === 1 && (
+        <>
+          <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
+          <DefinitionList.Definition>{product.variants[0].hmsArtNr}</DefinitionList.Definition>
+
+          <DefinitionList.Term>Lev-artnr</DefinitionList.Term>
+          <DefinitionList.Definition>{product.variants[0].hmsArtNr}</DefinitionList.Definition>
+        </>
+      )}
       <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
       <DefinitionList.Definition>
         {product.isoCategoryTitle + '(' + product.isoCategory + ')'}
