@@ -29,7 +29,7 @@ export function findUniqueStringValues(arr: string[]): string {
 
 export const dateToString = (date: Date): string => {
   const day = date.getDate()
-  const month = date.getMonth()
+  const month = date.getMonth() + 1
   const year = date.getFullYear()
 
   return `${day}.${month}.${year}`
