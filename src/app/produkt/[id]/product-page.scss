@@ -3,8 +3,6 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
-  padding-bottom: $a-spacing-4;
-
   .comparing-table {
     thead tr {
       background-color: $a-surface-selected;
@@ -290,15 +288,17 @@
   }
 }
 
-.spareparts-and-accessories {
-  padding: $a-spacing-4;
-  margin-top: $a-spacing-4;
+.product-page-section {
+  &__container {
+    padding: $a-spacing-8 $a-spacing-4;
+    margin-top: $a-spacing-4;
+  }
 
-  &__accessories {
+  &__yellow-background {
     background: #fff9f0;
   }
 
-  &__spare-parts {
+  &__blue-background {
     background: $a-deepblue-50;
   }
 

@@ -36,7 +36,6 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
-
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 

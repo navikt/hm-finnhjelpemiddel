@@ -27,7 +27,7 @@ import {
   mapProductsFromAggregation,
   mapProductsFromCollapse,
 } from './product-util'
-import { ProductDocResponse, SearchResponse } from './response-types'
+import { ProductDocResponse, SearchResponse, SeriesAggregationResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -815,9 +815,51 @@ export type FetchSeriesResponse = {
   products: Product[]
 }
 
+export async function getProductsWithVariants(seriesIds: string[]): Promise<SeriesAggregationResponse> {
+  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      query: {
+        terms: {
+          seriesId: seriesIds,
+        },
+      },
+      sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      aggregations: {
+        series_buckets: {
+          composite: {
+            sources: [
+              {
+                seriesId: {
+                  terms: {
+                    field: 'seriesId',
+                  },
+                },
+              },
+            ],
+          },
+          aggregations: {
+            products: {
+              top_hits: {
+                size: 150,
+              },
+            },
+          },
+        },
+      },
+    }),
+  })
+  return res.json()
+}
+
 //SWR fetcher
-export const fetchProductsWithVariants = (seriesIds: string[], url?: string): Promise<FetchSeriesResponse> => {
-  return fetch(url || '/products/_search', {
+export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
+  return fetch('/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

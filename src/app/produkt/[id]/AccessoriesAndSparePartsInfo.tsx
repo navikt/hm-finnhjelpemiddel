@@ -23,15 +23,15 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
   }
   const firstProducts = products.slice(0, 4)
   const lastProducts = products.length > 4 && products.slice(4)
-  const classname = type === 'Accessories' ? '__accessories' : '__spare-parts'
+  const classname = type === 'Accessories' ? '__yellow-background' : '__blue-background'
 
   if (!products.length) {
     return (
       <section
-        className={`spareparts-and-accessories spareparts-and-accessories${classname}`}
+        className={`product-page-section__container product-page-section${classname}`}
         aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
       >
-        <div className="spareparts-and-accessories__content max-width">
+        <div className="product-page-section__content max-width">
           <Heading level="2" size="medium" spacing ref={headingRef}>
             {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
           </Heading>
@@ -46,21 +46,21 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
 
   return (
     <section
-      className={`spareparts-and-accessories spareparts-and-accessories${classname}`}
+      className={`product-page-section__container product-page-section${classname}`}
       aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
     >
-      <div className="spareparts-and-accessories__content max-width">
+      <div className="product-page-section__content max-width">
         <Heading level="2" size="medium" spacing ref={headingRef}>
           {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
         </Heading>
-        <div className="spareparts-and-accessories__card-container">
+        <div className="product-page-section__card-container">
           {firstProducts.map((acc, i) => (
             <ProductCardHorizontal key={i} product={acc} />
           ))}
           {lastProducts && (
             <ReadMore
               content={
-                <div className="spareparts-and-accessories__card-container">
+                <div className="product-page-section__card-container">
                   {lastProducts.map((acc, i) => (
                     <ProductCardHorizontal key={i} product={acc} />
                   ))}

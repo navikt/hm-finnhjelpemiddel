@@ -1,13 +1,17 @@
 import { mapAgreement } from '@/utils/agreement-util'
 import {
-  fetchProductsWithVariants,
   getAgreement,
   getProductWithVariants,
   getProductsInPost,
+  getProductsWithVariants,
   getSupplier,
 } from '@/utils/api-util'
-import { accessoriesMock, sparePartsMock } from '@/utils/mock-data'
-import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
+import {
+  Product,
+  mapProductFromSeriesId,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
+} from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
@@ -38,7 +42,9 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   //TODO: Endre på product.attributes.matchingProducts når vi vet mer om hvordan vi skal knytte sammen product og tilbehør/reservedeler
   const matchingSeriesIds = product.attributes.matchingProducts?.length ? product.attributes.matchingProducts : null
   const url = process.env.HM_SEARCH_URL + '/products/_search'
-  const matchingProducts = matchingSeriesIds ? (await fetchProductsWithVariants(matchingSeriesIds, url)).products : null
+  const matchingProducts = matchingSeriesIds
+    ? mapProductsFromAggregation(await getProductsWithVariants(matchingSeriesIds))
+    : null
 
   //TODO: Lage fetchmetode som henter alle produkter som er tilbehør og reservedel. Dermed må de matches på serieID.
   //Forløpig: Sender inn en tom liste som fører til ingen visning. Bruk mock for å teste lokalt:

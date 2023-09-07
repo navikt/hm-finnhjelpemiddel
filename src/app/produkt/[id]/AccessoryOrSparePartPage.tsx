@@ -8,6 +8,7 @@ import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import ProductPageTopInfo from './ProductPageTopInfo'
+import './product-page.scss'
 
 type Props = {
   product: Product
@@ -23,13 +24,13 @@ const AccessoryOrSparePartPage = ({ product, agreement, supplier, matchingProduc
       <AnimateLayout>
         <article className="product-info">
           <ProductPageTopInfo product={product} supplier={supplier} agreement={agreement} />
-          <section className="accessory-spare-part-section">
+          <section className="product-page-section__container product-page-section__blue-background">
             <div className="max-width">
               <Heading level="2" size="medium" spacing>
                 Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
               </Heading>
               {matchingProducts && matchingProducts.length > 0 ? (
-                <div className="accessory-spare-part-section__card-container">
+                <div className="product-page-section__card-container">
                   {matchingProducts.map((product, i) => (
                     <ProductCard key={i} product={product} showRank={true} />
                   ))}
