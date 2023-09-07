@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { Button, Checkbox, CheckboxGroup, Detail } from '@navikt/ds-react'
+import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 
 import { agreementKeyLabels } from '@/utils/agreement-util'
 import { Filter, SearchData } from '@/utils/api-util'
@@ -51,11 +51,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
     return null
   }
 
-  const CheckboxLabel = ({ value, hitCount }: { value: string | number; hitCount: number }) => (
-    <>
-      {value} <Detail style={{ display: 'inline' }}>({hitCount})</Detail>
-    </>
-  )
+  const CheckboxLabel = ({ value }: { value: string | number }) => <>{value}</>
 
   return (
     <ShowMore
@@ -78,24 +74,24 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
               {selectedUnavailableFilters?.map((f) => (
                 <Checkbox value={f} key={f}>
                   {/* Midlertidig mapping av agreement label frem frem til backend er riktig */}
-                  <CheckboxLabel value={f.includes('HMDB') ? agreementKeyLabels[f] : f} hitCount={0} />
+                  <CheckboxLabel value={f.includes('HMDB') ? agreementKeyLabels[f] : f} />
                 </Checkbox>
               ))}
               {filterData?.values.slice(0, 10).map((f) => (
                 <Checkbox value={f.key} key={f.key}>
-                  <CheckboxLabel value={f.label || f.key} hitCount={f.doc_count} />
+                  <CheckboxLabel value={f.label || f.key} />
                 </Checkbox>
               ))}
               {showAllValues &&
                 filterData?.values.slice(10).map((f) => (
                   <Checkbox value={f.key} key={f.key}>
-                    <CheckboxLabel value={f.label || f.key} hitCount={f.doc_count} />
+                    <CheckboxLabel value={f.label || f.key} />
                   </Checkbox>
                 ))}
               {!showAllValues &&
                 selectedInvisibleFilters?.map((f) => (
                   <Checkbox value={f.key} key={f.key}>
-                    <CheckboxLabel value={f.label || f.key} hitCount={f.doc_count} />
+                    <CheckboxLabel value={f.label || f.key} />
                   </Checkbox>
                 ))}
             </CheckboxGroup>
