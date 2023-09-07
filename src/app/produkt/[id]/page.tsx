@@ -48,12 +48,17 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
             <div className="product-info__top-content max-width">
               <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
               <div className="product-info__top-right">
-                <div className="product-info__heading-container">
-                  <Heading level="1" size="large" spacing>
-                    {product.title}
-                  </Heading>
-                </div>
-
+                <Heading level="1" size="large" spacing>
+                  {product.title}
+                </Heading>
+                {/* TODO: check all expired dates */}
+                {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
+                  <div className="product-info__expired-propducts">
+                    <Alert variant="warning">Dette produktet er utgått</Alert>
+                  </div>
+                ) : (
+                  ''
+                )}
                 {product.applicableAgreementInfo && (
                   <div className="product-info__agreement-rank">
                     <AgreementIcon rank={product.applicableAgreementInfo.rank} />
@@ -65,14 +70,6 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
                   </div>
                 )}
 
-                <div className="product-info__expired-propducts">
-                  {/* TODO: check all expired dates */}
-                  {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
-                    <Alert variant="warning">Dette produktet er utgått</Alert>
-                  ) : (
-                    ''
-                  )}
-                </div>
                 <KeyInformation
                   product={product}
                   supplierName={supplier ? supplier.name : null}
@@ -155,6 +152,17 @@ const Characteristics = ({ product }: { product: Product }) => {
   const common = product.attributes?.commonCharacteristics
   return (
     <DefinitionList>
+      {product.variantCount === 1 && product.variants[0] && (
+        <>
+          <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
+          <DefinitionList.Definition>
+            {product.variants[0].hmsArtNr !== null ? product.variants[0].hmsArtNr : '-'}
+          </DefinitionList.Definition>
+          <DefinitionList.Term>Lev-artnr</DefinitionList.Term>
+          <DefinitionList.Definition>{product.variants[0].supplierRef}</DefinitionList.Definition>
+        </>
+      )}
+
       <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
       <DefinitionList.Definition>
         {product.isoCategoryTitle + '(' + product.isoCategory + ')'}
