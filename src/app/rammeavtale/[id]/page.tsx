@@ -79,7 +79,7 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                       Hva om hjelpemiddelet ikke har denne merkingen?
                     </Heading>
                     <BodyLong spacing>
-                      Det betyr at hjelpemiddelet ikke er på noen avtale med NAV. Dersom du vil søke om dette
+                      Det betyr at hjelpemiddelet ikke er på avtale med NAV. Dersom du vil søke om dette
                       hjelpemiddelet, må behovet begrunnes godt. NAV Hjelpemiddelsentral vurderer om hjelpemiddelet kan
                       innvilges eller ikke.
                     </BodyLong>
