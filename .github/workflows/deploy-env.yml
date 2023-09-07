@@ -91,6 +91,7 @@ jobs:
       BUILD_ENV: prod
       IMAGE_PROXY_URL: https://finnhjelpemidler.nav.no/imageproxy
       CDN_URL: https://cdn.nav.no/teamdigihot/grunndata/media/v1/
+      ASSET_PREFIX: https://cdn.nav.no/teamdigihot/hm-oversikt-frontend/prod
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -121,6 +122,7 @@ jobs:
           build-args: |
             BUILD_ENV=${{ env.BUILD_ENV }}
             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
+            ASSET_PREFIX=${{ env.ASSET_PREFIX }}
             CDN_URL=${{ env.CDN_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
