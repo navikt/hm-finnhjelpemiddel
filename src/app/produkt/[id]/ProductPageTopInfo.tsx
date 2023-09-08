@@ -27,12 +27,17 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
         <div className="product-info__top-content max-width">
           <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
           <div className="product-info__top-right">
-            <div className="product-info__heading-container">
-              <Heading level="1" size="large" spacing>
-                {product.title}
-              </Heading>
-            </div>
-
+            <Heading level="1" size="large" spacing>
+              {product.title}
+            </Heading>
+            {/* TODO: check all expired dates */}
+            {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
+              <div className="product-info__expired-propducts">
+                <Alert variant="warning">Dette produktet er utgått</Alert>
+              </div>
+            ) : (
+              ''
+            )}
             {product.applicableAgreementInfo && (
               <div className="product-info__agreement-rank">
                 <AgreementIcon rank={product.applicableAgreementInfo.rank} />
@@ -40,14 +45,6 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
               </div>
             )}
 
-            <div className="product-info__expired-propducts">
-              {/* TODO: check all expired dates */}
-              {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
-                <Alert variant="warning">Dette produktet er utgått</Alert>
-              ) : (
-                ''
-              )}
-            </div>
             <KeyInformation
               product={product}
               supplierName={supplier ? supplier.name : null}

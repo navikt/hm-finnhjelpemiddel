@@ -13,19 +13,10 @@
     }
   }
 
-  &__heading-container {
-    display: flex;
-    align-items: baseline;
-    gap: $a-spacing-2;
-  }
-
   &__key-information {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: $a-spacing-2;
-    border: 1px solid $a-border-subtle;
-    border-radius: $a-border-radius-large;
   }
 
   &__supplier-info {
@@ -38,22 +29,21 @@
 
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
-      padding: $a-spacing-10 $a-spacing-6;
     }
   }
 
   &__top-left {
     @include mixins.for-size(desktop-up) {
       padding: $a-spacing-5 $a-spacing-5;
-      flex: 1;
     }
   }
 
   &__top-right {
     @include mixins.for-size(desktop-up) {
-      padding: $a-spacing-5 $a-spacing-5;
-      border-left: 1px solid $a-gray-300;
-      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 450px;
     }
   }
 
@@ -61,6 +51,11 @@
     display: flex;
     align-items: center;
     gap: $a-spacing-1;
+    padding-bottom: $a-spacing-3;
+
+    @include mixins.for-size(desktop-up) {
+      padding-bottom: $a-spacing-4;
+    }
 
     p {
       font-weight: $a-font-weight-bold;
@@ -68,7 +63,11 @@
   }
 
   &__tabs {
-    padding-top: $a-spacing-10;
+    padding-top: $a-spacing-8;
+
+    @include mixins.for-size(desktop-up) {
+      padding-top: $a-spacing-1;
+    }
 
     &__panel {
       border-bottom: 1px solid $a-border-default;
@@ -92,8 +91,11 @@
   }
 
   &__expired-propducts {
-    margin-bottom: $a-spacing-6;
-    margin-top: $a-spacing-6;
+    margin-bottom: $a-spacing-3;
+
+    @include mixins.for-size(desktop-up) {
+      margin-bottom: $a-spacing-4;
+    }
   }
 }
 

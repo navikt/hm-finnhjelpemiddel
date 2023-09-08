@@ -71,28 +71,37 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                 </div>
               </div>
               {/* Skal vises når vi har tekst */}
-              {false && (
-                <ReadMore
-                  content={
-                    <>
-                      <Heading level="2" size="small">
-                        Hva om produktet ikke har denne merkingen?
-                      </Heading>
-                      <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
-                      <Heading level="2" size="small">
-                        Hva om produktet er rangert som nummer 2, 3 eller 4?
-                      </Heading>
-                      <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>{' '}
-                      <Heading level="2" size="small">
-                        Hva vil det si at et produkt ikke har rangering?
-                      </Heading>
-                      <BodyLong spacing>{'<Tekst her om hva det vil si>'}</BodyLong>
-                    </>
-                  }
-                  buttonOpen={'Les mer om betydning av dette for søknad om produkt'}
-                  buttonClose={'Les mindre om betydning av dette for søknad om produkt'}
-                />
-              )}
+
+              <ReadMore
+                content={
+                  <>
+                    <Heading level="2" size="small">
+                      Hva om hjelpemiddelet ikke har denne merkingen?
+                    </Heading>
+                    <BodyLong spacing>
+                      Det betyr at hjelpemiddelet ikke er på avtale med NAV. Dersom du vil søke om dette
+                      hjelpemiddelet, må behovet begrunnes godt. NAV Hjelpemiddelsentral vurderer om hjelpemiddelet kan
+                      innvilges eller ikke.
+                    </BodyLong>
+                    <Heading level="2" size="small">
+                      Hva om hjelpemiddelet er rangert som nummer 2,3 eller 4?
+                    </Heading>
+                    <BodyLong spacing>
+                      Det betyr at du kan søke om disse hjelpemidlene via NAV, men du må begrunne hvorfor rangeringen(e)
+                      foran ikke dekker behovet.
+                    </BodyLong>
+                    <Heading level="2" size="small">
+                      Hva vil det si at hjelpemiddelet ikke har rangering?
+                    </Heading>
+                    <BodyLong spacing>
+                      Det betyr at produktet er på avtale med NAV. Dette kan for eksempel være understell til en
+                      sittemodul, der samme understell passer til sittemoduler i flere rangeringer.
+                    </BodyLong>
+                  </>
+                }
+                buttonOpen={'Les mer'}
+                buttonClose={'Les mindre'}
+              />
             </article>
           )}
           <article>
