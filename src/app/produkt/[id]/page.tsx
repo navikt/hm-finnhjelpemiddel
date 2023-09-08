@@ -1,31 +1,30 @@
-import { headers } from 'next/dist/client/components/headers'
-
 import { mapAgreement } from '@/utils/agreement-util'
-import { getAgreement, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
-import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
-import { toValueAndUnit } from '@/utils/string-util'
+import {
+  getAgreement,
+  getProductWithVariants,
+  getProductsInPost,
+  getProductsWithVariants,
+  getSupplier,
+} from '@/utils/api-util'
+import {
+  Product,
+  mapProductFromSeriesId,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
+} from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
-import AgreementIcon from '@/components/AgreementIcon'
-import { BackButton } from '@/components/BackButton'
-import { Alert, BodyShort, Heading } from '@/components/aksel-client'
-import DefinitionList from '@/components/definition-list/DefinitionList'
-import AnimateLayout from '@/components/layout/AnimateLayout'
-
-import { AgreementInfo } from './AgreementInfo'
-import InformationTabs, { InformationAccordion } from './InformationTabs'
-import PhotoSlider from './PhotoSlider'
-import ProductVariants from './ProductVariants'
+import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
+import ProductPage from './ProductPage'
 import './product-page.scss'
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
-  const headersList = headers()
-
-  const userAgent = headersList.get('user-agent')
-  const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
+  // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
+  // const product = accessoriesMock[0]
 
   const product = mapProductFromSeriesId(await getProductWithVariants(seriesId))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
+
   const agreement =
     product.applicableAgreementInfo && mapAgreement((await getAgreement(product.applicableAgreementInfo.id))._source)
 
@@ -39,143 +38,41 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
         )
     : null
 
+  const isAccessoryOrSparePart = product.accessory || product.sparepart
+  //TODO: Endre på product.attributes.matchingProducts når vi vet mer om hvordan vi skal knytte sammen product og tilbehør/reservedeler
+  const matchingSeriesIds = product.attributes.matchingProducts?.length ? product.attributes.matchingProducts : null
+  const url = process.env.HM_SEARCH_URL + '/products/_search'
+  const matchingProducts = matchingSeriesIds
+    ? mapProductsFromAggregation(await getProductsWithVariants(matchingSeriesIds))
+    : null
+
+  //TODO: Lage fetchmetode som henter alle produkter som er tilbehør og reservedel. Dermed må de matches på serieID.
+  //Forløpig: Sender inn en tom liste som fører til ingen visning. Bruk mock for å teste lokalt:
+
+  // const accessories = accessoriesMock
+  // const spareParts = sparePartsMock
+  const accessories: Product[] = []
+  const spareParts: Product[] = []
+
   return (
     <>
-      <BackButton />
-      <AnimateLayout>
-        <article className="product-info">
-          <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
-            <div className="product-info__top-content max-width">
-              <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
-              <div className="product-info__top-right">
-                <Heading level="1" size="large" spacing>
-                  {product.title}
-                </Heading>
-                {/* TODO: check all expired dates */}
-                {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
-                  <div className="product-info__expired-propducts">
-                    <Alert variant="warning">Dette produktet er utgått</Alert>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {product.applicableAgreementInfo && (
-                  <div className="product-info__agreement-rank">
-                    <AgreementIcon rank={product.applicableAgreementInfo.rank} />
-                    <BodyShort>
-                      {product.applicableAgreementInfo.rank === 99
-                        ? 'Tilbehøret på avtale med NAV - ingen rangering'
-                        : `Rangert som nr ${product.applicableAgreementInfo.rank} på avtale med Nav`}
-                    </BodyShort>
-                  </div>
-                )}
-
-                <KeyInformation
-                  product={product}
-                  supplierName={supplier ? supplier.name : null}
-                  agreementTitle={agreement ? agreement.title : null}
-                />
-              </div>
-            </div>
-          </section>
-
-          <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
-            {isMobileDevice ? (
-              <InformationAccordion product={product} supplier={supplier} />
-            ) : (
-              <InformationTabs product={product} supplier={supplier} />
-            )}
-          </section>
-          <section
-            className="product-info__characteristics max-width"
-            aria-label="Produktegenskaper som alle produktvariantene har til felles"
-          >
-            <Heading level="2" size="medium" spacing>
-              Produktegenskaper
-            </Heading>
-            <Characteristics product={product} />
-          </section>
-
-          {product.variantCount > 1 && (
-            <section
-              className="product-info__product-variants max-width"
-              aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
-            >
-              <ProductVariants product={product} />
-            </section>
-          )}
-
-          {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}
-        </article>
-      </AnimateLayout>
+      {isAccessoryOrSparePart ? (
+        <AccessoryOrSparePartPage
+          product={product}
+          agreement={agreement}
+          supplier={supplier}
+          matchingProducts={matchingProducts}
+        />
+      ) : (
+        <ProductPage
+          product={product}
+          agreement={agreement}
+          supplier={supplier}
+          productsOnPost={productsOnPost}
+          accessories={accessories}
+          spareParts={spareParts}
+        />
+      )}
     </>
-  )
-}
-
-const KeyInformation = ({
-  product,
-  supplierName,
-  agreementTitle,
-}: {
-  product: Product
-  supplierName: string | null
-  agreementTitle: string | null
-}) => (
-  <div className="product-info__key-information">
-    <Heading level="2" size="medium">
-      Nøkkelinfo
-    </Heading>
-    <DefinitionList>
-      {product.applicableAgreementInfo && <DefinitionList.Term>Rangering</DefinitionList.Term>}
-      {product.applicableAgreementInfo && (
-        <DefinitionList.Definition>{product.applicableAgreementInfo?.rank}</DefinitionList.Definition>
-      )}
-      {product.applicableAgreementInfo && <DefinitionList.Term>Delkontrakt</DefinitionList.Term>}
-      {product.applicableAgreementInfo && (
-        <DefinitionList.Definition>
-          {'Nr ' + product.applicableAgreementInfo?.postNr + ': ' + product.applicableAgreementInfo?.postTitle ??
-            product.attributes?.text}
-        </DefinitionList.Definition>
-      )}
-
-      {agreementTitle && <DefinitionList.Term>Avtale</DefinitionList.Term>}
-      {agreementTitle && <DefinitionList.Definition>{agreementTitle}</DefinitionList.Definition>}
-      <DefinitionList.Term>Leverandør</DefinitionList.Term>
-      <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-      <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
-      <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
-    </DefinitionList>
-  </div>
-)
-
-const Characteristics = ({ product }: { product: Product }) => {
-  const common = product.attributes?.commonCharacteristics
-  return (
-    <DefinitionList>
-      {product.variantCount === 1 && product.variants[0] && (
-        <>
-          <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
-          <DefinitionList.Definition>
-            {product.variants[0].hmsArtNr !== null ? product.variants[0].hmsArtNr : '-'}
-          </DefinitionList.Definition>
-          <DefinitionList.Term>Lev-artnr</DefinitionList.Term>
-          <DefinitionList.Definition>{product.variants[0].supplierRef}</DefinitionList.Definition>
-        </>
-      )}
-
-      <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
-      <DefinitionList.Definition>
-        {product.isoCategoryTitle + '(' + product.isoCategory + ')'}
-      </DefinitionList.Definition>
-      {common &&
-        Object.keys(common).map((key, i) => (
-          <>
-            <DefinitionList.Term>{key}</DefinitionList.Term>
-            <DefinitionList.Definition>
-              {common[key] !== undefined ? toValueAndUnit(common[key].value, common[key].unit) : '-'}
-            </DefinitionList.Definition>
-          </>
-        ))}
-    </DefinitionList>
   )
 }

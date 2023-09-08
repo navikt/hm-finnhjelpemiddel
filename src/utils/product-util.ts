@@ -83,6 +83,8 @@ interface Attributes {
   text?: string
   bestillingsordning?: boolean
   commonCharacteristics?: TechData
+  //Temporary until we know how to connect spareParts/accessories to matching products
+  matchingProducts?: string[]
 }
 
 export interface AgreementInfo {

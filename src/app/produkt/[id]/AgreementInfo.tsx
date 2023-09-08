@@ -1,13 +1,10 @@
 'use client'
 
-import Image from 'next/image'
 import NextLink from 'next/link'
-import Link from 'next/link'
 
-import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 
-import AgreementIcon from '@/components/AgreementIcon'
+import ProductCard from '@/components/ProductCard'
 import { Alert, BodyLong, ChevronRightIcon, Heading, ImageIcon } from '@/components/aksel-client'
 
 type AgreementInfoProps = {
@@ -37,37 +34,7 @@ export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) =
           {productsOnPost && productsOnPost.length > 0 ? (
             <div className="agreement-details__products-on-post-list">
               {productsOnPost?.map((product) => (
-                <div className="agreement-details__product-on-post" key={product.id}>
-                  <div className="image-container">
-                    <div className="image">
-                      {product.photos.length === 0 && (
-                        <ImageIcon
-                          width="100%"
-                          height="100%"
-                          style={{ background: 'white' }}
-                          aria-label="Ingen bilde tilgjengelig"
-                        />
-                      )}
-                      {product.photos.length !== 0 && (
-                        <Image
-                          loader={smallImageLoader}
-                          src={product.photos.at(0)?.uri || ''}
-                          alt="Produktbilde"
-                          fill
-                          style={{ objectFit: 'contain' }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                  <div className="info">
-                    <Link className="link" href={`/produkt/${product.id}`}>
-                      <Heading size="xsmall" className="text-line-clamp">
-                        {product.title}
-                      </Heading>
-                    </Link>
-                    {product.applicableAgreementInfo && <AgreementIcon rank={product.applicableAgreementInfo.rank} />}
-                  </div>
-                </div>
+                <ProductCard key={product.id} product={product} showRank={true} />
               ))}
             </div>
           ) : (

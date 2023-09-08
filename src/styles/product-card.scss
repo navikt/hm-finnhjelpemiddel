@@ -7,10 +7,9 @@
   flex-direction: column;
   align-items: center;
   width: 10rem;
-  height: 13rem;
+  height: 14rem;
   text-align: center;
   box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
-  border: 1px solid $a-border-default;
   border-radius: $a-border-radius-large;
   background-color: $a-white;
 
@@ -60,4 +59,8 @@
     padding: $a-spacing-1 $a-spacing-2;
     min-height: 3rem;
   }
+}
+
+.border {
+  border: 1px solid $a-border-default;
 }

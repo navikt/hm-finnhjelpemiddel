@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 
 import Image from 'next/image'
@@ -9,25 +11,31 @@ import { Button, Heading } from '@navikt/ds-react'
 import { smallImageLoader } from '../utils/image-util'
 import { Product } from '../utils/product-util'
 
+import AgreementIcon from './AgreementIcon'
+
 type ProductCardProps = {
   product: Product
-  removeProduct: (product: Product) => void
+  removeProduct?: (product: Product) => void
+  showRank?: boolean
 }
 
-const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
+const ProductCard = ({ product, removeProduct, showRank }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
   const [imageLoadingError, setImageLoadingError] = useState(false)
 
   return (
-    <div className="product-card">
-      <Button
-        variant="tertiary-neutral"
-        className="remove-button"
-        onClick={() => removeProduct(product)}
-        icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
-      />
+    <div className={removeProduct ? 'product-card border' : 'product-card'}>
+      {removeProduct && (
+        <Button
+          variant="tertiary-neutral"
+          className="remove-button"
+          onClick={() => removeProduct(product)}
+          icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
+        />
+      )}
+
       <div className="product-card__image">
         <div className="image">
           {hasImage && !imageLoadingError ? (
@@ -60,6 +68,11 @@ const ProductCard = ({ product, removeProduct }: ProductCardProps) => {
           </Heading>
         </Link>
       </div>
+      {showRank && product.applicableAgreementInfo && (
+        <div className="rank">
+          <AgreementIcon rank={product.applicableAgreementInfo.rank} />
+        </div>
+      )}
     </div>
   )
 }
