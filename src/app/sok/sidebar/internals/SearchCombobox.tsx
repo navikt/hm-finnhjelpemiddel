@@ -50,7 +50,7 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
       selectedOptions={selectedOption ? [selectedOption] : []}
       clearButton={true}
       allowNewValues={false}
-      toggleListButton={true}
+      toggleListButton={inputValue || selectedOption ? true : false}
       onKeyUpCapture={(event) => {
         if (event.key === 'Enter') {
           event.preventDefault()
