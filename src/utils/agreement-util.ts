@@ -103,7 +103,7 @@ export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8660': 'Syn',
   'HMDB-8672': 'Plattformer og personløftere',
   'HMDB-8713': 'Varmehjelpemidler',
-  'HMDB-8582': 'Omgivelseskontroll',
+  'HMDB-8736': 'Omgivelseskontroll',
   'HMDB-8679': 'Sittesystem',
   'HMDB-8683': 'Kjøreramper',
   'HMDB-8682': 'Førerhunder og servicehunder',
