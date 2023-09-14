@@ -767,7 +767,12 @@ export async function getAgreement(id: string) {
   return res.json()
 }
 
+<<<<<<< HEAD
 export async function getAgreementFromId(id: string): Promise<SearchResponse> {
+=======
+//OBS Identifier skal utfases
+export async function getAgreementFromIdentifier(identifier: string): Promise<SearchResponse> {
+>>>>>>> main
   const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
