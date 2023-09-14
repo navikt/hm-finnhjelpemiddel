@@ -1,5 +1,12 @@
 import { Document, mapDocuments } from './product-util'
-import { AgreementsSourceResponse, AttachmentsResponse, Hit, PostResponse, SearchResponse } from './response-types'
+import {
+  AgreementLabelResponse,
+  AgreementsSourceResponse,
+  AttachmentsResponse,
+  Hit,
+  PostResponse,
+  SearchResponse,
+} from './response-types'
 
 export function getPostTitle(post: string, postNr: number): string
 export function getPostTitle(posts: Post[], postNr: number): string | undefined
@@ -17,11 +24,17 @@ export interface Agreement {
   id: string
   identifier: string
   title: string
+  label: string
   descriptionHtml: string //html
   published: Date //date
   expired: Date //date
   posts: Post[]
   attachments: Attachments[]
+}
+
+export interface AgreementLabel {
+  id: string
+  label: string
 }
 
 export interface Attachments {
@@ -49,11 +62,23 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     id: source.id,
     identifier: source.identifier,
     title: source.title,
+    label: source.label,
     descriptionHtml: source.text,
     published: new Date(Date.parse(source.published)) ?? '',
     expired: new Date(Date.parse(source.expired)) ?? '',
     posts: mapPosts(source.posts),
     attachments: mapAttachments(source.attachments),
+  }
+}
+
+export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
+  return data.hits.hits.map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
+}
+
+export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabel => {
+  return {
+    id: source.id,
+    label: source.label,
   }
 }
 
@@ -78,49 +103,8 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-export const agreementKeyLabels: Record<string, string> = {
-  'HMDB-8617': 'Manuelle rullestoler',
-  'HMDB-8710': 'Elektriske rullestoler',
-  'HMDB-8686': 'Hygienehjelpemidler og støttestang',
-  'HMDB-8709': 'Sitteputer',
-  'HMDB-8607': 'Stoler og bord',
-  'HMDB-8594': 'Ganghjelpemidler',
-  'HMDB-8590': 'Senger',
-  'HMDB-8688': 'Stoler med oppreisingsfunksjon',
-  'HMDB-8712': 'Kalendere',
-  'HMDB-8601': 'Sykler',
-  'HMDB-8726': 'Overflytting, vending og posisjonering',
-  'HMDB-8716': 'Innredning kjøkken og bad',
-  'HMDB-8612': 'Vogner og aktivitetshjelpemidler',
-  'HMDB-8734': 'Høreapparater',
-  'HMDB-8628': 'Madrasser',
-  'HMDB-8639': 'Hjelpemidler til trapp',
-  'HMDB-8641': 'Varsling',
-  'HMDB-8645': 'Kommunikasjon',
-  'HMDB-8646': 'Kjøreposer, varmeposer og regncape',
-  'HMDB-8648': 'Ståstativ og treningshjelpemidler',
-  'HMDB-8654': 'Hørsel',
-  'HMDB-8660': 'Syn',
-  'HMDB-8672': 'Plattformer og personløftere',
-  'HMDB-8713': 'Varmehjelpemidler',
-  'HMDB-8736': 'Omgivelseskontroll',
-  'HMDB-8679': 'Sittesystem',
-  'HMDB-8683': 'Kjøreramper',
-  'HMDB-8682': 'Førerhunder og servicehunder',
-  'HMDB-8673': 'Biler',
-  'HMDB-8685': 'Bilombygg',
-  'HMDB-8669': 'Seksuallivet',
-  // 'HMDB-7449': 'Elektriske rullestoler (duplicate)',
-  // 'HMDB-8692': 'TEST UU',
-  // 'HMDB-8570': 'Høreapparater (duplicate)',
-  // 'HMDB-8615': 'Innredning kjøkken og bad (duplicate)',
-  // 'HMDB-6427': 'Kalendere (duplicate)',
-  // 'HMDB-8725': 'Senger (duplicate)',
-  // 'HMDB-7490': 'Varmehjelpemidler (duplicate)',
-}
-
-export const agreementHasNoProducts = (key: string) => {
-  return agreementWithNoProducts.includes(key)
+export const agreementHasNoProducts = (identifier: string) => {
+  return agreementWithNoProducts.includes(identifier)
 }
 
 export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685']

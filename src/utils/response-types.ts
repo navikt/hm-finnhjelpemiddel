@@ -43,7 +43,7 @@ export interface Hit {
   _type: string | null
   _id: string
   _score: string
-  _source: ProductSourceResponse | AgreementsSourceResponse
+  _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse
 }
 
 export interface ProductDocResponse {
@@ -158,6 +158,7 @@ export interface AgreementsSourceResponse {
   id: string
   identifier: string
   title: string
+  label: string
   resume: string
   text: string
   reference: string
@@ -169,6 +170,11 @@ export interface AgreementsSourceResponse {
   updatedBy: string
   created: string
   updated: string
+}
+
+export interface AgreementLabelResponse {
+  id: string
+  label: string
 }
 
 export interface PostResponse {

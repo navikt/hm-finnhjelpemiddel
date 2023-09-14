@@ -1,13 +1,16 @@
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef } from 'react'
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import useSWR from 'swr'
+
 import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
 
-import { agreementKeyLabels } from '@/utils/agreement-util'
+import { AgreementLabel } from '@/utils/agreement-util'
+import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -29,16 +32,21 @@ function Home() {
     [router]
   )
 
-  let first9Agreements = Object.entries(agreementKeyLabels)
-  const lastAgreements = first9Agreements.splice(10)
+  //TODO: What to do if error?
+  const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+    keepPreviousData: true,
+  })
 
-  const agreementLink = (key: string, value: string) => {
-    let hrefAgreement = `/rammeavtale/${key}`
+  const first10AgreementLabels = data?.slice(0, 10)
+  const lastAgreementLabels = data?.slice(10)
+
+  const agreementLink = (id: string, label: string) => {
+    let hrefAgreement = `/rammeavtale/${id}`
 
     return (
-      <div className="home-page__agreement-link" key={key}>
+      <div className="home-page__agreement-link" key={id}>
         <NextLink href={hrefAgreement}>
-          <BodyShort> {value} </BodyShort>
+          <BodyShort> {label} </BodyShort>
         </NextLink>
       </div>
     )
@@ -73,17 +81,18 @@ function Home() {
                 hjelpemidler. Les mer om avtalene ved å trykke på lenkene nedenfor.
               </Ingress>
             </div>
+
             <div>
               <div className="home-page__agreement-links spacing-bottom--medium">
-                {first9Agreements.map(([key, value]) => {
-                  return agreementLink(key, value)
+                {first10AgreementLabels?.map(({ id, label }) => {
+                  return agreementLink(id, label)
                 })}
               </div>
               <ReadMore
                 content={
                   <div className="home-page__agreement-links read-more-content">
-                    {lastAgreements.map(([key, value]) => {
-                      return agreementLink(key, value)
+                    {lastAgreementLabels?.map(({ id, label }) => {
+                      return agreementLink(id, label)
                     })}
                   </div>
                 }

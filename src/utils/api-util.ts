@@ -1,4 +1,4 @@
-import { agreementKeyLabels } from './agreement-util'
+import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   FilterCategories,
   filterBeregnetBarn,
@@ -27,7 +27,7 @@ import {
   mapProductsFromAggregation,
   mapProductsFromCollapse,
 } from './product-util'
-import { ProductDocResponse, SearchResponse, SeriesAggregationResponse } from './response-types'
+import { ProductDocResponse, SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -38,7 +38,7 @@ export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = {
   key: number | string
   doc_count: number
-  label?: string
+  label: string
 }
 
 type FilterCategoryKey = keyof typeof FilterCategories
@@ -709,7 +709,7 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
           },
           aggs: {
             values: {
-              terms: { field: 'agreementInfo.identifier', size: 100 },
+              terms: { field: 'agreementInfo.label', size: 100 },
             },
           },
         },
@@ -736,13 +736,7 @@ const mapFilters = (data: any): FilterData => {
         ...(data.min && { min: data.min.value }),
         ...(data.max && { max: data.max.value }),
       }
-      //Midlertidig der hvor vi ikke har en tittel som passer seg å vise i UI
-      if (key === 'rammeavtale') {
-        obj[key].values = obj[key].values.map((bucket) => {
-          bucket.label = bucket.key in agreementKeyLabels ? agreementKeyLabels[bucket.key] : undefined
-          return bucket
-        })
-      }
+
       return obj
     }, {} as FilterData)
 }
@@ -773,8 +767,7 @@ export async function getAgreement(id: string) {
   return res.json()
 }
 
-//OBS Identifier skal utfases
-export async function getAgreementFromIdentifier(identifier: string): Promise<SearchResponse> {
+export async function getAgreementFromId(id: string): Promise<SearchResponse> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
@@ -784,8 +777,8 @@ export async function getAgreementFromIdentifier(identifier: string): Promise<Se
     body: JSON.stringify({
       query: {
         term: {
-          identifier: {
-            value: identifier,
+          id: {
+            value: id,
           },
         },
       },
@@ -793,6 +786,31 @@ export async function getAgreementFromIdentifier(identifier: string): Promise<Se
   })
 
   return res.json()
+}
+
+export async function getAgreementLabels(): Promise<AgreementLabel[]> {
+  const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 100,
+      query: {
+        term: {
+          status: {
+            value: 'ACTIVE',
+          },
+        },
+      },
+      _source: {
+        includes: ['id', 'label'],
+      },
+    }),
+  })
+
+  return res.json().then(mapAgreementLabels)
 }
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
