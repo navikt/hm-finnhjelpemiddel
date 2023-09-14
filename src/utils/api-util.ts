@@ -31,6 +31,9 @@ import { ProductDocResponse, SearchResponse, SeriesAggregationResponse } from '.
 
 export const PAGE_SIZE = 25
 
+//if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
+const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
+
 export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = {
   key: number | string
@@ -238,7 +241,7 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
     },
   }
 
-  return fetch('/products/_search', {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -745,7 +748,7 @@ const mapFilters = (data: any): FilterData => {
 }
 
 export async function getProduct(id: string): Promise<ProductDocResponse> {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/products/_doc/${id}`, {
+  const res = await fetch(HM_SEARCH_URL + `/products/_doc/${id}`, {
     method: 'GET',
   })
 
@@ -753,7 +756,7 @@ export async function getProduct(id: string): Promise<ProductDocResponse> {
 }
 
 export async function getSupplier(id: string) {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/suppliers/_doc/${id}`, {
+  const res = await fetch(HM_SEARCH_URL + `/suppliers/_doc/${id}`, {
     next: { revalidate: 900 },
     method: 'GET',
   })
@@ -762,7 +765,7 @@ export async function getSupplier(id: string) {
 }
 
 export async function getAgreement(id: string) {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/agreements/_doc/${id}`, {
+  const res = await fetch(HM_SEARCH_URL + `/agreements/_doc/${id}`, {
     next: { revalidate: 900 },
     method: 'GET',
   })
@@ -772,7 +775,7 @@ export async function getAgreement(id: string) {
 
 //OBS Identifier skal utfases
 export async function getAgreementFromIdentifier(identifier: string): Promise<SearchResponse> {
-  const res = await fetch(process.env.HM_SEARCH_URL + `/agreements/_search`, {
+  const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
     headers: {
@@ -793,7 +796,7 @@ export async function getAgreementFromIdentifier(identifier: string): Promise<Se
 }
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
-  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
     next: { revalidate: 900 },
     method: 'POST',
     headers: {
@@ -815,51 +818,8 @@ export type FetchSeriesResponse = {
   products: Product[]
 }
 
-export async function getProductsWithVariants(seriesIds: string[]): Promise<SeriesAggregationResponse> {
-  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
-    next: { revalidate: 900 },
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      size: 0,
-      query: {
-        terms: {
-          seriesId: seriesIds,
-        },
-      },
-      sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
-      aggregations: {
-        series_buckets: {
-          composite: {
-            sources: [
-              {
-                seriesId: {
-                  terms: {
-                    field: 'seriesId',
-                  },
-                },
-              },
-            ],
-          },
-          aggregations: {
-            products: {
-              top_hits: {
-                size: 150,
-              },
-            },
-          },
-        },
-      },
-    }),
-  })
-  return res.json()
-}
-
-//SWR fetcher
 export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
-  return fetch('/products/_search', {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -911,7 +871,7 @@ export async function getProductsInPost(postIdentifier: string): Promise<SearchR
     },
   }
 
-  const res = await fetch(process.env.HM_SEARCH_URL + '/products/_search', {
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -932,7 +892,7 @@ export type SuggestionsResponse = { suggestions: Suggestions }
 
 //TODO: Bør denne returnere Product? Vet ikke om vi trenger det
 export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => {
-  return fetch('/products/_search', {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -15,6 +15,10 @@ const nextConfig = {
         source: '/products/_search:path*',
         destination: process.env.HM_SEARCH_URL + '/products/_search:path*',
       },
+      {
+        source: '/agreements/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/agreements/_search:path*',
+      },
     ]
   },
   images: {
@@ -27,9 +31,9 @@ const nextConfig = {
     ],
   },
   env: {
-    HM_SEARCH_URL: process.env.HM_SEARCH_URL,
+    //https://nextjs.org/docs/app/api-reference/next-config-js/env
+    //To add environment variables to the JavaScript bundle (client side) add the env config.
     IMAGE_PROXY_URL: process.env.IMAGE_PROXY_URL,
-    CDN_URL: process.env.CDN_URL,
   },
 }
 
