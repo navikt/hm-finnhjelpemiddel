@@ -175,6 +175,7 @@ export interface AgreementsSourceResponse {
 export interface AgreementLabelResponse {
   id: string
   label: string
+  identifier: string
 }
 
 export interface PostResponse {

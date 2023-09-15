@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -9,7 +9,7 @@ import useSWR from 'swr'
 
 import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
 
-import { AgreementLabel } from '@/utils/agreement-util'
+import { AgreementLabel, agreementHasNoProducts, agreementKeyLabels } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
@@ -37,8 +37,27 @@ function Home() {
     keepPreviousData: true,
   })
 
-  const first10AgreementLabels = data?.slice(0, 10)
-  const lastAgreementLabels = data?.slice(10)
+  const sortedData = useMemo(() => {
+    if (!data) return []
+    const sorted = [...data] // Create a copy of data to avoid modifying it in place
+    sorted.sort((a, b) => {
+      const labelA = agreementKeyLabels[a.identifier]
+      const labelB = agreementKeyLabels[b.identifier]
+
+      if (labelA && labelB) {
+        const orderA = Object.keys(agreementKeyLabels).indexOf(a.identifier)
+        const orderB = Object.keys(agreementKeyLabels).indexOf(b.identifier)
+        return orderA - orderB
+      } else {
+        // Handle cases where identifier does not exist in agreementKeyLabels
+        return 0 // No change in order
+      }
+    })
+    return sorted
+  }, [data])
+
+  const first10Agreements = sortedData?.slice(0, 10)
+  const lastAgreements = sortedData?.slice(10)
 
   const agreementLink = (id: string, label: string) => {
     let hrefAgreement = `/rammeavtale/${id}`
@@ -84,14 +103,14 @@ function Home() {
 
             <div>
               <div className="home-page__agreement-links spacing-bottom--medium">
-                {first10AgreementLabels?.map(({ id, label }) => {
+                {first10Agreements?.map(({ id, label }) => {
                   return agreementLink(id, label)
                 })}
               </div>
               <ReadMore
                 content={
                   <div className="home-page__agreement-links read-more-content">
-                    {lastAgreementLabels?.map(({ id, label }) => {
+                    {lastAgreements?.map(({ id, label }) => {
                       return agreementLink(id, label)
                     })}
                   </div>
