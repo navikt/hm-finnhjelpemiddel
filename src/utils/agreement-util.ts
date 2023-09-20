@@ -135,8 +135,6 @@ export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8709': 'Sitteputer',
   'HMDB-8607': 'Stoler og bord',
   'HMDB-8594': 'Ganghjelpemidler',
-  'HMDB-8590': 'Senger',
-  //NB! HMDB-8725 returneres fra server og ikke HMDB-8590
   'HMDB-8725': 'Senger (duplicate)',
   'HMDB-8688': 'Stoler med oppreisingsfunksjon',
   'HMDB-8712': 'Kalendere',
