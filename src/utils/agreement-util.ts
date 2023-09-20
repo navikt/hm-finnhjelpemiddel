@@ -105,7 +105,7 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-export const agreementHasNoProducts = (identifier: string) => {
+export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
