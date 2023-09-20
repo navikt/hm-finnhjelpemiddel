@@ -1,13 +1,16 @@
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import useSWR from 'swr'
+
 import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
 
-import { agreementKeyLabels } from '@/utils/agreement-util'
+import { AgreementLabel, agreementHasNoProducts, agreementKeyLabels } from '@/utils/agreement-util'
+import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -29,16 +32,40 @@ function Home() {
     [router]
   )
 
-  let first9Agreements = Object.entries(agreementKeyLabels)
-  const lastAgreements = first9Agreements.splice(10)
+  //TODO: What to do if error?
+  const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+    keepPreviousData: true,
+  })
 
-  const agreementLink = (key: string, value: string) => {
-    let hrefAgreement = `/rammeavtale/${key}`
+  const sortedData = useMemo(() => {
+    if (!data) return []
+    const sorted = [...data] // Create a copy of data to avoid modifying it in place
+    sorted.sort((a, b) => {
+      const labelA = agreementKeyLabels[a.identifier]
+      const labelB = agreementKeyLabels[b.identifier]
+
+      if (labelA && labelB) {
+        const orderA = Object.keys(agreementKeyLabels).indexOf(a.identifier)
+        const orderB = Object.keys(agreementKeyLabels).indexOf(b.identifier)
+        return orderA - orderB
+      } else {
+        // Handle cases where identifier does not exist in agreementKeyLabels
+        return 0 // No change in order
+      }
+    })
+    return sorted
+  }, [data])
+
+  const first10Agreements = sortedData?.slice(0, 10)
+  const lastAgreements = sortedData?.slice(10)
+
+  const agreementLink = (id: string, label: string) => {
+    let hrefAgreement = `/rammeavtale/${id}`
 
     return (
-      <div className="home-page__agreement-link" key={key}>
+      <div className="home-page__agreement-link" key={id}>
         <NextLink href={hrefAgreement}>
-          <BodyShort> {value} </BodyShort>
+          <BodyShort> {label} </BodyShort>
         </NextLink>
       </div>
     )
@@ -73,17 +100,18 @@ function Home() {
                 hjelpemidler. Les mer om avtalene ved å trykke på lenkene nedenfor.
               </Ingress>
             </div>
+
             <div>
               <div className="home-page__agreement-links spacing-bottom--medium">
-                {first9Agreements.map(([key, value]) => {
-                  return agreementLink(key, value)
+                {first10Agreements?.map(({ id, label }) => {
+                  return agreementLink(id, label)
                 })}
               </div>
               <ReadMore
                 content={
                   <div className="home-page__agreement-links read-more-content">
-                    {lastAgreements.map(([key, value]) => {
-                      return agreementLink(key, value)
+                    {lastAgreements?.map(({ id, label }) => {
+                      return agreementLink(id, label)
                     })}
                   </div>
                 }

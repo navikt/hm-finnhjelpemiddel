@@ -113,7 +113,7 @@ export const filterProduktkategori = (values: Array<number>) => ({
 
 export const filterRammeavtale = (values: Array<number>) => ({
   bool: {
-    should: values.map((value) => ({ term: { 'agreementInfo.identifier': value } })),
+    should: values.map((value) => ({ term: { 'agreementInfo.label': value } })),
   },
 })
 

@@ -3,7 +3,6 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 
-import { agreementKeyLabels } from '@/utils/agreement-util'
 import { Filter, SearchData } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { useHydratedSearchStore } from '@/utils/search-state-util'
@@ -73,12 +72,12 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
             >
               {selectedUnavailableFilters?.map((f) => (
                 <Checkbox value={f} key={f}>
-                  {/* Midlertidig mapping av agreement label frem frem til backend er riktig */}
-                  <CheckboxLabel value={f.includes('HMDB') ? agreementKeyLabels[f] : f} />
+                  <CheckboxLabel value={f} />
                 </Checkbox>
               ))}
               {filterData?.values.slice(0, 10).map((f) => (
                 <Checkbox value={f.key} key={f.key}>
+                  {/* NB! Fjerne bruk av label dersom vi ender opp med å ikke bruke det for rammeavtale?*/}
                   <CheckboxLabel value={f.label || f.key} />
                 </Checkbox>
               ))}

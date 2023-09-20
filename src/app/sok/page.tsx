@@ -12,7 +12,6 @@ import { FilesIcon } from '@navikt/aksel-icons'
 import { Delete, Up } from '@navikt/ds-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
-import { agreementKeyLabels } from '@/utils/agreement-util'
 import { FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters, fetchProducts } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
@@ -210,14 +209,10 @@ export default function Home() {
                     Valgte filtre
                   </Heading>
                   <Chips className="results__chips">
-                    {filterChips.map(({ key, label, values }, index) => {
+                    {filterChips.map(({ key, label, values }) => {
                       return values
                         .filter((v) => v)
                         .map((value) => {
-                          let valueLabel = value
-                          if (key === 'rammeavtale') {
-                            valueLabel = agreementKeyLabels[value]
-                          }
                           return (
                             <Chips.Removable
                               key={key + value}
@@ -232,7 +227,7 @@ export default function Home() {
                                 )
                               }}
                             >
-                              {label === FilterCategories.produktkategori ? value : `${label}: ${valueLabel}`}
+                              {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
                             </Chips.Removable>
                           )
                         })

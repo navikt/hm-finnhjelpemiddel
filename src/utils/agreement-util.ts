@@ -1,5 +1,12 @@
 import { Document, mapDocuments } from './product-util'
-import { AgreementsSourceResponse, AttachmentsResponse, Hit, PostResponse, SearchResponse } from './response-types'
+import {
+  AgreementLabelResponse,
+  AgreementsSourceResponse,
+  AttachmentsResponse,
+  Hit,
+  PostResponse,
+  SearchResponse,
+} from './response-types'
 
 export function getPostTitle(post: string, postNr: number): string
 export function getPostTitle(posts: Post[], postNr: number): string | undefined
@@ -17,11 +24,18 @@ export interface Agreement {
   id: string
   identifier: string
   title: string
+  label: string
   descriptionHtml: string //html
   published: Date //date
   expired: Date //date
   posts: Post[]
   attachments: Attachments[]
+}
+
+export interface AgreementLabel {
+  id: string
+  label: string
+  identifier: string
 }
 
 export interface Attachments {
@@ -49,11 +63,24 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     id: source.id,
     identifier: source.identifier,
     title: source.title,
+    label: source.label,
     descriptionHtml: source.text,
     published: new Date(Date.parse(source.published)) ?? '',
     expired: new Date(Date.parse(source.expired)) ?? '',
     posts: mapPosts(source.posts),
     attachments: mapAttachments(source.attachments),
+  }
+}
+
+export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
+  return data.hits.hits.map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
+}
+
+export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabel => {
+  return {
+    id: source.id,
+    label: source.label,
+    identifier: source.identifier,
   }
 }
 
@@ -78,6 +105,29 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
+export const agreementHasNoProducts = (identifier: string): boolean => {
+  return agreementWithNoProducts.includes(identifier)
+}
+
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685']
+
+export const agreementAttachmentLabels: Record<string, string> = {
+  Tilbehør: 'Tilbehør for hver leverandør',
+  Tjenester: 'Tjenester for hver leverandør',
+  Reservedeler: 'Reservedeler for hver leverandør',
+  Endringskatalog: 'Endringskataloger for hver leverandør',
+}
+
+export function getAttachmentLabel(key: string): string | undefined {
+  const matchingKey = Object.keys(agreementAttachmentLabels).find((labelKey) => key.startsWith(labelKey))
+
+  if (matchingKey) {
+    return agreementAttachmentLabels[matchingKey]
+  }
+
+  return undefined
+}
+
 export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8617': 'Manuelle rullestoler',
   'HMDB-8710': 'Elektriske rullestoler',
@@ -85,7 +135,7 @@ export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8709': 'Sitteputer',
   'HMDB-8607': 'Stoler og bord',
   'HMDB-8594': 'Ganghjelpemidler',
-  'HMDB-8590': 'Senger',
+  'HMDB-8725': 'Senger (duplicate)',
   'HMDB-8688': 'Stoler med oppreisingsfunksjon',
   'HMDB-8712': 'Kalendere',
   'HMDB-8601': 'Sykler',
@@ -115,29 +165,6 @@ export const agreementKeyLabels: Record<string, string> = {
   // 'HMDB-8570': 'Høreapparater (duplicate)',
   // 'HMDB-8615': 'Innredning kjøkken og bad (duplicate)',
   // 'HMDB-6427': 'Kalendere (duplicate)',
-  // 'HMDB-8725': 'Senger (duplicate)',
+
   // 'HMDB-7490': 'Varmehjelpemidler (duplicate)',
-}
-
-export const agreementHasNoProducts = (key: string) => {
-  return agreementWithNoProducts.includes(key)
-}
-
-export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685']
-
-export const agreementAttachmentLabels: Record<string, string> = {
-  Tilbehør: 'Tilbehør for hver leverandør',
-  Tjenester: 'Tjenester for hver leverandør',
-  Reservedeler: 'Reservedeler for hver leverandør',
-  Endringskatalog: 'Endringskataloger for hver leverandør',
-}
-
-export function getAttachmentLabel(key: string): string | undefined {
-  const matchingKey = Object.keys(agreementAttachmentLabels).find((labelKey) => key.startsWith(labelKey))
-
-  if (matchingKey) {
-    return agreementAttachmentLabels[matchingKey]
-  }
-
-  return undefined
 }
