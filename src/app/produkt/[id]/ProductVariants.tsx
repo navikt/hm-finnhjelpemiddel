@@ -31,10 +31,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
         }
         return -1
       }
+
       if (
         sortColumns.orderBy &&
-        variantA.techData[sortColumns.orderBy].value &&
-        variantB.techData[sortColumns.orderBy].value
+        variantA.techData[sortColumns.orderBy]?.value &&
+        variantB.techData[sortColumns.orderBy]?.value
       ) {
         return sortIntWithStringFallback(
           variantA.techData[sortColumns.orderBy].value,

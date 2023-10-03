@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import '@/styles/globals.scss'
 
 export const metadata: Metadata = {
-  title: 'Oversikt over hjelpemidler',
+  title: 'FinnHjelpemidler',
   description: 'Oversikt over hjelpemidler',
   icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
 }
