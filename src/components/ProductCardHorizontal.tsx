@@ -25,10 +25,12 @@ const ProductCardHorizontal = ({ product }: CardProps) => {
   const [imageLoadingError, setImageLoadingError] = useState(false)
 
   return (
-    <div className="product-card-horizontal__card-container">
-      <div className="product-card-horizontal__first-column">
-        {product.applicableAgreementInfo && <AgreementIcon rank={99} />}
-      </div>
+    <Link
+      className="product-card-horizontal__link-content"
+      href={`/produkt/${product.id}`}
+      aria-label={`Gå til ${product.title}`}
+    >
+      {product.applicableAgreementInfo && <AgreementIcon rank={99} />}
       <div className="product-card-horizontal__image-container">
         {hasImage && !imageLoadingError ? (
           <Image
@@ -52,14 +54,14 @@ const ProductCardHorizontal = ({ product }: CardProps) => {
         )}
       </div>
       <div className="product-card-horizontal__info-container">
-        <Link className="product-card__link" href={`/produkt/${product.id}`} aria-label="Gå til produktet">
-          <Heading className="product-card-horizontal__heading" size="xsmall">
-            {product.title}
-          </Heading>
-        </Link>
-        <BodyLong className="product-card-horizontal__product-description">{product.attributes.text}</BodyLong>
+        <Heading className="product-card-horizontal__heading" size="xsmall">
+          {product.title}
+        </Heading>
+        <BodyLong size="small" className="product-card-horizontal__product-description">
+          {product.attributes.text}
+        </BodyLong>
       </div>
-    </div>
+    </Link>
   )
 }
 
