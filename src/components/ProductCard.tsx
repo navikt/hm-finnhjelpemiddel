@@ -35,44 +35,43 @@ const ProductCard = ({ product, removeProduct, showRank }: ProductCardProps) => 
           icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
         />
       )}
-
-      <div className="product-card__image">
-        <div className="image">
-          {hasImage && !imageLoadingError ? (
-            <Image
-              loader={smallImageLoader}
-              src={firstImageSrc}
-              onError={() => {
-                setImageLoadingError(true)
-              }}
-              alt="Produktbilde"
-              fill
-              style={{ objectFit: 'contain' }}
-            />
-          ) : (
-            <Image
-              src={'/assets/image-error.png'}
-              alt="Produktbilde"
-              fill
-              style={{ padding: '10px' }}
-              sizes="50vw"
-              priority
-            />
-          )}
+      <Link
+        className="product-card__link-content"
+        href={`/produkt/${product.id}`}
+        aria-label={`Gå til ${product.title}`}
+      >
+        <div className="product-card__image">
+          <div className="image">
+            {hasImage && !imageLoadingError ? (
+              <Image
+                loader={smallImageLoader}
+                src={firstImageSrc}
+                onError={() => {
+                  setImageLoadingError(true)
+                }}
+                alt="Produktbilde"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            ) : (
+              <Image
+                src={'/assets/image-error.png'}
+                alt="Produktbilde"
+                fill
+                style={{ padding: '10px' }}
+                sizes="50vw"
+                priority
+              />
+            )}
+          </div>
         </div>
-      </div>
-      <div className="info">
-        <Link className="product-card__link" href={`/produkt/${product.id}`} aria-label="Gå til produktet">
+        <div className="info">
           <Heading size="xsmall" className="text-line-clamp">
             {product.title}
           </Heading>
-        </Link>
-      </div>
-      {showRank && product.applicableAgreementInfo && (
-        <div className="rank">
-          <AgreementIcon rank={product.applicableAgreementInfo.rank} />
         </div>
-      )}
+        {showRank && product.applicableAgreementInfo && <AgreementIcon rank={product.applicableAgreementInfo.rank} />}
+      </Link>
     </div>
   )
 }

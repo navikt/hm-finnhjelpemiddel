@@ -5,10 +5,8 @@
 .product-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 10rem;
   height: 14rem;
-  text-align: center;
   box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
   border-radius: $a-border-radius-large;
   background-color: $a-white;
@@ -18,14 +16,17 @@
     min-width: 11rem;
   }
 
-  &__link {
-    outline: none;
+  &__link-content {
+    padding: $a-spacing-2;
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $a-spacing-1;
     color: $a-text-default;
-    font-weight: 400;
 
-    &:hover,
-    &:focus {
+    &:hover :not(.icon-wrapper),
+    &:focus :not(.icon-wrapper) {
       text-decoration: underline;
       color: $a-text-action;
     }
@@ -50,13 +51,12 @@
 
     .image {
       width: 140px;
-      height: 108px;
+      height: 100px;
       position: relative;
     }
   }
 
   .info {
-    padding: $a-spacing-1 $a-spacing-2;
     min-height: 3rem;
   }
 }

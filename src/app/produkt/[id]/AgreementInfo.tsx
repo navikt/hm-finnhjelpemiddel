@@ -43,7 +43,8 @@ export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) =
           <div className="agreement-details__agreement-link spacing-top--small">
             <BodyLong>
               <NextLink href={`/rammeavtale/${product.applicableAgreementInfo?.id}`} className="link">
-                Les mer om {product.applicableAgreementInfo?.title} <ChevronRightIcon aria-hidden fontSize={'1.5rem'} />
+                Les mer om {product.applicableAgreementInfo?.title}
+                <ChevronRightIcon aria-hidden fontSize={'1.5rem'} />
               </NextLink>
             </BodyLong>
           </div>

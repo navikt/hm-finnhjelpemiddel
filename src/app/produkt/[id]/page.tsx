@@ -6,6 +6,7 @@ import {
   getProductsInPost,
   getSupplier,
 } from '@/utils/api-util'
+// import { accessoriesMock } from '@/utils/mock-data'
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
@@ -33,6 +34,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
         )
     : null
 
+  // const isAccessoryOrSparePart = false
   const isAccessoryOrSparePart = product.accessory || product.sparepart
   //TODO: Endre på product.attributes.matchingProducts når vi vet mer om hvordan vi skal knytte sammen product og tilbehør/reservedeler
   const matchingSeriesIds = product.attributes.matchingProducts?.length ? product.attributes.matchingProducts : null
