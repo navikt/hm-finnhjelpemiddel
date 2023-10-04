@@ -9,7 +9,7 @@ import useSWR from 'swr'
 
 import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
 
-import { AgreementLabel, agreementHasNoProducts, agreementKeyLabels } from '@/utils/agreement-util'
+import { AgreementLabel, agreementKeyLabels } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'

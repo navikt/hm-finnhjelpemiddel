@@ -1,3 +1,3 @@
 'use client'
-export * from '@navikt/ds-react'
-export * from '@navikt/aksel-icons'
+export { BodyLong, BodyShort, Heading, Link, Alert, Loader, Table } from '@navikt/ds-react'
+export { ChevronRightIcon, ChevronLeftIcon, FileIcon, ImageIcon } from '@navikt/aksel-icons'
