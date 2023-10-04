@@ -188,9 +188,9 @@ const SearchResult = ({
             </DefinitionList>
           </div>
         </div>
-        <div className="search-result__chevron-container">
+        {/* <div className="search-result__chevron-container">
           <Next className="search-result__chevron" aria-hidden />
-        </div>
+        </div> */}
       </div>
     </li>
   )
@@ -199,8 +199,7 @@ const SearchResult = ({
 const ProductImage = ({ src }: { src: string }) => {
   const [loadingError, setLoadingError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-
-  if (!loadingError) {
+  if (!loadingError && src !== '') {
     return (
       <>
         {isLoading && <Loader size="large" />}
