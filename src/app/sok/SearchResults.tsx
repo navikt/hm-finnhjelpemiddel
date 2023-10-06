@@ -188,9 +188,9 @@ const SearchResult = ({
             </DefinitionList>
           </div>
         </div>
-        {/* <div className="search-result__chevron-container">
+        <div className="search-result__chevron-container">
           <Next className="search-result__chevron" aria-hidden />
-        </div> */}
+        </div>
       </div>
     </li>
   )

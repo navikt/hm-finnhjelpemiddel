@@ -13,12 +13,6 @@ export default function useRestoreScroll(id: string, shouldRestore: boolean) {
   useEffect(() => {
     try {
       if (shouldRestore) {
-        console.log(
-          'Restore previous scroll position, shoud restore:',
-          shouldRestore,
-          'stored value:',
-          sessionStorage.getItem(SESSION_STORAGE_ID)
-        )
         const storedValue = sessionStorage.getItem(SESSION_STORAGE_ID)
         if (storedValue) {
           window.scrollTo(0, parseInt(storedValue, 10))

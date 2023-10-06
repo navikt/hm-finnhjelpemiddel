@@ -84,7 +84,6 @@ export default function Home() {
   const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
 
   useEffect(() => {
-    console.log('Use effect 1')
     if (searchInitialized) {
       router.push(
         pathname +
@@ -97,23 +96,17 @@ export default function Home() {
   }, [router, searchInitialized, searchData, numberOfFetchedProducts, pathname])
 
   useEffect(() => {
-    console.log('Use effect 2')
-
     setShowSidebar(window.innerWidth >= 1100)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
   }, [])
 
   useEffect(() => {
-    console.log('Use effect 3')
-
     if (data) {
       setSearchInitialized(true)
     }
   }, [data])
 
   useEffect(() => {
-    console.log('Use effect 4')
-
     setProductSearchParams(mapProductSearchParams(searchParams))
   }, [searchParams, setProductSearchParams])
 
