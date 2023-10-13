@@ -1,0 +1,19 @@
+name: Build check
+
+on: [push]
+
+jobs:
+  build:
+    name: Build application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Install npm dependencies
+        run: npm install
+      - name: Build application
+        run: npm run build
+      - name: Run linting
+        run: npm run lint
