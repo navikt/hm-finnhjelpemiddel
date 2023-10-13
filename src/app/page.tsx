@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useRef } from 'react'
 
+import Image from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -56,8 +57,8 @@ function Home() {
     return sorted
   }, [data])
 
-  const first10Agreements = sortedData?.slice(0, 10)
-  const lastAgreements = sortedData?.slice(10)
+  const first15Agreements = sortedData?.slice(0, 15)
+  const lastAgreements = sortedData?.slice(15)
 
   const agreementLink = (id: string, label: string) => {
     let hrefAgreement = `/rammeavtale/${id}`
@@ -74,36 +75,33 @@ function Home() {
   return (
     <div className="home-page">
       <AnimateLayout>
-        <div className="home-page__background-container blue">
-          <div className="home-page__search-container">
-            <div className="home-page__heading">
-              <Heading level="1" size="xlarge" spacing>
-                Finn informasjon om hjelpemidler
+        <div className="home-page__background-container">
+          <div className="home-page__container illustration-container">
+            <div className="home-page__heading-and-search">
+              <Heading level="1" size="large" spacing>
+                Søk i Norges største samling av hjelpemidler på nett.
               </Heading>
-              <Ingress>Finn informasjon om hjelpemidler i Norges største samling av hjelpemidler på nett.</Ingress>
-            </div>
-            <div className="home-page__input">
+
               <SearchCombobox onSearch={onSearch} initialValue="" />
             </div>
+            <Image src="/illustrasjon.svg" width="316" height="173" alt="" aria-hidden={true} />
           </div>
         </div>
         <div className="home-page__background-container red">
-          <div className="polygon-shape"></div>
-          <div className="home-page__agreement-container">
-            <div className="home-page__heading">
+          <div className="home-page__container">
+            <div style={{ maxWidth: '530px' }}>
               <Heading level="2" size="large" spacing ref={agreementHeadingRef}>
                 Produkter på avtale med NAV
               </Heading>
               <Ingress>
                 NAV kjøper og eier hjelpemidlene som formidles gjennom hjelpemiddelsentralene. På noen produktområder
-                inngår NAV rammeavtaler med leverandørene. Produktene i rammeavtalene er det nasjonale sortimentet av
-                hjelpemidler. Les mer om avtalene ved å trykke på lenkene nedenfor.
+                inngår NAV rammeavtaler med leverandørene.
               </Ingress>
             </div>
 
-            <div>
+            <div className="home-page__agreement-links-container">
               <div className="home-page__agreement-links spacing-bottom--medium">
-                {first10Agreements?.map(({ id, label }) => {
+                {first15Agreements?.map(({ id, label }) => {
                   return agreementLink(id, label)
                 })}
               </div>

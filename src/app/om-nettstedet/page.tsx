@@ -5,9 +5,23 @@ function AboutUs() {
   return (
     <div className="about-us-page">
       <AnimateLayout>
-        <div className="about-us-page__content spacing-top--xlarge spacing-bottom--xlarge">
+        <div className="about-us-page__container">
+        <article>
+            <Heading level="1" size="large" spacing >
+              Kontakt oss
+            </Heading>
+            <BodyLong spacing>
+              Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
+              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
+              <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
+                nav.no
+              </Link>
+              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på{' '}
+              <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
+            </BodyLong>
+          </article>
           <article>
-            <Heading level="1" size="xlarge" spacing>
+            <Heading level="1" size="large" spacing>
               Om nettstedet
             </Heading>
             <Alert variant="warning" className="spacing-bottom--large">
@@ -28,21 +42,7 @@ function AboutUs() {
               legge inn dine produkter, ta kontakt med NAV Hjelpemidler og tilrettelegging for mer informasjon:{' '}
               <Link href="mailto:hjelpemiddeldatabasen@nav.no">hjelpemiddeldatabasen@nav.no</Link>
             </BodyLong>
-          </article>
-          <article>
-            <Heading level="2" size="large" spacing className="spacing-top--xlarge">
-              Kontakt oss
-            </Heading>
-            <BodyLong spacing>
-              Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
-              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
-              <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
-                nav.no
-              </Link>
-              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på{' '}
-              <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
-            </BodyLong>
-          </article>
+          </article>  
         </div>
       </AnimateLayout>
     </div>
