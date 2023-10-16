@@ -78,7 +78,7 @@ function Home() {
         <div className="home-page__background-container">
           <div className="home-page__container illustration-container">
             <div className="home-page__heading-and-search">
-              <Heading level="1" size="large" spacing>
+              <Heading level="1" size="large">
                 Søk i Norges største samling av hjelpemidler på nett.
               </Heading>
 
@@ -89,14 +89,15 @@ function Home() {
         </div>
         <div className="home-page__background-container red">
           <div className="home-page__container">
-            <div style={{ maxWidth: '530px' }}>
-              <Heading level="2" size="large" spacing ref={agreementHeadingRef}>
+            <div className="home-page__agreement-heading">
+              <Heading level="2" size="large" ref={agreementHeadingRef}>
                 Produkter på avtale med NAV
               </Heading>
               <Ingress>
                 NAV kjøper og eier hjelpemidlene som formidles gjennom hjelpemiddelsentralene. På noen produktområder
                 inngår NAV rammeavtaler med leverandørene.
               </Ingress>
+              <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
 
             <div className="home-page__agreement-links-container">
