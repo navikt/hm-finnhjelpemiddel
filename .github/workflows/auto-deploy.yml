@@ -21,7 +21,7 @@ jobs:
       IMAGE_PROXY_URL: https://finnhjelpemidler.nav.no/imageproxy
       CDN_URL: https://cdn.nav.no/teamdigihot/grunndata/media/v1/
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
@@ -59,7 +59,7 @@ jobs:
     needs: build-prod
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
