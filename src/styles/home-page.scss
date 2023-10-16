@@ -58,13 +58,19 @@
     display: flex;
     flex-direction: column;
     gap: $a-spacing-5;
-
     margin-bottom: $a-spacing-10;
 
     img {
-      position: absolute;
-      right: 20px;
-      bottom: 0;
+      display: none;
+    }
+
+    @include mixins.for-size(desktop-up) {
+      img {
+        display: block;
+        position: absolute;
+        right: 20px;
+        bottom: 0;
+      }
     }
 
     p {
