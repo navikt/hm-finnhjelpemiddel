@@ -10,11 +10,10 @@
   &__background-container {
     width: 100%;
     display: flex;
-    justify-content: center;
     padding: $a-spacing-8 $a-spacing-4;
 
     @include mixins.for-size(tablet-up) {
-      padding: $a-spacing-12 $a-spacing-1;
+      padding: $a-spacing-12 $a-spacing-4;
     }
 
     @include mixins.for-size(desktop-up) {
@@ -22,74 +21,82 @@
     }
   }
 
-  &__background-container.blue {
-    margin-top: 16px;
-    background-color: $a-deepblue-50;
-  }
-
   &__background-container.red {
     position: relative;
-    margin-top: 16px;
     background-color: #faefee;
   }
 
-  &__search-container {
-    z-index: 2;
-    max-width: 640px;
+  &__container {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: $a-spacing-8;
-
-    .navds-ingress {
-      max-width: 29rem;
-    }
-
-    @include mixins.for-size(desktop-up) {
-      padding-top: $a-spacing-4;
-    }
   }
 
-  &__agreement-container {
+  &__heading-and-search {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    max-width: 500px;
-    gap: $a-spacing-8;
-    padding-left: $a-spacing-1;
-    padding-right: $a-spacing-1;
-
-    @include mixins.for-size(tablet-up) {
-      padding: 0 $a-spacing-6;
-      max-width: 650px;
-    }
-
-    @include mixins.for-size(desktop-up) {
-      max-width: 900px;
-    }
-
-    .home-page__heading {
-      max-width: 800px;
-
-      @include mixins.for-size(tablet-up) {
-        gap: $a-spacing-5;
-      }
-    }
-  }
-
-  &__heading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: $a-spacing-5;
+    max-width: 530px;
+    margin: $a-spacing-8 0;
 
     h1,
     h2 {
       font-weight: 400;
     }
+
+    @include mixins.for-size(tablet-up) {
+      gap: $a-spacing-10;
+      margin: $a-spacing-16 0;
+      margin-bottom: $a-spacing-24;
+    }
   }
 
-  &__input {
-    width: 100%;
+  &__agreement-heading {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: $a-spacing-5;
+    margin-bottom: $a-spacing-10;
+
+    img {
+      display: none;
+    }
+
+    @include mixins.for-size(desktop-up) {
+      img {
+        display: block;
+        position: absolute;
+        right: 20px;
+        bottom: 0;
+      }
+    }
+
+    p {
+      max-width: 690px;
+    }
+  }
+
+  &__agreement-links-container {
+    margin-top: $a-spacing-4;
+  }
+
+  &__container.illustration-container {
+    position: relative;
+    img {
+      display: none;
+    }
+
+    @include mixins.for-size(desktop-up) {
+      img {
+        display: block;
+        position: absolute;
+        top: 52%;
+        transform: translateY(-50%);
+        right: 20px;
+      }
+    }
   }
 
   &__agreement-links {
@@ -98,9 +105,10 @@
     gap: $a-spacing-4;
     justify-content: center;
 
-    @include mixins.for-size(desktop-up) {
+    @include mixins.for-size(tablet-up) {
+      gap: $a-spacing-6;
       justify-content: flex-start;
-      max-width: calc(800px + 1rem);
+      max-width: calc(1000px + 1rem);
     }
   }
 
@@ -111,18 +119,14 @@
   &__agreement-link {
     display: flex;
     width: 100%;
-    height: 125px;
+    height: 100px;
     padding: $a-spacing-4 $a-spacing-5;
     align-items: center;
-    gap: $a-spacing-4;
-
     border-radius: $a-border-radius-large;
-    border: 1px solid $a-border-subtle;
     background: #fff;
-    box-shadow: $a-shadow-small;
 
     @include mixins.for-size(tablet-up) {
-      width: 400px;
+      width: 322px;
     }
 
     p {
@@ -136,25 +140,29 @@
 .about-us-page {
   width: 100%;
   height: 100%;
-  background-color: $a-deepblue-50;
-  display: flex;
-  justify-content: center;
 
-  &__content {
-    max-width: 600px;
+  &__container {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    background-color: $a-deepblue-50;
+    padding: $a-spacing-8 $a-spacing-4;
 
-    article {
-      display: flex;
-      flex-direction: column;
+    @include mixins.for-size(tablet-up) {
+      padding: $a-spacing-12 $a-spacing-4;
     }
 
-    h1,
-    h2 {
-      align-self: center;
-      font-weight: 400;
+    @include mixins.for-size(desktop-up) {
+      padding: $a-spacing-12 0;
     }
+  }
+
+  article {
+    max-width: 530px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
   }
 }
 
