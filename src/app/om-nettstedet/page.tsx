@@ -16,7 +16,7 @@ function AboutUs() {
               <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
                 nav.no
               </Link>
-              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på{' '}
+              . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på
               <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
             </BodyLong>
           </article>
