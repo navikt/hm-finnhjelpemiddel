@@ -12,7 +12,7 @@ function AboutUs() {
             </Heading>
             <BodyLong spacing>
               Dersom du ønsker råd om hjelpemidler eller har spørsmål til NAV Hjelpemiddelsentral, må du ta kontakt med
-              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på{' '}
+              NAV Hjelpemiddelsentral. Kontaktinformasjon til de ulike hjelpemiddelsentralene på
               <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
                 nav.no
               </Link>

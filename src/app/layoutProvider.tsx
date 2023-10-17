@@ -12,7 +12,7 @@ import { usePathname } from 'next/navigation'
 import classNames from 'classnames'
 
 import { ExclamationmarkTriangleIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Link } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Link } from '@navikt/ds-react'
 
 import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
@@ -39,26 +39,48 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     }
   }, [env])
 
-  const PageNavigation = () => (
-    <ul>
-      <li>
+  const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
+    <ul className="page-links">
+      <li className="logo-and-menu-button">
         <NextLink href="/" className={classNames('page-link', { 'page-link--active': pathname === '/' })}>
-          Finn hjelpemidler
+          <Image src="/nav-logo.svg" width="40" height="20" alt="Til forsiden" />
+          <span className="logo-text">
+            <span>Finn</span>
+            <span>Hjelpemidler</span>
+          </span>
         </NextLink>
+        <Button
+          className="nav-topp__burgermenu-button"
+          icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
+          variant="tertiary"
+          onClick={() => setMenuOpen(!menuOpen)}
+        />
       </li>
-      <li>
-        <NextLink href="/sok" className={classNames('page-link', { 'page-link--active': pathname === '/sok' })}>
-          Søk
-        </NextLink>
-      </li>
-      <li>
-        <NextLink
-          href="/sammenlign"
-          className={classNames('page-link', { 'page-link--active': pathname === '/sammenlign' })}
-        >
-          Sammenligner
-        </NextLink>
-      </li>
+      {menuOpen && (
+        <>
+          <li>
+            <NextLink href="/sok" className={classNames('page-link', { 'page-link--active': pathname === '/sok' })}>
+              <BodyShort size="medium">Søk</BodyShort>
+            </NextLink>
+          </li>
+          <li>
+            <NextLink
+              href="/sammenlign"
+              className={classNames('page-link', { 'page-link--active': pathname === '/sammenlign' })}
+            >
+              <BodyShort size="medium">Sammenligner</BodyShort>
+            </NextLink>
+          </li>
+          <li>
+            <NextLink
+              href="/rammeavtale"
+              className={classNames('page-link', { 'page-link--active': pathname === '/rammeavtale' })}
+            >
+              <BodyShort size="medium">Rammeavtaler</BodyShort>
+            </NextLink>
+          </li>
+        </>
+      )}
     </ul>
   )
 
@@ -71,7 +93,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           <BodyLong>
             <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
             Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du leter
-            etter anbefaler vi å bruke{' '}
+            etter anbefaler vi å bruke
             <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
           </BodyLong>
         </div>
@@ -79,17 +101,10 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       <header>
         <nav className="nav-topp">
           <div className="nav-topp__content">
-            <Image src="/nav-logo-red.svg" width="64" height="20" alt="Til forsiden" />
-            <PageNavigation />
-            <Button
-              className="nav-topp__menu-button"
-              icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
-              variant="tertiary"
-              onClick={() => setMenuOpen(!menuOpen)}
-            />
+            <NavigationBar menuOpen={true} />
           </div>
-          <div className={classNames('nav-topp__menu-content', { open: menuOpen })}>
-            {menuOpen && <PageNavigation />}
+          <div className={classNames('nav-topp__burgermenu-content', { open: menuOpen })}>
+            <NavigationBar menuOpen={menuOpen} />
           </div>
         </nav>
       </header>

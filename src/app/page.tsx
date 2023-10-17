@@ -61,11 +61,12 @@ function Home() {
   const lastAgreements = sortedData?.slice(15)
 
   const agreementLink = (id: string, label: string) => {
-    let hrefAgreement = `/rammeavtale/${id}`
+    let hrefSok = `/sok?agreement=true&rammeavtale=${label}`
+    // let hrefAgreement = `/rammeavtale/${id}`
 
     return (
       <div className="home-page__agreement-link" key={id}>
-        <NextLink href={hrefAgreement}>
+        <NextLink href={hrefSok}>
           <BodyShort> {label} </BodyShort>
         </NextLink>
       </div>

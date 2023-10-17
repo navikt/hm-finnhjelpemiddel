@@ -116,75 +116,52 @@ details {
 
   &__content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    margin: auto 0;
     width: 100%;
     max-width: 1200px;
-    padding: 0 $a-spacing-5;
-    text-align: center;
+    height: 72px;
 
-    @include mixins.for-size(tablet-up) {
-      justify-content: unset;
-    }
-
-    ul {
+    .page-links {
       display: none;
 
       @include mixins.for-size(tablet-up) {
         display: flex;
+
+        .page-link {
+          padding: 0 $a-spacing-2;
+        }
       }
     }
   }
 
-  &__menu-button {
-    margin: $a-spacing-3 0;
-
-    @include mixins.for-size(tablet-up) {
-      display: none;
-    }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: 600;
   }
 
-  &__menu-content {
-    display: none;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 $a-spacing-5;
-    margin-bottom: $a-spacing-3;
-
-    &.open {
-      display: block;
-
-      @include mixins.for-size(tablet-up) {
-        display: none;
-      }
-    }
-  }
-
-  img {
-    margin-right: $a-spacing-5;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 1em;
-  }
-
-  ul {
-    gap: $a-spacing-5;
+  .page-links {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    flex-direction: column;
+    gap: $a-spacing-3;
+
+    @include mixins.for-size(tablet-up) {
+      flex-direction: row;
+      height: 100%;
+      gap: $a-spacing-4;
+    }
   }
 
   .page-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    height: 100%;
     text-decoration: none;
-    padding: $a-spacing-3 0;
     border-bottom: 4px solid $a-transparent;
-
-    @include mixins.for-size(tablet-up) {
-      padding: $a-spacing-5 $a-spacing-1;
-    }
+    color: $a-text-default;
 
     &:focus-visible {
       background-color: transparent;
@@ -200,14 +177,51 @@ details {
       }
     }
 
-    &--active {
-      font-weight: bolder;
+    &--active > p {
+      font-weight: 600;
       text-decoration: underline;
       text-decoration-thickness: 3px;
 
       @include mixins.for-size(tablet-up) {
         text-decoration: unset;
+      }
+    }
+
+    &--active {
+      @include mixins.for-size(tablet-up) {
         border-bottom: 4px solid $a-border-focus;
+      }
+    }
+  }
+
+  &__burgermenu-button {
+    @include mixins.for-size(tablet-up) {
+      display: none;
+    }
+  }
+
+  &__burgermenu-content {
+    @include mixins.for-size(tablet-up) {
+      display: none;
+    }
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 $a-spacing-5;
+    margin-bottom: $a-spacing-3;
+
+    .page-links {
+      display: flex;
+    }
+    .logo-and-menu-button {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &.open {
+      .page-links li:not(.first) {
+        display: flex;
       }
     }
   }

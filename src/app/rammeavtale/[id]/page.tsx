@@ -4,14 +4,12 @@ import { agreementHasNoProducts, getAttachmentLabel, mapAgreementFromSearch } fr
 import { getAgreementFromId } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
-import AgreementIcon from '@/components/AgreementIcon'
 import File from '@/components/File'
-import ReadMore from '@/components/ReadMore'
 import { BodyLong, ChevronRightIcon, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import AgreementDescription from './AgreementDescription'
-import './agreement-page.scss'
+import '../agreement-page.scss'
 
 export default async function AgreementPage({ params: { id: agreementId } }: { params: { id: string } }) {
   const agreement = mapAgreementFromSearch(await getAgreementFromId(agreementId))
@@ -43,63 +41,8 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
              ${dateToString(agreement.expired)}`}
                   </BodyLong>
                 </div>
-
                 <AgreementDescription agreement={agreement} />
               </article>
-              {!agreementHasNoProducts(agreement.identifier) && (
-                <article>
-                  <Heading level="1" size="medium">
-                    Slik kan du se at et hjelpemiddel er på avtale med NAV
-                  </Heading>
-
-                  <div className="agreement-page__icon-containers">
-                    <div className="agreement-page__icon-container">
-                      <AgreementIcon rank={1} />
-                      <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
-                    </div>
-                    <div className="agreement-page__icon-container">
-                      <AgreementIcon rank={4} />
-                      <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
-                    </div>
-                    <div className="agreement-page__icon-container">
-                      <AgreementIcon rank={99} />
-                      <BodyLong>Er på avtale med NAV uten rangering.</BodyLong>
-                    </div>
-                  </div>
-                  {/* Skal vises når vi har tekst */}
-
-                  <ReadMore
-                    content={
-                      <>
-                        <Heading level="2" size="small">
-                          Hva om hjelpemiddelet ikke har denne merkingen?
-                        </Heading>
-                        <BodyLong spacing>
-                          Det betyr at hjelpemiddelet ikke er på avtale med NAV. Dersom du vil søke om dette
-                          hjelpemiddelet, må behovet begrunnes godt. NAV Hjelpemiddelsentral vurderer om hjelpemiddelet
-                          kan innvilges eller ikke.
-                        </BodyLong>
-                        <Heading level="2" size="small">
-                          Hva om hjelpemiddelet er rangert som nummer 2,3 eller 4?
-                        </Heading>
-                        <BodyLong spacing>
-                          Det betyr at du kan søke om disse hjelpemidlene via NAV, men du må begrunne hvorfor
-                          rangeringen(e) foran ikke dekker behovet.
-                        </BodyLong>
-                        <Heading level="2" size="small">
-                          Hva vil det si at hjelpemiddelet ikke har rangering?
-                        </Heading>
-                        <BodyLong spacing>
-                          Det betyr at produktet er på avtale med NAV. Dette kan for eksempel være understell til en
-                          sittemodul, der samme understell passer til sittemoduler i flere rangeringer.
-                        </BodyLong>
-                      </>
-                    }
-                    buttonOpen={'Les mer'}
-                    buttonClose={'Les mindre'}
-                  />
-                </article>
-              )}
               <article>
                 <Heading level="1" size="medium">
                   Dokumenter
