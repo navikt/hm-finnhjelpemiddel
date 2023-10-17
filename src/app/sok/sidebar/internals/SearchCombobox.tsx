@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import useSWR from 'swr'
 
@@ -16,12 +16,12 @@ type Props = {
 
 const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   const [inputValue, setInputValue] = useState(initialValue)
-  const [selectedOption, setSelectedOption] = useState('')
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([initialValue])
   const { searchData } = useHydratedSearchStore()
-  const debouncedSearchValue = useDebounce<string>(inputValue)
+  const debouncedSearchValue = useDebounce<string>(inputValue, 200)
 
   const { data: suggestionData } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
-    keepPreviousData: true,
+    keepPreviousData: false,
   })
 
   //hasAgreementOnly === true comes first.
@@ -42,34 +42,39 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
     [suggestionData]
   )
 
+  useEffect(() => {
+    if (!searchData.searchTerm) {
+      setInputValue('')
+      setSelectedOptions([])
+    }
+  }, [searchData.searchTerm])
+
+  const onToggleSelected = (option: string, isSelected: boolean) => {
+    if (isSelected) {
+      setSelectedOptions([option])
+      onSearch(option)
+    } else {
+      setSelectedOptions([])
+      onSearch('')
+    }
+  }
+
+  console.log(selectedOptions)
+
   return (
     <UNSAFE_Combobox
       label="Skriv ett eller flere søkeord"
+      isMultiSelect={false}
+      onChange={(event) => setInputValue(event?.target.value || '')}
+      onToggleSelected={onToggleSelected}
+      selectedOptions={selectedOptions}
       options={searchData.hasAgreementsOnly ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue}
       value={inputValue}
-      selectedOptions={selectedOption ? [selectedOption] : []}
-      clearButton={true}
-      allowNewValues={false}
-      toggleListButton={inputValue || selectedOption ? true : false}
+      allowNewValues
       onKeyUpCapture={(event) => {
         if (event.key === 'Enter') {
           event.preventDefault()
-          onSearch([selectedOption, inputValue].filter(Boolean).join(' '))
-        }
-      }}
-      onClear={() => {
-        setInputValue('')
-      }}
-      onChange={(event) => {
-        event && setInputValue(event.target.value)
-      }}
-      onToggleSelected={(option, isSelected) => {
-        if (isSelected) {
-          setSelectedOption(option)
-          onSearch(option)
-        } else {
-          setSelectedOption('')
-          onSearch('')
+          onSearch(inputValue)
         }
       }}
     />
