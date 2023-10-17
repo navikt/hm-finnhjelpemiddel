@@ -59,8 +59,6 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
     }
   }
 
-  console.log(selectedOptions)
-
   return (
     <UNSAFE_Combobox
       label="Skriv ett eller flere søkeord"
