@@ -90,7 +90,8 @@ export default function Home() {
           toSearchQueryString({
             ...searchData,
             to: numberOfFetchedProducts,
-          })
+          }),
+        { scroll: false }
       )
     }
   }, [router, searchInitialized, searchData, numberOfFetchedProducts, pathname])
