@@ -58,6 +58,13 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
       onSearch('')
     }
   }
+  const options = searchData.hasAgreementsOnly
+    ? suggestionsWithAgreementOnly.length
+      ? suggestionsWithAgreementOnly
+      : ['Ingen søkeforslag']
+    : allSuggestionsSortedonAgreementValue.length
+    ? allSuggestionsSortedonAgreementValue
+    : ['Ingen søkeforslag']
 
   return (
     <UNSAFE_Combobox
@@ -66,9 +73,9 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
       onChange={(event) => setInputValue(event?.target.value || '')}
       onToggleSelected={onToggleSelected}
       selectedOptions={selectedOptions}
-      options={searchData.hasAgreementsOnly ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue}
+      options={options}
       value={inputValue}
-      allowNewValues
+      toggleListButton={inputValue ? true : false}
       onKeyUpCapture={(event) => {
         if (event.key === 'Enter') {
           event.preventDefault()
