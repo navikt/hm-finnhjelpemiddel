@@ -82,6 +82,9 @@ export default async function AgreementsInfoPage() {
                 buttonClose={'Les mindre'}
               />
             </article>
+            <article>
+              <AgreementList />
+            </article>
           </div>
         </AnimateLayout>
       </div>
