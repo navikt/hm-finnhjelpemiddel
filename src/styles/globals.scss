@@ -119,7 +119,6 @@ details {
     margin: auto 0;
     width: 100%;
     max-width: 1200px;
-    height: 72px;
 
     .page-links {
       display: none;
@@ -129,6 +128,7 @@ details {
 
         .page-link {
           padding: 0 $a-spacing-2;
+          height: 72px;
         }
       }
     }
@@ -145,8 +145,6 @@ details {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    flex-direction: column;
-    gap: $a-spacing-3;
 
     @include mixins.for-size(tablet-up) {
       flex-direction: row;
@@ -207,21 +205,31 @@ details {
     width: 100%;
     max-width: 1200px;
     padding: 0 $a-spacing-5;
-    margin-bottom: $a-spacing-3;
 
     .page-links {
       display: flex;
+      flex-direction: column;
+      gap: $a-spacing-3;
     }
+
     .logo-and-menu-button {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      height: 72px;
     }
 
     &.open {
-      .page-links li:not(.first) {
+      .page-links {
         display: flex;
+
+        .page-link {
+          height: $a-spacing-10;
+        }
+        li:last-of-type {
+          margin-bottom: $a-spacing-3;
+        }
       }
     }
   }
