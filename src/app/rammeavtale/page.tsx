@@ -1,33 +1,34 @@
+import Image from 'next/image'
+
 import AgreementIcon from '@/components/AgreementIcon'
 import ReadMore from '@/components/ReadMore'
 import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import './agreement-page.scss'
+import AgreementList from './AgreementList'
 
 export default async function AgreementsInfoPage() {
-  // const agreements = mapAgreementFromSearch(await getAgreementFromId())
-  // const hrefSok = `/sok?agreement=true&rammeavtale=${agreement?.label}`
-
   return (
     <>
       <div className="agreement-page">
         <AnimateLayout>
           <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
             <article>
-              <div>
+              <div className="flex flex--space-between">
                 <Heading level="1" size="large" className="spacing-bottom--small">
-                  Avtaler
+                  Rammeavtaler på Hjelpemiddelområdet
                 </Heading>
+                <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
               </div>
               <Heading level="2" size="small">
-                Om avtalen med NAV
+                Om rammeavtaler med NAV
               </Heading>
 
               <BodyLong>
-                NAV har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor
-                området. På denne siden finner du informasjon om avtalen, dokumenter, tilbehør, eventuelle tjenester og
-                reservedeler. Informasjon om leverandør finner man på siden til hjelpemiddelet
+                NAV har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor noen
+                områder. Når et hjelpemiddel er på avtale med NAV så vil det være fremforhandlet en pris og blitt
+                gjennomført en kvalitetssikring av hjelpemiddelet.
               </BodyLong>
             </article>
             <article>
