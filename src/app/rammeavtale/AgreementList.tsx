@@ -41,6 +41,7 @@ const AgreementList = () => {
       {data &&
         sortedData.map((label) => (
           <LinkPanel key={label.identifier} href={`/rammeavtale/${label.id}`}>
+            {/* Label eller title her? {label.title} */}
             {label.label}
           </LinkPanel>
         ))}

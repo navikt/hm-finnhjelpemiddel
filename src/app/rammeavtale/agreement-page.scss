@@ -27,22 +27,7 @@
   }
 
   &__link-to-search {
-    align-self: flex-start;
-    display: flex;
-    gap: $a-spacing-5;
-    background-color: $a-blue-100;
-    padding: $a-spacing-5;
-    border-radius: $a-border-radius-large;
-    align-items: center;
-
-    h1 {
-      font-weight: 400;
-    }
-
-    a {
-      color: $a-text-default;
-      text-decoration: none;
-    }
+    margin: $a-spacing-5 0;
   }
 
   article {
@@ -54,12 +39,11 @@
     border-radius: $a-border-radius-large;
 
     @include mixins.for-size(tablet-up) {
-      padding: $a-spacing-5 $a-spacing-10;
-      padding-top: $a-spacing-6;
+      padding: $a-spacing-10 $a-spacing-20;
     }
-    @include mixins.for-size(desktop-up) {
-      padding: $a-spacing-5 $a-spacing-10;
-      padding-top: $a-spacing-6;
+
+    p {
+      max-width: 600px;
     }
   }
 
@@ -80,7 +64,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    max-width: 17rem;
+    max-width: 14rem;
   }
 
   .agreement-description {

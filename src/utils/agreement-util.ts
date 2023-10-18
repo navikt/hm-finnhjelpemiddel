@@ -36,6 +36,7 @@ export interface AgreementLabel {
   id: string
   label: string
   identifier: string
+  title: string
 }
 
 export interface Attachments {
@@ -81,6 +82,7 @@ export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabe
     id: source.id,
     label: source.label,
     identifier: source.identifier,
+    title: source.title,
   }
 }
 

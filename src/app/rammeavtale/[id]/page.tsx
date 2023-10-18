@@ -5,7 +5,7 @@ import { getAgreementFromId } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
 import File from '@/components/File'
-import { BodyLong, ChevronRightIcon, Heading } from '@/components/aksel-client'
+import { BodyLong, ChevronRightIcon, Heading, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import AgreementDescription from './AgreementDescription'
@@ -21,17 +21,13 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
         <div className="agreement-page">
           <AnimateLayout>
             <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
-              {!agreementHasNoProducts(agreement.identifier) && (
-                <div className="agreement-page__link-to-search">
-                  <NextLink href={hrefSok}>
-                    <Heading level="1" size="medium">
-                      Se produkter under avtale: {agreement.label}
-                    </Heading>
-                  </NextLink>
-                  <ChevronRightIcon aria-hidden fontSize="1.5rem" />
-                </div>
-              )}
               <article>
+                {!agreementHasNoProducts(agreement.identifier) && (
+                  <LinkPanel href={hrefSok} className="agreement-page__link-to-search">
+                    Produkter: {agreement.label}
+                  </LinkPanel>
+                )}
+
                 <div>
                   <Heading level="1" size="large" className="spacing-bottom--small">
                     {agreement.title}

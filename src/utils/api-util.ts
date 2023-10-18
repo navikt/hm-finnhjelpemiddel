@@ -805,7 +805,7 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
         },
       },
       _source: {
-        includes: ['id', 'label', 'identifier'],
+        includes: ['id', 'label', 'identifier', 'title'],
       },
     }),
   })
