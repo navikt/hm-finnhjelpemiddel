@@ -80,6 +80,10 @@
 
   &__agreement-links-container {
     margin-top: $a-spacing-4;
+
+    .read-more {
+      padding-top: $a-spacing-4;
+    }
   }
 
   &__container.illustration-container {
@@ -113,6 +117,7 @@
   }
 
   &__agreement-links.read-more-content {
+    padding-top: $a-spacing-2;
     padding-bottom: $a-spacing-4;
   }
 

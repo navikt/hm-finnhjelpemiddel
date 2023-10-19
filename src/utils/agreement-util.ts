@@ -111,7 +111,7 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685']
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734']
 
 export const agreementAttachmentLabels: Record<string, string> = {
   Tilbehør: 'Tilbehør for hver leverandør',
