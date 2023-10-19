@@ -21,7 +21,7 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   const debouncedSearchValue = useDebounce<string>(inputValue)
   const [isListOpen, setListIsopen] = useState(false)
 
-  const { data: suggestionData } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
+  const { data: suggestionData, isLoading } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
     keepPreviousData: false,
   })
 
@@ -82,6 +82,7 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
       clearButton={true}
       isListOpen={isListOpen}
       toggleListButton={false}
+      isLoading={isLoading}
       onKeyUpCapture={(event) => {
         if (event.key === 'Enter') {
           event.preventDefault()
