@@ -42,7 +42,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
     <ul className="page-links">
       <li className="logo-and-menu-button">
-        <NextLink href="/" className={classNames('page-link', { 'page-link--active': pathname === '/' })}>
+        <NextLink href="/" className="page-link">
           <Image src="/nav-logo.svg" width="40" height="20" alt="Til forsiden" />
           <span className="logo-text">
             <span>Finn</span>
