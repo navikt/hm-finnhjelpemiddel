@@ -72,7 +72,6 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
     <UNSAFE_Combobox
       label="Skriv ett eller flere søkeord"
       isMultiSelect={false}
-      // allowNewValues
       onChange={(event) => {
         setInputValue(event?.target.value || '')
       }}
