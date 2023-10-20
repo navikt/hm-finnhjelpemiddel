@@ -1,15 +1,13 @@
-import NextLink from 'next/link'
-
 import { agreementHasNoProducts, getAttachmentLabel, mapAgreementFromSearch } from '@/utils/agreement-util'
 import { getAgreementFromId } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
-import File from '@/components/File'
-import { BodyLong, ChevronRightIcon, Heading, LinkPanel } from '@/components/aksel-client'
+import { BodyLong, Heading, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import AgreementDescription from './AgreementDescription'
 import '../agreement-page.scss'
+import DocumentExpansionCard from './DocumentExpansionCard'
 
 export default async function AgreementPage({ params: { id: agreementId } }: { params: { id: string } }) {
   const agreement = mapAgreementFromSearch(await getAgreementFromId(agreementId))
@@ -43,31 +41,17 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                 <Heading level="1" size="medium">
                   Dokumenter
                 </Heading>
+
                 {agreement.attachments.map((attachment, i) => (
                   <div key={i}>
-                    <Heading level="2" size="small">
+                    <Heading level="2" size="small" spacing>
                       {getAttachmentLabel(attachment.title) ?? attachment.title}
                     </Heading>
-                    <BodyLong>{attachment.description}</BodyLong>
-
-                    {attachment.documents.length === 1 && (
-                      <div className="document-list spacing-top--small spacing-bottom--medium">
-                        <File
-                          title={attachment.documents[0].title}
-                          path={attachment.documents[0].uri}
-                          date={attachment.documents[0].updated}
-                        />
-                      </div>
-                    )}
-                    {attachment.documents.length > 1 && (
-                      <ul className="document-list spacing-top--small spacing-bottom--medium">
-                        {attachment.documents.map((doc, index) => (
-                          <li key={index}>
-                            <File title={doc.title} path={doc.uri} date={doc.updated} />
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    <div
+                      style={{ maxWidth: '550px' }}
+                      dangerouslySetInnerHTML={{ __html: attachment.description }}
+                    ></div>
+                    <DocumentExpansionCard attachment={attachment} />
                   </div>
                 ))}
               </article>

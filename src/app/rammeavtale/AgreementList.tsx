@@ -4,7 +4,6 @@ import { AgreementLabel, agreementKeyLabels } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Heading, LinkPanel } from '@navikt/ds-react'
-import { Combobox } from '@navikt/ds-react/esm/form/combobox'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 

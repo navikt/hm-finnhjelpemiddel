@@ -7,21 +7,20 @@
   height: 100%;
   overflow: hidden;
   background-color: #faefee;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
 
   &__content {
     display: flex;
     flex-direction: column;
     gap: $a-spacing-8;
-    max-width: 1024px;
+    max-width: 850px;
+    margin: $a-spacing-8 auto;
     padding: 0 $a-spacing-1;
 
     @include mixins.for-size(tablet-up) {
       padding: 0 $a-spacing-2;
     }
     @include mixins.for-size(desktop-up) {
+      margin: $a-spacing-10 auto;
       padding: 0;
     }
   }
@@ -43,7 +42,7 @@
     }
 
     p {
-      max-width: 600px;
+      max-width: 550px;
     }
   }
 
@@ -67,7 +66,7 @@
     max-width: 14rem;
   }
 
-  .agreement-description {
+  &__description {
     display: flex;
     flex-direction: column;
     gap: $a-spacing-2;

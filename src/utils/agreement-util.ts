@@ -29,7 +29,7 @@ export interface Agreement {
   published: Date //date
   expired: Date //date
   posts: Post[]
-  attachments: Attachments[]
+  attachments: Attachment[]
 }
 
 export interface AgreementLabel {
@@ -39,7 +39,7 @@ export interface AgreementLabel {
   title: string
 }
 
-export interface Attachments {
+export interface Attachment {
   title: string
   description: string
   documents: Document[]
@@ -86,7 +86,7 @@ export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabe
   }
 }
 
-const mapAttachments = (attachments: AttachmentsResponse[]): Attachments[] => {
+const mapAttachments = (attachments: AttachmentsResponse[]): Attachment[] => {
   return attachments
     .map((attachments: AttachmentsResponse) => ({
       title: attachments.title,
