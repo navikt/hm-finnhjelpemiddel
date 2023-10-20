@@ -9,9 +9,6 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 
 const AgreementList = () => {
-  // const agreements = mapAgreementFromSearch(await getAgreementFromId())
-  // const hrefSok = `/sok?agreement=true&rammeavtale=${agreement?.label}`
-  // let hrefAgreement = `/rammeavtale/${id}`
   const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
@@ -38,14 +35,14 @@ const AgreementList = () => {
       <Heading level="1" size="medium">
         Aktive avtaler
       </Heading>
+      {/* TODO <Combobox></Combobox> */}
       {data &&
         sortedData.map((label) => (
           <LinkPanel key={label.identifier} href={`/rammeavtale/${label.id}`}>
-            {/* Label eller title her? {label.title} */}
+            {/* TODO: Label eller title her? {label.title} */}
             {label.label}
           </LinkPanel>
         ))}
-      {/* <Combobox></Combobox> */}
     </>
   )
 }

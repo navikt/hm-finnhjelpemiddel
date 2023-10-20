@@ -64,7 +64,6 @@ function Home() {
 
   const agreementLink = (id: string, label: string) => {
     let hrefSok = `/sok?agreement=true&rammeavtale=${label}`
-    // let hrefAgreement = `/rammeavtale/${id}`
 
     return (
       <div className="home-page__agreement-link" key={id}>
