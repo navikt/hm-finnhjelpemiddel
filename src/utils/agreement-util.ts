@@ -29,16 +29,17 @@ export interface Agreement {
   published: Date //date
   expired: Date //date
   posts: Post[]
-  attachments: Attachments[]
+  attachments: Attachment[]
 }
 
 export interface AgreementLabel {
   id: string
   label: string
   identifier: string
+  title: string
 }
 
-export interface Attachments {
+export interface Attachment {
   title: string
   description: string
   documents: Document[]
@@ -81,10 +82,11 @@ export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabe
     id: source.id,
     label: source.label,
     identifier: source.identifier,
+    title: source.title,
   }
 }
 
-const mapAttachments = (attachments: AttachmentsResponse[]): Attachments[] => {
+const mapAttachments = (attachments: AttachmentsResponse[]): Attachment[] => {
   return attachments
     .map((attachments: AttachmentsResponse) => ({
       title: attachments.title,
@@ -109,7 +111,7 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685']
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734']
 
 export const agreementAttachmentLabels: Record<string, string> = {
   Tilbehør: 'Tilbehør for hver leverandør',

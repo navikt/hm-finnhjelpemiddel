@@ -10,7 +10,7 @@ import useSWR from 'swr'
 
 import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
 
-import { AgreementLabel, agreementKeyLabels } from '@/utils/agreement-util'
+import { AgreementLabel, agreementHasNoProducts, agreementKeyLabels } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
@@ -40,8 +40,9 @@ function Home() {
 
   const sortedData = useMemo(() => {
     if (!data) return []
-    const sorted = [...data] // Create a copy of data to avoid modifying it in place
-    sorted.sort((a, b) => {
+    const filteredData = data.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
+    // Create a copy of data to avoid modifying it in place
+    filteredData.sort((a, b) => {
       const labelA = agreementKeyLabels[a.identifier]
       const labelB = agreementKeyLabels[b.identifier]
 
@@ -54,18 +55,19 @@ function Home() {
         return 0 // No change in order
       }
     })
-    return sorted
+
+    return filteredData
   }, [data])
 
   const first15Agreements = sortedData?.slice(0, 15)
   const lastAgreements = sortedData?.slice(15)
 
   const agreementLink = (id: string, label: string) => {
-    let hrefAgreement = `/rammeavtale/${id}`
+    let hrefSok = `/sok?agreement=true&rammeavtale=${label}`
 
     return (
       <div className="home-page__agreement-link" key={id}>
-        <NextLink href={hrefAgreement}>
+        <NextLink href={hrefSok}>
           <BodyShort> {label} </BodyShort>
         </NextLink>
       </div>
@@ -90,7 +92,7 @@ function Home() {
         <div className="home-page__background-container red">
           <div className="home-page__container">
             <div className="home-page__agreement-heading">
-              <Heading level="2" size="large" ref={agreementHeadingRef}>
+              <Heading level="2" size="medium" ref={agreementHeadingRef}>
                 Produkter på avtale med NAV
               </Heading>
               <Ingress>

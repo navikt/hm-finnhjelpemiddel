@@ -15,7 +15,7 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
     headingRef.current && headingRef.current.scrollIntoView({ behavior: 'smooth' })
   }
   return (
-    <div className="agreement-description">
+    <div className="agreement-page__description">
       <Heading level="2" size="small" ref={headingRef}>
         Om avtalen med NAV
       </Heading>
