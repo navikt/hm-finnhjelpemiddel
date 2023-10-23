@@ -40,6 +40,7 @@ export default function Home() {
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
   const [productSearchParams, setProductSearchParams] = useState<SearchParams>(mapProductSearchParams(searchParams))
+  const [searchQueryString, setSearQueryString] = useState('')
 
   const { searchData, setFilter, setSearchData } = useHydratedSearchStore()
 
@@ -85,15 +86,18 @@ export default function Home() {
 
   useEffect(() => {
     if (searchInitialized) {
-      router.push(
-        pathname +
-          toSearchQueryString({
-            ...searchData,
-            to: numberOfFetchedProducts,
-          })
-      )
+      const newParamsString = toSearchQueryString({
+        ...searchData,
+        to: numberOfFetchedProducts,
+      })
+      setSearQueryString(newParamsString)
     }
-  }, [router, searchInitialized, searchData, numberOfFetchedProducts, pathname])
+  }, [router, searchParams, searchInitialized, searchData, numberOfFetchedProducts, pathname])
+
+  useEffect(() => {
+    console.log('CHANGED PARAMS', searchQueryString)
+    router.push(`${pathname}${searchQueryString}`, { scroll: false })
+  }, [router, pathname, searchQueryString])
 
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1100)
