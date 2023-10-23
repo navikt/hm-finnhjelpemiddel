@@ -59,7 +59,7 @@ const CompareMenu = () => {
 
   const openView = (
     <motion.div
-      initial="hidden"
+      initial={false}
       animate="visible"
       exit="hidden"
       variants={containerVariants}
