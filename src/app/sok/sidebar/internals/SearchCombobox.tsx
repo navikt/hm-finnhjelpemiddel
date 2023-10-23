@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import useSWR from 'swr'
 
@@ -16,12 +16,13 @@ type Props = {
 
 const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   const [inputValue, setInputValue] = useState(initialValue)
-  const [selectedOption, setSelectedOption] = useState('')
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([initialValue])
   const { searchData } = useHydratedSearchStore()
   const debouncedSearchValue = useDebounce<string>(inputValue)
+  const [isListOpen, setListIsopen] = useState(false)
 
   const { data: suggestionData } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
-    keepPreviousData: true,
+    keepPreviousData: false,
   })
 
   //hasAgreementOnly === true comes first.
@@ -42,34 +43,52 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
     [suggestionData]
   )
 
+  useEffect(() => {
+    if (!searchData.searchTerm) {
+      setInputValue('')
+      setSelectedOptions([])
+    }
+  }, [searchData.searchTerm])
+
+  useEffect(() => {
+    if (inputValue) setListIsopen(true)
+    else setListIsopen(false)
+  }, [inputValue])
+
+  const onToggleSelected = (option: string, isSelected: boolean) => {
+    if (isSelected) {
+      setSelectedOptions([option])
+      setListIsopen(false)
+      onSearch(option)
+    } else {
+      setSelectedOptions([])
+      onSearch('')
+    }
+  }
+
+  const options = searchData.hasAgreementsOnly ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue
+
   return (
     <UNSAFE_Combobox
       label="Skriv ett eller flere søkeord"
-      options={searchData.hasAgreementsOnly ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue}
+      isMultiSelect={false}
+      onChange={(event) => {
+        setInputValue(event?.target.value || '')
+      }}
+      onToggleSelected={onToggleSelected}
+      selectedOptions={selectedOptions}
+      options={options}
       value={inputValue}
-      selectedOptions={selectedOption ? [selectedOption] : []}
       clearButton={true}
-      allowNewValues={false}
-      toggleListButton={inputValue || selectedOption ? true : false}
+      isListOpen={isListOpen}
+      toggleListButton={false}
       onKeyUpCapture={(event) => {
         if (event.key === 'Enter') {
           event.preventDefault()
-          onSearch([selectedOption, inputValue].filter(Boolean).join(' '))
-        }
-      }}
-      onClear={() => {
-        setInputValue('')
-      }}
-      onChange={(event) => {
-        event && setInputValue(event.target.value)
-      }}
-      onToggleSelected={(option, isSelected) => {
-        if (isSelected) {
-          setSelectedOption(option)
-          onSearch(option)
-        } else {
-          setSelectedOption('')
-          onSearch('')
+          setSelectedOptions([inputValue])
+          onSearch(inputValue)
+          setInputValue('')
+          setListIsopen(false)
         }
       }}
     />

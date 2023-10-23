@@ -207,6 +207,22 @@ export default function Home() {
                 </div>
               )}
 
+              {searchData.searchTerm && (
+                <>
+                  <Heading level="2" size="small">
+                    Søkeord
+                  </Heading>
+                  <Chips className="results__chips">
+                    <Chips.Removable
+                      onClick={() => {
+                        setSearchData({ ...searchData, searchTerm: '' })
+                      }}
+                    >
+                      {searchData.searchTerm}
+                    </Chips.Removable>
+                  </Chips>
+                </>
+              )}
               {filterValues.length > 0 && (
                 <>
                   <Heading level="2" size="small">
