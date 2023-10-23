@@ -92,10 +92,9 @@ export default function Home() {
       })
       setSearQueryString(newParamsString)
     }
-  }, [router, searchParams, searchInitialized, searchData, numberOfFetchedProducts, pathname])
+  }, [router, searchInitialized, searchData, numberOfFetchedProducts, pathname])
 
   useEffect(() => {
-    console.log('CHANGED PARAMS', searchQueryString)
     router.push(`${pathname}${searchQueryString}`, { scroll: false })
   }, [router, pathname, searchQueryString])
 
