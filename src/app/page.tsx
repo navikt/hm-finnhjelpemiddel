@@ -93,7 +93,7 @@ function Home() {
           <div className="home-page__container">
             <div className="home-page__agreement-heading">
               <Heading level="2" size="medium" ref={agreementHeadingRef}>
-                Produkter på avtale med NAV
+                Hjelpemidler på avtale med NAV
               </Heading>
               <Ingress>
                 NAV kjøper og eier hjelpemidlene som formidles gjennom hjelpemiddelsentralene. På noen produktområder

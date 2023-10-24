@@ -3,33 +3,12 @@ import Link from 'next/link'
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button } from '@navikt/ds-react'
+import { BodyShort, Button } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 
 import ProductCard from '@/components/ProductCard'
-
-const containerVariants: Variants = {
-  hidden: { opacity: 1 },
-  visible: {
-    opacity: 1,
-    transition: {
-      when: 'beforeChildren',
-      duration: 0.3,
-      delayChildren: 0.1,
-    },
-  },
-}
-
-const childVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      delay: 0.3,
-    },
-  },
-}
+import classNames from 'classnames'
 
 const productVariants: Variants = {
   hidden: {
@@ -52,119 +31,96 @@ const CompareMenu = () => {
   const { compareMenuState, productsToCompare, setCompareMenuState, removeProduct, resetProductToCompare } =
     useHydratedCompareStore()
 
-  const MotionButton = motion(Button)
   const toggleButtonText = `Produkter til sammenligning (${productsToCompare.length})`
 
   const reversedProductsToCompare = productsToCompare.slice().reverse()
 
-  const openView = (
-    <motion.div
-      initial={false}
-      animate="visible"
-      exit="hidden"
-      variants={containerVariants}
-      layoutId="compare-menu"
-      className="compare-menu compare-menu--open"
-    >
-      <MotionButton
-        className="compare-menu__chevron-button"
-        layoutId="chevron-button"
-        variant="tertiary"
-        iconPosition="right"
-        icon={<ChevronDownIcon aria-hidden />}
-        onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
-      >
-        {toggleButtonText}
-      </MotionButton>
-
-      <motion.div key="content" variants={childVariants} className="compare-menu__container">
-        {productsToCompare.length === 0 && (
-          <motion.div layoutId="placeholder" className="compare-menu__placeholder compare-menu__placeholder__empty">
-            <motion.p layout="position">Ingen produkter er lagt til for sammenligning.</motion.p>
-          </motion.div>
-        )}
-        {productsToCompare.length !== 0 && (
-          <>
-            <motion.ul className="compare-menu__chosen-products">
-              <AnimatePresence mode="popLayout">
-                {reversedProductsToCompare.map((product) => (
-                  <motion.li
-                    layout
-                    key={'compare-' + product.id}
-                    variants={productVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                  >
-                    <ProductCard
-                      key={'compare-' + product.id}
-                      product={product}
-                      removeProduct={removeProduct}
-                    ></ProductCard>
-                  </motion.li>
-                ))}
-              </AnimatePresence>
-            </motion.ul>
-
-            {productsToCompare.length > 1 && (
-              <motion.div className="compare-menu__buttons">
-                <Link href="/sammenlign" passHref legacyBehavior>
-                  <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
-                    Sammenlign
-                  </Button>
-                </Link>
-                <MotionButton
-                  variant="secondary"
-                  icon={<TrashIcon aria-hidden />}
-                  onClick={() => {
-                    resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized)
-                  }}
-                >
-                  Nullstill
-                </MotionButton>
-              </motion.div>
-            )}
-            {productsToCompare.length === 1 && (
-              <motion.div
-                layoutId="placeholder"
-                className="compare-menu__placeholder compare-menu__placeholder__one-more"
-              >
-                <motion.p layout="position">Velg minst ett produkt til for å gå til sammenligning.</motion.p>
-              </motion.div>
-            )}
-          </>
-        )}
-      </motion.div>
-    </motion.div>
-  )
-
-  const miniView = (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      variants={containerVariants}
-      layoutId="compare-menu"
-      className="compare-menu"
-    >
-      <MotionButton
-        className="compare-menu__chevron-button"
-        layoutId="chevron-button"
-        variant="tertiary"
-        iconPosition="right"
-        icon={<ChevronUpIcon aria-hidden />}
-        onClick={() => setCompareMenuState(CompareMenuState.Open)}
-      >
-        {toggleButtonText}
-      </MotionButton>
-    </motion.div>
-  )
-
   return (
-    <AnimatePresence initial={false}>
-      {compareMenuState === CompareMenuState.Open && openView}
-      {compareMenuState === CompareMenuState.Minimized && miniView}
-    </AnimatePresence>
+    <div
+      className={classNames('compare-menu', {
+        open: compareMenuState === CompareMenuState.Open,
+        close: compareMenuState === CompareMenuState.Minimized,
+      })}
+    >
+      {compareMenuState === CompareMenuState.Open ? (
+        <Button
+          className="compare-menu__chevron-button"
+          variant="tertiary"
+          iconPosition="right"
+          icon={<ChevronDownIcon aria-hidden />}
+          onClick={() => setCompareMenuState(CompareMenuState.Minimized)}
+        >
+          {toggleButtonText}
+        </Button>
+      ) : (
+        <Button
+          className="compare-menu__chevron-button"
+          iconPosition="right"
+          variant="tertiary"
+          icon={<ChevronUpIcon aria-hidden />}
+          onClick={() => setCompareMenuState(CompareMenuState.Open)}
+        >
+          {toggleButtonText}
+        </Button>
+      )}
+
+      {compareMenuState === CompareMenuState.Open && (
+        <div key="content" className="compare-menu__container">
+          {productsToCompare.length === 0 && (
+            <div className="compare-menu__placeholder compare-menu__placeholder__empty">
+              <BodyShort>Ingen produkter er lagt til for sammenligning.</BodyShort>
+            </div>
+          )}
+          {productsToCompare.length !== 0 && (
+            <>
+              <ul className="compare-menu__chosen-products">
+                <AnimatePresence mode="popLayout">
+                  {reversedProductsToCompare.map((product) => (
+                    <motion.li
+                      layout
+                      key={'compare-' + product.id}
+                      variants={productVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                    >
+                      <ProductCard
+                        key={'compare-' + product.id}
+                        product={product}
+                        removeProduct={removeProduct}
+                      ></ProductCard>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
+              </ul>
+
+              {productsToCompare.length > 1 && (
+                <div className="compare-menu__buttons">
+                  <Link href="/sammenlign" passHref legacyBehavior>
+                    <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
+                      Sammenlign
+                    </Button>
+                  </Link>
+                  <Button
+                    icon={<TrashIcon aria-hidden />}
+                    onClick={() => {
+                      resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized)
+                    }}
+                  >
+                    Nullstill
+                  </Button>
+                </div>
+              )}
+              {productsToCompare.length === 1 && (
+                <div className="compare-menu__placeholder compare-menu__placeholder__one-more">
+                  <BodyShort>Velg minst ett produkt til for å gå til sammenligning.</BodyShort>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
