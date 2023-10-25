@@ -3,6 +3,10 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-info {
+  p {
+    max-width: 550px;
+  }
+
   .comparing-table {
     thead tr {
       background-color: $a-surface-selected;
@@ -42,7 +46,6 @@
     @include mixins.for-size(desktop-up) {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       max-height: 450px;
     }
   }

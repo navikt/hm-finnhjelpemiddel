@@ -93,11 +93,11 @@ function Home() {
           <div className="home-page__container">
             <div className="home-page__agreement-heading">
               <Heading level="2" size="medium" ref={agreementHeadingRef}>
-                Produkter på avtale med NAV
+                Hjelpemidler på avtale med NAV
               </Heading>
               <Ingress>
-                NAV kjøper og eier hjelpemidlene som formidles gjennom hjelpemiddelsentralene. På noen produktområder
-                inngår NAV rammeavtaler med leverandørene.
+                NAV inngår avtaler med leverandører om kjøp av hjelpemidler. Hver avtale gjelder for en begrenset
+                tidsperiode.
               </Ingress>
               <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>

@@ -2,7 +2,21 @@
 
 @import '@navikt/ds-tokens/dist/tokens';
 
+.compare-menu.open {
+  //Mobilview
+  max-height: 1000px;
+  height: 100%;
+  border-radius: unset;
+  overflow-x: scroll;
+
+  @include mixins.for-size(desktop-up) {
+    height: auto;
+  }
+}
+
 .compare-menu {
+  transition: all 0.4s linear;
+  max-height: 100px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -17,16 +31,6 @@
 
   @include mixins.for-size(desktop-up) {
     padding: $a-spacing-3 $a-spacing-6;
-  }
-
-  &--open {
-    height: 100%;
-    border-radius: unset;
-    overflow-x: scroll;
-
-    @include mixins.for-size(desktop-up) {
-      height: auto;
-    }
   }
 
   &__container {
@@ -153,7 +157,6 @@
   }
 
   &__chevron-button:hover {
-    color: $a-blue-700;
     background-color: $a-surface-action-subtle;
   }
 
