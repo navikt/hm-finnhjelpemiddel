@@ -10,7 +10,7 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state
 import ProductCard from '@/components/ProductCard'
 import classNames from 'classnames'
 
-const productVariants: Variants = {
+const productCardAnimations: Variants = {
   hidden: {
     opacity: 0,
     scale: 0.3,
@@ -79,7 +79,7 @@ const CompareMenu = () => {
                     <motion.li
                       layout
                       key={'compare-' + product.id}
-                      variants={productVariants}
+                      variants={productCardAnimations}
                       initial="hidden"
                       animate="visible"
                       exit="hidden"
