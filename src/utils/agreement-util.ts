@@ -7,6 +7,7 @@ import {
   PostResponse,
   SearchResponse,
 } from './response-types'
+import { sortAlphabetically } from './sort-util'
 
 export function getPostTitle(post: string, postNr: number): string
 export function getPostTitle(posts: Post[], postNr: number): string | undefined
@@ -96,6 +97,7 @@ const mapAttachments = (attachments: AttachmentsResponse[]): Attachment[] => {
     .filter((attachments) => {
       return attachments.title !== 'Hurtigoversikt ' && attachments.title !== 'Hurtigoversikt'
     })
+    .sort((a, b) => sortAlphabetically(a.title, b.title))
 }
 
 const mapPosts = (posts: PostResponse[]): Post[] => {
@@ -112,23 +114,6 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
 }
 
 export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734']
-
-export const agreementAttachmentLabels: Record<string, string> = {
-  Tilbehør: 'Tilbehør for hver leverandør',
-  Tjenester: 'Tjenester for hver leverandør',
-  Reservedeler: 'Reservedeler for hver leverandør',
-  Endringskatalog: 'Endringskataloger for hver leverandør',
-}
-
-export function getAttachmentLabel(key: string): string | undefined {
-  const matchingKey = Object.keys(agreementAttachmentLabels).find((labelKey) => key.startsWith(labelKey))
-
-  if (matchingKey) {
-    return agreementAttachmentLabels[matchingKey]
-  }
-
-  return undefined
-}
 
 export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8617': 'Manuelle rullestoler',

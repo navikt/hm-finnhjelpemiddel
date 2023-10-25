@@ -1,4 +1,4 @@
-import { agreementHasNoProducts, getAttachmentLabel, mapAgreementFromSearch } from '@/utils/agreement-util'
+import { agreementHasNoProducts, mapAgreementFromSearch } from '@/utils/agreement-util'
 import { getAgreementFromId } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
@@ -43,16 +43,7 @@ export default async function AgreementPage({ params: { id: agreementId } }: { p
                 </Heading>
 
                 {agreement.attachments.map((attachment, i) => (
-                  <div key={i}>
-                    <Heading level="2" size="small" spacing>
-                      {getAttachmentLabel(attachment.title) ?? attachment.title}
-                    </Heading>
-                    <div
-                      style={{ maxWidth: '550px' }}
-                      dangerouslySetInnerHTML={{ __html: attachment.description }}
-                    ></div>
-                    <DocumentExpansionCard attachment={attachment} />
-                  </div>
+                  <DocumentExpansionCard key={i} attachment={attachment} />
                 ))}
               </article>
             </div>

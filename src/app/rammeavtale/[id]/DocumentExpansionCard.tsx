@@ -9,15 +9,16 @@ import { Attachment } from '@/utils/agreement-util'
 import File from '@/components/File'
 
 export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }) => (
-  <ExpansionCard size="small" aria-label="Heading-size small demo" style={{ margin: '12px 0' }}>
+  <ExpansionCard size="small" aria-label="Heading-size small demo">
     <ExpansionCard.Header>
       <ExpansionCard.Title as="h4" size="small" style={{ fontSize: '18px' }}>
         {attachment.title}
       </ExpansionCard.Title>
     </ExpansionCard.Header>
     <ExpansionCard.Content>
+      <div style={{ maxWidth: '550px' }} dangerouslySetInnerHTML={{ __html: attachment.description }}></div>
       {attachment.documents.length === 1 && (
-        <div className="document-list spacing-top--small spacing-bottom--medium">
+        <div className="document-list spacing-top--medium spacing-bottom--medium">
           <File
             title={attachment.documents[0].title}
             path={attachment.documents[0].uri}
@@ -26,7 +27,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
         </div>
       )}
       {attachment.documents.length > 1 && (
-        <ul className="document-list spacing-top--small spacing-bottom--medium">
+        <ul className="document-list spacing-top--medium spacing-bottom--medium">
           {attachment.documents.map((doc, index) => (
             <li key={index}>
               <File title={doc.title} path={doc.uri} date={doc.updated} />
