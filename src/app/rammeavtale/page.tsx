@@ -46,7 +46,7 @@ export default async function AgreementsInfoPage() {
                   <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
                 </div>
                 <div className="agreement-page__icon-container">
-                  <AgreementIcon rank={99} />
+                  <AgreementIcon rank={null} />
                   <BodyLong>Er på avtale med NAV uten rangering.</BodyLong>
                 </div>
               </div>

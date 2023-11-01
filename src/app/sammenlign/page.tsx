@@ -121,25 +121,31 @@ const CompareTable = ({
     return `${min} - ${max}`
   }
 
-  const productRowKeyValue = productsToCompare.reduce((rowKeyValue, product) => {
-    rowKeyValue[product.id] = allDataKeysVariants.reduce((keysVariants, key) => {
-      const values = product.variants
-        .filter((variant) => key in variant.techData)
-        .map((variant) => variant.techData[key].value)
+  const productRowKeyValue = productsToCompare.reduce(
+    (rowKeyValue, product) => {
+      rowKeyValue[product.id] = allDataKeysVariants.reduce(
+        (keysVariants, key) => {
+          const values = product.variants
+            .filter((variant) => key in variant.techData)
+            .map((variant) => variant.techData[key].value)
 
-      let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
+          let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
 
-      let value = findValueRangeForProductRowKey(values)
-      if (key.includes('intervall') && value === '0') {
-        value = '-'
-        unit = ''
-      }
+          let value = findValueRangeForProductRowKey(values)
+          if (key.includes('intervall') && value === '0') {
+            value = '-'
+            unit = ''
+          }
 
-      keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
-      return keysVariants
-    }, {} as Record<string, string>)
-    return rowKeyValue
-  }, {} as Record<string, Record<string, string>>)
+          keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
+          return keysVariants
+        },
+        {} as Record<string, string>
+      )
+      return rowKeyValue
+    },
+    {} as Record<string, Record<string, string>>
+  )
 
   return (
     <section className="comparing-table">
@@ -167,7 +173,7 @@ const CompareTable = ({
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
             {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank || '-'}</Table.DataCell>
+              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank ?? '-'}</Table.DataCell>
             ))}
           </Table.Row>
           <Table.Row>

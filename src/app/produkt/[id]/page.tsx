@@ -28,7 +28,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
     ? mapProductsFromCollapse(await getProductsInPost(product.applicableAgreementInfo?.postIdentifier))
         .filter((postProduct) => postProduct.id !== product.id)
         .sort((productA, productB) =>
-          productA.applicableAgreementInfo && productB.applicableAgreementInfo
+          productA.applicableAgreementInfo?.rank && productB.applicableAgreementInfo?.rank
             ? productA.applicableAgreementInfo?.rank - productB.applicableAgreementInfo?.rank
             : -1
         )

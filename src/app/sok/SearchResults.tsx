@@ -162,7 +162,7 @@ const SearchResult = ({
               <div className="search-result__post-container">
                 <AgreementIcon rank={product.applicableAgreementInfo?.rank} />
                 <BodyShort>
-                  {'Dk ' +
+                  {'Delkontrakt ' +
                     product.applicableAgreementInfo?.postNr +
                     ': ' +
                     product.applicableAgreementInfo?.postTitle ?? product.attributes?.text}

@@ -20,7 +20,7 @@ export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) =
           Avtale med Nav
         </Heading>
 
-        {product.applicableAgreementInfo && product.applicableAgreementInfo.rank > 1 && (
+        {product.applicableAgreementInfo?.rank && product.applicableAgreementInfo.rank > 1 && (
           <Alert variant="info" inline>
             Dette produktet er rangert som nummer {product.applicableAgreementInfo.rank} i delkontrakten. Ta en titt på
             høyere rangerte produkter for å se om det passer ditt behov.
