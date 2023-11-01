@@ -21,6 +21,11 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
   const headersList = headers()
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
+  const agreementRankText =
+    product.applicableAgreementInfo?.rank == 99
+      ? 'Er på avtale med NAV uten rangering.'
+      : `Rangert som nr ${product.applicableAgreementInfo?.rank} på avtale med Nav.`
+
   return (
     <>
       <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
@@ -41,7 +46,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
             {product.applicableAgreementInfo && (
               <div className="product-info__agreement-rank">
                 <AgreementIcon rank={product.applicableAgreementInfo.rank} />
-                <BodyShort>Rangert som nr {product.applicableAgreementInfo.rank} på avtale med Nav</BodyShort>
+                <BodyShort>{agreementRankText}</BodyShort>
               </div>
             )}
 

@@ -103,7 +103,7 @@ function Home() {
             </div>
 
             <div className="home-page__agreement-links-container">
-              <div className="home-page__agreement-links spacing-bottom--medium">
+              <div className="home-page__agreement-links">
                 {first15Agreements?.map(({ id, label }) => {
                   return agreementLink(id, label)
                 })}
