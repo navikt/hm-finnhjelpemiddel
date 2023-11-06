@@ -11,7 +11,7 @@ import AgreementList from './AgreementList'
 export default async function AgreementsInfoPage() {
   return (
     <>
-      <div className="agreement-page">
+      <div className="agreement-page main">
         <AnimateLayout>
           <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
             <article>

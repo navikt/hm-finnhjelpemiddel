@@ -3,7 +3,6 @@ import { Product } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import { BackButton } from '@/components/BackButton'
 import { Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -25,7 +24,6 @@ type ProductProps = {
 const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories, spareParts }: ProductProps) => {
   return (
     <>
-      <BackButton />
       <AnimateLayout>
         <article className="product-info">
           <ProductPageTopInfo product={product} agreement={agreement} supplier={supplier} />

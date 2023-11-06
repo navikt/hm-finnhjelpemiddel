@@ -2,7 +2,6 @@ import { Agreement } from '@/utils/agreement-util'
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import { BackButton } from '@/components/BackButton'
 import ProductCard from '@/components/ProductCard'
 import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -20,7 +19,6 @@ type Props = {
 const AccessoryOrSparePartPage = ({ product, agreement, supplier, matchingProducts }: Props) => {
   return (
     <>
-      <BackButton />
       <AnimateLayout>
         <article className="product-info">
           <ProductPageTopInfo product={product} supplier={supplier} agreement={agreement} />
