@@ -11,7 +11,7 @@ import DocumentExpansionCard from './DocumentExpansionCard'
 
 export default async function AgreementPage({ params: { id: agreementId } }: { params: { id: string } }) {
   const agreement = mapAgreementFromSearch(await getAgreementFromId(agreementId))
-  const hrefSok = `/sok?agreement=true&rammeavtale=${agreement?.label}`
+  const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   return (
     <>

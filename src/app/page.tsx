@@ -8,15 +8,13 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { BodyShort, Heading, Ingress } from '@navikt/ds-react'
+import { BodyShort, Heading, Ingress, Search } from '@navikt/ds-react'
 
 import { AgreementLabel, agreementHasNoProducts, agreementKeyLabels } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-
-import SearchCombobox from './sok/sidebar/internals/SearchCombobox'
 
 function Home() {
   const router = useRouter()
@@ -63,7 +61,7 @@ function Home() {
   const lastAgreements = sortedData?.slice(15)
 
   const agreementLink = (id: string, label: string) => {
-    let hrefSok = `/sok?agreement=true&rammeavtale=${label}`
+    let hrefSok = `/sok?agreement&rammeavtale=${label}`
 
     return (
       <div className="home-page__agreement-link" key={id}>
@@ -83,8 +81,17 @@ function Home() {
               <Heading level="1" size="large">
                 Søk i Norges største samling av hjelpemidler på nett.
               </Heading>
-
-              <SearchCombobox onSearch={onSearch} initialValue="" />
+              <Search
+                label="Skriv ett eller flere søkeord"
+                hideLabel={false}
+                onSearchClick={onSearch}
+                onKeyUpCapture={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault()
+                    onSearch(event.currentTarget.value)
+                  }
+                }}
+              />
             </div>
             <Image src="/illustrasjon.svg" width="316" height="173" alt="" aria-hidden={true} />
           </div>

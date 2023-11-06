@@ -1,14 +1,13 @@
 'use client'
 
 import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import useSWR from 'swr'
 
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { Product, toSearchQueryString } from '@/utils/product-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { Product, mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
@@ -22,11 +21,13 @@ import {
   Table,
 } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import { useMemo } from 'react'
 
 export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
-  const { searchData } = useHydratedSearchStore()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
 
   const href = '/sok' + toSearchQueryString(searchData)
   const series = productsToCompare.map((product) => product.id)

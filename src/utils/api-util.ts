@@ -76,7 +76,7 @@ export type SearchParams = SearchData & { to?: number }
 
 type FetchProps = {
   from: number
-  to: number
+  size: number
   searchData: SearchData
 }
 
@@ -86,8 +86,9 @@ export type FetchResponse = {
   filters: FilterData
 }
 
-export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
+
   const {
     lengdeCM,
     breddeCM,
@@ -248,7 +249,7 @@ export const fetchProducts = ({ from, to, searchData }: FetchProps): Promise<Fet
     },
     body: JSON.stringify({
       from,
-      size: to,
+      size,
       track_scores: true,
       sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,

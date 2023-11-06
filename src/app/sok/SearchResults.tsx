@@ -93,7 +93,7 @@ const SearchResults = ({
         ))}
       </ol>
       {!isLastPage && (
-        <Button variant="secondary" onClick={() => setPage(page + 1)} loading={isLoadingMore}>
+        <Button variant="secondary" onClick={() => setPage(page + 1)} loading={isLoading}>
           Vis flere treff
         </Button>
       )}
