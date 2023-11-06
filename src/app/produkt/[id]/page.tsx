@@ -49,7 +49,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   const spareParts: Product[] = []
 
   return (
-    <>
+    <div className="main-wrapper">
       {isAccessoryOrSparePart ? (
         <AccessoryOrSparePartPage
           product={product}
@@ -67,6 +67,6 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
           spareParts={spareParts}
         />
       )}
-    </>
+    </div>
   )
 }

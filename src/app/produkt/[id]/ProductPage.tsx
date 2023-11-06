@@ -25,10 +25,10 @@ const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories
   return (
     <>
       <AnimateLayout>
-        <article className="product-info">
+        <article className="product-info spacing-top--large">
           <ProductPageTopInfo product={product} agreement={agreement} supplier={supplier} />
           <section
-            className="product-info__characteristics max-width"
+            className="product-info__characteristics"
             aria-label="Produktegenskaper som alle produktvariantene har til felles"
           >
             <Heading level="2" size="medium" spacing>
@@ -38,7 +38,7 @@ const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories
           </section>
           {product.variantCount > 1 && (
             <section
-              className="product-info__product-variants max-width"
+              className="product-info__product-variants"
               aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
             >
               <ProductVariants product={product} />

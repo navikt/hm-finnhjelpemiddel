@@ -47,7 +47,7 @@ export default function ComparePage() {
 
   if (isLoading) {
     return (
-      <div className="main-wrapper compare-page">
+      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
@@ -61,7 +61,7 @@ export default function ComparePage() {
 
   return (
     <AnimateLayout>
-      <div className="main-wrapper compare-page">
+      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>

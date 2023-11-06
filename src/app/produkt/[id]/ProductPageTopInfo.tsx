@@ -28,7 +28,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
   return (
     <>
       <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
-        <div className="product-info__top-content max-width">
+        <div className="product-info__top-content">
           <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
           <div className="product-info__top-right">
             <Heading level="1" size="large" spacing>
@@ -57,7 +57,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
           </div>
         </div>
       </section>
-      <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
+      <section className="product-info__tabs" aria-label="Produktbeskrivelse og medfølgende dokumenter">
         {isMobileDevice ? (
           <InformationAccordion product={product} supplier={supplier} />
         ) : (

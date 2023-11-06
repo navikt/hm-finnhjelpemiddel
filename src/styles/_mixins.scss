@@ -13,5 +13,9 @@
     @media (min-width: 1024px) {
       @content;
     }
+  } @else if $range == desktop-large-up {
+    @media (min-width: 1279px) {
+      @content;
+    }
   }
 }

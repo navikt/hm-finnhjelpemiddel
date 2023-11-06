@@ -8,8 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import useSWRInfinite from 'swr/infinite'
 
-import { FilesIcon } from '@navikt/aksel-icons'
-import { Delete, Up } from '@navikt/ds-icons'
+import { FilesIcon, TrashIcon, ArrowUpIcon } from '@navikt/aksel-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
 import { FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters, fetchProducts } from '@/utils/api-util'
@@ -170,7 +169,7 @@ export default function Home() {
                 type="button"
                 variant="tertiary"
                 size="small"
-                icon={<Delete title="Nullstill søket" />}
+                icon={<TrashIcon title="Nullstill søket" />}
                 onClick={onReset}
               >
                 Nullstill søket
@@ -187,7 +186,7 @@ export default function Home() {
           </Heading>
         </div>
         <div className="main-wrapper">
-          <div className="flex-column-wrap">
+          <div className="flex-column-wrap spacing-top--large spacing-bottom--large">
             {showSidebar && (
               <Sidebar
                 filters={data?.at(-1)?.filters}
@@ -269,7 +268,7 @@ export default function Home() {
           <Button
             type="button"
             className="search__page-up-button"
-            icon={<Up title="Gå til toppen av siden" />}
+            icon={<ArrowUpIcon title="Gå til toppen av siden" />}
             onClick={() => setFocusOnSearchResults()}
           />
         )}
