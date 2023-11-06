@@ -5,9 +5,9 @@ import useSWR from 'swr'
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 
 import { SuggestionsResponse, fetchSuggestions } from '@/utils/api-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
 
 import useDebounce from '@/hooks/useDebounce'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
   initialValue: string
@@ -15,11 +15,11 @@ type Props = {
 }
 
 const SearchCombobox = ({ initialValue, onSearch }: Props) => {
-  const [inputValue, setInputValue] = useState(initialValue)
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([initialValue])
-  const { searchData } = useHydratedSearchStore()
+  const [inputValue, setInputValue] = useState('')
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([])
   const debouncedSearchValue = useDebounce<string>(inputValue)
   const [isListOpen, setListIsopen] = useState(false)
+  const searchParams = useSearchParams()
 
   const { data: suggestionData } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
     keepPreviousData: false,
@@ -44,11 +44,11 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   )
 
   useEffect(() => {
-    if (!searchData.searchTerm) {
+    if (!searchParams.has('term')) {
       setInputValue('')
       setSelectedOptions([])
     }
-  }, [searchData.searchTerm])
+  }, [searchParams])
 
   useEffect(() => {
     if (inputValue) setListIsopen(true)
@@ -66,14 +66,16 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
     }
   }
 
-  const options = searchData.hasAgreementsOnly ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue
+  const options = searchParams.has('agreement') ? suggestionsWithAgreementOnly : allSuggestionsSortedonAgreementValue
 
   return (
     <UNSAFE_Combobox
       label="Skriv ett eller flere søkeord"
       isMultiSelect={false}
       onChange={(event) => {
-        setInputValue(event?.target.value || '')
+        if (!selectedOptions.length) {
+          setInputValue(event?.target.value || '')
+        }
       }}
       onToggleSelected={onToggleSelected}
       selectedOptions={selectedOptions}

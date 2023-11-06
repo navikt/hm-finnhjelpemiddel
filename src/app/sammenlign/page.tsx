@@ -1,14 +1,13 @@
 'use client'
 
 import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import useSWR from 'swr'
 
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { Product, toSearchQueryString } from '@/utils/product-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { Product, mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
@@ -22,11 +21,13 @@ import {
   Table,
 } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import { useMemo } from 'react'
 
 export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
-  const { searchData } = useHydratedSearchStore()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
 
   const href = '/sok' + toSearchQueryString(searchData)
   const series = productsToCompare.map((product) => product.id)
@@ -121,25 +122,31 @@ const CompareTable = ({
     return `${min} - ${max}`
   }
 
-  const productRowKeyValue = productsToCompare.reduce((rowKeyValue, product) => {
-    rowKeyValue[product.id] = allDataKeysVariants.reduce((keysVariants, key) => {
-      const values = product.variants
-        .filter((variant) => key in variant.techData)
-        .map((variant) => variant.techData[key].value)
+  const productRowKeyValue = productsToCompare.reduce(
+    (rowKeyValue, product) => {
+      rowKeyValue[product.id] = allDataKeysVariants.reduce(
+        (keysVariants, key) => {
+          const values = product.variants
+            .filter((variant) => key in variant.techData)
+            .map((variant) => variant.techData[key].value)
 
-      let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
+          let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
 
-      let value = findValueRangeForProductRowKey(values)
-      if (key.includes('intervall') && value === '0') {
-        value = '-'
-        unit = ''
-      }
+          let value = findValueRangeForProductRowKey(values)
+          if (key.includes('intervall') && value === '0') {
+            value = '-'
+            unit = ''
+          }
 
-      keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
-      return keysVariants
-    }, {} as Record<string, string>)
-    return rowKeyValue
-  }, {} as Record<string, Record<string, string>>)
+          keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
+          return keysVariants
+        },
+        {} as Record<string, string>
+      )
+      return rowKeyValue
+    },
+    {} as Record<string, Record<string, string>>
+  )
 
   return (
     <section className="comparing-table">

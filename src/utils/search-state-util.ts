@@ -1,14 +1,3 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
-
-import { SearchData } from './api-util'
-import { FilterCategories } from './filter-util'
-import { AtLeastOne } from './type-util'
-
 const initialFiltersState = {
   beregnetBarn: [],
   breddeCM: [null, null],
@@ -35,52 +24,3 @@ export const initialSearchDataState = {
   hasAgreementsOnly: false,
   filters: initialFiltersState,
 }
-
-type SearchDataState = {
-  searchData: SearchData
-  setSearchData: (searchData: AtLeastOne<SearchData>) => void
-  setFilter: (filterKey: keyof typeof FilterCategories, values: Array<any>) => void
-  resetSearchData: () => void
-}
-
-const useSearchStore = create<SearchDataState>()(
-  persist(
-    (set) => ({
-      searchData: initialSearchDataState,
-      setSearchData: (searchData) =>
-        set((state) => {
-          const updatedSearchData = { ...state.searchData, ...searchData }
-          return {
-            searchData: updatedSearchData,
-          }
-        }),
-      setFilter: (filterKey, values) =>
-        set((state) => ({
-          searchData: { ...state.searchData, filters: { ...state.searchData.filters, [filterKey]: values } },
-        })),
-      resetSearchData: () => set({ searchData: initialSearchDataState }),
-    }),
-    {
-      name: 'search-data-storage',
-      storage: createJSONStorage(() => sessionStorage),
-    }
-  )
-)
-
-// This a fix to ensure zustand never hydrates the store before React hydrates the page
-// otherwise it causes a mismatch between SSR and client render
-// see: https://github.com/pmndrs/zustand/issues/1145
-// https://github.com/TxnLab/use-wallet/pull/23/commits/f4c13aad62839500066d694a5b0f4a4c24c3c8d3
-export const useHydratedSearchStore = ((selector, compare) => {
-  const store = useSearchStore(selector, compare)
-  const [hydrated, setHydrated] = useState(false)
-  useEffect(() => setHydrated(true), [])
-  return hydrated
-    ? store
-    : {
-        searchData: initialSearchDataState,
-        setSearchData: () => undefined,
-        setFilter: () => undefined,
-        resetSearchData: () => undefined,
-      }
-}) as typeof useSearchStore

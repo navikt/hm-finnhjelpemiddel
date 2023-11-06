@@ -1,12 +1,15 @@
 import { CheckboxFilterInput } from './internals/CheckboxFilterInput'
 import { RangeFilterInput } from './internals/RangeFilterInput'
 import { FilterData } from '@/utils/api-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { mapProductSearchParams } from '@/utils/product-util'
 import { BodyShort } from '@navikt/ds-react'
-import React from 'react'
+import { useSearchParams } from 'next/navigation'
+import React, { useMemo } from 'react'
 
 const FilterView = ({ filters }: { filters?: FilterData }) => {
-  const { searchData } = useHydratedSearchStore()
+  const searchParams = useSearchParams()
+  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+
   const searchDataFilters = Object.entries(searchData.filters)
     .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)

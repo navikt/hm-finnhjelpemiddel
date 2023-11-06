@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { Detail, TextField } from '@navikt/ds-react'
 import { Filter, SearchData } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
 
 import ShowMore from '@/components/ShowMore'
+import { useSearchParams } from 'next/navigation'
+import { mapProductSearchParams } from '@/utils/product-util'
 
 type FilterProps = {
   filter: { key: keyof typeof FilterCategories; data?: Filter }
@@ -14,28 +15,24 @@ type FilterProps = {
 
 export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) => {
   const { key: filterKey, data: filterData } = filter
+  const searchParams = useSearchParams()
+  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
 
-  const { searchData, setFilter } = useHydratedSearchStore()
-  const {
-    control,
-    formState: { dirtyFields, isSubmitting, isValid, touchedFields },
-    trigger,
-    setValue,
-    watch,
-  } = useFormContext<SearchData>()
+  const formMethods = useFormContext<SearchData>()
 
-  const [min, max] = watch(`filters.${filterKey}`) || []
+  const [min, max] = formMethods.watch(`filters.${filterKey}`) || []
 
   useEffect(() => {
-    if (isSubmitting && !isValid) {
+    if (formMethods.formState.isSubmitting && !formMethods.formState.isValid) {
       const maxValue = Math.max(min, max)
-      setFilter(filterKey, [maxValue, maxValue])
-      setValue(`filters.${filterKey}`, [maxValue, maxValue])
+      formMethods.setValue(`filters.${filterKey}`, [maxValue, maxValue])
     }
-  }, [filterKey, isSubmitting, isValid, max, min, setFilter, setValue])
+  }, [formMethods, filterKey, min, max])
 
-  const dirty = dirtyFields.filters && !!dirtyFields.filters[filterKey]?.length
-  const touched = touchedFields.filters && !!touchedFields.filters[filterKey]?.length
+  const dirty =
+    formMethods.formState.dirtyFields.filters && !!formMethods.formState.dirtyFields.filters[filterKey]?.length
+  const touched =
+    formMethods.formState.touchedFields.filters && !!formMethods.formState.touchedFields.filters[filterKey]?.length
 
   const searchDataFilters = Object.entries(searchData.filters)
     .filter(([_, values]) => values.some((value) => !(isNaN(value) || value === null || value === undefined)))
@@ -52,7 +49,7 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
       <ShowMore title={FilterCategories[filterKey]} open={!!min || !!max || dirty} spacing>
         <div className="single-filter-input">
           <Controller
-            control={control}
+            control={formMethods.control}
             name={`filters.${filterKey}.${variant === 'min' ? 0 : 1}`}
             render={({ field }) => (
               <TextField
@@ -72,10 +69,11 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
                 value={field.value || ''}
                 onBlur={(event) => {
                   if (dirty) {
-                    setFilter(filterKey, [
-                      variant === 'min' ? event.target.value : null,
-                      variant === 'max' ? event.target.value : null,
-                    ])
+                    formMethods.setValue(
+                      `filters.${filterKey}`,
+                      variant === 'min' ? [event.target.value, null] : [null, event.target.value]
+                    )
+                    event.target?.form?.requestSubmit()
                   }
                 }}
               />
@@ -92,7 +90,7 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
         <div>
           <Detail>Min</Detail>
           <Controller
-            control={control}
+            control={formMethods.control}
             name={`filters.${filterKey}.0`}
             rules={{ validate: (value) => (min && max ? Number(value) <= max : true) }}
             render={({ field }) => (
@@ -107,13 +105,13 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
                 value={field.value || ''}
                 onBlur={async (event) => {
                   if (dirty) {
-                    const valid = await trigger([`filters.${filterKey}.0`])
+                    const valid = await formMethods.trigger([`filters.${filterKey}.0`])
                     if (valid) {
-                      setFilter(filterKey, [event.target.value, max])
+                      formMethods.setValue(`filters.${filterKey}`, [event.target.value, max])
                     } else {
-                      setFilter(filterKey, [event.target.value, event.target.value])
-                      setValue(`filters.${filterKey}`, [event.target.value, event.target.value])
+                      formMethods.setValue(`filters.${filterKey}`, [event.target.value, null])
                     }
+                    event.target.form?.requestSubmit()
                   }
                 }}
               />
@@ -123,7 +121,7 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
         <div>
           <Detail>Maks</Detail>
           <Controller
-            control={control}
+            control={formMethods.control}
             name={`filters.${filterKey}.1`}
             render={({ field }) => (
               <TextField
@@ -137,13 +135,13 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
                 value={field.value || ''}
                 onBlur={async (event) => {
                   if (dirty) {
-                    const valid = await trigger([`filters.${filterKey}.0`])
+                    const valid = await formMethods.trigger([`filters.${filterKey}.0`])
                     if (valid) {
-                      setFilter(filterKey, [min, event.target.value])
+                      formMethods.setValue(`filters.${filterKey}`, [min, event.target.value])
                     } else {
-                      setFilter(filterKey, [min, min])
-                      setValue(`filters.${filterKey}.1`, min)
+                      formMethods.setValue(`filters.${filterKey}`, [min, min])
                     }
+                    event.target?.form?.requestSubmit()
                   }
                 }}
               />
