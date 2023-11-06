@@ -1,8 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { useSearchParams } from 'next/navigation'
-
 import { Button, Search, Switch } from '@navikt/ds-react'
 
 import { FilterData, SearchData } from '@/utils/api-util'
@@ -23,7 +21,6 @@ type Props = {
 
 const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const searchParams = useSearchParams()
   const formMethods = useFormContext<SearchData>()
 
   useImperativeHandle(ref, () => formRef.current!)
