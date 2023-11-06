@@ -3,7 +3,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 import queryString from 'querystring'
 
 import { getPostTitle } from './agreement-util'
-import { SearchParams, SelectedFilters } from './api-util'
+import { SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
@@ -262,15 +262,10 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   rank: data.rank,
 })
 
-export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams | null): SearchParams => {
-  const searchTerm = searchParams?.get('term') ?? ''
-  const isoCode = searchParams?.get('isoCode') ?? ''
-  const agreement = searchParams?.get('agreement')
-
-  //default value is false when initiating search
-  const hasAgreementsOnly = agreement ? agreement === 'true' : false
-
-  const to = parseInt(searchParams?.get('to') ?? '') ?? undefined
+export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
+  const searchTerm = searchParams.get('term') ?? ''
+  const isoCode = searchParams.get('isoCode') ?? ''
+  const hasAgreementsOnly = searchParams.has('agreement')
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
 
@@ -287,18 +282,15 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams | n
     isoCode,
     hasAgreementsOnly,
     filters: { ...initialSearchDataState.filters, ...filters },
-    to,
   }
 }
 
-export const toSearchQueryString = (searchParams: SearchParams) =>
-  '?' +
+export const toSearchQueryString = (searchParams: SearchData) =>
   queryString.stringify({
-    agreement: searchParams.hasAgreementsOnly,
+    ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)
       .filter(([_, values]) => values.some((value) => value))
       .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
-    ...(searchParams.to && { to: searchParams.to }),
   })

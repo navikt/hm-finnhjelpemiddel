@@ -1,17 +1,17 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { ChevronLeftIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 
-import { toSearchQueryString } from '@/utils/product-util'
-import { useHydratedSearchStore } from '@/utils/search-state-util'
+import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { useMemo } from 'react'
 
 export const BackButton = () => {
   const router = useRouter()
-
-  const { searchData } = useHydratedSearchStore()
+  const searchParams = useSearchParams()
+  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
 
   const handleClick = () => {
     router.push('/sok' + toSearchQueryString(searchData))

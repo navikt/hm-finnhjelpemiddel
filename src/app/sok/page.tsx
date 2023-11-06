@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -12,20 +12,19 @@ import { FilesIcon } from '@navikt/aksel-icons'
 import { Delete, Up } from '@navikt/ds-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
-import { FetchResponse, PAGE_SIZE, SearchData, SearchParams, SelectedFilters, fetchProducts } from '@/utils/api-util'
+import { FetchResponse, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
-import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
-import { initialSearchDataState, useHydratedSearchStore } from '@/utils/search-state-util'
+import { initialSearchDataState } from '@/utils/search-state-util'
 import { Entries } from '@/utils/type-util'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import SearchForm, { SearchFormResetHandle } from './sidebar/SearchForm'
-import Sidebar from './sidebar/Sidebar'
+import SearchForm from './sidebar/SearchForm'
 
 import CompareMenu from './CompareMenu'
 import SearchResults from './SearchResults'
+import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 
 export default function Home() {
   const router = useRouter()
@@ -33,36 +32,46 @@ export default function Home() {
   const searchParams = useSearchParams()
 
   const copyButtonRef = useRef<HTMLButtonElement>(null)
-  const searchFormRef = useRef<SearchFormResetHandle>(null)
+  const searchFormRef = useRef<HTMLFormElement>(null)
 
-  const [searchInitialized, setSearchInitialized] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
-  const [productSearchParams, setProductSearchParams] = useState<SearchParams>(mapProductSearchParams(searchParams))
-  const [searchQueryString, setSearQueryString] = useState('')
 
-  const { searchData, setFilter, setSearchData } = useHydratedSearchStore()
+  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
       ...initialSearchDataState,
-      ...productSearchParams,
+      ...searchData,
     },
   })
+
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    router.replace(`${pathname}?${toSearchQueryString(data)}`, { scroll: false })
+  }
 
   const {
     data,
     size: page,
-    setSize: setPage,
+    setSize,
     isLoading,
   } = useSWRInfinite<FetchResponse>(
-    (index) => {
-      const from = index !== 0 ? (productSearchParams.to || PAGE_SIZE) + (index - 1) * PAGE_SIZE : 0
-      const to = (index === 0 && productSearchParams.to) || PAGE_SIZE
+    (index, previousPageData?: FetchResponse) => {
+      if (previousPageData && previousPageData.products.length === 0) return null
+      const sizeParam = Number(searchParams.get('size') || PAGE_SIZE)
+      let from = index * PAGE_SIZE
+      let size = PAGE_SIZE
+
+      if (index === 0 && sizeParam > PAGE_SIZE) {
+        //Special case where size is set at initial page load
+        from = 0
+        size = sizeParam
+      }
+
       return {
         from,
-        to,
+        size,
         searchData,
       }
     },
@@ -72,6 +81,18 @@ export default function Home() {
     }
   )
 
+  const setPage = useCallback(
+    (page: number) => {
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('page', `${page}`)
+      const searchQueryString = newParams.toString()
+      if (searchQueryString === searchParams.toString()) return
+      setSize(page)
+      router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
+    },
+    [pathname, router, setSize, searchParams]
+  )
+
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const searchResultRef = useRef<HTMLHeadingElement>(null)
 
@@ -79,46 +100,17 @@ export default function Home() {
     searchResultRef.current && searchResultRef.current.scrollIntoView()
   }
 
-  const productsWithVariants = data?.flatMap((d) => d.products)
-  const numberOfFetchedProducts =
-    productsWithVariants && productsWithVariants.length > PAGE_SIZE ? productsWithVariants.length : undefined
   const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
-
-  useEffect(() => {
-    if (searchInitialized) {
-      const newParamsString = toSearchQueryString({
-        ...searchData,
-        to: numberOfFetchedProducts,
-      })
-      setSearQueryString(newParamsString)
-    }
-  }, [router, searchParams, searchInitialized, searchData, numberOfFetchedProducts, pathname])
-
-  useEffect(() => {
-    console.log('CHANGED PARAMS', searchQueryString)
-    router.push(`${pathname}${searchQueryString}`, { scroll: false })
-  }, [router, pathname, searchQueryString])
 
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1100)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
   }, [])
 
-  useEffect(() => {
-    if (data) {
-      setSearchInitialized(true)
-    }
-  }, [data])
-
-  useEffect(() => {
-    setProductSearchParams(mapProductSearchParams(searchParams))
-  }, [searchParams, setProductSearchParams])
-
-  useEffect(() => setSearchData(productSearchParams), [productSearchParams, setSearchData])
-
   const onReset = () => {
-    setProductSearchParams({ ...initialSearchDataState, to: undefined })
-    setPage(1)
+    formMethods.reset()
+    setSize(1)
+    router.replace(pathname)
   }
 
   const filterValues = Object.values(searchData.filters)
@@ -142,7 +134,7 @@ export default function Home() {
             </Heading>
           </MobileOverlay.Header>
           <MobileOverlay.Content>
-            <SearchForm filters={data?.at(-1)?.filters} ref={searchFormRef} />
+            <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
           </MobileOverlay.Content>
           <MobileOverlay.Footer>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginBottom: 16 }}>
@@ -189,14 +181,42 @@ export default function Home() {
         <div className="main-wrapper">
           <div className="flex-column-wrap">
             {showSidebar && (
-              <Sidebar
-                filters={data?.at(-1)?.filters}
-                onResetSearchData={() => {
-                  onReset()
-                  searchFormRef.current && searchFormRef.current.reset()
-                }}
-                setFocus={setFocusOnSearchResults}
-              />
+              <section className="search__side-bar">
+                <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
+                <div className="footer">
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <Button
+                      ref={copyButtonRef}
+                      variant="tertiary"
+                      size="small"
+                      icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                      onClick={() => {
+                        navigator.clipboard.writeText(location.href)
+                        setCopyPopupOpenState(true)
+                      }}
+                    >
+                      Kopiér søket
+                    </Button>
+                    <Popover
+                      open={copyPopupOpenState}
+                      onClose={() => setCopyPopupOpenState(false)}
+                      anchorEl={copyButtonRef.current}
+                      placement="right"
+                    >
+                      <Popover.Content>Søket er kopiert!</Popover.Content>
+                    </Popover>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="tertiary"
+                    size="small"
+                    icon={<Delete title="Nullstill søket" />}
+                    onClick={onReset}
+                  >
+                    Nullstill søket
+                  </Button>
+                </div>
+              </section>
             )}
             <section className="results__wrapper">
               {!showSidebar && (
@@ -207,7 +227,7 @@ export default function Home() {
                 </div>
               )}
 
-              {searchData.searchTerm && (
+              {/* {searchData.searchTerm && (
                 <>
                   <Heading level="2" size="small">
                     Søkeord
@@ -215,14 +235,15 @@ export default function Home() {
                   <Chips className="results__chips">
                     <Chips.Removable
                       onClick={() => {
-                        setSearchData({ ...searchData, searchTerm: '' })
+                        formMethods.setValue('searchTerm', '') // Reset the search term
+                        searchFormRef.current?.requestSubmit()
                       }}
                     >
                       {searchData.searchTerm}
                     </Chips.Removable>
                   </Chips>
                 </>
-              )}
+              )} */}
               {filterValues.length > 0 && (
                 <>
                   <Heading level="2" size="small">
@@ -237,14 +258,11 @@ export default function Home() {
                             <Chips.Removable
                               key={key + value}
                               onClick={() => {
-                                setFilter(
-                                  key,
-                                  values.filter((val) => val !== value)
-                                )
                                 formMethods.setValue(
                                   `filters.${key}`,
                                   values.filter((val) => val !== value)
                                 )
+                                searchFormRef.current?.requestSubmit()
                               }}
                             >
                               {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
