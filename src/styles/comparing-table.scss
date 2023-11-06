@@ -64,6 +64,10 @@
     padding: $a-spacing-3 $a-spacing-3;
   }
 
+  .navds-table__data-cell {
+    max-width: 11.5rem;
+  }
+
   &__sortable-row {
     .navds-table__header-cell {
       padding: 6px $a-spacing-1;
