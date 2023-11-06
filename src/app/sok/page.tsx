@@ -209,7 +209,7 @@ export default function Home() {
                     type="button"
                     variant="tertiary"
                     size="small"
-                    icon={<Delete title="Nullstill søket" />}
+                    icon={<TrashIcon title="Nullstill søket" />}
                     onClick={onReset}
                   >
                     Nullstill søket
