@@ -908,6 +908,13 @@ export async function getProductsInPost(postIdentifier: string): Promise<SearchR
   const query = {
     bool: {
       must: [{ term: { 'agreementInfo.postIdentifier': { value: postIdentifier } } }],
+      filter: [
+        {
+          term: {
+            status: 'ACTIVE',
+          },
+        },
+      ],
     },
   }
 

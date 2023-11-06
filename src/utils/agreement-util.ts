@@ -95,7 +95,9 @@ const mapAttachments = (attachments: AttachmentsResponse[]): Attachment[] => {
       documents: mapDocuments(attachments.media),
     }))
     .filter((attachments) => {
-      return attachments.title !== 'Hurtigoversikt ' && attachments.title !== 'Hurtigoversikt'
+      return (
+        attachments.title !== '' && attachments.title !== 'Hurtigoversikt ' && attachments.title !== 'Hurtigoversikt'
+      )
     })
     .sort((a, b) => sortAlphabetically(a.title, b.title))
 }
