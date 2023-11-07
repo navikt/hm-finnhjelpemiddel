@@ -260,7 +260,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   postIdentifier: data.postIdentifier,
   postNr: data.postNr,
   postTitle: getPostTitle(data.postTitle, data.postNr),
-  rank: data.rank == 99 ? null : data.rank,
+  rank: data.rank === 99 ? null : data.rank,
 })
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {

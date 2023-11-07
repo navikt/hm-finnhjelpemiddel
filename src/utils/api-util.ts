@@ -926,7 +926,7 @@ export async function getProductsInPost(postIdentifier: string): Promise<SearchR
     },
     body: JSON.stringify({
       query,
-      size: 100,
+      size: 200,
       collapse: {
         field: 'seriesId',
       },

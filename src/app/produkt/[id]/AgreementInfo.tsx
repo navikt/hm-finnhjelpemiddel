@@ -33,8 +33,8 @@ export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) =
           )}
 
           <div className="agreement-details__products-on-post">
-            <Heading level="4" size="medium" spacing>
-              Andre produkter på samme delkontrakt
+            <Heading level="4" size="small" spacing>
+              {`Andre produkter delkontrakt ${product.applicableAgreementInfo?.postNr}: ${product.applicableAgreementInfo?.postTitle}`}
             </Heading>
             {productsOnPost && productsOnPost.length > 0 ? (
               <div className="agreement-details__products-on-post-list">
