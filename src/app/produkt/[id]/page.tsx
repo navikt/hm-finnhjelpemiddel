@@ -13,7 +13,7 @@ import { mapSupplier } from '@/utils/supplier-util'
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
 import ProductPage from './ProductPage'
 import './product-page.scss'
-import { sortWithNullValues } from '@/utils/sort-util'
+import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
@@ -29,7 +29,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
     ? mapProductsFromCollapse(await getProductsInPost(product.applicableAgreementInfo?.postIdentifier))
         .filter((postProduct) => postProduct.id !== product.id)
         .sort((productA, productB) => {
-          return sortWithNullValues(productA.applicableAgreementInfo?.rank, productB.applicableAgreementInfo?.rank)
+          return sortWithNullValuesAtEnd(productA.applicableAgreementInfo?.rank, productB.applicableAgreementInfo?.rank)
         })
     : null
 
