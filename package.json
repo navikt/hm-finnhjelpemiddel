@@ -13,7 +13,7 @@
     "@navikt/aksel-icons": "^5.9.2",
     "@navikt/ds-css": "^5.9.2",
     "@navikt/ds-react": "^5.9.2",
-    "@navikt/ds-tokens": "^5.9.2",
+    "@navikt/ds-tokens": "^5.10.0",
     "amplitude-js": "^8.21.9",
     "classnames": "^2.3.2",
     "framer-motion": "^10.16.2",
