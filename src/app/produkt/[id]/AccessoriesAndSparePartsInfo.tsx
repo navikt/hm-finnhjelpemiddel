@@ -31,7 +31,7 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
         className={`product-page-section__container product-page-section${classname}`}
         aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
       >
-        <div className="product-page-section__content max-width">
+        <div className="product-page-section__content">
           <Heading level="2" size="medium" spacing ref={headingRef}>
             {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
           </Heading>
@@ -49,7 +49,7 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
       className={`product-page-section__container product-page-section${classname}`}
       aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
     >
-      <div className="product-page-section__content max-width">
+      <div className="product-page-section__content">
         <Heading level="2" size="medium" spacing ref={headingRef}>
           {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
         </Heading>

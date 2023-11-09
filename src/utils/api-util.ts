@@ -823,8 +823,19 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
     },
     body: JSON.stringify({
       query: {
-        term: {
-          seriesId: seriesId,
+        bool: {
+          must: {
+            term: {
+              seriesId: seriesId,
+            },
+          },
+          filter: [
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+          ],
         },
       },
       size: 150,
@@ -846,8 +857,19 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     body: JSON.stringify({
       size: 0,
       query: {
-        terms: {
-          seriesId: seriesIds,
+        bool: {
+          must: {
+            terms: {
+              seriesId: seriesIds,
+            },
+          },
+          filter: [
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+          ],
         },
       },
       sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
@@ -887,6 +909,13 @@ export async function getProductsInPost(postIdentifier: string): Promise<SearchR
   const query = {
     bool: {
       must: [{ term: { 'agreementInfo.postIdentifier': { value: postIdentifier } } }],
+      filter: [
+        {
+          term: {
+            status: 'ACTIVE',
+          },
+        },
+      ],
     },
   }
 
@@ -897,7 +926,7 @@ export async function getProductsInPost(postIdentifier: string): Promise<SearchR
     },
     body: JSON.stringify({
       query,
-      size: 100,
+      size: 200,
       collapse: {
         field: 'seriesId',
       },

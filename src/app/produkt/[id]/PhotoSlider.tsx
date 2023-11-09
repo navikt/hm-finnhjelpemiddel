@@ -6,8 +6,7 @@ import Image from 'next/image'
 
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Picture } from '@navikt/ds-icons'
+import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
@@ -93,7 +92,12 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
       <div className="photo-slider-small">
         <div className="photo-and-arrow-container">
           {!hasImages && (
-            <Picture width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+            <CameraIcon
+              width={400}
+              height={300}
+              style={{ background: 'white' }}
+              aria-label="Ingen bilde tilgjengelig"
+            />
           )}
           {numberOfImages === 1 && (
             <>

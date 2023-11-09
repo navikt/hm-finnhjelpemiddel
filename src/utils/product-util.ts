@@ -91,7 +91,7 @@ export interface AgreementInfo {
   id: string
   identifier: string | null
   title: string
-  rank: number
+  rank: number | null
   postNr: number
   postIdentifier: string | null
   postTitle: string
@@ -133,7 +133,8 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   const variants = sources.map((source) => {
     if (
       source.agreementInfo &&
-      (applicableAgreementInfo === null || source.agreementInfo.rank < applicableAgreementInfo.rank)
+      (applicableAgreementInfo === null ||
+        (applicableAgreementInfo?.rank && source.agreementInfo.rank < applicableAgreementInfo.rank))
     ) {
       applicableAgreementInfo = mapAgreementInfo(source.agreementInfo)
     }
@@ -259,7 +260,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   postIdentifier: data.postIdentifier,
   postNr: data.postNr,
   postTitle: getPostTitle(data.postTitle, data.postNr),
-  rank: data.rank,
+  rank: data.rank === 99 ? null : data.rank,
 })
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {

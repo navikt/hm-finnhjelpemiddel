@@ -3,8 +3,6 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .agreement-page {
-  width: 100%;
-  height: 100%;
   overflow: hidden;
   background-color: #faefee;
 
@@ -13,20 +11,22 @@
     flex-direction: column;
     gap: $a-spacing-8;
     max-width: 850px;
-    margin: $a-spacing-8 auto;
+    margin-left: auto;
+    margin-right: auto;
     padding: 0 $a-spacing-1;
 
     @include mixins.for-size(tablet-up) {
       padding: 0 $a-spacing-2;
     }
     @include mixins.for-size(desktop-up) {
-      margin: $a-spacing-10 auto;
+      margin-top: $a-spacing-14;
       padding: 0;
     }
   }
 
   &__link-to-search {
-    margin: $a-spacing-5 0;
+    margin: $a-spacing-2 0;
+    align-self: flex-start;
   }
 
   article {

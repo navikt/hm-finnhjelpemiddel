@@ -145,7 +145,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
               <Table.Row>
                 <Table.HeaderCell>Rangering</Table.HeaderCell>
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>{variant.agreementInfo?.rank || '-'}</Table.DataCell>
+                  <Table.DataCell key={variant.id}>{variant.agreementInfo?.rank ?? '-'}</Table.DataCell>
                 ))}
               </Table.Row>
             )}

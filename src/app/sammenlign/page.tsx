@@ -48,7 +48,7 @@ export default function ComparePage() {
 
   if (isLoading) {
     return (
-      <div className="main-wrapper compare-page">
+      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
@@ -62,7 +62,7 @@ export default function ComparePage() {
 
   return (
     <AnimateLayout>
-      <div className="main-wrapper compare-page">
+      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
@@ -174,7 +174,7 @@ const CompareTable = ({
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
             {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank || '-'}</Table.DataCell>
+              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank ?? '-'}</Table.DataCell>
             ))}
           </Table.Row>
           <Table.Row>

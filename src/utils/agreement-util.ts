@@ -95,7 +95,9 @@ const mapAttachments = (attachments: AttachmentsResponse[]): Attachment[] => {
       documents: mapDocuments(attachments.media),
     }))
     .filter((attachments) => {
-      return attachments.title !== 'Hurtigoversikt ' && attachments.title !== 'Hurtigoversikt'
+      return (
+        attachments.title !== '' && attachments.title !== 'Hurtigoversikt ' && attachments.title !== 'Hurtigoversikt'
+      )
     })
     .sort((a, b) => sortAlphabetically(a.title, b.title))
 }
@@ -113,7 +115,7 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734']
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734', 'HMDB-8669']
 
 export const agreementKeyLabels: Record<string, string> = {
   'HMDB-8617': 'Manuelle rullestoler',
