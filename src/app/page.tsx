@@ -42,11 +42,8 @@ function Home() {
     const filteredData = data.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
     // Create a copy of data to avoid modifying it in place
     filteredData.sort((a, b) => {
-      const labelA = agreementKeyLabels[a.identifier]
-      const labelB = agreementKeyLabels[b.identifier]
-
-      if (labelA && labelB) {
-        return sortAlphabetically(labelA, labelB)
+      if (a.label && a.label) {
+        return sortAlphabetically(a.label, b.label)
       } else {
         // Handle cases where identifier does not exist in agreementKeyLabels
         return 0 // No change in order
