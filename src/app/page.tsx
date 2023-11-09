@@ -41,14 +41,7 @@ function Home() {
     if (!data) return []
     const filteredData = data.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
     // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => {
-      if (a.label && a.label) {
-        return sortAlphabetically(a.label, b.label)
-      } else {
-        // Handle cases where identifier does not exist in agreementKeyLabels
-        return 0 // No change in order
-      }
-    })
+    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
 
     return filteredData
   }, [data])
