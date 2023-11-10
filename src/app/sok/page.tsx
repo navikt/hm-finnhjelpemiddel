@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 
@@ -53,41 +53,44 @@ export default function Home() {
   const {
     data,
     size: page,
-    setSize: setPage,
+    setSize,
     isLoading,
   } = useSWRInfinite<FetchResponse>(
     (index, previousPageData?: FetchResponse) => {
       if (previousPageData && previousPageData.products.length === 0) return null
+      const sizeParam = Number(searchParams.get('size') || PAGE_SIZE)
+      let from = index * PAGE_SIZE
+      let size = PAGE_SIZE
+
+      if (index === 0 && sizeParam > PAGE_SIZE) {
+        //Special case where size is set at initial page load
+        from = 0
+        size = sizeParam
+      }
+
       return {
-        from: index * PAGE_SIZE,
-        size: PAGE_SIZE,
+        from,
+        size,
         searchData,
       }
     },
     fetchProducts,
     {
-      initialSize: Number(searchParams.get('page') || '1'),
       keepPreviousData: true,
-      revalidateFirstPage: false,
     }
   )
 
-  const loadMore = useMemo(() => {
-    const isEmpty = data?.[0]?.products.length === 0
-    const isReachingEnd = isEmpty || (data && data[data.length - 1]?.products.length < PAGE_SIZE)
-    if (isReachingEnd) {
-      return // no need to fetch another page
-    }
-    return () => setPage(page + 1)
-  }, [data, page, setPage])
-
-  useEffect(() => {
-    if (page <= 1) return
-    const newParams = new URLSearchParams(searchParams)
-    newParams.set('page', `${page}`)
-    const searchQueryString = newParams.toString()
-    router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-  }, [page, pathname, router, searchParams])
+  const setPage = useCallback(
+    (page: number) => {
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('page', `${page}`)
+      const searchQueryString = newParams.toString()
+      if (searchQueryString === searchParams.toString()) return
+      setSize(page)
+      router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
+    },
+    [pathname, router, setSize, searchParams]
+  )
 
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const searchResultRef = useRef<HTMLHeadingElement>(null)
@@ -96,6 +99,8 @@ export default function Home() {
     searchResultRef.current && searchResultRef.current.scrollIntoView()
   }
 
+  const totalNumberOfProducts = data?.at(-1)?.numberOfProducts
+
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1100)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
@@ -103,7 +108,7 @@ export default function Home() {
 
   const onReset = () => {
     formMethods.reset()
-    setPage(1)
+    setSize(1)
     router.replace(pathname)
   }
 
@@ -162,7 +167,7 @@ export default function Home() {
                 Nullstill søket
               </Button>
             </div>
-            <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
+            <Button onClick={() => setMobileOverlayOpen(false)}>Vis {totalNumberOfProducts} søkeresultater</Button>
           </MobileOverlay.Footer>
         </MobileOverlay>
       )}
@@ -221,6 +226,23 @@ export default function Home() {
                 </div>
               )}
 
+              {/* {searchData.searchTerm && (
+                <>
+                  <Heading level="2" size="small">
+                    Søkeord
+                  </Heading>
+                  <Chips className="results__chips">
+                    <Chips.Removable
+                      onClick={() => {
+                        formMethods.setValue('searchTerm', '') // Reset the search term
+                        searchFormRef.current?.requestSubmit()
+                      }}
+                    >
+                      {searchData.searchTerm}
+                    </Chips.Removable>
+                  </Chips>
+                </>
+              )} */}
               {filterValues.length > 0 && (
                 <>
                   <Heading level="2" size="small">
@@ -250,7 +272,13 @@ export default function Home() {
                   </Chips>
                 </>
               )}
-              <SearchResults data={data} loadMore={loadMore} isLoading={isLoading} searchResultRef={searchResultRef} />
+              <SearchResults
+                data={data}
+                page={page}
+                setPage={setPage}
+                isLoading={isLoading}
+                searchResultRef={searchResultRef}
+              />
             </section>
           </div>
         </div>

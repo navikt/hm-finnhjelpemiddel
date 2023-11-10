@@ -81,6 +81,7 @@ type FetchProps = {
 }
 
 export type FetchResponse = {
+  numberOfProducts: number
   products: Product[]
   filters: FilterData
 }
@@ -717,7 +718,10 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     }),
   })
     .then((res) => res.json())
-    .then((data) => ({ products: mapProductsFromCollapse(data), filters: mapFilters(data) }))
+    .then((data) => {
+      const products: Product[] = mapProductsFromCollapse(data)
+      return { numberOfProducts: data.hits.total.value, products, filters: mapFilters(data) }
+    })
 }
 
 const mapFilters = (data: any): FilterData => {

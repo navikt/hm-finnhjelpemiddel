@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
-import { FetchResponse, SearchData } from '@/utils/api-util'
+import { FetchResponse, PAGE_SIZE, SearchData } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
@@ -19,16 +19,18 @@ import { ChevronRightIcon } from '@navikt/aksel-icons'
 
 const SearchResults = ({
   data,
-  loadMore,
+  page,
+  setPage,
   isLoading,
   searchResultRef,
 }: {
-  loadMore?: () => void
+  page: number
+  setPage: (p: number) => void
   isLoading: boolean
   data?: Array<FetchResponse>
   searchResultRef: RefObject<HTMLHeadingElement>
 }) => {
-  const products = data?.map((d) => d.products).flat()
+  const products = data?.flatMap((d) => d.products)
 
   const [firstChecked, setFirstChecked] = useState<boolean>(true)
 
@@ -63,6 +65,11 @@ const SearchResults = ({
     )
   }
 
+  const isLoadingMore = !data || (page > 0 && typeof data[page - 1] === 'undefined')
+  const isLastPage =
+    (data?.at(-1)?.numberOfProducts || 0) - products.length === 0 ||
+    (!isLoadingMore && products.length < page * PAGE_SIZE)
+
   return (
     <>
       <header className="results__header">
@@ -85,8 +92,8 @@ const SearchResults = ({
           />
         ))}
       </ol>
-      {loadMore && (
-        <Button variant="secondary" onClick={loadMore} loading={isLoading}>
+      {!isLastPage && (
+        <Button variant="secondary" onClick={() => setPage(page + 1)} loading={isLoading}>
           Vis flere treff
         </Button>
       )}
