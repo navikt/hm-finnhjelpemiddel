@@ -65,7 +65,7 @@ export default function Home() {
       if (index === 0 && sizeParam > PAGE_SIZE) {
         //Special case where size is set at initial page load
         from = 0
-        size = sizeParam
+        size = sizeParam * PAGE_SIZE
       }
 
       return {
