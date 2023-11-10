@@ -33,9 +33,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       initAmplitude()
       logOversiktForsideVist()
-      if (env == 'production') {
-        hotjar.initialize(118350, 6)
-      }
+      // if (env == 'production') {
+      //   hotjar.initialize(118350, 6)
+      // }
     }
   }, [env])
 
