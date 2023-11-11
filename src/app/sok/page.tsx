@@ -79,16 +79,16 @@ export default function Home() {
     if (isReachingEnd) {
       return // no need to fetch another page
     }
-    return () => setPage(page + 1)
-  }, [data, page, setPage])
 
-  useEffect(() => {
-    if (page <= 1) return
-    const newParams = new URLSearchParams(searchParams)
-    newParams.set('page', `${page}`)
-    const searchQueryString = newParams.toString()
-    router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-  }, [page, pathname, router, searchParams])
+    return () => {
+      const nextPage = page + 1
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('page', `${nextPage}`)
+      const searchQueryString = newParams.toString()
+      router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
+      setPage(nextPage)
+    }
+  }, [data, page, setPage, pathname, router, searchParams])
 
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const searchResultRef = useRef<HTMLHeadingElement>(null)
