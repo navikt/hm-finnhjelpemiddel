@@ -4,7 +4,6 @@ import { useFormContext } from 'react-hook-form'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Next } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
 import { FetchResponse, SearchData } from '@/utils/api-util'
@@ -16,6 +15,7 @@ import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import AgreementIcon from '@/components/AgreementIcon'
 import DefinitionList from '@/components/definition-list/DefinitionList'
+import { ChevronRightIcon } from '@navikt/aksel-icons'
 
 const SearchResults = ({
   data,
@@ -155,7 +155,7 @@ const SearchResult = ({
               <div className="search-result__post-container">
                 <AgreementIcon rank={product.applicableAgreementInfo?.rank} />
                 <BodyShort>
-                  {'Dk ' +
+                  {'Delkontrakt ' +
                     product.applicableAgreementInfo?.postNr +
                     ': ' +
                     product.applicableAgreementInfo?.postTitle ?? product.attributes?.text}
@@ -182,7 +182,7 @@ const SearchResult = ({
           </div>
         </div>
         <div className="search-result__chevron-container">
-          <Next className="search-result__chevron" aria-hidden />
+          <ChevronRightIcon className="search-result__chevron" aria-hidden />
         </div>
       </div>
     </li>

@@ -17,7 +17,7 @@ const KeyInformation = ({ product, supplierName, agreementTitle }: KeyInformatio
     <DefinitionList>
       {product.applicableAgreementInfo && <DefinitionList.Term>Rangering</DefinitionList.Term>}
       {product.applicableAgreementInfo && (
-        <DefinitionList.Definition>{product.applicableAgreementInfo?.rank}</DefinitionList.Definition>
+        <DefinitionList.Definition>{product.applicableAgreementInfo?.rank ?? 'Urangert'}</DefinitionList.Definition>
       )}
       {product.applicableAgreementInfo && <DefinitionList.Term>Delkontrakt</DefinitionList.Term>}
       {product.applicableAgreementInfo && (

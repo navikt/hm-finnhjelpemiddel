@@ -13,6 +13,7 @@ import { mapSupplier } from '@/utils/supplier-util'
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
 import ProductPage from './ProductPage'
 import './product-page.scss'
+import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
@@ -27,11 +28,9 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   const productsOnPost = product.applicableAgreementInfo?.postIdentifier
     ? mapProductsFromCollapse(await getProductsInPost(product.applicableAgreementInfo?.postIdentifier))
         .filter((postProduct) => postProduct.id !== product.id)
-        .sort((productA, productB) =>
-          productA.applicableAgreementInfo && productB.applicableAgreementInfo
-            ? productA.applicableAgreementInfo?.rank - productB.applicableAgreementInfo?.rank
-            : -1
-        )
+        .sort((productA, productB) => {
+          return sortWithNullValuesAtEnd(productA.applicableAgreementInfo?.rank, productB.applicableAgreementInfo?.rank)
+        })
     : null
 
   // const isAccessoryOrSparePart = false
@@ -49,7 +48,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   const spareParts: Product[] = []
 
   return (
-    <>
+    <div className="main-wrapper">
       {isAccessoryOrSparePart ? (
         <AccessoryOrSparePartPage
           product={product}
@@ -67,6 +66,6 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
           spareParts={spareParts}
         />
       )}
-    </>
+    </div>
   )
 }

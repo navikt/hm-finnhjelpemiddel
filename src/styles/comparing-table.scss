@@ -7,7 +7,7 @@
 }
 
 .comparing-table {
-  max-width: 1152px;
+  max-width: 1280px;
   overflow-x: scroll;
   margin: $a-spacing-4 0;
 
@@ -62,6 +62,10 @@
   .navds-table__header-cell,
   .navds-table__data-cell {
     padding: $a-spacing-3 $a-spacing-3;
+  }
+
+  .navds-table__data-cell {
+    max-width: 11.5rem;
   }
 
   &__sortable-row {

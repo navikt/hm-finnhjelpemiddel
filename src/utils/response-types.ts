@@ -137,8 +137,8 @@ export interface SupplierInfoResponse {
 }
 
 enum Status {
-  Active,
-  Inactive,
+  ACTIVE,
+  INACTIVE,
 }
 
 enum MediaSourceType {

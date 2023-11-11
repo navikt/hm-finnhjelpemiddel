@@ -21,10 +21,14 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
   const headersList = headers()
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
+  const agreementRankText = product.applicableAgreementInfo?.rank
+    ? `Rangert som nr ${product.applicableAgreementInfo?.rank} på avtale med Nav.`
+    : 'Er på avtale med NAV uten rangering.'
+
   return (
     <>
       <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
-        <div className="product-info__top-content max-width">
+        <div className="product-info__top-content">
           <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
           <div className="product-info__top-right">
             <Heading level="1" size="large" spacing>
@@ -41,7 +45,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
             {product.applicableAgreementInfo && (
               <div className="product-info__agreement-rank">
                 <AgreementIcon rank={product.applicableAgreementInfo.rank} />
-                <BodyShort>Rangert som nr {product.applicableAgreementInfo.rank} på avtale med Nav</BodyShort>
+                <BodyShort>{agreementRankText}</BodyShort>
               </div>
             )}
 
@@ -53,7 +57,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
           </div>
         </div>
       </section>
-      <section className="product-info__tabs max-width" aria-label="Produktbeskrivelse og medfølgende dokumenter">
+      <section className="product-info__tabs" aria-label="Produktbeskrivelse og medfølgende dokumenter">
         {isMobileDevice ? (
           <InformationAccordion product={product} supplier={supplier} />
         ) : (

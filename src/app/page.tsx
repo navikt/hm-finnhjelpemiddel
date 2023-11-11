@@ -8,13 +8,14 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { BodyShort, Heading, Ingress, Search } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, Search } from '@navikt/ds-react'
 
 import { AgreementLabel, agreementHasNoProducts, agreementKeyLabels } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import { sortAlphabetically } from '@/utils/sort-util'
 
 function Home() {
   const router = useRouter()
@@ -40,19 +41,7 @@ function Home() {
     if (!data) return []
     const filteredData = data.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
     // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => {
-      const labelA = agreementKeyLabels[a.identifier]
-      const labelB = agreementKeyLabels[b.identifier]
-
-      if (labelA && labelB) {
-        const orderA = Object.keys(agreementKeyLabels).indexOf(a.identifier)
-        const orderB = Object.keys(agreementKeyLabels).indexOf(b.identifier)
-        return orderA - orderB
-      } else {
-        // Handle cases where identifier does not exist in agreementKeyLabels
-        return 0 // No change in order
-      }
-    })
+    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
 
     return filteredData
   }, [data])
@@ -102,15 +91,15 @@ function Home() {
               <Heading level="2" size="medium" ref={agreementHeadingRef}>
                 Hjelpemidler på avtale med NAV
               </Heading>
-              <Ingress>
+              <BodyLong size="large">
                 NAV inngår avtaler med leverandører om kjøp av hjelpemidler. Hver avtale gjelder for en begrenset
                 tidsperiode.
-              </Ingress>
+              </BodyLong>
               <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
 
             <div className="home-page__agreement-links-container">
-              <div className="home-page__agreement-links spacing-bottom--medium">
+              <div className="home-page__agreement-links">
                 {first15Agreements?.map(({ id, label }) => {
                   return agreementLink(id, label)
                 })}

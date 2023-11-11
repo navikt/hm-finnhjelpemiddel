@@ -3,7 +3,6 @@ import { Product } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import { BackButton } from '@/components/BackButton'
 import { Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -25,12 +24,11 @@ type ProductProps = {
 const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories, spareParts }: ProductProps) => {
   return (
     <>
-      <BackButton />
       <AnimateLayout>
-        <article className="product-info">
+        <article className="product-info spacing-top--large">
           <ProductPageTopInfo product={product} agreement={agreement} supplier={supplier} />
           <section
-            className="product-info__characteristics max-width"
+            className="product-info__characteristics"
             aria-label="Produktegenskaper som alle produktvariantene har til felles"
           >
             <Heading level="2" size="medium" spacing>
@@ -40,7 +38,7 @@ const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories
           </section>
           {product.variantCount > 1 && (
             <section
-              className="product-info__product-variants max-width"
+              className="product-info__product-variants"
               aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
             >
               <ProductVariants product={product} />
