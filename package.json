@@ -29,7 +29,7 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/amplitude-js": "^8.16.2",
     "@types/deep-equal": "^1.0.1",
     "@types/node": "20.8.7",
