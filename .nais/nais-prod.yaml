@@ -10,7 +10,7 @@ spec:
   image: {{image}}
   port: 3000
   ingresses:
-    - 'https://finnhjelpemidler.nav.no'
+    - 'https://finnhjelpemiddel.nav.no'
   accessPolicy:
     outbound:
       rules:
