@@ -23,7 +23,7 @@ jobs:
       packages: 'write'
     env:
       BUILD_ENV: dev
-      IMAGE_PROXY_URL: https://finnhjelpemidler.intern.dev.nav.no/imageproxy
+      IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
       CDN_URL: https://cdn.dev.nav.no/teamdigihot/grunndata/media/v1/
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
       packages: 'write'
     env:
       BUILD_ENV: prod
-      IMAGE_PROXY_URL: https://finnhjelpemidler.nav.no/imageproxy
+      IMAGE_PROXY_URL: https://finnhjelpemiddel.nav.no/imageproxy
       CDN_URL: https://cdn.nav.no/teamdigihot/grunndata/media/v1/
       ASSET_PREFIX: https://cdn.nav.no/teamdigihot/hm-oversikt-frontend/prod
     steps:

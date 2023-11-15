@@ -31,7 +31,7 @@ function AboutUs() {
               </BodyLong>
             </Alert>
             <BodyLong spacing>
-              Finnhjelpemidler er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og reservedeler både
+              FinnHjelpemiddel er en tjeneste levert av NAV. Her kan du finne produkter, tilbehør og reservedeler både
               på og utenfor avtale. Det vil si at det også finnes hjelpemidler i denne oversikten som NAV ikke låner ut.
               Denne nettsiden skal erstatte{' '}
               <Link href="https://www.hjelpemiddeldatabasen.no">hjelpemiddeldatabasen.no.</Link>
