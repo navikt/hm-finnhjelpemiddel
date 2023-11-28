@@ -66,7 +66,7 @@ const ProductCard = ({ product, removeProduct, showRank }: ProductCardProps) => 
           </div>
         </div>
         <div className="info">
-          <Heading size="xsmall" className="text-line-clamp">
+          <Heading level="3" size="xsmall" className="text-line-clamp">
             {product.title}
           </Heading>
         </div>

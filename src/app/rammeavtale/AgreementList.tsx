@@ -31,7 +31,7 @@ const AgreementList = () => {
 
   return (
     <>
-      <Heading level="1" size="medium">
+      <Heading level="2" size="medium">
         Aktive avtaler
       </Heading>
       {/* TODO <Combobox></Combobox> */}
