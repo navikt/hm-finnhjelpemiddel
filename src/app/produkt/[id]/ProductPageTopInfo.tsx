@@ -30,7 +30,7 @@ const ProductPageTopInfo = ({product, supplier, agreement}: ProductPageTopInfoPr
     <>
       <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
         <div className="product-info__top-content">
-          <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos}/>}</div>
+          <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
           <div className="product-info__top-right">
             <Heading level="1" size="large" spacing>
               {product.title}
@@ -45,7 +45,7 @@ const ProductPageTopInfo = ({product, supplier, agreement}: ProductPageTopInfoPr
             )}
             {product.applicableAgreementInfo && (
               <div className="product-info__agreement-rank">
-                <AgreementIcon rank={product.applicableAgreementInfo.rank}/>
+                <AgreementIcon rank={product.applicableAgreementInfo.rank} />
                 <BodyShort>{agreementRankText}</BodyShort>
               </div>
             )}
@@ -55,15 +55,15 @@ const ProductPageTopInfo = ({product, supplier, agreement}: ProductPageTopInfoPr
               supplierName={supplier ? supplier.name : null}
               agreementTitle={agreement ? agreement.title : null}
             />
-            <QrCodeComponent value={product.id}/>
+            <QrCodeComponent value={product.id} />
           </div>
         </div>
       </section>
       <section className="product-info__tabs" aria-label="Produktbeskrivelse og medfølgende dokumenter">
         {isMobileDevice ? (
-          <InformationAccordion product={product} supplier={supplier}/>
+          <InformationAccordion product={product} supplier={supplier} />
         ) : (
-          <InformationTabs product={product} supplier={supplier}/>
+          <InformationTabs product={product} supplier={supplier} />
         )}
       </section>
     </>

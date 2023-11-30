@@ -27,7 +27,7 @@ export const QrCodeComponent = ({value}: { value: string }) => {
       <QrCodeLink href={qrUrl} download={value + "-qr.png"}>
         Last ned QR-kode
         <div className="product-info__QrCodeHidden">
-          <QRCodeCanvas includeMargin={true} value={valueToUrl(value)} id="qr-canvas"/>
+          <QRCodeCanvas includeMargin={true} value={valueToUrl(value)} id="qr-canvas" />
         </div>
       </QrCodeLink>
     </>
