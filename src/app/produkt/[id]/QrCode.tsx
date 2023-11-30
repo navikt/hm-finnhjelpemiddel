@@ -2,7 +2,6 @@
 
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 
 export const QrCodeComponent = ({value}: { value: string }) => {
 
@@ -24,19 +23,13 @@ export const QrCodeComponent = ({value}: { value: string }) => {
 
   return (
     <>
-      <QrCodeLink href={qrUrl} download={value + "-qr.png"}>
+      <a className="product-info__qr-code-link" href={qrUrl} download={value + "-qr.png"}>
         Last ned QR-kode
-        <div className="product-info__QrCodeHidden">
+        <div className="product-info__qr-code-hidden">
           <QRCodeCanvas includeMargin={true} value={valueToUrl(value)} id="qr-canvas" />
         </div>
-      </QrCodeLink>
+      </a>
     </>
   )
 }
 
-
-const QrCodeLink = styled.a`
-  display: flex;
-  width: fit-content;
-  margin-top: 1rem;
-`

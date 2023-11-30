@@ -101,8 +101,14 @@
     }
   }
 
-  &__QrCodeHidden {
+  &__qr-code-hidden {
     display: none;
+  }
+
+  &__qr-code-link {
+    display: flex;
+    width: fit-content;
+    margin-top: 1rem;
   }
 }
 
