@@ -18,7 +18,7 @@ type ProductPageTopInfoProps = {
   agreement: Agreement | null
 }
 
-const ProductPageTopInfo = ({product, supplier, agreement}: ProductPageTopInfoProps) => {
+const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfoProps) => {
   const headersList = headers()
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
