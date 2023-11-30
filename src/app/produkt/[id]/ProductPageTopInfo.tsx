@@ -1,15 +1,16 @@
-import { headers } from 'next/dist/client/components/headers'
+import {headers} from 'next/dist/client/components/headers'
 
-import { Agreement } from '@/utils/agreement-util'
-import { Product } from '@/utils/product-util'
-import { Supplier } from '@/utils/supplier-util'
+import {Agreement} from '@/utils/agreement-util'
+import {Product} from '@/utils/product-util'
+import {Supplier} from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import { Alert, BodyShort, Heading } from '@/components/aksel-client'
+import {Alert, BodyShort, Heading} from '@/components/aksel-client'
 
-import InformationTabs, { InformationAccordion } from './InformationTabs'
+import InformationTabs, {InformationAccordion} from './InformationTabs'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
+import {QrCodeComponent} from "@/app/produkt/[id]/QrCode";
 
 type ProductPageTopInfoProps = {
   product: Product
@@ -17,7 +18,7 @@ type ProductPageTopInfoProps = {
   agreement: Agreement | null
 }
 
-const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfoProps) => {
+const ProductPageTopInfo = ({product, supplier, agreement}: ProductPageTopInfoProps) => {
   const headersList = headers()
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
@@ -29,7 +30,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
     <>
       <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
         <div className="product-info__top-content">
-          <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
+          <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos}/>}</div>
           <div className="product-info__top-right">
             <Heading level="1" size="large" spacing>
               {product.title}
@@ -44,7 +45,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
             )}
             {product.applicableAgreementInfo && (
               <div className="product-info__agreement-rank">
-                <AgreementIcon rank={product.applicableAgreementInfo.rank} />
+                <AgreementIcon rank={product.applicableAgreementInfo.rank}/>
                 <BodyShort>{agreementRankText}</BodyShort>
               </div>
             )}
@@ -54,14 +55,15 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
               supplierName={supplier ? supplier.name : null}
               agreementTitle={agreement ? agreement.title : null}
             />
+            <QrCodeComponent value={product.id}/>
           </div>
         </div>
       </section>
       <section className="product-info__tabs" aria-label="Produktbeskrivelse og medfølgende dokumenter">
         {isMobileDevice ? (
-          <InformationAccordion product={product} supplier={supplier} />
+          <InformationAccordion product={product} supplier={supplier}/>
         ) : (
-          <InformationTabs product={product} supplier={supplier} />
+          <InformationTabs product={product} supplier={supplier}/>
         )}
       </section>
     </>
