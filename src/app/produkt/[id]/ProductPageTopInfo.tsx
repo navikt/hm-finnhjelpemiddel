@@ -1,16 +1,16 @@
-import {headers} from 'next/dist/client/components/headers'
+import { headers } from 'next/dist/client/components/headers'
 
-import {Agreement} from '@/utils/agreement-util'
-import {Product} from '@/utils/product-util'
-import {Supplier} from '@/utils/supplier-util'
+import { Agreement } from '@/utils/agreement-util'
+import { Product } from '@/utils/product-util'
+import { Supplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
-import {Alert, BodyShort, Heading} from '@/components/aksel-client'
+import { Alert, BodyShort, Heading } from '@/components/aksel-client'
 
-import InformationTabs, {InformationAccordion} from './InformationTabs'
+import InformationTabs, { InformationAccordion } from './InformationTabs'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
-import {QrCodeComponent} from "@/app/produkt/[id]/QrCode";
+import { QrCodeComponent } from "@/app/produkt/[id]/QrCode";
 
 type ProductPageTopInfoProps = {
   product: Product

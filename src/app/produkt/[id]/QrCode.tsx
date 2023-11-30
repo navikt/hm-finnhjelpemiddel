@@ -1,7 +1,7 @@
 "use client"
 
-import {QRCodeCanvas} from "qrcode.react";
-import {useEffect, useState} from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 export const QrCodeComponent = ({value}: { value: string }) => {
