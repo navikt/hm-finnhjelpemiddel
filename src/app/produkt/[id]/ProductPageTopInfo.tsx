@@ -10,6 +10,7 @@ import { Alert, BodyShort, Heading } from '@/components/aksel-client'
 import InformationTabs, { InformationAccordion } from './InformationTabs'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
+import { QrCodeComponent } from "@/app/produkt/[id]/QrCode";
 
 type ProductPageTopInfoProps = {
   product: Product
@@ -54,6 +55,7 @@ const ProductPageTopInfo = ({ product, supplier, agreement }: ProductPageTopInfo
               supplierName={supplier ? supplier.name : null}
               agreementTitle={agreement ? agreement.title : null}
             />
+            <QrCodeComponent value={product.id} />
           </div>
         </div>
       </section>
