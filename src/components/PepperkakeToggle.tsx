@@ -8,7 +8,8 @@ const PepperkakeToggle = () => {
   const [snowfallEnabled, setSnowfallEnabled] = React.useState(false);
 
   return (
-    <NakedButton snowing={snowfallEnabled} onClick={() => setSnowfallEnabled(!snowfallEnabled)}>
+    <NakedButton aria-pressed={snowfallEnabled} aria-label="La det snø!" snowing={snowfallEnabled}
+                 onClick={() => setSnowfallEnabled(!snowfallEnabled)}>
       <Image src="/pepperkake.svg" width="65" height="41" alt="" aria-hidden={true} />
 
       {snowfallEnabled && (
@@ -31,6 +32,7 @@ const NakedButton = styled.button<{ snowing?: boolean; }>`
   height: 72px;
   border: none;
   border-bottom: ${props => props.snowing ? "1px solid rgba(256, 23, 51, 1);" : "4px solid rgba(256, 23, 51, 0);"};
+
   &:focus {
     outline: none;
   }
