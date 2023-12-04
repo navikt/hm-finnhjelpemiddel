@@ -18,6 +18,7 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
+import PepperkakeToggle from "@/components/PepperkakeToggle";
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -40,6 +41,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   }, [env])
 
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
+
     <ul className="page-links">
       <li className="logo-and-menu-button">
         <NextLink href="/" className="page-link">
@@ -78,6 +80,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             >
               <BodyShort size="medium">Rammeavtaler</BodyShort>
             </NextLink>
+          </li>
+          <li>
+            <PepperkakeToggle />
           </li>
         </>
       )}
