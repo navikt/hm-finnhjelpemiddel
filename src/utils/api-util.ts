@@ -85,6 +85,13 @@ export type FetchResponse = {
   filters: FilterData
 }
 
+// Because of queryString in opensearch query: https://opensearch.org/docs/latest/query-dsl/full-text/query-string/#reserved-characters
+const removeReservedChars = (searchTerm: String) => {
+  const unescapables = /([<>\\])/g
+  const queryStringReserved = /(\+|-|=|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\/)/g
+  return searchTerm.replaceAll(unescapables, "").replaceAll(queryStringReserved, "\\$&")
+}
+
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
 
@@ -183,6 +190,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
   }
 
+  const queryStringSearchTerm = removeReservedChars(searchTerm)
+  
   const searchTermQuery = {
     must: {
       bool: {
@@ -211,7 +220,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
             boosting: {
               positive: {
                 query_string: {
-                  query: `*${searchTerm}`,
+                  query: `*${queryStringSearchTerm}`,
                   boost: '0.1',
                 },
               },
@@ -222,7 +231,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
             boosting: {
               positive: {
                 query_string: {
-                  query: `${searchTerm}*`,
+                  query: `${queryStringSearchTerm}*`,
                   boost: '0.1',
                 },
               },
