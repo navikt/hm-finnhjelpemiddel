@@ -1,15 +1,19 @@
 import Image from "next/image";
-import React from "react";
+import React, { createContext, useContext } from "react";
 import Snowfall from "react-snowfall";
 import styled from "styled-components";
 
-const PepperkakeToggle = () => {
+interface props {
+  onClick: () => void;
+}
 
-  const [snowfallEnabled, setSnowfallEnabled] = React.useState(false);
+const PepperkakeToggle = (props: props) => {
+
+  const snowfallEnabled = useContext(SnowfallContext);
 
   return (
-    <NakedButton aria-pressed={snowfallEnabled} aria-label="La det snø!" snowing={snowfallEnabled}
-                 onClick={() => setSnowfallEnabled(!snowfallEnabled)}>
+    <NakedButton aria-pressed={snowfallEnabled} aria-label="La det snø!" $snowing={snowfallEnabled}
+                 onClick={props.onClick}>
       <Image src="/pepperkake.svg" width="65" height="41" alt="" aria-hidden={true} />
 
       {snowfallEnabled && (
@@ -22,7 +26,7 @@ const PepperkakeToggle = () => {
 
 export default PepperkakeToggle
 
-const NakedButton = styled.button<{ snowing?: boolean; }>`
+const NakedButton = styled.button<{ $snowing?: boolean; }>`
 
   text-decoration: none;
   outline: none;
@@ -31,7 +35,7 @@ const NakedButton = styled.button<{ snowing?: boolean; }>`
   padding: 0.5rem 0.5rem;
   height: 72px;
   border: none;
-  border-bottom: ${props => props.snowing ? "1px solid rgba(256, 23, 51, 1);" : "4px solid rgba(256, 23, 51, 0);"};
+  border-bottom: ${props => props.$snowing ? "1px solid rgba(256, 23, 51, 1);" : "4px solid rgba(256, 23, 51, 0);"};
 
   &:focus {
     outline: none;
@@ -46,3 +50,5 @@ const NakedButton = styled.button<{ snowing?: boolean; }>`
     border-bottom: 1px solid rgba(256, 23, 51, 0.34);
   }
 `
+
+export const SnowfallContext = createContext(false);

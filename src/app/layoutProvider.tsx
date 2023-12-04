@@ -18,7 +18,7 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import PepperkakeToggle from "@/components/PepperkakeToggle";
+import PepperkakeToggle, { SnowfallContext } from "@/components/PepperkakeToggle";
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -39,6 +39,8 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       }
     }
   }, [env])
+
+  const [snowfallEnabled, setSnowfallEnabled] = useState(false);
 
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
 
@@ -82,7 +84,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             </NextLink>
           </li>
           <li>
-            <PepperkakeToggle />
+            <PepperkakeToggle onClick={() => {
+              setSnowfallEnabled(!snowfallEnabled)
+            }} />
           </li>
         </>
       )}
@@ -91,32 +95,35 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div id="modal-container"></div>
-      <aside className="wip-banner">
-        <div>
-          <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
-          <BodyLong>
-            <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
-            Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du leter
-            etter anbefaler vi å bruke {''}
-            <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
-          </BodyLong>
-        </div>
-      </aside>
-      <header>
-        <nav className="nav-topp">
-          <div className="nav-topp__content">
-            <NavigationBar menuOpen={true} />
+      <SnowfallContext.Provider value={snowfallEnabled}>
+        <div id="modal-container"></div>
+        <aside className="wip-banner">
+          <div>
+            <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
+            <BodyLong>
+              <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
+              Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du
+              leter
+              etter anbefaler vi å bruke {''}
+              <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
+            </BodyLong>
           </div>
-          <div className={classNames('nav-topp__burgermenu-content', { open: menuOpen })}>
-            <NavigationBar menuOpen={menuOpen} />
-          </div>
-        </nav>
-      </header>
-      <main>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </main>
-      <Footer />
+        </aside>
+        <header>
+          <nav className="nav-topp">
+            <div className="nav-topp__content">
+              <NavigationBar menuOpen={true} />
+            </div>
+            <div className={classNames('nav-topp__burgermenu-content', { open: menuOpen })}>
+              <NavigationBar menuOpen={menuOpen} />
+            </div>
+          </nav>
+        </header>
+        <main>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </main>
+        <Footer />
+      </SnowfallContext.Provider>
     </>
   )
 }
