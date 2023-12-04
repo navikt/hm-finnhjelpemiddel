@@ -25,6 +25,8 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const env = process.env.NODE_ENV
 
+  const [snowfallEnabled, setSnowfallEnabled] = useState(false);
+
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
   }, [pathname])
@@ -40,7 +42,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     }
   }, [env])
 
-  const [snowfallEnabled, setSnowfallEnabled] = useState(false);
+
 
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
 
