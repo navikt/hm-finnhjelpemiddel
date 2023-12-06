@@ -1,0 +1,3 @@
+unleash:
+  environment: production
+  url: https://tiltakspenger-unleash-api.nav.cloud.nais.io/api

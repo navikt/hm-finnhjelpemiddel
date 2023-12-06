@@ -28,7 +28,8 @@
     "react-snowfall": "^1.2.1",
     "styled-components": "^6.1.0",
     "swr": "^2.2.2",
-    "zustand": "^4.4.1"
+    "zustand": "^4.4.1",
+    "@unleash/nextjs": "^1.1.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
