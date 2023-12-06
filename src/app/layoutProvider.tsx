@@ -18,18 +18,24 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import PepperkakeToggle, { SnowfallContext } from "@/components/PepperkakeToggle";
+import PepperkakeToggle, { SnowfallContext } from '@/components/PepperkakeToggle'
+import { featureIsEnabled } from '@/utils/featureToggling'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const env = process.env.NODE_ENV
+  const [ftJuledekorasjon, setFtJuledekorasjon] = useState(false)
 
-  const [snowfallEnabled, setSnowfallEnabled] = useState(false);
+  const [snowfallEnabled, setSnowfallEnabled] = useState(false)
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
   }, [pathname])
+
+  useEffect(() => {
+    featureIsEnabled('juledekorasjon').then((r) => setFtJuledekorasjon(r))
+  }, [])
 
   useEffect(() => {
     // if browser initialize amplitude
@@ -42,10 +48,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     }
   }, [env])
 
-
-
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
-
     <ul className="page-links">
       <li className="logo-and-menu-button">
         <NextLink href="/" className="page-link">
@@ -85,11 +88,15 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
               <BodyShort size="medium">Rammeavtaler</BodyShort>
             </NextLink>
           </li>
-          <li>
-            <PepperkakeToggle onClick={() => {
-              setSnowfallEnabled(!snowfallEnabled)
-            }} />
-          </li>
+          {ftJuledekorasjon && (
+            <li>
+              <PepperkakeToggle
+                onClick={() => {
+                  setSnowfallEnabled(!snowfallEnabled)
+                }}
+              />
+            </li>
+          )}
         </>
       )}
     </ul>
@@ -105,8 +112,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             <BodyLong>
               <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
               Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du
-              leter
-              etter anbefaler vi å bruke {''}
+              leter etter anbefaler vi å bruke {''}
               <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
             </BodyLong>
           </div>
