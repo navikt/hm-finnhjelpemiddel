@@ -1,6 +1,5 @@
 import { IToggle } from '@unleash/nextjs'
 import { ReactElement, createContext, PropsWithChildren, useContext, useEffect } from 'react'
-import { logger } from '@navikt/next-logger'
 
 import { ExpectedToggles } from './toggles'
 
@@ -9,7 +8,8 @@ const FlagContext = createContext<{ toggles: IToggle[] }>({ toggles: [] })
 export function FlagProvider({ toggles, children }: PropsWithChildren<{ toggles: IToggle[] }>): ReactElement {
     useEffect(() => {
         if (toggles == null) {
-            logger.error("Toggles are not SSR'd, falling back to default toggles.")
+          // todo: sett opp auth-token for å hente navikt packages (navikt/next-logger)
+           // logger.error("Toggles are not SSR'd, falling back to default toggles.")
         }
     }, [toggles])
 

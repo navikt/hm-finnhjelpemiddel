@@ -1,5 +1,5 @@
 import { IToggle, getDefinitions, evaluateFlags } from '@unleash/nextjs'
-import { logger } from '@navikt/next-logger'
+
 import * as R from 'remeda'
 import { cookies } from 'next/headers'
 
@@ -9,7 +9,8 @@ import { EXPECTED_TOGGLES } from './toggles'
 const env = process.env.NODE_ENV
 export async function getToggles(): Promise<{ toggles: IToggle[] }> {
     if (env !== 'production') {
-        logger.warn('Running in local or demo mode, falling back to development toggles.')
+       // todo: sette opp auth for å hente navikt packages (navikt/next-logger)
+       // logger.warn('Running in local or demo mode, falling back to development toggles.')
         return { toggles: localDevelopmentToggles() }
     }
 
@@ -21,7 +22,7 @@ export async function getToggles(): Promise<{ toggles: IToggle[] }> {
             environment: getUnleashEnvironment(),
         })
     } catch (e) {
-        logger.error(new Error('Failed to get flags from Unleash. Falling back to default flags.', { cause: e }))
+        //logger.error(new Error('Failed to get flags from Unleash. Falling back to default flags.', { cause: e }))
         return {
             toggles: EXPECTED_TOGGLES.map(
                 (it): IToggle => ({
@@ -52,16 +53,16 @@ async function getAndValidateDefinitions(): Promise<ReturnType<typeof getDefinit
     )
 
     if (diff.length > 0) {
-        logger.error(
-            `Difference in expected flags and flags in unleash, expected but not in unleash: ${diff.join(', ')}`,
-        )
+        // logger.error(
+        //     `Difference in expected flags and flags in unleash, expected but not in unleash: ${diff.join(', ')}`,
+        // )
     }
 
-    logger.info(
-        `Fetched ${definitions.features.length} flags from unleash: ${definitions.features
-            .map((it) => it.name)
-            .join('\n')}\n`,
-    )
+    // logger.info(
+    //     `Fetched ${definitions.features.length} flags from unleash: ${definitions.features
+    //         .map((it) => it.name)
+    //         .join('\n')}\n`,
+    // )
 
     return definitions
 }
@@ -73,7 +74,7 @@ export function getUnleashSessionId(): string {
     if (existingUnleashId != null) {
         return existingUnleashId.value
     } else {
-        logger.warn('No existing unleash session id found, is middleware not configured?')
+       // logger.warn('No existing unleash session id found, is middleware not configured?')
         return '0'
     }
 }
