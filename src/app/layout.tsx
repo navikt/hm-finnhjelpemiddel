@@ -3,6 +3,8 @@ import LayoutProvider from '@/app/layoutProvider'
 import { Metadata } from 'next'
 
 import '@/styles/globals.scss'
+import { getToggles } from '@/toggles/rsc'
+import Providers from '@/app/_providers'
 
 export const metadata: Metadata = {
   title: 'FinnHjelpemiddel',
@@ -10,11 +12,15 @@ export const metadata: Metadata = {
   icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
 }
 
-function RootLayout({ children }: { children: React.ReactNode }) {
+async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [toggles] = await Promise.all([getToggles()])
+
   return (
     <html lang="no">
       <body>
-        <LayoutProvider>{children}</LayoutProvider>
+        <Providers toggles={toggles.toggles}>
+          <LayoutProvider>{children}</LayoutProvider>
+        </Providers>
       </body>
     </html>
   )

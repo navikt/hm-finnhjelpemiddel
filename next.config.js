@@ -35,6 +35,7 @@ const nextConfig = {
     //To add environment variables to the JavaScript bundle (client side) add the env config.
     IMAGE_PROXY_URL: process.env.IMAGE_PROXY_URL,
     CDN_URL: process.env.CDN_URL,
+    RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
   },
 }
 

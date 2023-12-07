@@ -18,24 +18,19 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import PepperkakeToggle, { SnowfallContext } from '@/components/PepperkakeToggle'
-import { featureIsEnabled } from '@/utils/featureToggling'
+import PepperkakeDekorasjon, { SnowfallContext } from '@/components/PepperkakeDekorasjon'
+import { useToggle } from '@/toggles/context'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const env = process.env.NODE_ENV
-  const [ftJuledekorasjon, setFtJuledekorasjon] = useState(false)
 
   const [snowfallEnabled, setSnowfallEnabled] = useState(false)
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
   }, [pathname])
-
-  useEffect(() => {
-    featureIsEnabled('juledekorasjon').then((r) => setFtJuledekorasjon(r))
-  }, [])
 
   useEffect(() => {
     // if browser initialize amplitude
@@ -47,6 +42,8 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       }
     }
   }, [env])
+
+  const juledekorasjonToggle = useToggle('juledekorasjon')
 
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
     <ul className="page-links">
@@ -88,9 +85,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
               <BodyShort size="medium">Rammeavtaler</BodyShort>
             </NextLink>
           </li>
-          {ftJuledekorasjon && (
+          {juledekorasjonToggle.enabled && (
             <li>
-              <PepperkakeToggle
+              <PepperkakeDekorasjon
                 onClick={() => {
                   setSnowfallEnabled(!snowfallEnabled)
                 }}
