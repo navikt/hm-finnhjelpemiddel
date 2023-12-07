@@ -17,8 +17,11 @@ spec:
         - application: hm-grunndata-search
       external:
         - host: teamdigihot-unleash-api.nav.cloud.nais.io
+  envFrom:
+    - secret: hm-oversikt-frontend-unleash-secrets
   env:
     - name: RUNTIME_ENVIRONMENT
       value: dev
-  envFrom:
-    - secret: hm-oversikt-frontend-unleash-secrets
+    - name: UNLEASH_SERVER_API_URL
+      value: 'https://teamdigihot-unleash-api.nav.cloud.nais.io/api'
+
