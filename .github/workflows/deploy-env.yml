@@ -65,6 +65,8 @@ jobs:
         with:
           node-version: 18.x
       - name: Install npm dependencies
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: npm install
       - name: Build application
         run: npm run build
