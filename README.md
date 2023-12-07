@@ -1,8 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# hm-finnhjelpemiddel
 
-## Getting Started
+Frontend for søk og visning av hjelpemidler
 
-First, run the development server:
+Lever under:
+
+-   prod-gcp: https://finnhjelpemiddel.nav.no/
+-   dev-gcp: https://finnhjelpemiddel.intern.dev.nav.no/
+
+Bygget på [nextjs](https://nextjs.org/).
+
+## lokal utvikling
+
+### Tilgang til Github Package Registry
+
+Siden vi bruker avhengigheter som ligger i GPR,
+så må man sette opp tilgang til GPR med en PAT (personal access token)
+som har `read:packages`. Du kan [opprette PAT her](https://github.com/settings/tokens).
+Dersom du har en PAT som du bruker for tilgang til maven-packages i github kan du gjenbruke denne.
+
+I din `.bashrc` eller `.zshrc`, sett følgende miljøvariabel:
+
+`export NPM_AUTH_TOKEN=<din PAT med read:packages>`
+
 
 ```bash
 npm run dev
@@ -20,17 +39,3 @@ To get products locally from 8080:
 
 `kubectl port-forward $(kubectl get pods -l app=hm-grunndata-search -o custom-columns=:metadata.name) 8080`
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
