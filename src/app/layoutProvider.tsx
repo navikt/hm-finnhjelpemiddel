@@ -51,8 +51,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         <NextLink href="/" className="page-link">
           <Image src="/nav-logo.svg" width="40" height="20" alt="Til forsiden" />
           <span className="logo-text">
-            <span>Finn</span>
-            <span>Hjelpemidler</span>
+            <span>FinnHjelpemiddel</span>
           </span>
         </NextLink>
         <Button

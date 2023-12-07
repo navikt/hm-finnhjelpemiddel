@@ -17,7 +17,8 @@ function AboutUs() {
                 nav.no
               </Link>
               . Gjelder det spørsmål eller tilbakemelding om denne nettsiden, kan vi kontaktes på {''}
-              <Link href="mailto:digihot@nav.no">digihot@nav.no.</Link> Unngå å oppgi sensitiv informasjon på e-post.
+              <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no.</Link> Unngå å oppgi sensitiv
+              informasjon på e-post.
             </BodyLong>
           </article>
           <article>
@@ -40,7 +41,7 @@ function AboutUs() {
               Informasjon om produktene du finner her er lagt inn av NAV og av de ulike leverandørene. Du kan ikke søke
               om hjelpemidler fra NAV på denne siden, men vi hjelper deg videre. Dersom du er leverandør og ønsker å
               legge inn dine produkter, ta kontakt med NAV Hjelpemidler og tilrettelegging for mer informasjon:{' '}
-              <Link href="mailto:hjelpemiddeldatabasen@nav.no">hjelpemiddeldatabasen@nav.no</Link>
+              <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>
             </BodyLong>
           </article>
         </div>
