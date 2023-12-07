@@ -45,6 +45,8 @@ jobs:
             CDN_URL=${{ env.CDN_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
 
   build-prod:
     name: Build and push Prod Docker container
@@ -95,6 +97,8 @@ jobs:
             CDN_URL=${{ env.CDN_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
 
   deploy-to-dev:
     name: Deploy to NAIS (DEV)
