@@ -18,14 +18,14 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import PepperkakeToggle, { SnowfallContext } from "@/components/PepperkakeToggle";
+import PepperkakeToggle, { SnowfallContext } from '@/components/PepperkakeToggle'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const env = process.env.NODE_ENV
 
-  const [snowfallEnabled, setSnowfallEnabled] = useState(false);
+  const [snowfallEnabled, setSnowfallEnabled] = useState(false)
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
@@ -42,17 +42,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     }
   }, [env])
 
-
-
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
-
     <ul className="page-links">
       <li className="logo-and-menu-button">
         <NextLink href="/" className="page-link">
           <Image src="/nav-logo.svg" width="40" height="20" alt="Til forsiden" />
           <span className="logo-text">
-            <span>Finn</span>
-            <span>Hjelpemidler</span>
+            <span>FinnHjelpemiddel</span>
           </span>
         </NextLink>
         <Button
@@ -86,9 +82,11 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             </NextLink>
           </li>
           <li>
-            <PepperkakeToggle onClick={() => {
-              setSnowfallEnabled(!snowfallEnabled)
-            }} />
+            <PepperkakeToggle
+              onClick={() => {
+                setSnowfallEnabled(!snowfallEnabled)
+              }}
+            />
           </li>
         </>
       )}
@@ -105,8 +103,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             <BodyLong>
               <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
               Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du
-              leter
-              etter anbefaler vi å bruke {''}
+              leter etter anbefaler vi å bruke {''}
               <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
             </BodyLong>
           </div>
