@@ -18,7 +18,8 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import PepperkakeToggle, { SnowfallContext } from '@/components/PepperkakeToggle'
+import PepperkakeDekorasjon, { SnowfallContext } from '@/components/PepperkakeDekorasjon'
+import { useToggle } from '@/toggles/context'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -41,6 +42,8 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       }
     }
   }, [env])
+
+  const juledekorasjonToggle = useToggle('juledekorasjon')
 
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
     <ul className="page-links">
@@ -81,13 +84,15 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
               <BodyShort size="medium">Rammeavtaler</BodyShort>
             </NextLink>
           </li>
-          <li>
-            <PepperkakeToggle
-              onClick={() => {
-                setSnowfallEnabled(!snowfallEnabled)
-              }}
-            />
-          </li>
+          {juledekorasjonToggle.enabled && (
+            <li>
+              <PepperkakeDekorasjon
+                onClick={() => {
+                  setSnowfallEnabled(!snowfallEnabled)
+                }}
+              />
+            </li>
+          )}
         </>
       )}
     </ul>

@@ -1,0 +1,12 @@
+apiVersion: unleash.nais.io/v1
+kind: ApiToken
+metadata:
+  name: hm-oversikt-frontend
+  namespace: teamdigihot
+spec:
+  unleashInstance:
+    apiVersion: unleash.nais.io/v1
+    kind: RemoteUnleash
+    name: teamdigihot
+  secretName: hm-oversikt-frontend-unleash-secrets
+  environment: {{ unleash.environment }}

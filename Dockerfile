@@ -11,6 +11,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 COPY package*.json ./
 
 # Install dependencies
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    echo '//npm.pkg.github.com/:_authToken='$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc
 RUN npm ci
 
 # Copy all files

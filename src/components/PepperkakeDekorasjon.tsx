@@ -7,7 +7,7 @@ interface props {
   onClick: () => void;
 }
 
-const PepperkakeToggle = (props: props) => {
+const PepperkakeDekorasjon = (props: props) => {
 
   const snowfallEnabled = useContext(SnowfallContext);
 
@@ -24,7 +24,7 @@ const PepperkakeToggle = (props: props) => {
   )
 }
 
-export default PepperkakeToggle
+export default PepperkakeDekorasjon
 
 const NakedButton = styled.button<{ $snowing?: boolean; }>`
 
