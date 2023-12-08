@@ -70,4 +70,3 @@ jobs:
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais-prod.yaml,.nais/unleash-apitoken.yaml
           VAR: image=${{ env.docker_image }}
-          VARS: .nais/vars/prod.yaml
