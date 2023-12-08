@@ -55,6 +55,8 @@ jobs:
             CDN_URL=${{ env.CDN_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
 
   deploy-to-prod:
     name: Deploy to NAIS (PROD)
