@@ -22,6 +22,8 @@ I din `.bashrc` eller `.zshrc`, sett følgende miljøvariabel:
 
 `export NPM_AUTH_TOKEN=<din PAT med read:packages>`
 
+Tokenet må autoriseres for bruk mot navikt-organisasjonen i Github (configure SSO knappen ved siden av tokenet i GitHub)
+
 
 ```bash
 npm run dev
