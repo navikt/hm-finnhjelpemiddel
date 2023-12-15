@@ -250,7 +250,13 @@ export default function Home() {
                   </Chips>
                 </>
               )}
-              <SearchResults data={data} loadMore={loadMore} isLoading={isLoading} searchResultRef={searchResultRef} />
+              <SearchResults
+                data={data}
+                loadMore={loadMore}
+                isLoading={isLoading}
+                searchResultRef={searchResultRef}
+                formRef={searchFormRef}
+              />
             </section>
           </div>
         </div>

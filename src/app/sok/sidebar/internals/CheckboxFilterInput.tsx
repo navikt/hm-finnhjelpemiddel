@@ -87,7 +87,6 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
               ))}
               {filterData?.values.slice(0, 10).map((f) => (
                 <Checkbox value={f.key} key={f.key} onChange={onChange}>
-                  {/* NB! Fjerne bruk av label dersom vi ender opp med å ikke bruke det for rammeavtale?*/}
                   <CheckboxLabel value={f.label || f.key} />
                 </Checkbox>
               ))}
