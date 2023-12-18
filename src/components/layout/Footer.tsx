@@ -12,9 +12,9 @@ const Footer = () => (
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />
         <div>
           <BodyShort>
-            <b>Finn hjelpemidler</b>
+            <b>FinnHjelpemiddel</b>
           </BodyShort>
-          <BodyShort>Finn hjelpemidler er en tjeneste fra NAV</BodyShort>
+          <BodyShort>FinnHjelpemiddel er en tjeneste fra NAV</BodyShort>
           <NextLink href="/om-nettstedet" passHref legacyBehavior>
             <Link>Om nettstedet</Link>
           </NextLink>

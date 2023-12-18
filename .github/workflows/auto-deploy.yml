@@ -26,6 +26,8 @@ jobs:
         with:
           node-version: 18.x
       - name: Install npm dependencies
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: npm install
       - name: Build application
         run: npm run build
@@ -53,6 +55,8 @@ jobs:
             CDN_URL=${{ env.CDN_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
 
   deploy-to-prod:
     name: Deploy to NAIS (PROD)
@@ -64,5 +68,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/nais-prod.yaml
+          RESOURCE: .nais/nais-prod.yaml,.nais/unleash-apitoken.yaml
           VAR: image=${{ env.docker_image }}

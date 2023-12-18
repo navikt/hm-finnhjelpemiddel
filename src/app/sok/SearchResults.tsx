@@ -22,11 +22,13 @@ const SearchResults = ({
   loadMore,
   isLoading,
   searchResultRef,
+  formRef,
 }: {
   loadMore?: () => void
   isLoading: boolean
   data?: Array<FetchResponse>
   searchResultRef: RefObject<HTMLHeadingElement>
+  formRef: RefObject<HTMLFormElement>
 }) => {
   const products = data?.map((d) => d.products).flat()
 
@@ -82,6 +84,7 @@ const SearchResults = ({
             product={product}
             firstChecked={firstChecked}
             setFirstChecked={setFirstChecked}
+            formRef={formRef}
           />
         ))}
       </ol>
@@ -98,10 +101,12 @@ const SearchResult = ({
   product,
   firstChecked,
   setFirstChecked,
+  formRef,
 }: {
   product: Product
   firstChecked: boolean
   setFirstChecked: (first: boolean) => void
+  formRef: RefObject<HTMLFormElement>
 }) => {
   const { setProductToCompare, removeProduct, productsToCompare, setCompareMenuState } = useHydratedCompareStore()
   const { setValue } = useFormContext<SearchData>()
@@ -173,7 +178,10 @@ const SearchResult = ({
                   className="search-result__product-category-button"
                   variant="tertiary"
                   size="small"
-                  onClick={() => setValue(`filters.produktkategori`, [product.isoCategoryTitle])}
+                  onClick={() => {
+                    setValue(`filters.produktkategori`, [product.isoCategoryTitle])
+                    formRef.current?.requestSubmit()
+                  }}
                 >
                   {product.isoCategoryTitle}
                 </Button>
