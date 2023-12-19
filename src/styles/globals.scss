@@ -281,7 +281,7 @@ details {
   padding: 0 $a-spacing-4;
   margin: 0 auto;
 
-  @include mixins.for-size(desktop-up) {
+  @include mixins.for-size(desktop-large-up) {
     padding: 0;
   }
 }
