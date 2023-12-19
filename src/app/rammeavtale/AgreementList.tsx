@@ -1,6 +1,6 @@
 'use client'
 
-import { AgreementLabel, agreementKeyLabels } from '@/utils/agreement-util'
+import { AgreementLabel } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Heading, LinkPanel } from '@navikt/ds-react'
