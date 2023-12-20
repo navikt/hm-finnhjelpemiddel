@@ -89,7 +89,7 @@ export type FetchResponse = {
 const removeReservedChars = (searchTerm: String) => {
   const unescapables = /([<>\\])/g
   const queryStringReserved = /(\+|-|=|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\/)/g
-  return searchTerm.replaceAll(unescapables, "").replaceAll(queryStringReserved, "\\$&")
+  return searchTerm.replaceAll(unescapables, '').replaceAll(queryStringReserved, '\\$&')
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
@@ -191,7 +191,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
-  
+
   const searchTermQuery = {
     must: {
       bool: {
@@ -660,7 +660,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           },
           aggs: {
             values: {
-              terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 100 },
+              terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
             },
           },
         },
