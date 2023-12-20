@@ -21,6 +21,7 @@ export const accessoriesMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -67,6 +68,7 @@ export const accessoriesMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -113,6 +115,7 @@ export const accessoriesMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -159,6 +162,7 @@ export const accessoriesMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -205,6 +209,7 @@ export const accessoriesMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -251,6 +256,7 @@ export const accessoriesMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -300,6 +306,7 @@ export const sparePartsMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -346,6 +353,7 @@ export const sparePartsMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -392,6 +400,7 @@ export const sparePartsMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -438,6 +447,7 @@ export const sparePartsMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -484,6 +494,7 @@ export const sparePartsMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [
@@ -530,6 +541,7 @@ export const sparePartsMock: Product[] = [
       postNr: 4,
       postTitle: 'Teleslyngeforsterker',
       rank: 1,
+      expired: '',
     },
     variantCount: 1,
     variants: [

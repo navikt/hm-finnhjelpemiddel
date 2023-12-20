@@ -1,5 +1,4 @@
-import { Agreement } from '@/utils/agreement-util'
-import { Product } from '@/utils/product-util'
+import { AgreementInfo, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
 import ProductCard from '@/components/ProductCard'
@@ -11,17 +10,16 @@ import './product-page.scss'
 
 type Props = {
   product: Product
-  agreement: Agreement | null
   supplier: Supplier
   matchingProducts: Product[] | null
 }
 
-const AccessoryOrSparePartPage = ({ product, agreement, supplier, matchingProducts }: Props) => {
+const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props) => {
   return (
     <>
       <AnimateLayout>
         <article className="product-info spacing-top--large">
-          <ProductPageTopInfo product={product} supplier={supplier} agreement={agreement} />
+          <ProductPageTopInfo product={product} supplier={supplier} />
           <section className="product-page-section__container product-page-section__blue-background">
             <Heading level="2" size="medium" spacing>
               Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til

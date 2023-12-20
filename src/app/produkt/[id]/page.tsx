@@ -1,11 +1,4 @@
-import { mapAgreement } from '@/utils/agreement-util'
-import {
-  fetchProductsWithVariants,
-  getAgreement,
-  getProductWithVariants,
-  getProductsInPost,
-  getSupplier,
-} from '@/utils/api-util'
+import { fetchProductsWithVariants, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
 // import { accessoriesMock } from '@/utils/mock-data'
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
@@ -15,6 +8,11 @@ import ProductPage from './ProductPage'
 import './product-page.scss'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 
+export interface ProductsOnSamePost {
+  postTitle: string
+  productsOnPost: Product[] | null
+}
+
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
@@ -22,16 +20,38 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   const product = mapProductFromSeriesId(await getProductWithVariants(seriesId))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
-  const agreement =
-    product.applicableAgreementInfo && mapAgreement((await getAgreement(product.applicableAgreementInfo.id))._source)
+  //Filter away agreements with another identifier and that are expired.
+  const agreements = product.agreements
+    ?.filter((agreement, index, arr) => {
+      return arr.some((otherAgreement, otherIndex) => {
+        return (
+          index !== otherIndex && // Exclude the current agreement from comparison
+          agreement.identifier === otherAgreement.identifier
+        )
+      })
+    })
+    .filter((agreement) => new Date(agreement.expired) >= new Date())
 
-  const productsOnPost = product.applicableAgreementInfo?.postIdentifier
-    ? mapProductsFromCollapse(await getProductsInPost(product.applicableAgreementInfo?.postIdentifier))
-        .filter((postProduct) => postProduct.id !== product.id)
-        .sort((productA, productB) => {
-          return sortWithNullValuesAtEnd(productA.applicableAgreementInfo?.rank, productB.applicableAgreementInfo?.rank)
+  const productsOnPosts: ProductsOnSamePost[] = agreements
+    ? await Promise.all(
+        agreements.map(async (agreement) => {
+          const productsOnPost = agreement.postIdentifier
+            ? mapProductsFromCollapse(await getProductsInPost(agreement.postIdentifier))
+                .filter((postProduct) => postProduct.id !== product.id)
+                .sort((productA, productB) => {
+                  return sortWithNullValuesAtEnd(
+                    productA.applicableAgreementInfo?.rank,
+                    productB.applicableAgreementInfo?.rank
+                  )
+                })
+            : null
+          return {
+            postTitle: agreement.postTitle,
+            productsOnPost: productsOnPost,
+          }
         })
-    : null
+      )
+    : []
 
   // const isAccessoryOrSparePart = false
   const isAccessoryOrSparePart = product.accessory || product.sparepart
@@ -50,18 +70,13 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   return (
     <div className="main-wrapper">
       {isAccessoryOrSparePart ? (
-        <AccessoryOrSparePartPage
-          product={product}
-          agreement={agreement}
-          supplier={supplier}
-          matchingProducts={matchingProducts}
-        />
+        <AccessoryOrSparePartPage product={product} supplier={supplier} matchingProducts={matchingProducts} />
       ) : (
         <ProductPage
           product={product}
-          agreement={agreement}
+          agreements={product.agreements}
           supplier={supplier}
-          productsOnPost={productsOnPost}
+          productsOnPosts={productsOnPosts}
           accessories={accessories}
           spareParts={spareParts}
         />

@@ -1,5 +1,4 @@
-import { Agreement } from '@/utils/agreement-util'
-import { Product } from '@/utils/product-util'
+import { AgreementInfo, Product } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -8,25 +7,26 @@ import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
-import { AgreementInfo } from './AgreementInfo'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
+import { AgreementInfoSection } from './AgreementInfoSection'
+import { ProductsOnSamePost } from './page'
 
 type ProductProps = {
   product: Product
-  agreement: Agreement | null
   supplier: Supplier
-  productsOnPost: Product[] | null
+  productsOnPosts: ProductsOnSamePost[]
   accessories: Product[]
   spareParts: Product[]
+  agreements?: AgreementInfo[]
 }
 
-const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories, spareParts }: ProductProps) => {
+const ProductPage = ({ product, agreements, supplier, productsOnPosts, accessories, spareParts }: ProductProps) => {
   return (
     <>
       <AnimateLayout>
         <article className="product-info spacing-top--large">
-          <ProductPageTopInfo product={product} agreement={agreement} supplier={supplier} />
+          <ProductPageTopInfo product={product} supplier={supplier} />
           <section
             className="product-info__characteristics"
             aria-label="Produktegenskaper som alle produktvariantene har til felles"
@@ -44,7 +44,7 @@ const ProductPage = ({ product, agreement, supplier, productsOnPost, accessories
               <ProductVariants product={product} />
             </section>
           )}
-          {agreement && <AgreementInfo product={product} productsOnPost={productsOnPost} />}
+          {agreements && <AgreementInfoSection product={product} productsOnPosts={productsOnPosts} />}
           {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
           {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
           {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}

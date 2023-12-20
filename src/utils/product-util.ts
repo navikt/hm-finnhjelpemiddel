@@ -36,6 +36,7 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+  agreements?: AgreementInfo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -95,6 +96,7 @@ export interface AgreementInfo {
   postNr: number
   postIdentifier: string | null
   postTitle: string
+  expired: string
 }
 
 /**
@@ -190,6 +192,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
     supplierId: firstVariant.supplier?.id,
+    agreements: firstVariant.agreements,
   }
 }
 
@@ -261,6 +264,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   postNr: data.postNr,
   postTitle: getPostTitle(data.postTitle, data.postNr),
   rank: data.rank === 99 ? null : data.rank,
+  expired: data.expired,
 })
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
