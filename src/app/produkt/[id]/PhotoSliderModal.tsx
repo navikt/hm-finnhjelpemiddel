@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { createPortal } from 'react-dom'
 
 import Image from 'next/image'
 
@@ -55,26 +54,23 @@ const PhotoSliderModal = ({
     }
   }, [modalIsOpen, prevImage, nextImage])
 
-  const modalContainer = document.getElementById('modal-container')
-  if (!modalContainer) return null
-
-  return createPortal(
+  return (
     <Modal
       className="picture-modal"
+      portal={true}
       open={modalIsOpen}
       header={{
         heading: '',
         closeButton: true,
       }}
       onClose={() => {
-        console.log('close')
         setModalIsOpen(false)
       }}
       aria-label="Modal"
       aria-labelledby="stor bildevisning"
     >
-      <Modal.Body className="modal-body">
-        <div className="photo-and-arrows-container">
+      <Modal.Body className="picture-modal__modal-body">
+        <div className="picture-modal__photo-and-arrows-container">
           {photos.length > 1 && (
             <Button
               className="arrow-button"
@@ -88,7 +84,7 @@ const PhotoSliderModal = ({
             />
           )}
 
-          <div className="image-container">
+          <div className="picture-modal__image-container">
             <motion.div
               key={src}
               custom={direction}
@@ -127,7 +123,7 @@ const PhotoSliderModal = ({
 
           {photos.length > 1 && (
             <Button
-              className="arrow-button"
+              className="picture-modal__arrow-button"
               tabIndex={0}
               aria-label="Neste bilde"
               variant="tertiary-neutral"
@@ -139,14 +135,18 @@ const PhotoSliderModal = ({
           )}
         </div>
 
-        <div className="number-of-total">
+        <div className="picture-modal__number-of-total">
           {active + 1}/{photos.length}
         </div>
 
         {photos.length > 1 && (
-          <div className="preview-container">
+          <div className="picture-modal__preview-container">
             {photos.map((photo, i) => (
-              <div className="thumbnail-image-container" key={i} data-active={i === active ? '' : undefined}>
+              <div
+                className="picture-modal__thumbnail-image-container"
+                key={i}
+                data-active={i === active ? '' : undefined}
+              >
                 <Image
                   aria-selected={true}
                   onClick={() => setActive(i)}
@@ -161,8 +161,7 @@ const PhotoSliderModal = ({
           </div>
         )}
       </Modal.Body>
-    </Modal>,
-    modalContainer
+    </Modal>
   )
 }
 

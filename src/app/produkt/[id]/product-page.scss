@@ -285,7 +285,7 @@
     max-width: 90% !important;
   }
 
-  .modal-body {
+  &__modal-body {
     display: flex;
     flex: 2;
     flex-direction: column;
@@ -298,7 +298,7 @@
     }
   }
 
-  .photo-and-arrows-container {
+  &__photo-and-arrows-container {
     width: 100%;
     height: 75%;
     display: flex;
@@ -307,7 +307,7 @@
     gap: 0.5rem;
   }
 
-  .image-container {
+  &__image-container {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -324,7 +324,7 @@
     }
   }
 
-  .arrow-button {
+  &__arrow-button {
     padding: 0;
     flex: 0;
     cursor: pointer;
@@ -338,7 +338,7 @@
     }
   }
 
-  .number-of-total {
+  &__number-of-total {
     @include mixins.for-size(tablet-up) {
       display: none;
     }
@@ -348,7 +348,7 @@
     font-size: var(--a-font-size-large);
   }
 
-  .preview-container {
+  &__preview-container {
     @include mixins.for-size(maxWidthPhoneOnly) {
       display: none;
     }
@@ -366,7 +366,7 @@
     background-color: #edac9e;
   }
 
-  .thumbnail-image-container {
+  &__thumbnail-image-container {
     height: 80%;
     width: 150px !important;
     cursor: pointer;

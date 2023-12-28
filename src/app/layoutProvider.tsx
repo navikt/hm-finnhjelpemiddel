@@ -1,7 +1,5 @@
 'use client'
 
-import StyledComponentsRegistry from '@/lib/registry'
-
 import React, { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 
@@ -101,7 +99,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SnowfallContext.Provider value={snowfallEnabled}>
-        <div id="modal-container"></div>
         <aside className="wip-banner">
           <div>
             <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
@@ -123,9 +120,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             </div>
           </nav>
         </header>
-        <main>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-        </main>
+        <main>{children}</main>
         <Footer />
       </SnowfallContext.Provider>
     </>
