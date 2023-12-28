@@ -116,6 +116,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       (min-width: 44em) 40vw,
                       100vw"
                   onClick={() => setModalIsOpen(true)}
+                  tabIndex={0}
+                  onKeyUpCapture={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      setModalIsOpen(true)
+                    }
+                  }}
                 />
               </div>
               <div style={{ width: '40px', height: '40px' }}></div>
@@ -177,6 +184,13 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       (min-width: 44em) 40vw,
                       100vw"
                         onClick={() => setModalIsOpen(true)}
+                        tabIndex={0}
+                        onKeyUpCapture={(event) => {
+                          if (event.key === 'Enter') {
+                            event.preventDefault()
+                            setModalIsOpen(true)
+                          }
+                        }}
                       />
                     </div>
                   </motion.div>
