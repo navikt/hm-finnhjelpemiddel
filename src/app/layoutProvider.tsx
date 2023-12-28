@@ -120,7 +120,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             </div>
           </nav>
         </header>
-        <main>{children}</main>
+        <main>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </main>
         <Footer />
       </SnowfallContext.Provider>
     </>
