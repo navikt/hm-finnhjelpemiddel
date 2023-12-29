@@ -16,6 +16,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const agreementId = params.id
+  //Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
   const agreement = mapAgreementFromSearch(await getAgreementFromId(agreementId))
 
   return {
@@ -24,10 +25,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
   }
 }
-
-//Vilde getAgreement bli kalt på 2 ganger eller vil det cashes fra generateMetaData slik at det går fint å ha kallet på nytt?
-//https://nextjs.org/docs/app/building-your-application/optimizing/metadata : Spør noen om hjelp.
-//Må man: Have a function that fetches data from any api, call it in generateMetadata() and in Page().?
 
 export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromSearch(await getAgreementFromId(params.id))
