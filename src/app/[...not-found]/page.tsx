@@ -1,6 +1,13 @@
 import Link from 'next/link'
 
 import { BodyShort, Heading } from '@/components/aksel-client'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Fant ikke siden',
+  description: 'Siden ble ikke funnet',
+  icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
+}
 
 export default function NotFound() {
   return (
