@@ -15,6 +15,14 @@ import ProductPage from './ProductPage'
 import './product-page.scss'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Produktside',
+  description: 'Visning av et produkt',
+  icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
+}
+
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]

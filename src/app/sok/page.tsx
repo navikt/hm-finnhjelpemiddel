@@ -25,6 +25,8 @@ import CompareMenu from './CompareMenu'
 import SearchResults from './SearchResults'
 import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 
+import { Metadata } from 'next'
+
 export default function Home() {
   const router = useRouter()
   const pathname = usePathname()
