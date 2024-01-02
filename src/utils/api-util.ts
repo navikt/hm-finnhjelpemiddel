@@ -28,6 +28,7 @@ import {
   mapProductsFromCollapse,
 } from './product-util'
 import { ProductDocResponse, SearchResponse } from './response-types'
+import { sortAlphabetically } from './sort-util'
 
 export const PAGE_SIZE = 25
 
