@@ -82,7 +82,7 @@ function Home() {
                 }}
               />
             </div>
-            <Image src="/illustrasjon.svg" width="316" height="173" alt="" aria-hidden={true} />
+            <Image src="/illustrasjon.svg" width="316" height="173" alt="" aria-hidden />
           </div>
         </div>
         <div className="home-page__background-container red">
@@ -95,7 +95,7 @@ function Home() {
                 NAV inngår avtaler med leverandører om kjøp av hjelpemidler. Hver avtale gjelder for en begrenset
                 tidsperiode.
               </BodyLong>
-              <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
+              <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden />
             </div>
 
             <div className="home-page__agreement-links-container">
