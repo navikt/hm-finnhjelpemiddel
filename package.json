@@ -18,7 +18,7 @@
     "@unleash/nextjs": "^1.1.0",
     "amplitude-js": "^8.21.9",
     "classnames": "^2.5.0",
-    "framer-motion": "^10.16.2",
+    "framer-motion": "^10.17.4",
     "next": "^14.0.1",
     "qrcode.react": "^3.1.0",
     "query-string": "^8.1.0",
