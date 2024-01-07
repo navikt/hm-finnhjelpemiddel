@@ -6,11 +6,14 @@ import { mapSupplier } from '@/utils/supplier-util'
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
 import ProductPage from './ProductPage'
 import './product-page.scss'
+import { accessoriesMock } from '@/utils/mock-data'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
+import { removePostPrefix } from '@/utils/string-util'
 
-export interface ProductsOnSamePost {
+export interface ProductsOnPost {
   postTitle: string
-  productsOnPost: Product[] | null
+  postNr: number
+  products?: Product[]
 }
 
 export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
@@ -20,38 +23,33 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
   const product = mapProductFromSeriesId(await getProductWithVariants(seriesId))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
-  //Filter away agreements with another identifier and that are expired.
-  const agreements = product.agreements
-    ?.filter((agreement, index, arr) => {
-      return arr.some((otherAgreement, otherIndex) => {
-        return (
-          index !== otherIndex && // Exclude the current agreement from comparison
-          agreement.identifier === otherAgreement.identifier
-        )
-      })
-    })
-    .filter((agreement) => new Date(agreement.expired) >= new Date())
+  //Filter away agreements with another id and that are expired.
+  const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
 
-  const productsOnPosts: ProductsOnSamePost[] = agreements
-    ? await Promise.all(
-        agreements.map(async (agreement) => {
-          const productsOnPost = agreement.postIdentifier
-            ? mapProductsFromCollapse(await getProductsInPost(agreement.postIdentifier))
-                .filter((postProduct) => postProduct.id !== product.id)
-                .sort((productA, productB) => {
-                  return sortWithNullValuesAtEnd(
-                    productA.applicableAgreementInfo?.rank,
-                    productB.applicableAgreementInfo?.rank
-                  )
-                })
-            : null
-          return {
-            postTitle: agreement.postTitle,
-            productsOnPost: productsOnPost,
-          }
-        })
-      )
-    : []
+  const productsOnPosts: ProductsOnPost[] | undefined =
+    agreements &&
+    (await Promise.all(
+      product.agreements
+        ? product.agreements?.map(async (agreement) => {
+            const productsOnPost = mapProductsFromCollapse(await getProductsInPost(agreement.id, agreement.postNr))
+              .filter((postProduct) => postProduct.id !== product.id)
+              .sort((productA, productB) => {
+                const agreementA = productA.agreements
+                  ?.filter((ag) => ag.postNr === agreement.postNr)
+                  .map((agree) => agree.rank)
+                const agreementB = productB.agreements
+                  ?.filter((ag) => ag.postNr === agreement.postNr)
+                  .map((agree) => agree.rank)
+                return agreementA && agreementB ? sortWithNullValuesAtEnd(agreementA[0], agreementB[0]) : 0
+              })
+            return {
+              postTitle: removePostPrefix(agreement.postTitle),
+              postNr: agreement.postNr,
+              products: productsOnPost,
+            }
+          })
+        : []
+    ))
 
   // const isAccessoryOrSparePart = false
   const isAccessoryOrSparePart = product.accessory || product.sparepart
@@ -74,7 +72,6 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
       ) : (
         <ProductPage
           product={product}
-          agreements={product.agreements}
           supplier={supplier}
           productsOnPosts={productsOnPosts}
           accessories={accessories}

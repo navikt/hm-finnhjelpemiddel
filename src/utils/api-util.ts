@@ -250,7 +250,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
       from,
       size,
       track_scores: true,
-      sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
       collapse: {
         field: 'seriesId',
@@ -868,7 +868,7 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
           ],
         },
       },
-      sort: [{ _score: { order: 'desc' } }, { 'agreementInfo.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
       aggregations: {
         series_buckets: {
           composite: {
@@ -901,14 +901,22 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     })
 }
 
-export async function getProductsInPost(postIdentifier: string): Promise<SearchResponse> {
+export async function getProductsInPost(agreementId: string, postNr: number): Promise<SearchResponse> {
   const query = {
     bool: {
-      must: [{ term: { 'agreementInfo.postIdentifier': { value: postIdentifier } } }],
-      filter: [
+      must: [
         {
           term: {
-            status: 'ACTIVE',
+            'agreements.id': {
+              value: agreementId,
+            },
+          },
+        },
+        {
+          term: {
+            'agreements.postNr': {
+              value: postNr,
+            },
           },
         },
       ],

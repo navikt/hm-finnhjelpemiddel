@@ -81,8 +81,6 @@ export interface ProductSourceResponse {
   createdBy: string
   updatedBy: string
   filters: { [key: string]: string }
-  //Kan vi slette agreementInfo nå? Snakk med Tiril i morgen :)
-  agreementInfo: AgreementInfoResponse
   agreements: AgreementInfoResponse[]
   hasAgreement: boolean
 }
@@ -118,12 +116,11 @@ export interface MediaResponse {
 
 export interface AgreementInfoResponse {
   id: string
-  identifier: string | null
+  identifier: string
   title: string
   rank: number
   postNr: number
   postTitle: string
-  postIdentifier: string | null
   reference: string | null
   expired: string
 }

@@ -44,3 +44,7 @@ export const titleCapitalized = (title: string) => {
   }
   return title.charAt(0).toUpperCase() + title.slice(1)
 }
+
+export const removePostPrefix = (text: string): string => {
+  return text.substring(text.indexOf(':') + 1)
+}

@@ -10,18 +10,17 @@ import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { AgreementInfoSection } from './AgreementInfoSection'
-import { ProductsOnSamePost } from './page'
+import { ProductsOnPost } from './page'
 
 type ProductProps = {
   product: Product
   supplier: Supplier
-  productsOnPosts: ProductsOnSamePost[]
   accessories: Product[]
   spareParts: Product[]
-  agreements?: AgreementInfo[]
+  productsOnPosts?: ProductsOnPost[]
 }
 
-const ProductPage = ({ product, agreements, supplier, productsOnPosts, accessories, spareParts }: ProductProps) => {
+const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts }: ProductProps) => {
   return (
     <>
       <AnimateLayout>
@@ -44,7 +43,7 @@ const ProductPage = ({ product, agreements, supplier, productsOnPosts, accessori
               <ProductVariants product={product} />
             </section>
           )}
-          {agreements && <AgreementInfoSection product={product} productsOnPosts={productsOnPosts} />}
+          {productsOnPosts && <AgreementInfoSection product={product} productsOnPosts={productsOnPosts} />}
           {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
           {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
           {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}

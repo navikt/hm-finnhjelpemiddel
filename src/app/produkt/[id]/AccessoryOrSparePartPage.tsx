@@ -1,4 +1,4 @@
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
 import ProductCard from '@/components/ProductCard'
@@ -26,6 +26,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
             </Heading>
             {matchingProducts && matchingProducts.length > 0 ? (
               <div className="product-page-section__card-container">
+                {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
                 {matchingProducts.map((product, i) => (
                   <ProductCard key={i} product={product} showRank={true} />
                 ))}

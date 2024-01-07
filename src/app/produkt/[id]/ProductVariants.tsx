@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -141,11 +141,20 @@ const ProductVariants = ({ product }: { product: Product }) => {
               ))}
             </Table.Row>
 
-            {product.applicableAgreementInfo && (
+            {product.agreements && (
               <Table.Row>
                 <Table.HeaderCell>Rangering</Table.HeaderCell>
+                {/*Midlertidig løsning: Vi bør finne en måte å vise at et produkt kan være på flere avtaler i tabellen */}
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>{variant.agreementInfo?.rank ?? '-'}</Table.DataCell>
+                  <Fragment key={variant.id}>
+                    {variant.agreements?.length === 1 && (
+                      <Table.DataCell key={variant.id}>{variant.agreements[0]?.rank ?? '-'}</Table.DataCell>
+                    )}
+
+                    {variant.agreements?.length && variant.agreements?.length > 1 && (
+                      <Table.DataCell key={variant.id}>Ulik rangering på ulike poster</Table.DataCell>
+                    )}
+                  </Fragment>
                 ))}
               </Table.Row>
             )}

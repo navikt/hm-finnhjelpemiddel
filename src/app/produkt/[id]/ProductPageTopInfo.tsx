@@ -21,18 +21,8 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
 
-  const findHighestRank = (agreements: AgreementInfo[]): number => {
-    const validRanks = agreements
-      .filter((agreement) => agreement.rank !== null)
-      .map((agreement) => agreement.rank) as number[]
-    return Math.min(...validRanks)
-  }
-
-  const rank =
-    product.agreements?.length === 1
-      ? product.agreements[0].rank
-      : product.agreements && findHighestRank(product.agreements)
-
+  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+  const rank = product.agreements?.length === 1 ? product.agreements[0].rank : minRank
   const agreementRankText =
     typeof rank === 'number' ? `Rangert som nr ${rank} på avtale med Nav.` : 'Er på avtale med NAV uten rangering.'
 
@@ -53,7 +43,7 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             ) : (
               ''
             )}
-            {product.applicableAgreementInfo && (
+            {product.agreements?.length && (
               <div className="product-info__agreement-rank">
                 {rank !== undefined && <AgreementIcon rank={rank} />}
                 <BodyShort>{agreementRankText}</BodyShort>

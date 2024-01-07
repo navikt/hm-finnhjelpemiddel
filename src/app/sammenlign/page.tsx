@@ -171,11 +171,14 @@ const CompareTable = ({
         </Table.Header>
 
         <Table.Body>
+          {/*Hadde det ikke vært bra om vi hadde delkontrakt her også? Slik at man kan se hvilken kontrakt rangeringen hører til? Eventuelt vise flere rangeringer og delkontrakter dersom det finnes flere*/}
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
-            {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank ?? '-'}</Table.DataCell>
-            ))}
+            {productsToCompare.map((product) => {
+              const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+              const rank = product.agreements?.length === 1 ? product.agreements[0].rank : minRank
+              return <Table.DataCell key={product.id}>{rank ?? '-'}</Table.DataCell>
+            })}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell>Antall varianter</Table.HeaderCell>

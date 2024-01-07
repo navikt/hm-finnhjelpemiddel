@@ -16,6 +16,7 @@ import useRestoreScroll from '@/hooks/useRestoreScroll'
 import AgreementIcon from '@/components/AgreementIcon'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
+import { removePostPrefix } from '@/utils/string-util'
 
 const SearchResults = ({
   data,
@@ -126,6 +127,14 @@ const SearchResult = ({
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
+  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+
+  // Find the first agreement with the minimum rank
+  const finalAgreement =
+    product.agreements?.length === 1
+      ? product.agreements[0]
+      : product.agreements && product.agreements.find((agreement) => agreement.rank === minRank)
+
   return (
     <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>
       <div className="search-result__compare-checkbox">
@@ -149,21 +158,19 @@ const SearchResult = ({
                 {product.title}
               </Link>
             </Heading>
-            {product.applicableAgreementInfo?.rank && (
+            {finalAgreement?.rank && (
               <div className="search-result__rank-on-mobile">
-                <AgreementIcon rank={product.applicableAgreementInfo?.rank} size="small" />
+                <AgreementIcon rank={finalAgreement?.rank} size="small" />
               </div>
             )}
           </div>
           <div className="search-result__description">
-            {product.applicableAgreementInfo ? (
+            {finalAgreement ? (
               <div className="search-result__post-container">
-                <AgreementIcon rank={product.applicableAgreementInfo?.rank} />
+                <AgreementIcon rank={finalAgreement?.rank} />
                 <BodyShort>
-                  {'Delkontrakt ' +
-                    product.applicableAgreementInfo?.postNr +
-                    ': ' +
-                    product.applicableAgreementInfo?.postTitle ?? product.attributes?.text}
+                  {'Delkontrakt ' + finalAgreement.postNr + ': ' + removePostPrefix(finalAgreement?.postTitle) ??
+                    product.attributes?.text}
                 </BodyShort>
               </div>
             ) : (
