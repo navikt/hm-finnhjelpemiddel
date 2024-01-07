@@ -1,17 +1,15 @@
 'use client'
 
-import { PropsWithChildren, ReactElement, useState } from 'react'
+import { PropsWithChildren, ReactElement } from 'react'
 import { IToggle } from '@unleash/nextjs'
-import { FlagProvider } from "@/toggles/context";
+import { FlagProvider } from '@/toggles/context'
 
 type Props = {
-    toggles: IToggle[]
+  toggles: IToggle[]
 }
 
 function Providers({ children, toggles }: PropsWithChildren<Props>): ReactElement {
-    return (
-            <FlagProvider toggles={toggles}>{children}</FlagProvider>
-    )
+  return <FlagProvider toggles={toggles}>{children}</FlagProvider>
 }
 
 export default Providers

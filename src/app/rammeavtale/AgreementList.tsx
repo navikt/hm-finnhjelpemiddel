@@ -1,6 +1,6 @@
 'use client'
 
-import { AgreementLabel, agreementKeyLabels } from '@/utils/agreement-util'
+import { AgreementLabel } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Heading, LinkPanel } from '@navikt/ds-react'
@@ -15,24 +15,15 @@ const AgreementList = () => {
   const sortedData = useMemo(() => {
     if (!data) return []
     const sorted = [...data] // Create a copy of data to avoid modifying it in place
-    sorted.sort((a, b) => {
-      const labelA = agreementKeyLabels[a.identifier]
-      const labelB = agreementKeyLabels[b.identifier]
+    sorted.sort((a, b) => sortAlphabetically(a.label, b.label))
 
-      if (labelA && labelB) {
-        return sortAlphabetically(labelA, labelB)
-      } else {
-        // Handle cases where identifier does not exist in agreementKeyLabels
-        return 0 // No change in order
-      }
-    })
     return sorted
   }, [data])
 
   return (
     <>
-      <Heading level="2" size="medium">
-        Aktive avtaler
+      <Heading level="2" size="large">
+        Les mer om avtalene
       </Heading>
       {/* TODO <Combobox></Combobox> */}
       {data &&

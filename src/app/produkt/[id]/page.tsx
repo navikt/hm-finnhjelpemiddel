@@ -16,11 +16,27 @@ export interface ProductsOnPost {
   products?: Product[]
 }
 
-export default async function ProduktPage({ params: { id: seriesId } }: { params: { id: string } }) {
+import { Metadata } from 'next'
+
+type Props = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+
+  return {
+    title: product.title,
+    description: 'Produktside for ' + product.title,
+    icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
+  }
+}
+
+export default async function ProduktPage({ params }: Props) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
 
-  const product = mapProductFromSeriesId(await getProductWithVariants(seriesId))
+  const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
   //Filter away agreements with another id and that are expired.

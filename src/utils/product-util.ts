@@ -252,7 +252,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
       identifier: agreement.identifier,
       title: agreement.title,
       postNr: agreement.postNr,
-      postTitle: getPostTitle(agreement.postTitle, agreement.postNr),
+      postTitle: getPostTitle(agreement.postTitle),
       rank: agreement.rank,
       expired: agreement.expired,
     }
