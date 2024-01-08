@@ -148,6 +148,13 @@ const CompareTable = ({
     {} as Record<string, Record<string, string>>
   )
 
+  // const minRank = productsToCompare.agreements && Math.min(...productsToCompare.agreements.map((agreement) => agreement.rank))
+
+  // // Find the first agreement with the minimum rank
+  // const finalAgreement =
+  // productsToCompare.agreements?.length === 1
+  //     ? productsToCompare.agreements[0]
+  //     : productsToCompare.agreements && productsToCompare.agreements.find((agreement) => agreement.rank === minRank)
   return (
     <section className="comparing-table">
       <Table>
@@ -173,9 +180,15 @@ const CompareTable = ({
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
-            {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank ?? '-'}</Table.DataCell>
-            ))}
+            {productsToCompare.map((product) => {
+              const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+              const agreement =
+                product.agreements?.length === 1
+                  ? product.agreements[0]
+                  : product.agreements && product.agreements.find((agreement) => agreement.rank === minRank)
+
+              return <Table.DataCell key={product.id}>{agreement?.rank ?? '-'}</Table.DataCell>
+            })}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell>Antall varianter</Table.HeaderCell>
