@@ -18,9 +18,13 @@ const Footer = () => (
           <NextLink href="/om-nettstedet" passHref legacyBehavior>
             <Link>Om nettstedet</Link>
           </NextLink>
-          <NextLink href="https://uustatus.no/nb/erklaringer/publisert/d760f748-feec-4cdb-b1cb-9535f1219060" passHref rel="noopener noreferrer" target="_blank">
-            <Link>Tilgjengelighetserklæring</Link>
-          </NextLink>
+          <Link
+            href="https://uustatus.no/nb/erklaringer/publisert/d760f748-feec-4cdb-b1cb-9535f1219060"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Tilgjengelighetserklæring
+          </Link>
         </div>
       </div>
     </div>
