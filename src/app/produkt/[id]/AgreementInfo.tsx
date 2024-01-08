@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import { Product } from '@/utils/product-util'
 
 import ProductCard from '@/components/ProductCard'
-import { Alert, BodyLong, ChevronRightIcon, Heading, ImageIcon } from '@/components/aksel-client'
+import { Alert, BodyLong, ChevronRightIcon, Heading } from '@/components/aksel-client'
 import { Bleed } from '@navikt/ds-react'
 import { ProductsOnPost } from './page'
 
@@ -14,7 +14,7 @@ type AgreementInfoProps = {
   productsOnPosts: ProductsOnPost[]
 }
 
-export const AgreementInfoSection = ({ product, productsOnPosts }: AgreementInfoProps) => {
+export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) => {
   return (
     <Bleed marginInline="full" asChild>
       <section

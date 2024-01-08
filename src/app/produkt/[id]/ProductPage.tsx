@@ -1,4 +1,4 @@
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -9,7 +9,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
-import { AgreementInfoSection } from './AgreementInfoSection'
+import { AgreementInfo } from './AgreementInfo'
 import { ProductsOnPost } from './page'
 
 type ProductProps = {
@@ -43,7 +43,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               <ProductVariants product={product} />
             </section>
           )}
-          {productsOnPosts && <AgreementInfoSection product={product} productsOnPosts={productsOnPosts} />}
+          {productsOnPosts && <AgreementInfo product={product} productsOnPosts={productsOnPosts} />}
           {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
           {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
           {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
