@@ -12,7 +12,6 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Rammeavtaler',
   description: 'Oversikt over rammeavtaler med Nav',
-  icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
 }
 
 export default async function AgreementsInfoPage() {

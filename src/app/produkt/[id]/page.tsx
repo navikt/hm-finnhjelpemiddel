@@ -8,7 +8,6 @@ import ProductPage from './ProductPage'
 import './product-page.scss'
 import { accessoriesMock } from '@/utils/mock-data'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
-import { removePostPrefix } from '@/utils/string-util'
 
 export interface ProductsOnPost {
   postTitle: string
@@ -28,19 +27,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.title,
     description: 'Produktside for ' + product.title,
-    icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
   }
 }
 
 export default async function ProduktPage({ params }: Props) {
+  console.log('ID\n', params.id)
+
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
 
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
-  //Filter away agreements with another id and that are expired.
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
+
+  console.log('AGREEMENTS', agreements)
 
   const productsOnPosts: ProductsOnPost[] | undefined =
     agreements &&
@@ -59,7 +60,7 @@ export default async function ProduktPage({ params }: Props) {
                 return agreementA && agreementB ? sortWithNullValuesAtEnd(agreementA[0], agreementB[0]) : 0
               })
             return {
-              postTitle: removePostPrefix(agreement.postTitle),
+              postTitle: agreement.postTitle,
               postNr: agreement.postNr,
               products: productsOnPost,
             }
