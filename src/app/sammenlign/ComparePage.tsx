@@ -148,13 +148,6 @@ const CompareTable = ({
     {} as Record<string, Record<string, string>>
   )
 
-  // const minRank = productsToCompare.agreements && Math.min(...productsToCompare.agreements.map((agreement) => agreement.rank))
-
-  // // Find the first agreement with the minimum rank
-  // const finalAgreement =
-  // productsToCompare.agreements?.length === 1
-  //     ? productsToCompare.agreements[0]
-  //     : productsToCompare.agreements && productsToCompare.agreements.find((agreement) => agreement.rank === minRank)
   return (
     <section className="comparing-table">
       <Table>
