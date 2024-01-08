@@ -135,7 +135,9 @@ const SearchResult = ({
           onChange={toggleCompareProduct}
           checked={isInProductsToCompare}
         >
-          Sammenlign
+          <div aria-label={`sammenlign ${product.title}`}>
+            <span aria-hidden>Sammenlign</span>
+          </div>
         </Checkbox>
       </div>
       <div className="search-result__container">

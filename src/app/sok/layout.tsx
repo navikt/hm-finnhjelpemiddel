@@ -1,7 +1,4 @@
-import React from 'react'
-
 import { Metadata } from 'next'
-import SearchPage from './SearchPage'
 
 export const metadata: Metadata = {
   title: 'Søk',
@@ -9,6 +6,6 @@ export const metadata: Metadata = {
   icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
 }
 
-export default function Page() {
-  return <SearchPage />
+export default function SokLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
 }

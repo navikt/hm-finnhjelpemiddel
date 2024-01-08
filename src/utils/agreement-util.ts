@@ -9,16 +9,9 @@ import {
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
 
-export function getPostTitle(post: string, postNr: number): string
-export function getPostTitle(posts: Post[], postNr: number): string | undefined
-export function getPostTitle(post: unknown, postNr: number): string | undefined {
-  const prefix = `Post ${postNr}: `
-  if (typeof post === 'string') {
-    return post.substring(prefix.length)
-  } else if (Array.isArray(post)) {
-    return post.find((post) => post.nr === postNr)?.title.substring(prefix.length)
-  }
-  throw new Error('Could not get postTitle')
+export function getPostTitle(postTitle: string): string {
+  const regex = /^(post\s\d{1,2}:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
+  return postTitle.replace(regex, '')
 }
 
 export interface Agreement {

@@ -259,7 +259,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
   title: data.title,
   postIdentifier: data.postIdentifier,
   postNr: data.postNr,
-  postTitle: getPostTitle(data.postTitle, data.postNr),
+  postTitle: getPostTitle(data.postTitle),
   rank: data.rank === 99 ? null : data.rank,
 })
 
