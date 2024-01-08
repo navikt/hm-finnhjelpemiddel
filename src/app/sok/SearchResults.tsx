@@ -16,7 +16,6 @@ import useRestoreScroll from '@/hooks/useRestoreScroll'
 import AgreementIcon from '@/components/AgreementIcon'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
-import { removePostPrefix } from '@/utils/string-util'
 
 const SearchResults = ({
   data,
@@ -171,7 +170,7 @@ const SearchResult = ({
               <div className="search-result__post-container">
                 <AgreementIcon rank={finalAgreement?.rank} />
                 <BodyShort>
-                  {'Delkontrakt ' + finalAgreement.postNr + ': ' + removePostPrefix(finalAgreement?.postTitle) ??
+                  {'Delkontrakt ' + finalAgreement.postNr + ': ' + finalAgreement?.postTitle ??
                     product.attributes?.text}
                 </BodyShort>
               </div>

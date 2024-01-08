@@ -5,7 +5,6 @@ import { Product } from '@/utils/product-util'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { Heading, Link, Table, VStack } from '@navikt/ds-react'
 import { ArrowDownIcon } from '@navikt/aksel-icons'
-import { removePostPrefix } from '@/utils/string-util'
 
 type KeyInformationProps = {
   product: Product
@@ -47,13 +46,11 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
           <DefinitionList.Definition>
             <Link href="#" onClick={scrollToBottom}>
-              {product.agreements[0].postTitle ?? product.attributes?.text}
+              {'Nr. ' + product.agreements[0].postNr + ' ' + product.agreements[0].postTitle}
             </Link>
           </DefinitionList.Definition>
           <DefinitionList.Term>Avtale</DefinitionList.Term>
-          <DefinitionList.Definition>
-            {'Nr. ' + product.agreements[0].postNr + removePostPrefix(product.agreements[0].title)}
-          </DefinitionList.Definition>
+          <DefinitionList.Definition>{product.agreements[0].title}</DefinitionList.Definition>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
@@ -81,9 +78,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             {product.agreements.map((agreement, i) => {
               return (
                 <Table.Row key={i}>
-                  <Table.DataCell scope="row">
-                    {`Nr. ${agreement.postNr}: ${removePostPrefix(agreement.title)}`}
-                  </Table.DataCell>
+                  <Table.DataCell scope="row">{`Nr. ${agreement.postNr}: ${agreement.postTitle}`}</Table.DataCell>
                   <Table.DataCell align="center">{agreement.rank}</Table.DataCell>
                 </Table.Row>
               )
@@ -96,6 +91,8 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         </Link>
 
         <DefinitionList>
+          <DefinitionList.Term>Avtale</DefinitionList.Term>
+          <DefinitionList.Definition>{product.agreements[0].title}</DefinitionList.Definition>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>

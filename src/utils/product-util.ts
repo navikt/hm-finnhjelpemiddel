@@ -181,7 +181,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
     supplierId: firstVariant.supplier?.id,
-    agreements: firstVariant.agreements,
+    agreements: mapAgreementInfo(firstVariant.agreements),
   }
 }
 

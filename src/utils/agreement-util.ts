@@ -10,8 +10,7 @@ import {
 import { sortAlphabetically } from './sort-util'
 
 export function getPostTitle(postTitle: string): string {
-  const regex = /^(post\s\d{1,2}:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
-  return postTitle.replace(regex, '')
+  return postTitle.substring(postTitle.indexOf(':') + 2)
 }
 
 export interface Agreement {
