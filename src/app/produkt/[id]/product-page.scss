@@ -349,7 +349,7 @@
   }
 
   &__preview-container {
-    @include mixins.for-size(maxWidthPhoneOnly) {
+    @include mixins.for-size(phone-only) {
       display: none;
     }
 
