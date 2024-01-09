@@ -43,7 +43,9 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               <ProductVariants product={product} />
             </section>
           )}
-          {productsOnPosts && <AgreementInfo product={product} productsOnPosts={productsOnPosts} />}
+          {productsOnPosts && productsOnPosts?.length > 0 && (
+            <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+          )}
           {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
           {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
           {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}

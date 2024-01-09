@@ -1,6 +1,6 @@
 import { headers } from 'next/dist/client/components/headers'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
 import AgreementIcon from '@/components/AgreementIcon'
@@ -21,7 +21,10 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
 
-  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+  const minRank =
+    product.agreements &&
+    product.agreements?.length > 0 &&
+    Math.min(...product.agreements.map((agreement) => agreement.rank))
   const rank = product.agreements?.length === 1 ? product.agreements[0].rank : minRank
   const agreementRankText =
     typeof rank === 'number' ? `Rangert som nr ${rank} på avtale med Nav.` : 'Er på avtale med NAV uten rangering.'
@@ -43,9 +46,9 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             ) : (
               ''
             )}
-            {product.agreements?.length && (
+            {rank && (
               <div className="product-info__agreement-rank">
-                {rank !== undefined && <AgreementIcon rank={rank} />}
+                {<AgreementIcon rank={rank} />}
                 <BodyShort>{agreementRankText}</BodyShort>
               </div>
             )}
