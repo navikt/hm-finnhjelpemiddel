@@ -31,8 +31,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProduktPage({ params }: Props) {
-  console.log('ID\n', params.id)
-
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
 
@@ -40,8 +38,6 @@ export default async function ProduktPage({ params }: Props) {
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
-
-  console.log('AGREEMENTS', agreements)
 
   const productsOnPosts: ProductsOnPost[] | undefined =
     agreements &&
