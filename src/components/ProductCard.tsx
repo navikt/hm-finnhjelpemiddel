@@ -26,7 +26,7 @@ const ProductCard = ({ product, removeProduct, rank, showRank }: ProductCardProp
 
   const [imageLoadingError, setImageLoadingError] = useState(false)
 
-  const agreementRank = rank ? rank : product.agreements && product.agreements[0].rank
+  const agreementRank = rank ? rank : product.agreements && product.agreements.length > 0 && product.agreements[0].rank
 
   return (
     <div className={removeProduct ? 'product-card border' : 'product-card'}>

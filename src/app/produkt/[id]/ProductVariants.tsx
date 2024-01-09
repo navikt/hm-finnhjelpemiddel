@@ -141,7 +141,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
               ))}
             </Table.Row>
 
-            {product.agreements && (
+            {product.agreements && product.agreements.length > 0 && (
               <Table.Row>
                 <Table.HeaderCell>Rangering</Table.HeaderCell>
                 {/*Midlertidig løsning: Vi bør finne en måte å vise at et produkt kan være på flere avtaler i tabellen */}
