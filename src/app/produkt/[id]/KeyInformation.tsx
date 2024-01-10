@@ -5,6 +5,7 @@ import { Product } from '@/utils/product-util'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { Heading, Link, Table, VStack } from '@navikt/ds-react'
 import { ArrowDownIcon } from '@navikt/aksel-icons'
+import { useRouter } from 'next/navigation'
 
 type KeyInformationProps = {
   product: Product
@@ -12,12 +13,12 @@ type KeyInformationProps = {
 }
 
 const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: 'smooth',
-    })
+  const router = useRouter()
+
+  const scrollToAgreementInfo = () => {
+    router.push(`/produkt/${product.id}#agreement-info`)
   }
+
   if (!product.agreements?.length) {
     return (
       <div className="product-info__key-information">
@@ -45,7 +46,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Definition>{product.agreements[0].rank ?? 'Urangert'}</DefinitionList.Definition>
           <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
           <DefinitionList.Definition>
-            <Link href="#" onClick={scrollToBottom}>
+            <Link href="#" onClick={scrollToAgreementInfo}>
               {'Nr. ' + product.agreements[0].postNr + ' ' + product.agreements[0].postTitle}
             </Link>
           </DefinitionList.Definition>
@@ -85,7 +86,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             })}
           </Table.Body>
         </Table>
-        <Link href="#" onClick={scrollToBottom}>
+        <Link href="#" onClick={scrollToAgreementInfo}>
           Se flere produkter på disse delkontrakene
           <ArrowDownIcon title="a11y-title" fontSize="1.5rem" />
         </Link>
