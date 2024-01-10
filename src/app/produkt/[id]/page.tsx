@@ -27,7 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product.title,
     description: 'Produktside for ' + product.title,
-    icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
   }
 }
 

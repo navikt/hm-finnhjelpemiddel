@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: 'Rammeavtale ' + agreement.title,
     description: 'Rammeavtale for ' + agreement.title,
-    icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
   }
 }
 
