@@ -1,19 +1,17 @@
 import { useEffect } from 'react'
-import { createPortal } from 'react-dom'
 
 import Image from 'next/image'
 
 import { motion } from 'framer-motion'
-import styled from 'styled-components'
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button, Modal } from '@navikt/ds-react'
 
-import { maxWidthPhoneOnly, minWidthDesktopUp, minWidthTabletUp } from '@/utils/breakpoints'
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
 
 import { SWIPE_CONFIDENCE_THRESHOLD, swipePower, variants } from './PhotoSlider'
+import './product-page.scss'
 
 interface PhotoSliderModalProps {
   photos: Photo[]
@@ -56,24 +54,26 @@ const PhotoSliderModal = ({
     }
   }, [modalIsOpen, prevImage, nextImage])
 
-  const modalContainer = document.getElementById('modal-container')
-  if (!modalContainer) return null
-
-  return createPortal(
-    <StyledModal
+  return (
+    <Modal
+      className="picture-modal"
+      portal={true}
       open={modalIsOpen}
       header={{
         heading: '',
         closeButton: true,
       }}
-      onClose={() => setModalIsOpen(false)}
+      onClose={() => {
+        setModalIsOpen(false)
+      }}
       aria-label="Modal"
       aria-labelledby="stor bildevisning"
     >
-      <ModalBody>
-        <PhotoAndArrowsContainer>
+      <Modal.Body className="picture-modal__modal-body">
+        <div className="picture-modal__photo-and-arrows-container">
           {photos.length > 1 && (
-            <ArrowButton
+            <Button
+              className="arrow-button"
               tabIndex={0}
               aria-label="Forrige bilde"
               variant="tertiary-neutral"
@@ -84,7 +84,7 @@ const PhotoSliderModal = ({
             />
           )}
 
-          <ImageContainer>
+          <div className="picture-modal__image-container">
             <motion.div
               key={src}
               custom={direction}
@@ -119,10 +119,11 @@ const PhotoSliderModal = ({
                 style={{ objectFit: 'contain' }}
               />
             </motion.div>
-          </ImageContainer>
+          </div>
 
           {photos.length > 1 && (
-            <ArrowButton
+            <Button
+              className="picture-modal__arrow-button"
               tabIndex={0}
               aria-label="Neste bilde"
               variant="tertiary-neutral"
@@ -132,16 +133,20 @@ const PhotoSliderModal = ({
               icon={<ChevronRightIcon aria-hidden width={50} height={50} />}
             />
           )}
-        </PhotoAndArrowsContainer>
+        </div>
 
-        <NumberOfTotal>
+        <div className="picture-modal__number-of-total">
           {active + 1}/{photos.length}
-        </NumberOfTotal>
+        </div>
 
         {photos.length > 1 && (
-          <PreviewAllPhotosContainer>
+          <div className="picture-modal__preview-container">
             {photos.map((photo, i) => (
-              <ThumbnailImageContainer key={i} tabIndex={0} data-active={i === active ? '' : undefined}>
+              <div
+                className="picture-modal__thumbnail-image-container"
+                key={i}
+                data-active={i === active ? '' : undefined}
+              >
                 <Image
                   aria-selected={true}
                   onClick={() => setActive(i)}
@@ -151,127 +156,13 @@ const PhotoSliderModal = ({
                   fill
                   sizes=""
                 />
-              </ThumbnailImageContainer>
+              </div>
             ))}
-          </PreviewAllPhotosContainer>
+          </div>
         )}
-      </ModalBody>
-    </StyledModal>,
-    modalContainer
+      </Modal.Body>
+    </Modal>
   )
 }
 
 export default PhotoSliderModal
-
-const StyledModal = styled(Modal)`
-  width: 100vw;
-  height: 100vh;
-
-  @media (min-width: ${minWidthTabletUp}) {
-    max-height: 90% !important;
-    max-width: 90% !important;
-  }
-`
-const ModalBody = styled(Modal.Body)`
-  display: flex;
-  flex: 2;
-  flex-direction: column;
-  padding: 0;
-  height: 90%;
-  width: 100%;
-
-  @media (min-width: ${minWidthTabletUp}) {
-    justify-content: space-between;
-  }
-`
-
-const PhotoAndArrowsContainer = styled.div`
-  width: 100%;
-  height: 75%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-`
-
-const ImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-
-  div {
-    width: 100%;
-
-    img {
-      position: relative !important;
-      border-radius: var(--a-border-radius-medium);
-      object-fit: contain;
-    }
-  }
-`
-
-const ArrowButton = styled(Button)`
-  padding: 0;
-  flex: 0;
-  cursor: pointer;
-  color: black;
-
-  &:hover,
-  &:focus {
-    background: var(--a-deepblue-800);
-    color: white;
-    transition: 0.3s;
-  }
-`
-
-const NumberOfTotal = styled.div`
-  @media (min-width: ${minWidthTabletUp}) {
-    display: none;
-  }
-
-  display: flex;
-  justify-content: center;
-  font-size: var(--a-font-size-large);
-`
-
-const PreviewAllPhotosContainer = styled.div`
-  @media (max-width: ${maxWidthPhoneOnly}) {
-    display: none;
-  }
-
-  @media (max-height: 500px) {
-    display: none;
-  }
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  border-top: rgba(0, 0, 0, 0.1);
-  padding: 2rem 1rem;
-  background-color: #edac9e;
-`
-
-const ThumbnailImageContainer = styled.div`
-  height: 80%;
-  width: 150px !important;
-  cursor: pointer;
-  position: relative !important;
-  border-radius: var(--a-border-radius-medium);
-  background: white;
-
-  &[data-active] {
-    height: 100%;
-    cursor: not-allowed;
-    box-shadow: var(--a-shadow-medium);
-    width: 170px !important;
-  }
-
-  img {
-    position: relative !important;
-    border-radius: var(--a-border-radius-medium);
-    max-height: 100px !important;
-    object-fit: contain;
-  }
-`
