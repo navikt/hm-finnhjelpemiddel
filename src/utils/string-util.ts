@@ -1,3 +1,5 @@
+import { AgreementInfo } from './product-util'
+
 export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
 // Rules from Språkrådet: https://www.sprakradet.no/sprakhjelp/Skriveregler/Mellomrom/
@@ -43,4 +45,15 @@ export const titleCapitalized = (title: string) => {
     return title.charAt(0).toUpperCase()
   }
   return title.charAt(0).toUpperCase() + title.slice(1)
+}
+
+export const formatAgreementRanks = (agreements: AgreementInfo[]): string => {
+  if (agreements.length === 0) return '-'
+  if (agreements.length === 1 && agreements[0].rank === 99) return '-'
+
+  return agreements
+    .map((ag) => ag.rank)
+    .filter((rank) => rank !== 99)
+    .sort()
+    .join(', ')
 }

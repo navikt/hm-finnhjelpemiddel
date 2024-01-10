@@ -39,6 +39,7 @@ export default async function ProduktPage({ params }: Props) {
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
 
+  //Har ikke tatt hensyn til at produktet kan være på flere avtaler, kun at produktet kan være på flere rangeringer på samme avtale.
   const productsOnPosts: ProductsOnPost[] | undefined =
     agreements &&
     (await Promise.all(

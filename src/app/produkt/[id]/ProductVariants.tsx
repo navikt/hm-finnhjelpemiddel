@@ -9,7 +9,7 @@ import { BodyLong, Button, Heading, Table } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
-import { toValueAndUnit } from '@/utils/string-util'
+import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 
 type SortColumns = {
   orderBy: string | null
@@ -144,16 +144,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
             {product.agreements && product.agreements.length > 0 && (
               <Table.Row>
                 <Table.HeaderCell>Rangering</Table.HeaderCell>
-                {/*Midlertidig løsning: Vi bør finne en måte å vise at et produkt kan være på flere avtaler i tabellen */}
                 {sortedByKey.map((variant) => (
                   <Fragment key={variant.id}>
-                    {variant.agreements?.length === 1 && (
-                      <Table.DataCell key={variant.id}>{variant.agreements[0]?.rank ?? '-'}</Table.DataCell>
-                    )}
-
-                    {variant.agreements?.length && variant.agreements?.length > 1 && (
-                      <Table.DataCell key={variant.id}>Ulik rangering på ulike poster</Table.DataCell>
-                    )}
+                    <Table.DataCell key={variant.id}>{formatAgreementRanks(variant.agreements!)}</Table.DataCell>
                   </Fragment>
                 ))}
               </Table.Row>
