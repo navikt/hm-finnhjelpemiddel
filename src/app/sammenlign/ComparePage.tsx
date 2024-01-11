@@ -25,6 +25,7 @@ import { useMemo } from 'react'
 import { agreements } from '@/utils/mock-data'
 
 export default function ComparePage() {
+  //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
   const searchParams = useSearchParams()
