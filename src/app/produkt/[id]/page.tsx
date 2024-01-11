@@ -6,7 +6,6 @@ import {
   getProductsInPost,
   getSupplier,
 } from '@/utils/api-util'
-// import { accessoriesMock } from '@/utils/mock-data'
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
@@ -35,8 +34,7 @@ export default async function ProduktPage({ params: { id: seriesId } }: { params
 
   // const isAccessoryOrSparePart = false
   const isAccessoryOrSparePart = product.accessory || product.sparepart
-  //TODO: Endre på product.attributes.matchingProducts når vi vet mer om hvordan vi skal knytte sammen product og tilbehør/reservedeler
-  const matchingSeriesIds = product.attributes.matchingProducts?.length ? product.attributes.matchingProducts : null
+  const matchingSeriesIds = product.attributes.compatibleWith?.length ? product.attributes.compatibleWith : null
   const matchingProducts = matchingSeriesIds ? (await fetchProductsWithVariants(matchingSeriesIds)).products : null
 
   //TODO: Lage fetchmetode som henter alle produkter som er tilbehør og reservedel. Dermed må de matches på serieID.
