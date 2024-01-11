@@ -11,6 +11,7 @@ import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { AgreementInfo } from './AgreementInfo'
 import { ProductsOnPost } from './page'
+import { Fragment } from 'react'
 
 type ProductProps = {
   product: Product
@@ -78,12 +79,12 @@ const Characteristics = ({ product }: { product: Product }) => {
       </DefinitionList.Definition>
       {common &&
         Object.keys(common).map((key, i) => (
-          <>
+          <Fragment key={i}>
             <DefinitionList.Term>{key}</DefinitionList.Term>
             <DefinitionList.Definition>
               {common[key] !== undefined ? toValueAndUnit(common[key].value, common[key].unit) : '-'}
             </DefinitionList.Definition>
-          </>
+          </Fragment>
         ))}
     </DefinitionList>
   )
