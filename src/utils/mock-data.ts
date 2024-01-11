@@ -32,7 +32,7 @@ export const accessoriesMock: Product[] = [
     id: 'HMDB-60027',
     title: 'Vicair AdjusterO2 10',
     attributes: {
-      matchingProducts: ['HMDB-64818', 'HMDB-54382', 'HMDB-50757'],
+      compatibleWith: ['HMDB-64818', 'HMDB-54382', 'HMDB-50757'],
       series: 'Univox CLS-5',
       shortdescription:
         'Digital lydinngang. Automatic gain control. Justerbar tidsforsinkelse for tilkoblet lyd. Dekningsgrad i et tilnærmet kvadratisk rom er 140 kvm. ',

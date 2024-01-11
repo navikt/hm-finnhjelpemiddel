@@ -8,14 +8,13 @@ import ProductPage from './ProductPage'
 import './product-page.scss'
 import { accessoriesMock } from '@/utils/mock-data'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
+import { Metadata } from 'next'
 
 export interface ProductsOnPost {
   postTitle: string
   postNr: number
   products?: Product[]
 }
-
-import { Metadata } from 'next'
 
 type Props = {
   params: { id: string }
@@ -65,18 +64,14 @@ export default async function ProduktPage({ params }: Props) {
         : []
     ))
 
-  // const isAccessoryOrSparePart = false
   const isAccessoryOrSparePart = product.accessory || product.sparepart
-  const matchingSeriesIds = product.attributes.compatibleWith?.length ? product.attributes.compatibleWith : null
-  const matchingProducts = matchingSeriesIds ? (await fetchProductsWithVariants(matchingSeriesIds)).products : null
 
-  //TODO: Lage fetchmetode som henter alle produkter som er tilbehør og reservedel. Dermed må de matches på serieID.
-  //Forløpig: Sender inn en tom liste som fører til ingen visning. Bruk mock for å teste lokalt:
+  const matchingSeriesIds = product.attributes.compatibleWith
 
-  // const accessories = accessoriesMock
-  // const spareParts = sparePartsMock
-  const accessories: Product[] = []
-  const spareParts: Product[] = []
+  const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
+
+  const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
+  const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
 
   return (
     <div className="main-wrapper">
