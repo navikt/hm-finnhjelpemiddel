@@ -1,5 +1,11 @@
 import { Alert, BodyLong, Heading, Link } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Om nettstedet',
+  description: 'Informasjon om nettstedet',
+}
 
 function AboutUs() {
   return (

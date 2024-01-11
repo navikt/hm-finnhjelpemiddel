@@ -9,7 +9,6 @@ import Providers from '@/app/_providers'
 export const metadata: Metadata = {
   title: 'FinnHjelpemiddel',
   description: 'Oversikt over hjelpemidler',
-  icons: [{ rel: 'icon', type: 'image/x-icon', url: 'favicon.ico', sizes: 'any' }],
 }
 
 async function RootLayout({ children }: { children: React.ReactNode }) {

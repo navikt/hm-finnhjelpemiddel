@@ -126,6 +126,14 @@ const SearchResult = ({
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
+  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+
+  // Find the first agreement with the minimum rank
+  const finalAgreement =
+    product.agreements?.length === 1
+      ? product.agreements[0]
+      : product.agreements && product.agreements.find((agreement) => agreement.rank === minRank)
+
   return (
     <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>
       <div className="search-result__compare-checkbox">
@@ -135,7 +143,9 @@ const SearchResult = ({
           onChange={toggleCompareProduct}
           checked={isInProductsToCompare}
         >
-          Sammenlign
+          <div aria-label={`sammenlign ${product.title}`}>
+            <span aria-hidden>Sammenlign</span>
+          </div>
         </Checkbox>
       </div>
       <div className="search-result__container">
@@ -149,21 +159,19 @@ const SearchResult = ({
                 {product.title}
               </Link>
             </Heading>
-            {product.applicableAgreementInfo?.rank && (
+            {finalAgreement?.rank && (
               <div className="search-result__rank-on-mobile">
-                <AgreementIcon rank={product.applicableAgreementInfo?.rank} size="small" />
+                <AgreementIcon rank={finalAgreement?.rank} size="small" />
               </div>
             )}
           </div>
           <div className="search-result__description">
-            {product.applicableAgreementInfo ? (
+            {finalAgreement ? (
               <div className="search-result__post-container">
-                <AgreementIcon rank={product.applicableAgreementInfo?.rank} />
+                <AgreementIcon rank={finalAgreement?.rank} />
                 <BodyShort>
-                  {'Delkontrakt ' +
-                    product.applicableAgreementInfo?.postNr +
-                    ': ' +
-                    product.applicableAgreementInfo?.postTitle ?? product.attributes?.text}
+                  {'Delkontrakt ' + finalAgreement.postNr + ': ' + finalAgreement?.postTitle ??
+                    product.attributes?.text}
                 </BodyShort>
               </div>
             ) : (

@@ -8,9 +8,25 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import AgreementDescription from './AgreementDescription'
 import '../agreement-page.scss'
 import DocumentExpansionCard from './DocumentExpansionCard'
+import type { Metadata } from 'next'
 
-export default async function AgreementPage({ params: { id: agreementId } }: { params: { id: string } }) {
+type Props = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const agreementId = params.id
+  //Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
   const agreement = mapAgreementFromSearch(await getAgreementFromId(agreementId))
+
+  return {
+    title: 'Rammeavtale ' + agreement.title,
+    description: 'Rammeavtale for ' + agreement.title,
+  }
+}
+
+export default async function AgreementPage({ params }: Props) {
+  const agreement = mapAgreementFromSearch(await getAgreementFromId(params.id))
   const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   return (

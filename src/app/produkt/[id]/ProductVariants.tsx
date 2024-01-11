@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -9,7 +9,7 @@ import { BodyLong, Button, Heading, Table } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
-import { toValueAndUnit } from '@/utils/string-util'
+import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 
 type SortColumns = {
   orderBy: string | null
@@ -141,11 +141,13 @@ const ProductVariants = ({ product }: { product: Product }) => {
               ))}
             </Table.Row>
 
-            {product.applicableAgreementInfo && (
+            {product.agreements && product.agreements.length > 0 && (
               <Table.Row>
                 <Table.HeaderCell>Rangering</Table.HeaderCell>
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>{variant.agreementInfo?.rank ?? '-'}</Table.DataCell>
+                  <Fragment key={variant.id}>
+                    <Table.DataCell key={variant.id}>{formatAgreementRanks(variant.agreements!)}</Table.DataCell>
+                  </Fragment>
                 ))}
               </Table.Row>
             )}

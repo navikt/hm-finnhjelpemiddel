@@ -16,14 +16,17 @@ import AgreementIcon from './AgreementIcon'
 type ProductCardProps = {
   product: Product
   removeProduct?: (product: Product) => void
+  rank?: number
   showRank?: boolean
 }
 
-const ProductCard = ({ product, removeProduct, showRank }: ProductCardProps) => {
+const ProductCard = ({ product, removeProduct, rank, showRank }: ProductCardProps) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
   const [imageLoadingError, setImageLoadingError] = useState(false)
+
+  const agreementRank = rank ? rank : product.agreements && product.agreements.length > 0 && product.agreements[0].rank
 
   return (
     <div className={removeProduct ? 'product-card border' : 'product-card'}>
@@ -70,7 +73,7 @@ const ProductCard = ({ product, removeProduct, showRank }: ProductCardProps) => 
             {product.title}
           </Heading>
         </div>
-        {showRank && product.applicableAgreementInfo && <AgreementIcon rank={product.applicableAgreementInfo.rank} />}
+        {showRank && agreementRank && <AgreementIcon rank={agreementRank} />}
       </Link>
     </div>
   )

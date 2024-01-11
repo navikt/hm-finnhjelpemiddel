@@ -5,15 +5,16 @@ import NextLink from 'next/link'
 import { Product } from '@/utils/product-util'
 
 import ProductCard from '@/components/ProductCard'
-import { Alert, BodyLong, ChevronRightIcon, Heading, ImageIcon } from '@/components/aksel-client'
+import { Alert, BodyLong, ChevronRightIcon, Heading } from '@/components/aksel-client'
 import { Bleed } from '@navikt/ds-react'
+import { ProductsOnPost } from './page'
 
 type AgreementInfoProps = {
   product: Product
-  productsOnPost: Product[] | null
+  productsOnPosts: ProductsOnPost[]
 }
 
-export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) => {
+export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) => {
   return (
     <Bleed marginInline="full" asChild>
       <section
@@ -25,32 +26,45 @@ export const AgreementInfo = ({ product, productsOnPost }: AgreementInfoProps) =
             Avtale med Nav
           </Heading>
 
-          {product.applicableAgreementInfo?.rank && product.applicableAgreementInfo.rank > 1 && (
+          {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && (
             <Alert variant="info" inline>
-              Dette produktet er rangert som nummer {product.applicableAgreementInfo.rank} i delkontrakten. Ta en titt
-              på høyere rangerte produkter for å se om det passer ditt behov.
+              Dette produktet er rangert som nummer {product.agreements[0].rank} i delkontrakten. Ta en titt på høyere
+              rangerte produkter for å se om det passer ditt behov.
             </Alert>
           )}
 
-          <div className="agreement-details__products-on-post">
-            <Heading level="4" size="small" spacing>
-              {`Andre produkter delkontrakt ${product.applicableAgreementInfo?.postNr}: ${product.applicableAgreementInfo?.postTitle}`}
-            </Heading>
-            {productsOnPost && productsOnPost.length > 0 ? (
-              <div className="agreement-details__products-on-post-list">
-                {productsOnPost?.map((product) => <ProductCard key={product.id} product={product} showRank={true} />)}
-              </div>
-            ) : (
-              <BodyLong>Det finnes ingen andre produkter på samme delkontrakt</BodyLong>
-            )}
-            <div className="agreement-details__agreement-link spacing-top--small">
-              <BodyLong>
-                <NextLink href={`/rammeavtale/${product.applicableAgreementInfo?.id}`} className="link">
-                  Les mer om {product.applicableAgreementInfo?.title}
+          {productsOnPosts.map((post) => (
+            <div key={post.postTitle} className="agreement-details__products-on-post">
+              <Heading level="4" size="small" spacing>
+                {`Andre produkter på delkontrakt nr. ${post.postNr}: ${post.postTitle}`}
+              </Heading>
+
+              {post.products?.length ? (
+                <div className="agreement-details__products-on-post-list">
+                  {post.products?.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      rank={product.agreements?.find((ag) => ag.postTitle === post.postTitle)?.rank}
+                      showRank={true}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <BodyLong>Det finnes ingen andre produkter på samme delkontrakt</BodyLong>
+              )}
+            </div>
+          ))}
+
+          <div className="agreement-details__agreement-link spacing-top--small">
+            <BodyLong>
+              {product.agreements?.length && (
+                <NextLink href={`/rammeavtale/${product.agreements[0]?.id}`} className="link">
+                  Les mer om {product.agreements[0]?.title}
                   <ChevronRightIcon aria-hidden fontSize={'1.5rem'} />
                 </NextLink>
-              </BodyLong>
-            </div>
+              )}
+            </BodyLong>
           </div>
         </div>
       </section>

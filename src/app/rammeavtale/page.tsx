@@ -7,6 +7,12 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import './agreement-page.scss'
 import AgreementList from './AgreementList'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Rammeavtaler',
+  description: 'Oversikt over rammeavtaler med Nav',
+}
 
 export default async function AgreementsInfoPage() {
   return (
@@ -45,7 +51,7 @@ export default async function AgreementsInfoPage() {
                 <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
               </div>
               <div className="agreement-page__icon-container">
-                <AgreementIcon rank={null} />
+                <AgreementIcon rank={99} />
                 <BodyLong>Er på avtale med NAV uten rangering.</BodyLong>
               </div>
             </div>

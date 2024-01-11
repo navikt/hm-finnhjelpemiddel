@@ -24,7 +24,6 @@ export interface Product {
   id: string
   title: string
   attributes: Attributes
-  applicableAgreementInfo: AgreementInfo | null
   variantCount: number
   variants: ProductVariant[]
   compareData: ComparingData
@@ -36,6 +35,7 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+  agreements: AgreementInfo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -55,9 +55,9 @@ export interface ProductVariant {
   articleName: string
   techData: TechData
   hasAgreement: boolean
-  agreementInfo: AgreementInfo | null
   filters: { [key: string]: string | number }
   expired: string
+  agreements: AgreementInfo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -88,12 +88,12 @@ interface Attributes {
 
 export interface AgreementInfo {
   id: string
-  identifier: string | null
+  identifier: string
   title: string
-  rank: number | null
+  rank: number
   postNr: number
-  postIdentifier: string | null
   postTitle: string
+  expired: string
 }
 
 /**
@@ -117,6 +117,36 @@ export const mapProductFromDoc = (data: ProductDocResponse): Product => {
   return mapProductWithVariants(Array(data._source))
 }
 
+function filterUniqueCombinationsOfPostAndRank(agreementInfos: AgreementInfo[]): AgreementInfo[] {
+  const groupedByAgreementId: Map<string, Map<string, AgreementInfo>> = new Map()
+
+  // Group AgreementInfo objects by agreement.id and postNr
+  for (const agreementInfo of agreementInfos) {
+    const agreementId = agreementInfo.id
+    const postNr = agreementInfo.postNr
+
+    if (!groupedByAgreementId.has(agreementId)) {
+      groupedByAgreementId.set(agreementId, new Map())
+    }
+
+    const groupByPostNr = groupedByAgreementId.get(agreementId)!
+
+    // Check if the combination already exists for the current agreement.id
+    const key = `${postNr}-${agreementInfo.rank}`
+    if (!groupByPostNr.has(key)) {
+      groupByPostNr.set(key, agreementInfo)
+    }
+  }
+
+  // Flatten the map values back to an array
+  const uniqueCombinations: AgreementInfo[] = []
+  groupedByAgreementId.forEach((groupByPostNr) => {
+    uniqueCombinations.push(...Array.from(groupByPostNr.values()))
+  })
+
+  return uniqueCombinations
+}
+
 /**
  * Maps results from search with aggregation into products with all variants
  */
@@ -128,16 +158,7 @@ export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Pro
 }
 
 export const mapProductWithVariants = (sources: ProductSourceResponse[]): Product => {
-  let applicableAgreementInfo: AgreementInfo | null = null
   const variants = sources.map((source) => {
-    if (
-      source.agreementInfo &&
-      (applicableAgreementInfo === null ||
-        (applicableAgreementInfo?.rank && source.agreementInfo.rank < applicableAgreementInfo.rank))
-    ) {
-      applicableAgreementInfo = mapAgreementInfo(source.agreementInfo)
-    }
-
     return mapProductVariant(source)
   })
 
@@ -170,11 +191,13 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
 
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
   const firstVariant = sources[0]
+  const allAgreementsForAllVariants = variants.flatMap((variant) => variant.agreements)
+  const uniquesAgreementsPostAndRanks = filterUniqueCombinationsOfPostAndRank(allAgreementsForAllVariants)
+
   return {
     id: firstVariant.seriesId,
     title: firstVariant.title,
     attributes: { ...firstVariant.attributes, commonCharacteristics },
-    applicableAgreementInfo: applicableAgreementInfo,
     variantCount: sources.length,
     variants: variants,
     compareData: {
@@ -189,6 +212,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
     supplierId: firstVariant.supplier?.id,
+    agreements: uniquesAgreementsPostAndRanks,
   }
 }
 
@@ -200,7 +224,7 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     articleName: source.articleName,
     techData: mapTechDataDict(source.data),
     hasAgreement: source.hasAgreement,
-    agreementInfo: source.agreementInfo ? mapAgreementInfo(source.agreementInfo) : null,
+    agreements: mapAgreementInfo(source.agreements),
     filters: source.filters,
     expired: source.expired,
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
@@ -252,15 +276,19 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
   )
 }
 
-const mapAgreementInfo = (data: AgreementInfoResponse): AgreementInfo => ({
-  id: data.id,
-  identifier: data.identifier,
-  title: data.title,
-  postIdentifier: data.postIdentifier,
-  postNr: data.postNr,
-  postTitle: getPostTitle(data.postTitle, data.postNr),
-  rank: data.rank === 99 ? null : data.rank,
-})
+const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
+  return data.map((agreement) => {
+    return {
+      id: agreement.id,
+      identifier: agreement.identifier,
+      title: agreement.title,
+      postNr: agreement.postNr,
+      postTitle: getPostTitle(agreement.postTitle),
+      rank: agreement.rank,
+      expired: agreement.expired,
+    }
+  })
+}
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
   const searchTerm = searchParams.get('term') ?? ''

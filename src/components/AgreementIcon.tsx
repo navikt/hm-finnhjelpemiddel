@@ -5,11 +5,11 @@ const AgreementIcon = ({
   className,
   size = 'medium',
 }: {
-  rank: number | null
+  rank: number
   className?: string
   size?: 'small' | 'medium'
 }) => {
-  const isGreen = rank === 1 || rank === null
+  const isGreen = rank === 1 || rank === 99
 
   return (
     <span
@@ -24,7 +24,7 @@ const AgreementIcon = ({
       )}
       title="Agreement rank"
     >
-      {rank === null ? '-' : rank}
+      {rank === 99 ? '-' : rank}
     </span>
   )
 }

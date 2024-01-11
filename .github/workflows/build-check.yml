@@ -17,5 +17,9 @@ jobs:
         run: npm install
       - name: Build application
         run: npm run build
+        env:
+          IMAGE_PROXY_URL: 'Test'
+          CDN_URL: 'Test'
+          RUNTIME_ENVIRONMENT: 'Test'
       - name: Run linting
         run: npm run lint
