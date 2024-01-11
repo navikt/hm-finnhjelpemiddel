@@ -1,4 +1,3 @@
-import { Agreement } from '@/utils/agreement-util'
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -11,23 +10,23 @@ import './product-page.scss'
 
 type Props = {
   product: Product
-  agreement: Agreement | null
   supplier: Supplier
   matchingProducts: Product[] | null
 }
 
-const AccessoryOrSparePartPage = ({ product, agreement, supplier, matchingProducts }: Props) => {
+const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props) => {
   return (
     <>
       <AnimateLayout>
         <article className="product-info spacing-top--large">
-          <ProductPageTopInfo product={product} supplier={supplier} agreement={agreement} />
+          <ProductPageTopInfo product={product} supplier={supplier} />
           <section className="product-page-section__container product-page-section__blue-background">
             <Heading level="2" size="medium" spacing>
               Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
             </Heading>
             {matchingProducts && matchingProducts.length > 0 ? (
               <div className="product-page-section__card-container">
+                {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
                 {matchingProducts.map((product, i) => (
                   <ProductCard key={i} product={product} showRank={true} />
                 ))}

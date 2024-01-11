@@ -30,7 +30,7 @@ const ProductCardHorizontal = ({ product }: CardProps) => {
       href={`/produkt/${product.id}`}
       aria-label={`Gå til ${product.title}`}
     >
-      {product.applicableAgreementInfo && <AgreementIcon rank={null} />}
+      {product.agreements?.length && <AgreementIcon rank={99} />}
       <div className="product-card-horizontal__image-container">
         {hasImage && !imageLoadingError ? (
           <Image

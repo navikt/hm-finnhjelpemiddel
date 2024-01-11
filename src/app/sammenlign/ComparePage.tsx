@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { Product, mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
-import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
+import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
 import {
@@ -22,8 +22,10 @@ import {
 } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { useMemo } from 'react'
+import { agreements } from '@/utils/mock-data'
 
 export default function ComparePage() {
+  //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -173,9 +175,9 @@ const CompareTable = ({
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell>Rangering</Table.HeaderCell>
-            {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.applicableAgreementInfo?.rank ?? '-'}</Table.DataCell>
-            ))}
+            {productsToCompare.map((product) => {
+              return <Table.DataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</Table.DataCell>
+            })}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell>Antall varianter</Table.HeaderCell>
