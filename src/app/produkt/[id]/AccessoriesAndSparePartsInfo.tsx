@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react'
 
-import { BodyLong, Heading } from '@navikt/ds-react'
+import { Bleed, BodyLong, Heading } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
 
@@ -45,35 +45,37 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
   }
 
   return (
-    <section
-      className={`product-page-section__container product-page-section${classname}`}
-      aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
-    >
-      <div className="product-page-section__content">
-        <Heading level="2" size="medium" spacing ref={headingRef}>
-          {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
-        </Heading>
-        <div className="product-page-section__card-container">
-          {firstProducts.map((acc, i) => (
-            <ProductCardHorizontal key={i} product={acc} />
-          ))}
-          {lastProducts && (
-            <ReadMore
-              content={
-                <div className="product-page-section__card-container">
-                  {lastProducts.map((acc, i) => (
-                    <ProductCardHorizontal key={i} product={acc} />
-                  ))}
-                </div>
-              }
-              buttonOpen={`Vis alle ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
-              buttonClose={`Vis færre ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
-              setFocus={setFocusOnHeading}
-            />
-          )}
+    <Bleed marginInline="full" asChild>
+      <section
+        className={`product-page-section__container product-page-section${classname}`}
+        aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+      >
+        <div className="product-page-section__content main-wrapper">
+          <Heading level="2" size="medium" spacing ref={headingRef}>
+            {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+          </Heading>
+          <div className="product-page-section__card-container">
+            {firstProducts.map((acc, i) => (
+              <ProductCardHorizontal key={i} product={acc} />
+            ))}
+            {lastProducts && (
+              <ReadMore
+                content={
+                  <div className="product-page-section__card-container">
+                    {lastProducts.map((acc, i) => (
+                      <ProductCardHorizontal key={i} product={acc} />
+                    ))}
+                  </div>
+                }
+                buttonOpen={`Vis alle ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
+                buttonClose={`Vis færre ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
+                setFocus={setFocusOnHeading}
+              />
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Bleed>
   )
 }
 
