@@ -27,10 +27,6 @@ const SortSearchResults = ({ formRef }: Props) => {
     formRef.current?.requestSubmit()
   }
 
-  function getCurrentURL() {
-    return window.location.href
-  }
-
   return (
     <div>
       <Select label="Sortering" onChange={handleSelectedSorting} defaultValue={searchParams.get('sortOrder') ?? ''}>
