@@ -71,6 +71,7 @@ export type SearchData = {
   isoCode: string
   hasAgreementsOnly: boolean
   filters: SelectedFilters
+  sortOrder: any
 }
 
 export type SearchParams = SearchData & { to?: number }
@@ -94,7 +95,7 @@ const removeReservedChars = (searchTerm: String) => {
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
-  const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
+  const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
 
   const {
     lengdeCM,
@@ -260,7 +261,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
       from,
       size,
       track_scores: true,
-      sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      // sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: sortOrder,
       query,
       collapse: {
         field: 'seriesId',

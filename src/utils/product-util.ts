@@ -289,8 +289,18 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
     }
   })
 }
+const sortOptions = [
+  { value: { articleName_keyword: 'asc' }, label: 'Alfabetisk' },
+  { value: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }], label: 'Avtale_rangering' },
+  { value: [{ _score: { order: 'desc' } }], label: 'Beste_treff' },
+  { value: { created: 'desc' }, label: 'Nyeste' },
+  { value: { updated: 'desc' }, label: 'Sist_modifisert' },
+]
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
+  const sortOrderString = searchParams.get('sortering') ?? ''
+  const sortOrderOption = sortOptions.find((option) => option.label === sortOrderString)
+  const sortOrder = sortOrderOption?.value || { articleName_keyword: 'asc' }
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
   const hasAgreementsOnly = searchParams.has('agreement')
@@ -306,6 +316,7 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
   )
 
   return {
+    sortOrder,
     searchTerm,
     isoCode,
     hasAgreementsOnly,
@@ -315,6 +326,8 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
 
 export const toSearchQueryString = (searchParams: SearchData) =>
   queryString.stringify({
+    ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
+    // ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
     ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
