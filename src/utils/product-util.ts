@@ -291,10 +291,8 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
 }
 const sortOptions = [
   { value: { articleName_keyword: 'asc' }, label: 'Alfabetisk' },
-  { value: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }], label: 'Avtale_rangering' },
   { value: [{ _score: { order: 'desc' } }], label: 'Beste_treff' },
-  { value: { created: 'desc' }, label: 'Nyeste' },
-  { value: { updated: 'desc' }, label: 'Sist_modifisert' },
+  { value: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }], label: 'Delkontrakt_rangering' },
 ]
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
@@ -327,7 +325,6 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
 export const toSearchQueryString = (searchParams: SearchData) =>
   queryString.stringify({
     ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
-    // ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
     ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),

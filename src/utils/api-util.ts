@@ -1,8 +1,8 @@
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
-  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
+  FilterCategories,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -21,14 +21,13 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  Product,
-  ProductVariant,
-  mapProductVariant,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
+  mapProductVariant,
+  Product,
+  ProductVariant,
 } from './product-util'
 import { ProductDocResponse, SearchResponse } from './response-types'
-import { sortAlphabetically } from './sort-util'
 
 export const PAGE_SIZE = 25
 
@@ -261,7 +260,6 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
       from,
       size,
       track_scores: true,
-      // sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       sort: sortOrder,
       query,
       collapse: {
