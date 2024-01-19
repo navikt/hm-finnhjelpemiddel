@@ -290,9 +290,12 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
   })
 }
 const sortOptions = [
-  { value: { articleName_keyword: 'asc' }, label: 'Alfabetisk' },
-  { value: [{ _score: { order: 'desc' } }], label: 'Beste_treff' },
-  { value: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }], label: 'Delkontrakt_rangering' },
+  { value: [{ articleName_keyword: { order: 'asc' } }], label: 'Alfabetisk' },
+  { value: [{ _score: { order: 'asc' } }], label: 'Beste treff' },
+  {
+    value: [{ 'agreements.rank': { order: 'asc' } }, { 'agreementInfo.postNr': { order: 'asc' } }],
+    label: 'Delkontrakt_rangering',
+  },
 ]
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {

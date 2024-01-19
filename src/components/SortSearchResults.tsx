@@ -26,7 +26,7 @@ const SortSearchResults = ({ formRef }: Props) => {
   }
 
   return (
-    <Select label="Sortering" onChange={handleSelectedSorting} defaultValue={searchParams.get('sortOrder') ?? ''}>
+    <Select label="Sortering" onChange={handleSelectedSorting} defaultValue={searchParams.get('sortering') ?? ''}>
       {options.map((option, index) => (
         <option key={index} value={option.value}>
           {option.label}
