@@ -1,11 +1,12 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Search, Switch } from '@navikt/ds-react'
+import { Button, Switch } from '@navikt/ds-react'
 
 import { FilterData, SearchData } from '@/utils/api-util'
 
 import FilterView from './FilterView'
+import AutocompleteSearch from './internals/AutocompleteSearch'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
   <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
@@ -34,26 +35,7 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       aria-controls="searchResults"
     >
       <div className="spacing-bottom--medium">
-        <Controller
-          name="searchTerm"
-          control={formMethods.control}
-          defaultValue=""
-          render={({ field }) => (
-            <Search
-              {...field}
-              label="Skriv ett eller flere søkeord"
-              hideLabel={false}
-              onSearchClick={(searchTerm) => {
-                formMethods.setValue('searchTerm', searchTerm)
-                formRef.current?.requestSubmit()
-              }}
-              onClear={() => {
-                formMethods.setValue('searchTerm', '')
-                formRef.current?.requestSubmit()
-              }}
-            />
-          )}
-        />
+        <AutocompleteSearch formRef={formRef} />
       </div>
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
 

@@ -4,7 +4,7 @@ import useSWR from 'swr'
 
 import { UNSAFE_Combobox } from '@navikt/ds-react'
 
-import { SuggestionsResponse, fetchSuggestions } from '@/utils/api-util'
+import { Suggestions, fetchSuggestions } from '@/utils/api-util'
 
 import useDebounce from '@/hooks/useDebounce'
 import { useSearchParams } from 'next/navigation'
@@ -21,15 +21,15 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
   const [isListOpen, setListIsopen] = useState(false)
   const searchParams = useSearchParams()
 
-  const { data: suggestionData } = useSWR<SuggestionsResponse>(debouncedSearchValue, fetchSuggestions, {
+  const { data: suggestionData } = useSWR<Suggestions>(debouncedSearchValue, fetchSuggestions, {
     keepPreviousData: false,
   })
 
   //hasAgreementOnly === true comes first.
   const allSuggestionsSortedonAgreementValue = useMemo(
     () =>
-      suggestionData?.suggestions
-        .map((suggestion) => suggestion)
+      suggestionData
+        ?.map((suggestion) => suggestion)
         .sort((a, b) => (b.data.hasAgreement === a.data.hasAgreement ? 0 : a ? -1 : 1))
         .map((suggestion) => suggestion.text) || [],
     [suggestionData]
@@ -37,8 +37,8 @@ const SearchCombobox = ({ initialValue, onSearch }: Props) => {
 
   const suggestionsWithAgreementOnly = useMemo(
     () =>
-      suggestionData?.suggestions
-        .filter((suggestion) => suggestion.data.hasAgreement === true)
+      suggestionData
+        ?.filter((suggestion) => suggestion.data.hasAgreement === true)
         .map((suggestion) => suggestion.text) || [],
     [suggestionData]
   )

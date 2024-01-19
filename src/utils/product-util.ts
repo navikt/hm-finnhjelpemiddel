@@ -295,6 +295,7 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
   const hasAgreementsOnly = searchParams.has('agreement')
+  const sortOrder = searchParams.get('sortering') ?? ''
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
 
