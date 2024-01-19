@@ -70,7 +70,15 @@ export type SearchData = {
   isoCode: string
   hasAgreementsOnly: boolean
   filters: SelectedFilters
-  sortOrder: any
+  sortOrder: SortOrder
+}
+
+export const sortOrders = ['Alfabetisk', 'Beste_treff', 'Delkontrakt_rangering'] as const
+
+export type SortOrder = (typeof sortOrders)[number]
+
+export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
+  return sortOrders.includes(sortOrder as SortOrder)
 }
 
 export type SearchParams = SearchData & { to?: number }
@@ -93,8 +101,16 @@ const removeReservedChars = (searchTerm: String) => {
   return searchTerm.replaceAll(unescapables, '').replaceAll(queryStringReserved, '\\$&')
 }
 
+const sortOptionsOpenSearch = {
+  Alfabetisk: { articleName_keyword: 'asc' },
+  Delkontrakt_rangering: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }],
+  Beste_treff: [{ _score: { order: 'desc' } }],
+}
+
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
+
+  const sortOrderOpenSearch = sortOptionsOpenSearch[sortOrder]
 
   const {
     lengdeCM,
@@ -260,7 +276,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
       from,
       size,
       track_scores: true,
-      sort: sortOrder,
+      sort: sortOrderOpenSearch,
       query,
       collapse: {
         field: 'seriesId',
