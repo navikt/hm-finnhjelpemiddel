@@ -3,7 +3,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 import queryString from 'querystring'
 
 import { getPostTitle } from './agreement-util'
-import { SearchData, SelectedFilters } from './api-util'
+import { SearchData, SelectedFilters, SortOrder, isValidSortOrder } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
@@ -289,19 +289,11 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
     }
   })
 }
-const sortOptions = [
-  { value: [{ articleName_keyword: { order: 'asc' } }], label: 'Alfabetisk' },
-  { value: [{ _score: { order: 'asc' } }], label: 'Beste treff' },
-  {
-    value: [{ 'agreements.rank': { order: 'asc' } }, { 'agreementInfo.postNr': { order: 'asc' } }],
-    label: 'Delkontrakt_rangering',
-  },
-]
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
-  const sortOrderString = searchParams.get('sortering') ?? ''
-  const sortOrderOption = sortOptions.find((option) => option.label === sortOrderString)
-  const sortOrder = sortOrderOption?.value || { articleName_keyword: 'asc' }
+  const sortOrderStr = searchParams.get('sortering') || ''
+  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Alfabetisk'
+
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
   const hasAgreementsOnly = searchParams.has('agreement')
