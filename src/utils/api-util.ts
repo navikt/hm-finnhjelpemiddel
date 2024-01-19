@@ -109,7 +109,6 @@ const sortOptionsOpenSearch = {
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
-
   const sortOrderOpenSearch = sortOptionsOpenSearch[sortOrder]
 
   const {
