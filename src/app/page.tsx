@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -10,17 +10,20 @@ import useSWR from 'swr'
 
 import { BodyLong, BodyShort, Heading, Search } from '@navikt/ds-react'
 
-import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import { agreementHasNoProducts, AgreementLabel } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
+import sitemap from '@/app/sitemap'
 
 function Home() {
   const router = useRouter()
   const agreementHeadingRef = useRef<HTMLHeadingElement>(null)
-
+  useEffect(() => {
+    sitemap()
+  }, [])
   const setFocusOnHeading = () => {
     agreementHeadingRef.current && agreementHeadingRef.current.scrollIntoView({ behavior: 'smooth' })
   }

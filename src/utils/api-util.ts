@@ -1001,3 +1001,40 @@ export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => 
       return { suggestions }
     })
 }
+
+export async function fetchSerieId(ProductsWithAgreement: boolean): Promise<SearchResponse> {
+  const query = {
+    bool: {
+      filter: [
+        {
+          term: {
+            status: 'ACTIVE',
+          },
+        },
+        {
+          match_bool_prefix: {
+            hasAgreement: ProductsWithAgreement,
+          },
+        },
+      ],
+    },
+  }
+
+  const res = await fetch(HM_SEARCH_URL + '/products/_search?filter_path=took,hits.total,hits.hits._source', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      size: 10000,
+      collapse: {
+        field: 'seriesId',
+      },
+      _source: {
+        includes: ['seriesId'],
+      },
+    }),
+  })
+  return res.json()
+}

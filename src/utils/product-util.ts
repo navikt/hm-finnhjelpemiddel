@@ -327,3 +327,11 @@ export const toSearchQueryString = (searchParams: SearchData) =>
       .filter(([_, values]) => values.some((value) => value))
       .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
   })
+
+export interface SeriesId {
+  seriesId: string
+}
+
+export const mapSeriesId = (data: SearchResponse) => {
+  return data.hits.hits.map((h) => h._source as SeriesId)
+}
