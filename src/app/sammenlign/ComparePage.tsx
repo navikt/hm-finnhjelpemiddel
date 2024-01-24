@@ -5,9 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { FetchSeriesResponse, fetchProductsWithVariants } from '@/utils/api-util'
+import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { Product, mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { mapProductSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import ProductCard from '@/components/ProductCard'
@@ -22,7 +22,6 @@ import {
 } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { useMemo } from 'react'
-import { agreements } from '@/utils/mock-data'
 
 export default function ComparePage() {
   //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
@@ -31,7 +30,7 @@ export default function ComparePage() {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
 
-  const href = '/sok' + toSearchQueryString(searchData)
+  const href = '/sok?' + toSearchQueryString(searchData)
   const series = productsToCompare.map((product) => product.id)
 
   //TODO: error handling
