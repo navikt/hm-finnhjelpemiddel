@@ -1002,7 +1002,7 @@ export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => 
     })
 }
 
-export async function fetchSerieId(ProductsWithAgreement: boolean): Promise<SearchResponse> {
+export async function fetchSerieIds(ProductsWithAgreement: boolean): Promise<SearchResponse> {
   const query = {
     bool: {
       filter: [
