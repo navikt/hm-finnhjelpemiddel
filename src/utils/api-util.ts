@@ -73,7 +73,7 @@ export type SearchData = {
   sortOrder: SortOrder
 }
 
-export const sortOrders = ['Alfabetisk', 'Mest_relevant', 'Delkontrakt_rangering', 'Rangering_delkontrakt'] as const
+export const sortOrders = ['Alfabetisk', 'Delkontrakt_rangering', 'Mest_relevant'] as const
 
 export type SortOrder = (typeof sortOrders)[number]
 
@@ -103,9 +103,8 @@ const removeReservedChars = (searchTerm: String) => {
 
 const sortOptionsOpenSearch = {
   Alfabetisk: { articleName_keyword: 'asc' },
-  Mest_relevant: [{ _score: { order: 'desc' } }],
   Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
-  Rangering_delkontrakt: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }],
+  Mest_relevant: [{ _score: { order: 'desc' } }],
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {

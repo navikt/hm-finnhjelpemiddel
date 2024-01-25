@@ -16,9 +16,8 @@ const SortSearchResults = ({ formRef }: Props) => {
 
   const options = [
     { value: 'Alfabetisk', label: 'Alfabetisk' },
-    { value: 'Mest_relevant', label: 'Mest relevant' },
     { value: 'Delkontrakt_rangering', label: 'Delkontrakt og rangering' },
-    { value: 'Rangering_delkontrakt', label: 'Rangering og delkontrakt' },
+    { value: 'Mest_relevant', label: 'Mest relevant' },
   ] as const
 
   const handleSelectedSorting = (event: React.FormEvent<HTMLSelectElement>) => {
