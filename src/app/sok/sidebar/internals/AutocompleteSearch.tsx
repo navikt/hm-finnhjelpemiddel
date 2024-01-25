@@ -4,7 +4,8 @@ import { RefObject, useEffect, useRef, useState } from 'react'
 
 import useSWR from 'swr'
 
-import { Popover, Search } from '@navikt/ds-react'
+import { Popover } from '@navikt/ds-react'
+import { Search } from '../../../../components/@navikt/ds-react/form/search' // copy from node_modules/@navikt
 
 import { SearchData, Suggestions, fetchSuggestions } from '@/utils/api-util'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -32,7 +33,7 @@ const AutocompleteSearch = ({ formRef }: Props) => {
   const { data: suggestions } = useSWR<Suggestions>(shouldFetch ? debouncedSearchValue : null, fetchSuggestions, {
     keepPreviousData: false,
   })
-  const virtualFocus = useVirtualFocus(listContainerRef.current, suggestions)
+  const virtualFocus = useVirtualFocus(listContainerRef.current)
 
   useEffect(() => {
     if (inputValue && !selectedOption) {
@@ -46,11 +47,8 @@ const AutocompleteSearch = ({ formRef }: Props) => {
   }, [selectedOption])
 
   useEffect(() => {
-    console.log(virtualFocus.activeElementData)
-    console.log(virtualFocus.activeElement)
-    const buttonElm = virtualFocus.activeElement?.firstChild as HTMLButtonElement
-    buttonElm?.focus()
-  }, [virtualFocus.activeElement, virtualFocus.activeElementData])
+    virtualFocus.activeElement?.querySelector('button')?.focus()
+  }, [virtualFocus.activeElement])
 
   const handleSelectedOption = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -65,7 +63,7 @@ const AutocompleteSearch = ({ formRef }: Props) => {
     }
   }
 
-  const handlesearchWordSelected = () => {
+  const handleSelectInputValue = () => {
     if (inputValue) {
       setShouldFetch(false)
       setSelectedOption(inputValue)
@@ -75,12 +73,13 @@ const AutocompleteSearch = ({ formRef }: Props) => {
     }
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDownInsideSuggestionList = (event: React.KeyboardEvent) => {
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
       event.preventDefault()
 
       if (event.key === 'ArrowUp') {
         if (virtualFocus.isFocusOnTheTop) {
+          virtualFocus.reset()
           searchFieldRef.current?.focus()
         } else {
           virtualFocus.moveFocusUp()
@@ -91,8 +90,27 @@ const AutocompleteSearch = ({ formRef }: Props) => {
     }
   }
 
-  //Trenger ikke å legge til classname active når knappen får fokus og kan styles med &:focus
-  //className={virtualFocus.activeElementData == suggestion ? 'active' : ''}
+  const handleKeyUpInInputField = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      const inputValue = (event.currentTarget as HTMLInputElement).value
+      formMethods.setValue('searchTerm', inputValue)
+      formRef.current?.requestSubmit()
+      setOpenState(false)
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      const current = listContainerRef.current?.querySelector('li') as HTMLLIElement
+      if (current) {
+        virtualFocus.moveFocusToElement(current)
+      }
+    } else if (event.key === 'Backspace' && !inputValue.length) {
+      event.preventDefault()
+      setSelectedOption('')
+      formMethods.setValue('searchTerm', '')
+      formRef.current?.requestSubmit()
+      setOpenState(false)
+    }
+  }
 
   return (
     <div className="search-wrapper">
@@ -104,10 +122,14 @@ const AutocompleteSearch = ({ formRef }: Props) => {
           <Search
             {...field}
             value={inputValue}
-            variant="simple"
+            type="search"
             ref={searchFieldRef}
             label="Skriv ett eller flere søkeord"
             hideLabel={false}
+            role="combobox"
+            aria-expanded={openState}
+            aria-controls={'suggestion-list'}
+            aria-autocomplete="list"
             onChange={(value) => {
               setInputValue(value)
             }}
@@ -120,24 +142,8 @@ const AutocompleteSearch = ({ formRef }: Props) => {
               formMethods.setValue('searchTerm', '')
               formRef.current?.requestSubmit()
             }}
-            onKeyUpCapture={(event) => {
-              if (event.key === 'Enter') {
-                formMethods.setValue('searchTerm', event.currentTarget.value)
-                formRef.current?.requestSubmit()
-                setOpenState(false)
-              }
-              if (event.key === 'Backspace' && !inputValue) {
-                formMethods.setValue('searchTerm', '')
-                formRef.current?.requestSubmit()
-                setOpenState(false)
-              }
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'ArrowDown') {
-                event.preventDefault()
-                listContainerRef.current?.focus()
-              }
-            }}
+            onKeyUp={handleKeyUpInInputField}
+            onFocus={() => virtualFocus.reset()}
           />
         )}
       />
@@ -152,31 +158,29 @@ const AutocompleteSearch = ({ formRef }: Props) => {
         ref={popoverRef}
       >
         <Popover.Content className="popover-content">
-          <ul onKeyDown={handleKeyDown} role="listbox" className="popover-list" ref={listContainerRef} tabIndex={0}>
+          <ul
+            aria-label="Søkeforslag"
+            onKeyDown={handleKeyDownInsideSuggestionList}
+            role="listbox"
+            className="popover-list"
+            ref={listContainerRef}
+            id="suggestion-list"
+          >
             {(suggestions || []).map((suggestion, i) => (
-              <li key={i}>
-                <button
-                  tabIndex={0}
-                  className="reset-button-styling"
-                  onClick={handleSelectedOption}
-                  data-value={suggestion.text}
-                  type="button"
-                >
+              <li key={i} id={suggestion.text}>
+                <button tabIndex={0} onClick={handleSelectedOption} data-value={suggestion.text} type="button">
                   {suggestion.text}
                 </button>
               </li>
             ))}
 
             {!selectedOption && (
-              <>
-                <div className="divider" data-no-focus="true" />
-                <li className="popover-search-word">
-                  <button className="reset-button-styling" onClick={handlesearchWordSelected} type="button">
-                    <MagnifyingGlassIcon title="søkeikon" fontSize="1.5rem" />
-                    <span>{`Søk på "${inputValue}" i hele databasen`}</span>
-                  </button>
-                </li>
-              </>
+              <li className="popover-search-word">
+                <button className="reset-button-styling" onClick={handleSelectInputValue} type="button">
+                  <MagnifyingGlassIcon title="søkeikon" fontSize="1.5rem" />
+                  <span>{`Søk på "${inputValue}" i hele databasen`}</span>
+                </button>
+              </li>
             )}
           </ul>
         </Popover.Content>

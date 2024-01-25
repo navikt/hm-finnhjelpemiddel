@@ -1,20 +1,19 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 // Update useVirtualFocus hook
-function useVirtualFocus<T>(containerRef: HTMLElement | null, elementData?: T[]) {
+function useVirtualFocus<T>(containerRef: HTMLElement | null) {
   const [index, setIndex] = useState(-1)
 
-  const listOfAllChildren: HTMLElement[] = containerRef?.children
-    ? Array.prototype.slice.call(containerRef?.children)
-    : []
-  const elementsAbleToReceiveFocus = listOfAllChildren.filter((child) => child.getAttribute('data-no-focus') !== 'true')
+  const getElementsAbleToReceiveFocus = () => {
+    const listOfAllChildren: HTMLElement[] = containerRef?.children
+      ? Array.prototype.slice.call(containerRef?.children)
+      : []
+    return listOfAllChildren.filter((child) => child.getAttribute('data-no-focus') !== 'true')
+  }
 
-  const activeElement = elementsAbleToReceiveFocus[index]
-  const activeElementData = elementData ? elementData[index] : undefined
-
-  const getElementById = (id: string) => listOfAllChildren.find((element) => element.id === id)
-  const isFocusOnTheTop = index === 0
-  const isFocusOnTheBottom = index === elementsAbleToReceiveFocus.length - 1
+  const reset = useCallback(() => {
+    setIndex(-1)
+  }, [])
 
   const scrollToOption = (newIndex: number) => {
     const indexOfElementToScrollTo = Math.min(Math.max(newIndex, 0), containerRef?.children.length || 0)
@@ -33,26 +32,25 @@ function useVirtualFocus<T>(containerRef: HTMLElement | null, elementData?: T[])
     scrollToOption(_index)
   }
   const moveFocusUp = () => _moveFocusAndScrollTo(Math.max(index - 1, -1))
-  const moveFocusDown = () => _moveFocusAndScrollTo(Math.min(index + 1, elementsAbleToReceiveFocus.length - 1))
+  const moveFocusDown = () => _moveFocusAndScrollTo(Math.min(index + 1, getElementsAbleToReceiveFocus().length - 1))
   const moveFocusToTop = () => _moveFocusAndScrollTo(-1)
-  const moveFocusToBottom = () => _moveFocusAndScrollTo(elementsAbleToReceiveFocus.length - 1)
-  const moveFocusToElement = (id: string) => {
-    const thisElement = elementsAbleToReceiveFocus.find((_element) => _element.getAttribute('id') === id)
+  const moveFocusToBottom = () => _moveFocusAndScrollTo(getElementsAbleToReceiveFocus().length - 1)
+  const moveFocusToElement = (id: string | HTMLElement) => {
+    const elementsAbleToReceiveFocus = getElementsAbleToReceiveFocus()
+    const thisElement =
+      typeof id === 'string' ? elementsAbleToReceiveFocus.find((_element) => _element.getAttribute('id') === id) : id
     const indexOfElement = thisElement ? elementsAbleToReceiveFocus.indexOf(thisElement) : -1
     if (indexOfElement >= 0) {
-      setIndex(indexOfElement)
+      _moveFocusAndScrollTo(indexOfElement)
     }
   }
 
+  const elementsAbleToReceiveFocus = getElementsAbleToReceiveFocus()
+
   return {
-    index,
-    activeElement,
-    activeElementData,
-    elementsAbleToReceiveFocus, // Expose the array of focusable elements
-    getElementById,
-    isFocusOnTheTop,
-    isFocusOnTheBottom,
-    setIndex,
+    reset,
+    activeElement: elementsAbleToReceiveFocus[index],
+    isFocusOnTheTop: index === 0,
     moveFocusUp,
     moveFocusDown,
     moveFocusToElement,

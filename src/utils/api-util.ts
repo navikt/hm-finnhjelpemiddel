@@ -968,7 +968,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
             contexts: {
               status: 'ACTIVE',
             },
-            size: 10,
+            size: 20,
             fuzzy: {
               fuzziness: 'AUTO',
             },
