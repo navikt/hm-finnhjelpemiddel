@@ -16,6 +16,7 @@ import useRestoreScroll from '@/hooks/useRestoreScroll'
 import AgreementIcon from '@/components/AgreementIcon'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
+import SortSearchResults from '@/components/SortSearchResults'
 
 const SearchResults = ({
   data,
@@ -72,6 +73,7 @@ const SearchResults = ({
           <Heading level="2" size="medium" ref={searchResultRef}>
             Søkeresultater
           </Heading>
+          <SortSearchResults formRef={formRef} />
         </div>
         <div>
           <BodyShort aria-live="polite">{`${products.length} produkter vises`}</BodyShort>

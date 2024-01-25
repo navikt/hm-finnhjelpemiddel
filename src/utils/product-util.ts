@@ -3,7 +3,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 import queryString from 'querystring'
 
 import { getPostTitle } from './agreement-util'
-import { SearchData, SelectedFilters } from './api-util'
+import { isValidSortOrder, SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
@@ -83,8 +83,7 @@ interface Attributes {
   text?: string
   bestillingsordning?: boolean
   commonCharacteristics?: TechData
-  //Temporary until we know how to connect spareParts/accessories to matching products
-  matchingProducts?: string[]
+  compatibleWith?: string[]
 }
 
 export interface AgreementInfo {
@@ -292,6 +291,9 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
 }
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
+  const sortOrderStr = searchParams.get('sortering') || ''
+  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Mest_relevant'
+
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
   const hasAgreementsOnly = searchParams.has('agreement')
@@ -308,6 +310,7 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
   )
 
   return {
+    sortOrder,
     searchTerm,
     isoCode,
     hasAgreementsOnly,
@@ -317,6 +320,7 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
 
 export const toSearchQueryString = (searchParams: SearchData) =>
   queryString.stringify({
+    ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
     ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),

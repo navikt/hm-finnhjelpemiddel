@@ -1,8 +1,8 @@
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
-  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
+  FilterCategories,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -21,14 +21,13 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  Product,
-  ProductVariant,
-  mapProductVariant,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
+  mapProductVariant,
+  Product,
+  ProductVariant,
 } from './product-util'
 import { ProductDocResponse, SearchResponse } from './response-types'
-import { sortAlphabetically } from './sort-util'
 
 export const PAGE_SIZE = 25
 
@@ -71,6 +70,15 @@ export type SearchData = {
   isoCode: string
   hasAgreementsOnly: boolean
   filters: SelectedFilters
+  sortOrder: SortOrder
+}
+
+export const sortOrders = ['Alfabetisk', 'Delkontrakt_rangering', 'Mest_relevant'] as const
+
+export type SortOrder = (typeof sortOrders)[number]
+
+export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
+  return sortOrders.includes(sortOrder as SortOrder)
 }
 
 export type SearchParams = SearchData & { to?: number }
@@ -93,8 +101,16 @@ const removeReservedChars = (searchTerm: String) => {
   return searchTerm.replaceAll(unescapables, '').replaceAll(queryStringReserved, '\\$&')
 }
 
+const sortOptionsOpenSearch = {
+  Alfabetisk: { articleName_keyword: 'asc' },
+  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+  Mest_relevant: [{ _score: { order: 'desc' } }],
+}
+
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
-  const { searchTerm, isoCode, hasAgreementsOnly, filters } = searchData
+  const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
+
+  const sortOrderOpenSearch = sortOptionsOpenSearch[sortOrder]
 
   const {
     lengdeCM,
@@ -188,7 +204,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     },
     //Dersom man har gjort et søk eller valgt et filter ønsker vi ikke negativ boost på seksualhjelpemidler
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
+    // negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
+    negative_boost: searchDataFilters.length ? 1 : 0.01,
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
@@ -260,7 +277,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
       from,
       size,
       track_scores: true,
-      sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: sortOrderOpenSearch,
       query,
       collapse: {
         field: 'seriesId',

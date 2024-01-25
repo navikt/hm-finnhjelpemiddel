@@ -66,12 +66,8 @@ const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Suppl
     <Heading level="2" size="xsmall">
       Produktbeskrivelse
     </Heading>
-    {product.attributes.shortdescription && <BodyLong spacing>{product.attributes.shortdescription}</BodyLong>}
     {product.attributes.text && <BodyLong>{product.attributes.text}</BodyLong>}
-
-    {!product.attributes.shortdescription &&
-      !product.attributes.text &&
-      'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
+    {!product.attributes.text && 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
 
     <Heading level="2" size="xsmall" style={{ marginTop: '1.5rem' }}>
       Leverandør

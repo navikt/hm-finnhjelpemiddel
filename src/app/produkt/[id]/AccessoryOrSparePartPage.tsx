@@ -7,6 +7,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import ProductPageTopInfo from './ProductPageTopInfo'
 import './product-page.scss'
+import { Bleed } from '@navikt/ds-react'
 
 type Props = {
   product: Product
@@ -20,24 +21,28 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
       <AnimateLayout>
         <article className="product-info spacing-top--large">
           <ProductPageTopInfo product={product} supplier={supplier} />
-          <section className="product-page-section__container product-page-section__blue-background">
-            <Heading level="2" size="medium" spacing>
-              Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
-            </Heading>
-            {matchingProducts && matchingProducts.length > 0 ? (
-              <div className="product-page-section__card-container">
-                {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
-                {matchingProducts.map((product, i) => (
-                  <ProductCard key={i} product={product} showRank={true} />
-                ))}
+          <Bleed marginInline="full" asChild>
+            <section className="product-page-section__container product-page-section__blue-background">
+              <div className="product-page-section__content main-wrapper">
+                <Heading level="2" size="medium" spacing>
+                  Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
+                </Heading>
+                {matchingProducts && matchingProducts.length > 0 ? (
+                  <div className="product-page-section__card-container">
+                    {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
+                    {matchingProducts.map((product, i) => (
+                      <ProductCard key={i} product={product} showRank={true} />
+                    ))}
+                  </div>
+                ) : (
+                  <BodyLong>
+                    Det er ikke oppgitt hvilke produkter som passer til
+                    {product.accessory ? 'tilbehøret' : 'reservedelen'}
+                  </BodyLong>
+                )}
               </div>
-            ) : (
-              <BodyLong>
-                Det er ikke oppgitt hvilke produkter som passer til
-                {product.accessory ? 'tilbehøret' : 'reservedelen'}
-              </BodyLong>
-            )}
-          </section>
+            </section>
+          </Bleed>
         </article>
       </AnimateLayout>
     </>
