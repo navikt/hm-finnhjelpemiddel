@@ -3,7 +3,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 import queryString from 'querystring'
 
 import { getPostTitle } from './agreement-util'
-import { SearchData, SelectedFilters, SortOrder, isValidSortOrder } from './api-util'
+import { isValidSortOrder, SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
@@ -292,7 +292,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
 
 export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
   const sortOrderStr = searchParams.get('sortering') || ''
-  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Alfabetisk'
+  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Mest_relevant'
 
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
