@@ -3,7 +3,7 @@
 import React, { RefObject } from 'react'
 import { Select } from '@navikt/ds-react'
 import { useFormContext } from 'react-hook-form'
-import { SearchData, isValidSortOrder } from '@/utils/api-util'
+import { isValidSortOrder, SearchData } from '@/utils/api-util'
 import { useSearchParams } from 'next/navigation'
 
 type Props = {
@@ -16,8 +16,8 @@ const SortSearchResults = ({ formRef }: Props) => {
 
   const options = [
     { value: 'Alfabetisk', label: 'Alfabetisk' },
-    { value: 'Beste_treff', label: 'Beste treff' },
     { value: 'Delkontrakt_rangering', label: 'Delkontrakt og rangering' },
+    { value: 'Mest_relevant', label: 'Mest relevant' },
   ] as const
 
   const handleSelectedSorting = (event: React.FormEvent<HTMLSelectElement>) => {
@@ -28,7 +28,11 @@ const SortSearchResults = ({ formRef }: Props) => {
   }
 
   return (
-    <Select label="Sortering" onChange={handleSelectedSorting} defaultValue={searchParams.get('sortering') ?? ''}>
+    <Select
+      label="Sortering"
+      onChange={handleSelectedSorting}
+      defaultValue={searchParams.get('sortering') ?? 'Mest_relevant'}
+    >
       {options.map((option, index) => (
         <option key={index} value={option.value}>
           {option.label}

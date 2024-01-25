@@ -73,7 +73,7 @@ export type SearchData = {
   sortOrder: SortOrder
 }
 
-export const sortOrders = ['Alfabetisk', 'Beste_treff', 'Delkontrakt_rangering'] as const
+export const sortOrders = ['Alfabetisk', 'Delkontrakt_rangering', 'Mest_relevant'] as const
 
 export type SortOrder = (typeof sortOrders)[number]
 
@@ -103,8 +103,8 @@ const removeReservedChars = (searchTerm: String) => {
 
 const sortOptionsOpenSearch = {
   Alfabetisk: { articleName_keyword: 'asc' },
-  Delkontrakt_rangering: [{ 'agreementInfo.rank': 'asc' }, { 'agreements.postNr': 'asc' }],
-  Beste_treff: [{ _score: { order: 'desc' } }],
+  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+  Mest_relevant: [{ _score: { order: 'desc' } }],
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
@@ -204,7 +204,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     },
     //Dersom man har gjort et søk eller valgt et filter ønsker vi ikke negativ boost på seksualhjelpemidler
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
+    // negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
+    negative_boost: searchDataFilters.length ? 1 : 0.01,
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
