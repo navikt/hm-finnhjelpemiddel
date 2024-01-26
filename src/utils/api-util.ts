@@ -181,31 +181,19 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     queryFilters.push({ match: { hmsArtNr: { query: searchTerm } } })
   }
 
-  //Seksualhjelpemidler boostes negativt slik at de kommer langt ned i listen når søk ikke er initiert
+  //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
   const negativeIsoCategories = ['09540601', '09540901', '09540301']
-
-  const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
-    .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
   const commonBoosting = {
     negative: {
       bool: {
         must: {
-          bool: {
-            should: negativeIsoCategories.map((isoCategory) => ({
-              match: {
-                isoCategory,
-              },
-            })),
-          },
+          bool: {},
         },
       },
     },
-    //Dersom man har gjort et søk eller valgt et filter ønsker vi ikke negativ boost på seksualhjelpemidler
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    // negative_boost: searchData.searchTerm.length || searchDataFilters.length ? 1 : 0.1,
-    negative_boost: searchDataFilters.length ? 1 : 0.01,
+    negative_boost: 1,
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
@@ -257,6 +245,15 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
             },
           },
         ],
+      },
+    },
+    must_not: {
+      bool: {
+        should: negativeIsoCategories.map((isoCategory) => ({
+          match: {
+            isoCategory,
+          },
+        })),
       },
     },
   }
