@@ -9,14 +9,17 @@ const ReadMore = ({
   content,
   buttonOpen,
   buttonClose,
+  defaultOpen,
   setFocus,
 }: {
   content: ReactNode
   buttonOpen: string
   buttonClose: string
+  defaultOpen?: boolean
   setFocus?: () => void
 }) => {
-  const [showFullDescription, setShowFullDescription] = useState<boolean>(false)
+  const [showFullDescription, setShowFullDescription] = useState<boolean>(defaultOpen ?? false)
+
   return (
     <div className="read-more">
       {showFullDescription && content}
