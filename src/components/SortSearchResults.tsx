@@ -15,7 +15,6 @@ const SortSearchResults = ({ formRef }: Props) => {
   const searchParams = useSearchParams()
 
   const options = [
-    { value: 'Alfabetisk', label: 'Alfabetisk' },
     { value: 'Delkontrakt_rangering', label: 'Delkontrakt og rangering' },
     { value: 'Mest_relevant', label: 'Mest relevant' },
   ] as const
