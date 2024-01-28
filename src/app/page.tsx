@@ -16,6 +16,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 import ReadMore from '@/components/ReadMore'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
+import AutocompleteSearch from './sok/sidebar/internals/AutocompleteSearch'
 
 function Home() {
   const router = useRouter()
@@ -70,17 +71,7 @@ function Home() {
               <Heading level="1" size="large">
                 Søk i Norges største samling av hjelpemidler på nett.
               </Heading>
-              <Search
-                label="Skriv ett eller flere søkeord"
-                hideLabel={false}
-                onSearchClick={onSearch}
-                onKeyUpCapture={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault()
-                    onSearch(event.currentTarget.value)
-                  }
-                }}
-              />
+              <AutocompleteSearch onSearch={onSearch} />
             </div>
             <Image src="/illustrasjon.svg" width="316" height="173" alt="" aria-hidden />
           </div>

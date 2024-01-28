@@ -7,6 +7,7 @@ import { FilterData, SearchData } from '@/utils/api-util'
 
 import FilterView from './FilterView'
 import AutocompleteSearch from './internals/AutocompleteSearch'
+import { useSearchParams } from 'next/navigation'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
   <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
@@ -23,8 +24,15 @@ type Props = {
 const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
   const formRef = useRef<HTMLFormElement>(null)
   const formMethods = useFormContext<SearchData>()
+  const searchParams = useSearchParams()
+  const searchTerm = searchParams.get('term') ?? ''
 
   useImperativeHandle(ref, () => formRef.current!)
+
+  const onSearch = (searchTerm: string) => {
+    formMethods.setValue('searchTerm', searchTerm)
+    formRef.current?.requestSubmit()
+  }
 
   return (
     <form
@@ -35,7 +43,12 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       aria-controls="searchResults"
     >
       <div className="spacing-bottom--medium">
-        <AutocompleteSearch formRef={formRef} />
+        <Controller
+          name="searchTerm"
+          control={formMethods.control}
+          defaultValue=""
+          render={() => <AutocompleteSearch onSearch={onSearch} initialValue={searchTerm} />}
+        />
       </div>
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
 

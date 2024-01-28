@@ -1,26 +1,26 @@
 'use client'
 
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import useSWR from 'swr'
 
 import { Popover } from '@navikt/ds-react'
 import { Search } from '../../../../components/@navikt/ds-react/form/search' // copy from node_modules/@navikt
 
-import { SearchData, Suggestions, fetchSuggestions } from '@/utils/api-util'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Suggestions, fetchSuggestions } from '@/utils/api-util'
 
 import useDebounce from '@/hooks/useDebounce'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import useVirtualFocus from '@/hooks/useVirtualFocus'
 
 type Props = {
-  formRef: RefObject<HTMLFormElement>
+  onSearch: (searchTerm: string) => void
+  initialValue?: string
 }
 
-const AutocompleteSearch = ({ formRef }: Props) => {
+const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
   const [openState, setOpenState] = useState(false)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(initialValue || '')
   const [shouldFetch, setShouldFetch] = useState(true)
   const [selectedOption, setSelectedOption] = useState('')
 
@@ -28,7 +28,6 @@ const AutocompleteSearch = ({ formRef }: Props) => {
   const popoverRef = useRef<HTMLDivElement>(null)
   const listContainerRef = useRef<HTMLUListElement | null>(null)
 
-  const formMethods = useFormContext<SearchData>()
   const debouncedSearchValue = useDebounce<string>(inputValue, 100)
   const { data: suggestions } = useSWR<Suggestions>(shouldFetch ? debouncedSearchValue : null, fetchSuggestions, {
     keepPreviousData: false,
@@ -36,10 +35,10 @@ const AutocompleteSearch = ({ formRef }: Props) => {
   const virtualFocus = useVirtualFocus(listContainerRef.current)
 
   useEffect(() => {
-    if (inputValue && !selectedOption) {
+    if (inputValue && !selectedOption && !initialValue) {
       setOpenState(true)
     } else setOpenState(false)
-  }, [inputValue, selectedOption])
+  }, [inputValue, selectedOption, initialValue])
 
   useEffect(() => {
     if (selectedOption) setShouldFetch(false)
@@ -57,8 +56,7 @@ const AutocompleteSearch = ({ formRef }: Props) => {
       setShouldFetch(false)
       setSelectedOption(searchWord)
       setInputValue(searchWord)
-      formMethods.setValue('searchTerm', searchWord)
-      formRef.current?.requestSubmit()
+      onSearch(searchWord)
       setOpenState(false)
     }
   }
@@ -67,8 +65,7 @@ const AutocompleteSearch = ({ formRef }: Props) => {
     if (inputValue) {
       setShouldFetch(false)
       setSelectedOption(inputValue)
-      formMethods.setValue('searchTerm', inputValue)
-      formRef.current?.requestSubmit()
+      onSearch(inputValue)
       setOpenState(false)
     }
   }
@@ -94,8 +91,7 @@ const AutocompleteSearch = ({ formRef }: Props) => {
     if (event.key === 'Enter') {
       event.preventDefault()
       const inputValue = (event.currentTarget as HTMLInputElement).value
-      formMethods.setValue('searchTerm', inputValue)
-      formRef.current?.requestSubmit()
+      onSearch(inputValue)
       setOpenState(false)
     } else if (event.key === 'ArrowDown') {
       event.preventDefault()
@@ -106,52 +102,41 @@ const AutocompleteSearch = ({ formRef }: Props) => {
     } else if (event.key === 'Backspace' && !inputValue.length) {
       event.preventDefault()
       setSelectedOption('')
-      formMethods.setValue('searchTerm', '')
-      formRef.current?.requestSubmit()
+      onSearch('')
       setOpenState(false)
     }
   }
 
   return (
     <div className="search-wrapper">
-      <Controller
-        name="searchTerm"
-        control={formMethods.control}
-        defaultValue=""
-        render={({ field }) => (
-          <Search
-            {...field}
-            value={inputValue}
-            type="search"
-            ref={searchFieldRef}
-            label="Skriv ett eller flere søkeord"
-            hideLabel={false}
-            role="combobox"
-            aria-expanded={openState}
-            aria-controls={'suggestion-list'}
-            aria-autocomplete="list"
-            onChange={(value) => {
-              setInputValue(value)
-            }}
-            onSearchClick={(searchTerm) => {
-              formMethods.setValue('searchTerm', searchTerm)
-              formRef.current?.requestSubmit()
-            }}
-            onClear={() => {
-              setSelectedOption('')
-              formMethods.setValue('searchTerm', '')
-              formRef.current?.requestSubmit()
-            }}
-            onKeyUp={handleKeyUpInInputField}
-            onFocus={() => virtualFocus.reset()}
-          />
-        )}
+      <Search
+        value={inputValue}
+        type="search"
+        ref={searchFieldRef}
+        label="Skriv ett eller flere søkeord"
+        hideLabel={false}
+        role="combobox"
+        aria-expanded={openState}
+        aria-controls={'suggestion-list'}
+        aria-autocomplete="list"
+        onChange={(value) => {
+          setInputValue(value)
+        }}
+        onSearchClick={(searchTerm) => {
+          onSearch(searchTerm)
+        }}
+        onClear={() => {
+          setSelectedOption('')
+          onSearch('')
+        }}
+        onKeyUp={handleKeyUpInInputField}
+        onFocus={() => virtualFocus.reset()}
       />
 
       <Popover
         open={openState}
         className="popover"
-        placement="bottom"
+        placement="bottom-start"
         onClose={() => setOpenState(false)}
         anchorEl={searchFieldRef.current}
         arrow={false}

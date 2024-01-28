@@ -283,12 +283,11 @@
 .search-wrapper {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .popover {
-  position: relative !important;
-  top: 5px !important;
-  left: 0 !important;
+  width: 100%;
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid var(--ac-combobox-list-border-color, var(--a-border-divider));
