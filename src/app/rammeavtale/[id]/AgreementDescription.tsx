@@ -32,6 +32,7 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
           content={<div dangerouslySetInnerHTML={{ __html: agreement.descriptionHtml }} />}
           buttonOpen={'Les mer om avtalen'}
           buttonClose={'Les mindre om avtalen'}
+          defaultOpen={true}
           setFocus={setFocusOnHeading}
         />
       )}

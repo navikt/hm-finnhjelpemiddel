@@ -68,7 +68,20 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
 }
 
 export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
-  return data.hits.hits.map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
+  //TODO: Når vi skrur av hjelpemiddelbasen kan disse slettes fra database og vi trenger ikke lenger å filterre de ut her.
+  //Enn så lenge må vi gjøre det fordi de vil synkes fra hjelpemiddeldatabasen daglig
+  const excludedAgreements: Record<string, string> = {
+    Bilombygg: '123ea1cc-f366-4e08-a40c-8f50eafcdc78',
+    Biler: '970d867a-d095-42a8-9f0a-495e42f301cb',
+    Servicehunder: '744ca191-ed99-4a09-90f0-29f3733885f5',
+    Høreapparater: '67196a0e-d1db-4c74-87ce-9d84da279c0a',
+  }
+
+  const excludedValues = Object.values(excludedAgreements)
+
+  return data.hits.hits
+    .filter((hit) => !excludedValues.includes(hit._source.id))
+    .map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
 }
 
 export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabel => {

@@ -27,7 +27,7 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
     Math.min(...product.agreements.map((agreement) => agreement.rank))
   const rank = product.agreements?.length === 1 ? product.agreements[0].rank : minRank
   const agreementRankText =
-    typeof rank === 'number' ? `Rangert som nr ${rank} på avtale med Nav.` : 'Er på avtale med NAV uten rangering.'
+    typeof rank === 'number' ? `Rangert som nr ${rank} på avtale med NAV.` : 'Er på avtale med NAV uten rangering.'
 
   return (
     <>
