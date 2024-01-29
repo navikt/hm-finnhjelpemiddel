@@ -99,11 +99,16 @@ const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
       if (current) {
         virtualFocus.moveFocusToElement(current)
       }
-    } else if (event.key === 'Backspace' && !inputValue.length) {
+    } else if (event.key === 'Backspace') {
       event.preventDefault()
-      setSelectedOption('')
-      onSearch('')
-      setOpenState(false)
+      if (!inputValue.length) {
+        setSelectedOption('')
+        onSearch('')
+        setOpenState(false)
+      } else {
+        setShouldFetch(true)
+        setOpenState(true)
+      }
     }
   }
 
