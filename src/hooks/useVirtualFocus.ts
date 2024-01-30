@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 
-// Update useVirtualFocus hook
 function useVirtualFocus<T>(containerRef: HTMLElement | null) {
   const [index, setIndex] = useState(-1)
 
