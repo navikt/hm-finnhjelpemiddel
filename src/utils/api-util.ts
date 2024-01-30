@@ -963,10 +963,9 @@ export async function getProductsInPost(agreementId: string, postNr: number): Pr
 }
 
 export type Suggestions = Array<{ text: string; data: ProductVariant }>
-export type SuggestionsResponse = { suggestions: Suggestions }
 
 //TODO: Bør denne returnere Product? Vet ikke om vi trenger det
-export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => {
+export const fetchSuggestions = (term: string): Promise<Suggestions> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
@@ -982,7 +981,7 @@ export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => 
             contexts: {
               status: 'ACTIVE',
             },
-            size: 200,
+            size: 20,
             fuzzy: {
               fuzziness: 'AUTO',
             },
@@ -996,6 +995,6 @@ export const fetchSuggestions = (term: string): Promise<SuggestionsResponse> => 
       const suggestions: Suggestions = data.suggest.keywords_suggest
         .at(0)
         .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
-      return { suggestions }
+      return suggestions
     })
 }

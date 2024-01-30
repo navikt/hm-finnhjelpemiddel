@@ -1,11 +1,13 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Search, Switch } from '@navikt/ds-react'
+import { Button, Switch } from '@navikt/ds-react'
 
 import { FilterData, SearchData } from '@/utils/api-util'
 
 import FilterView from './FilterView'
+import AutocompleteSearch from './internals/AutocompleteSearch'
+import { useSearchParams } from 'next/navigation'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
   <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
@@ -22,8 +24,15 @@ type Props = {
 const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
   const formRef = useRef<HTMLFormElement>(null)
   const formMethods = useFormContext<SearchData>()
+  const searchParams = useSearchParams()
+  const searchTerm = searchParams.get('term') ?? ''
 
   useImperativeHandle(ref, () => formRef.current!)
+
+  const onSearch = (searchTerm: string) => {
+    formMethods.setValue('searchTerm', searchTerm)
+    formRef.current?.requestSubmit()
+  }
 
   return (
     <form
@@ -38,21 +47,7 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
           name="searchTerm"
           control={formMethods.control}
           defaultValue=""
-          render={({ field }) => (
-            <Search
-              {...field}
-              label="Skriv ett eller flere søkeord"
-              hideLabel={false}
-              onSearchClick={(searchTerm) => {
-                formMethods.setValue('searchTerm', searchTerm)
-                formRef.current?.requestSubmit()
-              }}
-              onClear={() => {
-                formMethods.setValue('searchTerm', '')
-                formRef.current?.requestSubmit()
-              }}
-            />
-          )}
+          render={() => <AutocompleteSearch onSearch={onSearch} initialValue={searchTerm} />}
         />
       </div>
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
