@@ -20,7 +20,7 @@ export default async function AgreementsInfoPage() {
       <AnimateLayout>
         <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
           <article>
-            <div className="flex flex--space-between">
+            <div className="flex flex--space-between" id="hovedinnhold">
               <Heading level="1" size="large" className="spacing-bottom--small">
                 Rammeavtaler på Hjelpemiddelområdet
               </Heading>

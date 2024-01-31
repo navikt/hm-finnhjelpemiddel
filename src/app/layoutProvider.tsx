@@ -20,6 +20,7 @@ import reportAccessibility from '@/utils/reportAccessibility'
 import Footer from '@/components/layout/Footer'
 import PepperkakeDekorasjon, { SnowfallContext } from '@/components/PepperkakeDekorasjon'
 import { useToggle } from '@/toggles/context'
+import Skiplink from '@/components/Skiplink'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -100,6 +101,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <Skiplink />
       <SnowfallContext.Provider value={snowfallEnabled}>
         <div id="modal-container"></div>
         <aside className="wip-banner">

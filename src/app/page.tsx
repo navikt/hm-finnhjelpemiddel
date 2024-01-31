@@ -8,9 +8,9 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { BodyLong, BodyShort, Heading, Search } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
 
-import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import { agreementHasNoProducts, AgreementLabel } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
@@ -67,7 +67,7 @@ function Home() {
       <AnimateLayout>
         <div className="home-page__background-container">
           <div className="home-page__container illustration-container">
-            <div className="home-page__heading-and-search">
+            <div className="home-page__heading-and-search" id="hovedinnhold">
               <Heading level="1" size="large">
                 Søk i Norges største samling av hjelpemidler på nett.
               </Heading>

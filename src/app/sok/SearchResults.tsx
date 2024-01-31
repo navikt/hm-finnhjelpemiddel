@@ -69,7 +69,7 @@ const SearchResults = ({
   return (
     <>
       <header className="results__header">
-        <div className="flex flex--row flex--space-between">
+        <div className="flex flex--row flex--space-between" id="hovedinnhold">
           <Heading level="2" size="medium" ref={searchResultRef}>
             Søkeresultater
           </Heading>

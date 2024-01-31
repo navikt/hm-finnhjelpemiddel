@@ -233,6 +233,7 @@ details {
         .page-link {
           height: $a-spacing-10;
         }
+
         li:last-of-type {
           margin-bottom: $a-spacing-3;
         }
@@ -346,9 +347,11 @@ details {
     &--small {
       margin-top: $a-spacing-2;
     }
+
     &--medium {
       margin-top: $a-spacing-4;
     }
+
     &--large {
       margin-top: $a-spacing-8;
 
@@ -356,6 +359,7 @@ details {
         margin-top: $a-spacing-12;
       }
     }
+
     &--xlarge {
       margin-top: $a-spacing-16;
 
@@ -371,9 +375,11 @@ details {
     &--small {
       margin-bottom: $a-spacing-2;
     }
+
     &--medium {
       margin-bottom: $a-spacing-4;
     }
+
     &--large {
       margin-bottom: $a-spacing-8;
 
@@ -381,6 +387,7 @@ details {
         margin-bottom: $a-spacing-12;
       }
     }
+
     &--xlarge {
       margin-bottom: $a-spacing-16;
 
@@ -491,4 +498,35 @@ details {
   -moz-box-orient: vertical;
 
   overflow: hidden;
+}
+
+.skiplink {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  z-index: 1001;
+
+  &:focus,
+  &:active {
+    clip: auto;
+    height: 2.625rem;
+    width: auto;
+    padding: 0.8rem;
+    margin: 0;
+    overflow: visible;
+    position: absolute;
+  }
+
+  &:focus {
+    outline: none;
+    color: white;
+    text-decoration: none;
+    background-color: $a-deepblue-800;
+    box-shadow: 0 0 0 2px $a-deepblue-800;
+  }
 }

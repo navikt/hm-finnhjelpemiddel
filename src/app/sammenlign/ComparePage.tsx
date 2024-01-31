@@ -63,7 +63,7 @@ export default function ComparePage() {
 
   return (
     <AnimateLayout>
-      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
+      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge" id="hovedinnhold">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
