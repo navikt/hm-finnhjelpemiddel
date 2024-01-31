@@ -36,6 +36,7 @@ const nextConfig = {
     IMAGE_PROXY_URL: process.env.IMAGE_PROXY_URL,
     CDN_URL: process.env.CDN_URL,
     RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
+    BUILD_ENV: process.env.BUILD_ENV,
   },
 }
 
