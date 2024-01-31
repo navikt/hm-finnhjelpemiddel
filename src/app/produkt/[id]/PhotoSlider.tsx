@@ -46,6 +46,7 @@ export const variants: Variants = {
 }
 
 const PhotoSlider = ({ photos }: ImageSliderProps) => {
+  console.log('ENV', process.env.NODE_ENV)
   const numberOfImages = photos.length
   const hasImages = photos.length !== 0
   const [active, setActive] = useState(0)

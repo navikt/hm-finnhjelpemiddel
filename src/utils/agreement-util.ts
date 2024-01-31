@@ -67,6 +67,9 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
   }
 }
 
+//TODO: Når vi skrur av hjelpemiddelbasen kan disse slettes fra database og vi trenger ikke lenger å filterre de ut her.
+//Enn så lenge må vi gjøre det fordi de vil synkes fra hjelpemiddeldatabasen daglig
+
 const excludedAgreementsDev: Record<string, string> = {
   Bilombygg: '123ea1cc-f366-4e08-a40c-8f50eafcdc78',
   Biler: '970d867a-d095-42a8-9f0a-495e42f301cb',
@@ -82,14 +85,9 @@ const excludedAgreementsProd: Record<string, string> = {
 }
 
 export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
-  //TODO: Når vi skrur av hjelpemiddelbasen kan disse slettes fra database og vi trenger ikke lenger å filterre de ut her.
-  //Enn så lenge må vi gjøre det fordi de vil synkes fra hjelpemiddeldatabasen daglig
-
-  const env = process.env.NODE_ENV
-
-  console.log('\n\nENV', env)
-
-  const excludedValues = Object.values(env === 'production' ? excludedAgreementsProd : excludedAgreementsDev)
+  const excludedValues = Object.values(
+    process.env.NODE_ENV === 'production' ? excludedAgreementsProd : excludedAgreementsDev
+  )
 
   return data.hits.hits
     .filter((hit) => !excludedValues.includes(hit._source.id))
