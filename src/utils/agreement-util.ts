@@ -89,9 +89,6 @@ export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
     process.env.BUILD_ENV === 'prod' ? excludedAgreementsProd : excludedAgreementsDev
   )
 
-  console.log('BUILD ENV', process.env.BUILD_ENV)
-  console.log('Excluded ids', excludedAgreemetns)
-
   return data.hits.hits
     .filter((hit) => !excludedAgreemetns.includes(hit._source.id))
     .map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
