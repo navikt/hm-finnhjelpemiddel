@@ -86,7 +86,7 @@ const excludedAgreementsProd: Record<string, string> = {
 
 export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
   const excludedValues = Object.values(
-    process.env.RUNTIME_ENVIRONMENT === 'prod' ? excludedAgreementsProd : excludedAgreementsDev
+    process.env.BUILD_ENV === 'prod' ? excludedAgreementsProd : excludedAgreementsDev
   )
 
   return data.hits.hits
