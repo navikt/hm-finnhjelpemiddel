@@ -46,6 +46,7 @@ export const variants: Variants = {
 }
 
 const PhotoSlider = ({ photos }: ImageSliderProps) => {
+  console.log('RUNTIME ENV', process.env.RUNTIME_ENVIRONMENT)
   const numberOfImages = photos.length
   const hasImages = photos.length !== 0
   const [active, setActive] = useState(0)
