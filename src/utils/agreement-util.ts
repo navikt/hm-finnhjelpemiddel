@@ -68,7 +68,7 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
 }
 
 //TODO: Når vi skrur av hjelpemiddelbasen kan disse slettes fra database og vi trenger ikke lenger å filterre de ut her.
-//Enn så lenge må vi gjøre det fordi de vil synkes fra hjelpemiddeldatabasen daglig
+//TODO: Enn så lenge må vi gjøre det fordi de vil synkes fra hjelpemiddeldatabasen daglig
 
 const excludedAgreementsDev: Record<string, string> = {
   Bilombygg: '123ea1cc-f366-4e08-a40c-8f50eafcdc78',
