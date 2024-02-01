@@ -926,6 +926,65 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     })
 }
 
+//TODO bytte til label
+export async function getProductsOnAgreement(agreementLabel: string): Promise<any> {
+  const query = {
+    bool: {
+      must: {
+        term: {
+          'agreements.id': {
+            value: agreementLabel,
+          },
+        },
+      },
+    },
+  }
+
+  const aggs = {
+    postNr: {
+      terms: {
+        field: 'agreements.postNr',
+      },
+      aggs: {
+        seriesId: {
+          terms: {
+            field: 'seriesId',
+          },
+          aggs: {
+            topHitData: {
+              top_hits: {
+                size: 1,
+                _source: {
+                  includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }
+
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      query,
+      aggs,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('AGGS', data)
+      return {
+        data,
+      }
+    })
+}
+
 export async function getProductsInPost(agreementId: string, postNr: number): Promise<SearchResponse> {
   const query = {
     bool: {

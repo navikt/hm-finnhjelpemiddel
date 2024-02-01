@@ -52,10 +52,13 @@ function Home() {
 
   const agreementLink = (id: string, label: string) => {
     let hrefSok = `/sok?agreement&rammeavtale=${label}`
+    let hrefHurtigoversikt = `/${id}`
 
     return (
       <div className="home-page__agreement-link" key={id}>
-        <NextLink href={hrefSok}>
+        <NextLink href={hrefHurtigoversikt}>
+          {/* <NextLink href={hrefSok}> */}
+
           <BodyShort> {label} </BodyShort>
         </NextLink>
       </div>
