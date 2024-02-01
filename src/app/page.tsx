@@ -34,21 +34,21 @@ function Home() {
   )
 
   //TODO: What to do if error?
-  const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+  const { data: agreements, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
 
-  const sortedData = useMemo(() => {
-    if (!data) return []
-    const filteredData = data.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
+  const sortedAgreements = useMemo(() => {
+    if (!agreements) return []
+    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
     // Create a copy of data to avoid modifying it in place
     filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
 
     return filteredData
-  }, [data])
+  }, [agreements])
 
-  const first15Agreements = sortedData?.slice(0, 15)
-  const lastAgreements = sortedData?.slice(15)
+  const first15Agreements = sortedAgreements?.slice(0, 15)
+  const lastAgreements = sortedAgreements?.slice(15)
 
   const agreementLink = (id: string, label: string) => {
     let hrefSok = `/sok?agreement&rammeavtale=${label}`
