@@ -27,7 +27,7 @@ import {
   Product,
   ProductVariant,
 } from './product-util'
-import { ProductDocResponse, SearchResponse } from './response-types'
+import { AgreementDocResponse, ProductDocResponse, SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -778,16 +778,15 @@ export async function getSupplier(id: string) {
   return res.json()
 }
 
-export async function getAgreement(id: string) {
+export async function getAgreement(id: string): Promise<AgreementDocResponse> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_doc/${id}`, {
     next: { revalidate: 900 },
     method: 'GET',
   })
-
   return res.json()
 }
 
-export async function getAgreementFromId(id: string): Promise<SearchResponse> {
+export async function getAgreementFromLabel(label: string): Promise<SearchResponse> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
@@ -797,11 +796,14 @@ export async function getAgreementFromId(id: string): Promise<SearchResponse> {
     body: JSON.stringify({
       query: {
         term: {
-          id: {
-            value: id,
+          label: {
+            value: label,
           },
         },
       },
+      // bool: {
+      //   should: { term: { 'agreementInfo.label': label } },
+      // },
     }),
   })
 

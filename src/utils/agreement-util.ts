@@ -1,5 +1,6 @@
 import { Document, mapDocuments } from './product-util'
 import {
+  AgreementDocResponse,
   AgreementLabelResponse,
   AgreementsSourceResponse,
   AttachmentsResponse,
@@ -51,6 +52,13 @@ export interface Post {
  */
 export const mapAgreementFromSearch = (data: SearchResponse): Agreement => {
   return data.hits.hits.map((hit: Hit) => mapAgreement(hit._source as AgreementsSourceResponse))[0]
+}
+
+/**
+ * Maps from opensearch document endpoint
+ */
+export const mapAgreementFromDoc = (data: AgreementDocResponse): Agreement => {
+  return mapAgreement(data._source as AgreementsSourceResponse)
 }
 
 export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {

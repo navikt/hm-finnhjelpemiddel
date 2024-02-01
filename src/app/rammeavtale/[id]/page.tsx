@@ -1,5 +1,5 @@
-import { agreementHasNoProducts, mapAgreementFromSearch } from '@/utils/agreement-util'
-import { getAgreementFromId } from '@/utils/api-util'
+import { agreementHasNoProducts, mapAgreementFromDoc } from '@/utils/agreement-util'
+import { getAgreement } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
 import { BodyLong, Heading, LinkPanel } from '@/components/aksel-client'
@@ -17,7 +17,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const agreementId = params.id
   //Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-  const agreement = mapAgreementFromSearch(await getAgreementFromId(agreementId))
+  const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
 
   return {
     title: 'Rammeavtale ' + agreement.title,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AgreementPage({ params }: Props) {
-  const agreement = mapAgreementFromSearch(await getAgreementFromId(params.id))
+  const agreement = mapAgreementFromDoc(await getAgreement(params.id))
   const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   return (

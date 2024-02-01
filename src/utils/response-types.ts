@@ -172,6 +172,13 @@ export interface AgreementsSourceResponse {
   updated: string
 }
 
+export interface AgreementDocResponse {
+  _index: string
+  _id: string
+  _found: boolean
+  _source: AgreementsSourceResponse
+}
+
 export interface AgreementLabelResponse {
   id: string
   label: string
