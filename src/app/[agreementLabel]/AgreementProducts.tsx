@@ -1,20 +1,16 @@
 'use client'
 
-import { mapAgreementFromSearch } from '@/utils/agreement-util'
+import { Agreement } from '@/utils/agreement-util'
 import { getProductsOnAgreement } from '@/utils/api-util'
-// import { getAgreementFromLabel } from '@/utils/api-util'
-import type { Metadata } from 'next'
+import { AgreementDocResponse } from '@/utils/response-types'
+// import { getAgreementFromLabel } from '@/utils/api-util
 import useSWR from 'swr'
 
-const AgreementProducts = ({ agreementLabel }: { agreementLabel: string }) => {
-  console.log('agreementLabel', agreementLabel)
+const AgreementProducts = ({ agreement }: { agreement: Agreement }) => {
+  const { data: products, error, isLoading } = useSWR<any>(agreement.id, getProductsOnAgreement)
 
-  //   const agreement = mapAgreementFromSearch(await getAgreementFromLabel(agreementLabel))
-
-  //TODO: error handling
-  const { data, error, isLoading } = useSWR<any>(agreementLabel, getProductsOnAgreement)
-  const products = data
-  console.log('data', products)
+  console.log('agreement', agreement)
+  console.log('products', products)
 
   return <div></div>
 }

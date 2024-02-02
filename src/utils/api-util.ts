@@ -975,14 +975,7 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<an
       query,
       aggs,
     }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('AGGS', data)
-      return {
-        data,
-      }
-    })
+  }).then((res) => res.json())
 }
 
 export async function getProductsInPost(agreementId: string, postNr: number): Promise<SearchResponse> {

@@ -1,4 +1,5 @@
-import React from 'react'
+import { mapAgreementFromDoc } from '@/utils/agreement-util'
+import { getAgreement } from '@/utils/api-util'
 import { Metadata } from 'next'
 import AgreementProducts from './AgreementProducts'
 
@@ -18,5 +19,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AgreementPage({ params }: Props) {
-  return <AgreementProducts agreementLabel={params.agreementLabel} />
+  const agreement = mapAgreementFromDoc(await getAgreement(params.agreementLabel))
+  return <AgreementProducts agreement={agreement} />
 }
