@@ -42,19 +42,6 @@ export default function ComparePage() {
     productsToCompare.length > 0 ? fetchProductsWithVariants : emptyProduct
   )
 
-  /*
-  interface SWRHook {
-    <Data = any, Error = any, SWRKey extends Key = StrictKey>(key: SWRKey): SWRResponse<Data, Error>;
-    <Data = any, Error = any, SWRKey extends Key = StrictKey>(key: SWRKey, fetcher: Fetcher<Data, SWRKey> | null): SWRResponse<Data, Error>;
-    <Data = any, Error = any, SWRKey extends Key = Key>(key: SWRKey, fetcher: Fetcher<Data, SWRKey> | null): SWRResponse<Data, Error>;
-    <Data = any, Error = any, SWRKey extends Key = StrictKey, SWROptions extends SWRConfiguration<Data, Error, Fetcher<Data, SWRKey>> | undefined = SWRConfiguration<Data, Error, Fetcher<Data, SWRKey>> | undefined>(key: SWRKey, config: SWROptions): SWRResponse<Data, Error, SWROptions>;
-    <Data = any, Error = any, SWRKey extends Key = StrictKey, SWROptions extends SWRConfiguration<Data, Error, Fetcher<Data, SWRKey>> | undefined = SWRConfiguration<Data, Error, Fetcher<Data, SWRKey>> | undefined>(key: SWRKey, fetcher: Fetcher<Data, SWRKey> | null, config: SWROptions): SWRResponse<Data, Error, SWROptions>;
-    <Data = any, Error = any>(key: Key): SWRResponse<Data, Error>;
-    <Data = any, Error = any, SWROptions extends SWRConfiguration<Data, Error, BareFetcher<Data>> | undefined = SWRConfiguration<Data, Error, BareFetcher<Data>> | undefined>(key: Key, config: SWROptions): SWRResponse<Data, Error, SWROptions>;
-    <Data = any, Error = any, SWROptions extends SWRConfiguration<Data, Error, BareFetcher<Data>> | undefined = SWRConfiguration<Data, Error, BareFetcher<Data>> | undefined>(key: Key, fetcher: BareFetcher<Data> | null, config: SWROptions): SWRResponse<Data, Error, SWROptions>;
-}
-  * */
-
   const productsToCompareWithVariants: Product[] | undefined = data?.products
 
   const handleClick = (event: any) => {
