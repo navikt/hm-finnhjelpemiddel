@@ -7,7 +7,6 @@ import { isValidSortOrder, SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
-  BucketResponse,
   Hit,
   MediaResponse,
   MediaType,
@@ -15,6 +14,7 @@ import {
   ProductSourceResponse,
   SearchResponse,
   SeriesAggregationResponse,
+  SeriesBucketResponse,
   TechDataResponse,
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
@@ -151,7 +151,7 @@ function filterUniqueCombinationsOfPostAndRank(agreementInfos: AgreementInfo[]):
  * Maps results from search with aggregation into products with all variants
  */
 export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Product[] => {
-  const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
+  const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
   return buckets

@@ -18,14 +18,50 @@ export interface SeriesAggregationResponse {
   }
 }
 
-export interface SeriesBucketsResponse {
+export interface PostAggregationResponse {
+  took: number
+  timed_out: boolean
+  _shards: object
+  hits: object
+  aggregations: {
+    postNr: {
+      buckets: PostBucketResponse[]
+      doc_count_error_upper_bound: number
+      sum_other_doc_count: number
+    }
+  }
+}
+
+interface PostBucketResponse {
+  doc_count: number
+  //key = postnr
+  key: number
+  seriesId: {
+    buckets: SeriesTopHitBucket[]
+    doc_count_error_upper_bound: number
+    sum_other_doc_count: number
+  }
+}
+interface SeriesTopHitBucket {
+  doc_count: number
+  //key = seriesId
+  key: number
+  topHitData: {
+    hits: {
+      total: object
+      hits: Hit[]
+    }
+  }
+}
+
+interface SeriesBucketsResponse {
   after_key: {
     seriesId: string
   }
-  buckets: BucketResponse[]
+  buckets: SeriesBucketResponse[]
 }
 
-export interface BucketResponse {
+export interface SeriesBucketResponse {
   key: {
     seriesId: string
   }

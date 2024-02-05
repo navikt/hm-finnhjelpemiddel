@@ -1,8 +1,8 @@
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
+  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
-  FilterCategories,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -21,13 +21,13 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  mapProductsFromAggregation,
-  mapProductsFromCollapse,
-  mapProductVariant,
   Product,
   ProductVariant,
+  mapProductVariant,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
 } from './product-util'
-import { AgreementDocResponse, ProductDocResponse, SearchResponse } from './response-types'
+import { AgreementDocResponse, PostAggregationResponse, ProductDocResponse, SearchResponse } from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -927,7 +927,7 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
 }
 
 //TODO bytte til label
-export async function getProductsOnAgreement(agreementLabel: string): Promise<any> {
+export async function getProductsOnAgreement(agreementLabel: string): Promise<PostAggregationResponse> {
   const query = {
     bool: {
       must: {
@@ -944,6 +944,10 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<an
     postNr: {
       terms: {
         field: 'agreements.postNr',
+        size: 100,
+        order: {
+          _key: 'asc',
+        },
       },
       aggs: {
         seriesId: {
@@ -955,7 +959,8 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<an
               top_hits: {
                 size: 1,
                 _source: {
-                  includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
+                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
+                  includes: ['*'],
                 },
               },
             },
@@ -972,6 +977,7 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<an
     },
     body: JSON.stringify({
       size: 0,
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
       aggs,
     }),
