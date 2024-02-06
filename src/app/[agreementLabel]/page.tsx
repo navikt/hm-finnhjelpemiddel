@@ -1,5 +1,6 @@
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
+import { VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import AgreementProducts from './AgreementProducts'
 
@@ -20,5 +21,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementLabel))
-  return <AgreementProducts agreement={agreement} />
+  return (
+    <VStack>
+      <AgreementProducts agreement={agreement} />
+    </VStack>
+  )
 }
