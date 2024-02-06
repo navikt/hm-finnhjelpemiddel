@@ -23,8 +23,6 @@ import {
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { useMemo } from 'react'
 
-type Empty = {}
-const emptyProduct: Empty = {}
 
 export default function ComparePage() {
   //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
