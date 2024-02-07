@@ -4,10 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 
 import useSWR from 'swr'
 
-import { Popover } from '@navikt/ds-react'
-import { Search } from '../../../../components/@navikt/ds-react/form/search' // copy from node_modules/@navikt
-
-import { Suggestions, fetchSuggestions } from '@/utils/api-util'
+import { Popover, Search } from '@navikt/ds-react'
+import { fetchSuggestions, Suggestions } from '@/utils/api-util'
 
 import useDebounce from '@/hooks/useDebounce'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'

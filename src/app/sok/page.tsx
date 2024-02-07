@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import { Metadata } from 'next'
 import SearchPage from './SearchPage'
@@ -9,5 +9,9 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <SearchPage />
+  return (
+    <Suspense>
+      <SearchPage />
+    </Suspense>
+  )
 }

@@ -23,6 +23,7 @@ import {
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { useMemo } from 'react'
 
+
 export default function ComparePage() {
   //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
@@ -36,7 +37,9 @@ export default function ComparePage() {
   //TODO: error handling
   const { data, error, isLoading } = useSWR<FetchSeriesResponse>(
     series,
-    productsToCompare.length > 0 ? fetchProductsWithVariants : null
+    productsToCompare.length > 0 ? fetchProductsWithVariants : null,
+    // Må sendes inn for å fikse typescript feil, open issue her: https://github.com/vercel/swr/issues/2826
+    {}
   )
 
   const productsToCompareWithVariants: Product[] | undefined = data?.products
