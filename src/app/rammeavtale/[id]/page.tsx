@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+
 import { agreementHasNoProducts, mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
@@ -5,10 +7,9 @@ import { dateToString } from '@/utils/string-util'
 import { BodyLong, Heading, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import AgreementDescription from './AgreementDescription'
 import '../agreement-page.scss'
+import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
-import type { Metadata } from 'next'
 
 type Props = {
   params: { id: string }
@@ -34,7 +35,7 @@ export default async function AgreementPage({ params }: Props) {
       {agreement && (
         <div className="agreement-page">
           <AnimateLayout>
-            <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
+            <div className="agreement-page__content main-wrapper--small">
               <article>
                 <div>
                   <Heading level="1" size="large" className="spacing-top--small spacing-bottom--small">

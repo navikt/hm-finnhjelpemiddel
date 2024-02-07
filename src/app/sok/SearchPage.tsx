@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 
@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import useSWRInfinite from 'swr/infinite'
 
-import { FilesIcon, TrashIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { ArrowUpIcon, FilesIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
 import { FetchResponse, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
@@ -21,9 +21,9 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import SearchForm from './sidebar/SearchForm'
 
+import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 import CompareMenu from './CompareMenu'
 import SearchResults from './SearchResults'
-import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -172,7 +172,7 @@ export default function SearchPage() {
             Søk i hjelpemidler
           </Heading>
         </div>
-        <div className="main-wrapper">
+        <div className="main-wrapper--large">
           <div className="flex-column-wrap spacing-top--large spacing-bottom--large">
             {showSidebar && (
               <section className="search__side-bar">

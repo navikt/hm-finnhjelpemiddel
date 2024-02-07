@@ -154,7 +154,6 @@ const PhotoSliderModal = ({
                   src={photo.uri}
                   alt={`Produktbilde ${i + 1} av ${photos.length}`}
                   fill
-                  sizes=""
                 />
               </div>
             ))}

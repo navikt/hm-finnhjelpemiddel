@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -41,6 +41,7 @@ const ProductCardHorizontal = ({ product }: CardProps) => {
             }}
             alt="Produktbilde"
             fill
+            sizes="50vw"
             style={{ objectFit: 'contain' }}
           />
         ) : (
@@ -48,6 +49,7 @@ const ProductCardHorizontal = ({ product }: CardProps) => {
             src={'/assets/image-error.png'}
             alt="Produktbilde mangler"
             fill
+            sizes="50vw"
             priority
             style={{ objectFit: 'contain' }}
           />

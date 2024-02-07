@@ -3,12 +3,12 @@ import { fetchProductsWithVariants, getProductWithVariants, getProductsInPost, g
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
-import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
-import ProductPage from './ProductPage'
-import './product-page.scss'
 import { accessoriesMock } from '@/utils/mock-data'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 import { Metadata } from 'next'
+import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
+import ProductPage from './ProductPage'
+import './product-page.scss'
 
 export interface ProductsOnPost {
   postTitle: string
@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProduktPage({ params }: Props) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
-  // const product = accessoriesMock[0]
+  const product = accessoriesMock[0]
 
-  const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+  // const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
@@ -65,7 +65,7 @@ export default async function ProduktPage({ params }: Props) {
     ))
 
   const isAccessoryOrSparePart = product.accessory || product.sparepart
-
+  console.log('is accsessory', isAccessoryOrSparePart)
   const matchingSeriesIds = product.attributes.compatibleWith
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
@@ -74,7 +74,7 @@ export default async function ProduktPage({ params }: Props) {
   const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
 
   return (
-    <div className="main-wrapper">
+    <div className="main-wrapper--large">
       {isAccessoryOrSparePart ? (
         <AccessoryOrSparePartPage product={product} supplier={supplier} matchingProducts={matchingProducts} />
       ) : (

@@ -54,6 +54,7 @@ const ProductCard = ({ product, removeProduct, rank, showRank }: ProductCardProp
                 }}
                 alt="Produktbilde"
                 fill
+                sizes="50vw"
                 style={{ objectFit: 'contain' }}
               />
             ) : (

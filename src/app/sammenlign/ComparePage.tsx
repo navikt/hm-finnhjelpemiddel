@@ -23,7 +23,6 @@ import {
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { useMemo } from 'react'
 
-
 export default function ComparePage() {
   //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
@@ -52,7 +51,7 @@ export default function ComparePage() {
 
   if (isLoading) {
     return (
-      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
+      <div className="main-wrapper--large compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
@@ -66,7 +65,7 @@ export default function ComparePage() {
 
   return (
     <AnimateLayout>
-      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
+      <div className="main-wrapper--large compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>

@@ -282,12 +282,33 @@ details {
 }
 
 .main-wrapper {
-  max-width: 1280px;
-  padding: 0 $a-spacing-4;
+  padding-left: $a-spacing-4;
+  padding-right: $a-spacing-4;
   margin: 0 auto;
 
-  @include mixins.for-size(desktop-large-up) {
-    padding: 0;
+  @include mixins.for-size(desktop-up) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &--small {
+    @extend .main-wrapper;
+    max-width: 768px;
+  }
+
+  &--medium {
+    @extend .main-wrapper;
+    max-width: 1024px;
+  }
+
+  &--large {
+    @extend .main-wrapper;
+    max-width: 1280px;
+  }
+
+  &--xlarge {
+    @extend .main-wrapper;
+    max-width: 1440px;
   }
 }
 

@@ -3,24 +3,21 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .agreement-page {
-  overflow: hidden;
   background-color: #faefee;
 
   &__content {
     display: flex;
     flex-direction: column;
     gap: $a-spacing-8;
-    max-width: 850px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 $a-spacing-1;
+    padding-top: $a-spacing-4;
+    padding-bottom: $a-spacing-4;
 
     @include mixins.for-size(tablet-up) {
-      padding: 0 $a-spacing-2;
+      padding-top: $a-spacing-8;
+      padding-bottom: $a-spacing-8;
     }
     @include mixins.for-size(desktop-up) {
-      margin-top: $a-spacing-14;
-      padding: 0;
+      padding: $a-spacing-14 0;
     }
   }
 
@@ -38,12 +35,12 @@
     border-radius: $a-border-radius-large;
 
     @include mixins.for-size(tablet-up) {
-      padding: $a-spacing-10 $a-spacing-20;
+      padding: $a-spacing-10 $a-spacing-12;
     }
 
     p {
       max-width: 550px;
-    }
+    } 
   }
 
   &__icon-containers {
