@@ -1,0 +1,28 @@
+.pepperkake {
+  text-decoration: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.5rem 0.5rem;
+  height: 72px;
+  border: none;
+  border-bottom: 4px solid rgba(256, 23, 51, 0);
+
+  &--aktiv {
+    border-bottom: 1px solid rgba(256, 23, 51, 1);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:hover {
+    outline: none;
+    background: transparent;
+    border-bottom: 1px solid rgba(256, 23, 51, 0.34);
+  }
+}
