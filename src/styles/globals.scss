@@ -11,6 +11,7 @@
 @import './not-found-page';
 @import './product-card.scss';
 @import './search.scss';
+@import './search-agreement.scss';
 @import './pepperkake-dekorasjon.scss';
 
 html,
@@ -370,6 +371,10 @@ details {
     }
     &--medium {
       margin-top: $a-spacing-4;
+
+      @include mixins.for-size(desktop-up) {
+        margin-bottom: $a-spacing-8;
+      }
     }
     &--large {
       margin-top: $a-spacing-8;
@@ -395,6 +400,10 @@ details {
     }
     &--medium {
       margin-bottom: $a-spacing-4;
+
+      @include mixins.for-size(desktop-up) {
+        margin-bottom: $a-spacing-8;
+      }
     }
     &--large {
       margin-bottom: $a-spacing-8;
@@ -407,6 +416,42 @@ details {
       margin-bottom: $a-spacing-16;
 
       @include mixins.for-size(desktop-up) {
+        margin-bottom: $a-spacing-20;
+      }
+    }
+  }
+}
+
+.spacing {
+  &-vertical {
+    &--small {
+      margin-top: $a-spacing-2;
+      margin-bottom: $a-spacing-2;
+    }
+    &--medium {
+      margin-top: $a-spacing-4;
+      margin-bottom: $a-spacing-4;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-8;
+        margin-bottom: $a-spacing-8;
+      }
+    }
+    &--large {
+      margin-top: $a-spacing-8;
+      margin-bottom: $a-spacing-8;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-12;
+        margin-bottom: $a-spacing-12;
+      }
+    }
+    &--xlarge {
+      margin-top: $a-spacing-16;
+      margin-bottom: $a-spacing-16;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-20;
         margin-bottom: $a-spacing-20;
       }
     }

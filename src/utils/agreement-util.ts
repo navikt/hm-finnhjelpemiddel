@@ -1,11 +1,13 @@
-import { Document, mapDocuments } from './product-util'
+import { Document, Product, mapDocuments, mapProductWithVariants } from './product-util'
 import {
   AgreementDocResponse,
   AgreementLabelResponse,
   AgreementsSourceResponse,
   AttachmentsResponse,
   Hit,
+  PostAggregationResponse,
   PostResponse,
+  ProductSourceResponse,
   SearchResponse,
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
@@ -45,6 +47,17 @@ export interface Post {
   nr: number
   title: string
   description: string
+}
+
+export interface ProductsOnAgreement {
+  posts: {
+    nr: number
+    title: string
+    products: {
+      rank: number
+      product: Product
+    }[]
+  }[]
 }
 
 /**
@@ -133,6 +146,34 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
     title: post.title,
     description: post.description,
   }))
+}
+
+export const mapPostWithProducts = (
+  bucketResponse: PostAggregationResponse,
+  agreement: Agreement
+): ProductsOnAgreement => {
+  const postsInBuckets = bucketResponse.aggregations.postNr.buckets
+  const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
+  const getRank = (product: Product, postNr: number) =>
+    product.agreements.find(
+      (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
+    )?.rank
+  const posts = postsInBuckets.map((post) => {
+    return {
+      nr: post.key,
+      title: getPostTitle(post.key) || '',
+      products: post.seriesId.buckets
+        .map((bucket) => {
+          const product = mapProductWithVariants(Array(bucket.topHitData.hits.hits[0]._source as ProductSourceResponse))
+          return {
+            rank: getRank(product, post.key) || 99,
+            product: product,
+          }
+        })
+        .sort((a, b) => a.rank - b.rank),
+    }
+  })
+  return { posts: posts }
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {

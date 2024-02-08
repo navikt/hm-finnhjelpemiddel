@@ -23,7 +23,7 @@ export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementLabel))
   return (
     <VStack className="main-wrapper--large">
-      <Heading level="1" size="large">
+      <Heading level="1" size="large" className="spacing-vertical--large">
         Alle hjelpemiddel
       </Heading>
       <AgreementProducts agreement={agreement} />
