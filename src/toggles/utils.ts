@@ -7,7 +7,7 @@ export function localDevelopmentToggles(): IToggle[] {
   return EXPECTED_TOGGLES.map(
     (it): IToggle => ({
       name: it,
-      enabled: true,
+      enabled: false,
       impressionData: false,
       variant: {
         name: 'disabled',
