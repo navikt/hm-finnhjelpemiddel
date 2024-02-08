@@ -1,10 +1,10 @@
-import { CheckboxFilterInput } from './internals/CheckboxFilterInput'
-import { RangeFilterInput } from './internals/RangeFilterInput'
+import { CheckboxFilterInput } from '@/components/filters/CheckboxFilterInput'
+import { RangeFilterInput } from '@/components/filters/RangeFilterInput'
 import { FilterData } from '@/utils/api-util'
 import { mapProductSearchParams } from '@/utils/product-util'
 import { BodyShort } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 const FilterView = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()

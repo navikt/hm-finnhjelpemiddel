@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from 'react'
+import { RefObject, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import Image from 'next/image'
@@ -14,9 +14,9 @@ import { Product } from '@/utils/product-util'
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import AgreementIcon from '@/components/AgreementIcon'
+import SortSearchResults from '@/components/SortSearchResults'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
-import SortSearchResults from '@/components/SortSearchResults'
 
 const SearchResults = ({
   data,
@@ -217,8 +217,8 @@ const ProductImage = ({ src }: { src: string }) => {
         <Image
           loader={smallImageLoader}
           src={src}
-          onLoad={() => setIsLoading(true)}
-          onLoadingComplete={() => setIsLoading(false)}
+          onLoad={() => setIsLoading(false)}
+          // onLoadingComplete={() => setIsLoading(false)}
           onError={() => {
             setLoadingError(true)
             setIsLoading(false)

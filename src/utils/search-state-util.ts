@@ -25,3 +25,9 @@ export const initialSearchDataState = {
   filters: initialFiltersState,
   sortOrder: '',
 }
+
+export const initialAgreementSearchDataState = {
+  searchTerm: '',
+  hidePictures: false,
+  filters: initialFiltersState,
+}

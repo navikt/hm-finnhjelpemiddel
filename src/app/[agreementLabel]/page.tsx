@@ -1,9 +1,10 @@
 import { Heading } from '@/components/aksel-client'
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
-import { VStack } from '@navikt/ds-react'
+import { BodyShort, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
-import AgreementProducts from './AgreementProducts'
+import { Suspense } from 'react'
+import AgreementSearch from './AgreementSearch'
 type Props = {
   params: { agreementLabel: string }
 }
@@ -22,11 +23,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementLabel))
   return (
-    <VStack className="main-wrapper--large">
-      <Heading level="1" size="large" className="spacing-vertical--large">
-        Alle hjelpemiddel
-      </Heading>
-      <AgreementProducts agreement={agreement} />
-    </VStack>
+    <Suspense>
+      <VStack className="main-wrapper--large">
+        <VStack gap="5" className="spacing-vertical--large">
+          <BodyShort textColor="subtle">Alle hjelpemiddel /</BodyShort>
+          <Heading level="1" size="large">
+            {agreement.title}
+          </Heading>
+        </VStack>
+        <AgreementSearch agreement={agreement} />
+      </VStack>
+    </Suspense>
   )
 }

@@ -13,12 +13,14 @@ import { PackageIcon } from '@navikt/aksel-icons'
 import { useState } from 'react'
 import useSWR from 'swr'
 
-const AgreementProducts = ({ agreement }: { agreement: Agreement }) => {
+const AgreementResults = ({ agreement }: { agreement: Agreement }) => {
   const { data, error, isLoading } = useSWR<PostAggregationResponse>(agreement.id, getProductsOnAgreement)
 
   if (!data) {
     return <BodyShort>Finner ikke data</BodyShort>
   }
+
+  console.log('data', data)
   const posts = mapPostWithProducts(data, agreement).posts
   // console.log('agreement', agreement)
   // console.log('products', posts)
@@ -34,7 +36,11 @@ const AgreementProducts = ({ agreement }: { agreement: Agreement }) => {
           </Heading>
           <HStack gap={'4'}>
             {post.products.map((productWithRank) => (
-              <ProductCardNew product={productWithRank.product} rank={productWithRank.rank}></ProductCardNew>
+              <ProductCardNew
+                key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                product={productWithRank.product}
+                rank={productWithRank.rank}
+              ></ProductCardNew>
             ))}
           </HStack>
         </VStack>
@@ -113,4 +119,4 @@ const ProductCardNew = ({ product, rank }: { product: Product; rank?: number }) 
   )
 }
 
-export default AgreementProducts
+export default AgreementResults

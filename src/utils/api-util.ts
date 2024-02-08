@@ -740,7 +740,10 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     }),
   })
     .then((res) => res.json())
-    .then((data) => ({ products: mapProductsFromCollapse(data), filters: mapFilters(data) }))
+    .then((data) => {
+      console.log('search', data)
+      return { products: mapProductsFromCollapse(data), filters: mapFilters(data) }
+    })
 }
 
 const mapFilters = (data: any): FilterData => {
@@ -965,6 +968,18 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<Po
               },
             },
           },
+        },
+      },
+    },
+    leverandor: {
+      filter: {
+        bool: {
+          filter: [],
+        },
+      },
+      aggs: {
+        values: {
+          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
         },
       },
     },
