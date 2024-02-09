@@ -24,15 +24,12 @@
 .new-product-card {
   display: flex;
   flex-direction: column;
-  width: 225px;
-  height: 335px;
-  padding-top: 4px;
+
   border-radius: 8px;
   border: 1px solid $a-border-subtle;
 
   &__content {
     position: relative;
-    flex-direction: column-reverse;
   }
 
   &:hover {
@@ -42,26 +39,6 @@
   &__checked {
     @extend .new-product-card;
     border: 3px solid $a-text-action-selected;
-  }
-
-  &__product-category-button.navds-button {
-    background-color: $a-gray-50;
-    border: 1px solid $a-border-subtle;
-    border-radius: $a-border-radius-large;
-    padding: $a-spacing-1 $a-spacing-1;
-    text-align: start;
-    z-index: 2;
-
-    .navds-label {
-      font-size: $a-font-size-small;
-      line-height: 1rem;
-      font-weight: 400;
-    }
-
-    &:hover {
-      border: 1px solid $a-gray-800;
-      background-color: $a-gray-200;
-    }
   }
 
   &__link {
@@ -89,19 +66,25 @@
     }
   }
 
-  &__image {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    position: relative;
+  &__product-category-button.navds-button {
+    background-color: $a-gray-50;
+    border: 1px solid $a-border-subtle;
+    border-radius: $a-border-radius-large;
+    padding: $a-spacing-1 $a-spacing-1;
+    text-align: start;
+    z-index: 2;
 
-    .image {
-      width: 185px;
-      height: 167px;
-      position: relative;
+    .navds-label {
+      font-size: $a-font-size-small;
+      line-height: 1rem;
+      font-weight: 400;
+    }
+
+    &:hover {
+      border: 1px solid $a-gray-800;
+      background-color: $a-gray-200;
     }
   }
-
   // Overwrite Aksel
 
   .navds-checkbox__label::before {
@@ -121,5 +104,75 @@
 
   .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
     color: black;
+  }
+}
+
+.new-product-card--large {
+  @extend .new-product-card;
+  width: 225px;
+  height: 335px;
+  padding-top: 4px;
+
+  .new-product-card__image {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+
+    .image {
+      width: 185px;
+      height: 167px;
+      position: relative;
+    }
+  }
+
+  .new-product-card__content {
+    flex-direction: column-reverse;
+  }
+}
+
+.new-product-card--large.without-iso-button {
+  height: 285px;
+  width: 210px;
+
+  .new-product-card__image {
+    .image {
+      width: 170px;
+    }
+  }
+}
+
+.new-product-card.no-picture {
+  width: 225px;
+
+  .new-product-card__link {
+    height: 2.2rem;
+    line-height: 1.1rem;
+  }
+
+  .new-product-card__checkbox {
+    z-index: 2;
+  }
+
+  .navds-checkbox__content {
+    .navds-body-short--small {
+      font-size: 14px;
+      color: $a-text-subtle;
+    }
+  }
+
+  .navds-checkbox__label {
+    gap: 4px;
+    padding: 0;
+  }
+
+  .navds-checkbox__label::before {
+    width: 14px;
+    height: 14px;
+  }
+
+  .navds-checkbox__label::before::after {
+    width: 14px;
+    height: 14px;
   }
 }

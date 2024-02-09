@@ -24,7 +24,7 @@ export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementLabel))
   return (
     <Suspense>
-      <VStack className="main-wrapper--large">
+      <VStack className="main-wrapper--large spacing-bottom--large">
         <VStack gap="5" className="spacing-vertical--large">
           <BodyShort textColor="subtle">Alle hjelpemiddel /</BodyShort>
           <Heading level="1" size="large">

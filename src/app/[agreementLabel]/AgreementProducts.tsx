@@ -5,12 +5,14 @@ import NextLink from 'next/link'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
-import { ImageIcon, PackageIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Checkbox, Detail, HStack, Heading, Link, ToggleGroup, VStack } from '@navikt/ds-react'
+import { ImageIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Checkbox, Detail, HStack, Heading, Link, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useState } from 'react'
 
 const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
-  const [showPictures, setShowPictures] = useState<string>('show-pictures')
+  const [pictureToggleValue, setPictureToggleValue] = useState<string>('show-pictures')
+
+  const hidePictures = pictureToggleValue === 'hide-pictures'
 
   return (
     <VStack style={{ maxWidth: '44.375rem' }}>
@@ -20,8 +22,8 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
         </Heading>
         <ToggleGroup
           defaultValue="show-pictures"
-          onChange={setShowPictures}
-          value={showPictures}
+          onChange={setPictureToggleValue}
+          value={pictureToggleValue}
           size="small"
           variant="neutral"
         >
@@ -29,14 +31,14 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
             <ImageIcon aria-hidden />
             Vis bilde
           </ToggleGroup.Item>
-          <ToggleGroup.Item value="no-pictures">Uten bilde</ToggleGroup.Item>
+          <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
         </ToggleGroup>
       </HStack>
       <VStack as="ol" gap="7" className="agreement-search-results" id="agreementSearchResults">
         {posts.map((post) => (
           <VStack as="li" key={post.nr} className="agreement-post" gap="4">
-            <Heading level="3" size="small" className="spacing-vertical--small">
-              {post.title}
+            <Heading level="3" size="xsmall" className="spacing-vertical--small">
+              {`DK ${post.nr}: ${post.title}`}
             </Heading>
             <HStack gap={'4'}>
               {post.products.map((productWithRank) => (
@@ -44,6 +46,7 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
                   key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                   product={productWithRank.product}
                   rank={productWithRank.rank}
+                  hidePictures={hidePictures}
                 ></ProductCardNew>
               ))}
             </HStack>
@@ -54,23 +57,56 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
   )
 }
 
-const ProductCardNew = ({ product, rank }: { product: Product; rank?: number }) => {
+const ProductCardNew = ({
+  product,
+  rank,
+  hidePictures,
+}: {
+  product: Product
+  rank?: number
+  hidePictures: boolean
+}) => {
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
+  const compareCheckbox = (
+    <Checkbox
+      className="new-product-card__checkbox"
+      size="small"
+      value="Legg produktet til sammenligning"
+      // onChange={toggleCompareProduct}
+      // checked={isInProductsToCompare}
+    >
+      <div aria-label={`sammenlign ${product.title}`}>
+        <span aria-hidden>Sammenlign</span>
+      </div>
+    </Checkbox>
+  )
+
+  if (hidePictures) {
+    return (
+      <Box paddingInline="2" paddingBlock="1" className="new-product-card no-picture">
+        <VStack gap="1" className="new-product-card__content">
+          <HStack justify={'space-between'}>
+            <Detail textColor="subtle">{rank ? `Rangering ${rank}` : 'Ingen rangering'}</Detail>
+            {compareCheckbox}
+          </HStack>
+          <Link
+            className="new-product-card__link"
+            href={`/produkt/${product.id}`}
+            aria-label={`Gå til ${product.title}`}
+            as={NextLink}
+          >
+            <BodyShort size="small">{product.title}</BodyShort>
+          </Link>
+        </VStack>
+      </Box>
+    )
+  }
+
   return (
-    <Box padding="2" className="new-product-card">
-      <Checkbox
-        className="new-product-card__checkbox"
-        size="small"
-        value="Legg produktet til sammenligning"
-        // onChange={toggleCompareProduct}
-        // checked={isInProductsToCompare}
-      >
-        <div aria-label={`sammenlign ${product.title}`}>
-          <span aria-hidden>Sammenlign</span>
-        </div>
-      </Checkbox>
+    <Box padding="2" className="new-product-card--large without-iso-button">
+      {compareCheckbox}
       <VStack gap="2" className="new-product-card__content">
         <VStack gap="1">
           <Detail textColor="subtle">{rank ? `Rangering ${rank}` : 'Ingen rangering'}</Detail>
@@ -82,13 +118,13 @@ const ProductCardNew = ({ product, rank }: { product: Product; rank?: number }) 
           >
             <BodyShort size="small">{product.title}</BodyShort>
           </Link>
-          <Button
+          {/* <Button
             className="new-product-card__product-category-button"
             variant="tertiary-neutral"
             icon={<PackageIcon />}
           >
             {product.isoCategoryTitle}
-          </Button>
+          </Button> */}
         </VStack>
         <div className="new-product-card__image">
           <div className="image">
