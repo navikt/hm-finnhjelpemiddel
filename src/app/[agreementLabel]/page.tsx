@@ -25,7 +25,7 @@ export default async function AgreementPage({ params }: Props) {
   return (
     <Suspense>
       <VStack className="main-wrapper--large spacing-bottom--large">
-        <VStack gap="5" className="spacing-vertical--large">
+        <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
           <BodyShort textColor="subtle">Alle hjelpemiddel /</BodyShort>
           <Heading level="1" size="large">
             {agreement.title}
