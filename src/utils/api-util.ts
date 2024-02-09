@@ -752,6 +752,116 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     })
 }
 
+export interface FetchPostBucketsWithFilters {
+  postBuckets: PostBucketResponse[]
+  filters: FilterData
+}
+
+//TODO bytte til label
+export const getProductsOnAgreement = ({
+  agreementLabel,
+  searchData,
+}: {
+  agreementLabel: string
+  searchData: SearchData
+}): Promise<FetchPostBucketsWithFilters> => {
+  const { searchTerm, filters: activeFilters } = searchData
+
+  console.log('FETCH FILTERS', activeFilters)
+
+  const { leverandor } = activeFilters
+  const allActiveFilters = [filterLeverandor(leverandor)]
+
+  const query = {
+    bool: {
+      must: {
+        term: {
+          'agreements.id': {
+            value: agreementLabel,
+          },
+        },
+      },
+    },
+  }
+
+  const filters = {
+    leverandor: {
+      filter: {
+        bool: {
+          filter: [],
+        },
+      },
+      aggs: {
+        values: {
+          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
+        },
+      },
+    },
+  }
+
+  const aggs = {
+    postNr: {
+      terms: {
+        field: 'agreements.postNr',
+        size: 120,
+        order: {
+          _key: 'asc',
+        },
+      },
+      aggs: {
+        seriesId: {
+          terms: {
+            field: 'seriesId',
+          },
+          aggs: {
+            topHitData: {
+              top_hits: {
+                size: 1,
+                _source: {
+                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
+                  includes: ['*'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    ...filters,
+  }
+
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      query,
+      post_filter: {
+        bool: {
+          filter: allActiveFilters,
+        },
+      },
+      aggs,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data: AgreementSearchResponse) => {
+      console.log('ASDDDD', data)
+      const filters = {
+        aggregations: {
+          leverandor: data.aggregations.leverandor,
+        },
+      }
+      return {
+        postBuckets: data.aggregations.postNr.buckets,
+        filters: mapFilters(filters),
+      }
+    })
+}
+
 const mapFilters = (data: any): FilterData => {
   const rawFilterData: RawFilterData = data.aggregations
 
@@ -931,93 +1041,6 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     .then((data) => {
       return {
         products: mapProductsFromAggregation(data),
-      }
-    })
-}
-
-export interface FetchPostBucketsWithFilters {
-  postBuckets: PostBucketResponse[]
-  filters: FilterData
-}
-
-//TODO bytte til label
-export async function getProductsOnAgreement(agreementLabel: string): Promise<FetchPostBucketsWithFilters> {
-  const query = {
-    bool: {
-      must: {
-        term: {
-          'agreements.id': {
-            value: agreementLabel,
-          },
-        },
-      },
-    },
-  }
-
-  const aggs = {
-    postNr: {
-      terms: {
-        field: 'agreements.postNr',
-        size: 120,
-        order: {
-          _key: 'asc',
-        },
-      },
-      aggs: {
-        seriesId: {
-          terms: {
-            field: 'seriesId',
-          },
-          aggs: {
-            topHitData: {
-              top_hits: {
-                size: 1,
-                _source: {
-                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
-                  includes: ['*'],
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    leverandor: {
-      filter: {
-        bool: {
-          filter: [],
-        },
-      },
-      aggs: {
-        values: {
-          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
-        },
-      },
-    },
-  }
-
-  return fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      size: 0,
-      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
-      query,
-      aggs,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data: AgreementSearchResponse) => {
-      const filters = {
-        aggregations: {
-          leverandor: data.aggregations.leverandor,
-        },
-      }
-      return {
-        postBuckets: data.aggregations.postNr.buckets,
-        filters: mapFilters(filters),
       }
     })
 }

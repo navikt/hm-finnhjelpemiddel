@@ -9,14 +9,15 @@ import {
 import { FetchPostBucketsWithFilters, SelectedFilters, getProductsOnAgreement } from '@/utils/api-util'
 import { initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
-import { BodyShort, HGrid, Hide, Show } from '@navikt/ds-react'
+import MobileOverlay from '@/components/MobileOverlay'
+import { FilesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, HGrid, HStack, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementProducts'
-import FilterDesktop from './FilterDesktop'
-import FilterMobile from './FilterMobile'
+import FilterForm from './FilterForm'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -28,10 +29,14 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapAgreementSearchParams(searchParams), [searchParams])
 
   const copyButtonRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
+
+  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
+
+  const searchData = useMemo(() => mapAgreementSearchParams(searchParams), [searchParams])
 
   const formMethods = useForm<AgreementSearchData>({
     defaultValues: {
@@ -39,11 +44,16 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
       ...searchData,
     },
   })
+
   const onSubmit: SubmitHandler<AgreementSearchData> = (data) => {
     router.replace(`${pathname}?${toAgreementSearchQueryString(data)}`, { scroll: false })
   }
 
-  const { data, error, isLoading } = useSWR<FetchPostBucketsWithFilters>(agreement.id, getProductsOnAgreement)
+  const { data } = useSWR<FetchPostBucketsWithFilters>(
+    { agreementLabel: agreement.id, searchData: searchData },
+    getProductsOnAgreement,
+    { keepPreviousData: true }
+  )
 
   if (!data) {
     return <BodyShort>Finner ikke data</BodyShort>
@@ -60,22 +70,106 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
     <FormProvider {...formMethods}>
       <HGrid columns={{ xs: 1, md: '390px auto' }} gap="18">
         <Show above="md">
-          <FilterDesktop
-            filters={data.filters}
-            onSubmit={onSubmit}
-            onReset={onReset}
-            searchFormRef={searchFormRef}
-            copyButtonRef={copyButtonRef}
-          ></FilterDesktop>
+          <section className="search-filter">
+            <FilterForm
+              onSubmit={onSubmit}
+              ref={searchFormRef}
+              filters={data.filters}
+              selectedFilters={searchData.filters}
+            />
+            <HStack className="search-filter__footer" gap="2">
+              <Button
+                ref={copyButtonRef}
+                variant="tertiary"
+                size="small"
+                icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                onClick={() => {
+                  navigator.clipboard.writeText(location.href)
+                  setCopyPopupOpenState(true)
+                }}
+              >
+                Kopiér søket
+              </Button>
+              <Popover
+                open={copyPopupOpenState}
+                onClose={() => setCopyPopupOpenState(false)}
+                anchorEl={copyButtonRef.current}
+                placement="right"
+              >
+                <Popover.Content>Søket er kopiert!</Popover.Content>
+              </Popover>
+
+              <Button
+                type="button"
+                variant="tertiary"
+                size="small"
+                icon={<TrashIcon title="Nullstill søket" />}
+                onClick={onReset}
+              >
+                Nullstill søket
+              </Button>
+            </HStack>
+          </section>
         </Show>
         <Hide above="md">
-          <FilterMobile
-            filters={data.filters}
-            onSubmit={onSubmit}
-            onReset={onReset}
-            searchFormRef={searchFormRef}
-            copyButtonRef={copyButtonRef}
-          ></FilterMobile>
+          <div>
+            <Button variant="secondary" onClick={() => setMobileOverlayOpen(true)}>
+              Filter
+            </Button>
+
+            <MobileOverlay open={mobileOverlayOpen}>
+              <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
+                <Heading level="1" size="medium">
+                  Filtrer søket
+                </Heading>
+              </MobileOverlay.Header>
+              <MobileOverlay.Content>
+                <FilterForm
+                  onSubmit={onSubmit}
+                  ref={searchFormRef}
+                  filters={data.filters}
+                  selectedFilters={searchData.filters}
+                />
+              </MobileOverlay.Content>
+              <MobileOverlay.Footer>
+                <VStack gap="2">
+                  <HStack className="search-filter__footer" gap="2">
+                    <Button
+                      ref={copyButtonRef}
+                      variant="tertiary"
+                      size="small"
+                      icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                      onClick={() => {
+                        navigator.clipboard.writeText(location.href)
+                        setCopyPopupOpenState(true)
+                      }}
+                    >
+                      Kopiér søket
+                    </Button>
+                    <Popover
+                      open={copyPopupOpenState}
+                      onClose={() => setCopyPopupOpenState(false)}
+                      anchorEl={copyButtonRef.current}
+                      placement="right"
+                    >
+                      <Popover.Content>Søket er kopiert!</Popover.Content>
+                    </Popover>
+
+                    <Button
+                      type="button"
+                      variant="tertiary"
+                      size="small"
+                      icon={<TrashIcon title="Nullstill søket" />}
+                      onClick={onReset}
+                    >
+                      Nullstill søket
+                    </Button>
+                  </HStack>
+                  <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
+                </VStack>
+              </MobileOverlay.Footer>
+            </MobileOverlay>
+          </div>
         </Hide>
         <AgreementResults posts={posts}></AgreementResults>
       </HGrid>
