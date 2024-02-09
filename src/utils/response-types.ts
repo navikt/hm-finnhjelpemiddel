@@ -18,7 +18,7 @@ export interface SeriesAggregationResponse {
   }
 }
 
-export interface PostAggregationResponse {
+export interface AgreementSearchResponse {
   took: number
   timed_out: boolean
   _shards: object
@@ -29,10 +29,15 @@ export interface PostAggregationResponse {
       doc_count_error_upper_bound: number
       sum_other_doc_count: number
     }
+    leverandor: {
+      values: {
+        buckets: { key: string; doc_count: number }
+      }
+    }
   }
 }
 
-interface PostBucketResponse {
+export interface PostBucketResponse {
   doc_count: number
   //key = postnr
   key: number

@@ -6,6 +6,21 @@
   border-top: 2px solid $a-border-divider;
 }
 
+.agreement-search-results {
+  padding-inline-start: 0;
+}
+
+.search-filter {
+  &__footer {
+    button {
+      flex: 1;
+      background-color: $a-deepblue-50;
+      border-radius: $a-border-radius-large;
+      padding: $a-spacing-3 $a-spacing-5;
+    }
+  }
+}
+
 .new-product-card {
   display: flex;
   flex-direction: column;

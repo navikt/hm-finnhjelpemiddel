@@ -17,5 +17,9 @@
     @media (min-width: 1279px) {
       @content;
     }
+  } @else if $range == desktop-xlarge-up {
+    @media (min-width: 1440px) {
+      @content;
+    }
   }
 }

@@ -27,7 +27,13 @@ import {
   mapProductsFromAggregation,
   mapProductsFromCollapse,
 } from './product-util'
-import { AgreementDocResponse, PostAggregationResponse, ProductDocResponse, SearchResponse } from './response-types'
+import {
+  AgreementDocResponse,
+  AgreementSearchResponse,
+  PostBucketResponse,
+  ProductDocResponse,
+  SearchResponse,
+} from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -89,7 +95,7 @@ type FetchProps = {
   searchData: SearchData
 }
 
-export type FetchResponse = {
+export type FetchProductsWithFilters = {
   products: Product[]
   filters: FilterData
 }
@@ -106,7 +112,7 @@ const sortOptionsOpenSearch = {
   Mest_relevant: [{ _score: { order: 'desc' } }],
 }
 
-export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
 
   const sortOrderOpenSearch = sortOptionsOpenSearch[sortOrder]
@@ -929,8 +935,13 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     })
 }
 
+export interface FetchPostBucketsWithFilters {
+  postBuckets: PostBucketResponse[]
+  filters: FilterData
+}
+
 //TODO bytte til label
-export async function getProductsOnAgreement(agreementLabel: string): Promise<PostAggregationResponse> {
+export async function getProductsOnAgreement(agreementLabel: string): Promise<FetchPostBucketsWithFilters> {
   const query = {
     bool: {
       must: {
@@ -947,7 +958,7 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<Po
     postNr: {
       terms: {
         field: 'agreements.postNr',
-        size: 100,
+        size: 120,
         order: {
           _key: 'asc',
         },
@@ -996,7 +1007,19 @@ export async function getProductsOnAgreement(agreementLabel: string): Promise<Po
       query,
       aggs,
     }),
-  }).then((res) => res.json())
+  })
+    .then((res) => res.json())
+    .then((data: AgreementSearchResponse) => {
+      const filters = {
+        aggregations: {
+          leverandor: data.aggregations.leverandor,
+        },
+      }
+      return {
+        postBuckets: data.aggregations.postNr.buckets,
+        filters: mapFilters(filters),
+      }
+    })
 }
 
 export async function getProductsInPost(agreementId: string, postNr: number): Promise<SearchResponse> {

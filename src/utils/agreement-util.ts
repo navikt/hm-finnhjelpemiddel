@@ -11,7 +11,7 @@ import {
   AgreementsSourceResponse,
   AttachmentsResponse,
   Hit,
-  PostAggregationResponse,
+  PostBucketResponse,
   PostResponse,
   ProductSourceResponse,
   SearchResponse,
@@ -19,7 +19,7 @@ import {
 import { initialSearchDataState } from './search-state-util'
 import { sortAlphabetically } from './sort-util'
 
-export function getPostTitle(postTitle: string): string {
+export function mapPostTitle(postTitle: string): string {
   const regex = /^(post\s\d{1,2}:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
   return postTitle.replace(regex, '')
 }
@@ -56,14 +56,12 @@ export interface Post {
   description: string
 }
 
-export interface ProductsOnAgreement {
-  posts: {
-    nr: number
-    title: string
-    products: {
-      rank: number
-      product: Product
-    }[]
+export interface PostWithProducts {
+  nr: number
+  title: string
+  products: {
+    rank: number
+    product: Product
   }[]
 }
 
@@ -155,20 +153,18 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-export const mapPostWithProducts = (
-  bucketResponse: PostAggregationResponse,
-  agreement: Agreement
-): ProductsOnAgreement => {
-  const postsInBuckets = bucketResponse.aggregations.postNr.buckets
+export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
-  const posts = postsInBuckets.map((post) => {
+  const posts = postBuckets.map((post) => {
+    const postTitle = getPostTitle(post.key)
+    const mappedTitle = postTitle ? mapPostTitle(postTitle) : ''
     return {
       nr: post.key,
-      title: getPostTitle(post.key) || '',
+      title: mappedTitle,
       products: post.seriesId.buckets
         .map((bucket) => {
           const product = mapProductWithVariants(Array(bucket.topHitData.hits.hits[0]._source as ProductSourceResponse))
@@ -180,7 +176,7 @@ export const mapPostWithProducts = (
         .sort((a, b) => a.rank - b.rank),
     }
   })
-  return { posts: posts }
+  return posts
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {

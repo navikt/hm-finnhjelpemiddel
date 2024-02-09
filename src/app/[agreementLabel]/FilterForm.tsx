@@ -36,10 +36,9 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
   return (
     <form
       ref={formRef}
-      className="container"
       role="search"
       onSubmit={formMethods.handleSubmit(onSubmit)}
-      aria-controls="searchResults"
+      aria-controls="agreementSearchResults"
     >
       <div className="spacing-bottom--medium">
         <Controller

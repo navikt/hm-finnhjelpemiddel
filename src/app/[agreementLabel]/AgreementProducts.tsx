@@ -2,49 +2,54 @@
 import Image from 'next/image'
 import NextLink from 'next/link'
 
-import { Agreement, mapPostWithProducts } from '@/utils/agreement-util'
-import { getProductsOnAgreement } from '@/utils/api-util'
-import { Product } from '@/utils/product-util'
-import { PostAggregationResponse } from '@/utils/response-types'
-import { BodyShort, Box, Button, Checkbox, Detail, HStack, Heading, Link, VStack } from '@navikt/ds-react'
-// import { getAgreementFromLabel } from '@/utils/api-util
+import { PostWithProducts } from '@/utils/agreement-util'
 import { smallImageLoader } from '@/utils/image-util'
-import { PackageIcon } from '@navikt/aksel-icons'
+import { Product } from '@/utils/product-util'
+import { ImageIcon, PackageIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Button, Checkbox, Detail, HStack, Heading, Link, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useState } from 'react'
-import useSWR from 'swr'
 
-const AgreementResults = ({ agreement }: { agreement: Agreement }) => {
-  const { data, error, isLoading } = useSWR<PostAggregationResponse>(agreement.id, getProductsOnAgreement)
-
-  if (!data) {
-    return <BodyShort>Finner ikke data</BodyShort>
-  }
-
-  console.log('data', data)
-  const posts = mapPostWithProducts(data, agreement).posts
-  // console.log('agreement', agreement)
-  // console.log('products', posts)
-
-  const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
+const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
+  const [showPictures, setShowPictures] = useState<string>('show-pictures')
 
   return (
-    <VStack className="search-agreement-posts" gap="8">
-      {posts.map((post) => (
-        <VStack key={post.nr} className="agreement-post" gap="4">
-          <Heading level="2" size="small" className="spacing-vertical--small">
-            {post.title}
-          </Heading>
-          <HStack gap={'4'}>
-            {post.products.map((productWithRank) => (
-              <ProductCardNew
-                key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                product={productWithRank.product}
-                rank={productWithRank.rank}
-              ></ProductCardNew>
-            ))}
-          </HStack>
-        </VStack>
-      ))}
+    <VStack style={{ maxWidth: '44.375rem' }}>
+      <HStack justify="space-between">
+        <Heading level="2" size="small">
+          Delkontrakter
+        </Heading>
+        <ToggleGroup
+          defaultValue="show-pictures"
+          onChange={setShowPictures}
+          value={showPictures}
+          size="small"
+          variant="neutral"
+        >
+          <ToggleGroup.Item value="show-pictures">
+            <ImageIcon aria-hidden />
+            Vis bilde
+          </ToggleGroup.Item>
+          <ToggleGroup.Item value="no-pictures">Uten bilde</ToggleGroup.Item>
+        </ToggleGroup>
+      </HStack>
+      <VStack as="ol" gap="7" className="agreement-search-results" id="agreementSearchResults">
+        {posts.map((post) => (
+          <VStack as="li" key={post.nr} className="agreement-post" gap="4">
+            <Heading level="3" size="small" className="spacing-vertical--small">
+              {post.title}
+            </Heading>
+            <HStack gap={'4'}>
+              {post.products.map((productWithRank) => (
+                <ProductCardNew
+                  key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                  product={productWithRank.product}
+                  rank={productWithRank.rank}
+                ></ProductCardNew>
+              ))}
+            </HStack>
+          </VStack>
+        ))}
+      </VStack>
     </VStack>
   )
 }

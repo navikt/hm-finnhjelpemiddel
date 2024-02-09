@@ -288,29 +288,44 @@ details {
   padding-right: $a-spacing-4;
   margin: 0 auto;
 
-  @include mixins.for-size(desktop-up) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   &--small {
     @extend .main-wrapper;
     max-width: 768px;
+
+    @include mixins.for-size(desktop-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   &--medium {
     @extend .main-wrapper;
-    max-width: 1024px;
+    max-width: 1000px;
+
+    @include mixins.for-size(desktop-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   &--large {
     @extend .main-wrapper;
-    max-width: 1280px;
+    max-width: 1258px;
+
+    @include mixins.for-size(desktop-large-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   &--xlarge {
     @extend .main-wrapper;
-    max-width: 1440px;
+    max-width: 1408px;
+
+    @include mixins.for-size(desktop-xlarge-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 

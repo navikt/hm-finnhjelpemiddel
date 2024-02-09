@@ -11,7 +11,7 @@ import useSWRInfinite from 'swr/infinite'
 import { ArrowUpIcon, FilesIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
-import { FetchResponse, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
+import { FetchProductsWithFilters, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
 import { Entries } from '@/utils/type-util'
@@ -55,8 +55,8 @@ export default function SearchPage() {
     size: page,
     setSize: setPage,
     isLoading,
-  } = useSWRInfinite<FetchResponse>(
-    (index, previousPageData?: FetchResponse) => {
+  } = useSWRInfinite<FetchProductsWithFilters>(
+    (index, previousPageData?: FetchProductsWithFilters) => {
       if (previousPageData && previousPageData.products.length === 0) return null
       return {
         from: index * PAGE_SIZE,
