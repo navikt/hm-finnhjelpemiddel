@@ -2,7 +2,7 @@
 
 import { PostWithProducts } from '@/utils/agreement-util'
 import { ImageIcon } from '@navikt/aksel-icons'
-import { HStack, Heading, ToggleGroup, VStack } from '@navikt/ds-react'
+import { HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useState } from 'react'
 import ProductCardNew from './ProductCardNew'
 
@@ -14,9 +14,11 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
   return (
     <VStack style={{ maxWidth: '44.375rem' }}>
       <HStack justify="space-between">
-        <Heading level="2" size="small">
-          Delkontrakter
-        </Heading>
+        <Show above="md">
+          <Heading level="2" size="small">
+            Delkontrakter
+          </Heading>
+        </Show>
         <ToggleGroup
           defaultValue="show-pictures"
           onChange={setPictureToggleValue}
@@ -31,9 +33,9 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
           <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
         </ToggleGroup>
       </HStack>
-      <VStack as="ol" gap="7" className="agreement-search-results" id="agreementSearchResults">
+      <VStack as="ol" gap={{ xs: '4', md: '7' }} className="agreement-search-results" id="agreementSearchResults">
         {posts.map((post) => (
-          <VStack as="li" key={post.nr} className="agreement-post" gap="4">
+          <VStack as="li" key={post.nr} className="agreement-post" gap={{ xs: '2', md: '4' }}>
             <Heading level="3" size="xsmall" className="spacing-vertical--small">
               {`DK ${post.nr}: ${post.title}`}
             </Heading>

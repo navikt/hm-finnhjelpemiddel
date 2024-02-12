@@ -14,11 +14,11 @@ import { useMemo, useRef, useState } from 'react'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { PostBucketResponse } from '@/utils/response-types'
-import { FilesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, HGrid, HStack, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import AgreementResults from './AgreementProducts'
+import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
 
 export type AgreementSearchData = {
@@ -84,7 +84,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
   return (
     <FormProvider {...formMethods}>
       <CompareMenu />
-      <HGrid columns={{ xs: 1, md: '390px auto' }} gap="18">
+      <HGrid columns={{ xs: 1, md: '390px auto' }} gap={{ xs: '4', md: '18' }}>
         <Show above="md">
           <section className="search-filter">
             <FilterForm
@@ -129,7 +129,12 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
         </Show>
         <Hide above="md">
           <div>
-            <Button variant="secondary" onClick={() => setMobileOverlayOpen(true)}>
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => setMobileOverlayOpen(true)}
+              icon={<FilterIcon aria-hidden />}
+            >
               Filter
             </Button>
 

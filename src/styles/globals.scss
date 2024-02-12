@@ -428,7 +428,7 @@ details {
       }
     }
     &--xlarge {
-      margin-bottom: $a-spacing-16;
+      margin-bottom: $a-spacing-10;
 
       @include mixins.for-size(desktop-up) {
         margin-bottom: $a-spacing-20;
