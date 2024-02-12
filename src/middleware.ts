@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { randomSessionId } from '@unleash/nextjs'
-
-import { UNLEASH_COOKIE_NAME } from './toggles/rsc'
 
 /**
  * Middleware is run on every document request, it
@@ -15,13 +12,6 @@ export default async function middleware(req: NextRequest): Promise<NextResponse
       headers: requestHeaders,
     },
   })
-
-  const existingCookie = req.cookies.get(UNLEASH_COOKIE_NAME)
-  if (existingCookie != null) {
-    return res
-  }
-
-  res.cookies.set(UNLEASH_COOKIE_NAME, randomSessionId())
 
   return res
 }

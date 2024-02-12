@@ -16,8 +16,6 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import PepperkakeDekorasjon, { SnowfallContext } from '@/components/PepperkakeDekorasjon'
-import { useToggle } from '@/toggles/context'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -40,8 +38,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       }
     }
   }, [env])
-
-  const juledekorasjonToggle = useToggle('juledekorasjon')
 
   const NavigationBar = ({ menuOpen }: { menuOpen: boolean }) => (
     <ul className="page-links">
@@ -82,15 +78,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
               <BodyShort size="medium">Rammeavtaler</BodyShort>
             </NextLink>
           </li>
-          {juledekorasjonToggle.enabled && (
-            <li>
-              <PepperkakeDekorasjon
-                onClick={() => {
-                  setSnowfallEnabled(!snowfallEnabled)
-                }}
-              />
-            </li>
-          )}
         </>
       )}
     </ul>
@@ -98,33 +85,31 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <SnowfallContext.Provider value={snowfallEnabled}>
-        <div id="modal-container"></div>
-        <aside className="wip-banner">
-          <div>
-            <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
-            <BodyLong>
-              <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
-              Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du
-              leter, gi oss gjerne beskjed på <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>{' '}
-              eller bruk {''}
-              <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
-            </BodyLong>
+      <div id="modal-container"></div>
+      <aside className="wip-banner">
+        <div>
+          <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
+          <BodyLong>
+            <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
+            Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du
+            leter, gi oss gjerne beskjed på <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>{' '}
+            eller bruk {''}
+            <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
+          </BodyLong>
+        </div>
+      </aside>
+      <header>
+        <nav className="nav-topp">
+          <div className="nav-topp__content">
+            <NavigationBar menuOpen={true} />
           </div>
-        </aside>
-        <header>
-          <nav className="nav-topp">
-            <div className="nav-topp__content">
-              <NavigationBar menuOpen={true} />
-            </div>
-            <div className={classNames('nav-topp__burgermenu-content', { open: menuOpen })}>
-              <NavigationBar menuOpen={menuOpen} />
-            </div>
-          </nav>
-        </header>
-        <main>{children}</main>
-        <Footer />
-      </SnowfallContext.Provider>
+          <div className={classNames('nav-topp__burgermenu-content', { open: menuOpen })}>
+            <NavigationBar menuOpen={menuOpen} />
+          </div>
+        </nav>
+      </header>
+      <main>{children}</main>
+      <Footer />
     </>
   )
 }
