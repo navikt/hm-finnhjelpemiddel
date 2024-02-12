@@ -117,7 +117,7 @@ const Bestillingsordning_HelpText = () => {
       Bestillingsordning
       <HelpText placement="right" strategy="absolute">
         Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
-        hjelpemidler som hjelpemiddelsentralene har på lager
+        hjelpemidler som hjelpemiddelsentralene har på lager.
       </HelpText>
     </div>
   )
