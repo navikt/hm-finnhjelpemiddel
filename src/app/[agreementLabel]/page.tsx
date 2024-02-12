@@ -1,10 +1,10 @@
-import { Heading } from '@/components/aksel-client'
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
-import { BodyShort, VStack } from '@navikt/ds-react'
+import { VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import AgreementSearch from './AgreementSearch'
+import Header from './Header'
 type Props = {
   params: { agreementLabel: string }
 }
@@ -25,12 +25,7 @@ export default async function AgreementPage({ params }: Props) {
   return (
     <Suspense>
       <VStack className="main-wrapper--large spacing-bottom--large">
-        <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
-          <BodyShort textColor="subtle">Alle hjelpemiddel /</BodyShort>
-          <Heading level="1" size="large">
-            {agreement.title}
-          </Heading>
-        </VStack>
+        <Header agreementTitle={agreement.title} />
         <AgreementSearch agreement={agreement} />
       </VStack>
     </Suspense>
