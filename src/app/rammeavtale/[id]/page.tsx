@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.id))
-  const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
+  const hrefHurtigoversikt = `/${params.id}`
+  // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   return (
     <>
@@ -46,7 +47,7 @@ export default async function AgreementPage({ params }: Props) {
                   </BodyLong>
                 </div>
                 {!agreementHasNoProducts(agreement.identifier) && (
-                  <LinkPanel href={hrefSok} className="agreement-page__link-to-search">
+                  <LinkPanel href={hrefHurtigoversikt} className="agreement-page__link-to-search">
                     Produkter: {agreement.label}
                   </LinkPanel>
                 )}
