@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { BodyShort, Button, Chips, Label, VStack } from '@navikt/ds-react'
+import { Button, Chips, Detail, Label, VStack } from '@navikt/ds-react'
 
 import { FilterData, SelectedFilters } from '@/utils/api-util'
 
@@ -68,8 +68,8 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, selectedFilter
         />
       </div>
       <VStack gap="2" className="spacing-bottom--medium">
-        <Label>Valgte filtre</Label>
-        {filterValues.length === 0 && <BodyShort>Ingen filter</BodyShort>}
+        <Label>Valgte filter</Label>
+        {filterValues.length === 0 && <Detail textColor="subtle">Ingen valgt</Detail>}
         {filterValues.length > 0 && (
           <Chips className="results__chips">
             {filterChips.map(({ key, label, values }) => {
