@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -8,15 +8,15 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { BodyLong, BodyShort, Heading, Search } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
 
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
+import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
-import AutocompleteSearch from './sok/sidebar/internals/AutocompleteSearch'
 
 function Home() {
   const router = useRouter()
