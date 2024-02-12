@@ -26,7 +26,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.50.0",
     "react-hotjar": "^6.2.0",
-    "react-intersection-observer": "^9.7.0",
+    "react-intersection-observer": "^9.8.0",
     "react-snowfall": "^2.1.0",
     "remeda": "^1.40.0",
     "swr": "^2.2.4",
