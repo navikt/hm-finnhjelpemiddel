@@ -3,7 +3,7 @@
 import { Product } from '@/utils/product-util'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
-import { Heading, Link, Table, VStack } from '@navikt/ds-react'
+import { Heading, HelpText, Link, Table, VStack } from '@navikt/ds-react'
 import { ArrowDownIcon } from '@navikt/aksel-icons'
 import { useRouter } from 'next/navigation'
 
@@ -28,7 +28,9 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <DefinitionList>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-          <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
+          <DefinitionList.Term>
+            <Bestillingsordning_HelpText />
+          </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
         </DefinitionList>
       </div>
@@ -54,7 +56,9 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Definition>{product.agreements[0].title}</DefinitionList.Definition>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-          <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
+          <DefinitionList.Term>
+            <Bestillingsordning_HelpText />
+          </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
         </DefinitionList>
       </div>
@@ -67,7 +71,6 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <Heading level="2" size="medium">
           Nøkkelinfo
         </Heading>
-
         <Table>
           <Table.Header>
             <Table.Row>
@@ -96,7 +99,9 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Definition>{product.agreements[0].title}</DefinitionList.Definition>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-          <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
+          <DefinitionList.Term>
+            <Bestillingsordning_HelpText />
+          </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
         </DefinitionList>
       </VStack>
@@ -105,3 +110,15 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
 }
 
 export default KeyInformation
+
+const Bestillingsordning_HelpText = () => {
+  return (
+    <div className="product-info__help-text">
+      Bestillingsordning
+      <HelpText placement="right" strategy="absolute">
+        Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
+        hjelpemidler som hjelpemiddelsentralene har på lager.
+      </HelpText>
+    </div>
+  )
+}

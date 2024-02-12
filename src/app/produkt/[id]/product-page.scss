@@ -23,6 +23,11 @@
     align-items: flex-start;
   }
 
+  &__help-text {
+    display: flex;
+    gap: $a-spacing-1;
+  }
+
   &__supplier-info {
     margin-bottom: $a-spacing-1;
   }
