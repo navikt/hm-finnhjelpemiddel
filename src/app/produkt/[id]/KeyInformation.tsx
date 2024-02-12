@@ -28,7 +28,10 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <DefinitionList>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-          <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
+          <DefinitionList.Term>
+            Bestillingsordning
+            <Bestillingsordning_HelpText />
+          </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
         </DefinitionList>
       </div>
@@ -55,13 +58,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>
-            <div className="product-info__help-text">
-              Bestillingsordning
-              <HelpText placement="right" strategy="absolute">
-                Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
-                hjelpemidler som hjelpemiddelsentralene har på lager
-              </HelpText>
-            </div>
+            <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
         </DefinitionList>
@@ -103,7 +100,10 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Definition>{product.agreements[0].title}</DefinitionList.Definition>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-          <DefinitionList.Term>Bestillingsordning</DefinitionList.Term>
+          <DefinitionList.Term>
+            Bestillingsordning
+            <Bestillingsordning_HelpText />
+          </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
         </DefinitionList>
       </VStack>
@@ -112,3 +112,15 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
 }
 
 export default KeyInformation
+
+const Bestillingsordning_HelpText = () => {
+  return (
+    <div className="product-info__help-text">
+      Bestillingsordning
+      <HelpText placement="right" strategy="absolute">
+        Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
+        hjelpemidler som hjelpemiddelsentralene har på lager
+      </HelpText>
+    </div>
+  )
+}
