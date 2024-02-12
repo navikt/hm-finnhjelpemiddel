@@ -6,12 +6,13 @@ import {
   mapAgreementSearchParams,
   toAgreementSearchQueryString,
 } from '@/utils/agreement-util'
-import { FetchPostBucketsWithFilters, SelectedFilters, getProductsOnAgreement } from '@/utils/api-util'
+import { FilterData, SelectedFilters, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import { initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
+import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, HGrid, HStack, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
@@ -49,17 +50,21 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
     router.replace(`${pathname}?${toAgreementSearchQueryString(data)}`, { scroll: false })
   }
 
-  const { data } = useSWR<FetchPostBucketsWithFilters>(
-    { agreementLabel: agreement.id, searchData: searchData },
+  const { data: postBucktes } = useSWR<PostBucketResponse[]>(
+    { agreementId: agreement.id, searchData: searchData },
     getProductsOnAgreement,
     { keepPreviousData: true }
   )
 
-  if (!data) {
+  const { data: filters } = useSWR<FilterData>({ agreementId: agreement.id }, getFiltersAgreement, {
+    keepPreviousData: true,
+  })
+
+  if (!postBucktes || !filters) {
     return <BodyShort>Finner ikke data</BodyShort>
   }
 
-  const posts = mapAgreementProducts(data.postBuckets, agreement)
+  const posts = mapAgreementProducts(postBucktes, agreement)
 
   const onReset = () => {
     formMethods.reset()
@@ -74,7 +79,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
             <FilterForm
               onSubmit={onSubmit}
               ref={searchFormRef}
-              filters={data.filters}
+              filters={filters}
               selectedFilters={searchData.filters}
             />
             <HStack className="search-filter__footer" gap="2">
@@ -127,7 +132,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
                 <FilterForm
                   onSubmit={onSubmit}
                   ref={searchFormRef}
-                  filters={data.filters}
+                  filters={filters}
                   selectedFilters={searchData.filters}
                 />
               </MobileOverlay.Content>

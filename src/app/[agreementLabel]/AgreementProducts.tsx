@@ -97,7 +97,9 @@ const ProductCardNew = ({
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
           >
-            <BodyShort size="small">{product.title}</BodyShort>
+            <BodyShort size="small" className="text-line-clamp">
+              {product.title}
+            </BodyShort>
           </Link>
         </VStack>
       </Box>
@@ -116,7 +118,9 @@ const ProductCardNew = ({
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
           >
-            <BodyShort size="small">{product.title}</BodyShort>
+            <BodyShort size="small" className="text-line-clamp">
+              {product.title}
+            </BodyShort>
           </Link>
           {/* <Button
             className="new-product-card__product-category-button"

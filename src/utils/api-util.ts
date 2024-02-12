@@ -100,6 +100,113 @@ export type FetchProductsWithFilters = {
   filters: FilterData
 }
 
+const makeSearchTermQuery = (searchTerm: string, agreementId?: string) => {
+  const commonBoosting = {
+    negative: {
+      bool: {
+        must: {
+          bool: {},
+        },
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 1,
+  }
+
+  const queryStringSearchTerm = removeReservedChars(searchTerm)
+
+  //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
+  const negativeIsoCategories = ['09540601', '09540901', '09540301']
+
+  const bool = {
+    should: [
+      {
+        boosting: {
+          positive: {
+            multi_match: {
+              query: searchTerm,
+              type: 'cross_fields',
+              fields: [
+                'isoCategoryTitle^2',
+                'isoCategoryText^0.5',
+                'title^0.3',
+                'attributes.text^0.1',
+                'keywords_bag^0.1',
+              ],
+              operator: 'and',
+              zero_terms_query: 'all',
+            },
+          },
+          ...commonBoosting,
+        },
+      },
+      {
+        boosting: {
+          positive: {
+            query_string: {
+              query: `*${queryStringSearchTerm}`,
+              boost: '0.1',
+            },
+          },
+          ...commonBoosting,
+        },
+      },
+      {
+        boosting: {
+          positive: {
+            query_string: {
+              query: `${queryStringSearchTerm}*`,
+              boost: '0.1',
+            },
+          },
+          ...commonBoosting,
+        },
+      },
+    ],
+  }
+
+  const term = {
+    'agreements.id': {
+      value: agreementId,
+    },
+  }
+
+  const mustForAgreement = {
+    must: [
+      { term: term },
+      {
+        bool: {
+          must: { bool: bool },
+          must_not: {
+            bool: {
+              should: negativeIsoCategories.map((isoCategory) => ({
+                match: {
+                  isoCategory,
+                },
+              })),
+            },
+          },
+        },
+      },
+    ],
+  }
+
+  const mustForAll = {
+    must: { bool: bool },
+    must_not: {
+      bool: {
+        should: negativeIsoCategories.map((isoCategory) => ({
+          match: {
+            isoCategory,
+          },
+        })),
+      },
+    },
+  }
+
+  return agreementId === undefined ? mustForAll : mustForAgreement
+}
+
 // Because of queryString in opensearch query: https://opensearch.org/docs/latest/query-dsl/full-text/query-string/#reserved-characters
 const removeReservedChars = (searchTerm: String) => {
   const unescapables = /([<>\\])/g
@@ -186,82 +293,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     queryFilters.push({ match: { hmsArtNr: { query: searchTerm } } })
   }
 
-  //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
-  const negativeIsoCategories = ['09540601', '09540901', '09540301']
-
-  const commonBoosting = {
-    negative: {
-      bool: {
-        must: {
-          bool: {},
-        },
-      },
-    },
-    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 1,
-  }
-
-  const queryStringSearchTerm = removeReservedChars(searchTerm)
-
-  const searchTermQuery = {
-    must: {
-      bool: {
-        should: [
-          {
-            boosting: {
-              positive: {
-                multi_match: {
-                  query: searchTerm,
-                  type: 'cross_fields',
-                  fields: [
-                    'isoCategoryTitle^2',
-                    'isoCategoryText^0.5',
-                    'title^0.3',
-                    'attributes.text^0.1',
-                    'keywords_bag^0.1',
-                  ],
-                  operator: 'and',
-                  zero_terms_query: 'all',
-                },
-              },
-              ...commonBoosting,
-            },
-          },
-          {
-            boosting: {
-              positive: {
-                query_string: {
-                  query: `*${queryStringSearchTerm}`,
-                  boost: '0.1',
-                },
-              },
-              ...commonBoosting,
-            },
-          },
-          {
-            boosting: {
-              positive: {
-                query_string: {
-                  query: `${queryStringSearchTerm}*`,
-                  boost: '0.1',
-                },
-              },
-              ...commonBoosting,
-            },
-          },
-        ],
-      },
-    },
-    must_not: {
-      bool: {
-        should: negativeIsoCategories.map((isoCategory) => ({
-          match: {
-            isoCategory,
-          },
-        })),
-      },
-    },
-  }
+  const searchTermQuery = makeSearchTermQuery(searchTerm)
 
   const query = {
     bool: {
@@ -747,55 +779,29 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log('search', data)
       return { products: mapProductsFromCollapse(data), filters: mapFilters(data) }
     })
 }
 
-export interface FetchPostBucketsWithFilters {
-  postBuckets: PostBucketResponse[]
-  filters: FilterData
-}
-
 //TODO bytte til label
 export const getProductsOnAgreement = ({
-  agreementLabel,
+  agreementId,
   searchData,
 }: {
-  agreementLabel: string
+  agreementId: string
   searchData: SearchData
-}): Promise<FetchPostBucketsWithFilters> => {
+}): Promise<PostBucketResponse[]> => {
   const { searchTerm, filters: activeFilters } = searchData
-
-  console.log('FETCH FILTERS', activeFilters)
 
   const { leverandor } = activeFilters
   const allActiveFilters = [filterLeverandor(leverandor)]
 
+  const searchTermQuery = makeSearchTermQuery(searchTerm, agreementId)
+
   const query = {
     bool: {
-      must: {
-        term: {
-          'agreements.id': {
-            value: agreementLabel,
-          },
-        },
-      },
-    },
-  }
-
-  const filters = {
-    leverandor: {
-      filter: {
-        bool: {
-          filter: [],
-        },
-      },
-      aggs: {
-        values: {
-          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
-        },
-      },
+      filter: allActiveFilters,
+      ...searchTermQuery,
     },
   }
 
@@ -827,7 +833,6 @@ export const getProductsOnAgreement = ({
         },
       },
     },
-    ...filters,
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
@@ -839,26 +844,72 @@ export const getProductsOnAgreement = ({
       size: 0,
       sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
       query,
-      post_filter: {
-        bool: {
-          filter: allActiveFilters,
-        },
-      },
       aggs,
     }),
   })
     .then((res) => res.json())
     .then((data: AgreementSearchResponse) => {
-      console.log('ASDDDD', data)
+      return data.aggregations.postNr.buckets
+    })
+}
+
+export const getFiltersAgreement = ({
+  agreementId,
+  // searchData,
+}: {
+  agreementId: string
+  // searchData: SearchData
+}): Promise<FilterData> => {
+  // const { filters: activeFilters } = searchData
+  // const { leverandor } = activeFilters
+  // const allActiveFilters = [filterLeverandor(leverandor)]
+
+  const query = {
+    bool: {
+      must: {
+        term: {
+          'agreements.id': {
+            value: agreementId,
+          },
+        },
+      },
+    },
+  }
+
+  const filters = {
+    leverandor: {
+      filter: {
+        bool: {
+          filter: [],
+        },
+      },
+      aggs: {
+        values: {
+          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
+        },
+      },
+    },
+  }
+
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      query,
+      aggs: { ...filters },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data: any) => {
       const filters = {
         aggregations: {
           leverandor: data.aggregations.leverandor,
         },
       }
-      return {
-        postBuckets: data.aggregations.postNr.buckets,
-        filters: mapFilters(filters),
-      }
+      return mapFilters(filters)
     })
 }
 

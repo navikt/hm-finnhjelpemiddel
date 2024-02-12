@@ -38,8 +38,8 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, selectedFilter
     formRef.current?.requestSubmit()
   }
 
-  const filterValues = selectedFilters
-    ? Object.values(selectedFilters)
+  const filterValues = filters
+    ? Object.values(filters)
         .flat()
         .filter((val) => val)
     : []
