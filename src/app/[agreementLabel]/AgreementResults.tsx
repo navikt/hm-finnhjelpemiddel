@@ -37,7 +37,7 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
         {posts.map((post) => (
           <VStack as="li" key={post.nr} className="agreement-post" gap={{ xs: '2', md: '4' }}>
             <Heading level="3" size="xsmall" className="spacing-vertical--small">
-              {`DK ${post.nr}: ${post.title}`}
+              {`${post.nr}: ${post.title}`}
             </Heading>
             <HStack gap={'4'}>
               {post.products.map((productWithRank) => (

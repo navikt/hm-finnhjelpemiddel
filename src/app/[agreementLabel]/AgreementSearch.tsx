@@ -86,14 +86,14 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
       <CompareMenu />
       <HGrid columns={{ xs: 1, md: '390px auto' }} gap={{ xs: '4', md: '18' }}>
         <Show above="md">
-          <section className="search-filter">
+          <section className="agreement-filter">
             <FilterForm
               onSubmit={onSubmit}
               ref={searchFormRef}
               filters={filters}
               selectedFilters={searchData.filters}
             />
-            <HStack className="search-filter__footer" gap="2">
+            <HGrid columns={{ xs: 2 }} className="agreement-filter__footer" gap="2">
               <Button
                 ref={copyButtonDesktopRef}
                 variant="tertiary"
@@ -124,7 +124,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
               >
                 Nullstill søket
               </Button>
-            </HStack>
+            </HGrid>
           </section>
         </Show>
         <Hide above="md">
@@ -154,7 +154,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
               </MobileOverlay.Content>
               <MobileOverlay.Footer>
                 <VStack gap="2">
-                  <HStack className="search-filter__footer" gap="2">
+                  <HStack className="agreement-filter__footer" gap="2">
                     <Button
                       ref={copyButtonMobileRef}
                       variant="tertiary"

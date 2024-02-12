@@ -67,6 +67,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
       title={FilterCategories[filterKey]}
       open={watchFilter.length > 0 || searchData.filters[filterKey].length > 0 || touched}
       spacing
+      className="checkbox-filter"
     >
       <div className="checkbox-filter-input">
         <Controller
