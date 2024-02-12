@@ -55,7 +55,6 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>
-            Bestillingsordning
             <div className="product-info__help-text">
               Bestillingsordning
               <HelpText placement="right" strategy="absolute">
