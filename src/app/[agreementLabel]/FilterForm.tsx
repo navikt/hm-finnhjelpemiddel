@@ -5,11 +5,11 @@ import { BodyShort, Button, Chips, Label, VStack } from '@navikt/ds-react'
 
 import { FilterData, SelectedFilters } from '@/utils/api-util'
 
+import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
+import FilterView from '@/components/filters/FilterView'
 import { FilterCategories } from '@/utils/filter-util'
 import { Entries } from '@/utils/type-util'
 import { useSearchParams } from 'next/navigation'
-import FilterView from '../sok/sidebar/FilterView'
-import AutocompleteSearch from '../sok/sidebar/internals/AutocompleteSearch'
 import { AgreementSearchData } from './AgreementSearch'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (

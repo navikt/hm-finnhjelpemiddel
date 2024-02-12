@@ -19,10 +19,10 @@ import { Entries } from '@/utils/type-util'
 import MobileOverlay from '@/components/MobileOverlay'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import SearchForm from './sidebar/SearchForm'
-
 import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
-import CompareMenu from './CompareMenu'
+
+import CompareMenu from '@/components/layout/CompareMenu'
+import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
 
 export default function SearchPage() {

@@ -218,7 +218,6 @@ const ProductImage = ({ src }: { src: string }) => {
           loader={smallImageLoader}
           src={src}
           onLoad={() => setIsLoading(false)}
-          // onLoadingComplete={() => setIsLoading(false)}
           onError={() => {
             setLoadingError(true)
             setIsLoading(false)

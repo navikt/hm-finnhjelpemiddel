@@ -12,12 +12,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
+import CompareMenu from '@/components/layout/CompareMenu'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, HGrid, HStack, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import CompareMenu from '../sok/CompareMenu'
 import AgreementResults from './AgreementProducts'
 import FilterForm from './FilterForm'
 
