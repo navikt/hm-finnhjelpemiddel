@@ -1,7 +1,5 @@
 'use client'
 
-import StyledComponentsRegistry from '@/lib/registry'
-
 import React, { useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 
@@ -94,8 +92,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           <BodyLong>
             <b>Hei!</b> Denne siden er under kontinuerlig utvikling og vil på sikt erstatte Hjelpemiddeldatabasen.
             Foreløpig er ikke alt innhold og alle funksjoner på plass på denne siden. Dersom du ikke finner det du
-            leter, gi oss gjerne beskjed på <Link
-            href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>{' '}
+            leter, gi oss gjerne beskjed på <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>{' '}
             eller bruk {''}
             <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
           </BodyLong>
@@ -111,9 +108,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
       </header>
-      <main>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </main>
+      <main>{children}</main>
       <Footer />
     </>
   )
