@@ -30,19 +30,14 @@
   flex-direction: column;
 
   border-radius: 8px;
-  border: 1px solid $a-border-subtle;
+  outline: 1px solid $a-border-subtle;
 
   &__content {
     position: relative;
   }
 
   &:hover {
-    border: 1px solid $a-border-action;
-  }
-
-  &__checked {
-    @extend .new-product-card;
-    border: 3px solid $a-text-action-selected;
+    outline: 1px solid $a-border-action;
   }
 
   &__link {
@@ -137,7 +132,7 @@
 
 .new-product-card--large.checked,
 .new-product-card.checked {
-  border: 3px solid $a-text-action-selected;
+  outline: 3px solid $a-text-action-selected;
 }
 
 .new-product-card--large.without-iso-button {
