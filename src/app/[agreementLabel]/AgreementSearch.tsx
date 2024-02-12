@@ -14,9 +14,10 @@ import { useMemo, useRef, useState } from 'react'
 import MobileOverlay from '@/components/MobileOverlay'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HGrid, HStack, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
+import CompareMenu from '../sok/CompareMenu'
 import AgreementResults from './AgreementProducts'
 import FilterForm from './FilterForm'
 
@@ -50,15 +51,23 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
     router.replace(`${pathname}?${toAgreementSearchQueryString(data)}`, { scroll: false })
   }
 
-  const { data: postBucktes } = useSWR<PostBucketResponse[]>(
+  const { data: postBucktes, isLoading: postsIsLoading } = useSWR<PostBucketResponse[]>(
     { agreementId: agreement.id, searchData: searchData },
     getProductsOnAgreement,
     { keepPreviousData: true }
   )
 
-  const { data: filters } = useSWR<FilterData>({ agreementId: agreement.id }, getFiltersAgreement, {
-    keepPreviousData: true,
-  })
+  const { data: filters, isLoading: filtersIsLoading } = useSWR<FilterData>(
+    { agreementId: agreement.id },
+    getFiltersAgreement,
+    {
+      keepPreviousData: true,
+    }
+  )
+
+  if (postsIsLoading || filtersIsLoading) {
+    return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
+  }
 
   if (!postBucktes || !filters) {
     return <BodyShort>Finner ikke data</BodyShort>
@@ -73,6 +82,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <FormProvider {...formMethods}>
+      <CompareMenu />
       <HGrid columns={{ xs: 1, md: '390px auto' }} gap="18">
         <Show above="md">
           <section className="search-filter">
