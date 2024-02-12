@@ -38,8 +38,8 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, selectedFilter
     formRef.current?.requestSubmit()
   }
 
-  const filterValues = filters
-    ? Object.values(filters)
+  const filterValues = selectedFilters
+    ? Object.values(selectedFilters)
         .flat()
         .filter((val) => val)
     : []
@@ -87,7 +87,7 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, selectedFilter
                         formRef.current?.requestSubmit()
                       }}
                     >
-                      {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
+                      {label === FilterCategories.leverandor ? value : `${label}: ${value}`}
                     </Chips.Removable>
                   )
                 })

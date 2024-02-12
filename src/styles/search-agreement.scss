@@ -28,7 +28,6 @@
 .new-product-card {
   display: flex;
   flex-direction: column;
-
   border-radius: 8px;
   outline: 1px solid $a-border-subtle;
 
@@ -87,10 +86,10 @@
   // Overwrite Aksel
 
   .navds-checkbox__label::before {
-    border-radius: 100px;
+    border-radius: 100px !important;
   }
   .navds-checkbox__label::before::after {
-    border-radius: 100px;
+    border-radius: 100px !important;
   }
 
   .navds-checkbox--small .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
@@ -106,19 +105,18 @@
   }
 }
 
-.new-product-card--large {
-  @extend .new-product-card;
+.new-product-card.large {
   width: 225px;
   height: 335px;
   padding-top: 4px;
 
-  .new-product-card__image {
+  .new-product-card-image-container {
     display: flex;
     justify-content: center;
     width: 100%;
     position: relative;
 
-    .image {
+    .new-product-card-image {
       width: 185px;
       height: 167px;
       position: relative;
@@ -130,17 +128,17 @@
   }
 }
 
-.new-product-card--large.checked,
-.new-product-card.checked {
+.new-product-card.checked,
+.new-product-card.large.checked {
   outline: 3px solid $a-text-action-selected;
 }
 
-.new-product-card--large.without-iso-button {
+.new-product-card.large.without-iso-button {
   height: 285px;
   width: 210px;
 
-  .new-product-card__image {
-    .image {
+  .new-product-card-image-container {
+    .new-product-card-image {
       width: 170px;
     }
   }

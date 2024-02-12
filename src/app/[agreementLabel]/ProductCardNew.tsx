@@ -78,7 +78,7 @@ const ProductCardNew = ({
   return (
     <Box
       padding="2"
-      className={classNames('new-product-card--large without-iso-button', { checked: isInProductsToCompare })}
+      className={classNames('new-product-card large without-iso-button', { checked: isInProductsToCompare })}
     >
       {compareCheckbox}
       <VStack gap="2" className="new-product-card__content">
@@ -102,8 +102,8 @@ const ProductCardNew = ({
             {product.isoCategoryTitle}
           </Button> */}
         </VStack>
-        <div className="new-product-card__image">
-          <div className="image">
+        <div className="new-product-card-image-container">
+          <div className="new-product-card-image">
             {hasImage ? (
               <Image
                 loader={smallImageLoader}

@@ -15,7 +15,7 @@ import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HGrid, HStack, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementProducts'
@@ -65,9 +65,9 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
-  if (postsIsLoading || filtersIsLoading) {
-    return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
-  }
+  // if (postsIsLoading || filtersIsLoading) {
+  //   return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
+  // }
 
   if (!postBucktes || !filters) {
     return <BodyShort>Finner ikke data</BodyShort>

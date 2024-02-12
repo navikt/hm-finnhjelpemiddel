@@ -1,10 +1,10 @@
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
-import { VStack } from '@navikt/ds-react'
+import { BodyShort, HStack, Heading, Link, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
+import NextLink from 'next/link'
 import { Suspense } from 'react'
 import AgreementSearch from './AgreementSearch'
-import Header from './Header'
 type Props = {
   params: { agreementLabel: string }
 }
@@ -25,7 +25,17 @@ export default async function AgreementPage({ params }: Props) {
   return (
     <Suspense>
       <VStack className="main-wrapper--large spacing-bottom--large">
-        <Header agreementTitle={agreement.title} />
+        <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
+          <HStack gap="3">
+            <Link as={NextLink} href="/" variant="subtle">
+              Alle hjelpemiddel
+            </Link>
+            <BodyShort textColor="subtle">/</BodyShort>
+          </HStack>
+          <Heading level="1" size="large">
+            {agreement.title}
+          </Heading>
+        </VStack>
         <AgreementSearch agreement={agreement} />
       </VStack>
     </Suspense>
