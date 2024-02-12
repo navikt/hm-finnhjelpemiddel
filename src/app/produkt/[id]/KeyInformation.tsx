@@ -29,7 +29,6 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>
-            Bestillingsordning
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
@@ -101,7 +100,6 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>
-            Bestillingsordning
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
