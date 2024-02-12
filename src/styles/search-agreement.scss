@@ -135,6 +135,11 @@
   }
 }
 
+.new-product-card--large.checked,
+.new-product-card.checked {
+  border: 3px solid $a-text-action-selected;
+}
+
 .new-product-card--large.without-iso-button {
   height: 285px;
   width: 210px;

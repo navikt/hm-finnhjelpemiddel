@@ -3,10 +3,12 @@ import Image from 'next/image'
 import NextLink from 'next/link'
 
 import { PostWithProducts } from '@/utils/agreement-util'
+import { useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 import { ImageIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Checkbox, Detail, HStack, Heading, Link, ToggleGroup, VStack } from '@navikt/ds-react'
+import classNames from 'classnames'
 import { useState } from 'react'
 
 const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
@@ -66,6 +68,21 @@ const ProductCardNew = ({
   rank?: number
   hidePictures: boolean
 }) => {
+  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+
+  const toggleCompareProduct = () => {
+    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
+      ? removeProduct(product)
+      : setProductToCompare(product)
+
+    // if (firstChecked) {
+    //   setCompareMenuState(CompareMenuState.Open)
+    //   setFirstChecked(false)
+    // }
+  }
+
+  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
 
@@ -74,8 +91,8 @@ const ProductCardNew = ({
       className="new-product-card__checkbox"
       size="small"
       value="Legg produktet til sammenligning"
-      // onChange={toggleCompareProduct}
-      // checked={isInProductsToCompare}
+      onChange={toggleCompareProduct}
+      checked={isInProductsToCompare}
     >
       <div aria-label={`sammenlign ${product.title}`}>
         <span aria-hidden>Sammenlign</span>
@@ -85,7 +102,11 @@ const ProductCardNew = ({
 
   if (hidePictures) {
     return (
-      <Box paddingInline="2" paddingBlock="1" className="new-product-card no-picture">
+      <Box
+        paddingInline="2"
+        paddingBlock="1"
+        className={classNames('new-product-card no-picture', { checked: isInProductsToCompare })}
+      >
         <VStack gap="1" className="new-product-card__content">
           <HStack justify={'space-between'}>
             <Detail textColor="subtle">{rank ? `Rangering ${rank}` : 'Ingen rangering'}</Detail>
@@ -107,7 +128,10 @@ const ProductCardNew = ({
   }
 
   return (
-    <Box padding="2" className="new-product-card--large without-iso-button">
+    <Box
+      padding="2"
+      className={classNames('new-product-card--large without-iso-button', { checked: isInProductsToCompare })}
+    >
       {compareCheckbox}
       <VStack gap="2" className="new-product-card__content">
         <VStack gap="1">
