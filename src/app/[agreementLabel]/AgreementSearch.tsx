@@ -32,7 +32,8 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const copyButtonRef = useRef<HTMLButtonElement>(null)
+  const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
+  const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
@@ -94,7 +95,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
             />
             <HStack className="search-filter__footer" gap="2">
               <Button
-                ref={copyButtonRef}
+                ref={copyButtonDesktopRef}
                 variant="tertiary"
                 size="small"
                 icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
@@ -108,7 +109,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
               <Popover
                 open={copyPopupOpenState}
                 onClose={() => setCopyPopupOpenState(false)}
-                anchorEl={copyButtonRef.current}
+                anchorEl={copyButtonDesktopRef.current}
                 placement="right"
               >
                 <Popover.Content>Søket er kopiert!</Popover.Content>
@@ -150,7 +151,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
                 <VStack gap="2">
                   <HStack className="search-filter__footer" gap="2">
                     <Button
-                      ref={copyButtonRef}
+                      ref={copyButtonMobileRef}
                       variant="tertiary"
                       size="small"
                       icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
@@ -164,7 +165,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
                     <Popover
                       open={copyPopupOpenState}
                       onClose={() => setCopyPopupOpenState(false)}
-                      anchorEl={copyButtonRef.current}
+                      anchorEl={copyButtonMobileRef.current}
                       placement="right"
                     >
                       <Popover.Content>Søket er kopiert!</Popover.Content>

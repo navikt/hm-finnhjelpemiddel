@@ -1,11 +1,10 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
-import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
+import { SubmitHandler, useFormContext } from 'react-hook-form'
 
 import { Button, Chips, Detail, Label, VStack } from '@navikt/ds-react'
 
 import { FilterData, SelectedFilters } from '@/utils/api-util'
 
-import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
 import FilterView from '@/components/filters/FilterView'
 import { FilterCategories } from '@/utils/filter-util'
 import { Entries } from '@/utils/type-util'
@@ -29,7 +28,7 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, selectedFilter
   const formRef = useRef<HTMLFormElement>(null)
   const formMethods = useFormContext<AgreementSearchData>()
   const searchParams = useSearchParams()
-  const searchTerm = searchParams.get('term') ?? ''
+  // const searchTerm = searchParams.get('term') ?? ''
 
   useImperativeHandle(ref, () => formRef.current!)
 
@@ -59,14 +58,16 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, selectedFilter
       onSubmit={formMethods.handleSubmit(onSubmit)}
       aria-controls="agreementSearchResults"
     >
-      <div className="spacing-bottom--medium">
-        <Controller
-          name="searchTerm"
-          control={formMethods.control}
-          defaultValue=""
-          render={() => <AutocompleteSearch onSearch={onSearch} initialValue={searchTerm} />}
-        />
-      </div>
+      {/* <div className="spacing-bottom--medium">
+          <Controller
+            name="searchTerm"
+            control={formMethods.control}
+            defaultValue=""
+            render={() => (
+              <AutocompleteSearch onSearch={onSearch} initialValue={searchTerm} agreementId={agreementId} />
+            )}
+          />
+        </div> */}
       <VStack gap="2" className="spacing-bottom--medium">
         <Label>Valgte filter</Label>
         {filterValues.length === 0 && <Detail textColor="subtle">Ingen valgt</Detail>}
