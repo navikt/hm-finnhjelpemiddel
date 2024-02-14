@@ -10,15 +10,7 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state
 import { mapSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
-import {
-  BodyLong,
-  BodyShort,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  Heading,
-  Loader,
-  Table,
-} from '@/components/aksel-client'
+import { BodyLong, ChevronRightIcon, Heading, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
 import { useMemo } from 'react'
@@ -156,15 +148,7 @@ const CompareTable = ({
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>
-              <Heading level="2" size="medium" spacing>
-                Produkter
-              </Heading>
-              <NextLink className="back-to-search" href={href}>
-                <ChevronLeftIcon title="Tilbake til søk" />
-                <BodyShort>Legg til flere</BodyShort>
-              </NextLink>
-            </Table.ColumnHeader>
+            <Table.ColumnHeader></Table.ColumnHeader>
             {productsToCompare.map((product) => (
               <Table.ColumnHeader key={'id-' + product.id}>
                 <ProductCard product={product} removeProduct={removeProduct} />

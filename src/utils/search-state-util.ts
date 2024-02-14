@@ -29,6 +29,6 @@ export const initialSearchDataState = {
 
 export const initialAgreementSearchDataState = {
   searchTerm: '',
-  hidePictures: false,
   filters: initialFiltersState,
+  hidePictures: 'show-pictures',
 }

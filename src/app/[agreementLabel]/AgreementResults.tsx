@@ -1,15 +1,23 @@
 'use client'
 
 import { PostWithProducts } from '@/utils/agreement-util'
+import { SearchData } from '@/utils/api-util'
 import { ImageIcon } from '@navikt/aksel-icons'
 import { HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { RefObject } from 'react'
+import { useFormContext } from 'react-hook-form'
 import ProductCardNew from './ProductCardNew'
 
-const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
-  const [pictureToggleValue, setPictureToggleValue] = useState<string>('show-pictures')
+const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formRef: RefObject<HTMLFormElement> }) => {
+  const formMethods = useFormContext<SearchData>()
+  const searchParams = useSearchParams()
+  const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
 
-  const hidePictures = pictureToggleValue === 'hide-pictures'
+  const handleSetToggle = (value: string) => {
+    formMethods.setValue('hidePictures', value)
+    formRef.current?.requestSubmit()
+  }
 
   return (
     <VStack style={{ maxWidth: '44.375rem' }}>
@@ -21,7 +29,7 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
         </Show>
         <ToggleGroup
           defaultValue="show-pictures"
-          onChange={setPictureToggleValue}
+          onChange={handleSetToggle}
           value={pictureToggleValue}
           size="small"
           variant="neutral"
@@ -45,7 +53,7 @@ const AgreementResults = ({ posts }: { posts: PostWithProducts[] }) => {
                   key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                   product={productWithRank.product}
                   rank={productWithRank.rank}
-                  hidePictures={hidePictures}
+                  hidePictures={pictureToggleValue === 'hide-pictures'}
                 ></ProductCardNew>
               ))}
             </HStack>

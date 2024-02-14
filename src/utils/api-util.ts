@@ -77,8 +77,8 @@ export type SearchData = {
   isoCode: string
   hasAgreementsOnly: boolean
   filters: SelectedFilters
-  sortOrder: SortOrder
-  hidePictures?: boolean
+  sortOrder?: SortOrder
+  hidePictures?: string
 }
 
 export const sortOrders = ['Delkontrakt_rangering', 'Mest_relevant'] as const
@@ -224,7 +224,7 @@ const sortOptionsOpenSearch = {
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
 
-  const sortOrderOpenSearch = sortOptionsOpenSearch[sortOrder]
+  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Mest_relevant']
 
   const {
     lengdeCM,
@@ -265,8 +265,6 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     filterProduktkategori(produktkategori),
     filterRammeavtale(rammeavtale),
   ]
-
-  console.log('filter', rammeavtale, filterRammeavtale(rammeavtale))
 
   const queryFilters: Array<any> = [
     {
@@ -797,12 +795,8 @@ export const getProductsOnAgreement = ({
 }): Promise<PostBucketResponse[]> => {
   const { searchTerm, filters: activeFilters } = searchData
 
-  const { leverandor, beregnetBarn, delkontrakt } = activeFilters
-  const allActiveFilters = [
-    filterLeverandor(leverandor),
-    filterBeregnetBarn(beregnetBarn),
-    filterDelkontrakt(delkontrakt),
-  ]
+  const { leverandor, delkontrakt } = activeFilters
+  const allActiveFilters = [filterLeverandor(leverandor), filterDelkontrakt(delkontrakt)]
 
   const searchTermQuery = makeSearchTermQuery(searchTerm, agreementId)
 
@@ -897,16 +891,16 @@ export const getFiltersAgreement = ({
         },
       },
     },
-    beregnetBarn: {
-      filter: {
-        bool: {
-          filter: [],
-        },
-      },
-      aggs: {
-        values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
-      },
-    },
+    // beregnetBarn: {
+    //   filter: {
+    //     bool: {
+    //       filter: [],
+    //     },
+    //   },
+    //   aggs: {
+    //     values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
+    //   },
+    // },
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
@@ -925,7 +919,6 @@ export const getFiltersAgreement = ({
       const filters = {
         aggregations: {
           leverandor: data.aggregations.leverandor,
-          beregnetBarn: data.aggregations.beregnetBarn,
         },
       }
       return mapFilters(filters)

@@ -206,7 +206,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
             </MobileOverlay>
           </div>
         </Hide>
-        <AgreementResults posts={posts}></AgreementResults>
+        <AgreementResults posts={posts} formRef={searchFormRef}></AgreementResults>
       </HGrid>
     </FormProvider>
   )
