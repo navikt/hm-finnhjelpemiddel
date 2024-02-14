@@ -24,7 +24,7 @@ export const initialSearchDataState = {
   isoCode: '',
   hasAgreementsOnly: false,
   filters: initialFiltersState,
-  sortOrder: '',
+  sortOrder: undefined,
 }
 
 export const initialAgreementSearchDataState = {
