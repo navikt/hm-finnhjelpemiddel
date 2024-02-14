@@ -22,17 +22,14 @@ const ProductCardNew = ({
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
-
-    // if (firstChecked) {
-    //   setCompareMenuState(CompareMenuState.Open)
-    //   setFirstChecked(false)
-    // }
   }
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
+  const [imageLoadingError, setImageLoadingError] = useState(false)
+
   //TODO sjekk at klikkflate er minst 24x24
   const compareCheckbox = (
     <Checkbox
@@ -104,14 +101,13 @@ const ProductCardNew = ({
         </VStack>
         <div className="new-product-card-image-container">
           <div className="new-product-card-image">
-            {hasImage ? (
+            {hasImage && !imageLoadingError ? (
               <Image
                 loader={smallImageLoader}
                 src={firstImageSrc}
-                // src={'/assets/image-error.png'}
-                // onError={() => {
-                //   setImageLoadingError(true)
-                // }}
+                onError={() => {
+                  setImageLoadingError(true)
+                }}
                 alt="Produktbilde"
                 fill
                 sizes="50vw"
@@ -129,8 +125,6 @@ const ProductCardNew = ({
             )}
           </div>
         </div>
-
-        {/* {showRank && agreementRank && <AgreementIcon rank={agreementRank} />} */}
       </VStack>
     </Box>
   )
