@@ -41,10 +41,24 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
           <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
         </ToggleGroup>
       </HStack>
-      <VStack as="ol" gap={{ xs: '4', md: '7' }} className="agreement-search-results" id="agreementSearchResults">
+      <VStack
+        as="ol"
+        gap={{ xs: '4', md: pictureToggleValue === 'hide-pictures' ? '4' : '6' }}
+        className="agreement-search-results"
+        id="agreementSearchResults"
+      >
         {posts.map((post) => (
-          <VStack as="li" key={post.nr} className="agreement-post" gap={{ xs: '2', md: '4' }}>
-            <Heading level="3" size="xsmall" className="spacing-vertical--small">
+          <VStack
+            as="li"
+            key={post.nr}
+            className="agreement-post"
+            gap={{ xs: '2', md: pictureToggleValue === 'hide-pictures' ? '2' : '4' }}
+          >
+            <Heading
+              level="3"
+              size="xsmall"
+              className={pictureToggleValue === 'hide-pictures' ? 'spacing-top--xsmall' : 'spacing-top--small'}
+            >
               {`${post.nr}: ${post.title}`}
             </Heading>
             <HStack gap={'4'}>

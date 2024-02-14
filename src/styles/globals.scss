@@ -381,14 +381,25 @@ details {
 
 .spacing {
   &-top {
+    &--xsmall {
+      margin-top: $a-spacing-1;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-2;
+      }
+    }
     &--small {
       margin-top: $a-spacing-2;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-4;
+      }
     }
     &--medium {
       margin-top: $a-spacing-4;
 
       @include mixins.for-size(desktop-up) {
-        margin-bottom: $a-spacing-8;
+        margin-top: $a-spacing-8;
       }
     }
     &--large {

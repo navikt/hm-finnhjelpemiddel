@@ -18,7 +18,7 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, HGrid, HStack, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { Button, HGrid, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
@@ -168,7 +168,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
               </MobileOverlay.Content>
               <MobileOverlay.Footer>
                 <VStack gap="2">
-                  <HStack className="agreement-filter__footer" gap="2">
+                  <HGrid columns={{ xs: 2 }} className="agreement-filter__footer" gap="2">
                     <Button
                       ref={copyButtonMobileRef}
                       variant="tertiary-neutral"
@@ -199,7 +199,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
                     >
                       Nullstill søket
                     </Button>
-                  </HStack>
+                  </HGrid>
                   <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
                 </VStack>
               </MobileOverlay.Footer>
