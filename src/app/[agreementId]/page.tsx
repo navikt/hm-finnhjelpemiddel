@@ -5,23 +5,25 @@ import { Metadata } from 'next'
 import NextLink from 'next/link'
 import { Suspense } from 'react'
 import AgreementSearch from './AgreementSearch'
+
 type Props = {
-  params: { agreementLabel: string }
+  params: { agreementId: string }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const agreementLabel = params.agreementLabel
+  const agreementId = params.agreementId
+  const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
   //   const agreement = mapAgreementFromSearch(await getAgreementFromLabel(agreementLabel))
   //TODO: må ha fornuftig title
   return {
-    title: agreementLabel,
-    description: agreementLabel,
+    title: agreement.label,
+    description: `Produkter under avtale ${agreement.title} med NAV`,
   }
 }
 
 export default async function AgreementPage({ params }: Props) {
-  const agreement = mapAgreementFromDoc(await getAgreement(params.agreementLabel))
+  const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
   return (
     <Suspense>
       <VStack className="main-wrapper--large spacing-bottom--large">

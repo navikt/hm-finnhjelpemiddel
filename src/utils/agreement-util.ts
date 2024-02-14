@@ -176,4 +176,13 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734', 'HMDB-8669']
+export const agreementWithNoProducts = [
+  'HMDB-8582',
+  'HMDB-8682',
+  'HMDB-8673',
+  'HMDB-8685',
+  'HMDB-8734',
+  'HMDB-8669',
+  //Omgivelseskontroll
+  'HMDB-8736',
+]

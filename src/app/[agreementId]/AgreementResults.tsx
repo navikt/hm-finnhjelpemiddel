@@ -3,7 +3,7 @@
 import { PostWithProducts } from '@/utils/agreement-util'
 import { SearchData } from '@/utils/api-util'
 import { ImageIcon } from '@navikt/aksel-icons'
-import { HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-react'
+import { Alert, HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -74,6 +74,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
           </VStack>
         ))}
       </VStack>
+      {posts.length === 0 && <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>}
     </VStack>
   )
 }
