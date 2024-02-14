@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { Detail, TextField } from '@navikt/ds-react'
 import { Filter, SearchData } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
+import { Detail, TextField } from '@navikt/ds-react'
+import { useEffect, useMemo } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import ShowMore from '@/components/ShowMore'
+import { mapSearchParams } from '@/utils/product-util'
 import { useSearchParams } from 'next/navigation'
-import { mapProductSearchParams } from '@/utils/product-util'
 
 type FilterProps = {
   filter: { key: keyof typeof FilterCategories; data?: Filter }
@@ -16,7 +16,7 @@ type FilterProps = {
 export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) => {
   const { key: filterKey, data: filterData } = filter
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const formMethods = useFormContext<SearchData>()
 

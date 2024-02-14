@@ -7,7 +7,9 @@ import { Filter, SearchData } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
 
 import ShowMore from '@/components/ShowMore'
-import { mapProductSearchParams } from '@/utils/product-util'
+// import { mapProductSearchParams } from '@/utils/product-util'
+import { mapSearchParams } from '@/utils/product-util'
+import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'
 
 type CheckboxFilterInputProps = {
@@ -18,7 +20,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   const { key: filterKey, data: filterData } = filter
   const [showAllValues, setShowAllValues] = useState(false)
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const {
     control,
@@ -37,6 +39,8 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
 
   const hasFilterData = filterData?.values.length
 
+  const numberOfActiveFilters = searchData.filters[filterKey].length
+
   const selectedUnavailableFilters = watchFilter.filter(
     (f) => !(filterData?.values.map((f) => f.key) || []).includes(f)
   )
@@ -48,6 +52,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const filterValues = new Set(searchData.filters[filterKey])
+
       if (event.currentTarget.checked) filterValues.add(event.currentTarget.value)
       else filterValues.delete(event.currentTarget.value)
       setValue(`filters.${filterKey}`, Array.from(filterValues))
@@ -61,13 +66,17 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   }
 
   const CheckboxLabel = ({ value }: { value: string | number }) => <>{value}</>
+  const showMoreLabel =
+    numberOfActiveFilters > 0
+      ? `${FilterCategories[filterKey]} (${numberOfActiveFilters})`
+      : FilterCategories[filterKey]
 
   return (
     <ShowMore
-      title={FilterCategories[filterKey]}
+      title={showMoreLabel}
       open={watchFilter.length > 0 || searchData.filters[filterKey].length > 0 || touched}
       spacing
-      className="checkbox-filter"
+      className={classNames('checkbox-filter', { active: numberOfActiveFilters > 0 })}
     >
       <div className="checkbox-filter-input">
         <Controller

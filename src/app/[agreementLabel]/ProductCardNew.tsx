@@ -33,7 +33,7 @@ const ProductCardNew = ({
 
   const hasImage = product.photos.length !== 0
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || '')
-
+  //TODO sjekk at klikkflate er minst 24x24
   const compareCheckbox = (
     <Checkbox
       className="new-product-card__checkbox"

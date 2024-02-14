@@ -3,6 +3,7 @@ import {
   FilterCategories,
   filterBeregnetBarn,
   filterBredde,
+  filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -44,7 +45,7 @@ export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = {
   key: number | string
   doc_count: number
-  label: string
+  label?: string
 }
 
 type FilterCategoryKey = keyof typeof FilterCategories
@@ -63,8 +64,8 @@ type RawFilterData = {
 export type Filter = {
   values: Array<Bucket>
   total_doc_count?: number
-  min: number
-  max: number
+  min?: number
+  max?: number
 }
 
 export type FilterData = {
@@ -77,6 +78,7 @@ export type SearchData = {
   hasAgreementsOnly: boolean
   filters: SelectedFilters
   sortOrder: SortOrder
+  hidePictures?: boolean
 }
 
 export const sortOrders = ['Delkontrakt_rangering', 'Mest_relevant'] as const
@@ -263,6 +265,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     filterProduktkategori(produktkategori),
     filterRammeavtale(rammeavtale),
   ]
+
+  console.log('filter', rammeavtale, filterRammeavtale(rammeavtale))
 
   const queryFilters: Array<any> = [
     {
@@ -770,7 +774,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           },
           aggs: {
             values: {
-              terms: { field: 'agreementInfo.label', size: 100 },
+              terms: { field: 'agreements.label', order: { _key: 'asc' }, size: 100 },
             },
           },
         },
@@ -793,8 +797,12 @@ export const getProductsOnAgreement = ({
 }): Promise<PostBucketResponse[]> => {
   const { searchTerm, filters: activeFilters } = searchData
 
-  const { leverandor } = activeFilters
-  const allActiveFilters = [filterLeverandor(leverandor)]
+  const { leverandor, beregnetBarn, delkontrakt } = activeFilters
+  const allActiveFilters = [
+    filterLeverandor(leverandor),
+    filterBeregnetBarn(beregnetBarn),
+    filterDelkontrakt(delkontrakt),
+  ]
 
   const searchTermQuery = makeSearchTermQuery(searchTerm, agreementId)
 
@@ -889,6 +897,16 @@ export const getFiltersAgreement = ({
         },
       },
     },
+    beregnetBarn: {
+      filter: {
+        bool: {
+          filter: [],
+        },
+      },
+      aggs: {
+        values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
+      },
+    },
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
@@ -907,6 +925,7 @@ export const getFiltersAgreement = ({
       const filters = {
         aggregations: {
           leverandor: data.aggregations.leverandor,
+          beregnetBarn: data.aggregations.beregnetBarn,
         },
       }
       return mapFilters(filters)

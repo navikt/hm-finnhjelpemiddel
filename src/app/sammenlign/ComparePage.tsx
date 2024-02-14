@@ -7,10 +7,9 @@ import useSWR from 'swr'
 
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { mapProductSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
-import ProductCard from '@/components/ProductCard'
 import {
   BodyLong,
   BodyShort,
@@ -21,6 +20,7 @@ import {
   Table,
 } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import ProductCard from '@/components/ProductCard'
 import { useMemo } from 'react'
 
 export default function ComparePage() {
@@ -28,7 +28,7 @@ export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const href = '/sok?' + toSearchQueryString(searchData)
   const series = productsToCompare.map((product) => product.id)

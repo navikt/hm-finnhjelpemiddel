@@ -1,18 +1,21 @@
 'use client'
 
+import { Agreement, mapAgreementProducts, mapPostTitle } from '@/utils/agreement-util'
 import {
-  Agreement,
-  mapAgreementProducts,
-  mapAgreementSearchParams,
-  toAgreementSearchQueryString,
-} from '@/utils/agreement-util'
-import { FilterData, SelectedFilters, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+  Filter,
+  FilterData,
+  SearchData,
+  SelectedFilters,
+  getFiltersAgreement,
+  getProductsOnAgreement,
+} from '@/utils/api-util'
 import { initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
+import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, HGrid, HStack, Heading, Hide, Loader, Popover, Show, VStack } from '@navikt/ds-react'
@@ -39,17 +42,17 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
-  const searchData = useMemo(() => mapAgreementSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const formMethods = useForm<AgreementSearchData>({
+  const formMethods = useForm<SearchData>({
     defaultValues: {
       ...initialAgreementSearchDataState,
       ...searchData,
     },
   })
 
-  const onSubmit: SubmitHandler<AgreementSearchData> = (data) => {
-    router.replace(`${pathname}?${toAgreementSearchQueryString(data)}`, { scroll: false })
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    router.replace(`${pathname}?${toSearchQueryString(data)}`, { scroll: false })
   }
 
   const { data: postBucktes, isLoading: postsIsLoading } = useSWR<PostBucketResponse[]>(
@@ -58,7 +61,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
     { keepPreviousData: true }
   )
 
-  const { data: filters, isLoading: filtersIsLoading } = useSWR<FilterData>(
+  const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
     { agreementId: agreement.id },
     getFiltersAgreement,
     {
@@ -66,12 +69,23 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
+  const postFilters: Filter = {
+    values: agreement.posts
+      .sort((a, b) => a.nr - b.nr)
+      .map((post) => ({ key: post.title, doc_count: 1, label: `${post.nr}: ${mapPostTitle(post.title)}` })),
+  }
+
   // if (postsIsLoading || filtersIsLoading) {
   //   return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
   // }
 
-  if (!postBucktes || !filters) {
+  if (!postBucktes || !filtersFromData) {
     return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
+  }
+
+  const filters: FilterData = {
+    ...filtersFromData,
+    delkontrakt: postFilters,
   }
 
   const posts = mapAgreementProducts(postBucktes, agreement)
@@ -96,7 +110,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
             <HGrid columns={{ xs: 2 }} className="agreement-filter__footer" gap="2">
               <Button
                 ref={copyButtonDesktopRef}
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="small"
                 icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                 onClick={() => {
@@ -117,7 +131,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
 
               <Button
                 type="button"
-                variant="tertiary"
+                variant="tertiary-neutral"
                 size="small"
                 icon={<TrashIcon title="Nullstill søket" />}
                 onClick={onReset}
@@ -157,7 +171,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
                   <HStack className="agreement-filter__footer" gap="2">
                     <Button
                       ref={copyButtonMobileRef}
-                      variant="tertiary"
+                      variant="tertiary-neutral"
                       size="small"
                       icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                       onClick={() => {
@@ -178,7 +192,7 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
 
                     <Button
                       type="button"
-                      variant="tertiary"
+                      variant="tertiary-neutral"
                       size="small"
                       icon={<TrashIcon title="Nullstill søket" />}
                       onClick={onReset}

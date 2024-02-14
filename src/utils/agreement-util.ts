@@ -1,9 +1,3 @@
-import { ReadonlyURLSearchParams } from 'next/navigation'
-import queryString from 'query-string'
-
-import { AgreementSearchData } from '@/app/[agreementLabel]/AgreementSearch'
-import { SelectedFilters } from './api-util'
-import { FilterCategories } from './filter-util'
 import { Document, Product, mapDocuments, mapProductWithVariants } from './product-util'
 import {
   AgreementDocResponse,
@@ -16,7 +10,6 @@ import {
   ProductSourceResponse,
   SearchResponse,
 } from './response-types'
-import { initialSearchDataState } from './search-state-util'
 import { sortAlphabetically } from './sort-util'
 
 export function mapPostTitle(postTitle: string): string {
@@ -184,33 +177,3 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
 }
 
 export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734', 'HMDB-8669']
-
-export const mapAgreementSearchParams = (searchParams: ReadonlyURLSearchParams): AgreementSearchData => {
-  const searchTerm = searchParams.get('term') ?? ''
-  const hidePictures = searchParams.has('hidePictures')
-
-  const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
-
-  const filters = filterKeys.reduce(
-    (obj, fk) => ({
-      ...obj,
-      [fk]: searchParams?.getAll(fk),
-    }),
-    {}
-  )
-
-  return {
-    searchTerm,
-    hidePictures,
-    filters: { ...initialSearchDataState.filters, ...filters },
-  }
-}
-
-export const toAgreementSearchQueryString = (searchParams: AgreementSearchData) =>
-  queryString.stringify({
-    ...(searchParams.hidePictures ? { hidePictures: '' } : {}),
-    ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
-    ...Object.entries(searchParams.filters)
-      .filter(([_, values]) => values.some((value) => value))
-      .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
-  })

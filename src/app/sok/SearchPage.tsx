@@ -19,7 +19,7 @@ import { Entries } from '@/utils/type-util'
 import MobileOverlay from '@/components/MobileOverlay'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 
 import CompareMenu from '@/components/layout/CompareMenu'
 import SearchForm from './SearchForm'
@@ -37,7 +37,7 @@ export default function SearchPage() {
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const formMethods = useForm<SearchData>({
     defaultValues: {

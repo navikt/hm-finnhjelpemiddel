@@ -290,13 +290,14 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
   })
 }
 
-export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
+export const mapSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
   const sortOrderStr = searchParams.get('sortering') || ''
   const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Mest_relevant'
 
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
   const hasAgreementsOnly = searchParams.has('agreement')
+  const hidePictures = searchParams.has('hidePictures')
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
 
@@ -314,6 +315,7 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
     isoCode,
     hasAgreementsOnly,
     filters: { ...initialSearchDataState.filters, ...filters },
+    hidePictures,
   }
 }
 
@@ -321,6 +323,7 @@ export const toSearchQueryString = (searchParams: SearchData) =>
   queryString.stringify({
     ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
     ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
+    ...(searchParams.hidePictures ? { hidePictures: '' } : {}),
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)

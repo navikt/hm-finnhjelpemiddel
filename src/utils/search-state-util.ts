@@ -16,6 +16,7 @@ const initialFiltersState = {
   leverandor: [],
   produktkategori: [],
   rammeavtale: [],
+  delkontrakt: [],
 }
 
 export const initialSearchDataState = {

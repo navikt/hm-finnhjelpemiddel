@@ -1,13 +1,13 @@
 import { CheckboxFilterInput } from '@/components/filters/CheckboxFilterInput'
 import { FilterData } from '@/utils/api-util'
-import { mapProductSearchParams } from '@/utils/product-util'
+import { mapSearchParams } from '@/utils/product-util'
 import { BodyShort } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 
 const AgreementFilters = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const searchDataFilters = Object.entries(searchData.filters)
     .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
