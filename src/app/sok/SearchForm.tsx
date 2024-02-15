@@ -1,12 +1,12 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
 import { Button, Switch } from '@navikt/ds-react'
 
 import { FilterData, SearchData } from '@/utils/api-util'
 
-import FilterView from './FilterView'
-import AutocompleteSearch from './internals/AutocompleteSearch'
+import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
+import FilterView from '@/components/filters/FilterView'
 import { useSearchParams } from 'next/navigation'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (

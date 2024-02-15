@@ -16,6 +16,7 @@ export enum FilterCategories {
   leverandor = 'Leverandør',
   produktkategori = 'Produktkategori',
   rammeavtale = 'Rammeavtale',
+  delkontrakt = 'Delkontrakt',
 }
 
 const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number>) => {
@@ -81,7 +82,7 @@ export const filterMaksBrukervekt = (values: Array<number>) => {
   return mapRangeFilter('brukervektMaksKG', values)
 }
 
-export const filterBeregnetBarn = (values: Array<number>) => ({
+export const filterBeregnetBarn = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'filters.beregnetBarn': value } })),
   },
@@ -99,7 +100,7 @@ export const filterMaterialeTrekk = (values: Array<number>) => ({
   },
 })
 
-export const filterLeverandor = (values: Array<number>) => ({
+export const filterLeverandor = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'supplier.name': value } })),
   },
@@ -111,9 +112,15 @@ export const filterProduktkategori = (values: Array<number>) => ({
   },
 })
 
-export const filterRammeavtale = (values: Array<number>) => ({
+export const filterRammeavtale = (values: Array<string>) => ({
   bool: {
-    should: values.map((value) => ({ term: { 'agreementInfo.label': value } })),
+    should: values.map((value) => ({ term: { 'agreements.label': value } })),
+  },
+})
+
+export const filterDelkontrakt = (values: Array<string>) => ({
+  bool: {
+    should: values.map((value) => ({ term: { 'agreements.postTitle': value } })),
   },
 })
 

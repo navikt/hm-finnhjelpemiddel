@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from 'react'
+import { RefObject, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import Image from 'next/image'
@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
-import { FetchResponse, SearchData } from '@/utils/api-util'
+import { FetchProductsWithFilters, SearchData } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
@@ -14,9 +14,9 @@ import { Product } from '@/utils/product-util'
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import AgreementIcon from '@/components/AgreementIcon'
+import SortSearchResults from '@/components/SortSearchResults'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
-import SortSearchResults from '@/components/SortSearchResults'
 
 const SearchResults = ({
   data,
@@ -27,7 +27,7 @@ const SearchResults = ({
 }: {
   loadMore?: () => void
   isLoading: boolean
-  data?: Array<FetchResponse>
+  data?: Array<FetchProductsWithFilters>
   searchResultRef: RefObject<HTMLHeadingElement>
   formRef: RefObject<HTMLFormElement>
 }) => {
@@ -217,8 +217,7 @@ const ProductImage = ({ src }: { src: string }) => {
         <Image
           loader={smallImageLoader}
           src={src}
-          onLoad={() => setIsLoading(true)}
-          onLoadingComplete={() => setIsLoading(false)}
+          onLoad={() => setIsLoading(false)}
           onError={() => {
             setLoadingError(true)
             setIsLoading(false)

@@ -11,6 +11,7 @@
 @import './not-found-page';
 @import './product-card.scss';
 @import './search.scss';
+@import './search-agreement.scss';
 @import './pepperkake-dekorasjon.scss';
 
 html,
@@ -283,12 +284,48 @@ details {
 }
 
 .main-wrapper {
-  max-width: 1280px;
-  padding: 0 $a-spacing-4;
+  padding-left: $a-spacing-4;
+  padding-right: $a-spacing-4;
   margin: 0 auto;
 
-  @include mixins.for-size(desktop-large-up) {
-    padding: 0;
+  &--small {
+    @extend .main-wrapper;
+    max-width: 768px;
+
+    @include mixins.for-size(desktop-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &--medium {
+    @extend .main-wrapper;
+    max-width: 1000px;
+
+    @include mixins.for-size(desktop-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &--large {
+    @extend .main-wrapper;
+    max-width: 1258px;
+
+    @include mixins.for-size(desktop-large-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &--xlarge {
+    @extend .main-wrapper;
+    max-width: 1408px;
+
+    @include mixins.for-size(desktop-xlarge-up) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 
@@ -344,11 +381,26 @@ details {
 
 .spacing {
   &-top {
+    &--xsmall {
+      margin-top: $a-spacing-1;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-2;
+      }
+    }
     &--small {
       margin-top: $a-spacing-2;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-4;
+      }
     }
     &--medium {
       margin-top: $a-spacing-4;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-8;
+      }
     }
     &--large {
       margin-top: $a-spacing-8;
@@ -374,6 +426,10 @@ details {
     }
     &--medium {
       margin-bottom: $a-spacing-4;
+
+      @include mixins.for-size(desktop-up) {
+        margin-bottom: $a-spacing-8;
+      }
     }
     &--large {
       margin-bottom: $a-spacing-8;
@@ -383,9 +439,45 @@ details {
       }
     }
     &--xlarge {
+      margin-bottom: $a-spacing-10;
+
+      @include mixins.for-size(desktop-up) {
+        margin-bottom: $a-spacing-20;
+      }
+    }
+  }
+}
+
+.spacing {
+  &-vertical {
+    &--small {
+      margin-top: $a-spacing-2;
+      margin-bottom: $a-spacing-2;
+    }
+    &--medium {
+      margin-top: $a-spacing-4;
+      margin-bottom: $a-spacing-4;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-8;
+        margin-bottom: $a-spacing-8;
+      }
+    }
+    &--large {
+      margin-top: $a-spacing-8;
+      margin-bottom: $a-spacing-8;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-12;
+        margin-bottom: $a-spacing-12;
+      }
+    }
+    &--xlarge {
+      margin-top: $a-spacing-16;
       margin-bottom: $a-spacing-16;
 
       @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-20;
         margin-bottom: $a-spacing-20;
       }
     }

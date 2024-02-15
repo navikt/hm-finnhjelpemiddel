@@ -1,8 +1,9 @@
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
+  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
-  FilterCategories,
+  filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
@@ -21,13 +22,19 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  mapProductsFromAggregation,
-  mapProductsFromCollapse,
-  mapProductVariant,
   Product,
   ProductVariant,
+  mapProductVariant,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
 } from './product-util'
-import { ProductDocResponse, SearchResponse } from './response-types'
+import {
+  AgreementDocResponse,
+  AgreementSearchResponse,
+  PostBucketResponse,
+  ProductDocResponse,
+  SearchResponse,
+} from './response-types'
 
 export const PAGE_SIZE = 25
 
@@ -38,7 +45,7 @@ export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = {
   key: number | string
   doc_count: number
-  label: string
+  label?: string
 }
 
 type FilterCategoryKey = keyof typeof FilterCategories
@@ -57,8 +64,8 @@ type RawFilterData = {
 export type Filter = {
   values: Array<Bucket>
   total_doc_count?: number
-  min: number
-  max: number
+  min?: number
+  max?: number
 }
 
 export type FilterData = {
@@ -70,7 +77,8 @@ export type SearchData = {
   isoCode: string
   hasAgreementsOnly: boolean
   filters: SelectedFilters
-  sortOrder: SortOrder
+  sortOrder?: SortOrder
+  hidePictures?: string
 }
 
 export const sortOrders = ['Delkontrakt_rangering', 'Mest_relevant'] as const
@@ -89,9 +97,116 @@ type FetchProps = {
   searchData: SearchData
 }
 
-export type FetchResponse = {
+export type FetchProductsWithFilters = {
   products: Product[]
   filters: FilterData
+}
+
+const makeSearchTermQuery = (searchTerm: string, agreementId?: string) => {
+  const commonBoosting = {
+    negative: {
+      bool: {
+        must: {
+          bool: {},
+        },
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 1,
+  }
+
+  const queryStringSearchTerm = removeReservedChars(searchTerm)
+
+  //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
+  const negativeIsoCategories = ['09540601', '09540901', '09540301']
+
+  const bool = {
+    should: [
+      {
+        boosting: {
+          positive: {
+            multi_match: {
+              query: searchTerm,
+              type: 'cross_fields',
+              fields: [
+                'isoCategoryTitle^2',
+                'isoCategoryText^0.5',
+                'title^0.3',
+                'attributes.text^0.1',
+                'keywords_bag^0.1',
+              ],
+              operator: 'and',
+              zero_terms_query: 'all',
+            },
+          },
+          ...commonBoosting,
+        },
+      },
+      {
+        boosting: {
+          positive: {
+            query_string: {
+              query: `*${queryStringSearchTerm}`,
+              boost: '0.1',
+            },
+          },
+          ...commonBoosting,
+        },
+      },
+      {
+        boosting: {
+          positive: {
+            query_string: {
+              query: `${queryStringSearchTerm}*`,
+              boost: '0.1',
+            },
+          },
+          ...commonBoosting,
+        },
+      },
+    ],
+  }
+
+  const term = {
+    'agreements.id': {
+      value: agreementId,
+    },
+  }
+
+  const mustForAgreement = {
+    must: [
+      { term: term },
+      {
+        bool: {
+          must: { bool: bool },
+          must_not: {
+            bool: {
+              should: negativeIsoCategories.map((isoCategory) => ({
+                match: {
+                  isoCategory,
+                },
+              })),
+            },
+          },
+        },
+      },
+    ],
+  }
+
+  const mustForAll = {
+    must: { bool: bool },
+    must_not: {
+      bool: {
+        should: negativeIsoCategories.map((isoCategory) => ({
+          match: {
+            isoCategory,
+          },
+        })),
+      },
+    },
+  }
+
+  return agreementId === undefined ? mustForAll : mustForAgreement
 }
 
 // Because of queryString in opensearch query: https://opensearch.org/docs/latest/query-dsl/full-text/query-string/#reserved-characters
@@ -106,10 +221,10 @@ const sortOptionsOpenSearch = {
   Mest_relevant: [{ _score: { order: 'desc' } }],
 }
 
-export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchResponse> => {
+export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
 
-  const sortOrderOpenSearch = sortOptionsOpenSearch[sortOrder]
+  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Mest_relevant']
 
   const {
     lengdeCM,
@@ -180,82 +295,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     queryFilters.push({ match: { hmsArtNr: { query: searchTerm } } })
   }
 
-  //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
-  const negativeIsoCategories = ['09540601', '09540901', '09540301']
-
-  const commonBoosting = {
-    negative: {
-      bool: {
-        must: {
-          bool: {},
-        },
-      },
-    },
-    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 1,
-  }
-
-  const queryStringSearchTerm = removeReservedChars(searchTerm)
-
-  const searchTermQuery = {
-    must: {
-      bool: {
-        should: [
-          {
-            boosting: {
-              positive: {
-                multi_match: {
-                  query: searchTerm,
-                  type: 'cross_fields',
-                  fields: [
-                    'isoCategoryTitle^2',
-                    'isoCategoryText^0.5',
-                    'title^0.3',
-                    'attributes.text^0.1',
-                    'keywords_bag^0.1',
-                  ],
-                  operator: 'and',
-                  zero_terms_query: 'all',
-                },
-              },
-              ...commonBoosting,
-            },
-          },
-          {
-            boosting: {
-              positive: {
-                query_string: {
-                  query: `*${queryStringSearchTerm}`,
-                  boost: '0.1',
-                },
-              },
-              ...commonBoosting,
-            },
-          },
-          {
-            boosting: {
-              positive: {
-                query_string: {
-                  query: `${queryStringSearchTerm}*`,
-                  boost: '0.1',
-                },
-              },
-              ...commonBoosting,
-            },
-          },
-        ],
-      },
-    },
-    must_not: {
-      bool: {
-        should: negativeIsoCategories.map((isoCategory) => ({
-          match: {
-            isoCategory,
-          },
-        })),
-      },
-    },
-  }
+  const searchTermQuery = makeSearchTermQuery(searchTerm)
 
   const query = {
     bool: {
@@ -732,7 +772,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           },
           aggs: {
             values: {
-              terms: { field: 'agreementInfo.label', size: 100 },
+              terms: { field: 'agreements.label', order: { _key: 'asc' }, size: 100 },
             },
           },
         },
@@ -740,7 +780,149 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     }),
   })
     .then((res) => res.json())
-    .then((data) => ({ products: mapProductsFromCollapse(data), filters: mapFilters(data) }))
+    .then((data) => {
+      return { products: mapProductsFromCollapse(data), filters: mapFilters(data) }
+    })
+}
+
+//TODO bytte til label
+export const getProductsOnAgreement = ({
+  agreementId,
+  searchData,
+}: {
+  agreementId: string
+  searchData: SearchData
+}): Promise<PostBucketResponse[]> => {
+  const { searchTerm, filters: activeFilters } = searchData
+
+  const { leverandor, delkontrakt } = activeFilters
+  const allActiveFilters = [filterLeverandor(leverandor), filterDelkontrakt(delkontrakt)]
+
+  const searchTermQuery = makeSearchTermQuery(searchTerm, agreementId)
+
+  const query = {
+    bool: {
+      filter: allActiveFilters,
+      ...searchTermQuery,
+    },
+  }
+
+  const aggs = {
+    postNr: {
+      terms: {
+        field: 'agreements.postNr',
+        size: 120,
+        order: {
+          _key: 'asc',
+        },
+      },
+      aggs: {
+        seriesId: {
+          terms: {
+            field: 'seriesId',
+          },
+          aggs: {
+            topHitData: {
+              top_hits: {
+                size: 1,
+                _source: {
+                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
+                  includes: ['*'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }
+
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      query,
+      aggs,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data: AgreementSearchResponse) => {
+      return data.aggregations.postNr.buckets
+    })
+}
+
+export const getFiltersAgreement = ({
+  agreementId,
+  // searchData,
+}: {
+  agreementId: string
+  // searchData: SearchData
+}): Promise<FilterData> => {
+  // const { filters: activeFilters } = searchData
+  // const { leverandor } = activeFilters
+  // const allActiveFilters = [filterLeverandor(leverandor)]
+
+  const query = {
+    bool: {
+      must: {
+        term: {
+          'agreements.id': {
+            value: agreementId,
+          },
+        },
+      },
+    },
+  }
+
+  const filters = {
+    leverandor: {
+      filter: {
+        bool: {
+          filter: [],
+        },
+      },
+      aggs: {
+        values: {
+          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
+        },
+      },
+    },
+    // beregnetBarn: {
+    //   filter: {
+    //     bool: {
+    //       filter: [],
+    //     },
+    //   },
+    //   aggs: {
+    //     values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
+    //   },
+    // },
+  }
+
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      query,
+      aggs: { ...filters },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data: any) => {
+      const filters = {
+        aggregations: {
+          leverandor: data.aggregations.leverandor,
+        },
+      }
+      return mapFilters(filters)
+    })
 }
 
 const mapFilters = (data: any): FilterData => {
@@ -778,16 +960,15 @@ export async function getSupplier(id: string) {
   return res.json()
 }
 
-export async function getAgreement(id: string) {
+export async function getAgreement(id: string): Promise<AgreementDocResponse> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_doc/${id}`, {
     next: { revalidate: 900 },
     method: 'GET',
   })
-
   return res.json()
 }
 
-export async function getAgreementFromId(id: string): Promise<SearchResponse> {
+export async function getAgreementFromLabel(label: string): Promise<SearchResponse> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
@@ -797,11 +978,14 @@ export async function getAgreementFromId(id: string): Promise<SearchResponse> {
     body: JSON.stringify({
       query: {
         term: {
-          id: {
-            value: id,
+          label: {
+            value: label,
           },
         },
       },
+      // bool: {
+      //   should: { term: { 'agreementInfo.label': label } },
+      // },
     }),
   })
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 
@@ -8,10 +8,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import useSWRInfinite from 'swr/infinite'
 
-import { FilesIcon, TrashIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { ArrowUpIcon, FilesIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
 
-import { FetchResponse, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
+import { FetchProductsWithFilters, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
 import { FilterCategories } from '@/utils/filter-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
 import { Entries } from '@/utils/type-util'
@@ -19,11 +19,11 @@ import { Entries } from '@/utils/type-util'
 import MobileOverlay from '@/components/MobileOverlay'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import SearchForm from './sidebar/SearchForm'
+import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 
-import CompareMenu from './CompareMenu'
+import CompareMenu from '@/components/layout/CompareMenu'
+import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
-import { mapProductSearchParams, toSearchQueryString } from '@/utils/product-util'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -37,7 +37,7 @@ export default function SearchPage() {
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
@@ -55,8 +55,8 @@ export default function SearchPage() {
     size: page,
     setSize: setPage,
     isLoading,
-  } = useSWRInfinite<FetchResponse>(
-    (index, previousPageData?: FetchResponse) => {
+  } = useSWRInfinite<FetchProductsWithFilters>(
+    (index, previousPageData?: FetchProductsWithFilters) => {
       if (previousPageData && previousPageData.products.length === 0) return null
       return {
         from: index * PAGE_SIZE,
@@ -172,7 +172,7 @@ export default function SearchPage() {
             Søk i hjelpemidler
           </Heading>
         </div>
-        <div className="main-wrapper">
+        <div className="main-wrapper--large">
           <div className="flex-column-wrap spacing-top--large spacing-bottom--large">
             {showSidebar && (
               <section className="search__side-bar">

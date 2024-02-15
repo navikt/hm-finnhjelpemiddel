@@ -18,14 +18,55 @@ export interface SeriesAggregationResponse {
   }
 }
 
-export interface SeriesBucketsResponse {
+export interface AgreementSearchResponse {
+  took: number
+  timed_out: boolean
+  _shards: object
+  hits: object
+  aggregations: {
+    postNr: {
+      buckets: PostBucketResponse[]
+      doc_count_error_upper_bound: number
+      sum_other_doc_count: number
+    }
+    leverandor: {
+      values: {
+        buckets: { key: string; doc_count: number }
+      }
+    }
+  }
+}
+
+export interface PostBucketResponse {
+  doc_count: number
+  //key = postnr
+  key: number
+  seriesId: {
+    buckets: SeriesTopHitBucket[]
+    doc_count_error_upper_bound: number
+    sum_other_doc_count: number
+  }
+}
+interface SeriesTopHitBucket {
+  doc_count: number
+  //key = seriesId
+  key: number
+  topHitData: {
+    hits: {
+      total: object
+      hits: Hit[]
+    }
+  }
+}
+
+interface SeriesBucketsResponse {
   after_key: {
     seriesId: string
   }
-  buckets: BucketResponse[]
+  buckets: SeriesBucketResponse[]
 }
 
-export interface BucketResponse {
+export interface SeriesBucketResponse {
   key: {
     seriesId: string
   }
@@ -170,6 +211,13 @@ export interface AgreementsSourceResponse {
   updatedBy: string
   created: string
   updated: string
+}
+
+export interface AgreementDocResponse {
+  _index: string
+  _id: string
+  _found: boolean
+  _source: AgreementsSourceResponse
 }
 
 export interface AgreementLabelResponse {

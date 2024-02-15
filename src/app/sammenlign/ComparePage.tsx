@@ -7,29 +7,20 @@ import useSWR from 'swr'
 
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
-import { mapProductSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
-import ProductCard from '@/components/ProductCard'
-import {
-  BodyLong,
-  BodyShort,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  Heading,
-  Loader,
-  Table,
-} from '@/components/aksel-client'
+import { BodyLong, ChevronRightIcon, Heading, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import ProductCard from '@/components/ProductCard'
 import { useMemo } from 'react'
-
 
 export default function ComparePage() {
   //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapProductSearchParams(searchParams), [searchParams])
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const href = '/sok?' + toSearchQueryString(searchData)
   const series = productsToCompare.map((product) => product.id)
@@ -52,7 +43,7 @@ export default function ComparePage() {
 
   if (isLoading) {
     return (
-      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
+      <div className="main-wrapper--large compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
@@ -66,7 +57,7 @@ export default function ComparePage() {
 
   return (
     <AnimateLayout>
-      <div className="main-wrapper compare-page spacing-top--large spacing-bottom--xlarge">
+      <div className="main-wrapper--large compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
@@ -157,15 +148,7 @@ const CompareTable = ({
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>
-              <Heading level="2" size="medium" spacing>
-                Produkter
-              </Heading>
-              <NextLink className="back-to-search" href={href}>
-                <ChevronLeftIcon title="Tilbake til søk" />
-                <BodyShort>Legg til flere</BodyShort>
-              </NextLink>
-            </Table.ColumnHeader>
+            <Table.ColumnHeader></Table.ColumnHeader>
             {productsToCompare.map((product) => (
               <Table.ColumnHeader key={'id-' + product.id}>
                 <ProductCard product={product} removeProduct={removeProduct} />

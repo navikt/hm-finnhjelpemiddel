@@ -16,12 +16,12 @@ type AgreementInfoProps = {
 
 export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) => {
   return (
-    <Bleed marginInline="full" asChild>
+    <Bleed marginInline="full" asChild reflectivePadding>
       <section
         className="agreement-details spacing-top--large"
         aria-label="Informasjon om rammeavtalen produktet er på"
       >
-        <div className="agreement-details__content main-wrapper">
+        <div className="agreement-details__content">
           <Heading level="3" size="large" id="agreement-info">
             Avtale med Nav
           </Heading>

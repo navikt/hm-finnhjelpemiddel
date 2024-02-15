@@ -22,7 +22,8 @@ const productCardAnimations: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      type: 'spring',
+      duration: 0.1,
+      type: 'ease',
     },
   },
 }

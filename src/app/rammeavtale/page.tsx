@@ -5,9 +5,10 @@ import ReadMore from '@/components/ReadMore'
 import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import './agreement-page.scss'
-import AgreementList from './AgreementList'
+import { Bleed } from '@navikt/ds-react'
 import { Metadata } from 'next'
+import AgreementList from './AgreementList'
+import './agreement-page.scss'
 
 export const metadata: Metadata = {
   title: 'Rammeavtaler',
@@ -16,9 +17,9 @@ export const metadata: Metadata = {
 
 export default async function AgreementsInfoPage() {
   return (
-    <div className="agreement-page main">
+    <div className="agreement-page">
       <AnimateLayout>
-        <div className="agreement-page__content spacing-top--large spacing-bottom--xlarge">
+        <div className="agreement-page__content  main-wrapper--small">
           <article>
             <div className="flex flex--space-between">
               <Heading level="1" size="large" className="spacing-bottom--small">
@@ -40,21 +41,22 @@ export default async function AgreementsInfoPage() {
             <Heading level="2" size="medium">
               Slik kan du se at et hjelpemiddel er på avtale med NAV
             </Heading>
-
-            <div className="agreement-page__icon-containers">
-              <div className="agreement-page__icon-container">
-                <AgreementIcon rank={1} />
-                <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
+            <Bleed marginInline="8" asChild>
+              <div className="agreement-page__icon-containers">
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={1} />
+                  <BodyLong>Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.</BodyLong>
+                </div>
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={4} />
+                  <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
+                </div>
+                <div className="agreement-page__icon-container">
+                  <AgreementIcon rank={99} />
+                  <BodyLong>Er på avtale med NAV uten rangering.</BodyLong>
+                </div>
               </div>
-              <div className="agreement-page__icon-container">
-                <AgreementIcon rank={4} />
-                <BodyLong>Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt.</BodyLong>
-              </div>
-              <div className="agreement-page__icon-container">
-                <AgreementIcon rank={99} />
-                <BodyLong>Er på avtale med NAV uten rangering.</BodyLong>
-              </div>
-            </div>
+            </Bleed>
 
             <ReadMore
               content={

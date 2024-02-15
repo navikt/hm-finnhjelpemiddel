@@ -3,12 +3,11 @@ import { fetchProductsWithVariants, getProductWithVariants, getProductsInPost, g
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
+import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
+import { Metadata } from 'next'
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
 import ProductPage from './ProductPage'
 import './product-page.scss'
-import { accessoriesMock } from '@/utils/mock-data'
-import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
-import { Metadata } from 'next'
 
 export interface ProductsOnPost {
   postTitle: string
@@ -65,16 +64,17 @@ export default async function ProduktPage({ params }: Props) {
     ))
 
   const isAccessoryOrSparePart = product.accessory || product.sparepart
-
   const matchingSeriesIds = product.attributes.compatibleWith
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
 
   const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
+  // Kommenter ut den over og bruk den under for å se tilbehør på produktside (når man bruker mock)
+  // const accessories = (!isAccessoryOrSparePart && matchingProducts) || []
   const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
 
   return (
-    <div className="main-wrapper">
+    <div className="main-wrapper--large">
       {isAccessoryOrSparePart ? (
         <AccessoryOrSparePartPage product={product} supplier={supplier} matchingProducts={matchingProducts} />
       ) : (

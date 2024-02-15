@@ -2,12 +2,11 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 
 import queryString from 'querystring'
 
-import { getPostTitle } from './agreement-util'
+import { mapPostTitle } from './agreement-util'
 import { isValidSortOrder, SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
-  BucketResponse,
   Hit,
   MediaResponse,
   MediaType,
@@ -15,6 +14,7 @@ import {
   ProductSourceResponse,
   SearchResponse,
   SeriesAggregationResponse,
+  SeriesBucketResponse,
   TechDataResponse,
 } from './response-types'
 import { initialSearchDataState } from './search-state-util'
@@ -151,7 +151,7 @@ function filterUniqueCombinationsOfPostAndRank(agreementInfos: AgreementInfo[]):
  * Maps results from search with aggregation into products with all variants
  */
 export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Product[] => {
-  const buckets = data.aggregations.series_buckets.buckets.map((bucket: BucketResponse) =>
+  const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
   return buckets
@@ -283,20 +283,21 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
       identifier: agreement.identifier,
       title: agreement.title,
       postNr: agreement.postNr,
-      postTitle: getPostTitle(agreement.postTitle),
+      postTitle: mapPostTitle(agreement.postTitle),
       rank: agreement.rank,
       expired: agreement.expired,
     }
   })
 }
 
-export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): SearchData => {
+export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreementSearch?: boolean): SearchData => {
   const sortOrderStr = searchParams.get('sortering') || ''
-  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Mest_relevant'
+  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : agreementSearch ? undefined : 'Mest_relevant'
 
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
   const hasAgreementsOnly = searchParams.has('agreement')
+  const hidePictures = searchParams.get('hidePictures') ?? ''
 
   const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
 
@@ -314,6 +315,7 @@ export const mapProductSearchParams = (searchParams: ReadonlyURLSearchParams): S
     isoCode,
     hasAgreementsOnly,
     filters: { ...initialSearchDataState.filters, ...filters },
+    hidePictures,
   }
 }
 
@@ -321,6 +323,7 @@ export const toSearchQueryString = (searchParams: SearchData) =>
   queryString.stringify({
     ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
     ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
+    ...(searchParams.hidePictures ? { hidePictures: searchParams.hidePictures } : {}),
     ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)

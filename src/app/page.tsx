@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -8,15 +8,15 @@ import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { BodyLong, BodyShort, Heading, Search } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
 
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import ReadMore from '@/components/ReadMore'
+import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
-import AutocompleteSearch from './sok/sidebar/internals/AutocompleteSearch'
 
 function Home() {
   const router = useRouter()
@@ -34,28 +34,31 @@ function Home() {
   )
 
   //TODO: What to do if error?
-  const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+  const { data: agreements, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
 
-  const sortedData = useMemo(() => {
-    if (!data) return []
-    const filteredData = data.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
+  const sortedAgreements = useMemo(() => {
+    if (!agreements) return []
+    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
     // Create a copy of data to avoid modifying it in place
     filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
 
     return filteredData
-  }, [data])
+  }, [agreements])
 
-  const first15Agreements = sortedData?.slice(0, 15)
-  const lastAgreements = sortedData?.slice(15)
+  const first15Agreements = sortedAgreements?.slice(0, 15)
+  const lastAgreements = sortedAgreements?.slice(15)
 
   const agreementLink = (id: string, label: string) => {
     let hrefSok = `/sok?agreement&rammeavtale=${label}`
+    let hrefHurtigoversikt = `/${id}`
 
     return (
       <div className="home-page__agreement-link" key={id}>
-        <NextLink href={hrefSok}>
+        <NextLink href={hrefHurtigoversikt}>
+          {/* <NextLink href={hrefSok}> */}
+
           <BodyShort> {label} </BodyShort>
         </NextLink>
       </div>

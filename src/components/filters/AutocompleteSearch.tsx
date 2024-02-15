@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 
 import { Popover, Search } from '@navikt/ds-react'
-import { fetchSuggestions, Suggestions } from '@/utils/api-util'
 
 import useDebounce from '@/hooks/useDebounce'
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import useVirtualFocus from '@/hooks/useVirtualFocus'
+import { Suggestions, fetchSuggestions } from '@/utils/api-util'
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 
 type Props = {
   onSearch: (searchTerm: string) => void

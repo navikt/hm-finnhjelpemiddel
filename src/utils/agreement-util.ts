@@ -1,15 +1,18 @@
-import { Document, mapDocuments } from './product-util'
+import { Document, Product, mapDocuments, mapProductWithVariants } from './product-util'
 import {
+  AgreementDocResponse,
   AgreementLabelResponse,
   AgreementsSourceResponse,
   AttachmentsResponse,
   Hit,
+  PostBucketResponse,
   PostResponse,
+  ProductSourceResponse,
   SearchResponse,
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
 
-export function getPostTitle(postTitle: string): string {
+export function mapPostTitle(postTitle: string): string {
   const regex = /^(post\s\d{1,2}:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
   return postTitle.replace(regex, '')
 }
@@ -46,11 +49,27 @@ export interface Post {
   description: string
 }
 
+export interface PostWithProducts {
+  nr: number
+  title: string
+  products: {
+    rank: number
+    product: Product
+  }[]
+}
+
 /**
  * Maps top result from opensearch into agreement info
  */
 export const mapAgreementFromSearch = (data: SearchResponse): Agreement => {
   return data.hits.hits.map((hit: Hit) => mapAgreement(hit._source as AgreementsSourceResponse))[0]
+}
+
+/**
+ * Maps from opensearch document endpoint
+ */
+export const mapAgreementFromDoc = (data: AgreementDocResponse): Agreement => {
+  return mapAgreement(data._source as AgreementsSourceResponse)
 }
 
 export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
@@ -127,8 +146,43 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
+export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
+  const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
+  const getRank = (product: Product, postNr: number) =>
+    product.agreements.find(
+      (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
+    )?.rank
+  const posts = postBuckets.map((post) => {
+    const postTitle = getPostTitle(post.key)
+    const mappedTitle = postTitle ? mapPostTitle(postTitle) : ''
+    return {
+      nr: post.key,
+      title: mappedTitle,
+      products: post.seriesId.buckets
+        .map((bucket) => {
+          const product = mapProductWithVariants(Array(bucket.topHitData.hits.hits[0]._source as ProductSourceResponse))
+          return {
+            rank: getRank(product, post.key) || 99,
+            product: product,
+          }
+        })
+        .sort((a, b) => a.rank - b.rank),
+    }
+  })
+  return posts
+}
+
 export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734', 'HMDB-8669']
+export const agreementWithNoProducts = [
+  'HMDB-8582',
+  'HMDB-8682',
+  'HMDB-8673',
+  'HMDB-8685',
+  'HMDB-8734',
+  'HMDB-8669',
+  //Omgivelseskontroll
+  'HMDB-8736',
+]

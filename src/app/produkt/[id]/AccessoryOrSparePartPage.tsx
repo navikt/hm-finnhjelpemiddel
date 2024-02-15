@@ -23,7 +23,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
           <ProductPageTopInfo product={product} supplier={supplier} />
           <Bleed marginInline="full" asChild>
             <section className="product-page-section__container product-page-section__blue-background">
-              <div className="product-page-section__content main-wrapper">
+              <div className="product-page-section__content main-wrapper--large">
                 <Heading level="2" size="medium" spacing>
                   Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
                 </Heading>

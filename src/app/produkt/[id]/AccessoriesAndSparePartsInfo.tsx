@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
 import { Bleed, BodyLong, Heading } from '@navikt/ds-react'
 
@@ -45,12 +45,12 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
   }
 
   return (
-    <Bleed marginInline="full" asChild>
+    <Bleed marginInline="full" asChild reflectivePadding>
       <section
         className={`product-page-section__container product-page-section${classname}`}
         aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
       >
-        <div className="product-page-section__content main-wrapper">
+        <div className="product-page-section__content main-wrapper--large">
           <Heading level="2" size="medium" spacing ref={headingRef}>
             {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
           </Heading>
