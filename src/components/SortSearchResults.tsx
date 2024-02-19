@@ -16,7 +16,7 @@ const SortSearchResults = ({ formRef }: Props) => {
 
   const options = [
     { value: 'Delkontrakt_rangering', label: 'Delkontrakt og rangering' },
-    { value: 'Mest_relevant', label: 'Mest relevant' },
+    { value: 'Best_soketreff', label: 'Beste søketreff' },
   ] as const
 
   const handleSelectedSorting = (event: React.FormEvent<HTMLSelectElement>) => {
@@ -30,7 +30,7 @@ const SortSearchResults = ({ formRef }: Props) => {
     <Select
       label="Sortering"
       onChange={handleSelectedSorting}
-      defaultValue={searchParams.get('sortering') ?? 'Mest_relevant'}
+      defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}
     >
       {options.map((option, index) => (
         <option key={index} value={option.value}>

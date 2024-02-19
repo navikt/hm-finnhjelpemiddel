@@ -81,7 +81,7 @@ export type SearchData = {
   hidePictures?: string
 }
 
-export const sortOrders = ['Delkontrakt_rangering', 'Mest_relevant'] as const
+export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
 
 export type SortOrder = (typeof sortOrders)[number]
 
@@ -218,13 +218,13 @@ const removeReservedChars = (searchTerm: String) => {
 
 const sortOptionsOpenSearch = {
   Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
-  Mest_relevant: [{ _score: { order: 'desc' } }],
+  Best_soketreff: [{ _score: { order: 'desc' } }],
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
   const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
 
-  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Mest_relevant']
+  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
 
   const {
     lengdeCM,
