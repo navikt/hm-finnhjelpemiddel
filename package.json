@@ -42,7 +42,7 @@
     "eslint-config-next": "14.1.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "prettier": "^3.2.4",
-    "sass": "^1.70.0",
+    "sass": "^1.71.0",
     "sharp": "^0.33.2",
     "typescript": "5.3.3"
   }
