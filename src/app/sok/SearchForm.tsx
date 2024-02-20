@@ -1,12 +1,14 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Switch } from '@navikt/ds-react'
+import { Button, Chips, Heading, Switch } from '@navikt/ds-react'
 
-import { FilterData, SearchData } from '@/utils/api-util'
+import { FilterData, SearchData, SelectedFilters } from '@/utils/api-util'
 
 import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
 import FilterView from '@/components/filters/FilterView'
+import { FilterCategories } from '@/utils/filter-util'
+import { Entries } from '@/utils/type-util'
 import { useSearchParams } from 'next/navigation'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
@@ -19,9 +21,10 @@ type Props = {
   filters?: FilterData
   setFocus?: () => void
   onSubmit: SubmitHandler<SearchData>
+  selectedFilters: SelectedFilters
 }
 
-const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
+const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit, selectedFilters }, ref) => {
   const formRef = useRef<HTMLFormElement>(null)
   const formMethods = useFormContext<SearchData>()
   const searchParams = useSearchParams()
@@ -33,6 +36,18 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
     formMethods.setValue('searchTerm', searchTerm)
     formRef.current?.requestSubmit()
   }
+
+  const filterChips =
+    selectedFilters &&
+    (Object.entries(selectedFilters) as Entries<SelectedFilters>).flatMap(([key, values]) => ({
+      key,
+      values,
+      label: FilterCategories[key],
+    }))
+
+  const filterValues = Object.values(selectedFilters)
+    .flat()
+    .filter((val) => val)
 
   return (
     <form
@@ -71,6 +86,36 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
 
         {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
       </div>
+
+      {filterChips && filterValues.length > 0 && (
+        <>
+          <Heading level="2" size="small">
+            Valgte filtre
+          </Heading>
+          <Chips className="results__chips">
+            {filterChips.map(({ key, label, values }) => {
+              return values
+                .filter((v) => v)
+                .map((value) => {
+                  return (
+                    <Chips.Removable
+                      key={key + value}
+                      onClick={() => {
+                        formMethods.setValue(
+                          `filters.${key}`,
+                          values.filter((val) => val !== value)
+                        )
+                        formRef.current?.requestSubmit()
+                      }}
+                    >
+                      {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
+                    </Chips.Removable>
+                  )
+                })
+            })}
+          </Chips>
+        </>
+      )}
 
       <FilterView filters={filters} />
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}

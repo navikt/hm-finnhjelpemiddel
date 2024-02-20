@@ -1,22 +1,30 @@
+import { SearchData } from '@/utils/api-util'
 import { useHydratedCompareStore } from '@/utils/compare-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
-import { BodyShort, Box, Checkbox, Detail, HStack, Link, VStack } from '@navikt/ds-react'
+import { PackageIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Button, Checkbox, Detail, HStack, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 const ProductCardNew = ({
   product,
   rank,
-  hidePictures,
+  hidePictures = false,
+  withIsoButton = false,
+  formRef,
 }: {
   product: Product
   rank?: number
-  hidePictures: boolean
+  hidePictures?: boolean
+  withIsoButton?: boolean
+  formRef?: RefObject<HTMLFormElement>
 }) => {
   const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+  const { setValue } = useFormContext<SearchData>()
 
   const toggleCompareProduct = () => {
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
@@ -54,7 +62,9 @@ const ProductCardNew = ({
       >
         <VStack gap="1" className="new-product-card__content">
           <HStack justify={'space-between'}>
-            <Detail textColor="subtle">{rank ? `Rangering ${rank}` : 'Ingen rangering'}</Detail>
+            <Detail textColor="subtle">
+              {rank ? (rank < 90 ? `Rangering ${rank}` : 'Ingen rangering') : 'Ikke på avtale'}
+            </Detail>
             {compareCheckbox}
           </HStack>
           <Link
@@ -75,12 +85,12 @@ const ProductCardNew = ({
   return (
     <Box
       padding="2"
-      className={classNames('new-product-card large without-iso-button', { checked: isInProductsToCompare })}
+      className={classNames('new-product-card large ', { checked: isInProductsToCompare, 'iso-button': withIsoButton })}
     >
       {compareCheckbox}
-      <VStack gap="2" className="new-product-card__content">
+      <VStack justify="space-between" className="new-product-card__content">
         <VStack gap="1">
-          <Detail textColor="subtle">{rank ? `Rangering ${rank}` : 'Ingen rangering'}</Detail>
+          <Detail textColor="subtle">{rank ? (rank < 90 ? `Rangering ${rank}` : 'På avtale med NAV') : ''}</Detail>
           <Link
             className="new-product-card__link"
             href={`/produkt/${product.id}`}
@@ -91,13 +101,19 @@ const ProductCardNew = ({
               {product.title}
             </BodyShort>
           </Link>
-          {/* <Button
-            className="new-product-card__product-category-button"
-            variant="tertiary-neutral"
-            icon={<PackageIcon />}
-          >
-            {product.isoCategoryTitle}
-          </Button> */}
+          {withIsoButton && (
+            <Button
+              className="new-product-card__product-category-button"
+              variant="tertiary-neutral"
+              icon={<PackageIcon />}
+              onClick={() => {
+                setValue(`filters.produktkategori`, [product.isoCategoryTitle])
+                formRef && formRef.current?.requestSubmit()
+              }}
+            >
+              {product.isoCategoryTitle}
+            </Button>
+          )}
         </VStack>
         <div className="new-product-card-image-container">
           <div className="new-product-card-image">

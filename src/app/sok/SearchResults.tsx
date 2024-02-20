@@ -2,9 +2,8 @@ import { RefObject, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import Image from 'next/image'
-import Link from 'next/link'
 
-import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react'
 
 import { FetchProductsWithFilters, SearchData } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
@@ -13,10 +12,8 @@ import { Product } from '@/utils/product-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
-import AgreementIcon from '@/components/AgreementIcon'
 import SortSearchResults from '@/components/SortSearchResults'
-import DefinitionList from '@/components/definition-list/DefinitionList'
-import { ChevronRightIcon } from '@navikt/aksel-icons'
+import ProductCardNew from '../[agreementId]/ProductCardNew'
 
 const SearchResults = ({
   data,
@@ -68,18 +65,18 @@ const SearchResults = ({
 
   return (
     <>
-      <header className="results__header">
-        <div className="flex flex--row flex--space-between">
+      <HStack justify="space-between">
+        <VStack justify="space-between">
           <Heading level="2" size="medium" ref={searchResultRef}>
-            Søkeresultater
+            Hjelpemiddel
           </Heading>
-          <SortSearchResults formRef={formRef} />
-        </div>
-        <div>
-          <BodyShort aria-live="polite">{`${products.length} produkter vises`}</BodyShort>
-        </div>
-      </header>
-      <ol className="results__list" id="searchResults">
+          <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>{`Viser de ${products.length} første`}</BodyShort>
+        </VStack>
+
+        <SortSearchResults formRef={formRef} />
+      </HStack>
+
+      <HStack as={'ol'} gap={{ xs: '4', md: '5' }} id="searchResults" className="search-results">
         {products.map((product) => (
           <SearchResult
             key={product.id}
@@ -89,7 +86,7 @@ const SearchResults = ({
             formRef={formRef}
           />
         ))}
-      </ol>
+      </HStack>
       {loadMore && (
         <Button variant="secondary" onClick={loadMore} loading={isLoading}>
           Vis flere treff
@@ -137,8 +134,14 @@ const SearchResult = ({
       : product.agreements && product.agreements.find((agreement) => agreement.rank === minRank)
 
   return (
-    <li className={isInProductsToCompare ? 'search-result checked' : 'search-result'}>
-      <div className="search-result__compare-checkbox">
+    <li>
+      <ProductCardNew
+        product={product}
+        rank={minRank < 100 ? minRank : undefined}
+        withIsoButton={true}
+        formRef={formRef}
+      ></ProductCardNew>
+      {/* <div className="search-result__compare-checkbox">
         <Checkbox
           size="small"
           value="Legg produktet til sammenligning"
@@ -202,7 +205,7 @@ const SearchResult = ({
         <div className="search-result__chevron-container">
           <ChevronRightIcon className="search-result__chevron" aria-hidden />
         </div>
-      </div>
+      </div> */}
     </li>
   )
 }

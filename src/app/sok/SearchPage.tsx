@@ -9,12 +9,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { ArrowUpIcon, FilesIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, Chips, Heading, Popover } from '@navikt/ds-react'
+import { Button, HGrid, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, PAGE_SIZE, SearchData, SelectedFilters, fetchProducts } from '@/utils/api-util'
-import { FilterCategories } from '@/utils/filter-util'
+import { FetchProductsWithFilters, PAGE_SIZE, SearchData, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
-import { Entries } from '@/utils/type-util'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -107,99 +105,96 @@ export default function SearchPage() {
     router.replace(pathname)
   }
 
-  const filterValues = Object.values(searchData.filters)
-    .flat()
-    .filter((val) => val)
-
-  const filterChips = (Object.entries(searchData.filters) as Entries<SelectedFilters>).flatMap(([key, values]) => ({
-    key,
-    values,
-    label: FilterCategories[key],
-  }))
-
   return (
-    <FormProvider {...formMethods}>
-      <CompareMenu />
-      {!showSidebar && (
-        <MobileOverlay open={mobileOverlayOpen}>
-          <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-            <Heading level="1" size="medium">
-              Filtrer søket
-            </Heading>
-          </MobileOverlay.Header>
-          <MobileOverlay.Content>
-            <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
-          </MobileOverlay.Content>
-          <MobileOverlay.Footer>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginBottom: 16 }}>
-              <Button
-                ref={copyButtonRef}
-                variant="tertiary"
-                size="small"
-                icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                onClick={() => {
-                  navigator.clipboard.writeText(location.href)
-                  setCopyPopupOpenState(true)
-                }}
-              >
-                Kopiér søket
-              </Button>
-              <Popover
-                open={copyPopupOpenState}
-                onClose={() => setCopyPopupOpenState(false)}
-                anchorEl={copyButtonRef.current}
-                placement="right"
-              >
-                <Popover.Content>Søket er kopiert!</Popover.Content>
-              </Popover>
-              <Button
-                type="button"
-                variant="tertiary"
-                size="small"
-                icon={<TrashIcon title="Nullstill søket" />}
-                onClick={onReset}
-              >
-                Nullstill søket
-              </Button>
-            </div>
-            <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
-          </MobileOverlay.Footer>
-        </MobileOverlay>
-      )}
-      <AnimateLayout>
-        <div className="main-header">
-          <Heading level="1" size="large" ref={pageTopRef}>
-            Søk i hjelpemidler
-          </Heading>
-        </div>
-        <div className="main-wrapper--large">
-          <div className="flex-column-wrap spacing-top--large spacing-bottom--large">
-            {showSidebar && (
-              <section className="search__side-bar">
-                <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
-                <div className="footer">
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <Button
-                      ref={copyButtonRef}
-                      variant="tertiary"
-                      size="small"
-                      icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                      onClick={() => {
-                        navigator.clipboard.writeText(location.href)
-                        setCopyPopupOpenState(true)
-                      }}
-                    >
-                      Kopiér søket
-                    </Button>
-                    <Popover
-                      open={copyPopupOpenState}
-                      onClose={() => setCopyPopupOpenState(false)}
-                      anchorEl={copyButtonRef.current}
-                      placement="right"
-                    >
-                      <Popover.Content>Søket er kopiert!</Popover.Content>
-                    </Popover>
-                  </div>
+    <VStack className="main-wrapper--xlarge spacing-bottom--large">
+      <VStack gap="5" className="spacing-top--xlarge spacing-bottom--xlarge">
+        <Heading level="1" size="large" ref={pageTopRef}>
+          Alle hjelpemiddel
+        </Heading>
+      </VStack>
+      <FormProvider {...formMethods}>
+        <CompareMenu />
+        <HGrid columns={{ xs: 1, md: '374px auto' }} gap={{ xs: '4', md: '18' }}>
+          <Show above="md">
+            <section className="">
+              <SearchForm
+                onSubmit={onSubmit}
+                filters={data?.at(-1)?.filters}
+                selectedFilters={searchData.filters}
+                ref={searchFormRef}
+              />
+              <div className="footer">
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Button
+                    ref={copyButtonRef}
+                    variant="tertiary"
+                    size="small"
+                    icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                    onClick={() => {
+                      navigator.clipboard.writeText(location.href)
+                      setCopyPopupOpenState(true)
+                    }}
+                  >
+                    Kopiér søket
+                  </Button>
+                  <Popover
+                    open={copyPopupOpenState}
+                    onClose={() => setCopyPopupOpenState(false)}
+                    anchorEl={copyButtonRef.current}
+                    placement="right"
+                  >
+                    <Popover.Content>Søket er kopiert!</Popover.Content>
+                  </Popover>
+                </div>
+                <Button
+                  type="button"
+                  variant="tertiary"
+                  size="small"
+                  icon={<TrashIcon title="Nullstill søket" />}
+                  onClick={onReset}
+                >
+                  Nullstill søket
+                </Button>
+              </div>
+            </section>
+          </Show>
+          <Hide above="md">
+            <MobileOverlay open={mobileOverlayOpen}>
+              <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
+                <Heading level="1" size="medium">
+                  Filtrer søket
+                </Heading>
+              </MobileOverlay.Header>
+              <MobileOverlay.Content>
+                <SearchForm
+                  onSubmit={onSubmit}
+                  filters={data?.at(-1)?.filters}
+                  selectedFilters={searchData.filters}
+                  ref={searchFormRef}
+                />
+              </MobileOverlay.Content>
+              <MobileOverlay.Footer>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginBottom: 16 }}>
+                  <Button
+                    ref={copyButtonRef}
+                    variant="tertiary"
+                    size="small"
+                    icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                    onClick={() => {
+                      navigator.clipboard.writeText(location.href)
+                      setCopyPopupOpenState(true)
+                    }}
+                  >
+                    Kopiér søket
+                  </Button>
+                  <Popover
+                    open={copyPopupOpenState}
+                    onClose={() => setCopyPopupOpenState(false)}
+                    anchorEl={copyButtonRef.current}
+                    placement="right"
+                  >
+                    <Popover.Content>Søket er kopiert!</Popover.Content>
+                  </Popover>
                   <Button
                     type="button"
                     variant="tertiary"
@@ -210,65 +205,31 @@ export default function SearchPage() {
                     Nullstill søket
                   </Button>
                 </div>
-              </section>
-            )}
-            <section className="results__wrapper">
-              {!showSidebar && (
-                <div className="spacing-bottom--medium">
-                  <Button variant="secondary" onClick={() => setMobileOverlayOpen(true)}>
-                    Endre søk
-                  </Button>
-                </div>
-              )}
+                <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
+              </MobileOverlay.Footer>
+            </MobileOverlay>
+          </Hide>
 
-              {filterValues.length > 0 && (
-                <>
-                  <Heading level="2" size="small">
-                    Valgte filtre
-                  </Heading>
-                  <Chips className="results__chips">
-                    {filterChips.map(({ key, label, values }) => {
-                      return values
-                        .filter((v) => v)
-                        .map((value) => {
-                          return (
-                            <Chips.Removable
-                              key={key + value}
-                              onClick={() => {
-                                formMethods.setValue(
-                                  `filters.${key}`,
-                                  values.filter((val) => val !== value)
-                                )
-                                searchFormRef.current?.requestSubmit()
-                              }}
-                            >
-                              {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
-                            </Chips.Removable>
-                          )
-                        })
-                    })}
-                  </Chips>
-                </>
-              )}
-              <SearchResults
-                data={data}
-                loadMore={loadMore}
-                isLoading={isLoading}
-                searchResultRef={searchResultRef}
-                formRef={searchFormRef}
+          <AnimateLayout>
+            <SearchResults
+              data={data}
+              loadMore={loadMore}
+              isLoading={isLoading}
+              searchResultRef={searchResultRef}
+              formRef={searchFormRef}
+            />
+
+            {!isAtPageTop && (
+              <Button
+                type="button"
+                className="search__page-up-button"
+                icon={<ArrowUpIcon title="Gå til toppen av siden" />}
+                onClick={() => setFocusOnSearchResults()}
               />
-            </section>
-          </div>
-        </div>
-        {!isAtPageTop && (
-          <Button
-            type="button"
-            className="search__page-up-button"
-            icon={<ArrowUpIcon title="Gå til toppen av siden" />}
-            onClick={() => setFocusOnSearchResults()}
-          />
-        )}
-      </AnimateLayout>
-    </FormProvider>
+            )}
+          </AnimateLayout>
+        </HGrid>
+      </FormProvider>
+    </VStack>
   )
 }
