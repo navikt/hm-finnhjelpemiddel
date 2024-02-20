@@ -27,9 +27,6 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <VStack>
-      <Heading size="small" level="2">
-        Filter
-      </Heading>
       <div className="search__filters">
         <CheckboxFilterInput filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} />
         <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />

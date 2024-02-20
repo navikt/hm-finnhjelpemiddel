@@ -1,0 +1,55 @@
+@use './_mixins';
+
+.burgermenu-container {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  min-height: 122px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  padding: 0 $a-spacing-4;
+  width: 100%;
+  z-index: 99;
+  box-shadow: inset 0 -1px 0 $a-gray-300;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1440px;
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      padding-inline-start: 0;
+
+      li {
+        @include mixins.for-size(tablet-up) {
+        }
+
+        @include mixins.for-size(desktop-up) {
+          max-width: 500px;
+        }
+        @include mixins.for-size(desktop-large-up) {
+          max-width: 400px;
+        }
+
+        span {
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  &__agreemment-list {
+    @include mixins.for-size(desktop-up) {
+      max-height: 700px;
+    }
+    @include mixins.for-size(desktop-large-up) {
+      max-height: 500px;
+    }
+  }
+}

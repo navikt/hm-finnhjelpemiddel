@@ -26,6 +26,11 @@
     background-color: #faefee;
   }
 
+  &__background-container.blue {
+    position: relative;
+    background-color: #e6eef4;
+  }
+
   &__container {
     max-width: 1024px;
     width: 100%;
@@ -34,7 +39,7 @@
     flex-direction: column;
   }
 
-  &__heading-and-search {
+  &__heading {
     display: flex;
     flex-direction: column;
     gap: $a-spacing-5;
