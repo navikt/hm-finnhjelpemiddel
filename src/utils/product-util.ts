@@ -20,6 +20,11 @@ import {
 import { initialSearchDataState } from './search-state-util'
 import { capitalize } from './string-util'
 
+enum Status {
+  ACTIVE,
+  INACTIVE,
+}
+
 export interface Product {
   id: string
   title: string
@@ -50,6 +55,7 @@ export interface TechDataRange {
 
 export interface ProductVariant {
   id: string
+  status: Status | null
   hmsArtNr: string | null
   supplierRef: string
   articleName: string
@@ -216,9 +222,23 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   }
 }
 
-export const mapProductVariant = (source: ProductSourceResponse): ProductVariant => {
+export const mapProductVariant = (
+  source: ProductSourceResponse
+): {
+  status: Status | null
+  hmsArtNr: string | null
+  articleName: string
+  expired: string
+  supplierRef: string
+  techData: TechData
+  agreements: AgreementInfo[]
+  id: string
+  filters: { [p: string]: string }
+  hasAgreement: boolean
+} => {
   return {
     id: source.id,
+    status: source.status,
     hmsArtNr: source.hmsArtNr,
     supplierRef: source.supplierRef,
     articleName: source.articleName,

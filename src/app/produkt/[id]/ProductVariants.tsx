@@ -4,8 +4,8 @@ import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, Heading, Label, Table } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortIntWithStringFallback } from '@/utils/sort-util'
@@ -127,13 +127,32 @@ const ProductVariants = ({ product }: { product: Product }) => {
         <Table>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Tittel</Table.ColumnHeader>
+              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
               {sortedByKey.map((variant) => (
-                <Table.ColumnHeader key={variant.id}>{variantTitle(variant.articleName)}</Table.ColumnHeader>
+                <Table.ColumnHeader key={variant.id}>
+                  <div>
+                    {variant.status?.toString() === 'INACTIVE' ? (
+                      <Label size="small" className="comparing-table__expired-variant-label">
+                        Utgått
+                      </Label>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                  <div>{variantTitle(variant.articleName)}</div>
+                </Table.ColumnHeader>
               ))}
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <Table.Row>
+              <Table.HeaderCell>Utgått</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>
+                  {variant.status?.toString() === 'INACTIVE' ? 'Ja' : '-'}
+                </Table.DataCell>
+              ))}
+            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
               {sortedByKey.map((variant) => (
