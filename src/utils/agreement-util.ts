@@ -27,6 +27,7 @@ export interface Agreement {
   expired: Date //date
   posts: Post[]
   attachments: Attachment[]
+  reference: string
 }
 
 export interface AgreementLabel {
@@ -83,6 +84,7 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     expired: new Date(Date.parse(source.expired)) ?? '',
     posts: mapPosts(source.posts),
     attachments: mapAttachments(source.attachments),
+    reference: source.reference,
   }
 }
 

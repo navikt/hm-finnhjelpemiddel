@@ -34,7 +34,9 @@ export const dateToString = (date: Date): string => {
   const month = date.getMonth() + 1
   const year = date.getFullYear()
 
-  return `${day}.${month}.${year}`
+  const monthWithZero = month < 10 ? `0${month}` : month
+
+  return `${day}.${monthWithZero}.${year}`
 }
 
 export const titleCapitalized = (title: string) => {
