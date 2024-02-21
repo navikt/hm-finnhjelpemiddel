@@ -17,6 +17,7 @@ export function mapPostTitle(postTitle: string): string {
   return postTitle.replace(regex, '')
 }
 
+// Egen mapper for synstekniske hjelpemiddel som har 1A, 1B osv som delkontraktnr
 export const makePostTitleBasedOnAgreementId = (postTitle: string, postNr: number, agreementId: string) =>
   agreementId === 'de5cce52-cd91-469e-82a1-4ca0d3bc79d4' || 'f3a70762-832c-4b1c-a3c6-4f6b0e646e9f'
     ? postTitle.replace('Post ', '')
