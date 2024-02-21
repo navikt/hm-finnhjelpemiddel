@@ -13,7 +13,7 @@ import {
 import { sortAlphabetically } from './sort-util'
 
 export function mapPostTitle(postTitle: string): string {
-  const regex = /^(post\s\d{1,2}:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
+  const regex = /^(post\s\d{1,2}[A-Za-z]?:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
   return postTitle.replace(regex, '')
 }
 
