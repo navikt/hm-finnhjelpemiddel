@@ -55,8 +55,6 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>Avtale</DefinitionList.Term>
           <DefinitionList.Definition>
             <Link as={NextLink} href={`/${product.agreements[0].id}`}>
-              {/* <NextLink href={hrefSok}> */}
-
               <BodyShort> {product.agreements[0].title} </BodyShort>
             </Link>
           </DefinitionList.Definition>
