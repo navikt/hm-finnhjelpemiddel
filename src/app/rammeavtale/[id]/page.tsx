@@ -45,7 +45,7 @@ export default async function AgreementPage({ params }: Props) {
                   <BodyLong size="small">
                     {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
                   </BodyLong>
-                  <BodyLong size="small">{`Avtalenummer:  ${agreement.reference}`}</BodyLong>
+                  <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
                 </div>
                 {!agreementHasNoProducts(agreement.identifier) && (
                   <LinkPanel href={hrefHurtigoversikt} className="agreement-page__link-to-search">
