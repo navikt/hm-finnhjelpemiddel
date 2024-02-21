@@ -36,7 +36,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
           {productsOnPosts.map((post) => (
             <div key={post.postTitle} className="agreement-details__products-on-post">
               <Heading level="4" size="small" spacing>
-                {`Andre produkter på delkontrakt nr. ${post.postNr}: ${post.postTitle}`}
+                {`Andre produkter på delkontrakt ${post.postTitle}`}
               </Heading>
 
               {post.products?.length ? (
@@ -45,7 +45,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
                     <ProductCard
                       key={product.id}
                       product={product}
-                      rank={product.agreements?.find((ag) => ag.postTitle === post.postTitle)?.rank}
+                      rank={product.agreements?.find((ag) => ag.postNr === post.postNr)?.rank}
                       showRank={true}
                     />
                   ))}
