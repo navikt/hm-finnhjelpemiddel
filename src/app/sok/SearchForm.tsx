@@ -67,7 +67,7 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       </div>
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
 
-      <div className="search__agreement-switch">
+      <div className="filter-container__agreement-switch">
         <Controller
           name="hasAgreementsOnly"
           control={formMethods.control}
@@ -89,10 +89,10 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
 
       {filterChips && filterValues.length > 0 && (
         <>
-          <Heading level="2" size="small">
+          <Heading level="2" size="small" spacing>
             Valgte filtre
           </Heading>
-          <Chips className="results__chips">
+          <Chips className="filter-container__chips spacing-bottom--medium">
             {filterChips.map(({ key, label, values }) => {
               return values
                 .filter((v) => v)

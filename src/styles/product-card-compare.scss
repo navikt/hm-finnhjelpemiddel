@@ -1,0 +1,67 @@
+@use './_mixins';
+
+@import '@navikt/ds-tokens/dist/tokens';
+
+.product-card-compare {
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  height: 13rem;
+  box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
+  border-radius: $a-border-radius-large;
+  background-color: $a-white;
+
+  &--fullWidth {
+    width: 100%;
+    min-width: 11rem;
+  }
+
+  &__link-content {
+    padding: $a-spacing-2;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $a-spacing-1;
+    color: $a-text-default;
+
+    &:hover :not(.icon-wrapper),
+    &:focus :not(.icon-wrapper) {
+      text-decoration: underline;
+      color: $a-text-action;
+    }
+  }
+
+  .remove-button {
+    align-self: flex-end;
+    padding: 0;
+    margin: $a-spacing-1;
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  &__image {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+
+    .image {
+      width: 140px;
+      height: 100px;
+      position: relative;
+    }
+  }
+
+  .info {
+    min-height: 3rem;
+    text-align: center;
+  }
+}
+
+.border {
+  border: 1px solid $a-border-default;
+}

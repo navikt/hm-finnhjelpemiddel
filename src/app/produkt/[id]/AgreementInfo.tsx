@@ -4,7 +4,7 @@ import NextLink from 'next/link'
 
 import { Product } from '@/utils/product-util'
 
-import ProductCard from '@/components/ProductCard'
+import ProductCardCompare from '@/components/ProductCardCompare'
 import { Alert, BodyLong, ChevronRightIcon, Heading } from '@/components/aksel-client'
 import { Bleed } from '@navikt/ds-react'
 import { ProductsOnPost } from './page'
@@ -42,7 +42,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
               {post.products?.length ? (
                 <div className="agreement-details__products-on-post-list">
                   {post.products?.map((product) => (
-                    <ProductCard
+                    <ProductCardCompare
                       key={product.id}
                       product={product}
                       rank={product.agreements?.find((ag) => ag.postTitle === post.postTitle)?.rank}

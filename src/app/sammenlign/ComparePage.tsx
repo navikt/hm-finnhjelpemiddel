@@ -12,7 +12,7 @@ import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseN
 
 import { BodyLong, ChevronRightIcon, Heading, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import ProductCard from '@/components/ProductCard'
+import ProductCardCompare from '@/components/ProductCardCompare'
 import { useMemo } from 'react'
 
 export default function ComparePage() {
@@ -151,7 +151,7 @@ const CompareTable = ({
             <Table.ColumnHeader></Table.ColumnHeader>
             {productsToCompare.map((product) => (
               <Table.ColumnHeader key={'id-' + product.id}>
-                <ProductCard product={product} removeProduct={removeProduct} />
+                <ProductCardCompare product={product} removeProduct={removeProduct} />
               </Table.ColumnHeader>
             ))}
           </Table.Row>

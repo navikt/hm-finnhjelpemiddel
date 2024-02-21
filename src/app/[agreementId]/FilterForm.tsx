@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button } from '@navikt/ds-react'
+import { Button, Search } from '@navikt/ds-react'
 
 import { FilterData, SearchData, SelectedFilters } from '@/utils/api-util'
 
@@ -37,6 +37,7 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       aria-controls="agreementSearchResults"
     >
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
+      <Search label="Søk etter titler i avtalen" size="small"></Search>
 
       <FilterView filters={filters} />
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}

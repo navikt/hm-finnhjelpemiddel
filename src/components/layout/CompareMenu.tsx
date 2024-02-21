@@ -7,7 +7,7 @@ import { BodyShort, Button } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
 
-import ProductCard from '@/components/ProductCard'
+import ProductCardCompare from '@/components/ProductCardCompare'
 import classNames from 'classnames'
 
 const productCardAnimations: Variants = {
@@ -85,11 +85,11 @@ const CompareMenu = () => {
                       animate="visible"
                       exit="hidden"
                     >
-                      <ProductCard
+                      <ProductCardCompare
                         key={'compare-' + product.id}
                         product={product}
                         removeProduct={removeProduct}
-                      ></ProductCard>
+                      ></ProductCardCompare>
                     </motion.li>
                   ))}
                 </AnimatePresence>

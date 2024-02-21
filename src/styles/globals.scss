@@ -9,6 +9,7 @@
 @import './home-page.scss';
 @import './mobile-overlay';
 @import './not-found-page';
+@import './product-card-compare.scss';
 @import './product-card.scss';
 @import './search.scss';
 @import './search-agreement.scss';
@@ -31,76 +32,6 @@ main {
 
 * {
   scroll-behavior: smooth;
-}
-
-details {
-  > summary {
-    display: flex;
-    gap: $a-spacing-1;
-    list-style: none;
-    padding: $a-spacing-1 0;
-    transition: margin 150ms ease-out;
-    font-weight: $a-font-weight-bold;
-    cursor: pointer;
-    user-select: none;
-
-    .chevron-wrapper {
-      display: grid;
-      align-self: center;
-      place-content: center;
-      border-radius: $a-border-radius-medium;
-      height: $a-spacing-6;
-      width: $a-spacing-6;
-
-      svg {
-        transition: transform 200ms ease-in-out;
-      }
-    }
-
-    &::marker,
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &:hover {
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-      text-decoration-color: $a-text-default;
-
-      .chevron-wrapper {
-        background-color: $a-surface-neutral-subtle-hover;
-      }
-    }
-
-    &:focus {
-      outline: none;
-    }
-
-    &:focus-visible {
-      box-shadow: $a-shadow-focus;
-      border-radius: $a-border-radius-medium;
-    }
-  }
-
-  &.spacing {
-    margin-bottom: $a-spacing-2;
-  }
-
-  > div {
-    box-sizing: border-box;
-    margin-bottom: $a-spacing-5;
-    padding-left: $a-spacing-7;
-  }
-
-  &[open] > summary {
-    margin-bottom: $a-spacing-3;
-
-    .chevron-wrapper {
-      svg {
-        transform: rotate(180deg);
-      }
-    }
-  }
 }
 
 .main-header {
