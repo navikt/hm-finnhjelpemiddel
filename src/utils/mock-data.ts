@@ -1,5 +1,10 @@
 import { Product } from './product-util'
 
+enum Status {
+  ACTIVE,
+  INACTIVE,
+}
+
 export const agreements = [
   {
     id: '9e81826e-9ec0-4333-94e5-8f079b5e53b0',
@@ -53,6 +58,7 @@ export const accessoriesMock: Product[] = [
         filters: {},
         expired: '2043-08-07T14:33:40.468028091',
         agreements: agreements,
+        status: Status.ACTIVE,
       },
     ],
     compareData: { techDataRange: {}, agreementRank: null },
