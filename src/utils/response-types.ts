@@ -47,6 +47,7 @@ export interface PostBucketResponse {
     sum_other_doc_count: number
   }
 }
+
 interface SeriesTopHitBucket {
   doc_count: number
   //key = seriesId
@@ -104,7 +105,7 @@ export interface ProductSourceResponse {
   }
   title: string
   attributes: AttributeResponse
-  status: Status
+  status: 'INACTIVE' | 'ACTIVE'
   hmsArtNr: string | null
   identifier: string
   supplierRef: string
