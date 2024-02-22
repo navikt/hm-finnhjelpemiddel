@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react'
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Label, Table, Tag, VStack } from '@navikt/ds-react'
+import { BodyLong, Button, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
@@ -142,9 +142,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         Utgått
                       </Tag>
                     )}
-                    <Label variant size="small">
-                      {variantTitle(variant.articleName)}
-                    </Label>
+                    {variantTitle(variant.articleName)}
                   </VStack>
                 </Table.ColumnHeader>
               ))}
