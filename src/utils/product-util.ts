@@ -217,20 +217,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   }
 }
 
-export const mapProductVariant = (
-  source: ProductSourceResponse
-): {
-  status: 'INACTIVE' | 'ACTIVE'
-  hmsArtNr: string | null
-  articleName: string
-  expired: string
-  supplierRef: string
-  techData: TechData
-  agreements: AgreementInfo[]
-  id: string
-  filters: { [p: string]: string }
-  hasAgreement: boolean
-} => {
+export const mapProductVariant = (source: ProductSourceResponse): ProductVariant => {
   return {
     id: source.id,
     status: source.status,
