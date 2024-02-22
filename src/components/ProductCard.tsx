@@ -13,14 +13,16 @@ const ProductCard = ({
   product,
   rank,
   hidePictures = false,
-  withIsoButton = false,
   formRef,
+  size,
+  handleIsoButton,
 }: {
   product: Product
   rank?: number
   hidePictures?: boolean
-  withIsoButton?: boolean
   formRef?: RefObject<HTMLFormElement>
+  size?: 'large'
+  handleIsoButton?: (value: string) => void
 }) => {
   const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
   const { setValue } = useFormContext<SearchData>()
@@ -40,7 +42,7 @@ const ProductCard = ({
 
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
-  console.log('min rank?', minRank)
+
   const currentRank = rank ? rank : minRank
 
   //TODO sjekk at klikkflate er minst 24x24
@@ -58,12 +60,14 @@ const ProductCard = ({
     </Checkbox>
   )
 
+  const cardClassName = size ? 'product-card--large' : 'product-card--compare'
+
   if (hidePictures) {
     return (
       <Box
         paddingInline="2"
         paddingBlock="1"
-        className={classNames('product-card no-picture', { checked: isInProductsToCompare })}
+        className={classNames('product-card--no-picture', { 'product-card__checked': isInProductsToCompare })}
       >
         <VStack gap="1" className="product-card__content">
           <HStack justify={'space-between'}>
@@ -90,9 +94,8 @@ const ProductCard = ({
   return (
     <Box
       padding="2"
-      className={classNames('product-card large with-compare-button', {
-        checked: isInProductsToCompare,
-        'iso-button': withIsoButton,
+      className={classNames(cardClassName, {
+        'product-card__checked': isInProductsToCompare,
       })}
     >
       {compareCheckbox}
@@ -111,15 +114,12 @@ const ProductCard = ({
               {product.title}
             </BodyShort>
           </Link>
-          {withIsoButton && (
+          {size === 'large' && handleIsoButton && (
             <Button
-              className="product-card__iso-button"
+              className="product-card--large__iso-button"
               variant="tertiary-neutral"
               icon={<PackageIcon />}
-              onClick={() => {
-                setValue(`filters.produktkategori`, [product.isoCategoryTitle])
-                formRef && formRef.current?.requestSubmit()
-              }}
+              onClick={() => handleIsoButton(product.isoCategoryTitle)}
             >
               {product.isoCategoryTitle}
             </Button>

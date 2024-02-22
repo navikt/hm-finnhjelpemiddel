@@ -2,13 +2,13 @@ import { RefObject } from 'react'
 
 import { Alert, BodyShort, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters } from '@/utils/api-util'
-import { Product } from '@/utils/product-util'
+import { FetchProductsWithFilters, SearchData } from '@/utils/api-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import ProductCard from '@/components/ProductCard'
 import SortSearchResults from '@/components/SortSearchResults'
+import { useFormContext } from 'react-hook-form'
 
 const SearchResults = ({
   data,
@@ -24,6 +24,12 @@ const SearchResults = ({
   formRef: RefObject<HTMLFormElement>
 }) => {
   const products = data?.map((d) => d.products).flat()
+  const formMethods = useFormContext<SearchData>()
+
+  const handleSetIsoFilter = (value: string) => {
+    formMethods.setValue(`filters.produktkategori`, [value])
+    formRef.current?.requestSubmit()
+  }
 
   useRestoreScroll('search-results', !isLoading)
 
@@ -83,7 +89,9 @@ const SearchResults = ({
 
       <HStack as={'ol'} gap={{ xs: '4', md: '5' }} id="searchResults" className="search-results">
         {products.map((product) => (
-          <SearchResult key={product.id} product={product} formRef={formRef} />
+          <li>
+            <ProductCard product={product} handleIsoButton={handleSetIsoFilter} formRef={formRef} size="large" />
+          </li>
         ))}
       </HStack>
       {loadMore && (
@@ -92,14 +100,6 @@ const SearchResults = ({
         </Button>
       )}
     </>
-  )
-}
-
-const SearchResult = ({ product, formRef }: { product: Product; formRef: RefObject<HTMLFormElement> }) => {
-  return (
-    <li>
-      <ProductCard product={product} withIsoButton={true} formRef={formRef}></ProductCard>
-    </li>
   )
 }
 

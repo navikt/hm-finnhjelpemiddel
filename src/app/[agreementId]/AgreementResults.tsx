@@ -19,6 +19,11 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
     formRef.current?.requestSubmit()
   }
 
+  const handleSetIsoFilter = (value: string) => {
+    formMethods.setValue(`filters.produktkategori`, [value])
+    formRef.current?.requestSubmit()
+  }
+
   return (
     <VStack style={{ maxWidth: '44.375rem' }}>
       <HStack justify="space-between">
@@ -61,7 +66,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
             >
               {`${post.nr}: ${post.title}`}
             </Heading>
-            <HStack gap={'4'}>
+            <HStack as="ol" gap={'4'}>
               {post.products.map((productWithRank) => (
                 <li>
                   <ProductCard
@@ -69,6 +74,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
                     product={productWithRank.product}
                     rank={productWithRank.rank}
                     hidePictures={pictureToggleValue === 'hide-pictures'}
+                    handleIsoButton={handleSetIsoFilter}
                   ></ProductCard>
                 </li>
               ))}

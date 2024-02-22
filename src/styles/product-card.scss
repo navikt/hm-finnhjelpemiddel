@@ -15,6 +15,12 @@
     position: relative;
   }
 
+  .product-card__content {
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    height: 100%;
+  }
+
   &:hover {
     outline: 1px solid $a-border-action;
   }
@@ -52,37 +58,70 @@
     position: relative;
 
     .product-card-image {
-      width: 120px;
-      height: 105px;
+      width: 145px;
+      height: 145px;
+
       position: relative;
+    }
+  }
+
+  &__checked:hover,
+  &__checked {
+    outline: 3px solid $a-text-action-selected;
+  }
+
+  &__checkbox {
+    // Overwrite Aksel
+
+    .navds-checkbox--small .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
+      transform: translate(0.2rem, -8%);
+    }
+    .navds-checkbox__input:checked + .navds-checkbox__label::before {
+      box-shadow: 0 0 0 2px var(--ac-radio-checkbox-action, var(--a-surface-action));
+      background-color: #fff;
+    }
+
+    .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
+      color: black;
+    }
+
+    @include mixins.for-size(phone-only) {
+      .navds-checkbox__content {
+        .navds-body-short--small {
+          font-size: 14px;
+          color: $a-text-subtle;
+        }
+      }
+
+      .navds-checkbox__label {
+        gap: 4px;
+        padding-top: 4px;
+      }
+
+      .navds-checkbox__label::before {
+        width: 14px;
+        height: 14px;
+      }
+
+      .navds-checkbox__label::before::after {
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 }
 
-.product-card.large {
+.product-card--large {
+  @extend .product-card;
   width: 225px;
   height: 326px;
-
-  // @include mixins.for-size(tablet-up) {
-  //   height: 285px;
-  //   width: 210px;
-  // }
+  padding-top: 4px;
 
   .product-card-image-container {
     .product-card-image {
       width: 185px;
       height: 167px;
-
-      // @include mixins.for-size(tablet-up) {
-      //   width: 170px;
-      //   height: 160px;
-      // }
     }
-  }
-  .product-card__content {
-    flex-direction: column-reverse;
-    justify-content: space-between;
-    height: 100%;
   }
 
   &__iso-button.navds-button {
@@ -116,73 +155,27 @@
   }
 }
 
-.product-card.with-compare-button {
-  // Overwrite Aksel
+.product-card--removable,
+.product-card--compare {
+  @extend .product-card;
+  padding-top: 4px;
 
-  .navds-checkbox--small .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
-    transform: translate(0.2rem, -8%);
-  }
-  .navds-checkbox__input:checked + .navds-checkbox__label::before {
-    box-shadow: 0 0 0 2px var(--ac-radio-checkbox-action, var(--a-surface-action));
-    background-color: #fff;
-  }
-
-  .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
-    color: black;
-  }
-
-  @include mixins.for-size(phone-only) {
-    .navds-checkbox__content {
-      .navds-body-short--small {
-        font-size: 14px;
-        color: $a-text-subtle;
-      }
-    }
-
-    .navds-checkbox__label {
-      gap: 4px;
-      padding-top: 4px;
-    }
-
-    .navds-checkbox__label::before {
-      width: 14px;
-      height: 14px;
-    }
-
-    .navds-checkbox__label::before::after {
-      width: 14px;
-      height: 14px;
-    }
-  }
-}
-
-.product-card.checked {
-  outline: 3px solid $a-text-action-selected;
-}
-
-.product-card-compare {
   .product-card-image {
-    width: 145px;
-    height: 145px;
+    width: 120px;
+    height: 105px;
   }
+}
 
+.product-card--compare {
   box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
 }
 
-.product-card.large.with-compare-button {
-  padding-top: 4px;
-}
-
-.product-card.no-picture {
+.product-card--no-picture {
+  @extend .product-card;
   width: 225px;
   height: 60px;
 
-  .product-card__link {
-    height: 2.2rem;
-    line-height: 1.1rem;
-  }
-
-  .product-card__checkbox {
+  &__checkbox {
     z-index: 2;
   }
 
