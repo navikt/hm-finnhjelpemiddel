@@ -5,10 +5,10 @@ import { Fragment, useState } from 'react'
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Label, Table } from '@navikt/ds-react'
+import { BodyLong, Button, Heading, Label, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
-import { sortIntWithStringFallback } from '@/utils/sort-util'
+import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 
 type SortColumns = {
@@ -33,11 +33,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
       }
       if (sortColumns.orderBy === 'Expired') {
         if (variantA.status && variantB.status) {
-          return sortIntWithStringFallback(
-            variantA.status.toString(),
-            variantB.status.toString(),
-            sortColumns?.direction === 'descending'
-          )
+          return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
         }
         return -1
       }
@@ -140,29 +136,21 @@ const ProductVariants = ({ product }: { product: Product }) => {
               <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>
-                  <div>
-                    {variant.status?.toString() === 'INACTIVE' ? (
-                      <Label size="small" className="comparing-table__expired-variant-label">
+                  <VStack gap="3">
+                    {variant.status === 'INACTIVE' && (
+                      <Tag size="small" variant="warning-moderate">
                         Utgått
-                      </Label>
-                    ) : (
-                      ''
+                      </Tag>
                     )}
-                  </div>
-                  <div>{variantTitle(variant.articleName)}</div>
+                    <Label variant size="small">
+                      {variantTitle(variant.articleName)}
+                    </Label>
+                  </VStack>
                 </Table.ColumnHeader>
               ))}
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            <Table.Row>
-              <Table.HeaderCell>Utgått</Table.HeaderCell>
-              {sortedByKey.map((variant) => (
-                <Table.DataCell key={variant.id}>
-                  {variant.status?.toString() === 'INACTIVE' ? 'Ja' : '-'}
-                </Table.DataCell>
-              ))}
-            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
               {sortedByKey.map((variant) => (
