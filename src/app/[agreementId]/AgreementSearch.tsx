@@ -1,6 +1,6 @@
 'use client'
 
-import { Agreement, mapAgreementProducts, mapPostTitle } from '@/utils/agreement-util'
+import { Agreement, makePostTitleBasedOnAgreementId, mapAgreementProducts } from '@/utils/agreement-util'
 import {
   Filter,
   FilterData,
@@ -72,7 +72,11 @@ const AgreementSearch = ({ agreement }: { agreement: Agreement }) => {
   const postFilters: Filter = {
     values: agreement.posts
       .sort((a, b) => a.nr - b.nr)
-      .map((post) => ({ key: post.title, doc_count: 1, label: `${post.nr}: ${mapPostTitle(post.title)}` })),
+      .map((post) => ({
+        key: post.title,
+        doc_count: 1,
+        label: makePostTitleBasedOnAgreementId(post.title, post.nr, agreement.id),
+      })),
   }
 
   // if (postsIsLoading || filtersIsLoading) {

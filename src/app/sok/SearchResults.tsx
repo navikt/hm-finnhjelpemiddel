@@ -171,10 +171,7 @@ const SearchResult = ({
             {finalAgreement ? (
               <div className="search-result__post-container">
                 <AgreementIcon rank={finalAgreement?.rank} />
-                <BodyShort>
-                  {'Delkontrakt ' + finalAgreement.postNr + ': ' + finalAgreement?.postTitle ??
-                    product.attributes?.text}
-                </BodyShort>
+                <BodyShort>{'Delkontrakt ' + finalAgreement?.postTitle ?? product.attributes?.text}</BodyShort>
               </div>
             ) : (
               <div>{product.attributes.text ?? 'Produkt mangler beskrivelse'}</div>

@@ -2,7 +2,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 
 import queryString from 'querystring'
 
-import { mapPostTitle } from './agreement-util'
+import { makePostTitleBasedOnAgreementId } from './agreement-util'
 import { isValidSortOrder, SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
@@ -283,7 +283,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
       identifier: agreement.identifier,
       title: agreement.title,
       postNr: agreement.postNr,
-      postTitle: mapPostTitle(agreement.postTitle),
+      postTitle: makePostTitleBasedOnAgreementId(agreement.postTitle, agreement.postNr, agreement.id),
       rank: agreement.rank,
       expired: agreement.expired,
     }

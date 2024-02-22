@@ -59,7 +59,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
               size="xsmall"
               className={pictureToggleValue === 'hide-pictures' ? 'spacing-top--xsmall' : 'spacing-top--small'}
             >
-              {`${post.nr}: ${post.title}`}
+              {post.title}
             </Heading>
             <HStack gap={'4'}>
               {post.products.map((productWithRank) => (
