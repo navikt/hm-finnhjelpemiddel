@@ -17,8 +17,8 @@ type SortColumns = {
 }
 
 const ProductVariants = ({ product }: { product: Product }) => {
-  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })
-
+  /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
+  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
     return variants.sort((variantA, variantB) => {
       if (sortColumns.orderBy === 'HMS') {
@@ -26,6 +26,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
           return sortIntWithStringFallback(
             variantA.hmsArtNr,
             variantB.hmsArtNr,
+            sortColumns?.direction === 'descending'
+          )
+        }
+        return -1
+      }
+      if (sortColumns.orderBy === 'Expired') {
+        if (variantA.status && variantB.status) {
+          return sortIntWithStringFallback(
+            variantA.status.toString(),
+            variantB.status.toString(),
             sortColumns?.direction === 'descending'
           )
         }
