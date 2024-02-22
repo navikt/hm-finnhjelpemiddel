@@ -13,9 +13,15 @@ import {
 import { sortAlphabetically } from './sort-util'
 
 export function mapPostTitle(postTitle: string): string {
-  const regex = /^(post\s\d{1,2}:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
+  const regex = /^(post\s\d{1,2}[A-Za-z]?:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
   return postTitle.replace(regex, '')
 }
+
+// Egen mapper for synstekniske hjelpemiddel som har 1A, 1B osv som delkontraktnr
+export const makePostTitleBasedOnAgreementId = (postTitle: string, postNr: number, agreementId: string) =>
+  agreementId === 'de5cce52-cd91-469e-82a1-4ca0d3bc79d4' || 'f3a70762-832c-4b1c-a3c6-4f6b0e646e9f'
+    ? postTitle.replace('Post ', '')
+    : `${postNr}: ${mapPostTitle(postTitle)}`
 
 export interface Agreement {
   id: string
@@ -27,6 +33,7 @@ export interface Agreement {
   expired: Date //date
   posts: Post[]
   attachments: Attachment[]
+  reference: string
 }
 
 export interface AgreementLabel {
@@ -83,6 +90,7 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     expired: new Date(Date.parse(source.expired)) ?? '',
     posts: mapPosts(source.posts),
     attachments: mapAttachments(source.attachments),
+    reference: source.reference,
   }
 }
 
@@ -154,7 +162,7 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
     )?.rank
   const posts = postBuckets.map((post) => {
     const postTitle = getPostTitle(post.key)
-    const mappedTitle = postTitle ? mapPostTitle(postTitle) : ''
+    const mappedTitle = postTitle ? makePostTitleBasedOnAgreementId(postTitle, post.key, agreement.id) : ''
     return {
       nr: post.key,
       title: mappedTitle,
