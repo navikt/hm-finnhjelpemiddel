@@ -40,7 +40,6 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             <Heading level="1" size="large" spacing>
               {product.title}
             </Heading>
-            {/* TODO: check all expired dates */}
             {(allVariantsExpiredDates || allVariantsExpired) && (
               <div className="product-info__expired-propducts">
                 <Alert variant="warning">Dette produktet er utgått</Alert>
