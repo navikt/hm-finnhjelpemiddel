@@ -1,4 +1,4 @@
-import { useHydratedCompareStore } from '@/utils/compare-state-util'
+import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 import { BodyShort, Box, Checkbox, Detail, HStack, Link, VStack } from '@navikt/ds-react'

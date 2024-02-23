@@ -1,8 +1,17 @@
 @use './_mixins';
 
 @import '@navikt/ds-tokens/dist/tokens';
+@import './z-index.scss';
 
 .search {
+  &__active-filter-container {
+    width: 100%;
+
+    @include mixins.for-size(desktop-up) {
+      max-width: 25rem;
+    }
+  }
+
   &__side-bar {
     display: flex;
     flex-direction: column;
@@ -62,10 +71,6 @@
 }
 
 .results {
-  &__chips {
-    margin-bottom: $a-spacing-8;
-  }
-
   &__wrapper {
     display: flex;
     flex-direction: column;
@@ -292,7 +297,7 @@
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid var(--ac-combobox-list-border-color, var(--a-border-divider));
-  z-index: 10;
+  z-index: var(--z-index-popover);
 
   .popover-content {
     margin: 0;

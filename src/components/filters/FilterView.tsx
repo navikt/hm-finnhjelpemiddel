@@ -2,7 +2,7 @@ import { CheckboxFilterInput } from '@/components/filters/CheckboxFilterInput'
 import { RangeFilterInput } from '@/components/filters/RangeFilterInput'
 import { FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/product-util'
-import { BodyShort, Heading, VStack } from '@navikt/ds-react'
+import { BodyShort, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 

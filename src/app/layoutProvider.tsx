@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { hotjar } from 'react-hotjar'
 import { usePathname } from 'next/navigation'
 
@@ -12,13 +12,13 @@ import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
 import NavigationBar from '@/components/NavigationBar'
+import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
-  const env = process.env.NODE_ENV
-
-  const [snowfallEnabled, setSnowfallEnabled] = useState(false)
+  const { isMenuOpen } = useMenuStore()
+  const { isMobileOverlayOpen } = useMobileOverlayStore()
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
@@ -29,14 +29,15 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       initAmplitude()
       logOversiktForsideVist()
-      if (env == 'production') {
+      if (process.env.NODE_ENV == 'production') {
         hotjar.initialize(118350, 6)
       }
     }
-  }, [env])
+  }, [])
 
   return (
     <>
+      {isMobileOverlayOpen && <div id="cover-main" />}
       <div id="modal-container"></div>
       <aside className="wip-banner">
         <div>
@@ -53,7 +54,12 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       <header>
         <NavigationBar />
       </header>
-      <main>{children}</main>
+
+      <main>
+        {isMenuOpen && <div id="cover-main" />}
+        {children}
+      </main>
+
       <Footer />
     </>
   )

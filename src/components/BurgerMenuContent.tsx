@@ -1,7 +1,7 @@
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
-import { Button, Heading } from '@navikt/ds-react'
+import { Heading, Link } from '@navikt/ds-react'
 import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
 import NextLink from 'next/link'
@@ -12,11 +12,11 @@ import AutocompleteSearch from './filters/AutocompleteSearch'
 interface Props {
   searchOpen: boolean
   menuOpen: boolean
-  setOpenMenu: (open: boolean) => void
+  setMenuOpen: (open: boolean) => void
   setSearchOpen: (open: boolean) => void
 }
 
-const BurgerMenuContent = ({ searchOpen, menuOpen, setOpenMenu, setSearchOpen }: Props) => {
+const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }: Props) => {
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
@@ -25,9 +25,10 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setOpenMenu, setSearchOpen }:
 
   const onSearch = useCallback(
     (searchTerm: string) => {
+      setSearchOpen(false)
       router.push('/sok?term=' + searchTerm)
     },
-    [router]
+    [router, setSearchOpen]
   )
 
   const sortedAgreements = useMemo(() => {
@@ -43,18 +44,22 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setOpenMenu, setSearchOpen }:
     <>
       {menuOpen && (
         <div className="burgermenu-container">
-          <div className="burgermenu-container__content">
+          <div className="burgermenu-container__content spacing-vertical--medium  main-wrapper--xlarge">
             <>
               <Heading level="2" size="small">
                 Avtale med NAV
               </Heading>
               <ul>
                 <li>
-                  <NextLink href="/rammeavtale" onClick={() => setOpenMenu(false)}>
-                    <Button variant="tertiary" as="a" icon={<ChevronRightIcon title="a11y-title" fontSize="1.5rem" />}>
-                      Om avtaler med NAV
-                    </Button>
-                  </NextLink>
+                  <Link
+                    className="burgermenu-container__link"
+                    as={NextLink}
+                    href="/rammeavtale"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
+                    Om avtaler med NAV
+                  </Link>
                 </li>
               </ul>
               <Heading level="2" size="small">
@@ -63,11 +68,15 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setOpenMenu, setSearchOpen }:
               <ul className="burgermenu-container__agreemment-list">
                 {sortedAgreements.map((agreement) => (
                   <li key={agreement.id}>
-                    <NextLink href={`/${agreement.id}`} onClick={() => setOpenMenu(false)}>
-                      <Button variant="tertiary" icon={<ChevronRightIcon title="a11y-title" fontSize="1.5rem" />}>
-                        {agreement.label}
-                      </Button>
-                    </NextLink>
+                    <Link
+                      className="burgermenu-container__link"
+                      as={NextLink}
+                      href={`/${agreement.id}`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <ChevronRightIcon title="Pil mote høyre" fontSize="1.5rem" />
+                      {agreement.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

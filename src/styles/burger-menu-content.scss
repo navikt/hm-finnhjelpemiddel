@@ -1,4 +1,5 @@
 @use './_mixins';
+@import './z-index.scss';
 
 .burgermenu-container {
   position: absolute;
@@ -10,14 +11,13 @@
   justify-content: center;
   padding: 0 $a-spacing-4;
   width: 100%;
-  z-index: 99;
+  z-index: var(--z-index-dropdown-menu);
   box-shadow: inset 0 -1px 0 $a-gray-300;
 
   &__content {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 1440px;
 
     ul {
       list-style: none;
@@ -51,5 +51,10 @@
     @include mixins.for-size(desktop-large-up) {
       max-height: 500px;
     }
+  }
+
+  &__link {
+    padding: var(--a-spacing-3) var(--a-spacing-5);
+    font-weight: var(--a-font-weight-bold);
   }
 }

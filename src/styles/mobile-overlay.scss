@@ -9,12 +9,12 @@
   left: 0;
   right: 0;
   height: 0;
-  z-index: 4;
-  background-color: $a-white;
+  z-index: var(--z-index-dropdown-menu);
 
   &__header {
     background-color: $a-white;
-    padding: $a-spacing-3 $a-spacing-6;
+    border-radius: 30px 30px 0px 0px;
+    padding: $a-spacing-4 $a-spacing-6;
     border-bottom: 1px solid $a-border-divider;
     text-align: center;
 
@@ -26,6 +26,7 @@
   }
 
   &__content {
+    background-color: $a-white;
     flex: 1;
     padding: $a-spacing-3 $a-spacing-6;
     overscroll-behavior: contain;
@@ -33,6 +34,7 @@
   }
 
   &__footer {
+    background-color: $a-white;
     display: flex;
     flex-direction: column;
     width: 100%;
