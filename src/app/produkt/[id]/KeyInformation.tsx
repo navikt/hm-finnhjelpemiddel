@@ -78,6 +78,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <Table>
           <Table.Header>
             <Table.Row>
+              <Table.ColumnHeader scope="col">Avtale</Table.ColumnHeader>
               <Table.ColumnHeader scope="col">Delkontrakt</Table.ColumnHeader>
               <Table.ColumnHeader scope="col">Rangering</Table.ColumnHeader>
             </Table.Row>
@@ -86,6 +87,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             {product.agreements.map((agreement, i) => {
               return (
                 <Table.Row key={i}>
+                  <Table.DataCell scope="row">{agreement.title}</Table.DataCell>
                   <Table.DataCell scope="row">{agreement.postTitle}</Table.DataCell>
                   <Table.DataCell align="center">{agreement.rank}</Table.DataCell>
                 </Table.Row>
