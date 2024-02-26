@@ -15,7 +15,6 @@
     thead tr > th:first-child {
       background-color: $a-surface-selected;
     }
-    
   }
 
   &__key-information {
@@ -52,7 +51,6 @@
     @include mixins.for-size(desktop-up) {
       display: flex;
       flex-direction: column;
-      max-height: 450px;
     }
   }
 
@@ -230,11 +228,9 @@
   }
 
   &__agreement-link {
-    .link {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-    }
+    display: flex;
+    align-items: center;
+    text-decoration: none;
   }
 
   &__products-on-post,

@@ -10,6 +10,8 @@ import ProductPage from './ProductPage'
 import './product-page.scss'
 
 export interface ProductsOnPost {
+  agreementId: string
+  agreementTitle: string
   postTitle: string
   postNr: number
   products?: Product[]
@@ -37,7 +39,7 @@ export default async function ProduktPage({ params }: Props) {
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
 
-  //Har ikke tatt hensyn til at produktet kan være på flere avtaler, kun at produktet kan være på flere rangeringer på samme avtale.
+  //NB! Et produkt kan være på flere avtaler og på flere delkontrakter med ulik rangering for hver avtale.
   const productsOnPosts: ProductsOnPost[] | undefined =
     agreements &&
     (await Promise.all(
@@ -55,6 +57,8 @@ export default async function ProduktPage({ params }: Props) {
                 return agreementA && agreementB ? sortWithNullValuesAtEnd(agreementA[0], agreementB[0]) : 0
               })
             return {
+              agreementId: agreement.id,
+              agreementTitle: agreement.title,
               postTitle: agreement.postTitle,
               postNr: agreement.postNr,
               products: productsOnPost,
