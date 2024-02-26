@@ -53,6 +53,7 @@ export const accessoriesMock: Product[] = [
         filters: {},
         expired: '2043-08-07T14:33:40.468028091',
         agreements: agreements,
+        status: 'ACTIVE',
       },
     ],
     compareData: { techDataRange: {}, agreementRank: null },

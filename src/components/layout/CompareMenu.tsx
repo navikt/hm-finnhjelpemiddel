@@ -5,7 +5,7 @@ import { AnimatePresence, Variants, motion } from 'framer-motion'
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button } from '@navikt/ds-react'
 
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
 import classNames from 'classnames'
 import ProductCard from '../ProductCard'

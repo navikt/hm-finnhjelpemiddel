@@ -28,6 +28,8 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
   const rank = product.agreements?.length === 1 ? product.agreements[0].rank : minRank
   const agreementRankText =
     typeof rank === 'number' ? `Rangert som nr ${rank} på avtale med NAV.` : 'Er på avtale med NAV uten rangering.'
+  const allVariantsExpired = product.variants.every((variant) => variant.status === 'INACTIVE')
+  const allVariantsExpiredDates = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
   return (
     <>
@@ -38,13 +40,10 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             <Heading level="1" size="large" spacing>
               {product.title}
             </Heading>
-            {/* TODO: check all expired dates */}
-            {new Date(product.variants[0].expired).getTime() <= Date.now() ? (
+            {(allVariantsExpiredDates || allVariantsExpired) && (
               <div className="product-info__expired-propducts">
                 <Alert variant="warning">Dette produktet er utgått</Alert>
               </div>
-            ) : (
-              ''
             )}
             {rank && (
               <div className="product-info__agreement-rank">

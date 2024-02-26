@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 
@@ -19,7 +19,9 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 
+import ActiveFilters from '@/components/filters/ActiveFilters'
 import CompareMenu from '@/components/layout/CompareMenu'
+import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
 
@@ -32,11 +34,11 @@ export default function SearchPage() {
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
 
-  const [showSidebar, setShowSidebar] = useState(false)
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
-  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+
+  const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
 
   const formMethods = useForm<SearchData>({
     defaultValues: {
@@ -95,11 +97,6 @@ export default function SearchPage() {
     searchResultRef.current && searchResultRef.current.scrollIntoView()
   }
 
-  useEffect(() => {
-    setShowSidebar(window.innerWidth >= 1100)
-    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1100))
-  }, [])
-
   const onReset = () => {
     formMethods.reset()
     setPage(1)
@@ -118,6 +115,7 @@ export default function SearchPage() {
         <HGrid columns={{ xs: 1, md: '374px auto' }} gap={{ xs: '4', md: '18' }}>
           <Show above="md">
             <section className="filter-container">
+              <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
               <SearchForm
                 onSubmit={onSubmit}
                 filters={data?.at(-1)?.filters}
@@ -167,13 +165,14 @@ export default function SearchPage() {
               >
                 Filter
               </Button>
-              <MobileOverlay open={mobileOverlayOpen}>
+              <MobileOverlay open={isMobileOverlayOpen}>
                 <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
                   <Heading level="1" size="medium">
                     Filtrer søket
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
+                  <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
                   <SearchForm
                     onSubmit={onSubmit}
                     filters={data?.at(-1)?.filters}

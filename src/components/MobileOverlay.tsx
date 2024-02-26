@@ -15,7 +15,7 @@ const modalVariants: Variants = {
     },
   },
   open: {
-    height: '100%',
+    height: '90%',
     transition: {
       ease: 'easeOut',
       duration: 0.4,

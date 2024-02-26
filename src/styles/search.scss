@@ -1,6 +1,7 @@
 @use './_mixins';
 
 @import '@navikt/ds-tokens/dist/tokens';
+@import './z-index.scss';
 
 .search {
   &__page-up-button {
@@ -124,6 +125,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
 }
 
 .popover {
@@ -131,7 +133,7 @@
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid var(--ac-combobox-list-border-color, var(--a-border-divider));
-  z-index: 10;
+  z-index: var(--z-index-popover);
 
   .popover-content {
     margin: 0;

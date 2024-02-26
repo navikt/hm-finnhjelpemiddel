@@ -1,8 +1,8 @@
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
-  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
+  FilterCategories,
   filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
@@ -22,11 +22,11 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  Product,
-  ProductVariant,
-  mapProductVariant,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
+  mapProductVariant,
+  Product,
+  ProductVariant,
 } from './product-util'
 import {
   AgreementDocResponse,
@@ -267,11 +267,11 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
   ]
 
   const queryFilters: Array<any> = [
-    {
-      term: {
-        status: 'ACTIVE',
-      },
-    },
+    /*    {
+          term: {
+            status: 'ACTIVE',
+          },
+        },*/
   ]
 
   if (hasAgreementsOnly) {
@@ -1033,11 +1033,11 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
             },
           },
           filter: [
-            {
-              term: {
-                status: 'ACTIVE',
-              },
-            },
+            /*            {
+                          term: {
+                            status: 'ACTIVE',
+                          },
+                        },*/
           ],
         },
       },

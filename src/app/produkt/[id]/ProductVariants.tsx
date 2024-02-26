@@ -4,11 +4,11 @@ import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
-import { sortIntWithStringFallback } from '@/utils/sort-util'
+import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 
 type SortColumns = {
@@ -17,8 +17,8 @@ type SortColumns = {
 }
 
 const ProductVariants = ({ product }: { product: Product }) => {
-  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })
-
+  /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
+  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
     return variants.sort((variantA, variantB) => {
       if (sortColumns.orderBy === 'HMS') {
@@ -28,6 +28,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
             variantB.hmsArtNr,
             sortColumns?.direction === 'descending'
           )
+        }
+        return -1
+      }
+      if (sortColumns.orderBy === 'Expired') {
+        if (variantA.status && variantB.status) {
+          return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
         }
         return -1
       }
@@ -127,9 +133,18 @@ const ProductVariants = ({ product }: { product: Product }) => {
         <Table>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Tittel</Table.ColumnHeader>
+              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
               {sortedByKey.map((variant) => (
-                <Table.ColumnHeader key={variant.id}>{variantTitle(variant.articleName)}</Table.ColumnHeader>
+                <Table.ColumnHeader key={variant.id}>
+                  <VStack gap="3">
+                    {variant.status === 'INACTIVE' && (
+                      <Tag size="small" variant="warning-moderate">
+                        Utgått
+                      </Tag>
+                    )}
+                    {variantTitle(variant.articleName)}
+                  </VStack>
+                </Table.ColumnHeader>
               ))}
             </Table.Row>
           </Table.Header>
