@@ -8,6 +8,10 @@
   }
 
   .comparing-table {
+    * {
+      font-size: 1rem;
+    }
+
     thead tr {
       background-color: $a-surface-selected;
     }

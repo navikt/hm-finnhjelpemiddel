@@ -1,10 +1,10 @@
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import ProductCardCompare from '@/components/ProductCardCompare'
 import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
+import ProductCard from '@/components/ProductCard'
 import { Bleed } from '@navikt/ds-react'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import './product-page.scss'
@@ -31,7 +31,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
                   <div className="product-page-section__card-container">
                     {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
                     {matchingProducts.map((product, i) => (
-                      <ProductCardCompare key={i} product={product} showRank={true} />
+                      <ProductCard product={product} />
                     ))}
                   </div>
                 ) : (

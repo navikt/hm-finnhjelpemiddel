@@ -1,68 +1,46 @@
-import { SearchData } from '@/utils/api-util'
+'use client'
+
 import { useHydratedCompareStore } from '@/utils/compare-state-util'
 import { Product } from '@/utils/product-util'
-import { PackageIcon } from '@navikt/aksel-icons'
+import { MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Checkbox, Detail, HStack, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
-import { RefObject, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useState } from 'react'
 import ProductImage from './ProductImage'
 
 const ProductCard = ({
   product,
   rank,
-  hidePictures = false,
-  formRef,
-  size,
+  type,
   handleIsoButton,
 }: {
   product: Product
   rank?: number
-  hidePictures?: boolean
-  formRef?: RefObject<HTMLFormElement>
-  size?: 'large'
+  type?: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox'
   handleIsoButton?: (value: string) => void
 }) => {
-  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
-  const { setValue } = useFormContext<SearchData>()
-
-  const toggleCompareProduct = () => {
-    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product)
-      : setProductToCompare(product)
-
-    // if (firstChecked) {
-    //   setCompareMenuState(CompareMenuState.Open)
-    //   setFirstChecked(false)
-    // }
-  }
-
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
-
+  const { productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   const currentRank = rank ? rank : minRank
+  let cardClassName = ''
 
-  //TODO sjekk at klikkflate er minst 24x24
-  const compareCheckbox = (
-    <Checkbox
-      className="product-card__checkbox"
-      size="small"
-      value="Legg produktet til sammenligning"
-      onChange={toggleCompareProduct}
-      checked={isInProductsToCompare}
-    >
-      <div aria-label={`sammenlign ${product.title}`}>
-        <span aria-hidden>Sammenlign</span>
-      </div>
-    </Checkbox>
-  )
+  if (type === 'plain') {
+    cardClassName = 'product-card'
+  } else if (type === 'large-with-checkbox') {
+    cardClassName = 'product-card--large'
+  } else if (type === 'checkbox') {
+    cardClassName = 'product-card--checkbox'
+  } else if (type === 'removable') {
+    cardClassName = 'product-card--removable'
+  } else if (type === 'no-picture') {
+    cardClassName = 'product-card--no-picture'
+  }
 
-  const cardClassName = size ? 'product-card--large' : 'product-card--compare'
-
-  if (hidePictures) {
+  if (type === 'no-picture') {
     return (
       <Box
         paddingInline="2"
@@ -74,7 +52,7 @@ const ProductCard = ({
             <Detail textColor="subtle">
               {rank ? (rank < 90 ? `Rangering ${rank}` : 'Ingen rangering') : 'Ikke på avtale'}
             </Detail>
-            {compareCheckbox}
+            <CompareCheckbox product={product} />
           </HStack>
           <Link
             className="product-card__link"
@@ -95,10 +73,14 @@ const ProductCard = ({
     <Box
       padding="2"
       className={classNames(cardClassName, {
-        'product-card__checked': isInProductsToCompare,
+        'product-card__checked': isInProductsToCompare && type !== 'plain' && type !== 'removable',
       })}
     >
-      {compareCheckbox}
+      {type === 'plain' ? null : type === 'removable' ? (
+        <RemoveButton product={product} />
+      ) : (
+        <CompareCheckbox product={product} />
+      )}
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">
@@ -114,9 +96,9 @@ const ProductCard = ({
               {product.title}
             </BodyShort>
           </Link>
-          {size === 'large' && handleIsoButton && (
+          {type === 'large-with-checkbox' && handleIsoButton && (
             <Button
-              className="product-card--large__iso-button"
+              className="product-card__iso-button"
               variant="tertiary-neutral"
               icon={<PackageIcon />}
               onClick={() => handleIsoButton(product.isoCategoryTitle)}
@@ -129,6 +111,49 @@ const ProductCard = ({
         <ProductImage src={firstImageSrc} />
       </VStack>
     </Box>
+  )
+}
+
+const CompareCheckbox = ({ product }: { product: Product }) => {
+  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+
+  const toggleCompareProduct = () => {
+    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
+      ? removeProduct(product)
+      : setProductToCompare(product)
+
+    // if (firstChecked) {
+    //   setCompareMenuState(CompareMenuState.Open)
+    //   setFirstChecked(false)
+    // }
+  }
+
+  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+  return (
+    <Checkbox
+      className="product-card__checkbox"
+      size="small"
+      value="Legg produktet til sammenligning"
+      onChange={toggleCompareProduct}
+      checked={isInProductsToCompare}
+    >
+      <div aria-label={`sammenlign ${product.title}`}>
+        <span aria-hidden>Sammenlign</span>
+      </div>
+    </Checkbox>
+  )
+}
+
+const RemoveButton = ({ product }: { product: Product }) => {
+  const { removeProduct } = useHydratedCompareStore()
+
+  return (
+    <Button
+      variant="tertiary-neutral"
+      className="product-card__remove-button"
+      onClick={() => removeProduct(product)}
+      icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
+    />
   )
 }
 

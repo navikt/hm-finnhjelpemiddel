@@ -36,8 +36,8 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       onSubmit={formMethods.handleSubmit(onSubmit)}
       aria-controls="agreementSearchResults"
     >
-      {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-      <Search label="Søk etter titler i avtalen" size="small"></Search>
+      {/* {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
+      <Search label="Søk etter titler i avtalen" size="small"></Search> */}
 
       <FilterView filters={filters} />
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}

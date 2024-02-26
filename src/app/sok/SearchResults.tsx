@@ -90,7 +90,7 @@ const SearchResults = ({
       <HStack as={'ol'} gap={{ xs: '4', md: '5' }} id="searchResults" className="search-results">
         {products.map((product) => (
           <li>
-            <ProductCard product={product} handleIsoButton={handleSetIsoFilter} formRef={formRef} size="large" />
+            <ProductCard product={product} handleIsoButton={handleSetIsoFilter} type="large-with-checkbox" />
           </li>
         ))}
       </HStack>

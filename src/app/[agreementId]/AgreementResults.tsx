@@ -73,7 +73,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
                     key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                     product={productWithRank.product}
                     rank={productWithRank.rank}
-                    hidePictures={pictureToggleValue === 'hide-pictures'}
+                    type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
                     handleIsoButton={handleSetIsoFilter}
                   ></ProductCard>
                 </li>
