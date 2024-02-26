@@ -20,7 +20,7 @@ const ProductImage = ({ src }: { src: string | undefined }) => {
           }}
           alt="Produktbilde"
           fill
-          style={{ objectFit: 'contain', opacity: !isLoading ? 1 : 0 }}
+          style={{ objectFit: 'contain', padding: '5px', opacity: !isLoading ? 1 : 0 }}
           sizes="50vw"
           priority
         />
@@ -30,7 +30,7 @@ const ProductImage = ({ src }: { src: string | undefined }) => {
         src={'/assets/image-error.png'}
         alt="Produktbilde mangler"
         fill
-        style={{ padding: '10px' }}
+        style={{ padding: '30px' }}
         sizes="50vw"
         priority
       />

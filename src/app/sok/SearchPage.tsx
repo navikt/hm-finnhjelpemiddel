@@ -223,22 +223,24 @@ export default function SearchPage() {
           </Hide>
 
           <AnimateLayout>
-            <SearchResults
-              data={data}
-              loadMore={loadMore}
-              isLoading={isLoading}
-              searchResultRef={searchResultRef}
-              formRef={searchFormRef}
-            />
-
-            {!isAtPageTop && (
-              <Button
-                type="button"
-                className="search__page-up-button"
-                icon={<ArrowUpIcon title="Gå til toppen av siden" />}
-                onClick={() => setFocusOnSearchResults()}
+            <VStack>
+              <SearchResults
+                data={data}
+                loadMore={loadMore}
+                isLoading={isLoading}
+                searchResultRef={searchResultRef}
+                formRef={searchFormRef}
               />
-            )}
+
+              {!isAtPageTop && (
+                <Button
+                  type="button"
+                  className="search__page-up-button"
+                  icon={<ArrowUpIcon title="Gå til toppen av siden" />}
+                  onClick={() => setFocusOnSearchResults()}
+                />
+              )}
+            </VStack>
           </AnimateLayout>
         </HGrid>
       </FormProvider>

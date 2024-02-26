@@ -1,6 +1,6 @@
 'use client'
 
-import { useHydratedCompareStore } from '@/utils/compare-state-util'
+import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Checkbox, Detail, HStack, Link, VStack } from '@navikt/ds-react'

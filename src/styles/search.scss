@@ -19,12 +19,12 @@
       max-width: 100%;
     }
   }
+}
 
-  .results__loader {
-    margin-top: $a-spacing-12;
-    align-self: center;
-    justify-self: center;
-  }
+.results__loader {
+  margin-top: $a-spacing-12;
+  align-self: center;
+  justify-self: center;
 }
 
 .filter-container {
@@ -39,12 +39,12 @@
   }
 
   &__agreement-switch {
-    margin-bottom: $a-spacing-4;
+    margin-bottom: $a-spacing-6;
   }
 
   &__filters {
-    margin-top: $a-spacing-3;
-    margin-bottom: $a-spacing-4;
+    margin-top: $a-spacing-4;
+    margin-bottom: $a-spacing-6;
 
     .checkbox-filter,
     .input-filter {

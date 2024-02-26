@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Heading, Switch } from '@navikt/ds-react'
+import { Button, Switch } from '@navikt/ds-react'
 
 import { FilterData, SearchData, SelectedFilters } from '@/utils/api-util'
 
@@ -35,9 +35,6 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       aria-controls="searchResults"
     >
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-      <Heading size="small" level="2">
-        Filter
-      </Heading>
 
       <div className="filter-container__agreement-switch">
         <Controller
