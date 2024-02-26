@@ -22,7 +22,7 @@ const ActiveFilters = ({ selectedFilters, searchFormRef, withoutHeading }: Props
     .flat()
     .filter((val) => val)
 
-  if (withoutHeading) {
+  const FilterChips = () => {
     return (
       <HStack gap="12">
         <Chips>
@@ -50,6 +50,10 @@ const ActiveFilters = ({ selectedFilters, searchFormRef, withoutHeading }: Props
       </HStack>
     )
   }
+
+  if (withoutHeading) {
+    return <FilterChips />
+  }
   return (
     <>
       {filterValues.length > 0 && (
@@ -57,30 +61,7 @@ const ActiveFilters = ({ selectedFilters, searchFormRef, withoutHeading }: Props
           <Heading level="2" size="small">
             Valgte filtre
           </Heading>
-          <HStack gap="12">
-            <Chips>
-              {filterChips.map(({ key, label, values }) => {
-                return values
-                  .filter((v) => v)
-                  .map((value) => {
-                    return (
-                      <Chips.Removable
-                        key={key + value}
-                        onClick={() => {
-                          formMethods.setValue(
-                            `filters.${key}`,
-                            values.filter((val) => val !== value)
-                          )
-                          searchFormRef.current?.requestSubmit()
-                        }}
-                      >
-                        {label === FilterCategories.produktkategori ? value : `${label}: ${value}`}
-                      </Chips.Removable>
-                    )
-                  })
-              })}
-            </Chips>
-          </HStack>
+          <FilterChips />
         </VStack>
       )}
     </>

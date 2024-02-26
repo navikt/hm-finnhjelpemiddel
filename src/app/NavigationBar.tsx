@@ -4,7 +4,7 @@ import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel
 import NextLink from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
-import AutocompleteSearch from './filters/AutocompleteSearch'
+import AutocompleteSearch from '../components/filters/AutocompleteSearch'
 import { usePathname, useRouter } from 'next/navigation'
 import { useMenuStore } from '@/utils/global-state-util'
 

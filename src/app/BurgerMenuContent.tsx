@@ -7,7 +7,7 @@ import useSWR from 'swr'
 import NextLink from 'next/link'
 import { getAgreementLabels } from '@/utils/api-util'
 import { useRouter } from 'next/navigation'
-import AutocompleteSearch from './filters/AutocompleteSearch'
+import AutocompleteSearch from '../components/filters/AutocompleteSearch'
 
 interface Props {
   searchOpen: boolean

@@ -11,7 +11,7 @@ import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import Footer from '@/components/layout/Footer'
-import NavigationBar from '@/components/NavigationBar'
+import NavigationBar from '@/app/NavigationBar'
 import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
