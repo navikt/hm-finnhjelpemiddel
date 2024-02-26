@@ -5,12 +5,13 @@ import NextLink from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
 import AutocompleteSearch from './filters/AutocompleteSearch'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useMenuStore } from '@/utils/global-state-util'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const pathname = usePathname()
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
 
@@ -19,9 +20,13 @@ const NavigationBar = () => {
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)
-      router.push('/sok?term=' + searchTerm)
+      if (pathname !== '/sok' && searchTerm.length === 0) {
+        return
+      } else {
+        router.push('/sok?term=' + searchTerm)
+      }
     },
-    [router]
+    [router, pathname]
   )
 
   useEffect(() => {
