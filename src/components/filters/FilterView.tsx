@@ -2,7 +2,7 @@ import { CheckboxFilterInput } from '@/components/filters/CheckboxFilterInput'
 import { RangeFilterInput } from '@/components/filters/RangeFilterInput'
 import { FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/product-util'
-import { BodyShort, Heading, VStack } from '@navikt/ds-react'
+import { BodyShort, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 
@@ -27,9 +27,6 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <VStack>
-      <Heading size="small" level="2">
-        Filter
-      </Heading>
       <div className="search__filters">
         <CheckboxFilterInput filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} />
         <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />

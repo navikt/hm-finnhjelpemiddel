@@ -117,7 +117,9 @@ const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
         type="search"
         ref={searchFieldRef}
         label="Skriv ett eller flere søkeord"
-        hideLabel={false}
+        variant="simple"
+        hideLabel={true}
+        size="medium"
         role="combobox"
         aria-expanded={openState}
         aria-controls={'suggestion-list'}

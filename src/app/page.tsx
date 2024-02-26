@@ -1,40 +1,22 @@
 'use client'
 
-import { useCallback, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
-import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
+import { Bleed, BodyShort, HStack, Heading, Hide, VStack } from '@navikt/ds-react'
 
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
-import ReadMore from '@/components/ReadMore'
-import AutocompleteSearch from '@/components/filters/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
 
 function Home() {
-  const router = useRouter()
-  const agreementHeadingRef = useRef<HTMLHeadingElement>(null)
-
-  const setFocusOnHeading = () => {
-    agreementHeadingRef.current && agreementHeadingRef.current.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  const onSearch = useCallback(
-    (searchTerm: string) => {
-      router.push('/sok?term=' + searchTerm)
-    },
-    [router]
-  )
-
-  //TODO: What to do if error?
-  const { data: agreements, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+  const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
 
@@ -47,74 +29,41 @@ function Home() {
     return filteredData
   }, [agreements])
 
-  const first15Agreements = sortedAgreements?.slice(0, 15)
-  const lastAgreements = sortedAgreements?.slice(15)
-
-  const agreementLink = (id: string, label: string) => {
-    let hrefSok = `/sok?agreement&rammeavtale=${label}`
-    let hrefHurtigoversikt = `/${id}`
-
-    return (
-      <div className="home-page__agreement-link" key={id}>
-        <NextLink href={hrefHurtigoversikt}>
-          {/* <NextLink href={hrefSok}> */}
-
-          <BodyShort> {label} </BodyShort>
-        </NextLink>
-      </div>
-    )
-  }
-
   return (
-    <div className="home-page">
+    <>
       <AnimateLayout>
-        <div className="home-page__background-container">
-          <div className="home-page__container illustration-container">
-            <div className="home-page__heading-and-search">
-              <Heading level="1" size="large">
-                Søk i Norges største samling av hjelpemidler på nett.
-              </Heading>
-              <AutocompleteSearch onSearch={onSearch} />
-            </div>
-            <Image src="/illustrasjon.svg" width="316" height="173" alt="" aria-hidden />
-          </div>
-        </div>
-        <div className="home-page__background-container red">
-          <div className="home-page__container">
-            <div className="home-page__agreement-heading">
-              <Heading level="2" size="medium" ref={agreementHeadingRef}>
-                Hjelpemidler på avtale med NAV
-              </Heading>
-              <BodyLong size="large">
-                NAV inngår avtaler med leverandører om kjøp av hjelpemidler. Hver avtale gjelder for en begrenset
-                tidsperiode.
-              </BodyLong>
-              <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden />
-            </div>
+        <Bleed marginInline="full" asChild reflectivePadding>
+          <div className="main-wrapper--background-blue">
+            <VStack className="main-wrapper--large">
+              <HStack justify={{ xl: 'space-between' }} gap={{ lg: '20' }} className="spacing-top--xlarge">
+                <div className="home-page__heading">
+                  <Heading level="1" size="large">
+                    Finn hjelpemiddel i Norges største samling av hjelpemidler på nett.
+                  </Heading>
+                </div>
+                <Hide below="lg">
+                  <Image src="/illustrasjon.svg" width="316" height="173" alt="Illustrasjon" aria-hidden />
+                </Hide>
+              </HStack>
 
-            <div className="home-page__agreement-links-container">
-              <div className="home-page__agreement-links">
-                {first15Agreements?.map(({ id, label }) => {
-                  return agreementLink(id, label)
+              <HStack gap="5" className="spacing-bottom--xlarge">
+                {sortedAgreements?.map(({ id, label }) => {
+                  //Wish to replace id by label in url
+                  let hrefSok = `/sok?agreement&rammeavtale=${label}`
+                  return (
+                    <div className="home-page__agreement-link" key={id}>
+                      <NextLink href={`/${id}`}>
+                        <BodyShort> {label} </BodyShort>
+                      </NextLink>
+                    </div>
+                  )
                 })}
-              </div>
-              <ReadMore
-                content={
-                  <div className="home-page__agreement-links read-more-content">
-                    {lastAgreements?.map(({ id, label }) => {
-                      return agreementLink(id, label)
-                    })}
-                  </div>
-                }
-                buttonOpen={'Vis alle avtaler'}
-                buttonClose={'Skjul visning av alle avtaler'}
-                setFocus={setFocusOnHeading}
-              />
-            </div>
+              </HStack>
+            </VStack>
           </div>
-        </div>
+        </Bleed>
       </AnimateLayout>
-    </div>
+    </>
   )
 }
 

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Alert, BodyShort, Button, Checkbox, Heading, Loader } from '@navikt/ds-react'
 
 import { FetchProductsWithFilters, SearchData } from '@/utils/api-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { smallImageLoader } from '@/utils/image-util'
 import { Product } from '@/utils/product-util'
 

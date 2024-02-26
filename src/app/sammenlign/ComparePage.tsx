@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/compare-state-util'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { mapSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 

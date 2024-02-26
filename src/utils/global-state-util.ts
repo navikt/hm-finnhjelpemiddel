@@ -61,3 +61,31 @@ export const useHydratedCompareStore = ((selector, compare) => {
         resetProductToCompare: () => undefined,
       }
 }) as typeof useProductCompareStore
+
+type MenuState = {
+  isMenuOpen: boolean
+  setMenuOpen(open: boolean): void
+}
+
+export const useMenuStore = create<MenuState>((set) => ({
+  isMenuOpen: false,
+  setMenuOpen: (open: boolean) =>
+    set((state) => {
+      if (open !== state.isMenuOpen) return { isMenuOpen: open }
+      return state
+    }),
+}))
+
+type MobileOverlayState = {
+  isMobileOverlayOpen: boolean
+  setMobileOverlayOpen(open: boolean): void
+}
+
+export const useMobileOverlayStore = create<MobileOverlayState>((set) => ({
+  isMobileOverlayOpen: false,
+  setMobileOverlayOpen: (open: boolean) =>
+    set((state) => {
+      if (open !== state.isMobileOverlayOpen) return { isMobileOverlayOpen: open }
+      return state
+    }),
+}))
