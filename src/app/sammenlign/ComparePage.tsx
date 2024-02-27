@@ -151,7 +151,7 @@ const CompareTable = ({
             <Table.ColumnHeader></Table.ColumnHeader>
             {productsToCompare.map((product) => (
               <Table.ColumnHeader key={'id-' + product.id}>
-                <ProductCard product={product} removeProduct={removeProduct} />
+                <ProductCard product={product} type="removable" />
               </Table.ColumnHeader>
             ))}
           </Table.Row>

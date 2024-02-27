@@ -1,10 +1,10 @@
 'use client'
 
-import React, { RefObject } from 'react'
-import { Select } from '@navikt/ds-react'
-import { useFormContext } from 'react-hook-form'
 import { isValidSortOrder, SearchData } from '@/utils/api-util'
+import { Select } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
+import React, { RefObject } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 type Props = {
   formRef: RefObject<HTMLFormElement>
@@ -28,6 +28,7 @@ const SortSearchResults = ({ formRef }: Props) => {
 
   return (
     <Select
+      size="small"
       label="Sortering"
       onChange={handleSelectedSorting}
       defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}

@@ -6,10 +6,12 @@
   gap: $a-spacing-4;
   box-sizing: border-box;
   max-width: 13rem;
+  margin-bottom: $a-spacing-3;
 }
 
 .single-filter-input {
   max-width: 6rem;
+  margin-bottom: $a-spacing-3;
 }
 
 .checkbox-filter-input {

@@ -1,5 +1,6 @@
 'use client'
 
+import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { SearchData } from '@/utils/api-util'
 import { ImageIcon } from '@navikt/aksel-icons'
@@ -7,7 +8,6 @@ import { Alert, HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-re
 import { useSearchParams } from 'next/navigation'
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
-import ProductCardNew from './ProductCardNew'
 
 const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formRef: RefObject<HTMLFormElement> }) => {
   const formMethods = useFormContext<SearchData>()
@@ -16,6 +16,11 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
 
   const handleSetToggle = (value: string) => {
     formMethods.setValue('hidePictures', value)
+    formRef.current?.requestSubmit()
+  }
+
+  const handleSetIsoFilter = (value: string) => {
+    formMethods.setValue(`filters.produktkategori`, [value])
     formRef.current?.requestSubmit()
   }
 
@@ -61,14 +66,17 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
             >
               {post.title}
             </Heading>
-            <HStack gap={'4'}>
+            <HStack as="ol" gap={'4'}>
               {post.products.map((productWithRank) => (
-                <ProductCardNew
-                  key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                  product={productWithRank.product}
-                  rank={productWithRank.rank}
-                  hidePictures={pictureToggleValue === 'hide-pictures'}
-                ></ProductCardNew>
+                <li key={productWithRank.product.id}>
+                  <ProductCard
+                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                    product={productWithRank.product}
+                    rank={productWithRank.rank}
+                    type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
+                    handleIsoButton={handleSetIsoFilter}
+                  ></ProductCard>
+                </li>
               ))}
             </HStack>
           </VStack>
