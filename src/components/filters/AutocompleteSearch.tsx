@@ -99,14 +99,8 @@ const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
       }
     } else if (event.key === 'Backspace') {
       event.preventDefault()
-      if (!inputValue.length) {
-        setSelectedOption('')
-        onSearch('')
-        setOpenState(false)
-      } else {
-        setShouldFetch(true)
-        setOpenState(true)
-      }
+      setShouldFetch(true)
+      setOpenState(true)
     }
   }
 
