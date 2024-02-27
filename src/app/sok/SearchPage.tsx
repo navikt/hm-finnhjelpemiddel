@@ -109,8 +109,6 @@ export default function SearchPage() {
     router.replace(pathname)
   }
 
-  console.log(searchData.searchTerm)
-
   return (
     <FormProvider {...formMethods}>
       <CompareMenu />
