@@ -216,7 +216,6 @@ export default function SearchPage() {
                     </HGrid>
                     <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
                   </VStack>
-                  <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
                 </MobileOverlay.Footer>
               </MobileOverlay>
             </div>
