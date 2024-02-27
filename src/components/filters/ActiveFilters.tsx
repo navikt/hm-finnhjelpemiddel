@@ -7,12 +7,11 @@ import { useFormContext } from 'react-hook-form'
 
 interface Props {
   selectedFilters: SelectedFilters
-  searchTerm: string
   searchFormRef: RefObject<HTMLFormElement>
   withoutHeading?: boolean
 }
 
-const ActiveFilters = ({ selectedFilters, searchTerm, searchFormRef, withoutHeading }: Props) => {
+const ActiveFilters = ({ selectedFilters, searchFormRef, withoutHeading }: Props) => {
   const formMethods = useFormContext<SearchData>()
   const filterChips = (Object.entries(selectedFilters) as Entries<SelectedFilters>).flatMap(([key, values]) => ({
     key,
@@ -27,14 +26,6 @@ const ActiveFilters = ({ selectedFilters, searchTerm, searchFormRef, withoutHead
     return (
       <HStack gap="12">
         <Chips>
-          {searchTerm && (
-            <Chips.Removable
-              onClick={() => {
-                formMethods.setValue('searchTerm', '')
-                searchFormRef.current?.requestSubmit()
-              }}
-            >{`Søkeord: ${searchTerm}`}</Chips.Removable>
-          )}
           {filterChips.map(({ key, label, values }) => {
             return values
               .filter((v) => v)
@@ -69,7 +60,7 @@ const ActiveFilters = ({ selectedFilters, searchTerm, searchFormRef, withoutHead
         <Heading level="2" size="small">
           Valgte filtre
         </Heading>
-        {filterValues.length > 0 || searchTerm ? <FilterChips /> : <BodyShort>Ingen filter</BodyShort>}
+        {filterValues.length > 0 ? <FilterChips /> : <BodyShort>Ingen filter</BodyShort>}
       </VStack>
     </>
   )

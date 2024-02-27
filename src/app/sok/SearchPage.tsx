@@ -115,11 +115,7 @@ export default function SearchPage() {
         <HGrid columns={{ xs: 1, md: '374px auto' }} gap={{ xs: '4', md: '18' }}>
           <Show above="md">
             <section className="filter-container">
-              <ActiveFilters
-                selectedFilters={searchData.filters}
-                searchTerm={searchData.searchTerm}
-                searchFormRef={searchFormRef}
-              />
+              <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
               <SearchForm
                 onSubmit={onSubmit}
                 filters={data?.at(-1)?.filters}
@@ -176,11 +172,7 @@ export default function SearchPage() {
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
-                  <ActiveFilters
-                    selectedFilters={searchData.filters}
-                    searchTerm={searchData.searchTerm}
-                    searchFormRef={searchFormRef}
-                  />
+                  <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
                   <SearchForm
                     onSubmit={onSubmit}
                     filters={data?.at(-1)?.filters}
