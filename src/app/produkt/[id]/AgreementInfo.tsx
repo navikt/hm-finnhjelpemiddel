@@ -56,7 +56,6 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
                                   key={product.id}
                                   product={product}
                                   rank={product.agreements?.find((ag) => ag.postNr === post.postNr)?.rank}
-                                  showRank={true}
                                 />
                               ))}
                             </div>
@@ -110,6 +109,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
                 <div className="agreement-details__products-on-post-list">
                   {post.products?.map((product) => (
                     <ProductCard
+                      key={product.id}
                       product={product}
                       rank={product.agreements?.find((ag) => ag.postNr === post.postNr)?.rank}
                       type="plain"

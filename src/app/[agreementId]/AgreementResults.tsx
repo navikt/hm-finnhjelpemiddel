@@ -68,7 +68,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
             </Heading>
             <HStack as="ol" gap={'4'}>
               {post.products.map((productWithRank) => (
-                <li>
+                <li key={productWithRank.product.id}>
                   <ProductCard
                     key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                     product={productWithRank.product}
