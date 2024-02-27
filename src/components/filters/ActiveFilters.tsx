@@ -27,7 +27,14 @@ const ActiveFilters = ({ selectedFilters, searchTerm, searchFormRef, withoutHead
     return (
       <HStack gap="12">
         <Chips>
-          {searchTerm && <Chips.Removable>{`Søkeord: ${searchTerm}`}</Chips.Removable>}
+          {searchTerm && (
+            <Chips.Removable
+              onClick={() => {
+                formMethods.setValue('searchTerm', '')
+                searchFormRef.current?.requestSubmit()
+              }}
+            >{`Søkeord: ${searchTerm}`}</Chips.Removable>
+          )}
           {filterChips.map(({ key, label, values }) => {
             return values
               .filter((v) => v)
