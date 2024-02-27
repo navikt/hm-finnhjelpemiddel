@@ -1,31 +1,37 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useInView } from 'react-intersection-observer'
-
+import { Agreement, makePostTitleBasedOnAgreementId, mapAgreementProducts } from '@/utils/agreement-util'
+import {
+  Filter,
+  FilterData,
+  SearchData,
+  SelectedFilters,
+  getFiltersAgreement,
+  getProductsOnAgreement,
+} from '@/utils/api-util'
+import { initialAgreementSearchDataState } from '@/utils/search-state-util'
+import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-
-import useSWRInfinite from 'swr/infinite'
-
-import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, HGrid, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
-
-import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
-import { initialSearchDataState } from '@/utils/search-state-util'
+import { useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
-import AnimateLayout from '@/components/layout/AnimateLayout'
-
-import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
-
-import ActiveFilters from '@/components/filters/ActiveFilters'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { useMobileOverlayStore } from '@/utils/global-state-util'
-import SearchForm from './SearchForm'
-import SearchResults from './SearchResults'
+import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { PostBucketResponse } from '@/utils/response-types'
+import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, HGrid, HStack, Heading, Hide, Link, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import useSWR from 'swr'
+import AgreementResults from './AgreementResults'
+import FilterForm from './FilterForm'
 
-export default function SearchPage() {
+export type AgreementSearchData = {
+  searchTerm: string
+  hidePictures: boolean
+  filters: SelectedFilters
+}
+
+const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -35,101 +41,98 @@ export default function SearchPage() {
   const searchFormRef = useRef<HTMLFormElement>(null)
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
-
-  const formMethods = useForm<FormSearchData>({
+  const formMethods = useForm<SearchData>({
     defaultValues: {
-      ...initialSearchDataState,
+      ...initialAgreementSearchDataState,
       ...searchData,
     },
   })
 
-  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
+  const onSubmit: SubmitHandler<SearchData> = (data) => {
+    router.replace(`${pathname}?${toSearchQueryString(data)}`, { scroll: false })
   }
 
-  const {
-    data,
-    size: page,
-    setSize: setPage,
-    isLoading,
-  } = useSWRInfinite<FetchProductsWithFilters>(
-    (index, previousPageData?: FetchProductsWithFilters) => {
-      if (previousPageData && previousPageData.products.length === 0) return null
-      return {
-        from: index * PAGE_SIZE,
-        size: PAGE_SIZE,
-        searchData,
-      }
-    },
-    fetchProducts,
+  const { data: postBucktes, isLoading: postsIsLoading } = useSWR<PostBucketResponse[]>(
+    { agreementId: agreement.id, searchData: searchData },
+    getProductsOnAgreement,
+    { keepPreviousData: true }
+  )
+
+  const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
+    { agreementId: agreement.id },
+    getFiltersAgreement,
     {
-      initialSize: Number(searchParams.get('page') || '1'),
       keepPreviousData: true,
-      revalidateFirstPage: false,
     }
   )
 
-  const loadMore = useMemo(() => {
-    const isEmpty = data?.[0]?.products.length === 0
-    const isReachingEnd = isEmpty || (data && data[data.length - 1]?.products.length < PAGE_SIZE)
-    if (isReachingEnd) {
-      return // no need to fetch another page
-    }
-
-    return () => {
-      const nextPage = page + 1
-      const newParams = new URLSearchParams(searchParams)
-      newParams.set('page', `${nextPage}`)
-      const searchQueryString = newParams.toString()
-      router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-      setPage(nextPage)
-    }
-  }, [data, page, setPage, pathname, router, searchParams])
-
-  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
-  const searchResultRef = useRef<HTMLHeadingElement>(null)
-
-  const setFocusOnSearchResults = () => {
-    searchResultRef.current && searchResultRef.current.scrollIntoView()
+  const postFilters: Filter = {
+    values: agreement.posts
+      .sort((a, b) => a.nr - b.nr)
+      .map((post) => ({
+        key: post.title,
+        doc_count: 1,
+        label: makePostTitleBasedOnAgreementId(post.title, post.nr, agreement.id),
+      })),
   }
+
+  // if (postsIsLoading || filtersIsLoading) {
+  //   return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
+  // }
+
+  if (!postBucktes || !filtersFromData) {
+    return (
+      <HStack justify="center" style={{ marginTop: '48px' }}>
+        <Loader size="3xlarge" title="Laster produkter" />
+      </HStack>
+    )
+  }
+
+  const filters: FilterData = {
+    ...filtersFromData,
+    delkontrakt: postFilters,
+  }
+
+  const posts = mapAgreementProducts(postBucktes, agreement)
 
   const onReset = () => {
     formMethods.reset()
-    setPage(1)
     router.replace(pathname)
   }
 
   return (
-    <VStack className="main-wrapper--xlarge spacing-bottom--large">
-      <VStack gap="5" className="spacing-top--xlarge spacing-bottom--xlarge">
-        <Heading level="1" size="large" ref={pageTopRef}>
-          Alle hjelpemiddel
+    <VStack className="main-wrapper--large spacing-bottom--large">
+      <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
+        <HStack gap="3">
+          <Link as={NextLink} href="/" variant="subtle">
+            Alle hjelpemiddel
+          </Link>
+          <BodyShort textColor="subtle">/</BodyShort>
+        </HStack>
+        <Heading level="1" size="large">
+          {agreement.title}
         </Heading>
       </VStack>
+
       <FormProvider {...formMethods}>
         <CompareMenu />
-        <HGrid columns={{ xs: 1, md: '374px auto' }} gap={{ xs: '4', md: '18' }}>
+        <HGrid columns={{ xs: 1, md: '390px auto' }} gap={{ xs: '4', md: '18' }}>
           <Show above="md">
             <section className="filter-container">
-              <ActiveFilters
-                selectedFilters={searchData.filters}
-                searchTerm={searchData.searchTerm}
-                searchFormRef={searchFormRef}
-              />
-              <SearchForm
+              <FilterForm
                 onSubmit={onSubmit}
-                filters={data?.at(-1)?.filters}
-                selectedFilters={searchData.filters}
                 ref={searchFormRef}
+                filters={filters}
+                selectedFilters={searchData.filters}
               />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
-                  variant="tertiary"
+                  variant="tertiary-neutral"
                   size="small"
                   icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                   onClick={() => {
@@ -147,9 +150,10 @@ export default function SearchPage() {
                 >
                   <Popover.Content>Søket er kopiert!</Popover.Content>
                 </Popover>
+
                 <Button
                   type="button"
-                  variant="tertiary"
+                  variant="tertiary-neutral"
                   size="small"
                   icon={<TrashIcon title="Nullstill søket" />}
                   onClick={onReset}
@@ -169,23 +173,19 @@ export default function SearchPage() {
               >
                 Filter
               </Button>
-              <MobileOverlay open={isMobileOverlayOpen}>
+
+              <MobileOverlay open={mobileOverlayOpen}>
                 <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
                   <Heading level="1" size="medium">
                     Filtrer søket
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
-                  <ActiveFilters
-                    selectedFilters={searchData.filters}
-                    searchTerm={searchData.searchTerm}
-                    searchFormRef={searchFormRef}
-                  />
-                  <SearchForm
+                  <FilterForm
                     onSubmit={onSubmit}
-                    filters={data?.at(-1)?.filters}
-                    selectedFilters={searchData.filters}
                     ref={searchFormRef}
+                    filters={filters}
+                    selectedFilters={searchData.filters}
                   />
                 </MobileOverlay.Content>
                 <MobileOverlay.Footer>
@@ -228,29 +228,11 @@ export default function SearchPage() {
               </MobileOverlay>
             </div>
           </Hide>
-
-          <AnimateLayout>
-            <VStack>
-              <SearchResults
-                data={data}
-                loadMore={loadMore}
-                isLoading={isLoading}
-                searchResultRef={searchResultRef}
-                formRef={searchFormRef}
-              />
-
-              {!isAtPageTop && (
-                <Button
-                  type="button"
-                  className="search__page-up-button"
-                  icon={<ArrowUpIcon title="Gå til toppen av siden" />}
-                  onClick={() => setFocusOnSearchResults()}
-                />
-              )}
-            </VStack>
-          </AnimateLayout>
+          <AgreementResults posts={posts} formRef={searchFormRef}></AgreementResults>
         </HGrid>
       </FormProvider>
     </VStack>
   )
 }
+
+export default AgreementPage

@@ -1,10 +1,8 @@
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
-import { BodyShort, HStack, Heading, Link, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
-import NextLink from 'next/link'
 import { Suspense } from 'react'
-import AgreementSearch from './AgreementSearch'
+import AgreementPage from './AgreementPage'
 
 type Props = {
   params: { agreementId: string }
@@ -22,24 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function AgreementPage({ params }: Props) {
+export default async function Page({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
   return (
     <Suspense>
-      <VStack className="main-wrapper--large spacing-bottom--large">
-        <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
-          <HStack gap="3">
-            <Link as={NextLink} href="/" variant="subtle">
-              Alle hjelpemiddel
-            </Link>
-            <BodyShort textColor="subtle">/</BodyShort>
-          </HStack>
-          <Heading level="1" size="large">
-            {agreement.title}
-          </Heading>
-        </VStack>
-        <AgreementSearch agreement={agreement} />
-      </VStack>
+      <AgreementPage agreement={agreement} />
     </Suspense>
   )
 }

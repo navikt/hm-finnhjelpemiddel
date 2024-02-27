@@ -37,6 +37,10 @@ export default async function AgreementsInfoPage() {
               gjennomført en kvalitetssikring av hjelpemiddelet.
             </BodyLong>
           </article>
+
+          <article>
+            <AgreementList />
+          </article>
           <article>
             <Heading level="2" size="medium">
               Slik kan du se at et hjelpemiddel er på avtale med NAV
@@ -88,9 +92,6 @@ export default async function AgreementsInfoPage() {
               buttonOpen={'Les mer'}
               buttonClose={'Les mindre'}
             />
-          </article>
-          <article>
-            <AgreementList />
           </article>
         </div>
       </AnimateLayout>

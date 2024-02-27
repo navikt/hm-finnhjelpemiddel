@@ -5,34 +5,112 @@
 .product-card {
   display: flex;
   flex-direction: column;
-  width: 10rem;
-  height: 14rem;
-  box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
-  border-radius: $a-border-radius-large;
-  background-color: $a-white;
+  border-radius: 8px;
+  outline: 1px solid $a-border-subtle;
+  background-color: $a-surface-default;
+  width: 10.5rem;
+  height: 13.7rem;
 
-  &--fullWidth {
-    width: 100%;
-    min-width: 11rem;
+  &__content {
+    position: relative;
   }
 
-  &__link-content {
-    padding: $a-spacing-2;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: $a-spacing-1;
-    color: $a-text-default;
+  .product-card__content {
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    height: 100%;
+  }
 
-    &:hover :not(.icon-wrapper),
-    &:focus :not(.icon-wrapper) {
+  &:hover {
+    outline: 1px solid $a-border-action;
+  }
+
+  &__link {
+    height: 2.75rem;
+    outline: none;
+    text-decoration: none;
+    color: $a-text-default;
+    font-weight: 400;
+    line-height: 1.375rem;
+
+    &:hover,
+    &:focus {
       text-decoration: underline;
       color: $a-text-action;
+      background-color: white;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
     }
   }
 
-  .remove-button {
+  .product-card-image-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+
+    .product-card-image {
+      width: 145px;
+      height: 145px;
+
+      position: relative;
+    }
+  }
+
+  &__checked:hover,
+  &__checked {
+    outline: 3px solid $a-text-action-selected;
+  }
+
+  &__checkbox {
+    // Overwrite Aksel
+
+    .navds-checkbox--small .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
+      transform: translate(0.2rem, -8%);
+    }
+    .navds-checkbox__input:checked + .navds-checkbox__label::before {
+      box-shadow: 0 0 0 2px var(--ac-radio-checkbox-action, var(--a-surface-action));
+      background-color: #fff;
+    }
+
+    .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
+      color: black;
+    }
+
+    @include mixins.for-size(phone-only) {
+      .navds-checkbox__content {
+        .navds-body-short--small {
+          font-size: 14px;
+          color: $a-text-subtle;
+        }
+      }
+
+      .navds-checkbox__label {
+        gap: 4px;
+        padding-top: 4px;
+      }
+
+      .navds-checkbox__label::before {
+        width: 14px;
+        height: 14px;
+      }
+
+      .navds-checkbox__label::before::after {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  &__remove-button {
     align-self: flex-end;
     padding: 0;
     margin: $a-spacing-1;
@@ -43,25 +121,96 @@
     }
   }
 
-  &__image {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    position: relative;
+  &__iso-button.navds-button {
+    background-color: $a-gray-50;
+    border: 1px solid $a-border-subtle;
+    border-radius: $a-border-radius-large;
+    padding: $a-spacing-1 $a-spacing-2;
+    text-align: start;
+    z-index: 2;
+    justify-content: start;
+    text-decoration: underline;
 
-    .image {
-      width: 140px;
-      height: 100px;
-      position: relative;
+    .navds-label {
+      @extend .text-line-clamp;
+      font-size: $a-font-size-small;
+      line-height: 1rem;
+      font-weight: 400;
+      text-overflow: ellipsis;
+      max-width: 200px; /* Adjust the max-width as needed */
+      transition: max-width 0.3s ease;
     }
-  }
 
-  .info {
-    min-height: 3rem;
-    text-align: center;
+    .navds-label:hover {
+      max-width: none;
+    }
+
+    &:hover {
+      border: 1px solid $a-gray-800;
+      background-color: $a-gray-200;
+    }
   }
 }
 
-.border {
-  border: 1px solid $a-border-default;
+.product-card--large {
+  @extend .product-card;
+  width: 225px;
+  height: 326px;
+  padding-top: 4px;
+
+  .product-card-image-container {
+    .product-card-image {
+      width: 185px;
+      height: 167px;
+    }
+  }
+}
+
+.product-card--removable,
+.product-card--checkbox {
+  @extend .product-card;
+  padding-top: 4px;
+
+  .product-card-image-container {
+    .product-card-image {
+      width: 120px;
+      height: 105px;
+    }
+  }
+}
+
+.product-card--plain {
+  box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
+}
+
+.product-card--no-picture {
+  @extend .product-card;
+  width: 225px;
+  height: 60px;
+
+  &__checkbox {
+    z-index: 2;
+  }
+
+  .navds-checkbox__content {
+    .navds-body-short--small {
+      font-size: 14px;
+      color: $a-text-subtle;
+    }
+  }
+
+  .navds-checkbox__label {
+    gap: 4px;
+    padding: 0;
+  }
+
+  .navds-checkbox__label::before {
+    width: 14px;
+    height: 14px;
+  }
+
+  .navds-checkbox__label::before::after {
+    width: 14px;
+    height: 14px;
+  }
 }

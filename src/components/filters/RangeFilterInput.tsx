@@ -21,6 +21,7 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
   const formMethods = useFormContext<SearchData>()
 
   const [min, max] = formMethods.watch(`filters.${filterKey}`) || []
+  const numberOfActiveFilters = searchData.filters[filterKey].length
 
   useEffect(() => {
     if (formMethods.formState.isSubmitting && !formMethods.formState.isValid) {
@@ -46,7 +47,7 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
 
   if (variant === 'min' || variant === 'max') {
     return (
-      <ShowMore title={FilterCategories[filterKey]} open={!!min || !!max || dirty} spacing>
+      <ShowMore title={FilterCategories[filterKey]} open={!!min || !!max || dirty} spacing className="input-filter">
         <div className="single-filter-input">
           <Controller
             control={formMethods.control}
@@ -85,7 +86,12 @@ export const RangeFilterInput = ({ filter, variant = 'min-max' }: FilterProps) =
   }
 
   return (
-    <ShowMore title={FilterCategories[filterKey]} open={!!min || !!max || dirty || touched} spacing>
+    <ShowMore
+      title={FilterCategories[filterKey]}
+      open={!!min || !!max || dirty || touched}
+      spacing
+      className="input-filter"
+    >
       <div className="range-filter-input">
         <div>
           <Detail>Min</Detail>

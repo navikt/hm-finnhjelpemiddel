@@ -2,7 +2,7 @@ import { CheckboxFilterInput } from '@/components/filters/CheckboxFilterInput'
 import { RangeFilterInput } from '@/components/filters/RangeFilterInput'
 import { FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/product-util'
-import { BodyShort, VStack } from '@navikt/ds-react'
+import { BodyShort, Heading, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 
@@ -19,7 +19,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   if (!searchDataFilters.length && noAvailableFilters) {
     return (
-      <div className="search__filters">
+      <div className="filter-container__filters">
         <BodyShort>Ingen filtre tilgjengelig</BodyShort>
       </div>
     )
@@ -27,7 +27,10 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
   return (
     <VStack>
-      <div className="search__filters">
+      <Heading size="small" level="2">
+        Filter
+      </Heading>
+      <VStack gap="2" className="filter-container__filters">
         <CheckboxFilterInput filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} />
         <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />
         <RangeFilterInput variant="min" filter={{ key: 'setebreddeMinCM', data: filters?.setebreddeMinCM }} />
@@ -46,7 +49,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
         <CheckboxFilterInput filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} />
         <CheckboxFilterInput filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} />
         <CheckboxFilterInput filter={{ key: 'leverandor', data: filters?.leverandor }} />
-      </div>
+      </VStack>
     </VStack>
   )
 }
