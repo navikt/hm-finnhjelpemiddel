@@ -47,6 +47,7 @@
   align-items: center;
   height: 100%;
   text-decoration: none;
+  gap: 6px;
   color: $a-text-default;
 
   &:focus-visible {
@@ -60,7 +61,11 @@
   &__text {
     display: flex;
     flex-direction: column;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
+  }
+
+  img {
+    margin-bottom: 5px;
   }
 }

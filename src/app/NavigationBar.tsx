@@ -39,7 +39,7 @@ const NavigationBar = () => {
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
             <NextLink href="/" className="logo">
-              <Image src="/nav-logo.svg" width="40" height="20" alt="Til forsiden" />
+              <Image src="/nav-logo.svg" width="50" height="35" alt="Til forsiden" />
               <span className="logo__text">
                 <span>FinnHjelpemiddel</span>
               </span>
