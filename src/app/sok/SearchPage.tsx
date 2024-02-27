@@ -107,7 +107,7 @@ export default function SearchPage() {
     <VStack className="main-wrapper--xlarge spacing-bottom--large">
       <VStack gap="5" className="spacing-top--xlarge spacing-bottom--xlarge">
         <Heading level="1" size="large" ref={pageTopRef}>
-          Alle hjelpemiddel
+          Alle hjelpemidler
         </Heading>
       </VStack>
       <FormProvider {...formMethods}>
