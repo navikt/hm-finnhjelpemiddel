@@ -11,7 +11,7 @@ import useSWRInfinite from 'swr/infinite'
 import { ArrowUpIcon, FilesIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, HStack, Heading, Popover, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, PAGE_SIZE, SearchData, fetchProducts } from '@/utils/api-util'
+import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
 
 import MobileOverlay from '@/components/MobileOverlay'
@@ -41,15 +41,15 @@ export default function SearchPage() {
 
   const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
 
-  const formMethods = useForm<SearchData>({
+  const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialSearchDataState,
       ...searchData,
     },
   })
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
+    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
   }
 
   const {
