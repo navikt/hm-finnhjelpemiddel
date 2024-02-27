@@ -11,7 +11,7 @@ import useSWRInfinite from 'swr/infinite'
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, HGrid, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, PAGE_SIZE, SearchData, fetchProducts } from '@/utils/api-util'
+import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
 
 import MobileOverlay from '@/components/MobileOverlay'
@@ -40,15 +40,15 @@ export default function SearchPage() {
 
   const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
 
-  const formMethods = useForm<SearchData>({
+  const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialSearchDataState,
       ...searchData,
     },
   })
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
+    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
   }
 
   const {
@@ -115,11 +115,7 @@ export default function SearchPage() {
         <HGrid columns={{ xs: 1, md: '374px auto' }} gap={{ xs: '4', md: '18' }}>
           <Show above="md">
             <section className="filter-container">
-              <ActiveFilters
-                selectedFilters={searchData.filters}
-                searchTerm={searchData.searchTerm}
-                searchFormRef={searchFormRef}
-              />
+              <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
               <SearchForm
                 onSubmit={onSubmit}
                 filters={data?.at(-1)?.filters}
@@ -176,11 +172,7 @@ export default function SearchPage() {
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
-                  <ActiveFilters
-                    selectedFilters={searchData.filters}
-                    searchTerm={searchData.searchTerm}
-                    searchFormRef={searchFormRef}
-                  />
+                  <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
                   <SearchForm
                     onSubmit={onSubmit}
                     filters={data?.at(-1)?.filters}

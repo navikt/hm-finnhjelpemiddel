@@ -3,7 +3,7 @@ import { ReadonlyURLSearchParams } from 'next/navigation'
 import queryString from 'querystring'
 
 import { makePostTitleBasedOnAgreementId } from './agreement-util'
-import { isValidSortOrder, SearchData, SelectedFilters } from './api-util'
+import { FormSearchData, isValidSortOrder, SearchData, SelectedFilters } from './api-util'
 import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
@@ -321,12 +321,12 @@ export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreement
   }
 }
 
-export const toSearchQueryString = (searchParams: SearchData) =>
+export const toSearchQueryString = (searchParams: FormSearchData, searchTerm: string) =>
   queryString.stringify({
     ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
     ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
     ...(searchParams.hidePictures ? { hidePictures: searchParams.hidePictures } : {}),
-    ...(searchParams.searchTerm && { term: searchParams.searchTerm }),
+    ...{ term: searchTerm },
     ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
     ...Object.entries(searchParams.filters)
       .filter(([_, values]) => values.some((value) => value))

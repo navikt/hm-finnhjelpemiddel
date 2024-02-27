@@ -22,7 +22,7 @@ export default function ComparePage() {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const href = '/sok?' + toSearchQueryString(searchData)
+  const href = '/sok?' + toSearchQueryString(searchData, searchData.searchTerm)
   const series = productsToCompare.map((product) => product.id)
 
   //TODO: error handling
@@ -81,7 +81,7 @@ export default function ComparePage() {
           </section>
         )}
         {productsToCompareWithVariants && (
-          <CompareTable productsToCompare={productsToCompareWithVariants} removeProduct={removeProduct} href={href} />
+          <CompareTable productsToCompare={productsToCompareWithVariants} removeProduct={removeProduct} />
         )}
       </div>
     </AnimateLayout>
@@ -91,11 +91,9 @@ export default function ComparePage() {
 const CompareTable = ({
   productsToCompare,
   removeProduct,
-  href,
 }: {
   productsToCompare: Product[]
   removeProduct: (product: Product) => void
-  href: string
 }) => {
   const allDataKeysVariants = [
     ...new Set(

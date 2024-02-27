@@ -5,21 +5,24 @@ import NextLink from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useMenuStore } from '@/utils/global-state-util'
+
+//Bug: SearchTerm var en del av form -> fristiller searchterm fra form. Og setter searchterm i url med de andre paramaterne som er der (for å ikke overskrive)
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
-
   const router = useRouter()
 
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)
-      router.push('/sok?term=' + searchTerm)
+      const q = new URLSearchParams(window.location.search)
+      q.set('term', searchTerm)
+      router.push('/sok?' + q.toString())
     },
     [router]
   )

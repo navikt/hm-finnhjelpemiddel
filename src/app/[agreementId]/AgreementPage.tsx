@@ -4,6 +4,7 @@ import { Agreement, makePostTitleBasedOnAgreementId, mapAgreementProducts } from
 import {
   Filter,
   FilterData,
+  FormSearchData,
   SearchData,
   SelectedFilters,
   getFiltersAgreement,
@@ -45,15 +46,15 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const formMethods = useForm<SearchData>({
+  const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialAgreementSearchDataState,
       ...searchData,
     },
   })
 
-  const onSubmit: SubmitHandler<SearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
+    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
   }
 
   const { data: postBucktes, isLoading: postsIsLoading } = useSWR<PostBucketResponse[]>(

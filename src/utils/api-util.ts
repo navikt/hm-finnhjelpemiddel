@@ -81,6 +81,8 @@ export type SearchData = {
   hidePictures?: string
 }
 
+export type FormSearchData = Omit<SearchData, 'searchTerm'>
+
 export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
 
 export type SortOrder = (typeof sortOrders)[number]
@@ -88,8 +90,6 @@ export type SortOrder = (typeof sortOrders)[number]
 export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
   return sortOrders.includes(sortOrder as SortOrder)
 }
-
-export type SearchParams = SearchData & { to?: number }
 
 type FetchProps = {
   from: number
