@@ -20,8 +20,8 @@ function Nyhet() {
 
     return sorted
   }, [data])
-  const newsMigrationDate = new Date('March 01, 2024')
-  
+  const newsMigrationDate = new Date('February 01, 2024')
+
   return (
     <div>
       <Heading level="1" size="large" spacing>
@@ -33,10 +33,10 @@ function Nyhet() {
             {news.created >= newsMigrationDate && (
               <Accordion key={news.identifier}>
                 <Accordion.Item>
-                  <Accordion.Header>
-                    {news.identifier}: {news.title}
-                  </Accordion.Header>
+                  <Accordion.Header>{news.title}</Accordion.Header>
                   <Accordion.Content>
+                    Id: {news.identifier}
+                    <br />
                     Author: {news.author}
                     <br />
                     Created: {dateToString(news.created)}
@@ -45,7 +45,8 @@ function Nyhet() {
                     <br />
                     Expired: {dateToString(news.expired)}
                     <br />
-                    {news.text}
+                    {/*                    {news.text}*/}
+                    <div dangerouslySetInnerHTML={{ __html: news.text }} />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
