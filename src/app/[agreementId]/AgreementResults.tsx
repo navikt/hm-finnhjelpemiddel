@@ -25,7 +25,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
   }
 
   return (
-    <VStack style={{ maxWidth: '44.375rem' }} gap={{ xs: '4' }}>
+    <VStack gap={{ xs: '4' }}>
       <HStack justify="space-between">
         <Show above="md">
           <Heading level="2" size="small">

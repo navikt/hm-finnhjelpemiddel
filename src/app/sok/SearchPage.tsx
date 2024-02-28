@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useInView } from 'react-intersection-observer'
 
@@ -9,7 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HGrid, HStack, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Heading, Popover, Show, VStack } from '@navikt/ds-react'
 
 import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
@@ -36,6 +36,7 @@ export default function SearchPage() {
   const searchFormRef = useRef<HTMLFormElement>(null)
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(true)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
@@ -47,6 +48,11 @@ export default function SearchPage() {
       ...searchData,
     },
   })
+
+  useEffect(() => {
+    setShowSidebar(window.innerWidth >= 1024)
+    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
+  }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = (data) => {
     router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
@@ -115,7 +121,7 @@ export default function SearchPage() {
       <FormProvider {...formMethods}>
         <CompareMenu />
         <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
-          <Show above="lg">
+          {showSidebar && (
             <section className="filter-container">
               <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
               <SearchForm
@@ -156,7 +162,7 @@ export default function SearchPage() {
                 </Button>
               </HGrid>
             </section>
-          </Show>
+          )}
 
           <AnimateLayout>
             <VStack gap={{ xs: '4', lg: '8' }}>
@@ -171,7 +177,7 @@ export default function SearchPage() {
                     </BodyShort>
                   </VStack>
                 </Show>
-                <Hide above="lg">
+                {!showSidebar && (
                   <div>
                     <Button
                       variant="secondary"
@@ -235,7 +241,7 @@ export default function SearchPage() {
                       </MobileOverlay.Footer>
                     </MobileOverlay>
                   </div>
-                </Hide>
+                )}
 
                 <SortSearchResults formRef={searchFormRef} />
               </HStack>
