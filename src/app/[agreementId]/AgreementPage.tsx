@@ -42,7 +42,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
-  const [showSidebar, setShowSidebar] = useState(true)
+  const [showSidebar, setShowSidebar] = useState(false)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
