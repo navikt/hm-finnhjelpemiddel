@@ -82,7 +82,7 @@
 
     .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
       color: black;
-      transform: translate(0.16rem, -12%);
+      transform: translate(0.19rem, -7%);
     }
 
     @include mixins.for-size(phone-only) {
@@ -96,16 +96,6 @@
       .navds-checkbox__label {
         gap: 4px;
         padding-top: 4px;
-      }
-
-      .navds-checkbox__label::before {
-        width: 14px;
-        height: 14px;
-      }
-
-      .navds-checkbox__label::before::after {
-        width: 14px;
-        height: 14px;
       }
     }
   }
@@ -218,15 +208,5 @@
   .navds-checkbox__label {
     gap: 4px;
     padding: 0;
-  }
-
-  .navds-checkbox__label::before {
-    width: 14px;
-    height: 14px;
-  }
-
-  .navds-checkbox__label::before::after {
-    width: 14px;
-    height: 14px;
   }
 }
