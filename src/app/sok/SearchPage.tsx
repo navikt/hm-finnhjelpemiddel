@@ -9,7 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 
 import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
@@ -62,6 +62,7 @@ export default function SearchPage() {
     data,
     size: page,
     setSize: setPage,
+    error,
     isLoading,
   } = useSWRInfinite<FetchProductsWithFilters>(
     (index, previousPageData?: FetchProductsWithFilters) => {
@@ -110,6 +111,16 @@ export default function SearchPage() {
     router.replace(pathname)
   }
   const products = data?.map((d) => d.products).flat()
+
+  if (error) {
+    return (
+      <HStack justify="center" style={{ marginTop: '48px' }}>
+        <Alert variant="error" title="Error med lasting av produkter">
+          Obs, her skjedde det noe feil :o
+        </Alert>
+      </HStack>
+    )
+  }
 
   if (!products) {
     return (
