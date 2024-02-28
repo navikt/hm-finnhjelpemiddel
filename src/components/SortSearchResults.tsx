@@ -1,7 +1,7 @@
 'use client'
 
 import { isValidSortOrder, SearchData } from '@/utils/api-util'
-import { Select } from '@navikt/ds-react'
+import { Hide, Select, Show } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React, { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -27,18 +27,37 @@ const SortSearchResults = ({ formRef }: Props) => {
   }
 
   return (
-    <Select
-      size="small"
-      label="Sortering"
-      onChange={handleSelectedSorting}
-      defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}
-    >
-      {options.map((option, index) => (
-        <option key={index} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </Select>
+    <>
+      <Show above="lg">
+        <Select
+          size="small"
+          label="Sortering"
+          onChange={handleSelectedSorting}
+          defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}
+        >
+          {options.map((option, index) => (
+            <option key={index} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+      </Show>
+      <Hide above="lg">
+        <Select
+          size="small"
+          label="Sortering"
+          hideLabel
+          onChange={handleSelectedSorting}
+          defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}
+        >
+          {options.map((option, index) => (
+            <option key={index} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+      </Hide>
+    </>
   )
 }
 

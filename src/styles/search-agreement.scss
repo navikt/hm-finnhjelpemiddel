@@ -4,6 +4,7 @@
 
 .agreement-search-results {
   border-top: 2px solid $a-border-divider;
+  padding-top: $a-spacing-2;
 }
 
 .agreement-search-results,
@@ -11,6 +12,7 @@
 .search-results {
   padding-inline-start: 0;
   list-style: none;
+  margin-block: 0;
 }
 
 .navds-toggle-group__wrapper {

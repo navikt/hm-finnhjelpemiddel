@@ -84,7 +84,7 @@ const ProductCard = ({
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">
-            {currentRank ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
+            {currentRank !== Infinity ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
           </Detail>
           <Link
             className="product-card__link"
@@ -108,7 +108,7 @@ const ProductCard = ({
           )}
         </VStack>
 
-        <ProductImage src={firstImageSrc} />
+        <ProductImage src={firstImageSrc} productTitle={product.title} />
       </VStack>
     </Box>
   )

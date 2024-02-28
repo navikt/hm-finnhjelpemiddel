@@ -1,29 +1,26 @@
 import { RefObject } from 'react'
 
-import { Alert, BodyShort, Button, HStack, Heading, Loader, VStack } from '@navikt/ds-react'
+import { Alert, Button, HStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, SearchData } from '@/utils/api-util'
+import { SearchData } from '@/utils/api-util'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import ProductCard from '@/components/ProductCard'
-import SortSearchResults from '@/components/SortSearchResults'
+import { Product } from '@/utils/product-util'
 import { useFormContext } from 'react-hook-form'
 
 const SearchResults = ({
-  data,
+  products,
   loadMore,
   isLoading,
-  searchResultRef,
   formRef,
 }: {
   loadMore?: () => void
   isLoading: boolean
-  data?: Array<FetchProductsWithFilters>
-  searchResultRef: RefObject<HTMLHeadingElement>
+  products?: Product[] | undefined
   formRef: RefObject<HTMLFormElement>
 }) => {
-  const products = data?.map((d) => d.products).flat()
   const formMethods = useFormContext<SearchData>()
 
   const handleSetIsoFilter = (value: string) => {
@@ -33,61 +30,23 @@ const SearchResults = ({
 
   useRestoreScroll('search-results', !isLoading)
 
-  if (!data) {
+  if (!products?.length || products.length === 0) {
     return (
-      <VStack gap="8">
-        <HStack justify="space-between">
-          <VStack justify="space-between">
-            <Heading level="2" size="small" ref={searchResultRef}>
-              Hjelpemiddel
-            </Heading>
-            <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>{`Ingen treff`}</BodyShort>
-          </VStack>
-
-          <SortSearchResults formRef={formRef} />
-        </HStack>
-
-        <div id="searchResults" className="results__loader">
-          <Loader size="3xlarge" title="Laster produkter" />
-        </div>
-      </VStack>
-    )
-  }
-
-  if (!products?.length) {
-    return (
-      <VStack gap="8">
-        <HStack justify="space-between">
-          <VStack justify="space-between">
-            <Heading level="2" size="small" ref={searchResultRef}>
-              Hjelpemiddel
-            </Heading>
-            <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>{`Ingen treff`}</BodyShort>
-          </VStack>
-
-          <SortSearchResults formRef={formRef} />
-        </HStack>
-        <div id="searchResults">
-          <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
-        </div>
-      </VStack>
+      <div id="searchResults">
+        <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
+      </div>
     )
   }
 
   return (
     <>
-      <HStack justify="space-between" className="results__header">
-        <VStack justify="space-between">
-          <Heading level="2" size="small" ref={searchResultRef}>
-            Hjelpemiddel
-          </Heading>
-          <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>{`Viser de ${products.length} første`}</BodyShort>
-        </VStack>
-
-        <SortSearchResults formRef={formRef} />
-      </HStack>
-
-      <HStack as={'ol'} gap={{ xs: '4', md: '5' }} id="searchResults" className="search-results">
+      <HStack
+        as={'ol'}
+        gap={{ xs: '4', md: '5' }}
+        id="searchResults"
+        className="search-results"
+        justify={{ xs: 'center', lg: 'start' }}
+      >
         {products.map((product) => (
           <li key={product.id}>
             <ProductCard product={product} handleIsoButton={handleSetIsoFilter} type="large-with-checkbox" />

@@ -73,9 +73,8 @@
   &__checkbox {
     // Overwrite Aksel
 
-    .navds-checkbox--small .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
-      transform: translate(0.2rem, -8%);
-    }
+    z-index: 2;
+
     .navds-checkbox__input:checked + .navds-checkbox__label::before {
       box-shadow: 0 0 0 2px var(--ac-radio-checkbox-action, var(--a-surface-action));
       background-color: #fff;
@@ -83,6 +82,7 @@
 
     .navds-checkbox__input:checked + .navds-checkbox__label > .navds-checkbox__icon {
       color: black;
+      transform: translate(0.16rem, -12%);
     }
 
     @include mixins.for-size(phone-only) {
@@ -154,14 +154,30 @@
 
 .product-card--large {
   @extend .product-card;
-  width: 225px;
-  height: 326px;
-  padding-top: 4px;
 
-  .product-card-image-container {
-    .product-card-image {
-      width: 185px;
-      height: 167px;
+  @include mixins.for-size(desktop-up) {
+    width: 225px;
+    height: 326px;
+    padding-top: 4px;
+
+    .product-card-image-container {
+      .product-card-image {
+        width: 185px;
+        height: 167px;
+      }
+    }
+  }
+
+  @include mixins.for-size(desktop-down) {
+    .product-card__iso-button {
+      display: none;
+    }
+
+    .product-card-image-container {
+      .product-card-image {
+        width: 120px;
+        height: 105px;
+      }
     }
   }
 }

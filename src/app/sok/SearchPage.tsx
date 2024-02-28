@@ -9,16 +9,17 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, HGrid, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Heading, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 
 import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
 
-import MobileOverlay from '@/components/MobileOverlay'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 
+import MobileOverlay from '@/components/MobileOverlay'
+import SortSearchResults from '@/components/SortSearchResults'
 import ActiveFilters from '@/components/filters/ActiveFilters'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
@@ -102,6 +103,7 @@ export default function SearchPage() {
     setPage(1)
     router.replace(pathname)
   }
+  const products = data?.map((d) => d.products).flat()
 
   return (
     <VStack className="main-wrapper--xlarge spacing-bottom--large">
@@ -112,8 +114,8 @@ export default function SearchPage() {
       </VStack>
       <FormProvider {...formMethods}>
         <CompareMenu />
-        <HGrid columns={{ xs: 1, md: '374px auto' }} gap={{ xs: '4', md: '18' }}>
-          <Show above="md">
+        <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
+          <Show above="lg">
             <section className="filter-container">
               <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
               <SearchForm
@@ -155,81 +157,90 @@ export default function SearchPage() {
               </HGrid>
             </section>
           </Show>
-          <Hide above="md">
-            <div>
-              <Button
-                variant="secondary"
-                size="small"
-                onClick={() => setMobileOverlayOpen(true)}
-                icon={<FilterIcon aria-hidden />}
-              >
-                Filter
-              </Button>
-              <MobileOverlay open={isMobileOverlayOpen}>
-                <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-                  <Heading level="1" size="medium">
-                    Filtrer søket
-                  </Heading>
-                </MobileOverlay.Header>
-                <MobileOverlay.Content>
-                  <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
-                  <SearchForm
-                    onSubmit={onSubmit}
-                    filters={data?.at(-1)?.filters}
-                    selectedFilters={searchData.filters}
-                    ref={searchFormRef}
-                  />
-                </MobileOverlay.Content>
-                <MobileOverlay.Footer>
-                  <VStack gap="2">
-                    <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                      <Button
-                        ref={copyButtonMobileRef}
-                        variant="tertiary-neutral"
-                        size="small"
-                        icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                        onClick={() => {
-                          navigator.clipboard.writeText(location.href)
-                          setCopyPopupOpenState(true)
-                        }}
-                      >
-                        Kopiér søket
-                      </Button>
-                      <Popover
-                        open={copyPopupOpenState}
-                        onClose={() => setCopyPopupOpenState(false)}
-                        anchorEl={copyButtonMobileRef.current}
-                        placement="right"
-                      >
-                        <Popover.Content>Søket er kopiert!</Popover.Content>
-                      </Popover>
-
-                      <Button
-                        type="button"
-                        variant="tertiary-neutral"
-                        size="small"
-                        icon={<TrashIcon title="Nullstill søket" />}
-                        onClick={onReset}
-                      >
-                        Nullstill søket
-                      </Button>
-                    </HGrid>
-                    <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
-                  </VStack>
-                </MobileOverlay.Footer>
-              </MobileOverlay>
-            </div>
-          </Hide>
 
           <AnimateLayout>
-            <VStack>
-              <SearchResults
-                data={data}
-                loadMore={loadMore}
-                isLoading={isLoading}
-                searchResultRef={searchResultRef}
-                formRef={searchFormRef}
-              />
+            <VStack gap={{ xs: '4', lg: '8' }}>
+              <HStack justify="space-between" className="results__header">
+                <Show above="lg">
+                  <VStack justify="space-between">
+                    <Heading level="2" size="small" ref={searchResultRef}>
+                      Hjelpemiddel
+                    </Heading>
+                    <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>
+                      {products ? `Viser de ${products.length} første` : `Ingen treff`}
+                    </BodyShort>
+                  </VStack>
+                </Show>
+                <Hide above="lg">
+                  <div>
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      onClick={() => setMobileOverlayOpen(true)}
+                      icon={<FilterIcon aria-hidden />}
+                    >
+                      Filter
+                    </Button>
+                    <MobileOverlay open={isMobileOverlayOpen}>
+                      <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
+                        <Heading level="1" size="medium">
+                          Filtrer søket
+                        </Heading>
+                      </MobileOverlay.Header>
+                      <MobileOverlay.Content>
+                        <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
+                        <SearchForm
+                          onSubmit={onSubmit}
+                          filters={data?.at(-1)?.filters}
+                          selectedFilters={searchData.filters}
+                          ref={searchFormRef}
+                        />
+                      </MobileOverlay.Content>
+                      <MobileOverlay.Footer>
+                        <VStack gap="2">
+                          <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
+                            <Button
+                              ref={copyButtonMobileRef}
+                              variant="tertiary-neutral"
+                              size="small"
+                              icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                              onClick={() => {
+                                navigator.clipboard.writeText(location.href)
+                                setCopyPopupOpenState(true)
+                              }}
+                            >
+                              Kopiér søket
+                            </Button>
+                            <Popover
+                              open={copyPopupOpenState}
+                              onClose={() => setCopyPopupOpenState(false)}
+                              anchorEl={copyButtonMobileRef.current}
+                              placement="right"
+                            >
+                              <Popover.Content>Søket er kopiert!</Popover.Content>
+                            </Popover>
+
+                            <Button
+                              type="button"
+                              variant="tertiary-neutral"
+                              size="small"
+                              icon={<TrashIcon title="Nullstill søket" />}
+                              onClick={onReset}
+                            >
+                              Nullstill søket
+                            </Button>
+                          </HGrid>
+                          <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
+                        </VStack>
+                      </MobileOverlay.Footer>
+                    </MobileOverlay>
+                  </div>
+                </Hide>
+
+                <SortSearchResults formRef={searchFormRef} />
+              </HStack>
+
+              <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} formRef={searchFormRef} />
 
               {!isAtPageTop && (
                 <Button
