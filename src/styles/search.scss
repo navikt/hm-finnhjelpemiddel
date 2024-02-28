@@ -12,19 +12,17 @@
   }
 }
 
-.results {
-  &__header {
-    max-width: 716px;
-    @include mixins.for-size(desktop-xlarge-up) {
-      max-width: 100%;
-    }
-  }
-}
-
 .results__loader {
   margin-top: $a-spacing-12;
   align-self: center;
   justify-self: center;
+}
+
+.results__header {
+  max-width: 716px;
+  @include mixins.for-size(desktop-xlarge-up) {
+    max-width: 100%;
+  }
 }
 
 .filter-container {

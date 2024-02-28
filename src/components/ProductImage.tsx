@@ -3,7 +3,7 @@ import { Loader } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
-const ProductImage = ({ src }: { src: string | undefined }) => {
+const ProductImage = ({ src, productTitle }: { src: string | undefined; productTitle: string }) => {
   const [loadingError, setLoadingError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const image =
@@ -18,7 +18,7 @@ const ProductImage = ({ src }: { src: string | undefined }) => {
             setLoadingError(true)
             setIsLoading(false)
           }}
-          alt="Produktbilde"
+          alt={'Produktbilde ' + productTitle}
           fill
           style={{ objectFit: 'contain', padding: '5px', opacity: !isLoading ? 1 : 0 }}
           sizes="50vw"
@@ -28,7 +28,7 @@ const ProductImage = ({ src }: { src: string | undefined }) => {
     ) : (
       <Image
         src={'/assets/image-error.png'}
-        alt="Produktbilde mangler"
+        alt={'Produktbilde mangler for' + productTitle}
         fill
         style={{ padding: '30px' }}
         sizes="50vw"

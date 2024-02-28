@@ -5,7 +5,6 @@ import {
   Filter,
   FilterData,
   FormSearchData,
-  SearchData,
   SelectedFilters,
   getFiltersAgreement,
   getProductsOnAgreement,
@@ -13,14 +12,14 @@ import {
 import { initialAgreementSearchDataState } from '@/utils/search-state-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HGrid, HStack, Heading, Hide, Link, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
@@ -43,6 +42,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(true)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
@@ -52,6 +52,11 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       ...searchData,
     },
   })
+
+  useEffect(() => {
+    setShowSidebar(window.innerWidth >= 1024)
+    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
+  }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = (data) => {
     router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
@@ -121,8 +126,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
       <FormProvider {...formMethods}>
         <CompareMenu />
-        <HGrid columns={{ xs: 1, md: '390px auto' }} gap={{ xs: '4', md: '18' }}>
-          <Show above="md">
+        <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
+          {showSidebar && (
             <section className="filter-container">
               <FilterForm
                 onSubmit={onSubmit}
@@ -163,8 +168,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </Button>
               </HGrid>
             </section>
-          </Show>
-          <Hide above="md">
+          )}
+          {!showSidebar && (
             <div>
               <Button
                 variant="secondary"
@@ -228,7 +233,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </MobileOverlay.Footer>
               </MobileOverlay>
             </div>
-          </Hide>
+          )}
           <AgreementResults posts={posts} formRef={searchFormRef}></AgreementResults>
         </HGrid>
       </FormProvider>

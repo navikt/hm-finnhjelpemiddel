@@ -98,6 +98,7 @@ const CompareMenu = () => {
                     </Button>
                   </Link>
                   <Button
+                    variant="tertiary"
                     icon={<TrashIcon aria-hidden />}
                     onClick={() => {
                       resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized)
