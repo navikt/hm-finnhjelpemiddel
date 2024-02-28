@@ -12,18 +12,16 @@ function AboutUs() {
     <div className="about-us-page">
       <AnimateLayout>
         <div className="about-us-page__container">
-          <Heading level="1" size="large" spacing align="center">
-            Om nettstedet
-          </Heading>
           <article>
-            <Heading level="2" size="medium">
+            <Heading level="1" size="large" spacing>
               Om nettstedet
             </Heading>
-            <BodyLong>FinnHjelpemiddel eies og driftes av NAV Hjelpemidler og tilrettelegging.</BodyLong>
+
+            <BodyLong spacing>FinnHjelpemiddel eies og driftes av NAV Hjelpemidler og tilrettelegging.</BodyLong>
             <Heading level="2" size="medium">
               Målgrupper
             </Heading>
-            <BodyLong>
+            <BodyLong spacing>
               Hovedmålgruppene for FinnHjelpemiddel er innbyggere, kommuner og NAV hjelpemiddelsentraler.
             </BodyLong>
             <Heading level="2" size="medium">
@@ -49,7 +47,7 @@ function AboutUs() {
               Et hjelpemiddel på FinnHjelpemiddel er et produkt som er spesiallaget for personer med
               funksjonsnedsettelse.
             </BodyLong>
-            <Heading level="2" size="medium">
+            <Heading level="1" size="large">
               Tilbakemeldinger
             </Heading>
             <BodyLong spacing>
