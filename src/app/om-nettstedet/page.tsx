@@ -13,18 +13,18 @@ function AboutUs() {
       <AnimateLayout>
         <div className="about-us-page__container">
           <article>
-            <Heading level="1" size="large" spacing>
+            <Heading level="1" size="medium" spacing>
               Om nettstedet
             </Heading>
 
             <BodyLong spacing>FinnHjelpemiddel eies og driftes av NAV Hjelpemidler og tilrettelegging.</BodyLong>
-            <Heading level="2" size="medium">
+            <Heading level="2" size="small">
               Målgrupper
             </Heading>
             <BodyLong spacing>
               Hovedmålgruppene for FinnHjelpemiddel er innbyggere, kommuner og NAV hjelpemiddelsentraler.
             </BodyLong>
-            <Heading level="2" size="medium">
+            <Heading level="2" size="small">
               Innhold
             </Heading>
             <BodyLong spacing>
@@ -32,7 +32,7 @@ function AboutUs() {
               presenteres med tekst, bilder, brosjyrer, bruksanvisninger og tekniske data med mer. Du vil også finne
               informasjon om avtaler med NAV.
             </BodyLong>
-            <Heading level="2" size="medium">
+            <Heading level="2" size="small">
               Avtale med NAV
             </Heading>
             <BodyLong spacing>
@@ -40,14 +40,14 @@ function AboutUs() {
               hjelpemidler innen aktuelle hjelpemiddelområder. Hjelpemidlene som er på avtale med NAV er markert på
               FinnHjelpemiddel, og har egne innganger til hjelpemiddelvisning og informasjon.
             </BodyLong>
-            <Heading level="2" size="medium">
+            <Heading level="2" size="small">
               Hva er et hjelpemiddel?
             </Heading>
             <BodyLong spacing>
               Et hjelpemiddel på FinnHjelpemiddel er et produkt som er spesiallaget for personer med
               funksjonsnedsettelse.
             </BodyLong>
-            <Heading level="1" size="large">
+            <Heading level="1" size="medium">
               Tilbakemeldinger
             </Heading>
             <BodyLong spacing>
