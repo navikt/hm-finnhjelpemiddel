@@ -37,6 +37,31 @@
       font-size: 1.25rem;
     }
   }
+
+  &__news-area {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    justify-items: center;
+  }
+
+  &__news-box {
+    display: flex;
+    width: 100%;
+    padding: $a-spacing-6 $a-spacing-5;
+    align-items: flex-start;
+    border-radius: $a-border-radius-large;
+    background: #fff;
+
+    @include mixins.for-size(tablet-up) {
+      width: 600px;
+    }
+
+    p {
+      color: var(--nav-gra-nav-mork-gra, #262626);
+      font-size: 1.25rem;
+    }
+  }
 }
 
 .about-us-page {

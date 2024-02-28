@@ -7,13 +7,14 @@ import NextLink from 'next/link'
 
 import useSWR from 'swr'
 
-import { Bleed, BodyShort, HStack, Heading, Hide, VStack } from '@navikt/ds-react'
+import { Bleed, BodyShort, Heading, Hide, HStack, VStack } from '@navikt/ds-react'
 
-import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import { agreementHasNoProducts, AgreementLabel } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
+import ShowNews from '@/components/ShowNews'
 
 function Home() {
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
@@ -59,6 +60,7 @@ function Home() {
                   )
                 })}
               </HStack>
+              <ShowNews />
             </VStack>
           </div>
         </Bleed>
