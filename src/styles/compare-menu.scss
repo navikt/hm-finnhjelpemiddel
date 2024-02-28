@@ -58,7 +58,6 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    gap: $a-spacing-2;
     max-width: 62rem;
     list-style: none;
     margin: 0;
@@ -69,8 +68,11 @@
     }
 
     @include mixins.for-size(phone-only) {
-      width: 100%;
       gap: $a-spacing-5;
+
+      li {
+        margin: 0;
+      }
     }
 
     @include mixins.for-size(desktop-up) {
@@ -93,7 +95,6 @@
     .product-card {
       @include mixins.for-size(phone-only) {
         height: 100%;
-        width: 100%;
         min-width: 150px;
       }
 
@@ -103,13 +104,6 @@
           height: 60vw;
         }
       }
-    }
-  }
-
-  @include mixins.for-size(phone-only) {
-    li {
-      width: 100%;
-      margin: 0;
     }
   }
 
