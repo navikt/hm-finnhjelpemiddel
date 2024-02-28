@@ -45,7 +45,7 @@ const SearchResults = ({
         gap={{ xs: '4', md: '5' }}
         id="searchResults"
         className="search-results"
-        justify={{ xs: 'center', lg: 'start' }}
+        justify={{ xs: 'center', md: 'start' }}
       >
         {products.map((product) => (
           <li key={product.id}>
