@@ -9,7 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 
 import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
 import { initialSearchDataState } from '@/utils/search-state-util'
@@ -37,7 +37,6 @@ export default function SearchPage() {
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
-  const [firstLoad, setfirstLoad] = useState(true)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
@@ -53,7 +52,6 @@ export default function SearchPage() {
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-    setfirstLoad(false)
   }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = (data) => {
@@ -113,6 +111,14 @@ export default function SearchPage() {
   }
   const products = data?.map((d) => d.products).flat()
 
+  if (!products) {
+    return (
+      <HStack justify="center" style={{ marginTop: '48px' }}>
+        <Loader size="3xlarge" title="Laster produkter" />
+      </HStack>
+    )
+  }
+
   return (
     <VStack className="main-wrapper--xlarge spacing-bottom--large">
       <VStack gap="5" className="spacing-top--xlarge spacing-bottom--xlarge">
@@ -165,11 +171,6 @@ export default function SearchPage() {
               </HGrid>
             </section>
           )}
-          {firstLoad && (
-            <Box>
-              <Loader />
-            </Box>
-          )}
 
           <VStack gap={{ xs: '4', lg: '8' }}>
             <HStack justify="space-between" className="results__header">
@@ -183,7 +184,7 @@ export default function SearchPage() {
                   </BodyShort>
                 </VStack>
               </Show>
-              {!showSidebar && !firstLoad && (
+              {!showSidebar && (
                 <div>
                   <Button
                     variant="secondary"
