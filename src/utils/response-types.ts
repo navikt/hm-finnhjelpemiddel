@@ -241,3 +241,30 @@ export interface AttachmentsResponse {
   media: MediaResponse[]
   description: string
 }
+
+export interface NewsSelectedResponse {
+  id: string
+  identifier: string
+  title: string
+  text: string
+  status: Status
+  created: Date //date
+  published: Date //date
+  expired: Date //date
+  author: string
+}
+
+export interface NewsResponse {
+  id: string
+  identifier: string
+  title: string
+  text: string
+  status: Status
+  published: string
+  expired: string
+  created: string
+  updated: string
+  createdBy: string
+  updatedBy: string
+  author: string
+}
