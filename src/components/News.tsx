@@ -4,7 +4,6 @@ import useSWR from 'swr'
 import { News } from '@/utils/response-types'
 import { getNews } from '@/utils/api-util'
 import { Fragment, useMemo } from 'react'
-import { sortAlphabetically } from '@/utils/sort-util'
 
 function News() {
   const { data, error } = useSWR<News[]>('/news/_search', getNews, {
@@ -14,7 +13,7 @@ function News() {
   const sortedData = useMemo(() => {
     if (!data) return []
     const sorted = [...data] // Create a copy of data to avoid modifying it in place
-    sorted.sort((a, b) => sortAlphabetically(a.published.toString(), b.published.toString()))
+    sorted.sort((a, b) => b.published.getTime() - a.published.getTime())
 
     return sorted
   }, [data])
