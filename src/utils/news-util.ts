@@ -13,7 +13,7 @@ export const mapNews = (source: News): News => {
     title: source.title,
     text: source.text,
     status: source.status,
-    expired: new Date(source.expired.toString()) ?? '',
-    published: new Date(source.published.toString()) ?? '',
+    expired: new Date(source.expired) ?? '',
+    published: new Date(source.published) ?? '',
   }
 }
