@@ -66,6 +66,7 @@ export const CheckboxFilterInput = ({ filter }: CheckboxFilterInputProps) => {
   }
 
   const CheckboxLabel = ({ value }: { value: string | number }) => <>{value}</>
+
   const showMoreLabel =
     numberOfActiveFilters > 0
       ? `${FilterCategories[filterKey]} (${numberOfActiveFilters})`

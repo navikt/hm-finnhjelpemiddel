@@ -14,6 +14,118 @@
   margin-bottom: $a-spacing-3;
 }
 
-.checkbox-filter-input {
-  margin-bottom: $a-spacing-3;
+.checkbox-filter {
+  &__checkboxes {
+    > div {
+      margin: 2px 0;
+      margin-left: $a-spacing-3;
+    }
+  }
+
+  &__search {
+    padding: $a-spacing-1 $a-spacing-2;
+    padding-bottom: $a-spacing-3;
+  }
+
+  &__scroll-container {
+    padding-top: $a-spacing-3;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+
+.filter-container {
+  &__agreement-switch {
+    margin-bottom: $a-spacing-6;
+  }
+
+  &__divider {
+    border-bottom: 1px solid $a-border-divider;
+  }
+
+  &__filters {
+    margin-top: $a-spacing-4;
+    margin-bottom: $a-spacing-6;
+
+    .checkbox-filter,
+    .input-filter {
+      border: 1px solid $a-border-divider;
+      border-radius: 5px;
+    }
+
+    .checkbox-filter.active,
+    .input-filter.active {
+      summary {
+        background-color: $a-surface-action-subtle;
+      }
+    }
+
+    details > div {
+      margin-bottom: $a-spacing-1;
+      box-sizing: border-box;
+    }
+
+    details[open] > summary {
+      margin-bottom: $a-spacing-2;
+
+      .chevron-wrapper {
+        svg {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    summary {
+      font-size: 17px;
+      padding: 0;
+      border-radius: 4px;
+      padding: $a-spacing-2 $a-spacing-3;
+      transition: margin 150ms ease-out;
+      cursor: pointer;
+      user-select: none;
+
+      &::marker,
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-decoration-color: $a-text-default;
+
+        .chevron-wrapper {
+          background-color: $a-surface-neutral-subtle-hover;
+        }
+      }
+    }
+
+    .chevron-wrapper {
+      display: grid;
+      align-self: center;
+      place-content: center;
+      border-radius: $a-border-radius-medium;
+      height: $a-spacing-6;
+      width: $a-spacing-6;
+
+      svg {
+        transition: transform 200ms ease-in-out;
+      }
+    }
+  }
+
+  &__footer {
+    button {
+      background-color: $a-purple-50;
+      border-radius: $a-border-radius-medium;
+      padding: $a-spacing-2 $a-spacing-3;
+      justify-content: flex-start;
+    }
+  }
+
+  &__chips {
+    .chip {
+      padding: 2px var(--a-spacing-3);
+    }
+  }
 }
