@@ -192,10 +192,14 @@
 .product-card--no-picture {
   @extend .product-card;
   width: 225px;
-  height: 60px;
+  height: auto;
 
   &__checkbox {
     z-index: 2;
+  }
+
+  .product-card__link {
+    height: auto;
   }
 
   .navds-checkbox__content {
