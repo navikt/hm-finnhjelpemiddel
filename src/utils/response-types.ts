@@ -242,16 +242,14 @@ export interface AttachmentsResponse {
   description: string
 }
 
-export interface NewsSelectedResponse {
+export interface News {
   id: string
   identifier: string
   title: string
   text: string
   status: Status
-  created: Date //date
   published: Date //date
   expired: Date //date
-  author: string
 }
 
 export interface NewsResponse {

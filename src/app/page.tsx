@@ -14,7 +14,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { sortAlphabetically } from '@/utils/sort-util'
-import ShowNews from '@/components/ShowNews'
+import News from '@/components/News'
 
 function Home() {
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
@@ -60,7 +60,7 @@ function Home() {
                   )
                 })}
               </HStack>
-              <ShowNews />
+              <News />
             </VStack>
           </div>
         </Bleed>

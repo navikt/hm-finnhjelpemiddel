@@ -31,12 +31,12 @@ import {
 import {
   AgreementDocResponse,
   AgreementSearchResponse,
-  Hit,
-  NewsSelectedResponse,
+  News,
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
+import { mapAllNews } from '@/utils/news-util'
 
 export const PAGE_SIZE = 25
 
@@ -1185,30 +1185,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
     })
 }
 
-export const mapAllNews = (data: SearchResponse): NewsSelectedResponse[] => {
-  /*  return data.hits.hits.map((hit: Hit) => {
-      return mapNews(hit._source as unknown as NewsSelectedResponse)
-    })*/
-  return data.hits.hits.map((hit: Hit) => {
-    return mapNews(hit._source as unknown as NewsSelectedResponse)
-  })
-}
-
-export const mapNews = (source: NewsSelectedResponse): NewsSelectedResponse => {
-  return {
-    id: source.id,
-    identifier: source.identifier,
-    title: source.title,
-    text: source.text,
-    status: source.status,
-    created: new Date(Date.parse(source.created.toString())) ?? '',
-    expired: new Date(Date.parse(source.expired.toString())) ?? '',
-    published: new Date(Date.parse(source.published.toString())) ?? '',
-    author: source.author,
-  }
-}
-
-export async function getNews(): Promise<NewsSelectedResponse[]> {
+export async function getNews(): Promise<News[]> {
   const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
@@ -1225,7 +1202,7 @@ export async function getNews(): Promise<NewsSelectedResponse[]> {
         },
       },
       _source: {
-        includes: ['id', 'identifier', 'title', 'text', 'status', 'created', 'published', 'expired', 'author'],
+        includes: ['id', 'identifier', 'title', 'text', 'status', 'published', 'expired'],
       },
     }),
   })
