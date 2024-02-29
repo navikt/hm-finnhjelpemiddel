@@ -1,6 +1,6 @@
 import { RefObject } from 'react'
 
-import { Alert, Button, HStack } from '@navikt/ds-react'
+import { Alert, Button, HStack, VStack } from '@navikt/ds-react'
 
 import { SearchData } from '@/utils/api-util'
 
@@ -39,7 +39,7 @@ const SearchResults = ({
   }
 
   return (
-    <>
+    <VStack gap="4">
       <HStack
         as={'ol'}
         gap={{ xs: '4', md: '5' }}
@@ -58,7 +58,7 @@ const SearchResults = ({
           Vis flere treff
         </Button>
       )}
-    </>
+    </VStack>
   )
 }
 
