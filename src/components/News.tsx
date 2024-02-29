@@ -14,11 +14,13 @@ function News() {
   const sortedData = useMemo(() => {
     if (!data) return []
     const sorted = [...data] // Create a copy of data to avoid modifying it in place
-    sorted.sort((a, b) => sortAlphabetically(a.identifier, b.identifier))
+    sorted.sort((a, b) => sortAlphabetically(a.published.toString(), b.published.toString()))
 
     return sorted
   }, [data])
+
   const newsMigrationDate = new Date('February 01, 2024')
+
   return (
     <>
       <Heading level="2" size="medium" align="center" className="spacing-bottom--large">
