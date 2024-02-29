@@ -251,18 +251,3 @@ export interface News {
   published: Date //date
   expired: Date //date
 }
-
-export interface NewsResponse {
-  id: string
-  identifier: string
-  title: string
-  text: string
-  status: Status
-  published: string
-  expired: string
-  created: string
-  updated: string
-  createdBy: string
-  updatedBy: string
-  author: string
-}
