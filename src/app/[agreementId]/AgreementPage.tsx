@@ -19,7 +19,7 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
@@ -42,7 +42,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
-  const [showSidebar, setShowSidebar] = useState(true)
+  const [showSidebar, setShowSidebar] = useState(false)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
@@ -62,11 +62,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
   }
 
-  const { data: postBucktes, isLoading: postsIsLoading } = useSWR<PostBucketResponse[]>(
-    { agreementId: agreement.id, searchData: searchData },
-    getProductsOnAgreement,
-    { keepPreviousData: true }
-  )
+  const {
+    data: postBucktes,
+    isLoading: postsIsLoading,
+    error: postError,
+  } = useSWR<PostBucketResponse[]>({ agreementId: agreement.id, searchData: searchData }, getProductsOnAgreement, {
+    keepPreviousData: true,
+  })
 
   const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
     { agreementId: agreement.id },
@@ -89,6 +91,16 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   // if (postsIsLoading || filtersIsLoading) {
   //   return <Loader size="3xlarge" title="Laster produkter" style={{ margin: '0 auto' }} />
   // }
+
+  if (postError) {
+    return (
+      <HStack justify="center" style={{ marginTop: '48px' }}>
+        <Alert variant="error" title="Error med lasting av produkter">
+          Obs, her skjedde det noe feil :o
+        </Alert>
+      </HStack>
+    )
+  }
 
   if (!postBucktes || !filtersFromData) {
     return (
