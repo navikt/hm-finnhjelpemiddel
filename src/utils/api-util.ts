@@ -31,10 +31,12 @@ import {
 import {
   AgreementDocResponse,
   AgreementSearchResponse,
+  News,
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
+import { mapAllNews } from '@/utils/news-util'
 
 export const PAGE_SIZE = 25
 
@@ -1181,4 +1183,28 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
         .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
       return suggestions
     })
+}
+
+export async function getNews(): Promise<News[]> {
+  const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 100,
+      query: {
+        term: {
+          status: {
+            value: 'ACTIVE',
+          },
+        },
+      },
+      _source: {
+        includes: ['id', 'identifier', 'title', 'text', 'status', 'published', 'expired'],
+      },
+    }),
+  })
+  return res.json().then(mapAllNews)
 }
