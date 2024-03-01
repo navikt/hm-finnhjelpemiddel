@@ -56,7 +56,19 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
         .filter((bucket) => bucket.key.toString().toLowerCase().startsWith(searchFilterTerm.toLowerCase()))
         .sort((a, b) => sortAlphabetically(a.key.toString(), b.key.toString())) || []
     )
-  }, [searchData, searchFilterTerm, searchParams])
+  }, [searchData, searchFilterTerm, searchParams, filterData])
+
+  const selectedUnavailableFilters = watchFilter.filter(
+    (f) => !(filterData?.values.map((f) => f.key) || []).includes(f)
+  )
+
+  // const selectedInvisibleFilters = filterData?.values.filter(
+  //   (f) => watchFilter.includes(f.key) || searchData.filters[filterKey].includes(f.key)
+  // )
+
+  if (!searchData.filters[filterKey].includes(filterKey) && !filterData?.values.length) {
+    return null
+  }
 
   // const sortedFilters = filterData?.values.sort((a, b) => )
   const showMoreLabel =
@@ -96,21 +108,49 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
               {...field}
               value={searchData.filters[filterKey]}
             >
-              <VStack gap="1" className="checkbox-filter__checkboxes">
-                {selectedFilters.map((f) => (
+              {!showSearch && (
+                <VStack gap="1" className="checkbox-filter__checkboxes">
+                  {selectedUnavailableFilters?.map((f) => (
+                    <Checkbox value={f} key={f} onChange={onChange} className="checkbox-filter__selected-unavailable">
+                      {`${f} (0)`}
+                    </Checkbox>
+                  ))}
+                  {filterData?.values.map((f) => (
+                    <Checkbox value={f.key} key={f.key} onChange={onChange}>
+                      {f.label || f.key}
+                    </Checkbox>
+                  ))}
+                </VStack>
+              )}
+              {showSearch && (
+                <>
+                  <VStack gap="1" className="checkbox-filter__checkboxes">
+                    {selectedFilters.map((f) => (
+                      <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
+                        {f.label || f.key}
+                      </Checkbox>
+                    ))}
+                    {selectedUnavailableFilters?.map((f) => (
+                      <Checkbox value={f} key={f} onChange={onChange} className="checkbox-filter__selected-unavailable">
+                        {`${f} (0)`}
+                      </Checkbox>
+                    ))}
+                    <span className="filter-container__divider"></span>
+                  </VStack>
+                  <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
+                    {notSelectedFilters.map((f) => (
+                      <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
+                        {f.label || f.key}
+                      </Checkbox>
+                    ))}
+                    {/* {selectedInvisibleFilters?.map((f) => (
                   <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
-                    {f.label || f.key}
+                  {f.label || f.key}
                   </Checkbox>
-                ))}
-                <span className="filter-container__divider"></span>
-              </VStack>
-              <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
-                {notSelectedFilters.map((f) => (
-                  <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
-                    {f.label || f.key}
-                  </Checkbox>
-                ))}
-              </VStack>
+                ))} */}
+                  </VStack>
+                </>
+              )}
             </CheckboxGroup>
           )}
         />

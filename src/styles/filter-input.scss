@@ -32,6 +32,12 @@
     max-height: 400px;
     overflow-y: auto;
   }
+
+  &__selected-unavailable {
+    .navds-body-short--small {
+      color: $a-text-subtle;
+    }
+  }
 }
 
 .filter-container {
