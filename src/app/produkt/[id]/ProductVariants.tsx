@@ -55,16 +55,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
             formatAgreementRanks(variantB.agreements!),
             sortColumns?.direction === 'descending'
           )
-          // if (
-          //   formatAgreementRanks(variantA.agreements!) < formatAgreementRanks(variantB.agreements!) ||
-          //   formatAgreementRanks(variantB.agreements!) === undefined
-          // ) {
-          //   return -1
-          // }
-          // if (formatAgreementRanks(variantA.agreements!) > formatAgreementRanks(variantB.agreements!)) {
-          //   return 1
-          // }
-          // return 0
         }
         return -1
       }
