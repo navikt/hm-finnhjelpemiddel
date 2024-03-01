@@ -31,9 +31,40 @@ const ProductVariants = ({ product }: { product: Product }) => {
         }
         return -1
       }
+      if (sortColumns.orderBy === 'levart') {
+        if (variantA.supplierRef && variantB.supplierRef) {
+          return sortIntWithStringFallback(
+            variantA.supplierRef,
+            variantB.supplierRef,
+            sortColumns?.direction === 'descending'
+          )
+        }
+        return -1
+      }
       if (sortColumns.orderBy === 'Expired') {
         if (variantA.status && variantB.status) {
           return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
+        }
+        return -1
+      }
+
+      if (sortColumns.orderBy === 'rank') {
+        if (variantA.agreements && variantA.agreements) {
+          return sortAlphabetically(
+            formatAgreementRanks(variantA.agreements!),
+            formatAgreementRanks(variantB.agreements!),
+            sortColumns?.direction === 'descending'
+          )
+          // if (
+          //   formatAgreementRanks(variantA.agreements!) < formatAgreementRanks(variantB.agreements!) ||
+          //   formatAgreementRanks(variantB.agreements!) === undefined
+          // ) {
+          //   return -1
+          // }
+          // if (formatAgreementRanks(variantA.agreements!) > formatAgreementRanks(variantB.agreements!)) {
+          //   return 1
+          // }
+          // return 0
         }
         return -1
       }
@@ -150,7 +181,19 @@ const ProductVariants = ({ product }: { product: Product }) => {
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+              <Table.HeaderCell>
+                <Button
+                  className="sort-button"
+                  size="xsmall"
+                  style={{ textAlign: 'left' }}
+                  variant="tertiary"
+                  onClick={() => handleSortRow('HMS')}
+                  iconPosition="right"
+                  icon={iconBasedOnState('HMS')}
+                >
+                  HMS-nummer
+                </Button>
+              </Table.HeaderCell>
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>{variant.hmsArtNr ?? '-'}</Table.DataCell>
               ))}
@@ -158,7 +201,19 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
             {product.agreements && product.agreements.length > 0 && (
               <Table.Row>
-                <Table.HeaderCell>Rangering</Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Button
+                    className="sort-button"
+                    size="xsmall"
+                    style={{ textAlign: 'left' }}
+                    variant="tertiary"
+                    onClick={() => handleSortRow('rank')}
+                    iconPosition="right"
+                    icon={iconBasedOnState('rank')}
+                  >
+                    Rangering
+                  </Button>
+                </Table.HeaderCell>
                 {sortedByKey.map((variant) => (
                   <Fragment key={variant.id}>
                     <Table.DataCell key={variant.id}>{formatAgreementRanks(variant.agreements!)}</Table.DataCell>
@@ -168,7 +223,19 @@ const ProductVariants = ({ product }: { product: Product }) => {
             )}
 
             <Table.Row>
-              <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+              <Table.HeaderCell>
+                <Button
+                  className="sort-button"
+                  size="xsmall"
+                  style={{ textAlign: 'left' }}
+                  variant="tertiary"
+                  onClick={() => handleSortRow('levart')}
+                  iconPosition="right"
+                  icon={iconBasedOnState('levart')}
+                >
+                  Lev-artnr
+                </Button>
+              </Table.HeaderCell>
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
               ))}

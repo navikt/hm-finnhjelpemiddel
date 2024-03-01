@@ -1,4 +1,12 @@
 const stringComparator = (a: string, b: string) => {
+  // Handle special cases for "-"
+  if (a === '-' && b !== '-') {
+    return 1 // "-" should come last
+  }
+  if (b === '-' && a !== '-') {
+    return -1 // "-" should come last
+  }
+
   if (a < b || b === undefined) {
     return -1
   }
