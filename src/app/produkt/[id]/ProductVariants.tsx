@@ -170,7 +170,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            <Table.Row>
+            <Table.Row
+              className={classNames('comparing-table__sortable-row', {
+                'comparing-table__sorted-row': sortColumns.orderBy === 'HMS',
+              })}
+            >
               <Table.HeaderCell>
                 <Button
                   className="sort-button"
@@ -190,7 +194,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
             </Table.Row>
 
             {product.agreements && product.agreements.length > 0 && (
-              <Table.Row>
+              <Table.Row
+                className={classNames('comparing-table__sortable-row', {
+                  'comparing-table__sorted-row': sortColumns.orderBy === 'rank',
+                })}
+              >
                 <Table.HeaderCell>
                   <Button
                     className="sort-button"
@@ -212,7 +220,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
               </Table.Row>
             )}
 
-            <Table.Row>
+            <Table.Row
+              className={classNames('comparing-table__sortable-row', {
+                'comparing-table__sorted-row': sortColumns.orderBy === 'levart',
+              })}
+            >
               <Table.HeaderCell>
                 <Button
                   className="sort-button"
