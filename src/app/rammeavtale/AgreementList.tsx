@@ -49,7 +49,7 @@ const AgreementList = () => {
 
   return (
     <>
-      <Heading level="2" size="large" className="spacing-bottom--small">
+      <Heading level="2" size="large" className="spacing-bottom--small" id="alle-avtaler">
         Alle avtaler
       </Heading>
       <BodyShort>
