@@ -53,10 +53,10 @@ const AgreementList = () => {
         Alle avtaler
       </Heading>
       <BodyShort>
-        Her finner du alle aktive avtaler NAV har. Under hver enkelt avtale finner man tilbehør, tjenester, reservedeler
-        og dokumenter som "Behov og kravspesifikasjon".
+        {`Her finner du alle aktive avtaler NAV har. Under hver enkelt avtale finner man tilbehør, tjenester, reservedeler
+        og dokumenter som "Behov og kravspesifikasjon".`}
       </BodyShort>
-      {/* TODO <Combobox></Combobox> */}
+
       <Select
         label="Sorter avtalene basert på"
         onChange={handleSelectedSorting}
@@ -80,9 +80,9 @@ const AgreementList = () => {
       <VStack as="ol" gap="4" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (
-            <Box as="li" borderRadius="medium" borderColor="border-subtle" borderWidth="1">
+            <Box as="li" key={label.identifier} borderRadius="medium" borderColor="border-subtle" borderWidth="1">
               <HGrid columns={{ xs: '1', md: '4fr 1fr 1fr' }} align="center">
-                <Link as={NextLink} key={label.identifier} href={`/rammeavtale/${label.id}`}>
+                <Link as={NextLink} href={`/rammeavtale/${label.id}`}>
                   {/* TODO: Label eller title her? {label.title} */}
                   {`${label.label} `}
                 </Link>
