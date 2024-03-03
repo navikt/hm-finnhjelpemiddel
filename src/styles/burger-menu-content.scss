@@ -27,9 +27,6 @@
       padding-inline-start: 0;
 
       li {
-        @include mixins.for-size(tablet-up) {
-        }
-
         @include mixins.for-size(desktop-up) {
           max-width: 500px;
         }

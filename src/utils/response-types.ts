@@ -226,6 +226,8 @@ export interface AgreementLabelResponse {
   label: string
   identifier: string
   title: string
+  published: string
+  expired: string
 }
 
 export interface PostResponse {

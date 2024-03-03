@@ -41,6 +41,8 @@ export interface AgreementLabel {
   label: string
   identifier: string
   title: string
+  published: Date
+  expires: Date
 }
 
 export interface Attachment {
@@ -127,6 +129,8 @@ export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabe
     label: source.label,
     identifier: source.identifier,
     title: source.title,
+    published: new Date(Date.parse(source.published)) ?? '',
+    expires: new Date(Date.parse(source.expired)) ?? '',
   }
 }
 

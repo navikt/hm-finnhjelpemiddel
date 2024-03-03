@@ -8,7 +8,6 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import { Bleed } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import AgreementList from './AgreementList'
-import './agreement-page.scss'
 
 export const metadata: Metadata = {
   title: 'Rammeavtaler',
@@ -19,7 +18,7 @@ export default async function AgreementsInfoPage() {
   return (
     <div className="agreement-page">
       <AnimateLayout>
-        <div className="agreement-page__content  main-wrapper--small">
+        <div className="agreement-page__content  main-wrapper--medium">
           <article>
             <div className="flex flex--space-between">
               <Heading level="1" size="large" className="spacing-bottom--small">

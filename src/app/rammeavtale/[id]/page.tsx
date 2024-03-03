@@ -7,7 +7,6 @@ import { dateToString } from '@/utils/string-util'
 import { BodyLong, Heading, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import '../agreement-page.scss'
 import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
 
