@@ -41,8 +41,10 @@
   }
 
   .sort-button {
-    border-radius: 0;
+    width: 100%;
+    justify-content: space-between;
   }
+
   .sort-button:focus,
   .sort-button:hover {
     outline: none;
