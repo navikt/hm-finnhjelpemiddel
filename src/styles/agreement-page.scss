@@ -1,4 +1,4 @@
-@use 'src/styles/mixins';
+@use './_mixins';
 
 @import '@navikt/ds-tokens/dist/tokens';
 
@@ -31,7 +31,7 @@
     display: flex;
     flex-direction: column;
     gap: $a-spacing-4;
-    padding: $a-spacing-4 $a-spacing-4;
+    padding: $a-spacing-6 $a-spacing-4;
     border-radius: $a-border-radius-large;
 
     @include mixins.for-size(tablet-up) {
@@ -40,7 +40,7 @@
 
     p {
       max-width: 550px;
-    } 
+    }
   }
 
   &__icon-containers {
@@ -67,5 +67,51 @@
     display: flex;
     flex-direction: column;
     gap: $a-spacing-2;
+  }
+
+  &__list-header {
+    @include mixins.for-size(tablet-up) {
+      :first-child {
+        margin-left: 1rem;
+      }
+      :last-child {
+        margin-left: 1rem;
+      }
+    }
+
+    p {
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: $a-text-subtle;
+    }
+  }
+
+  &__list-container {
+    list-style: none;
+    margin-block-start: 0;
+    padding-inline-start: 0;
+
+    li > div {
+      // padding: 0 $a-spacing-2;
+      @include mixins.for-size(tablet-up) {
+        // padding: 0 $a-spacing-4;
+        height: 3.75rem;
+        :first-child {
+          margin-left: 1rem;
+          padding-right: 4px;
+        }
+        :last-child {
+          margin-left: 1rem;
+        }
+      }
+    }
+
+    li {
+      padding: $a-spacing-2;
+
+      @include mixins.for-size(tablet-up) {
+        padding: 0;
+      }
+    }
   }
 }
