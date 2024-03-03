@@ -91,6 +91,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
             hideLabel
             variant="simple"
             size="small"
+            aria-controls="filters"
             clearButton={true}
             // placeholder="Søk etter rammeavtale"
             value={searchFilterTerm}
@@ -105,6 +106,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
               legend={FilterCategories[filterKey]}
               hideLegend
               size="small"
+              id="filters"
               {...field}
               value={searchData.filters[filterKey]}
             >
@@ -124,7 +126,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
               )}
               {showSearch && (
                 <>
-                  <VStack gap="1" className="checkbox-filter__checkboxes">
+                  <VStack gap="1" className="checkbox-filter__checkboxes" aria-label="Valgte filtre">
                     {selectedFilters.map((f) => (
                       <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
                         {f.label || f.key}
@@ -137,7 +139,11 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
                     ))}
                     <span className="filter-container__divider"></span>
                   </VStack>
-                  <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
+                  <VStack
+                    gap="1"
+                    className="checkbox-filter__checkboxes checkbox-filter__scroll-container"
+                    aria-label="Ikke valgte filtre"
+                  >
                     {notSelectedFilters.map((f) => (
                       <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
                         {f.label || f.key}
