@@ -69,7 +69,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     onClick={() => setMenuOpen(false)}
                   >
                     <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
-                    Alle avtaler med avtaleperiode
+                    Alle avtaler med sortering på avtaleperiode
                   </Link>
                 </li>
                 <li>
