@@ -125,9 +125,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   return (
     <VStack className="main-wrapper--large spacing-bottom--large">
       <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
-        <HStack gap="3">
+        <HStack gap="3" className="hide-print">
           <Link as={NextLink} href="/" variant="subtle">
-            Alle hjelpemiddel
+            Alle hjelpemidler
           </Link>
           <BodyShort textColor="subtle">/</BodyShort>
         </HStack>
@@ -140,7 +140,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <CompareMenu />
         <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
-            <section className="filter-container">
+            <section className="filter-container hide-print">
               <FilterForm
                 onSubmit={onSubmit}
                 ref={searchFormRef}
