@@ -25,6 +25,7 @@
     align-items: stretch;
     border-radius: $a-border-radius-large;
     background: #fff;
+    box-shadow: $a-shadow-xsmall;
 
     @include mixins.for-size(phone-up) {
       width: 299px;
@@ -34,16 +35,20 @@
       padding: $a-spacing-4 $a-spacing-5;
       width: 100%;
       justify-content: flex-start;
+      color: var(--nav-gra-nav-mork-gra, #262626);
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+      text-decoration-line: underline;
+      text-underline-offset: 2px;
     }
 
     a:active {
       background-color: transparent;
     }
 
-    p {
-      color: var(--nav-gra-nav-mork-gra, #262626);
-      text-decoration-line: underline;
-      font-size: 1.25rem;
+    :hover {
+      box-shadow: $a-shadow-small;
+      text-decoration: none;
     }
   }
 }
