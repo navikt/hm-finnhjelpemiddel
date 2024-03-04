@@ -51,10 +51,11 @@ export default async function AgreementPage({ params }: Props) {
                     Produkter: {agreement.label}
                   </LinkPanel>
                 )}
+
                 <AgreementDescription agreement={agreement} />
               </article>
               <article>
-                <Heading level="1" size="medium">
+                <Heading level="1" size="medium" id="dokumenter">
                   Dokumenter
                 </Heading>
                 {agreement.attachments.map((attachment, i) => (

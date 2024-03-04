@@ -132,7 +132,6 @@ const AgreementList = () => {
             <Box as="li" key={label.identifier} borderRadius="medium" borderColor="border-subtle" borderWidth="1">
               <HGrid columns={{ xs: '1', md: '4fr 1fr 1fr' }} align="center">
                 <Link as={NextLink} href={`/rammeavtale/${label.id}`}>
-                  {/* TODO: Label eller title her? {label.title} */}
                   {`${label.label} `}
                 </Link>
                 <BodyShort>{`Fra ${dateToString(label.published)}`}</BodyShort>

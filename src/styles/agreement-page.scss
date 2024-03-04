@@ -84,6 +84,16 @@
         padding: 0;
       }
     }
+
+    a {
+      width: fit-content;
+      text-underline-offset: 2px;
+    }
+
+    a:active {
+      background-color: transparent;
+      color: black;
+    }
   }
 
   &__sort-button {
