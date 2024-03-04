@@ -50,15 +50,6 @@
   }
 
   &__list-header {
-    @include mixins.for-size(tablet-up) {
-      :first-child {
-        margin-left: 1rem;
-      }
-      :last-child {
-        margin-left: 1rem;
-      }
-    }
-
     p {
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -93,5 +84,14 @@
         padding: 0;
       }
     }
+  }
+
+  &__sort-button {
+    width: fit-content;
+    padding-left: 1rem;
+  }
+
+  &__sort-selected {
+    background-color: $a-surface-action-subtle;
   }
 }

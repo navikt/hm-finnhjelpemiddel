@@ -132,7 +132,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           <BodyShort textColor="subtle">/</BodyShort>
         </HStack>
         <Heading level="1" size="large">
-          {agreement.title}
+          {`Avtale: ${agreement.title}`}
         </Heading>
       </VStack>
 
