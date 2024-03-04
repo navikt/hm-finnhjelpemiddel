@@ -17,7 +17,7 @@ type SortColumns = {
 }
 
 const AgreementList = () => {
-  const [sortColumn, setSortColumn] = useState<SortColumns>({ orderBy: 'title', direction: 'descending' })
+  const [sortColumn, setSortColumn] = useState<SortColumns>({ orderBy: 'title', direction: 'ascending' })
   const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
@@ -39,7 +39,7 @@ const AgreementList = () => {
         sorted.sort((a, b) => b.expires.getTime() - a.expires.getTime())
       }
     } else {
-      sorted.sort((a, b) => sortAlphabetically(a.label, b.label, sortColumn.direction === 'ascending'))
+      sorted.sort((a, b) => sortAlphabetically(a.label, b.label, sortColumn.direction === 'descending'))
     }
 
     return sorted
