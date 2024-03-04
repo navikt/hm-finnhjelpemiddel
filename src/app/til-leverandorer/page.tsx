@@ -1,7 +1,6 @@
-import { BodyLong, Heading } from '@/components/aksel-client'
+import { BodyLong, BodyShort, Heading, Link, List } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { Metadata } from 'next'
-import { BodyShort, Link, List } from '@navikt/ds-react'
 
 export const metadata: Metadata = {
   title: 'Til leverandører',
