@@ -31,7 +31,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
                   <div className="product-page-section__card-container">
                     {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
                     {matchingProducts.map((product, i) => (
-                      <ProductCard product={product} key={`${i}-${product.id}`} />
+                      <ProductCard product={product} key={`${i}-${product.id}`} type="plain" />
                     ))}
                   </div>
                 ) : (
