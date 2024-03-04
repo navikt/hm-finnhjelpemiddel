@@ -3,6 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 
 import { Link } from '@navikt/ds-react'
+import NextLink from 'next/link'
 
 const Footer = () => (
   <footer className="nav-bunn">
@@ -10,10 +11,17 @@ const Footer = () => (
       <div className="nav-bunn__info">
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />
         <div>
-          <Link href="/om-nettstedet">Om FinnHjelpemiddel</Link>
-          <Link href="/rettigheter-og-ansvar">Rettigheter og ansvar</Link>
-          <Link href="/til-leverandorer">Til leverandører</Link>
+          <Link as={NextLink} href="/om-nettstedet">
+            Om FinnHjelpemiddel
+          </Link>
+          <Link as={NextLink} href="/rettigheter-og-ansvar">
+            Rettigheter og ansvar
+          </Link>
+          <Link as={NextLink} href="/til-leverandorer">
+            Til leverandører
+          </Link>
           <Link
+            as={NextLink}
             href="https://uustatus.no/nb/erklaringer/publisert/d760f748-feec-4cdb-b1cb-9535f1219060"
             rel="noopener noreferrer"
             target="_blank"
