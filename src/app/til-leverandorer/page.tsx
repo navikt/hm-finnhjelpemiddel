@@ -24,7 +24,7 @@ function ToSuppliers() {
             <Heading level="2" size="small">
               Hva er et hjelpemiddel?
             </Heading>
-            <BodyLong spacing>
+            <BodyLong>
               På FinnHjelpemiddel forholder vi oss i hovedsak til folketrygdens definisjon av et hjelpemiddel. Det vil
               si at hjelpemidlene som presenteres er spesiallaget for personer med funksjonsnedsettelse. For mer
               informasjon om hva som defineres som et hjelpemiddel, se
@@ -32,7 +32,8 @@ function ToSuppliers() {
                 rundskriv til folketrygdloven § 10-7.
               </Link>
             </BodyLong>
-            <List as="ul" title="Produkter som klart faller utenfor hjelpemiddelbegrepet i denne sammenhengen er:">
+            <BodyShort>Produkter som klart faller utenfor hjelpemiddelbegrepet i denne sammenhengen er:</BodyShort>
+            <List as="ul">
               <List.Item>Vanlige møbler</List.Item>
               <List.Item>Brune- og hvitevarer</List.Item>
               <List.Item>Vanlig kjøkkenutstyr</List.Item>
