@@ -79,54 +79,53 @@ const AgreementList = () => {
         og dokumenter som "Behov og kravspesifikasjon".`}
       </BodyShort>
 
-      <Show above="md">
-        <HGrid columns={{ xs: '1', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
-          <Button
-            className={classNames('agreement-page__sort-button', {
-              'agreement-page__sort-selected': sortColumn.orderBy === 'title',
-            })}
-            aria-label="Sorter på tittel"
-            aria-selected={sortColumn.orderBy === 'title'}
-            size="xsmall"
-            variant="tertiary"
-            onClick={() => handleSortColumn('title')}
-            iconPosition="right"
-            icon={iconBasedOnState('title')}
-          >
-            Tittel
-          </Button>
-          <Button
-            className={classNames('agreement-page__sort-button', {
-              'agreement-page__sort-selected': sortColumn.orderBy === 'published',
-            })}
-            aria-label="Sorter på publisert dato"
-            aria-selected={sortColumn.orderBy === 'published'}
-            size="xsmall"
-            variant="tertiary"
-            onClick={() => handleSortColumn('published')}
-            iconPosition="right"
-            icon={iconBasedOnState('published')}
-            style={{ marginLeft: '-6px' }}
-          >
-            Aktiv fra
-          </Button>
-          <Button
-            className={classNames('agreement-page__sort-button', {
-              'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
-            })}
-            aria-label="Sorter på tittel"
-            aria-selected={sortColumn.orderBy === 'expires'}
-            size="xsmall"
-            variant="tertiary"
-            onClick={() => handleSortColumn('expires')}
-            iconPosition="right"
-            icon={iconBasedOnState('expires')}
-            style={{ marginLeft: '1rem' }}
-          >
-            Aktiv til
-          </Button>
-        </HGrid>
-      </Show>
+      <HGrid columns={{ xs: '1fr 1fr 1fr', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
+        <Button
+          className={classNames('agreement-page__sort-button', {
+            'agreement-page__sort-selected': sortColumn.orderBy === 'title',
+          })}
+          aria-label="Sorter på tittel"
+          aria-selected={sortColumn.orderBy === 'title'}
+          size="xsmall"
+          variant="tertiary"
+          onClick={() => handleSortColumn('title')}
+          iconPosition="right"
+          icon={iconBasedOnState('title')}
+        >
+          Tittel
+        </Button>
+        <Button
+          className={classNames('agreement-page__sort-button agreement-page__sort-button-published', {
+            'agreement-page__sort-selected': sortColumn.orderBy === 'published',
+          })}
+          aria-label="Sorter på publisert dato"
+          aria-selected={sortColumn.orderBy === 'published'}
+          size="xsmall"
+          variant="tertiary"
+          onClick={() => handleSortColumn('published')}
+          iconPosition="right"
+          icon={iconBasedOnState('published')}
+        >
+          <Show above="md">Aktiv fra</Show>
+          <Show below="md">Fra</Show>
+        </Button>
+        <Button
+          className={classNames('agreement-page__sort-button agreement-page__sort-button-expires', {
+            'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
+          })}
+          aria-label="Sorter på tittel"
+          aria-selected={sortColumn.orderBy === 'expires'}
+          size="xsmall"
+          variant="tertiary"
+          onClick={() => handleSortColumn('expires')}
+          iconPosition="right"
+          icon={iconBasedOnState('expires')}
+        >
+          <Show above="md">Aktiv til</Show>
+          <Show below="md">Til</Show>
+        </Button>
+      </HGrid>
+
       <VStack as="ol" gap="4" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (

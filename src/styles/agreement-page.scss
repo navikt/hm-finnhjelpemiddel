@@ -89,6 +89,15 @@
   &__sort-button {
     width: fit-content;
     padding-left: 1rem;
+    @include mixins.for-size(tablet-up) {
+      &-published {
+        margin-left: -6px;
+      }
+
+      &-expires {
+        margin-left: 1rem;
+      }
+    }
   }
 
   &__sort-selected {
