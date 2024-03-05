@@ -1,8 +1,9 @@
+import { mapAllNews } from '@/utils/news-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
+  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
-  FilterCategories,
   filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
@@ -22,11 +23,11 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  mapProductsFromAggregation,
-  mapProductsFromCollapse,
-  mapProductVariant,
   Product,
   ProductVariant,
+  mapProductVariant,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
 } from './product-util'
 import {
   AgreementDocResponse,
@@ -36,7 +37,6 @@ import {
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
-import { mapAllNews } from '@/utils/news-util'
 
 export const PAGE_SIZE = 25
 
@@ -1011,7 +1011,7 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
         },
       },
       _source: {
-        includes: ['id', 'label', 'identifier', 'title'],
+        includes: ['id', 'label', 'identifier', 'title', 'published', 'expired'],
       },
     }),
   })

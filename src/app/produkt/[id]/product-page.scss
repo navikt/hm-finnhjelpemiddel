@@ -140,7 +140,7 @@
     width: 250px;
     height: 250px;
 
-    @include mixins.for-size(tablet-up) {
+    @include mixins.for-size(phone-up) {
       width: 400px;
       height: 400px;
     }
@@ -156,7 +156,7 @@
       height: 250px;
       background: white;
 
-      @include mixins.for-size(tablet-up) {
+      @include mixins.for-size(phone-up) {
         width: 400px;
         height: 400px;
       }

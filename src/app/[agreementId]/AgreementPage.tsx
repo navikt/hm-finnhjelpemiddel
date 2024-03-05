@@ -127,12 +127,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
         <HStack gap="3" className="hide-print">
           <Link as={NextLink} href="/" variant="subtle">
-            Alle hjelpemidler
+            Hjelpemidler på avtale med NAV
           </Link>
           <BodyShort textColor="subtle">/</BodyShort>
         </HStack>
         <Heading level="1" size="large">
-          {agreement.title}
+          {`${agreement.title}`}
         </Heading>
       </VStack>
 
