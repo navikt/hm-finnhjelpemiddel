@@ -63,9 +63,7 @@
     padding-inline-start: 0;
 
     li > div {
-      // padding: 0 $a-spacing-2;
       @include mixins.for-size(tablet-up) {
-        // padding: 0 $a-spacing-4;
         height: 3.75rem;
         :first-child {
           margin-left: 1rem;
