@@ -66,7 +66,7 @@ function ToSuppliers() {
               Produktkategorier
             </Heading>
             <BodyLong spacing>
-              NAlle hjelpemidler som publiseres på FinnHjelpemiddel, er kategorisert etter gjeldende versjon av Norsk
+              Alle hjelpemidler som publiseres på FinnHjelpemiddel, er kategorisert etter gjeldende versjon av Norsk
               Standard «NS-EN ISO 9999 - Hjelpemidler for personer med nedsatt funksjonsevne». Standarden er basert på
               oversettelse fra engelsk utført av{' '}
               <Link href="https://online.standard.no/ns-en-iso-9999-2022"> Standard Norge.</Link>
