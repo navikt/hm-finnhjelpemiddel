@@ -17,7 +17,7 @@ const ProductCard = ({
 }: {
   product: Product
   rank?: number
-  type?: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox'
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox'
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()

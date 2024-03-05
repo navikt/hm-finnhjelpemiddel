@@ -1,12 +1,12 @@
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { Heading, Link } from '@navikt/ds-react'
+import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
-import NextLink from 'next/link'
-import { getAgreementLabels } from '@/utils/api-util'
-import { useRouter } from 'next/navigation'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
 
 interface Props {
@@ -58,11 +58,22 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     onClick={() => setMenuOpen(false)}
                   >
                     <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
-                    Om avtaler med NAV
+                    Avtaler med NAV
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="burgermenu-container__link"
+                    as={NextLink}
+                    href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
+                    Slik kan du se at et hjelpemiddel er på avtale med NAV
                   </Link>
                 </li>
               </ul>
-              <Heading level="2" size="small">
+              <Heading level="2" size="small" style={{ marginTop: '4px' }}>
                 Hjelpemidler på avtale med NAV
               </Heading>
               <ul className="burgermenu-container__agreemment-list">

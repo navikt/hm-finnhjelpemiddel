@@ -16,6 +16,7 @@
 @import './navigation-bar.scss';
 @import './burger-menu-content.scss';
 @import './z-index.scss';
+@import './agreement-page.scss';
 
 html,
 body {
@@ -276,6 +277,11 @@ main {
     &--small {
       margin-top: $a-spacing-2;
       margin-bottom: $a-spacing-2;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-4;
+        margin-bottom: $a-spacing-4;
+      }
     }
     &--medium {
       margin-top: $a-spacing-4;

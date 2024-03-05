@@ -1,7 +1,5 @@
 'use client'
 
-import React from 'react'
-
 import { BodyShort, ExpansionCard } from '@navikt/ds-react'
 
 import { Attachment } from '@/utils/agreement-util'
@@ -11,7 +9,7 @@ import File from '@/components/File'
 export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }) => (
   <ExpansionCard size="small" aria-label="Heading-size small demo">
     <ExpansionCard.Header>
-      <ExpansionCard.Title as="h4" size="small" style={{ fontSize: '18px' }}>
+      <ExpansionCard.Title as="h2" size="small" style={{ fontSize: '18px' }}>
         {attachment.title}
       </ExpansionCard.Title>
     </ExpansionCard.Header>

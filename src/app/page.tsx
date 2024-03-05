@@ -7,14 +7,14 @@ import NextLink from 'next/link'
 
 import useSWR from 'swr'
 
-import { Bleed, BodyShort, Heading, Hide, HStack, VStack } from '@navikt/ds-react'
+import { Bleed, Heading, Hide, HStack, Link, VStack } from '@navikt/ds-react'
 
 import { agreementHasNoProducts, AgreementLabel } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import { sortAlphabetically } from '@/utils/sort-util'
 import News from '@/components/News'
+import { sortAlphabetically } from '@/utils/sort-util'
 
 function Home() {
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
@@ -35,7 +35,7 @@ function Home() {
       <AnimateLayout>
         <Bleed marginInline="full" asChild reflectivePadding>
           <div className="main-wrapper--background-blue">
-            <VStack className="main-wrapper--large">
+            <VStack className="main-wrapper--large" gap="4">
               <HStack justify={{ xl: 'space-between' }} gap={{ lg: '20' }} className="spacing-top--xlarge">
                 <div className="home-page__heading">
                   <Heading level="1" size="large">
@@ -47,19 +47,25 @@ function Home() {
                 </Hide>
               </HStack>
 
-              <HStack gap="5" className="spacing-bottom--xlarge">
-                {sortedAgreements?.map(({ id, label }) => {
-                  //Wish to replace id by label in url
-                  let hrefSok = `/sok?agreement&rammeavtale=${label}`
-                  return (
-                    <div className="home-page__agreement-link" key={id}>
-                      <NextLink href={`/${id}`}>
-                        <BodyShort> {label} </BodyShort>
-                      </NextLink>
-                    </div>
-                  )
-                })}
-              </HStack>
+              <VStack gap={{ xs: '4', md: '8' }}>
+                <Heading level="2" size="medium">
+                  Hjelpemidler på avtale med NAV
+                </Heading>
+
+                <HStack gap="5" className="spacing-bottom--xlarge">
+                  {sortedAgreements?.map(({ id, label }) => {
+                    //Wish to replace id by label in url
+                    let hrefSok = `/sok?agreement&rammeavtale=${label}`
+                    return (
+                      <div className="home-page__agreement-link" key={id}>
+                        <Link as={NextLink} href={`/${id}`}>
+                          {label}
+                        </Link>
+                      </div>
+                    )
+                  })}
+                </HStack>
+              </VStack>
               <News />
             </VStack>
           </div>
