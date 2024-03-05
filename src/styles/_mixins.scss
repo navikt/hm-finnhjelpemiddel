@@ -5,8 +5,12 @@
     @media (max-width: 549px) {
       @content;
     }
-  } @else if $range == tablet-up {
+  } @else if $range == phone-up {
     @media (min-width: 550px) {
+      @content;
+    }
+  } @else if $range == tablet-up {
+    @media (min-width: 768px) {
       @content;
     }
   } @else if $range == desktop-up {
