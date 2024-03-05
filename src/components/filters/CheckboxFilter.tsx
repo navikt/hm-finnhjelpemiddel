@@ -47,7 +47,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
     setNotSelectedFilters(
       filterData?.values
         .filter((f) => !searchData.filters[filterKey].includes(f.key))
-        .filter((bucket) => bucket.key.toString().toLowerCase().startsWith(searchFilterTerm.toLowerCase()))
+        .filter((bucket) => bucket.key.toString().toLowerCase().includes(searchFilterTerm.toLowerCase()))
         .sort((a, b) => sortAlphabetically(a.key.toString(), b.key.toString())) || []
     )
   }, [searchData, searchFilterTerm, searchParams, filterData])
