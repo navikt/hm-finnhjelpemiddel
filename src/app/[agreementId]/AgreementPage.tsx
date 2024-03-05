@@ -150,7 +150,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
-                  variant="tertiary-neutral"
+                  variant="secondary"
                   size="small"
                   icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                   onClick={() => {
@@ -171,12 +171,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
                 <Button
                   type="button"
-                  variant="tertiary-neutral"
+                  variant="secondary"
                   size="small"
                   icon={<TrashIcon title="Nullstill søket" />}
                   onClick={onReset}
                 >
-                  Nullstill søket
+                  Tøm filtre
                 </Button>
               </HGrid>
             </section>
@@ -211,7 +211,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                     <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                       <Button
                         ref={copyButtonMobileRef}
-                        variant="tertiary-neutral"
+                        variant="secondary"
                         size="small"
                         icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                         onClick={() => {
@@ -232,12 +232,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
                       <Button
                         type="button"
-                        variant="tertiary-neutral"
+                        variant="secondary"
                         size="small"
                         icon={<TrashIcon title="Nullstill søket" />}
                         onClick={onReset}
                       >
-                        Nullstill søket
+                        Tøm filtre
                       </Button>
                     </HGrid>
                     <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
