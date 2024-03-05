@@ -41,7 +41,7 @@ const ProductCard = ({
     cardClassName = 'product-card--no-picture'
   }
 
-  addEventListener('beforeprint', () => {
+  window.addEventListener('beforeprint', () => {
     setShowInPrintMode(true)
   })
 
