@@ -414,3 +414,12 @@ main {
 
   overflow: hidden;
 }
+
+@media print {
+  ol li {
+    break-inside: avoid-page;
+  }
+  .hide-print {
+    display: none;
+  }
+}
