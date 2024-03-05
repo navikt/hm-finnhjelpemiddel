@@ -159,28 +159,42 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
 }
 
 export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
+  console.log('pos', postBuckets)
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
   const posts = postBuckets.map((post) => {
+    let seen: string[] = []
     const postTitle = getPostTitle(post.key)
     const mappedTitle = postTitle ? makePostTitleBasedOnAgreementId(postTitle, post.key, agreement.id) : ''
     return {
       nr: post.key,
       title: mappedTitle,
-      products: post.seriesId.buckets
-        .map((bucket) => {
-          const product = mapProductWithVariants(Array(bucket.topHitData.hits.hits[0]._source as ProductSourceResponse))
+      products: post.topHitData.hits.hits
+        .map((hit) => {
+          const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
+
           return {
             rank: getRank(product, post.key) || 99,
             product: product,
           }
         })
+        .filter((prod) => {
+          console.log(seen, seen.includes(prod.product.id))
+          if (seen.includes(prod.product.id)) {
+            return false
+          } else {
+            seen.push(prod.product.id)
+            return true
+          }
+        })
         .sort((a, b) => a.rank - b.rank),
     }
   })
+
+  console.log('Posts', posts)
   return posts
 }
 

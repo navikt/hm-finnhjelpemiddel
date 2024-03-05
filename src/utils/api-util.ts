@@ -813,30 +813,30 @@ export const getProductsOnAgreement = ({
     postNr: {
       terms: {
         field: 'agreements.postNr',
-        size: 120,
+        size: 1000,
         order: {
           _key: 'asc',
         },
       },
+      // aggs: {
+      //   seriesId: {
+      //     terms: {
+      //       field: 'seriesId',
+      //     },
       aggs: {
-        seriesId: {
-          terms: {
-            field: 'seriesId',
-          },
-          aggs: {
-            topHitData: {
-              top_hits: {
-                size: 1,
-                _source: {
-                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
-                  includes: ['*'],
-                },
-              },
+        topHitData: {
+          top_hits: {
+            size: 500,
+            _source: {
+              // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
+              includes: ['*'],
             },
           },
         },
       },
     },
+    //   },
+    // },
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
@@ -846,7 +846,7 @@ export const getProductsOnAgreement = ({
     },
     body: JSON.stringify({
       size: 0,
-      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
       query,
       aggs,
     }),
