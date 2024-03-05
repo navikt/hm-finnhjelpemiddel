@@ -67,6 +67,7 @@ const NavigationBar = () => {
                     icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
                     variant="tertiary-neutral"
                     onClick={() => setMenuOpen(!menuOpen)}
+                    aria-expanded={menuOpen}
                   >
                     Avtale med NAV
                   </Button>
