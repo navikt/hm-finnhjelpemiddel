@@ -47,6 +47,7 @@
     }
 
     :hover {
+      border-radius: $a-border-radius-large;
       box-shadow: $a-shadow-small;
       text-decoration: none;
     }

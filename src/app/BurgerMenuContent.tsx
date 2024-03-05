@@ -58,18 +58,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     onClick={() => setMenuOpen(false)}
                   >
                     <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
-                    Om avtaler med NAV
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="burgermenu-container__link"
-                    as={NextLink}
-                    href="/rammeavtale#alle-avtaler"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
-                    Alle avtaler med sortering på avtaleperiode
+                    Avtaler med NAV
                   </Link>
                 </li>
                 <li>

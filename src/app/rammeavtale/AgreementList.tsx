@@ -5,7 +5,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, HGrid, HStack, Heading, Link, Loader, Show, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, Button, HGrid, HStack, Link, Loader, Show, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useMemo, useState } from 'react'
@@ -71,14 +71,6 @@ const AgreementList = () => {
 
   return (
     <>
-      <Heading level="2" size="large" className="spacing-bottom--small" id="alle-avtaler">
-        Alle avtaler
-      </Heading>
-      <BodyShort spacing>
-        {`Her finner du alle aktive avtaler NAV har. Under hver enkelt avtale finner man tilbehør, tjenester, reservedeler
-        og dokumenter som "Behov og kravspesifikasjon".`}
-      </BodyShort>
-
       <HGrid columns={{ xs: '1fr 1fr 1fr', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
         <Button
           className={classNames('agreement-page__sort-button', {

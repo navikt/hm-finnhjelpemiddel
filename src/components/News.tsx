@@ -1,9 +1,9 @@
 'use client'
-import { Box, Heading, VStack } from '@navikt/ds-react'
-import useSWR from 'swr'
-import { News } from '@/utils/response-types'
 import { getNews } from '@/utils/api-util'
+import { News } from '@/utils/response-types'
+import { Box, Heading, VStack } from '@navikt/ds-react'
 import { Fragment, useMemo } from 'react'
+import useSWR from 'swr'
 
 function News() {
   const { data, error } = useSWR<News[]>('/news/_search', getNews, {
@@ -22,7 +22,7 @@ function News() {
 
   return (
     <>
-      <Heading level="2" size="medium" align="center" className="spacing-bottom--large">
+      <Heading level="2" size="medium" align="center" className="spacing-bottom--medium">
         Nyheter
       </Heading>
       <VStack gap="6" align="center" className="spacing-bottom--xlarge">
@@ -30,7 +30,13 @@ function News() {
           sortedData.map((news) => (
             <Fragment key={news.identifier}>
               {news.published.getTime() >= newsMigrationDate.getTime() && news.expired >= new Date(Date.now()) && (
-                <Box padding="6" background="surface-default" borderRadius="large" style={{ maxWidth: '690px' }}>
+                <Box
+                  padding="6"
+                  background="surface-default"
+                  borderRadius="large"
+                  style={{ maxWidth: '690px' }}
+                  shadow="xsmall"
+                >
                   <VStack gap="1">
                     <Heading level="3" size="small" spacing>
                       {news.title}

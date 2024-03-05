@@ -21,22 +21,15 @@ export default async function AgreementsInfoPage() {
           <article>
             <div className="flex flex--space-between">
               <Heading level="1" size="large" className="spacing-bottom--small">
-                Rammeavtaler på Hjelpemiddelområdet
+                Avtaler på hjelpemiddelområdet
               </Heading>
               <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
-            <Heading level="2" size="small">
-              Om rammeavtaler med NAV
-            </Heading>
+            <BodyShort spacing>
+              {`Nedenfor finner du alle aktive avtaler for NAV Hjelpemniddel og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
+        og behov- og kravspesifikasjon med mer.`}
+            </BodyShort>
 
-            <BodyLong>
-              NAV har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor noen
-              områder. Når et hjelpemiddel er på avtale med NAV så vil det være fremforhandlet en pris og blitt
-              gjennomført en kvalitetssikring av hjelpemiddelet.
-            </BodyLong>
-          </article>
-
-          <article>
             <AgreementList />
           </article>
           <article>
