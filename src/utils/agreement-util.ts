@@ -88,8 +88,8 @@ export const mapAgreement = (source: AgreementsSourceResponse): Agreement => {
     title: source.title,
     label: source.label,
     descriptionHtml: source.text,
-    published: new Date(Date.parse(source.published)) ?? '',
-    expired: new Date(Date.parse(source.expired)) ?? '',
+    published: new Date(source.published) ?? '',
+    expired: new Date(source.expired) ?? '',
     posts: mapPosts(source.posts),
     attachments: mapAttachments(source.attachments),
     reference: source.reference,
@@ -129,8 +129,8 @@ export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabe
     label: source.label,
     identifier: source.identifier,
     title: source.title,
-    published: new Date(Date.parse(source.published)) ?? '',
-    expires: new Date(Date.parse(source.expired)) ?? '',
+    published: new Date(source.published) ?? '',
+    expires: new Date(source.expired) ?? '',
   }
 }
 
