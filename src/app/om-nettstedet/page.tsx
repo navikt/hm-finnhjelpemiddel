@@ -47,7 +47,7 @@ function AboutUs() {
               Et hjelpemiddel på FinnHjelpemiddel er et produkt som er spesiallaget for personer med
               funksjonsnedsettelse.
             </BodyLong>
-            <Heading level="1" size="medium">
+            <Heading level="2" size="medium">
               Tilbakemeldinger
             </Heading>
             <BodyLong spacing>
