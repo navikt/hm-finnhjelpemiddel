@@ -32,7 +32,7 @@ const NavigationBar = () => {
   }, [menuOpen, searchOpen, setMenuOpenGlobalState])
 
   return (
-    <nav className="nav">
+    <nav className="nav hide-print">
       <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">

@@ -33,6 +33,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
           </Heading>
         </Show>
         <ToggleGroup
+          className="hide-print"
           defaultValue="show-pictures"
           onChange={handleSetToggle}
           value={pictureToggleValue}
@@ -75,7 +76,7 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
                     rank={productWithRank.rank}
                     type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
                     handleIsoButton={handleSetIsoFilter}
-                  ></ProductCard>
+                  />
                 </li>
               ))}
             </HStack>
