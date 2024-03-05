@@ -21,15 +21,9 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
   const [searchFilterTerm, setSearchFilterTerm] = useState<string>('')
   const [notSelectedFilters, setNotSelectedFilters] = useState<Bucket[]>([])
 
-  const {
-    control,
-    formState: { touchedFields },
-    watch,
-    setValue,
-  } = useFormContext<SearchData>()
+  const { control, watch, setValue } = useFormContext<SearchData>()
 
   const watchFilter = watch(`filters.${filterKey}`)
-  const touched = touchedFields.filters && !!touchedFields.filters[filterKey]
 
   let selectedFilters = filterData?.values.filter((f) => searchData.filters[filterKey].includes(f.key)) || []
 
@@ -73,13 +67,12 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
   // const sortedFilters = filterData?.values.sort((a, b) => )
   const showMoreLabel =
     selectedFilters.length > 0
-      ? `${FilterCategories[filterKey]} (${selectedFilters.length})`
+      ? `${FilterCategories[filterKey]} (${selectedFilters.length + selectedUnavailableFilters.length})`
       : FilterCategories[filterKey]
 
   return (
     <ShowMore
       title={showMoreLabel}
-      open={watchFilter.length > 0 || searchData.filters[filterKey].length > 0 || touched}
       spacing
       className={classNames('checkbox-filter', { active: selectedFilters.length > 0 })}
     >
