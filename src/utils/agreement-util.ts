@@ -161,7 +161,6 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
 }
 
 export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
-  console.log('pos', postBuckets)
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
@@ -184,7 +183,6 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
           }
         })
         .filter((prod) => {
-          console.log(seen, seen.includes(prod.product.id))
           if (seen.includes(prod.product.id)) {
             return false
           } else {
@@ -196,7 +194,6 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
     }
   })
 
-  console.log('Posts', posts)
   return posts
 }
 

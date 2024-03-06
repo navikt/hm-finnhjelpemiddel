@@ -818,25 +818,17 @@ export const getProductsOnAgreement = ({
           _key: 'asc',
         },
       },
-      // aggs: {
-      //   seriesId: {
-      //     terms: {
-      //       field: 'seriesId',
-      //     },
       aggs: {
         topHitData: {
           top_hits: {
             size: 500,
             _source: {
-              // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
               includes: ['*'],
             },
           },
         },
       },
     },
-    //   },
-    // },
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
