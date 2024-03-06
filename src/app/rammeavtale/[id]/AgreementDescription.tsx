@@ -1,12 +1,11 @@
 'use client'
 
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
 import { BodyLong, Heading } from '@navikt/ds-react'
 
-import { Agreement, agreementHasNoProducts } from '@/utils/agreement-util'
-
 import ReadMore from '@/components/ReadMore'
+import { Agreement, agreementHasNoProducts } from '@/utils/agreement-util'
 
 const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -14,6 +13,7 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
   const setFocusOnHeading = () => {
     headingRef.current && headingRef.current.scrollIntoView({ behavior: 'smooth' })
   }
+
   return (
     <div className="agreement-page__description">
       <Heading level="2" size="small" ref={headingRef}>

@@ -39,7 +39,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     <>
       {isMobileOverlayOpen && <div id="cover-main" />}
       <div id="modal-container"></div>
-      <aside className="wip-banner">
+      <aside className="wip-banner hide-print">
         <div>
           <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
           <BodyLong>

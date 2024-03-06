@@ -116,6 +116,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     delkontrakt: postFilters,
   }
 
+  //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
+  //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
   const posts = mapAgreementProducts(postBucktes, agreement)
 
   const onReset = () => {
@@ -126,14 +128,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   return (
     <VStack className="main-wrapper--large spacing-bottom--large">
       <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
-        <HStack gap="3">
+        <HStack gap="3" className="hide-print">
           <Link as={NextLink} href="/" variant="subtle">
-            Alle hjelpemiddel
+            Hjelpemidler på avtale med NAV
           </Link>
           <BodyShort textColor="subtle">/</BodyShort>
         </HStack>
         <Heading level="1" size="large">
-          {agreement.title}
+          {`${agreement.title}`}
         </Heading>
       </VStack>
 
@@ -141,12 +143,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <CompareMenu />
         <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
-            <section className="filter-container">
+            <section className="filter-container hide-print">
               <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
-                  variant="tertiary-neutral"
+                  variant="secondary"
                   size="small"
                   icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                   onClick={() => {
@@ -167,12 +169,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
                 <Button
                   type="button"
-                  variant="tertiary-neutral"
+                  variant="secondary"
                   size="small"
                   icon={<TrashIcon title="Nullstill søket" />}
                   onClick={onReset}
                 >
-                  Nullstill søket
+                  Tøm filtre
                 </Button>
               </HGrid>
             </section>
@@ -202,7 +204,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                     <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                       <Button
                         ref={copyButtonMobileRef}
-                        variant="tertiary-neutral"
+                        variant="secondary"
                         size="small"
                         icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                         onClick={() => {
@@ -223,12 +225,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
                       <Button
                         type="button"
-                        variant="tertiary-neutral"
+                        variant="secondary"
                         size="small"
                         icon={<TrashIcon title="Nullstill søket" />}
                         onClick={onReset}
                       >
-                        Nullstill søket
+                        Tøm filtre
                       </Button>
                     </HGrid>
                     <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>

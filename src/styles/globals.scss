@@ -5,7 +5,7 @@
 @import './compare-menu.scss';
 @import './compare-page.scss';
 @import './comparing-table.scss';
-@import './filter-input.scss';
+@import './filter.scss';
 @import './home-page.scss';
 @import './mobile-overlay';
 @import './not-found-page';
@@ -16,6 +16,7 @@
 @import './navigation-bar.scss';
 @import './burger-menu-content.scss';
 @import './z-index.scss';
+@import './agreement-page.scss';
 
 html,
 body {
@@ -276,6 +277,11 @@ main {
     &--small {
       margin-top: $a-spacing-2;
       margin-bottom: $a-spacing-2;
+
+      @include mixins.for-size(desktop-up) {
+        margin-top: $a-spacing-4;
+        margin-bottom: $a-spacing-4;
+      }
     }
     &--medium {
       margin-top: $a-spacing-4;
@@ -407,4 +413,13 @@ main {
   -moz-box-orient: vertical;
 
   overflow: hidden;
+}
+
+@media print {
+  ol li {
+    break-inside: avoid-page;
+  }
+  .hide-print {
+    display: none;
+  }
 }

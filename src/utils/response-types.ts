@@ -41,11 +41,17 @@ export interface PostBucketResponse {
   doc_count: number
   //key = postnr
   key: number
-  seriesId: {
-    buckets: SeriesTopHitBucket[]
-    doc_count_error_upper_bound: number
-    sum_other_doc_count: number
+  topHitData: {
+    hits: {
+      total: object
+      hits: Hit[]
+    }
   }
+  // seriesId: {
+  //   buckets: SeriesTopHitBucket[]
+  //   doc_count_error_upper_bound: number
+  //   sum_other_doc_count: number
+  // }
 }
 
 interface SeriesTopHitBucket {
@@ -226,6 +232,8 @@ export interface AgreementLabelResponse {
   label: string
   identifier: string
   title: string
+  published: string
+  expired: string
 }
 
 export interface PostResponse {
@@ -240,4 +248,29 @@ export interface AttachmentsResponse {
   title: string
   media: MediaResponse[]
   description: string
+}
+
+export interface News {
+  id: string
+  identifier: string
+  title: string
+  text: string
+  status: Status
+  published: Date //date
+  expired: Date //date
+}
+
+export interface NewsResponse {
+  id: string
+  identifier: string
+  title: string
+  text: string
+  status: Status
+  published: Date //date
+  expired: Date //date
+  created: Date //date
+  updated: Date //date
+  createdBy: string
+  updatedBy: string
+  author: string
 }

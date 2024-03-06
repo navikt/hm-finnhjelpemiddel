@@ -1,3 +1,4 @@
+import { mapAllNews } from '@/utils/news-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   NewFiltersFormState,
@@ -22,15 +23,16 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  mapProductsFromAggregation,
-  mapProductsFromCollapse,
-  mapProductVariant,
   Product,
   ProductVariant,
+  mapProductVariant,
+  mapProductsFromAggregation,
+  mapProductsFromCollapse,
 } from './product-util'
 import {
   AgreementDocResponse,
   AgreementSearchResponse,
+  News,
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
@@ -238,7 +240,7 @@ const removeReservedChars = (searchTerm: String) => {
 }
 
 const sortOptionsOpenSearch = {
-  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
   Best_soketreff: [{ _score: { order: 'desc' } }],
 }
 
@@ -832,25 +834,17 @@ export const getProductsOnAgreement = ({
     postNr: {
       terms: {
         field: 'agreements.postNr',
-        size: 120,
+        size: 1000,
         order: {
           _key: 'asc',
         },
       },
       aggs: {
-        seriesId: {
-          terms: {
-            field: 'seriesId',
-          },
-          aggs: {
-            topHitData: {
-              top_hits: {
-                size: 1,
-                _source: {
-                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
-                  includes: ['*'],
-                },
-              },
+        topHitData: {
+          top_hits: {
+            size: 500,
+            _source: {
+              includes: ['*'],
             },
           },
         },
@@ -865,7 +859,7 @@ export const getProductsOnAgreement = ({
     },
     body: JSON.stringify({
       size: 0,
-      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
       query,
       aggs,
     }),
@@ -1005,7 +999,7 @@ export async function getAgreementFromLabel(label: string): Promise<SearchRespon
         },
       },
       // bool: {
-      //   should: { term: { 'agreementInfo.label': label } },
+      //   should: { term: { 'agreements.label': label } },
       // },
     }),
   })
@@ -1030,7 +1024,7 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
         },
       },
       _source: {
-        includes: ['id', 'label', 'identifier', 'title'],
+        includes: ['id', 'label', 'identifier', 'title', 'published', 'expired'],
       },
     }),
   })
@@ -1202,4 +1196,28 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
         .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
       return suggestions
     })
+}
+
+export async function getNews(): Promise<News[]> {
+  const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 100,
+      query: {
+        term: {
+          status: {
+            value: 'ACTIVE',
+          },
+        },
+      },
+      _source: {
+        includes: ['id', 'identifier', 'title', 'text', 'status', 'published', 'expired'],
+      },
+    }),
+  })
+  return res.json().then(mapAllNews)
 }

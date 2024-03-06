@@ -147,7 +147,7 @@ export default function SearchPage() {
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
-                  variant="tertiary"
+                  variant="secondary"
                   size="small"
                   icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                   onClick={() => {
@@ -167,7 +167,7 @@ export default function SearchPage() {
                 </Popover>
                 <Button
                   type="button"
-                  variant="tertiary"
+                  variant="secondary"
                   size="small"
                   icon={<TrashIcon title="Nullstill søket" />}
                   onClick={onReset}
@@ -214,7 +214,7 @@ export default function SearchPage() {
                         <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                           <Button
                             ref={copyButtonMobileRef}
-                            variant="tertiary-neutral"
+                            variant="secondary"
                             size="small"
                             icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
                             onClick={() => {
@@ -235,7 +235,7 @@ export default function SearchPage() {
 
                           <Button
                             type="button"
-                            variant="tertiary-neutral"
+                            variant="secondary"
                             size="small"
                             icon={<TrashIcon title="Nullstill søket" />}
                             onClick={onReset}

@@ -32,7 +32,7 @@ const NavigationBar = () => {
   }, [menuOpen, searchOpen, setMenuOpenGlobalState])
 
   return (
-    <nav className="nav">
+    <nav className="nav hide-print">
       <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
@@ -67,6 +67,7 @@ const NavigationBar = () => {
                     icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
                     variant="tertiary-neutral"
                     onClick={() => setMenuOpen(!menuOpen)}
+                    aria-expanded={menuOpen}
                   >
                     Avtale med NAV
                   </Button>

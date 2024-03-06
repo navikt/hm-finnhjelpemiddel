@@ -1,10 +1,11 @@
-import { CheckboxFilterInput } from '@/components/filters/CheckboxFilterInput'
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/FilterMinMaxGroup'
-import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
+import { FilterCategoryKeyServer } from '@/utils/api-util'
+import { FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/product-util'
 import { BodyShort, Heading, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
+import { CheckboxFilter } from './CheckboxFilter'
 
 const minMaxFilterKeyMapSete: Record<'setedimensjoner', MinMaxGroupFilter[]> = {
   setedimensjoner: [
@@ -119,19 +120,17 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
         Filter
       </Heading>
       <VStack gap="2" className="filter-container__filters">
-        <CheckboxFilterInput filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} />
-        <CheckboxFilterInput filter={{ key: 'produktkategori', data: filters?.produktkategori }} />
+        <CheckboxFilter filter={{ key: 'produktkategori', data: filters?.produktkategori }} showSearch={true} />
+        <CheckboxFilter filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} showSearch={true} />
         {setedimensjonerFilters.length > 0 && (
           <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={setedimensjonerFilters} />
         )}
-
         {målOgVektFilters.length > 0 && <FilterMinMaxGroup groupTitle="Mål og vekt" filters={målOgVektFilters} />}
-
-        <CheckboxFilterInput filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
-        <CheckboxFilterInput filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
-        <CheckboxFilterInput filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} />
-        <CheckboxFilterInput filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} />
-        <CheckboxFilterInput filter={{ key: 'leverandor', data: filters?.leverandor }} />
+        <CheckboxFilter filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
+        <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
+        <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
+        <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
+        <CheckboxFilter filter={{ key: 'leverandor', data: filters?.leverandor }} showSearch={true} />
       </VStack>
     </VStack>
   )

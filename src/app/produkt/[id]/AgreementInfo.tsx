@@ -56,6 +56,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
                                   key={product.id}
                                   product={product}
                                   rank={product.agreements?.find((ag) => ag.postNr === post.postNr)?.rank}
+                                  type="plain"
                                 />
                               ))}
                             </div>
