@@ -846,7 +846,7 @@ export const getProductsOnAgreement = ({
     },
     body: JSON.stringify({
       size: 0,
-      sort: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
       query,
       aggs,
     }),
