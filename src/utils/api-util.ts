@@ -219,7 +219,7 @@ const removeReservedChars = (searchTerm: String) => {
 }
 
 const sortOptionsOpenSearch = {
-  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreementInfo.rank': 'asc' }],
+  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
   Best_soketreff: [{ _score: { order: 'desc' } }],
 }
 
@@ -986,7 +986,7 @@ export async function getAgreementFromLabel(label: string): Promise<SearchRespon
         },
       },
       // bool: {
-      //   should: { term: { 'agreementInfo.label': label } },
+      //   should: { term: { 'agreements.label': label } },
       // },
     }),
   })
