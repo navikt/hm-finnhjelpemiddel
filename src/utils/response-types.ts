@@ -41,11 +41,17 @@ export interface PostBucketResponse {
   doc_count: number
   //key = postnr
   key: number
-  seriesId: {
-    buckets: SeriesTopHitBucket[]
-    doc_count_error_upper_bound: number
-    sum_other_doc_count: number
+  topHitData: {
+    hits: {
+      total: object
+      hits: Hit[]
+    }
   }
+  // seriesId: {
+  //   buckets: SeriesTopHitBucket[]
+  //   doc_count_error_upper_bound: number
+  //   sum_other_doc_count: number
+  // }
 }
 
 interface SeriesTopHitBucket {

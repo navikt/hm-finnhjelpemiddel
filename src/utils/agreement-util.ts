@@ -167,22 +167,33 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
   const posts = postBuckets.map((post) => {
+    let seen: string[] = []
     const postTitle = getPostTitle(post.key)
     const mappedTitle = postTitle ? makePostTitleBasedOnAgreementId(postTitle, post.key, agreement.id) : ''
     return {
       nr: post.key,
       title: mappedTitle,
-      products: post.seriesId.buckets
-        .map((bucket) => {
-          const product = mapProductWithVariants(Array(bucket.topHitData.hits.hits[0]._source as ProductSourceResponse))
+      products: post.topHitData.hits.hits
+        .map((hit) => {
+          const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
+
           return {
             rank: getRank(product, post.key) || 99,
             product: product,
           }
         })
+        .filter((prod) => {
+          if (seen.includes(prod.product.id)) {
+            return false
+          } else {
+            seen.push(prod.product.id)
+            return true
+          }
+        })
         .sort((a, b) => a.rank - b.rank),
     }
   })
+
   return posts
 }
 

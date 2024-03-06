@@ -813,25 +813,17 @@ export const getProductsOnAgreement = ({
     postNr: {
       terms: {
         field: 'agreements.postNr',
-        size: 120,
+        size: 1000,
         order: {
           _key: 'asc',
         },
       },
       aggs: {
-        seriesId: {
-          terms: {
-            field: 'seriesId',
-          },
-          aggs: {
-            topHitData: {
-              top_hits: {
-                size: 1,
-                _source: {
-                  // includes: ['title', 'media', 'agreements', 'isoCategoryTitle', 'isoCategory'],
-                  includes: ['*'],
-                },
-              },
+        topHitData: {
+          top_hits: {
+            size: 500,
+            _source: {
+              includes: ['*'],
             },
           },
         },
