@@ -3,7 +3,7 @@ import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 
 import { Button, Switch } from '@navikt/ds-react'
 
-import { FilterData, SearchData, SelectedFilters } from '@/utils/api-util'
+import { FilterData, FormSearchData, SelectedFilters } from '@/utils/api-util'
 
 import FilterView from '@/components/filters/FilterView'
 
@@ -16,13 +16,12 @@ const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
 type Props = {
   filters?: FilterData
   setFocus?: () => void
-  onSubmit: SubmitHandler<SearchData>
-  selectedFilters: SelectedFilters
+  onSubmit: SubmitHandler<FormSearchData>
 }
 
-const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit, selectedFilters }, ref) => {
+const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const formMethods = useFormContext<SearchData>()
+  const formMethods = useFormContext<FormSearchData>()
 
   useImperativeHandle(ref, () => formRef.current!)
 

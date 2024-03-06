@@ -9,13 +9,18 @@ type Props = {
   className?: string
   open?: boolean
   spacing?: boolean
+  activeFilters?: number
 }
 
-const ShowMore = ({ title, children, className, open, spacing }: Props) => {
+const ShowMore = ({ title, children, className, open, spacing, activeFilters }: Props) => {
   return (
     <details open={open} className={classNames(className, { spacing })}>
-      <HStack as="summary" justify="space-between">
-        {title}
+      <HStack as="summary" justify="space-between" className={activeFilters ? 'active-filters' : ''}>
+        <HStack gap="1">
+          <span>{title}</span>
+          {activeFilters && <span style={{ fontWeight: 'bold' }}>({activeFilters})</span>}
+        </HStack>
+
         <div className="chevron-wrapper">
           <ChevronDownIcon fontSize="1.7rem" aria-hidden />
         </div>

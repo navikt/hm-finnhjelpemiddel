@@ -63,6 +63,10 @@
       box-sizing: border-box;
     }
 
+    details[open] {
+      padding-bottom: $a-spacing-4;
+    }
+
     details[open] > summary {
       margin-bottom: $a-spacing-2;
 
@@ -182,5 +186,16 @@
     &:last-child {
       border-top: 1px solid var(--a-border-divider);
     }
+  }
+}
+
+//Bør vel egentlig ligge et annet sted. Men tror Tiril har stylet bakgrunnen
+.active-filters {
+  background-color: #cce1ff;
+}
+
+form {
+  [data-invalid] {
+    outline: 2px solid var(--a-red-400);
   }
 }

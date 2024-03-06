@@ -4,7 +4,7 @@ import queryString from 'querystring'
 
 import { makePostTitleBasedOnAgreementId } from './agreement-util'
 import { FormSearchData, isValidSortOrder, SearchData, SelectedFilters } from './api-util'
-import { FilterCategories } from './filter-util'
+import { FilterCategories, initialNewFiltersFormState, NewFiltersFormKey, NewFiltersFormState } from './filter-util'
 import {
   AgreementInfoResponse,
   Hit,
@@ -311,24 +311,44 @@ export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreement
     {}
   )
 
+  const newFilters = Object.keys(initialNewFiltersFormState).reduce((acc, f) => {
+    const str = searchParams.get(f)
+    if (str) {
+      acc[f as NewFiltersFormKey] = str
+    }
+    return acc
+  }, {} as NewFiltersFormState)
+
   return {
     sortOrder,
     searchTerm,
     isoCode,
     hasAgreementsOnly,
+    // @ts-ignore
     filters: { ...initialSearchDataState.filters, ...filters },
+    newFilters: { ...initialSearchDataState.newFilters, ...newFilters },
     hidePictures,
   }
 }
 
-export const toSearchQueryString = (searchParams: FormSearchData, searchTerm: string) =>
-  queryString.stringify({
-    ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
-    ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
-    ...(searchParams.hidePictures ? { hidePictures: searchParams.hidePictures } : {}),
+export const toSearchQueryString = (searchData: FormSearchData, searchTerm: string) => {
+  return queryString.stringify({
+    ...(searchData.sortOrder && { sortering: searchData.sortOrder }),
+    ...(searchData.hasAgreementsOnly ? { agreement: '' } : {}),
+    ...(searchData.hidePictures ? { hidePictures: searchData.hidePictures } : {}),
     ...{ term: searchTerm },
-    ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
-    ...Object.entries(searchParams.filters)
+    ...(searchData.isoCode && { isoCode: searchData.isoCode }),
+    ...Object.entries(searchData.filters)
       .filter(([_, values]) => values.some((value) => value))
       .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
+    ...Object.entries(searchData.newFilters)
+      .filter(([_, value]) => value.trim().length)
+      .reduce(
+        (acc, [key, value]) => {
+          acc[key as keyof FormSearchData['newFilters']] = value
+          return acc
+        },
+        {} as FormSearchData['newFilters']
+      ),
   })
+}

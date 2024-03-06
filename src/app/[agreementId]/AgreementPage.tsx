@@ -46,6 +46,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
+  // TODO: Make a concrete type for this form (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialAgreementSearchDataState,
@@ -141,12 +142,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
             <section className="filter-container">
-              <FilterForm
-                onSubmit={onSubmit}
-                ref={searchFormRef}
-                filters={filters}
-                selectedFilters={searchData.filters}
-              />
+              <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
@@ -199,12 +195,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
-                  <FilterForm
-                    onSubmit={onSubmit}
-                    ref={searchFormRef}
-                    filters={filters}
-                    selectedFilters={searchData.filters}
-                  />
+                  <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
                 </MobileOverlay.Content>
                 <MobileOverlay.Footer>
                   <VStack gap="2">

@@ -17,3 +17,14 @@
 .checkbox-filter-input {
   margin-bottom: $a-spacing-3;
 }
+
+.range-filter-input-group {
+  input {
+    width: 115px;
+  }
+
+  button {
+    align-self: flex-end;
+    height: 32px;
+  }
+}

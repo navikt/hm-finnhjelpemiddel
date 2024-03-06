@@ -20,9 +20,9 @@ export default function ComparePage() {
   const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const href = '/sok?' + toSearchQueryString(searchData, searchData.searchTerm)
+  // @TIRIL: Bør egentlig være router.back() nå som vi ikke har egen inngang lenger -> <ellers så må vi huske søkestaten på en eller annen måte (ta med seg searchparams på en eller annen måte)
+  const href = '/sok?' + searchParams.toString()
   const series = productsToCompare.map((product) => product.id)
 
   //TODO: error handling
