@@ -6,6 +6,8 @@ import { FormSearchData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/product-util'
 import { useSearchParams } from 'next/navigation'
 import { NewFiltersFormKey } from '@/utils/filter-util'
+import classNames from 'classnames'
+import { TrashIcon } from '@navikt/aksel-icons'
 
 export type MinMaxGroupFilter = {
   name: string
@@ -23,15 +25,18 @@ const FilterMinMaxGroup = ({ groupTitle, filters }: Props) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const numberOfactiveFilters = filters.filter((f) => [f.min, f.max].some((k) => searchData.newFilters[k].length))
-  console.log('active', numberOfactiveFilters)
+  const numberOfactiveFiltersInGroup = filters.filter((f) =>
+    [f.min, f.max].some((k) => searchData.newFilters[k].length)
+  )
+
+  const showMoreLabel =
+    numberOfactiveFiltersInGroup.length > 0 ? `${groupTitle} (${numberOfactiveFiltersInGroup.length})` : `${groupTitle}`
 
   return (
     <ShowMore
-      title={groupTitle}
+      title={showMoreLabel}
       spacing
-      className="input-filter"
-      activeFilters={numberOfactiveFilters.length > 0 ? numberOfactiveFilters.length : undefined}
+      className={classNames('input-filter', { active: numberOfactiveFiltersInGroup.length > 0 })}
     >
       <VStack gap="4">
         {filters.map((filter) => (
@@ -54,20 +59,34 @@ const FilterMinMaxRow = ({
   filterKeyMin: NewFiltersFormKey
   filterKeyMax: NewFiltersFormKey
 }) => {
+  const formMethods = useFormContext<FormSearchData>()
+
   return (
-    <HStack className="range-filter-input-group" wrap={false} gap="4">
+    <HStack className="range-filter-input-group" wrap={false} gap="2">
       <InputFieldMinMax inputName="Min" filterKey={filterKeyMin} />
       <InputFieldMinMax inputName="Max" filterKey={filterKeyMax} />
-      <Button
-        size="small"
-        type="button"
-        variant="secondary"
-        onClick={(event) => {
-          event.currentTarget?.form?.requestSubmit()
-        }}
-      >
-        Søk
-      </Button>
+      <HStack gap="2">
+        <Button
+          size="small"
+          type="button"
+          variant="secondary"
+          onClick={(event) => {
+            event.currentTarget?.form?.requestSubmit()
+          }}
+        >
+          Søk
+        </Button>
+        <Button
+          onClick={(event) => {
+            formMethods.setValue(`newFilters.${filterKeyMin}`, '')
+            formMethods.setValue(`newFilters.${filterKeyMax}`, '')
+            event.currentTarget?.form?.requestSubmit()
+          }}
+          size="small"
+          variant="secondary"
+          icon={<TrashIcon title="Fjern filter" fontSize="1.5rem" />}
+        />
+      </HStack>
     </HStack>
   )
 }

@@ -188,11 +188,6 @@
   }
 }
 
-//Bør vel egentlig ligge et annet sted. Men tror Tiril har stylet bakgrunnen
-.active-filters {
-  background-color: #cce1ff;
-}
-
 form {
   [data-invalid] {
     outline: 2px solid var(--a-red-400);
