@@ -141,7 +141,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large">
-      <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
+      <VStack gap="5" className="spacing-top--large spacing-bottom--large">
         <HStack gap="3" className="hide-print">
           <Link as={NextLink} href="/" variant="subtle">
             Hjelpemidler på avtale med NAV
@@ -151,6 +151,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <Heading level="1" size="large">
           {`${agreement.title}`}
         </Heading>
+
+        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search">
+          Tilbehør, reservedeler og dokumenter med mer
+        </LinkPanel>
       </VStack>
 
       <FormProvider {...formMethods}>
