@@ -1,6 +1,6 @@
 'use client'
 
-import { isValidSortOrder, SearchData } from '@/utils/api-util'
+import { FormSearchData, isValidSortOrder } from '@/utils/search-state-util'
 import { Select } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React, { RefObject, useEffect, useState } from 'react'
@@ -11,7 +11,7 @@ type Props = {
 }
 
 const SortSearchResults = ({ formRef }: Props) => {
-  const formMethods = useFormContext<SearchData>()
+  const formMethods = useFormContext<FormSearchData>()
   const searchParams = useSearchParams()
   const [hideLabel, setHideLabel] = useState(false)
 
