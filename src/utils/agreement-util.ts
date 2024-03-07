@@ -171,7 +171,12 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
           }
         })
         .filter((prod) => {
-          if (seen.includes(prod.product.id)) {
+          if (
+            seen.includes(prod.product.id) ||
+            !prod.product.agreements.some(
+              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === post.key
+            )
+          ) {
             return false
           } else {
             seen.push(prod.product.id)
