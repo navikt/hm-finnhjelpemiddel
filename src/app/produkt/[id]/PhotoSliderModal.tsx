@@ -67,7 +67,6 @@ const PhotoSliderModal = ({
         setModalIsOpen(false)
       }}
       aria-label="Modal"
-      aria-labelledby="stor bildevisning"
     >
       <Modal.Body className="picture-modal__modal-body">
         <div className="picture-modal__photo-and-arrows-container">
