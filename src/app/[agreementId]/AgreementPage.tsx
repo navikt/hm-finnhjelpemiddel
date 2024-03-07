@@ -19,7 +19,19 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyShort,
+  Button,
+  HGrid,
+  HStack,
+  Heading,
+  Link,
+  LinkPanel,
+  Loader,
+  Popover,
+  VStack,
+} from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
