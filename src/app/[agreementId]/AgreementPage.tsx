@@ -19,7 +19,19 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyShort,
+  Button,
+  HGrid,
+  HStack,
+  Heading,
+  Link,
+  LinkPanel,
+  Loader,
+  Popover,
+  VStack,
+} from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
@@ -129,7 +141,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large">
-      <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
+      <VStack gap="5" className="spacing-top--large spacing-bottom--large">
         <HStack gap="3" className="hide-print">
           <Link as={NextLink} href="/" variant="subtle">
             Hjelpemidler på avtale med NAV
@@ -139,6 +151,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <Heading level="1" size="large">
           {`${agreement.title}`}
         </Heading>
+
+        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search">
+          Tilbehør, reservedeler og dokumenter med mer
+        </LinkPanel>
       </VStack>
 
       <FormProvider {...formMethods}>

@@ -4,9 +4,11 @@ import { agreementHasNoProducts, mapAgreementFromDoc } from '@/utils/agreement-u
 import { getAgreement } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
-import { BodyLong, Heading, LinkPanel } from '@/components/aksel-client'
+import { BodyLong, BodyShort, Heading, Link, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
+import { HStack, VStack } from '@navikt/ds-react'
+import NextLink from 'next/link'
 import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
 
@@ -38,6 +40,12 @@ export default async function AgreementPage({ params }: Props) {
             <div className="agreement-page__content main-wrapper--small">
               <article>
                 <div>
+                  <HStack gap="3" className="hide-print">
+                    <Link as={NextLink} href="/rammeavtale" variant="subtle">
+                      Avtaler med NAV
+                    </Link>
+                    <BodyShort textColor="subtle">/</BodyShort>
+                  </HStack>
                   <Heading level="1" size="large" className="spacing-top--small spacing-bottom--small">
                     {agreement.title}
                   </Heading>
