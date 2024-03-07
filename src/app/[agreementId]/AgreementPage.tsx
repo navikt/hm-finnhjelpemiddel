@@ -1,6 +1,6 @@
 'use client'
 
-import { Agreement, makePostTitleBasedOnAgreementId, mapAgreementProducts } from '@/utils/agreement-util'
+import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import {
   Filter,
   FilterData,
@@ -84,7 +84,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       .map((post) => ({
         key: post.title,
         doc_count: 1,
-        label: makePostTitleBasedOnAgreementId(post.title, post.nr, agreement.id),
+        label: post.title,
       })),
   }
 
@@ -117,7 +117,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
-  const posts = mapAgreementProducts(postBucktes, agreement)
+
+  const posts = mapAgreementProducts(postBucktes, agreement).filter(
+    (post) => searchData.filters?.delkontrakt.length === 0 || searchData.filters?.delkontrakt.includes(post.title)
+  )
 
   const onReset = () => {
     formMethods.reset()
