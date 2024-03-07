@@ -1,10 +1,4 @@
-import { ReadonlyURLSearchParams } from 'next/navigation'
-
-import queryString from 'querystring'
-
 import { makePostTitleBasedOnAgreementId } from './agreement-util'
-import { FormSearchData, isValidSortOrder, SearchData, SelectedFilters } from './api-util'
-import { FilterCategories, initialNewFiltersFormState, NewFiltersFormKey, NewFiltersFormState } from './filter-util'
 import {
   AgreementInfoResponse,
   Hit,
@@ -17,7 +11,6 @@ import {
   SeriesBucketResponse,
   TechDataResponse,
 } from './response-types'
-import { initialSearchDataState } from './search-state-util'
 import { capitalize } from './string-util'
 
 export interface Product {
@@ -289,66 +282,5 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
       rank: agreement.rank,
       expired: agreement.expired,
     }
-  })
-}
-
-export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreementSearch?: boolean): SearchData => {
-  const sortOrderStr = searchParams.get('sortering') || ''
-  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : agreementSearch ? undefined : 'Best_soketreff'
-
-  const searchTerm = searchParams.get('term') ?? ''
-  const isoCode = searchParams.get('isoCode') ?? ''
-  const hasAgreementsOnly = searchParams.has('agreement')
-  const hidePictures = searchParams.get('hidePictures') ?? ''
-
-  const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
-
-  const filters = filterKeys.reduce(
-    (obj, fk) => ({
-      ...obj,
-      [fk]: searchParams?.getAll(fk),
-    }),
-    {}
-  )
-
-  const newFilters = Object.keys(initialNewFiltersFormState).reduce((acc, f) => {
-    const str = searchParams.get(f)
-    if (str) {
-      acc[f as NewFiltersFormKey] = str
-    }
-    return acc
-  }, {} as NewFiltersFormState)
-
-  return {
-    sortOrder,
-    searchTerm,
-    isoCode,
-    hasAgreementsOnly,
-    // @ts-ignore
-    filters: { ...initialSearchDataState.filters, ...filters },
-    newFilters: { ...initialSearchDataState.newFilters, ...newFilters },
-    hidePictures,
-  }
-}
-
-export const toSearchQueryString = (searchData: FormSearchData, searchTerm: string) => {
-  return queryString.stringify({
-    ...(searchData.sortOrder && { sortering: searchData.sortOrder }),
-    ...(searchData.hasAgreementsOnly ? { agreement: '' } : {}),
-    ...(searchData.hidePictures ? { hidePictures: searchData.hidePictures } : {}),
-    ...{ term: searchTerm },
-    ...(searchData.isoCode && { isoCode: searchData.isoCode }),
-    ...Object.entries(searchData.filters)
-      .filter(([_, values]) => values.some((value) => value))
-      .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
-    ...Object.entries(searchData.newFilters)
-      .filter(([_, value]) => value.trim().length)
-      .reduce(
-        (acc, [key, value]) => {
-          acc[key as keyof FormSearchData['newFilters']] = value
-          return acc
-        },
-        {} as FormSearchData['newFilters']
-      ),
   })
 }

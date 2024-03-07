@@ -1,17 +1,6 @@
 import { FilterCategoryKeyServer } from './api-util'
 
-//TODO: Legge denn inn i NewFilterState med riktig type og slette denne. Rename newFilterStatetilFilterState.
-export const initialFiltersState = {
-  beregnetBarn: [],
-  fyllmateriale: [],
-  materialeTrekk: [],
-  leverandor: [],
-  produktkategori: [],
-  rammeavtale: [],
-  delkontrakt: [],
-}
-
-export const initialNewFiltersFormState = {
+export const initialFiltersFormState = {
   setebreddeMaksCM: '',
   setebreddeMinCM: '',
   setedybdeMaksCM: '',
@@ -26,21 +15,17 @@ export const initialNewFiltersFormState = {
   breddeMaxCM: '',
   brukervektMinKG: '',
   brukervektMaksKG: '',
+  beregnetBarn: [] as string[],
+  fyllmateriale: [] as string[],
+  materialeTrekk: [] as string[],
+  leverandor: [] as string[],
+  produktkategori: [] as string[],
+  rammeavtale: [] as string[],
+  delkontrakt: [] as string[],
 }
 
-export type NewFiltersFormState = typeof initialNewFiltersFormState
-export type NewFiltersFormKey = keyof NewFiltersFormState
-
-//Egentlig så trengs ikke denne lenger. Fordi vi skal ikke ha strengene som labels.
-export enum FilterCategories {
-  fyllmateriale = 'Fyllmateriale',
-  materialeTrekk = 'Trekkmateriale',
-  beregnetBarn = 'Beregnet på barn',
-  leverandor = 'Leverandør',
-  produktkategori = 'Produktkategori',
-  rammeavtale = 'Rammeavtale',
-  delkontrakt = 'Delkontrakt',
-}
+export type FilterFormState = typeof initialFiltersFormState
+export type FilterFormKey = keyof FilterFormState
 
 const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
   const [min, max] = values
@@ -60,45 +45,6 @@ const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
     },
   }
 }
-
-// const mapNewRangeFilter = (
-//   keyMin: FilterCategoryKeyServer,
-//   keyMax: FilterCategoryKeyServer,
-//   minValue: Array<any>,
-//   maxValue: Array<any>
-// ) => {
-//   const [min1, max1] = minValue
-//   const [min2, max2] = maxValue
-
-//   // if (!min1 && !max1) return { bool: { should: [] } }
-
-//   return {
-//     bool: {
-//       should: [
-//         {
-//           range: {
-//             [`filters.${keyMin}`]: {
-//               gte: min1 || undefined,
-//               lte: max1 || undefined,
-//             },
-//           },
-//         },
-//         {
-//           range: {
-//             [`filters.${keyMax}`]: {
-//               gte: min2 || undefined,
-//               lte: max2 || undefined,
-//             },
-//           },
-//         },
-//       ],
-//     },
-//   }
-// }
-
-// export const filterSeteHøyde = (seteHoydeMin?: number, seteHoydeMaks?: number) => {
-//   return mapNewRangeFilter('setehoydeMinCM', 'setehoydeMaksCM', [seteHoydeMin, null], [null, seteHoydeMaks])
-// }
 
 export const filterLengde = (minStr?: string, maxStr?: string) => {
   return mapRangeFilter('lengdeCM', [minStr ? +minStr : null, maxStr ? +maxStr : null])
@@ -150,13 +96,13 @@ export const filterBeregnetBarn = (values: Array<string>) => ({
   },
 })
 
-export const filterFyllmateriale = (values: Array<number>) => ({
+export const filterFyllmateriale = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'filters.fyllmateriale': value } })),
   },
 })
 
-export const filterMaterialeTrekk = (values: Array<number>) => ({
+export const filterMaterialeTrekk = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'filters.materialeTrekk': value } })),
   },
@@ -168,7 +114,7 @@ export const filterLeverandor = (values: Array<string>) => ({
   },
 })
 
-export const filterProduktkategori = (values: Array<number>) => ({
+export const filterProduktkategori = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { isoCategoryName: value } })),
   },

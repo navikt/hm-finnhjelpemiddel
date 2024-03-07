@@ -1,22 +1,15 @@
 'use client'
 
 import { Agreement, makePostTitleBasedOnAgreementId, mapAgreementProducts } from '@/utils/agreement-util'
-import {
-  Filter,
-  FilterData,
-  FormSearchData,
-  SelectedFilters,
-  getFiltersAgreement,
-  getProductsOnAgreement,
-} from '@/utils/api-util'
-import { initialAgreementSearchDataState } from '@/utils/search-state-util'
+import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
@@ -28,7 +21,6 @@ import FilterForm from './FilterForm'
 export type AgreementSearchData = {
   searchTerm: string
   hidePictures: boolean
-  filters: SelectedFilters
 }
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
@@ -46,7 +38,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  // TODO: Make a concrete type for this form (e.g. AgreementPageFormData)
+  // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialAgreementSearchDataState,

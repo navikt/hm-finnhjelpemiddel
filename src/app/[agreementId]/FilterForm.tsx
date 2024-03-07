@@ -3,9 +3,10 @@ import { SubmitHandler, useFormContext } from 'react-hook-form'
 
 import { Button } from '@navikt/ds-react'
 
-import { FilterData, FormSearchData } from '@/utils/api-util'
+import { FilterData } from '@/utils/api-util'
 
 import FilterView from '@/components/filters/FilterView'
+import { FormSearchData } from '@/utils/search-state-util'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
   <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>

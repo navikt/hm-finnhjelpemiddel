@@ -11,12 +11,12 @@ import useSWRInfinite from 'swr/infinite'
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
-import { initialSearchDataState } from '@/utils/search-state-util'
+import { FetchProductsWithFilters, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
+import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'

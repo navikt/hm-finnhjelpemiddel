@@ -7,17 +7,15 @@ import useSWR from 'swr'
 
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { mapSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import { BodyLong, ChevronRightIcon, Heading, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
-import { useMemo } from 'react'
 
 export default function ComparePage() {
-  //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
-  const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
+  const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -80,21 +78,13 @@ export default function ComparePage() {
             </NextLink>
           </section>
         )}
-        {productsToCompareWithVariants && (
-          <CompareTable productsToCompare={productsToCompareWithVariants} removeProduct={removeProduct} />
-        )}
+        {productsToCompareWithVariants && <CompareTable productsToCompare={productsToCompareWithVariants} />}
       </div>
     </AnimateLayout>
   )
 }
 
-const CompareTable = ({
-  productsToCompare,
-  removeProduct,
-}: {
-  productsToCompare: Product[]
-  removeProduct: (product: Product) => void
-}) => {
+const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
   const allDataKeysVariants = [
     ...new Set(
       productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))

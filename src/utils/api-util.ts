@@ -1,7 +1,6 @@
 import { mapAllNews } from '@/utils/news-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
-  NewFiltersFormState,
   filterBeregnetBarn,
   filterBredde,
   filterDelkontrakt,
@@ -37,16 +36,15 @@ import {
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
+import { SearchData } from './search-state-util'
 
-export const PAGE_SIZE = 25
+export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 
-// TODO: should be moved to filter-utils.ts
-export type SelectedFilters = Record<FilterCategoryKeyServer, Array<any>>
-
 export type Bucket = {
+  //Kan key noen gang være et number? Hvis ikke så er det vel like greit å bruke FilterCategoryKeyServer-typen?
   key: number | string
   doc_count: number
   label?: string
@@ -92,26 +90,6 @@ export type Filter = {
 
 export type FilterData = {
   [key in FilterCategoryKeyServer]: Filter
-}
-
-export type SearchData = {
-  searchTerm: string
-  isoCode: string
-  hasAgreementsOnly: boolean
-  filters: SelectedFilters
-  newFilters: NewFiltersFormState
-  sortOrder?: SortOrder
-  hidePictures?: string
-}
-
-export type FormSearchData = Omit<SearchData, 'searchTerm'>
-
-export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
-
-export type SortOrder = (typeof sortOrders)[number]
-
-export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
-  return sortOrders.includes(sortOrder as SortOrder)
 }
 
 type FetchProps = {
@@ -245,11 +223,9 @@ const sortOptionsOpenSearch = {
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
-  const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder, newFilters } = searchData
+  const { searchTerm, isoCode, hasAgreementsOnly, sortOrder, filters } = searchData
 
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
-
-  const { beregnetBarn, fyllmateriale, materialeTrekk, leverandor, produktkategori, rammeavtale } = filters
 
   const {
     setebreddeMinCM,
@@ -266,7 +242,13 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     totalVektMaxKG,
     brukervektMinKG,
     brukervektMaksKG,
-  } = newFilters
+    beregnetBarn,
+    fyllmateriale,
+    materialeTrekk,
+    leverandor,
+    produktkategori,
+    rammeavtale,
+  } = filters
 
   const allFilters = [
     filterLengde(lengdeMinCM, lengdeMaxCM),
@@ -278,7 +260,6 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     filterMaksSetedybde(setedybdeMaksCM),
     filterMinSetehoyde(setehoydeMinCM),
     filterMaksSetehoyde(setehoydeMaksCM),
-    // filterSeteHøyde(setehoydeMinCM, setehoydeMaksCM),
     filterMinBrukervekt(brukervektMinKG),
     filterMaksBrukervekt(brukervektMaksKG),
     filterBeregnetBarn(beregnetBarn),

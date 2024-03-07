@@ -2,18 +2,33 @@ import React, { useMemo } from 'react'
 import { Label, HStack, VStack, Detail, TextField, Button } from '@navikt/ds-react'
 import ShowMore from '@/components/ShowMore'
 import { Controller, useFormContext } from 'react-hook-form'
-import { FormSearchData } from '@/utils/api-util'
-import { mapSearchParams } from '@/utils/product-util'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 import { useSearchParams } from 'next/navigation'
-import { NewFiltersFormKey } from '@/utils/filter-util'
 import classNames from 'classnames'
 import { TrashIcon } from '@navikt/aksel-icons'
+import { FormSearchData } from '@/utils/search-state-util'
+
+type PickedFiltersFormKey =
+  | 'setebreddeMaksCM'
+  | 'setebreddeMinCM'
+  | 'setedybdeMaksCM'
+  | 'setedybdeMinCM'
+  | 'setehoydeMaksCM'
+  | 'setehoydeMinCM'
+  | 'breddeMaxCM'
+  | 'breddeMinCM'
+  | 'lengdeMinCM'
+  | 'lengdeMaxCM'
+  | 'brukervektMaksKG'
+  | 'brukervektMinKG'
+  | 'totalVektMaxKG'
+  | 'totalVektMinKG'
 
 export type MinMaxGroupFilter = {
   name: string
   filterNameServer?: string
-  min: NewFiltersFormKey
-  max: NewFiltersFormKey
+  min: PickedFiltersFormKey
+  max: PickedFiltersFormKey
 }
 
 type Props = {
@@ -21,13 +36,11 @@ type Props = {
   filters: MinMaxGroupFilter[]
 }
 
-const FilterMinMaxGroup = ({ groupTitle, filters }: Props) => {
+const RangeFilter = ({ groupTitle, filters }: Props) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const numberOfactiveFiltersInGroup = filters.filter((f) =>
-    [f.min, f.max].some((k) => searchData.newFilters[k].length)
-  )
+  const numberOfactiveFiltersInGroup = filters.filter((f) => [f.min, f.max].some((k) => searchData.filters[k].length))
 
   const showMoreLabel =
     numberOfactiveFiltersInGroup.length > 0 ? `${groupTitle} (${numberOfactiveFiltersInGroup.length})` : `${groupTitle}`
@@ -50,14 +63,14 @@ const FilterMinMaxGroup = ({ groupTitle, filters }: Props) => {
   )
 }
 
-export default FilterMinMaxGroup
+export default RangeFilter
 
 const FilterMinMaxRow = ({
   filterKeyMin,
   filterKeyMax,
 }: {
-  filterKeyMin: NewFiltersFormKey
-  filterKeyMax: NewFiltersFormKey
+  filterKeyMin: PickedFiltersFormKey
+  filterKeyMax: PickedFiltersFormKey
 }) => {
   const formMethods = useFormContext<FormSearchData>()
 
@@ -78,8 +91,8 @@ const FilterMinMaxRow = ({
         </Button>
         <Button
           onClick={(event) => {
-            formMethods.setValue(`newFilters.${filterKeyMin}`, '')
-            formMethods.setValue(`newFilters.${filterKeyMax}`, '')
+            formMethods.setValue(`filters.${filterKeyMin}`, '')
+            formMethods.setValue(`filters.${filterKeyMax}`, '')
             event.currentTarget?.form?.requestSubmit()
           }}
           size="small"
@@ -91,7 +104,7 @@ const FilterMinMaxRow = ({
   )
 }
 
-const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; filterKey: NewFiltersFormKey }) => {
+const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; filterKey: PickedFiltersFormKey }) => {
   const formMethods = useFormContext<FormSearchData>()
 
   const rule = inputName === 'Min' ? { min: 0 } : { max: 99999 }
@@ -100,7 +113,7 @@ const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; 
       <Detail>{inputName}</Detail>
       <Controller
         control={formMethods.control}
-        name={`newFilters.${filterKey}`}
+        name={`filters.${filterKey}`}
         rules={rule}
         render={({ field, fieldState }) => {
           return (

@@ -1,7 +1,7 @@
-import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/FilterMinMaxGroup'
+import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
 import { FilterCategoryKeyServer } from '@/utils/api-util'
 import { FilterData } from '@/utils/api-util'
-import { mapSearchParams } from '@/utils/product-util'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 import { BodyShort, Heading, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
@@ -59,20 +59,14 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => value != null && value != ''))
-    .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
-
-  const searchDataNewFilters = Object.entries(searchData.newFilters)
+  const searchDataNewFilters = Object.entries(searchData.filters)
     .filter(([_, value]) => value.length)
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
-
-  const searchDataNewAndOldFilters = searchDataFilters.concat(searchDataNewFilters)
 
   const noAvailableFilters =
     !filters || !Object.values(filters).filter((data) => data.values.length).length || !Object.keys(filters).length
 
-  if (!searchDataFilters.length && noAvailableFilters) {
+  if (!searchDataNewFilters.length && noAvailableFilters) {
     return (
       <div className="filter-container__filters">
         <BodyShort>Ingen filtre tilgjengelig</BodyShort>
@@ -84,7 +78,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   const setedimensjonerFilters = filters
     ? Array.from(
         Object.keys(filters)
-          .concat(searchDataNewAndOldFilters)
+          .concat(searchDataNewFilters)
           .reduce((acc, filterKeyStr) => {
             const filterKey = filterKeyStr as FilterCategoryKeyServer
             const filter = minMaxFilterKeyMapSete['setedimensjoner'].find(
@@ -101,7 +95,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
   const målOgVektFilters = filters
     ? Array.from(
         Object.keys(filters)
-          .concat(searchDataNewAndOldFilters)
+          .concat(searchDataNewFilters)
           .reduce((acc, filterKeyStr) => {
             const filterKey = filterKeyStr as FilterCategoryKeyServer
             const filter = minMaxFilterKeyMapMålOgVekt['målOgVekt'].find(
