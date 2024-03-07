@@ -1,8 +1,6 @@
 'use client'
 
-import { Agreement, makePostTitleBasedOnAgreementId, mapAgreementProducts } from '@/utils/agreement-util'
 import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
-import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -12,11 +10,25 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Button, HGrid, HStack, Heading, Link, Loader, Popover, VStack } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyShort,
+  Button,
+  HGrid,
+  HStack,
+  Heading,
+  Link,
+  LinkPanel,
+  Loader,
+  Popover,
+  VStack,
+} from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
+import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
+import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -77,7 +89,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       .map((post) => ({
         key: post.title,
         doc_count: 1,
-        label: makePostTitleBasedOnAgreementId(post.title, post.nr, agreement.id),
+        label: post.title,
       })),
   }
 
@@ -110,7 +122,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
-  const posts = mapAgreementProducts(postBucktes, agreement)
+
+  const posts = mapAgreementProducts(postBucktes, agreement).filter(
+    (post) => searchData.filters?.delkontrakt.length === 0 || searchData.filters?.delkontrakt.includes(post.title)
+  )
 
   const onReset = () => {
     formMethods.reset()
@@ -119,7 +134,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large">
-      <VStack gap="5" className="spacing-top--large spacing-bottom--xlarge">
+      <VStack gap="5" className="spacing-top--large spacing-bottom--large">
         <HStack gap="3" className="hide-print">
           <Link as={NextLink} href="/" variant="subtle">
             Hjelpemidler på avtale med NAV
@@ -129,6 +144,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <Heading level="1" size="large">
           {`${agreement.title}`}
         </Heading>
+
+        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search">
+          Tilbehør, reservedeler og dokumenter med mer
+        </LinkPanel>
       </VStack>
 
       <FormProvider {...formMethods}>

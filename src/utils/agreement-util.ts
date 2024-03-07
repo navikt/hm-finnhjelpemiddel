@@ -12,17 +12,6 @@ import {
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
 
-export function mapPostTitle(postTitle: string): string {
-  const regex = /^(post\s\d{1,2}[A-Za-z]?:\s|\d{1,2}:\s|\d{1,2}\.\s)/i
-  return postTitle.replace(regex, '')
-}
-
-// Egen mapper for synstekniske hjelpemiddel som har 1A, 1B osv som delkontraktnr
-export const makePostTitleBasedOnAgreementId = (postTitle: string, postNr: number, agreementId: string) =>
-  agreementId === 'de5cce52-cd91-469e-82a1-4ca0d3bc79d4' || 'f3a70762-832c-4b1c-a3c6-4f6b0e646e9f'
-    ? postTitle.replace('Post ', '')
-    : `${postNr}: ${mapPostTitle(postTitle)}`
-
 export interface Agreement {
   id: string
   identifier: string
@@ -169,10 +158,9 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
   const posts = postBuckets.map((post) => {
     let seen: string[] = []
     const postTitle = getPostTitle(post.key)
-    const mappedTitle = postTitle ? makePostTitleBasedOnAgreementId(postTitle, post.key, agreement.id) : ''
     return {
       nr: post.key,
-      title: mappedTitle,
+      title: postTitle ?? '',
       products: post.topHitData.hits.hits
         .map((hit) => {
           const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
@@ -183,7 +171,12 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
           }
         })
         .filter((prod) => {
-          if (seen.includes(prod.product.id)) {
+          if (
+            seen.includes(prod.product.id) ||
+            !prod.product.agreements.some(
+              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === post.key
+            )
+          ) {
             return false
           } else {
             seen.push(prod.product.id)

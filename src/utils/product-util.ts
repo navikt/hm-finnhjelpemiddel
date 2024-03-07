@@ -1,4 +1,3 @@
-import { makePostTitleBasedOnAgreementId } from './agreement-util'
 import {
   AgreementInfoResponse,
   Hit,
@@ -278,7 +277,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
       identifier: agreement.identifier,
       title: agreement.title,
       postNr: agreement.postNr,
-      postTitle: makePostTitleBasedOnAgreementId(agreement.postTitle, agreement.postNr, agreement.id),
+      postTitle: agreement.postTitle,
       rank: agreement.rank,
       expired: agreement.expired,
     }
