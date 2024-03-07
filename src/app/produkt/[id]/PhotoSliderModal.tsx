@@ -66,7 +66,6 @@ const PhotoSliderModal = ({
       onClose={() => {
         setModalIsOpen(false)
       }}
-      aria-label="Modal"
     >
       <Modal.Body className="picture-modal__modal-body">
         <div className="picture-modal__photo-and-arrows-container">
