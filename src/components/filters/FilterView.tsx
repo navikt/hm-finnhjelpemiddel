@@ -74,7 +74,6 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
     )
   }
 
-  //Filrer bort alle andre filtre enn setefiltre
   const setedimensjonerFilters = filters
     ? Array.from(
         Object.keys(filters)
@@ -91,7 +90,6 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       )
     : []
 
-  //Filrer bort alle andre filtre enn målOgVekt (har ikke egne min og max filtre, kun to felter per filter)
   const målOgVektFilters = filters
     ? Array.from(
         Object.keys(filters)

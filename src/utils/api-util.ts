@@ -44,7 +44,6 @@ export const PAGE_SIZE = 24
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 
 export type Bucket = {
-  //Kan key noen gang være et number? Hvis ikke så er det vel like greit å bruke FilterCategoryKeyServer-typen?
   key: number | string
   doc_count: number
   label?: string
