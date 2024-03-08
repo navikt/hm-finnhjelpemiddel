@@ -53,7 +53,7 @@ const RangeFilter = ({ groupTitle, filters }: Props) => {
     >
       <VStack gap="4">
         {filters.map((filter) => (
-          <VStack key={filter.name} gap="2">
+          <VStack className="range-filter-input-group" key={filter.name} gap="2">
             <Label size="small">{filter.name}</Label>
             <FilterMinMaxRow filterKeyMin={filter.min} filterKeyMax={filter.max} />
           </VStack>
@@ -75,7 +75,7 @@ const FilterMinMaxRow = ({
   const formMethods = useFormContext<FormSearchData>()
 
   return (
-    <HStack className="range-filter-input-group" wrap={false} gap="2">
+    <HStack wrap={false} gap="2">
       <InputFieldMinMax inputName="Min" filterKey={filterKeyMin} />
       <InputFieldMinMax inputName="Max" filterKey={filterKeyMax} />
       <HStack gap="2">
