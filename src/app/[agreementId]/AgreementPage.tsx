@@ -145,7 +145,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           {`${agreement.title}`}
         </Heading>
 
-        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search">
+        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search hide-print">
           Tilbehør, reservedeler og dokumenter med mer
         </LinkPanel>
       </VStack>
