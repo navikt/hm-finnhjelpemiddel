@@ -90,7 +90,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
       >
         <div className="agreement-details__content">
           <Heading level="3" size="large" id="agreement-info">
-            Avtale med Nav
+            Avtale med NAV
           </Heading>
 
           {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && (
