@@ -4,9 +4,6 @@ import React, { useEffect } from 'react'
 import { hotjar } from 'react-hotjar'
 import { usePathname } from 'next/navigation'
 
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { BodyLong, Link } from '@navikt/ds-react'
-
 import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
@@ -39,18 +36,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     <>
       {isMobileOverlayOpen && <div id="cover-main" />}
       <div id="modal-container"></div>
-      <aside className="wip-banner hide-print">
-        <div>
-          <ExclamationmarkTriangleIcon title="Advarsel" fontSize="3rem" />
-          <BodyLong>
-            <b>Hei! </b>
-            FinnHjelpemiddel vil snart erstatte Hjelpemiddeldatabasen. Foreløpig er ikke alt innhold og alle funksjoner
-            på plass her. Dersom du ikke finner det du leter etter, gi oss gjerne beskjed på{' '}
-            <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link> eller bruk{' '}
-            <Link href="https://www.hjelpemiddeldatabasen.no/"> hjelpemiddeldatabasen.no</Link>
-          </BodyLong>
-        </div>
-      </aside>
       <header>
         <NavigationBar />
       </header>
