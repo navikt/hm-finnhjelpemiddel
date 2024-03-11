@@ -212,6 +212,7 @@ main {
         margin-top: $a-spacing-2;
       }
     }
+
     &--small {
       margin-top: $a-spacing-2;
 
@@ -219,6 +220,7 @@ main {
         margin-top: $a-spacing-4;
       }
     }
+
     &--medium {
       margin-top: $a-spacing-4;
 
@@ -226,6 +228,7 @@ main {
         margin-top: $a-spacing-8;
       }
     }
+
     &--large {
       margin-top: $a-spacing-8;
 
@@ -233,6 +236,7 @@ main {
         margin-top: $a-spacing-12;
       }
     }
+
     &--xlarge {
       margin-top: $a-spacing-12;
 
@@ -248,6 +252,7 @@ main {
     &--small {
       margin-bottom: $a-spacing-2;
     }
+
     &--medium {
       margin-bottom: $a-spacing-4;
 
@@ -255,6 +260,7 @@ main {
         margin-bottom: $a-spacing-8;
       }
     }
+
     &--large {
       margin-bottom: $a-spacing-8;
 
@@ -262,6 +268,7 @@ main {
         margin-bottom: $a-spacing-12;
       }
     }
+
     &--xlarge {
       margin-bottom: $a-spacing-10;
 
@@ -283,6 +290,7 @@ main {
         margin-bottom: $a-spacing-4;
       }
     }
+
     &--medium {
       margin-top: $a-spacing-4;
       margin-bottom: $a-spacing-4;
@@ -292,6 +300,7 @@ main {
         margin-bottom: $a-spacing-8;
       }
     }
+
     &--large {
       margin-top: $a-spacing-8;
       margin-bottom: $a-spacing-8;
@@ -301,6 +310,7 @@ main {
         margin-bottom: $a-spacing-12;
       }
     }
+
     &--xlarge {
       margin-top: $a-spacing-16;
       margin-bottom: $a-spacing-16;
@@ -335,39 +345,6 @@ main {
 
   &--grey {
     background-image: url('/assets/icons/agreementGrey.svg');
-  }
-}
-
-.wip-banner {
-  width: 100%;
-  font-size: $a-font-size-heading-small;
-  background-color: $a-surface-warning-subtle;
-  border-top: 8px solid;
-  border-image: repeating-linear-gradient(-64deg, #ffc166, #ffc166 10px, #00243a 0, #00243a 20px) 20;
-
-  div {
-    display: flex;
-    align-items: center;
-    gap: $a-spacing-3;
-    max-width: 1280px;
-    padding: $a-spacing-5;
-    margin: 0 auto;
-
-    a {
-      display: unset;
-
-      @include mixins.for-size(tablet-up) {
-        display: inline-flex;
-      }
-    }
-  }
-
-  svg {
-    display: none;
-
-    @include mixins.for-size(tablet-up) {
-      display: block;
-    }
   }
 }
 
