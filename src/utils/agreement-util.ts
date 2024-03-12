@@ -160,18 +160,17 @@ export const mapAgreementProducts = (
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
 
-  const posts = postBuckets.map((post, i) => {
+  const mapPostBucket = (bucket: PostBucketResponse) => {
     let seen: string[] = []
-
     return {
-      nr: post.key,
-      title: getPostTitle(post.key) ?? '',
-      products: post.topHitData.hits.hits
+      nr: bucket.key,
+      title: getPostTitle(bucket.key) ?? '',
+      products: bucket.topHitData.hits.hits
         .map((hit) => {
           const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
 
           return {
-            rank: getRank(product, post.key) || 99,
+            rank: getRank(product, bucket.key) || 99,
             product: product,
           }
         })
@@ -179,7 +178,7 @@ export const mapAgreementProducts = (
           if (
             seen.includes(prod.product.id) ||
             !prod.product.agreements.some(
-              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === post.key
+              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === bucket.key
             )
           ) {
             return false
@@ -190,26 +189,21 @@ export const mapAgreementProducts = (
         })
         .sort((a, b) => a.rank - b.rank),
     }
-  })
-
-  const fillMissingPosts = (acc: PostWithProducts[], current: PostWithProducts, index: number) => {
-    let expectedNumber = acc.length + 1
-
-    while (current.nr > expectedNumber) {
-      acc.push({
-        nr: expectedNumber,
-        title: getPostTitle(expectedNumber) ?? '',
-        products: [],
-      })
-      expectedNumber++
-    }
-
-    acc.push(current)
-
-    return acc
   }
 
-  return postBuckets.length === agreement.posts.length ? posts : posts.reduce(fillMissingPosts, [])
+  const allPosts = Array.from({ length: agreement.posts.length }, (_, index) => {
+    const listItem = postBuckets.find((post) => post.key === index + 1)
+
+    return listItem
+      ? mapPostBucket(listItem)
+      : {
+          nr: index + 1,
+          title: getPostTitle(index + 1) ?? '',
+          products: [],
+        }
+  })
+
+  return allPosts.filter((post) => filters.length === 0 || filters.includes(post.title))
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {
