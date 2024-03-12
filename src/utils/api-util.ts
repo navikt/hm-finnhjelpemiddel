@@ -1040,6 +1040,35 @@ export async function getSuppliers(letter: string): Promise<Supplier[]> {
     return res.json().then(mapSuppliers)
 }
 
+export async function getAllSuppliers(): Promise<Supplier[]> {
+    const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
+            next: { revalidate: 900 },
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                    "size": 400,
+                    "query": {
+                        "match_all": {}
+                    },
+                    "_source": {
+                        "includes": [
+                            "id",
+                            "identifier",
+                            "name",
+                            "address",
+                            "homepage"
+                        ]
+                    }
+                }
+            ),
+        }
+    )
+
+    return res.json().then(mapSuppliers)
+}
+
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
     const res = await fetch(HM_SEARCH_URL + '/products/_search', {
         next: { revalidate: 900 },

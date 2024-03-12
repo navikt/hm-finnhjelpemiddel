@@ -1,4 +1,5 @@
 import { Hit, SearchResponse, SupplierInfoResponse } from './response-types'
+import * as console from "console";
 
 
 export const alphabet = [...Array(26).keys()].map((n) =>
