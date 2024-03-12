@@ -57,7 +57,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     href="/rammeavtale"
                     onClick={() => setMenuOpen(false)}
                   >
-                    <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
+                    <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
                     Avtaler med NAV
                   </Link>
                 </li>
