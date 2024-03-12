@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Label, HStack, VStack, Detail, TextField, Button } from '@navikt/ds-react'
+import { Label, HStack, VStack, Detail, TextField, Button, Fieldset } from '@navikt/ds-react'
 import ShowMore from '@/components/ShowMore'
 import { Controller, useFormContext } from 'react-hook-form'
 import { mapSearchParams } from '@/utils/mapSearchParams'
@@ -52,12 +52,14 @@ const RangeFilter = ({ groupTitle, filters }: Props) => {
       className={classNames('input-filter', { active: numberOfactiveFiltersInGroup.length > 0 })}
     >
       <VStack gap="4">
-        {filters.map((filter) => (
-          <VStack className="range-filter-input-group" key={filter.name} gap="2">
-            <Label size="small">{filter.name}</Label>
-            <FilterMinMaxRow filterKeyMin={filter.min} filterKeyMax={filter.max} />
-          </VStack>
-        ))}
+        {filters.map((filter, i) => {
+          return (
+            <VStack key={filter.name} className="range-filter-input-group" gap="2">
+              <Label size="small">{filter.name}</Label>
+              <FilterMinMaxRow filterKeyMin={filter.min} filterKeyMax={filter.max} />
+            </VStack>
+          )
+        })}
       </VStack>
     </ShowMore>
   )
@@ -108,6 +110,7 @@ const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; 
   const formMethods = useFormContext<FormSearchData>()
 
   const rule = inputName === 'Min' ? { min: 0 } : { max: 99999 }
+
   return (
     <VStack>
       <Detail>{inputName}</Detail>
@@ -124,6 +127,12 @@ const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; 
               data-invalid={fieldState.invalid ? '' : undefined}
               hideLabel
               {...field}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  event.currentTarget?.form?.requestSubmit()
+                }
+              }}
             />
           )
         }}
