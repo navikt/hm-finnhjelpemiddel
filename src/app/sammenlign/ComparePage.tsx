@@ -1,7 +1,7 @@
 'use client'
 
 import NextLink from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
@@ -17,10 +17,7 @@ import ProductCard from '@/components/ProductCard'
 export default function ComparePage() {
   const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
-  const searchParams = useSearchParams()
 
-  // @TIRIL: Bør egentlig være router.back() nå som vi ikke har egen inngang lenger -> <ellers så må vi huske søkestaten på en eller annen måte (ta med seg searchparams på en eller annen måte)
-  const href = '/sok?' + searchParams.toString()
   const series = productsToCompare.map((product) => product.id)
 
   //TODO: error handling
@@ -36,7 +33,7 @@ export default function ComparePage() {
   const handleClick = (event: any) => {
     event.preventDefault()
     setCompareMenuState(CompareMenuState.Open)
-    router.push(href)
+    router.back()
   }
 
   if (isLoading) {
@@ -65,7 +62,7 @@ export default function ComparePage() {
             <NextLink
               className="navds-panel navds-link-panel navds-panel--border"
               style={{ maxWidth: '750px' }}
-              href={href}
+              href={'/sok'}
               onClick={handleClick}
             >
               <div className="navds-link-panel__content">
