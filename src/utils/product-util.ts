@@ -1,9 +1,3 @@
-import { ReadonlyURLSearchParams } from 'next/navigation'
-
-import queryString from 'querystring'
-
-import { FormSearchData, isValidSortOrder, SearchData, SelectedFilters } from './api-util'
-import { FilterCategories } from './filter-util'
 import {
   AgreementInfoResponse,
   Hit,
@@ -16,7 +10,6 @@ import {
   SeriesBucketResponse,
   TechDataResponse,
 } from './response-types'
-import { initialSearchDataState } from './search-state-util'
 import { capitalize } from './string-util'
 
 export interface Product {
@@ -290,44 +283,3 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
     }
   })
 }
-
-export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreementSearch?: boolean): SearchData => {
-  const sortOrderStr = searchParams.get('sortering') || ''
-  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : agreementSearch ? undefined : 'Best_soketreff'
-
-  const searchTerm = searchParams.get('term') ?? ''
-  const isoCode = searchParams.get('isoCode') ?? ''
-  const hasAgreementsOnly = searchParams.has('agreement')
-  const hidePictures = searchParams.get('hidePictures') ?? ''
-
-  const filterKeys = Object.keys(FilterCategories).filter((filter) => searchParams?.has(filter))
-
-  const filters = filterKeys.reduce(
-    (obj, fk) => ({
-      ...obj,
-      [fk]: searchParams?.getAll(fk),
-    }),
-    {}
-  )
-
-  return {
-    sortOrder,
-    searchTerm,
-    isoCode,
-    hasAgreementsOnly,
-    filters: { ...initialSearchDataState.filters, ...filters },
-    hidePictures,
-  }
-}
-
-export const toSearchQueryString = (searchParams: FormSearchData, searchTerm: string) =>
-  queryString.stringify({
-    ...(searchParams.sortOrder && { sortering: searchParams.sortOrder }),
-    ...(searchParams.hasAgreementsOnly ? { agreement: '' } : {}),
-    ...(searchParams.hidePictures ? { hidePictures: searchParams.hidePictures } : {}),
-    ...{ term: searchTerm },
-    ...(searchParams.isoCode && { isoCode: searchParams.isoCode }),
-    ...Object.entries(searchParams.filters)
-      .filter(([_, values]) => values.some((value) => value))
-      .reduce((newObject, [key, values]) => ({ ...newObject, [key]: values }), {} as SelectedFilters),
-  })
