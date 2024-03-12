@@ -149,18 +149,23 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
+export const mapAgreementProducts = (
+  postBuckets: PostBucketResponse[],
+  agreement: Agreement,
+  filters: string[]
+): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
-  const posts = postBuckets.map((post) => {
+
+  const posts = postBuckets.map((post, i) => {
     let seen: string[] = []
-    const postTitle = getPostTitle(post.key)
+
     return {
       nr: post.key,
-      title: postTitle ?? '',
+      title: getPostTitle(post.key) ?? '',
       products: post.topHitData.hits.hits
         .map((hit) => {
           const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
@@ -187,7 +192,24 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
     }
   })
 
-  return posts
+  const fillMissingPosts = (acc: PostWithProducts[], current: PostWithProducts, index: number) => {
+    let expectedNumber = acc.length + 1
+
+    while (current.nr > expectedNumber) {
+      acc.push({
+        nr: expectedNumber,
+        title: getPostTitle(expectedNumber) ?? '',
+        products: [],
+      })
+      expectedNumber++
+    }
+
+    acc.push(current)
+
+    return acc
+  }
+
+  return postBuckets.length === agreement.posts.length ? posts : posts.reduce(fillMissingPosts, [])
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {
