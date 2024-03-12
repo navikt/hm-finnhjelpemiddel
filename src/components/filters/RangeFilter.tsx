@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Label, HStack, VStack, Detail, TextField, Button, Fieldset } from '@navikt/ds-react'
+import { Label, HStack, VStack, Detail, TextField, Button } from '@navikt/ds-react'
 import ShowMore from '@/components/ShowMore'
 import { Controller, useFormContext } from 'react-hook-form'
 import { mapSearchParams } from '@/utils/mapSearchParams'
@@ -52,7 +52,7 @@ const RangeFilter = ({ groupTitle, filters }: Props) => {
       className={classNames('input-filter', { active: numberOfactiveFiltersInGroup.length > 0 })}
     >
       <VStack gap="4">
-        {filters.map((filter, i) => {
+        {filters.map((filter) => {
           return (
             <VStack key={filter.name} className="range-filter-input-group" gap="2">
               <Label size="small">{filter.name}</Label>

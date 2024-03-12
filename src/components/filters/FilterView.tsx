@@ -88,17 +88,11 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <VStack gap="2" className="filter-container__filters">
         <CheckboxFilter filter={{ key: 'produktkategori', data: filters?.produktkategori }} showSearch={true} />
         <CheckboxFilter filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} showSearch={true} />
-        {availableAndSelectedFiltersSetedimensjoner.size > 0 && (
-          <FilterMinMaxGroup
-            groupTitle="Setedimensjoner"
-            filters={Array.from(availableAndSelectedFiltersSetedimensjoner.values())}
-          />
+        {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
+          <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
         )}
-        {availableAndSelectedFiltersMålOgVekt.size > 0 && (
-          <FilterMinMaxGroup
-            groupTitle="Mål og vekt"
-            filters={Array.from(availableAndSelectedFiltersMålOgVekt.values())}
-          />
+        {availableAndSelectedFiltersMålOgVekt.length > 0 && (
+          <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
         )}
         <CheckboxFilter filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
         <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
@@ -115,7 +109,7 @@ export default FilterView
 const getAvailableAndSelectedFiltersSetedimensjoner = (
   searchDataFilters: string[],
   filtersFromServer?: FilterData
-): Map<string, MinMaxGroupFilter> => {
+): MinMaxGroupFilter[] => {
   const selectedFiltersSetedimensjoner: Map<string, MinMaxGroupFilter> = new Map()
 
   searchDataFilters.forEach((filterKeyStr) => {
@@ -132,14 +126,17 @@ const getAvailableAndSelectedFiltersSetedimensjoner = (
       const isEmpty = filterValue.min === null && filterValue.max === null
       if (filter && !isEmpty) selectedFiltersSetedimensjoner.set(filter.name, filter)
     })
+  const validFiltersArray = Array.from(selectedFiltersSetedimensjoner.values())
 
-  return selectedFiltersSetedimensjoner
+  validFiltersArray.sort((a, b) => a.name.localeCompare(b.name))
+
+  return validFiltersArray
 }
 
 const getAvailableAndSelectedFiltersMålOgVekt = (
   searchDataFilters: string[],
   filtersFromServer?: FilterData
-): Map<string, MinMaxGroupFilter> => {
+): MinMaxGroupFilter[] => {
   const selectedFiltersMålOgVekt: Map<string, MinMaxGroupFilter> = new Map()
 
   searchDataFilters.forEach((filterKeyStr) => {
@@ -159,5 +156,9 @@ const getAvailableAndSelectedFiltersMålOgVekt = (
       if (filter && !isEmpty) selectedFiltersMålOgVekt.set(filter.name, filter)
     })
 
-  return selectedFiltersMålOgVekt
+  const validFiltersArray = Array.from(selectedFiltersMålOgVekt.values())
+
+  validFiltersArray.sort((a, b) => a.name.localeCompare(b.name))
+
+  return validFiltersArray
 }
