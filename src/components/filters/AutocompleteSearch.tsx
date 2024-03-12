@@ -108,7 +108,6 @@ const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
     <div className="search-wrapper">
       <Search
         value={inputValue}
-        type="search"
         ref={searchFieldRef}
         label="Skriv ett eller flere søkeord"
         variant="simple"
