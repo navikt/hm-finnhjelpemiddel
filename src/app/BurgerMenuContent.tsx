@@ -91,6 +91,18 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                   </li>
                 ))}
               </ul>
+              <Heading level="2" size="small" style={{ marginTop: '4px' }}>
+                Leverandører
+              </Heading>
+              <Link
+                  className="burgermenu-container__link"
+                  as={NextLink}
+                  href="/leverandorer/A"
+                  onClick={() => setMenuOpen(false)}
+              >
+                <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
+                Leverandøroversikt
+              </Link>
             </>
           </div>
         </div>
