@@ -30,7 +30,7 @@ export type FilterFormKey = keyof FilterFormState
 const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
   const [min, max] = values
 
-  if (!min && !max) return { bool: { should: [] } }
+  if (!min && !max) return null
 
   return {
     bool: {
@@ -42,6 +42,29 @@ const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
           },
         },
       },
+    },
+  }
+}
+
+//I openSearch er ikke setebreddeMin en range med min og max. er bare et number. Så det gir ingen mening å ha en range for et min-filter.
+//Det er vi som har laget dette systemet. Jeg tenker at det kun gir mening å ha gte (større eller lik) dersom man velger min og lte (mindre enn) hvis det er max.
+const mapMinOrMaxFilter = (type: 'min' | 'max', key: FilterCategoryKeyServer, value: number) => {
+  return {
+    bool: {
+      should: [
+        {
+          range: {
+            [`filters.${key}`]:
+              type === 'min'
+                ? {
+                    gte: value,
+                  }
+                : {
+                    lte: value,
+                  },
+          },
+        },
+      ],
     },
   }
 }
@@ -59,35 +82,35 @@ export const filterTotalvekt = (minStr?: string, maxStr?: string) => {
 }
 
 export const filterMinSetebredde = (valueStr?: string) => {
-  return mapRangeFilter('setebreddeMinCM', [valueStr ? +valueStr : null, null])
+  return valueStr ? mapMinOrMaxFilter('min', 'setebreddeMinCM', Number(valueStr)) : null
 }
 
 export const filterMaksSetebredde = (valueStr?: string) => {
-  return mapRangeFilter('setebreddeMaksCM', [null, valueStr ? +valueStr : null])
+  return valueStr ? mapMinOrMaxFilter('max', 'setebreddeMaksCM', Number(valueStr)) : null
 }
 
 export const filterMinSetedybde = (valueStr?: string) => {
-  return mapRangeFilter('setedybdeMinCM', [valueStr ? +valueStr : null, null])
+  return valueStr ? mapMinOrMaxFilter('min', 'setedybdeMinCM', Number(valueStr)) : null
 }
 
 export const filterMaksSetedybde = (valueStr?: string) => {
-  return mapRangeFilter('setedybdeMaksCM', [null, valueStr ? +valueStr : null])
-}
-
-export const filterMinSetehoyde = (valueStr?: string) => {
-  return mapRangeFilter('setehoydeMinCM', [valueStr ? +valueStr : null, null])
-}
-
-export const filterMaksSetehoyde = (valueStr?: string) => {
-  return mapRangeFilter('setehoydeMaksCM', [null, valueStr ? +valueStr : null])
+  return valueStr ? mapMinOrMaxFilter('max', 'setedybdeMaksCM', Number(valueStr)) : null
 }
 
 export const filterMinBrukervekt = (valueStr?: string) => {
-  return mapRangeFilter('brukervektMinKG', [valueStr ? +valueStr : null, null])
+  return valueStr ? mapMinOrMaxFilter('min', 'brukervektMinKG', Number(valueStr)) : null
 }
 
 export const filterMaksBrukervekt = (valueStr?: string) => {
-  return mapRangeFilter('brukervektMaksKG', [null, valueStr ? +valueStr : null])
+  return valueStr ? mapMinOrMaxFilter('max', 'brukervektMaksKG', Number(valueStr)) : null
+}
+
+export const filterMinSetehoyde = (valueStr?: string) => {
+  return valueStr ? mapMinOrMaxFilter('min', 'setehoydeMinCM', Number(valueStr)) : null
+}
+
+export const filterMaksSetehoyde = (valueStr?: string) => {
+  return valueStr ? mapMinOrMaxFilter('max', 'setehoydeMaksCM', Number(valueStr)) : null
 }
 
 export const filterBeregnetBarn = (values: Array<string>) => ({
