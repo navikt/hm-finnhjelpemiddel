@@ -1,22 +1,13 @@
 'use client'
 
-import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import {
-  Filter,
-  FilterData,
-  FormSearchData,
-  SelectedFilters,
-  getFiltersAgreement,
-  getProductsOnAgreement,
-} from '@/utils/api-util'
-import { initialAgreementSearchDataState } from '@/utils/search-state-util'
+import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import {
@@ -36,11 +27,12 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
+import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
+import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 
 export type AgreementSearchData = {
   searchTerm: string
   hidePictures: boolean
-  filters: SelectedFilters
 }
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
@@ -58,6 +50,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
+  // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialAgreementSearchDataState,
@@ -162,12 +155,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
             <section className="filter-container hide-print">
-              <FilterForm
-                onSubmit={onSubmit}
-                ref={searchFormRef}
-                filters={filters}
-                selectedFilters={searchData.filters}
-              />
+              <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
@@ -220,12 +208,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
-                  <FilterForm
-                    onSubmit={onSubmit}
-                    ref={searchFormRef}
-                    filters={filters}
-                    selectedFilters={searchData.filters}
-                  />
+                  <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
                 </MobileOverlay.Content>
                 <MobileOverlay.Footer>
                   <VStack gap="2">

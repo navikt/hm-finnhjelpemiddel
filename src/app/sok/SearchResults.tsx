@@ -2,13 +2,12 @@ import { RefObject } from 'react'
 
 import { Alert, Button, HStack, VStack } from '@navikt/ds-react'
 
-import { SearchData } from '@/utils/api-util'
-
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import ProductCard from '@/components/ProductCard'
 import { Product } from '@/utils/product-util'
 import { useFormContext } from 'react-hook-form'
+import { FormSearchData } from '@/utils/search-state-util'
 
 const SearchResults = ({
   products,
@@ -21,7 +20,7 @@ const SearchResults = ({
   products?: Product[] | undefined
   formRef: RefObject<HTMLFormElement>
 }) => {
-  const formMethods = useFormContext<SearchData>()
+  const formMethods = useFormContext<FormSearchData>()
 
   const handleSetIsoFilter = (value: string) => {
     formMethods.setValue(`filters.produktkategori`, [value])

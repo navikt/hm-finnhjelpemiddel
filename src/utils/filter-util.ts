@@ -1,25 +1,33 @@
-export enum FilterCategories {
-  lengdeCM = 'Lengde (cm)',
-  breddeCM = 'Bredde (cm)',
-  setebreddeMinCM = 'Min. setebredde (cm)',
-  setebreddeMaksCM = 'Maks. setebredde (cm)',
-  setedybdeMinCM = 'Min. setedybde (cm)',
-  setedybdeMaksCM = 'Maks. setedybde (cm)',
-  setehoydeMinCM = 'Min. setehøyde (cm)',
-  setehoydeMaksCM = 'Maks. setehøyde (cm)',
-  brukervektMinKG = 'Min. brukervekt (kg)',
-  brukervektMaksKG = 'Maks. brukervekt (kg)',
-  totalVektKG = 'Totalvekt (kg)',
-  fyllmateriale = 'Fyllmateriale',
-  materialeTrekk = 'Trekkmateriale',
-  beregnetBarn = 'Beregnet på barn',
-  leverandor = 'Leverandør',
-  produktkategori = 'Produktkategori',
-  rammeavtale = 'Rammeavtale',
-  delkontrakt = 'Delkontrakt',
+import { FilterCategoryKeyServer } from './api-util'
+
+export const initialFiltersFormState = {
+  setebreddeMaksCM: '',
+  setebreddeMinCM: '',
+  setedybdeMaksCM: '',
+  setehoydeMaksCM: '',
+  setehoydeMinCM: '',
+  setedybdeMinCM: '',
+  totalVektMinKG: '',
+  totalVektMaxKG: '',
+  lengdeMinCM: '',
+  lengdeMaxCM: '',
+  breddeMinCM: '',
+  breddeMaxCM: '',
+  brukervektMinKG: '',
+  brukervektMaksKG: '',
+  beregnetBarn: [] as string[],
+  fyllmateriale: [] as string[],
+  materialeTrekk: [] as string[],
+  leverandor: [] as string[],
+  produktkategori: [] as string[],
+  rammeavtale: [] as string[],
+  delkontrakt: [] as string[],
 }
 
-const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number>) => {
+export type FilterFormState = typeof initialFiltersFormState
+export type FilterFormKey = keyof FilterFormState
+
+const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
   const [min, max] = values
 
   if (!min && !max) return { bool: { should: [] } }
@@ -38,48 +46,48 @@ const mapRangeFilter = (key: keyof typeof FilterCategories, values: Array<number
   }
 }
 
-export const filterLengde = (values: Array<number>) => {
-  return mapRangeFilter('lengdeCM', values)
+export const filterLengde = (minStr?: string, maxStr?: string) => {
+  return mapRangeFilter('lengdeCM', [minStr ? +minStr : null, maxStr ? +maxStr : null])
 }
 
-export const filterBredde = (values: Array<number>) => {
-  return mapRangeFilter('breddeCM', values)
+export const filterBredde = (minStr?: string, maxStr?: string) => {
+  return mapRangeFilter('breddeCM', [minStr ? +minStr : null, maxStr ? +maxStr : null])
 }
 
-export const filterTotalvekt = (values: Array<number>) => {
-  return mapRangeFilter('totalVektKG', values)
+export const filterTotalvekt = (minStr?: string, maxStr?: string) => {
+  return mapRangeFilter('totalVektKG', [minStr ? +minStr : null, maxStr ? +maxStr : null])
 }
 
-export const filterMinSetebredde = (values: Array<number>) => {
-  return mapRangeFilter('setebreddeMinCM', values)
+export const filterMinSetebredde = (valueStr?: string) => {
+  return mapRangeFilter('setebreddeMinCM', [valueStr ? +valueStr : null, null])
 }
 
-export const filterMaksSetebredde = (values: Array<number>) => {
-  return mapRangeFilter('setebreddeMaksCM', values)
+export const filterMaksSetebredde = (valueStr?: string) => {
+  return mapRangeFilter('setebreddeMaksCM', [null, valueStr ? +valueStr : null])
 }
 
-export const filterMinSetedybde = (values: Array<number>) => {
-  return mapRangeFilter('setedybdeMinCM', values)
+export const filterMinSetedybde = (valueStr?: string) => {
+  return mapRangeFilter('setedybdeMinCM', [valueStr ? +valueStr : null, null])
 }
 
-export const filterMaksSetedybde = (values: Array<number>) => {
-  return mapRangeFilter('setedybdeMaksCM', values)
+export const filterMaksSetedybde = (valueStr?: string) => {
+  return mapRangeFilter('setedybdeMaksCM', [null, valueStr ? +valueStr : null])
 }
 
-export const filterMinSetehoyde = (values: Array<number>) => {
-  return mapRangeFilter('setehoydeMinCM', values)
+export const filterMinSetehoyde = (valueStr?: string) => {
+  return mapRangeFilter('setehoydeMinCM', [valueStr ? +valueStr : null, null])
 }
 
-export const filterMaksSetehoyde = (values: Array<number>) => {
-  return mapRangeFilter('setehoydeMaksCM', values)
+export const filterMaksSetehoyde = (valueStr?: string) => {
+  return mapRangeFilter('setehoydeMaksCM', [null, valueStr ? +valueStr : null])
 }
 
-export const filterMinBrukervekt = (values: Array<number>) => {
-  return mapRangeFilter('brukervektMinKG', values)
+export const filterMinBrukervekt = (valueStr?: string) => {
+  return mapRangeFilter('brukervektMinKG', [valueStr ? +valueStr : null, null])
 }
 
-export const filterMaksBrukervekt = (values: Array<number>) => {
-  return mapRangeFilter('brukervektMaksKG', values)
+export const filterMaksBrukervekt = (valueStr?: string) => {
+  return mapRangeFilter('brukervektMaksKG', [null, valueStr ? +valueStr : null])
 }
 
 export const filterBeregnetBarn = (values: Array<string>) => ({
@@ -88,13 +96,13 @@ export const filterBeregnetBarn = (values: Array<string>) => ({
   },
 })
 
-export const filterFyllmateriale = (values: Array<number>) => ({
+export const filterFyllmateriale = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'filters.fyllmateriale': value } })),
   },
 })
 
-export const filterMaterialeTrekk = (values: Array<number>) => ({
+export const filterMaterialeTrekk = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { 'filters.materialeTrekk': value } })),
   },
@@ -106,7 +114,7 @@ export const filterLeverandor = (values: Array<string>) => ({
   },
 })
 
-export const filterProduktkategori = (values: Array<number>) => ({
+export const filterProduktkategori = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { isoCategoryName: value } })),
   },

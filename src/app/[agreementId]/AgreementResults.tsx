@@ -2,7 +2,7 @@
 
 import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
-import { SearchData } from '@/utils/api-util'
+import { FormSearchData } from '@/utils/search-state-util'
 import { ImageIcon } from '@navikt/aksel-icons'
 import { Alert, HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
@@ -10,7 +10,7 @@ import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formRef: RefObject<HTMLFormElement> }) => {
-  const formMethods = useFormContext<SearchData>()
+  const formMethods = useFormContext<FormSearchData>()
   const searchParams = useSearchParams()
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
 
