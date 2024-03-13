@@ -1,5 +1,4 @@
 import { Hit, SearchResponse, SupplierInfoResponse } from './response-types'
-import * as console from "console";
 
 
 export const alphabet = [...Array(26).keys()].map((n) =>
@@ -18,7 +17,7 @@ export interface Supplier {
 export const mapSuppliers = (data: SearchResponse): Supplier[] => {
 
   return data.hits.hits
-    .map((hit: Hit) => mapSupplier(hit._source as SupplierInfoResponse))
+    .map((hit: Hit) => mapSupplier(hit._source as SupplierInfoResponse)).filter((supplier: Supplier) => !supplier.name.includes('(opphørt)'))
 }
 
 export const mapSupplier = (_source: SupplierInfoResponse): Supplier => {
