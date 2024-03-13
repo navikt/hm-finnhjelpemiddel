@@ -97,7 +97,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
               <Link
                   className="burgermenu-container__link"
                   as={NextLink}
-                  href="/leverandorer/A"
+                  href="/leverandorer"
                   onClick={() => setMenuOpen(false)}
               >
                 <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />

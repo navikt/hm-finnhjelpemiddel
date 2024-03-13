@@ -1,6 +1,4 @@
 import { Hit, SearchResponse, SupplierInfoResponse } from './response-types'
-import * as console from "console";
-
 
 export const alphabet = [...Array(26).keys()].map((n) =>
   String.fromCharCode(65 + n)).concat([String.fromCharCode((198)), 'Ø', String.fromCharCode((197))])
