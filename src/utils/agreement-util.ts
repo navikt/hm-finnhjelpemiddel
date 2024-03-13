@@ -52,6 +52,8 @@ export interface PostWithProducts {
   title: string
   products: {
     rank: number
+    hmsNumbers?: string[]
+    variantCount?: number
     product: Product
   }[]
 }
