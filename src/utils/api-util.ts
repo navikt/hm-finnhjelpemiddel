@@ -1061,13 +1061,6 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
               seriesId: seriesIds,
             },
           },
-          filter: [
-            {
-              term: {
-                status: 'ACTIVE',
-              },
-            },
-          ],
         },
       },
       sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
