@@ -7,11 +7,11 @@ import { dateToString } from '@/utils/string-util'
 import { BodyLong, BodyShort, Heading, Link, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
+import { logNavigationEvent } from '@/utils/amplitude'
 import { HStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
-import { logNavigereEvent } from '@/utils/amplitude'
 
 type Props = {
   params: { id: string }
@@ -60,7 +60,11 @@ export default async function AgreementPage({ params }: Props) {
                     href={hrefHurtigoversikt}
                     className="agreement-page__link-to-search"
                     onClick={() =>
-                      logNavigereEvent('rammeavtale', 'hurtigoversikt', 'Tilbehør, reservedeler og dokumenter med mer')
+                      logNavigationEvent(
+                        'rammeavtale',
+                        'hurtigoversikt',
+                        'Tilbehør, reservedeler og dokumenter med mer'
+                      )
                     }
                   >
                     Produkter: {agreement.label}

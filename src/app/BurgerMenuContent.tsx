@@ -1,5 +1,5 @@
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
-import { logNavigereEvent } from '@/utils/amplitude'
+import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
@@ -58,7 +58,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     href="/rammeavtale"
                     onClick={() => {
                       setMenuOpen(false)
-                      logNavigereEvent('meny', 'rammeavtale', 'Avtaler med NAV')
+                      logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
                     }}
                   >
                     <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
@@ -72,7 +72,11 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
                     onClick={() => {
                       setMenuOpen(false)
-                      logNavigereEvent('meny', 'rammeavtale', 'Slik kan du se at et hjelpemiddel er på avtale med NAV')
+                      logNavigationEvent(
+                        'meny',
+                        'rammeavtale',
+                        'Slik kan du se at et hjelpemiddel er på avtale med NAV'
+                      )
                     }}
                   >
                     <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
@@ -92,7 +96,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                       href={`/${agreement.id}`}
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigereEvent('meny', 'hurtigoversikt', agreement.label)
+                        logNavigationEvent('meny', 'hurtigoversikt', agreement.label)
                       }}
                     >
                       <ChevronRightIcon title="Pil mote høyre" fontSize="1.5rem" />

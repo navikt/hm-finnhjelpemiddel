@@ -59,7 +59,7 @@ export function logOversiktForsideVist() {
   logCustomEvent(digihot_customevents.VISNING_OVERSIKT)
 }
 
-export function logNavigereEvent(komponent: string, destinasjon: string, lenketekst: string) {
+export function logNavigationEvent(komponent: string, destinasjon: string, lenketekst: string) {
   logCustomEvent(digihot_customevents.NAVIGERE, {
     komponent: komponent,
     destinasjon: destinasjon,

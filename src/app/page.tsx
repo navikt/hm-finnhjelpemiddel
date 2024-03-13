@@ -14,7 +14,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import News from '@/components/News'
-import { logNavigereEvent } from '@/utils/amplitude'
+import { logNavigationEvent } from '@/utils/amplitude'
 import { sortAlphabetically } from '@/utils/sort-util'
 
 function Home() {
@@ -62,7 +62,7 @@ function Home() {
                         <Link
                           as={NextLink}
                           href={`/${id}`}
-                          onClick={() => logNavigereEvent('forside', 'hurtigoversikt', label)}
+                          onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label)}
                         >
                           {label}
                         </Link>
