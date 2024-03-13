@@ -269,8 +269,6 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     rammeavtale: filterRammeavtale(rammeavtale),
   }
 
-  console.log('allFilters', allFilters)
-
   const queryFilters: Array<any> = [
     /*    {
           term: {
@@ -309,7 +307,6 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     },
   }
 
-  console.log()
   const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
     filter: {
       bool: {
