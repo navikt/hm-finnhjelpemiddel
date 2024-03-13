@@ -34,7 +34,7 @@ function News() {
                   padding="6"
                   background="surface-default"
                   borderRadius="large"
-                  style={{ maxWidth: '690px' }}
+                  className="home-page__news"
                   shadow="xsmall"
                 >
                   <VStack gap="1">
