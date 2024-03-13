@@ -1,24 +1,5 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
-.range-filter-input {
-  display: flex;
-  align-items: flex-end;
-  gap: $a-spacing-4;
-  box-sizing: border-box;
-  max-width: 13rem;
-  margin-bottom: $a-spacing-3;
-  margin-left: $a-spacing-3;
-}
-
-.single-filter-input {
-  max-width: 6rem;
-  margin-bottom: $a-spacing-3;
-
-  > div {
-    margin-left: $a-spacing-3;
-  }
-}
-
 .checkbox-filter {
   &__checkboxes {
     > div {
@@ -72,7 +53,7 @@
     }
 
     details > div {
-      margin-bottom: $a-spacing-1;
+      margin-bottom: $a-spacing-4;
       box-sizing: border-box;
     }
 
@@ -135,5 +116,23 @@
     .chip {
       padding: 2px var(--a-spacing-3);
     }
+  }
+}
+
+.range-filter-input-group {
+  margin-left: $a-spacing-3;
+  input {
+    width: 115px;
+  }
+
+  button {
+    align-self: flex-end;
+    height: 32px;
+  }
+}
+
+form {
+  [data-invalid] {
+    outline: 2px solid var(--a-red-400);
   }
 }

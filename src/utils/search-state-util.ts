@@ -1,34 +1,35 @@
-const initialFiltersState = {
-  beregnetBarn: [],
-  breddeCM: [null, null],
-  brukervektMaksKG: [null, null],
-  brukervektMinKG: [null, null],
-  fyllmateriale: [],
-  lengdeCM: [null, null],
-  materialeTrekk: [],
-  setebreddeMaksCM: [null, null],
-  setebreddeMinCM: [null, null],
-  setedybdeMaksCM: [null, null],
-  setehoydeMaksCM: [null, null],
-  setehoydeMinCM: [null, null],
-  setedybdeMinCM: [null, null],
-  totalVektKG: [null, null],
-  leverandor: [],
-  produktkategori: [],
-  rammeavtale: [],
-  delkontrakt: [],
-}
+import { FilterFormState, initialFiltersFormState } from './filter-util'
 
 export const initialSearchDataState = {
   searchTerm: '',
   isoCode: '',
   hasAgreementsOnly: false,
-  filters: initialFiltersState,
+  filters: initialFiltersFormState,
   sortOrder: undefined,
 }
 
 export const initialAgreementSearchDataState = {
   searchTerm: '',
-  filters: initialFiltersState,
+  filters: initialFiltersFormState,
+  newFilters: initialFiltersFormState,
   hidePictures: 'show-pictures',
 }
+
+export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
+
+export type SortOrder = (typeof sortOrders)[number]
+
+export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
+  return sortOrders.includes(sortOrder as SortOrder)
+}
+
+export type SearchData = {
+  searchTerm: string
+  isoCode: string
+  hasAgreementsOnly: boolean
+  filters: FilterFormState
+  sortOrder?: SortOrder
+  hidePictures?: string
+}
+
+export type FormSearchData = Omit<SearchData, 'searchTerm'>

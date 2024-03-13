@@ -1,17 +1,66 @@
-import { RangeFilterInput } from '@/components/filters/RangeFilterInput'
+import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
+import { FilterCategoryKeyServer } from '@/utils/api-util'
 import { FilterData } from '@/utils/api-util'
-import { mapSearchParams } from '@/utils/product-util'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 import { BodyShort, Heading, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
+
+const minMaxFilterKeyMapSete: Record<'setedimensjoner', MinMaxGroupFilter[]> = {
+  setedimensjoner: [
+    {
+      name: 'Bredde',
+      min: 'setebreddeMinCM',
+      max: 'setebreddeMaksCM',
+    },
+    {
+      name: 'Høyde',
+      min: 'setehoydeMinCM',
+      max: 'setehoydeMaksCM',
+    },
+    {
+      name: 'Dybde',
+      min: 'setedybdeMinCM',
+      max: 'setedybdeMaksCM',
+    },
+  ],
+}
+
+const minMaxFilterKeyMapMålOgVekt: Record<'målOgVekt', MinMaxGroupFilter[]> = {
+  målOgVekt: [
+    {
+      name: 'Lengde',
+      filterNameServer: 'lengdeCM',
+      min: 'lengdeMinCM',
+      max: 'lengdeMaxCM',
+    },
+    {
+      name: 'Bredde',
+      filterNameServer: 'breddeCM',
+      min: 'breddeMinCM',
+      max: 'breddeMaxCM',
+    },
+    {
+      name: 'Totalvekt',
+      filterNameServer: 'totalVektKG',
+      min: 'totalVektMinKG',
+      max: 'totalVektMaxKG',
+    },
+    {
+      name: 'Brukervekt',
+      min: 'brukervektMinKG',
+      max: 'brukervektMaksKG',
+    },
+  ],
+}
 
 const FilterView = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const searchDataFilters = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.some((value) => !(value === null || value === undefined)))
+    .filter(([_, value]) => value.length)
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
   const noAvailableFilters =
@@ -25,6 +74,12 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
     )
   }
 
+  const availableAndSelectedFiltersSetedimensjoner = getAvailableAndSelectedFiltersSetedimensjoner(
+    searchDataFilters,
+    filters
+  )
+  const availableAndSelectedFiltersMålOgVekt = getAvailableAndSelectedFiltersMålOgVekt(searchDataFilters, filters)
+
   return (
     <VStack>
       <Heading size="small" level="2">
@@ -33,17 +88,12 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <VStack gap="2" className="filter-container__filters">
         <CheckboxFilter filter={{ key: 'produktkategori', data: filters?.produktkategori }} showSearch={true} />
         <CheckboxFilter filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} showSearch={true} />
-        <RangeFilterInput variant="min" filter={{ key: 'setebreddeMinCM', data: filters?.setebreddeMinCM }} />
-        <RangeFilterInput variant="max" filter={{ key: 'setebreddeMaksCM', data: filters?.setebreddeMaksCM }} />
-        <RangeFilterInput variant="min" filter={{ key: 'setedybdeMinCM', data: filters?.setedybdeMinCM }} />
-        <RangeFilterInput variant="max" filter={{ key: 'setedybdeMaksCM', data: filters?.setedybdeMaksCM }} />
-        <RangeFilterInput variant="min" filter={{ key: 'setehoydeMinCM', data: filters?.setehoydeMinCM }} />
-        <RangeFilterInput variant="max" filter={{ key: 'setehoydeMaksCM', data: filters?.setehoydeMaksCM }} />
-        <RangeFilterInput variant="min" filter={{ key: 'brukervektMinKG', data: filters?.brukervektMinKG }} />
-        <RangeFilterInput variant="max" filter={{ key: 'brukervektMaksKG', data: filters?.brukervektMaksKG }} />
-        <RangeFilterInput filter={{ key: 'lengdeCM', data: filters?.lengdeCM }} />
-        <RangeFilterInput filter={{ key: 'breddeCM', data: filters?.breddeCM }} />
-        <RangeFilterInput filter={{ key: 'totalVektKG', data: filters?.totalVektKG }} />
+        {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
+          <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
+        )}
+        {availableAndSelectedFiltersMålOgVekt.length > 0 && (
+          <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
+        )}
         <CheckboxFilter filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
         <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
         <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
@@ -55,3 +105,60 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 }
 
 export default FilterView
+
+const getAvailableAndSelectedFiltersSetedimensjoner = (
+  searchDataFilters: string[],
+  filtersFromServer?: FilterData
+): MinMaxGroupFilter[] => {
+  const selectedFiltersSetedimensjoner: Map<string, MinMaxGroupFilter> = new Map()
+
+  searchDataFilters.forEach((filterKeyStr) => {
+    const filter = minMaxFilterKeyMapSete['setedimensjoner'].find(
+      (f) => f.min === filterKeyStr || f.max === filterKeyStr
+    )
+    if (filter) selectedFiltersSetedimensjoner.set(filter.name, filter)
+  })
+
+  filtersFromServer &&
+    Object.entries(filtersFromServer).forEach(([filterKeyStr, filterValue]) => {
+      const filterKey = filterKeyStr as FilterCategoryKeyServer
+      const filter = minMaxFilterKeyMapSete['setedimensjoner'].find((f) => f.min === filterKey || f.max === filterKey)
+      const isEmpty = filterValue.min === null && filterValue.max === null
+      if (filter && !isEmpty) selectedFiltersSetedimensjoner.set(filter.name, filter)
+    })
+  const validFiltersArray = Array.from(selectedFiltersSetedimensjoner.values())
+
+  validFiltersArray.sort((a, b) => a.name.localeCompare(b.name))
+
+  return validFiltersArray
+}
+
+const getAvailableAndSelectedFiltersMålOgVekt = (
+  searchDataFilters: string[],
+  filtersFromServer?: FilterData
+): MinMaxGroupFilter[] => {
+  const selectedFiltersMålOgVekt: Map<string, MinMaxGroupFilter> = new Map()
+
+  searchDataFilters.forEach((filterKeyStr) => {
+    const filter = minMaxFilterKeyMapMålOgVekt['målOgVekt'].find(
+      (f) => f.filterNameServer === filterKeyStr || f.min === filterKeyStr || f.max === filterKeyStr
+    )
+    if (filter) selectedFiltersMålOgVekt.set(filter.name, filter)
+  })
+
+  filtersFromServer &&
+    Object.entries(filtersFromServer).forEach(([filterKeyStr, filterValue]) => {
+      const filterKey = filterKeyStr as FilterCategoryKeyServer
+      const filter = minMaxFilterKeyMapMålOgVekt['målOgVekt'].find(
+        (f) => f.filterNameServer === filterKey || f.min === filterKey || f.max === filterKey
+      )
+      const isEmpty = filterValue.min === null && filterValue.max === null
+      if (filter && !isEmpty) selectedFiltersMålOgVekt.set(filter.name, filter)
+    })
+
+  const validFiltersArray = Array.from(selectedFiltersMålOgVekt.values())
+
+  validFiltersArray.sort((a, b) => a.name.localeCompare(b.name))
+
+  return validFiltersArray
+}

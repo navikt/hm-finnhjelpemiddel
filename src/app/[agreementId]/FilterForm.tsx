@@ -1,12 +1,12 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Search } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 
-import { FilterData, SearchData, SelectedFilters } from '@/utils/api-util'
+import { FilterData } from '@/utils/api-util'
 
 import FilterView from '@/components/filters/FilterView'
-import { useSearchParams } from 'next/navigation'
+import { FormSearchData } from '@/utils/search-state-util'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
   <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
@@ -16,16 +16,13 @@ const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
 
 type Props = {
   filters?: FilterData
-  selectedFilters?: SelectedFilters
   setFocus?: () => void
-  onSubmit: SubmitHandler<SearchData>
+  onSubmit: SubmitHandler<FormSearchData>
 }
 
 const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
   const formRef = useRef<HTMLFormElement>(null)
-  const formMethods = useFormContext<SearchData>()
-  const searchParams = useSearchParams()
-  // const searchTerm = searchParams.get('term') ?? ''
+  const formMethods = useFormContext<FormSearchData>()
 
   useImperativeHandle(ref, () => formRef.current!)
 
@@ -36,9 +33,6 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       onSubmit={formMethods.handleSubmit(onSubmit)}
       aria-controls="agreementSearchResults"
     >
-      {/* {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-      <Search label="Søk etter titler i avtalen" size="small"></Search> */}
-
       <FilterView filters={filters} />
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
       <input type="submit" style={{ display: 'none' }} />
