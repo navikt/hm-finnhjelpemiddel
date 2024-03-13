@@ -14,6 +14,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import News from '@/components/News'
+import { logNavigereEvent } from '@/utils/amplitude'
 import { sortAlphabetically } from '@/utils/sort-util'
 
 function Home() {
@@ -58,7 +59,11 @@ function Home() {
                     let hrefSok = `/sok?agreement&rammeavtale=${label}`
                     return (
                       <div className="home-page__agreement-link" key={id}>
-                        <Link as={NextLink} href={`/${id}`}>
+                        <Link
+                          as={NextLink}
+                          href={`/${id}`}
+                          onClick={() => logNavigereEvent('forside', 'hurtigoversikt', label)}
+                        >
                           {label}
                         </Link>
                       </div>

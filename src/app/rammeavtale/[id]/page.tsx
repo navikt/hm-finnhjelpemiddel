@@ -7,10 +7,11 @@ import { dateToString } from '@/utils/string-util'
 import { BodyLong, BodyShort, Heading, Link, LinkPanel } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import { HStack, VStack } from '@navikt/ds-react'
+import { HStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
+import { logNavigereEvent } from '@/utils/amplitude'
 
 type Props = {
   params: { id: string }
@@ -55,7 +56,13 @@ export default async function AgreementPage({ params }: Props) {
                   <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
                 </div>
                 {!agreementHasNoProducts(agreement.identifier) && (
-                  <LinkPanel href={hrefHurtigoversikt} className="agreement-page__link-to-search">
+                  <LinkPanel
+                    href={hrefHurtigoversikt}
+                    className="agreement-page__link-to-search"
+                    onClick={() =>
+                      logNavigereEvent('rammeavtale', 'hurtigoversikt', 'Tilbehør, reservedeler og dokumenter med mer')
+                    }
+                  >
                     Produkter: {agreement.label}
                   </LinkPanel>
                 )}

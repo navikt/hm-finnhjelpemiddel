@@ -1,4 +1,5 @@
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import { logNavigereEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
@@ -55,7 +56,10 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     className="burgermenu-container__link"
                     as={NextLink}
                     href="/rammeavtale"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      setMenuOpen(false)
+                      logNavigereEvent('meny', 'rammeavtale', 'Avtaler med NAV')
+                    }}
                   >
                     <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
                     Avtaler med NAV
@@ -66,7 +70,10 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     className="burgermenu-container__link"
                     as={NextLink}
                     href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      setMenuOpen(false)
+                      logNavigereEvent('meny', 'rammeavtale', 'Slik kan du se at et hjelpemiddel er på avtale med NAV')
+                    }}
                   >
                     <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
                     Slik kan du se at et hjelpemiddel er på avtale med NAV
@@ -83,7 +90,10 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                       className="burgermenu-container__link"
                       as={NextLink}
                       href={`/${agreement.id}`}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigereEvent('meny', 'hurtigoversikt', agreement.label)
+                      }}
                     >
                       <ChevronRightIcon title="Pil mote høyre" fontSize="1.5rem" />
                       {agreement.label}
