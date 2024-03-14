@@ -27,25 +27,6 @@ export const initialFiltersFormState = {
 export type FilterFormState = typeof initialFiltersFormState
 export type FilterFormKey = keyof FilterFormState
 
-const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
-  const [min, max] = values
-
-  if (!min && !max) return null
-
-  return {
-    bool: {
-      should: {
-        range: {
-          [`filters.${key}`]: {
-            gte: min || undefined,
-            lte: max || undefined,
-          },
-        },
-      },
-    },
-  }
-}
-
 type MinMaxFilter =
   | { setebreddeMinCM?: string }
   | { setebreddeMaksCM?: string }
@@ -61,6 +42,8 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter) => {
   const valueMin = Object.values(min)[0]
   const keyMax = Object.keys(max)[0]
   const valueMax = Object.values(max)[0]
+  if (!valueMin.length && !valueMax.length) return null
+
   return {
     bool: {
       should: [
@@ -81,6 +64,25 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter) => {
           },
         },
       ],
+    },
+  }
+}
+
+const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
+  const [min, max] = values
+
+  if (!min && !max) return null
+
+  return {
+    bool: {
+      should: {
+        range: {
+          [`filters.${key}`]: {
+            gte: min || undefined,
+            lte: max || undefined,
+          },
+        },
+      },
     },
   }
 }

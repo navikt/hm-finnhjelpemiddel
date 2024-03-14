@@ -337,6 +337,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
             filterLeverandor(leverandor),
             filterProduktkategori(produktkategori),
             filterRammeavtale(rammeavtale),
+            //Remove null values
           ].filter(Boolean),
         },
       },
