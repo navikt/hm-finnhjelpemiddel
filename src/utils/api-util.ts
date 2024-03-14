@@ -881,6 +881,7 @@ export const getFiltersAgreement = ({
     leverandor: {
       filter: {
         bool: {
+          // filter: [filterDelkontrakt(delkontrakt)],
           filter: [],
         },
       },
@@ -920,7 +921,6 @@ export const getFiltersAgreement = ({
           leverandor: data.aggregations.leverandor,
         },
       }
-      // console.log('data', data)
       return mapFilters(filters)
     })
 }
