@@ -100,7 +100,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                   href="/leverandorer"
                   onClick={() => setMenuOpen(false)}
               >
-                <ChevronRightIcon title="Pil mot høyre" fontSize="1.5rem" />
+                <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
                 Leverandøroversikt
               </Link>
             </>
