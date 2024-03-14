@@ -82,7 +82,7 @@ const NavigationBar = () => {
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
-                    Avtale med NAV
+                    Meny
                   </Button>
                 </Hide>
                 <Show below="md" asChild>
