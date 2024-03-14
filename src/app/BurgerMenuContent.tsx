@@ -93,7 +93,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     <Link
                       className="burgermenu-container__link"
                       as={NextLink}
-                      href={`/${agreement.id}`}
+                      href={`/rammeavtale/hjelpemidler/${agreement.id}`}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'hurtigoversikt', agreement.label)

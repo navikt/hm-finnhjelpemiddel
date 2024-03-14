@@ -54,7 +54,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           </DefinitionList.Definition>
           <DefinitionList.Term>Avtale</DefinitionList.Term>
           <DefinitionList.Definition>
-            <Link as={NextLink} href={`/${product.agreements[0].id}`}>
+            <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${product.agreements[0].id}`}>
               <BodyShort> {product.agreements[0].title} </BodyShort>
             </Link>
           </DefinitionList.Definition>
@@ -87,7 +87,11 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             {product.agreements.map((agreement, i) => {
               return (
                 <Table.Row key={i}>
-                  <Table.DataCell scope="row">{agreement.title}</Table.DataCell>
+                  <Table.DataCell scope="row">
+                    <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${product.agreements[0].id}`}>
+                      {agreement.title}
+                    </Link>
+                  </Table.DataCell>
                   <Table.DataCell scope="row">{agreement.postTitle}</Table.DataCell>
                   <Table.DataCell align="center">{agreement.rank}</Table.DataCell>
                 </Table.Row>
@@ -95,18 +99,12 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             })}
           </Table.Body>
         </Table>
-        <Link href="#" onClick={scrollToAgreementInfo}>
+        <Link href="#" onClick={scrollToAgreementInfo} className="spacing-bottom--medium">
           Se flere produkter på disse delkontrakene
           <ArrowDownIcon title="a11y-title" fontSize="1.5rem" />
         </Link>
 
         <DefinitionList>
-          <DefinitionList.Term>Avtale</DefinitionList.Term>
-          <DefinitionList.Definition>
-            <Link as={NextLink} href={`/${product.agreements[0].id}`}>
-              <BodyShort> {product.agreements[0].title} </BodyShort>
-            </Link>
-          </DefinitionList.Definition>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
           <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
           <DefinitionList.Term>
