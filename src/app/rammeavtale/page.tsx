@@ -4,8 +4,9 @@ import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
-import { BodyShort } from '@navikt/ds-react'
+import { Alert, BodyShort } from '@navikt/ds-react'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import AgreementList from './AgreementList'
 
 export const metadata: Metadata = {
@@ -31,6 +32,23 @@ export default async function AgreementsInfoPage() {
             </BodyShort>
 
             <AgreementList />
+
+            <Alert variant="info">
+              Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og
+              hjelpemidler for seksuallivet her:
+              <ul>
+                <li>
+                  <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
+                    Høreapparat, ørepropper og tinnitusmaskerere
+                  </Link>
+                </li>
+                <li>
+                  <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
+                    Hjelpemidler for seksuallivet
+                  </Link>
+                </li>
+              </ul>
+            </Alert>
           </article>
           <article>
             <Heading level="2" size="medium" id="se-at-et-hjelpemiddel-er-på-avtale" spacing>
