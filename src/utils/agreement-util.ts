@@ -1,3 +1,4 @@
+import { FilterFormState } from './filter-util'
 import { Document, Product, mapDocuments, mapProductWithVariants } from './product-util'
 import {
   AgreementDocResponse,
@@ -152,7 +153,7 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
 export const mapAgreementProducts = (
   postBuckets: PostBucketResponse[],
   agreement: Agreement,
-  filters: string[]
+  filters: FilterFormState
 ): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
@@ -191,7 +192,7 @@ export const mapAgreementProducts = (
     }
   }
 
-  const allPosts = Array.from({ length: agreement.posts.length }, (_, index) => {
+  const allPostsWithEmpty = Array.from({ length: agreement.posts.length }, (_, index) => {
     const listItem = postBuckets.find((post) => post.key === index + 1)
 
     return listItem
@@ -203,7 +204,21 @@ export const mapAgreementProducts = (
         }
   })
 
-  return allPosts.filter((post) => filters.length === 0 || filters.includes(post.title))
+  const isFilteredOnDelkontrakt = filters.delkontrakt.length > 0
+  const isFilteredOnAnythingElse = Object.entries(filters).some(
+    ([key, values]) => key !== 'delkontrakt' && values.length > 0
+  )
+
+  // Viser kun de delkontraktene som ikke har produkter dersom det enten kun er filtrert på delkontrakter
+  // eller om det ikke er filtrert på noe
+  if (
+    (isFilteredOnDelkontrakt && !isFilteredOnAnythingElse) ||
+    (!isFilteredOnDelkontrakt && !isFilteredOnAnythingElse)
+  ) {
+    return allPostsWithEmpty.filter((post) => !isFilteredOnDelkontrakt || filters.delkontrakt?.includes(post.title))
+  }
+
+  return postBuckets.map((bucket) => mapPostBucket(bucket)).filter((post) => post.products.length > 0)
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {

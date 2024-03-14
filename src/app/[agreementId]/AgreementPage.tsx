@@ -124,7 +124,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
 
-  const posts = mapAgreementProducts(postBucktes, agreement, searchData.filters?.delkontrakt)
+  const posts = mapAgreementProducts(postBucktes, agreement, searchData.filters)
 
   const onReset = () => {
     formMethods.reset()

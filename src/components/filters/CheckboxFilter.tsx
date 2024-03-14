@@ -1,5 +1,6 @@
 import { Bucket, Filter } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
+import { FormSearchData } from '@/utils/search-state-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Checkbox, CheckboxGroup, Search, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
@@ -7,7 +8,6 @@ import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import ShowMore from '../ShowMore'
-import { FormSearchData } from '@/utils/search-state-util'
 
 const checkboxFilterCategoriesLabels = {
   fyllmateriale: 'Fyllmateriale',

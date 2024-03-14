@@ -858,6 +858,8 @@ export const getFiltersAgreement = ({
   // searchData: SearchData
 }): Promise<FilterData> => {
   // const { filters: activeFilters } = searchData
+  // const { leverandor, delkontrakt } = activeFilters
+  // const allActiveFilters = [filterLeverandor(leverandor), filterDelkontrakt(delkontrakt)]
   // const { leverandor } = activeFilters
   // const allActiveFilters = [filterLeverandor(leverandor)]
 
@@ -870,8 +872,10 @@ export const getFiltersAgreement = ({
           },
         },
       },
+      // filter: allActiveFilters,
     },
   }
+  // console.log('query', query)
 
   const filters = {
     leverandor: {
@@ -916,6 +920,7 @@ export const getFiltersAgreement = ({
           leverandor: data.aggregations.leverandor,
         },
       }
+      // console.log('data', data)
       return mapFilters(filters)
     })
 }
