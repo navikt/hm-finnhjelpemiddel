@@ -67,6 +67,12 @@ export function logNavigationEvent(komponent: string, destinasjon: string, lenke
     lenketekst: lenketekst,
   })
 }
+
+export function logLeverandorprodukterKlikket() {
+  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET)
+  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET)
+}
+
 /*export function logSøkGjort(søkeord: string, antallTreff: number, fikkTreff: boolean) {
   logCustomEvent(digihot_customevents.SØK_GJORT, { søkeord, antallTreff, fikkTreff })
 }*/
