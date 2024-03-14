@@ -56,8 +56,6 @@ type MinMaxFilter =
   | { brukervektMinKG?: string }
   | { brukervektMaksKG?: string }
 
-//I openSearch er ikke setebreddeMin en range med min og max. er bare et number. Så det gir ingen mening å ha en range for et min-filter.
-//Det er vi som har laget dette systemet. Jeg tenker at det kun gir mening å ha gte (større eller lik) dersom man velger min og lte (mindre enn) hvis det er max.
 export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter) => {
   const keyMin = Object.keys(min)[0]
   const valueMin = Object.values(min)[0]
