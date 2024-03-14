@@ -1,5 +1,3 @@
-'use client'
-
 import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
