@@ -149,28 +149,24 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-export const mapAgreementProducts = (
-  postBuckets: PostBucketResponse[],
-  agreement: Agreement,
-  filters: string[]
-): PostWithProducts[] => {
+export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
-
-  const mapPostBucket = (bucket: PostBucketResponse) => {
+  const posts = postBuckets.map((post) => {
     let seen: string[] = []
+    const postTitle = getPostTitle(post.key)
     return {
-      nr: bucket.key,
-      title: getPostTitle(bucket.key) ?? '',
-      products: bucket.topHitData.hits.hits
+      nr: post.key,
+      title: postTitle ?? '',
+      products: post.topHitData.hits.hits
         .map((hit) => {
           const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
 
           return {
-            rank: getRank(product, bucket.key) || 99,
+            rank: getRank(product, post.key) || 99,
             product: product,
           }
         })
@@ -178,7 +174,7 @@ export const mapAgreementProducts = (
           if (
             seen.includes(prod.product.id) ||
             !prod.product.agreements.some(
-              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === bucket.key
+              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === post.key
             )
           ) {
             return false
@@ -189,21 +185,9 @@ export const mapAgreementProducts = (
         })
         .sort((a, b) => a.rank - b.rank),
     }
-  }
-
-  const allPosts = Array.from({ length: agreement.posts.length }, (_, index) => {
-    const listItem = postBuckets.find((post) => post.key === index + 1)
-
-    return listItem
-      ? mapPostBucket(listItem)
-      : {
-          nr: index + 1,
-          title: getPostTitle(index + 1) ?? '',
-          products: [],
-        }
   })
 
-  return allPosts.filter((post) => filters.length === 0 || filters.includes(post.title))
+  return posts
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {

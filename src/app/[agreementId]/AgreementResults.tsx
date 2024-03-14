@@ -67,7 +67,6 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
             >
               {post.title}
             </Heading>
-            {post.products.length === 0 && <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>}
             <HStack as="ol" gap={'4'}>
               {post.products.map((productWithRank) => (
                 <li key={productWithRank.product.id}>
