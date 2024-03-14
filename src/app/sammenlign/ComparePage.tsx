@@ -1,28 +1,23 @@
 'use client'
 
 import NextLink from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import useSWR from 'swr'
 
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { mapSearchParams, Product, toSearchQueryString } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 import { BodyLong, ChevronRightIcon, Heading, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
-import { useMemo } from 'react'
 
 export default function ComparePage() {
-  //På sammenligningssiden: flatmappe alle avtaler og skrive ut unike rankringer.
-  const { productsToCompare, removeProduct, setCompareMenuState } = useHydratedCompareStore()
+  const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const href = '/sok?' + toSearchQueryString(searchData, searchData.searchTerm)
   const series = productsToCompare.map((product) => product.id)
 
   //TODO: error handling
@@ -38,7 +33,7 @@ export default function ComparePage() {
   const handleClick = (event: any) => {
     event.preventDefault()
     setCompareMenuState(CompareMenuState.Open)
-    router.push(href)
+    router.back()
   }
 
   if (isLoading) {
@@ -67,7 +62,7 @@ export default function ComparePage() {
             <NextLink
               className="navds-panel navds-link-panel navds-panel--border"
               style={{ maxWidth: '750px' }}
-              href={href}
+              href={'/sok'}
               onClick={handleClick}
             >
               <div className="navds-link-panel__content">
@@ -80,21 +75,13 @@ export default function ComparePage() {
             </NextLink>
           </section>
         )}
-        {productsToCompareWithVariants && (
-          <CompareTable productsToCompare={productsToCompareWithVariants} removeProduct={removeProduct} />
-        )}
+        {productsToCompareWithVariants && <CompareTable productsToCompare={productsToCompareWithVariants} />}
       </div>
     </AnimateLayout>
   )
 }
 
-const CompareTable = ({
-  productsToCompare,
-  removeProduct,
-}: {
-  productsToCompare: Product[]
-  removeProduct: (product: Product) => void
-}) => {
+const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
   const allDataKeysVariants = [
     ...new Set(
       productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))

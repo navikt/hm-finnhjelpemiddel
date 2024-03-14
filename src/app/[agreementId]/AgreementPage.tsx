@@ -1,23 +1,17 @@
 'use client'
 
-import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import {
-  Filter,
-  FilterData,
-  FormSearchData,
-  SelectedFilters,
-  getFiltersAgreement,
-  getProductsOnAgreement,
-} from '@/utils/api-util'
-import { initialAgreementSearchDataState } from '@/utils/search-state-util'
+import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
+import { logNavigationEvent } from '@/utils/amplitude'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
+import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import {
   Alert,
@@ -40,7 +34,6 @@ import FilterForm from './FilterForm'
 export type AgreementSearchData = {
   searchTerm: string
   hidePictures: boolean
-  filters: SelectedFilters
 }
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
@@ -58,6 +51,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
+  // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
       ...initialAgreementSearchDataState,
@@ -150,7 +144,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           {`${agreement.title}`}
         </Heading>
 
-        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search hide-print">
+        <LinkPanel
+          href={`/rammeavtale/${agreement.id}`}
+          className="agreement-page__link-to-search hide-print"
+          onClick={() =>
+            logNavigationEvent('hurtigoversikt', 'rammeavtale', 'Tilbehør, reservedeler og dokumenter med mer')
+          }
+        >
           Tilbehør, reservedeler og dokumenter med mer
         </LinkPanel>
       </VStack>
@@ -160,12 +160,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
             <section className="filter-container hide-print">
-              <FilterForm
-                onSubmit={onSubmit}
-                ref={searchFormRef}
-                filters={filters}
-                selectedFilters={searchData.filters}
-              />
+              <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
@@ -218,12 +213,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Heading>
                 </MobileOverlay.Header>
                 <MobileOverlay.Content>
-                  <FilterForm
-                    onSubmit={onSubmit}
-                    ref={searchFormRef}
-                    filters={filters}
-                    selectedFilters={searchData.filters}
-                  />
+                  <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
                 </MobileOverlay.Content>
                 <MobileOverlay.Footer>
                   <VStack gap="2">

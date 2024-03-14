@@ -1,7 +1,6 @@
 import { mapAllNews } from '@/utils/news-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
-  FilterCategories,
   filterBeregnetBarn,
   filterBredde,
   filterDelkontrakt,
@@ -37,23 +36,41 @@ import {
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
+import { SearchData } from './search-state-util'
 
-export const PAGE_SIZE = 25
+export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 
-export type SelectedFilters = Record<keyof typeof FilterCategories, Array<any>>
 export type Bucket = {
   key: number | string
   doc_count: number
   label?: string
 }
 
-type FilterCategoryKey = keyof typeof FilterCategories
+export type FilterCategoryKeyServer =
+  | 'lengdeCM'
+  | 'breddeCM'
+  | 'brukervektMinKG'
+  | 'brukervektMaksKG'
+  | 'totalVektKG'
+  | 'fyllmateriale'
+  | 'materialeTrekk'
+  | 'beregnetBarn'
+  | 'leverandor'
+  | 'produktkategori'
+  | 'rammeavtale'
+  | 'delkontrakt'
+  | 'setebreddeMinCM'
+  | 'setebreddeMaksCM'
+  | 'setedybdeMinCM'
+  | 'setedybdeMaksCM'
+  | 'setehoydeMinCM'
+  | 'setehoydeMaksCM'
 
 type RawFilterData = {
-  [key in FilterCategoryKey]: {
+  [key in FilterCategoryKeyServer]: {
     doc_count: number
     buckets?: Array<Bucket>
     values?: { sum_other_doc_count?: number; buckets?: Array<Bucket> }
@@ -71,26 +88,7 @@ export type Filter = {
 }
 
 export type FilterData = {
-  [key in FilterCategoryKey]: Filter
-}
-
-export type SearchData = {
-  searchTerm: string
-  isoCode: string
-  hasAgreementsOnly: boolean
-  filters: SelectedFilters
-  sortOrder?: SortOrder
-  hidePictures?: string
-}
-
-export type FormSearchData = Omit<SearchData, 'searchTerm'>
-
-export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
-
-export type SortOrder = (typeof sortOrders)[number]
-
-export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
-  return sortOrders.includes(sortOrder as SortOrder)
+  [key in FilterCategoryKeyServer]: Filter
 }
 
 type FetchProps = {
@@ -224,20 +222,23 @@ const sortOptionsOpenSearch = {
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
-  const { searchTerm, isoCode, hasAgreementsOnly, filters, sortOrder } = searchData
+  const { searchTerm, isoCode, hasAgreementsOnly, sortOrder, filters } = searchData
 
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
 
   const {
-    lengdeCM,
-    breddeCM,
-    totalVektKG,
     setebreddeMinCM,
     setebreddeMaksCM,
     setedybdeMinCM,
     setedybdeMaksCM,
     setehoydeMinCM,
     setehoydeMaksCM,
+    lengdeMaxCM,
+    lengdeMinCM,
+    breddeMinCM,
+    breddeMaxCM,
+    totalVektMinKG,
+    totalVektMaxKG,
     brukervektMinKG,
     brukervektMaksKG,
     beregnetBarn,
@@ -249,9 +250,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
   } = filters
 
   const allFilters = [
-    filterLengde(lengdeCM),
-    filterBredde(breddeCM),
-    filterTotalvekt(totalVektKG),
+    filterLengde(lengdeMinCM, lengdeMaxCM),
+    filterBredde(breddeMinCM, breddeMaxCM),
+    filterTotalvekt(totalVektMinKG, totalVektMaxKG),
     filterMinSetebredde(setebreddeMinCM),
     filterMaksSetebredde(setebreddeMaksCM),
     filterMinSetedybde(setedybdeMinCM),
@@ -340,8 +341,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -367,8 +368,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -394,9 +395,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(lengdeMinCM, lengdeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
                 filterMaksSetedybde(setedybdeMaksCM),
@@ -421,9 +422,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMinSetedybde(setedybdeMinCM),
                 filterMaksSetedybde(setedybdeMaksCM),
@@ -448,9 +449,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMaksSetedybde(setedybdeMaksCM),
@@ -475,9 +476,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -502,9 +503,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -529,9 +530,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -556,9 +557,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -583,9 +584,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -610,9 +611,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -637,9 +638,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -666,9 +667,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -695,9 +696,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -724,9 +725,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -753,9 +754,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
           filter: {
             bool: {
               filter: [
-                filterLengde(lengdeCM),
-                filterBredde(breddeCM),
-                filterTotalvekt(totalVektKG),
+                filterLengde(lengdeMinCM, lengdeMaxCM),
+                filterBredde(breddeMinCM, breddeMaxCM),
+                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
                 filterMinSetebredde(setebreddeMinCM),
                 filterMaksSetebredde(setebreddeMaksCM),
                 filterMinSetedybde(setedybdeMinCM),
@@ -925,7 +926,7 @@ const mapFilters = (data: any): FilterData => {
   return Object.entries(rawFilterData)
     .filter(([_, data]) => data.doc_count > 0)
     .reduce((obj, [k, data]) => {
-      const key = k as FilterCategoryKey
+      const key = k as FilterCategoryKeyServer
       obj[key] = {
         total_doc_count: data.doc_count,
         values: data.buckets || data.values?.buckets || [],
@@ -1060,13 +1061,6 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
               seriesId: seriesIds,
             },
           },
-          filter: [
-            {
-              term: {
-                status: 'ACTIVE',
-              },
-            },
-          ],
         },
       },
       sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],

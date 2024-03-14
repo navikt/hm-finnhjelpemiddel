@@ -1,6 +1,5 @@
-import { Bucket, Filter, SearchData } from '@/utils/api-util'
-import { FilterCategories } from '@/utils/filter-util'
-import { mapSearchParams } from '@/utils/product-util'
+import { Bucket, Filter } from '@/utils/api-util'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Checkbox, CheckboxGroup, Search, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
@@ -8,9 +7,22 @@ import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import ShowMore from '../ShowMore'
+import { FormSearchData } from '@/utils/search-state-util'
+
+const checkboxFilterCategoriesLabels = {
+  fyllmateriale: 'Fyllmateriale',
+  materialeTrekk: 'Trekkmateriale',
+  beregnetBarn: 'Beregnet på barn',
+  leverandor: 'Leverandør',
+  produktkategori: 'Produktkategori',
+  rammeavtale: 'Rammeavtale',
+  delkontrakt: 'Delkontrakt',
+}
+
+type ChecboxFilterKey = keyof typeof checkboxFilterCategoriesLabels
 
 type CheckboxFilterInputProps = {
-  filter: { key: keyof typeof FilterCategories; data?: Filter }
+  filter: { key: ChecboxFilterKey; data?: Filter }
   showSearch?: boolean
 }
 
@@ -21,11 +33,12 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
   const [searchFilterTerm, setSearchFilterTerm] = useState<string>('')
   const [notSelectedFilters, setNotSelectedFilters] = useState<Bucket[]>([])
 
-  const { control, watch, setValue } = useFormContext<SearchData>()
+  const { control, watch, setValue } = useFormContext<FormSearchData>()
 
   const watchFilter = watch(`filters.${filterKey}`)
 
-  let selectedFilters = filterData?.values.filter((f) => searchData.filters[filterKey].includes(f.key)) || []
+  const selectedFilters =
+    filterData?.values.filter((f) => searchData.filters[filterKey].includes(f.key as string)) || []
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +59,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
   useEffect(() => {
     setNotSelectedFilters(
       filterData?.values
-        .filter((f) => !searchData.filters[filterKey].includes(f.key))
+        .filter((f) => !searchData.filters[filterKey].includes(f.key as string))
         .filter((bucket) => bucket.key.toString().toLowerCase().includes(searchFilterTerm.toLowerCase()))
         .sort((a, b) => sortAlphabetically(a.key.toString(), b.key.toString())) || []
     )
@@ -56,19 +69,14 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
     (f) => !(filterData?.values.map((f) => f.key) || []).includes(f)
   )
 
-  // const selectedInvisibleFilters = filterData?.values.filter(
-  //   (f) => watchFilter.includes(f.key) || searchData.filters[filterKey].includes(f.key)
-  // )
-
   if (!searchData.filters[filterKey].includes(filterKey) && !filterData?.values.length) {
     return null
   }
 
-  // const sortedFilters = filterData?.values.sort((a, b) => )
   const showMoreLabel =
     selectedFilters.length > 0
-      ? `${FilterCategories[filterKey]} (${selectedFilters.length + selectedUnavailableFilters.length})`
-      : FilterCategories[filterKey]
+      ? `${checkboxFilterCategoriesLabels[filterKey]} (${selectedFilters.length + selectedUnavailableFilters.length})`
+      : checkboxFilterCategoriesLabels[filterKey]
 
   return (
     <ShowMore
@@ -88,7 +96,6 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
             size="small"
             aria-controls="filters"
             clearButton={true}
-            // placeholder="Søk etter rammeavtale"
             value={searchFilterTerm}
             onChange={(value) => handleSearch(value)}
           />
@@ -98,12 +105,11 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
           name={`filters.${filterKey}`}
           render={({ field }) => (
             <CheckboxGroup
-              legend={FilterCategories[filterKey]}
+              legend={checkboxFilterCategoriesLabels[filterKey]}
               hideLegend
               size="small"
               id="filters"
               {...field}
-              value={searchData.filters[filterKey]}
             >
               {!showSearch && (
                 <VStack gap="1" className="checkbox-filter__checkboxes">
@@ -144,11 +150,6 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
                         {f.label || f.key}
                       </Checkbox>
                     ))}
-                    {/* {selectedInvisibleFilters?.map((f) => (
-                  <Checkbox value={f.key} key={`${filterKey}-${f.key}`} onChange={onChange}>
-                  {f.label || f.key}
-                  </Checkbox>
-                ))} */}
                   </VStack>
                 </>
               )}

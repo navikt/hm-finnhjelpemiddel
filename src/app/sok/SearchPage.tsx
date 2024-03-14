@@ -11,16 +11,15 @@ import useSWRInfinite from 'swr/infinite'
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, FormSearchData, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
-import { initialSearchDataState } from '@/utils/search-state-util'
+import { FetchProductsWithFilters, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
+import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import { mapSearchParams, toSearchQueryString } from '@/utils/product-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
-import ActiveFilters from '@/components/filters/ActiveFilters'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
@@ -43,6 +42,8 @@ export default function SearchPage() {
   const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
 
   const formMethods = useForm<FormSearchData>({
+    mode: 'onSubmit',
+    shouldFocusError: false,
     defaultValues: {
       ...initialSearchDataState,
       ...searchData,
@@ -142,13 +143,7 @@ export default function SearchPage() {
         <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
             <section className="filter-container">
-              <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
-              <SearchForm
-                onSubmit={onSubmit}
-                filters={data?.at(-1)?.filters}
-                selectedFilters={searchData.filters}
-                ref={searchFormRef}
-              />
+              <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
@@ -212,13 +207,7 @@ export default function SearchPage() {
                       </Heading>
                     </MobileOverlay.Header>
                     <MobileOverlay.Content>
-                      <ActiveFilters selectedFilters={searchData.filters} searchFormRef={searchFormRef} />
-                      <SearchForm
-                        onSubmit={onSubmit}
-                        filters={data?.at(-1)?.filters}
-                        selectedFilters={searchData.filters}
-                        ref={searchFormRef}
-                      />
+                      <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
                     </MobileOverlay.Content>
                     <MobileOverlay.Footer>
                       <VStack gap="2">
