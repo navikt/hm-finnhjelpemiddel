@@ -82,9 +82,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
     <ShowMore
       title={showMoreLabel}
       spacing
-      className={classNames('checkbox-filter', {
-        active: selectedFilters.length + selectedUnavailableFilters.length > 0,
-      })}
+      className={classNames('checkbox-filter', { active: selectedFilters.length > 0 })}
     >
       <>
         {showSearch && (
