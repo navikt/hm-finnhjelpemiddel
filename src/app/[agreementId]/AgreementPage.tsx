@@ -7,8 +7,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
+import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
+import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import {
   Alert,
@@ -27,8 +29,6 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
-import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -63,8 +63,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
   }, [])
 
-  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = () => {
+    router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
+      scroll: false,
+    })
   }
 
   const {

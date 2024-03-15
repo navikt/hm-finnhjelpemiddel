@@ -21,6 +21,7 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
+import { initialFiltersFormState } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
@@ -55,8 +56,10 @@ export default function SearchPage() {
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
   }, [])
 
-  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = () => {
+    router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
+      scroll: false,
+    })
   }
 
   const {
@@ -107,7 +110,9 @@ export default function SearchPage() {
   }
 
   const onReset = () => {
-    formMethods.reset()
+    // console.log('get values før', formMethods.getValues('filters'))
+    formMethods.reset({ filters: initialFiltersFormState })
+    // console.log('get values etter', formMethods.getValues('filters'))
     setPage(1)
     router.replace(pathname)
   }
