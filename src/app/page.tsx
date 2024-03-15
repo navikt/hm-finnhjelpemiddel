@@ -61,7 +61,7 @@ function Home() {
                       <div className="home-page__agreement-link" key={id}>
                         <Link
                           as={NextLink}
-                          href={`/${id}`}
+                          href={`/rammeavtale/hjelpemidler/${id}`}
                           onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label)}
                         >
                           {label}

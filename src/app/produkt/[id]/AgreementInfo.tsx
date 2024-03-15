@@ -26,10 +26,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
   if (!allAgreementsTheSame) {
     return (
       <Bleed marginInline="full" asChild reflectivePadding>
-        <section
-          className="agreement-details spacing-top--large"
-          aria-label="Informasjon om rammeavtalene produktet er på"
-        >
+        <section className="agreement-details" aria-label="Informasjon om rammeavtalene produktet er på">
           <div className="agreement-details__content">
             <Heading level="3" size="large" id="agreement-info">
               Avtaler med Nav
@@ -84,10 +81,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
 
   return (
     <Bleed marginInline="full" asChild reflectivePadding>
-      <section
-        className="agreement-details spacing-top--large"
-        aria-label="Informasjon om rammeavtalen produktet er på"
-      >
+      <section className="agreement-details" aria-label="Informasjon om rammeavtalen produktet er på">
         <div className="agreement-details__content">
           <Heading level="3" size="large" id="agreement-info">
             Avtale med NAV
