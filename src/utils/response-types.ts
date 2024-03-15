@@ -250,7 +250,7 @@ export interface AttachmentsResponse {
   description: string
 }
 
-export interface News {
+export interface NewsType {
   id: string
   identifier: string
   title: string
