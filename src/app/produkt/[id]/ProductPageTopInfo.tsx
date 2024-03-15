@@ -6,10 +6,11 @@ import { Supplier } from '@/utils/supplier-util'
 import AgreementIcon from '@/components/AgreementIcon'
 import { Alert, BodyShort, Heading } from '@/components/aksel-client'
 
+import { QrCodeComponent } from '@/app/produkt/[id]/QrCode'
+import { HGrid, VStack } from '@navikt/ds-react'
 import InformationTabs, { InformationAccordion } from './InformationTabs'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
-import { QrCodeComponent } from '@/app/produkt/[id]/QrCode'
 
 type ProductPageTopInfoProps = {
   product: Product
@@ -33,30 +34,30 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
 
   return (
     <>
-      <section className="product-info__top" aria-label="Bilder og nøkkelinformasjon">
-        <div className="product-info__top-content">
-          <div className="product-info__top-left">{product.photos && <PhotoSlider photos={product.photos} />}</div>
-          <div className="product-info__top-right">
-            <Heading level="1" size="large" spacing>
-              {product.title}
-            </Heading>
-            {(allVariantsExpiredDates || allVariantsExpired) && (
-              <div className="product-info__expired-propducts">
-                <Alert variant="warning">Dette produktet er utgått</Alert>
-              </div>
-            )}
-            {rank && (
-              <div className="product-info__agreement-rank">
-                {<AgreementIcon rank={rank} />}
-                <BodyShort>{agreementRankText}</BodyShort>
-              </div>
-            )}
-
-            <KeyInformation product={product} supplierName={supplier ? supplier.name : null} />
-            <QrCodeComponent value={product.id} />
-          </div>
+      <HGrid columns={{ xs: '1fr', lg: '1fr 1fr' }} aria-label="Bilder og nøkkelinformasjon">
+        <div className="product-info__photo-slider-container">
+          {product.photos && <PhotoSlider photos={product.photos} />}
         </div>
-      </section>
+        <VStack gap="4">
+          <Heading level="1" size="large" spacing>
+            {product.title}
+          </Heading>
+          {(allVariantsExpiredDates || allVariantsExpired) && (
+            <div className="product-info__expired-propducts">
+              <Alert variant="warning">Dette produktet er utgått</Alert>
+            </div>
+          )}
+          {rank && (
+            <div className="product-info__agreement-rank">
+              {<AgreementIcon rank={rank} />}
+              <BodyShort>{agreementRankText}</BodyShort>
+            </div>
+          )}
+
+          <KeyInformation product={product} supplierName={supplier ? supplier.name : null} />
+          <QrCodeComponent value={product.id} />
+        </VStack>
+      </HGrid>
       <section className="product-info__tabs" aria-label="Produktbeskrivelse og medfølgende dokumenter">
         {isMobileDevice ? (
           <InformationAccordion product={product} supplier={supplier} />

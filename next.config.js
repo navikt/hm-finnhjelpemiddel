@@ -23,6 +23,10 @@ const nextConfig = {
         source: '/news/_search:path*',
         destination: process.env.HM_SEARCH_URL + '/news/_search:path*',
       },
+      {
+        source: '/suppliers/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/suppliers/_search:path*',
+      },
     ]
   },
   images: {

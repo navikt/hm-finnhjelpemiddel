@@ -1,5 +1,3 @@
-'use client'
-
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
@@ -82,7 +80,7 @@ const NavigationBar = () => {
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
-                    Avtale med NAV
+                    Meny
                   </Button>
                 </Hide>
                 <Show below="md" asChild>

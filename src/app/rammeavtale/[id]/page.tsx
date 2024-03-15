@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.id))
-  const hrefHurtigoversikt = `/${params.id}`
+  const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.id}`
   // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   return (
@@ -55,12 +55,12 @@ export default async function AgreementPage({ params }: Props) {
                   </BodyLong>
                   <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
                 </div>
-                <LinkToAgreement
-                  agreementHasNoProducts={agreementHasNoProducts(agreement.identifier)}
-                  hrefHurtigoversikt={hrefHurtigoversikt}
-                  agreementLabel={agreement.label}
-                ></LinkToAgreement>
-
+                {!agreementHasNoProducts(agreement.identifier) && (
+                  <LinkToAgreement
+                    hrefHurtigoversikt={hrefHurtigoversikt}
+                    agreementLabel={agreement.label}
+                  ></LinkToAgreement>
+                )}
                 <AgreementDescription agreement={agreement} />
               </article>
               <article>

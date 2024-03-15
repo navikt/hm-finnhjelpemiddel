@@ -31,11 +31,13 @@ import {
 import {
   AgreementDocResponse,
   AgreementSearchResponse,
-  News,
+  NewsType,
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
+import { mapSuppliers, Supplier } from '@/utils/supplier-util'
+import { formatNorwegianLetter } from '@/utils/string-util'
 import { SearchData } from './search-state-util'
 
 export const PAGE_SIZE = 24
@@ -1017,6 +1019,51 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   return res.json().then(mapAgreementLabels)
 }
 
+export async function getSuppliers(letter: string): Promise<Supplier[]> {
+  letter = formatNorwegianLetter(letter)
+
+  const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        match_phrase_prefix: {
+          name_startswith: letter,
+        },
+      },
+      _source: {
+        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
+      },
+    }),
+  })
+
+  return res.json().then(mapSuppliers)
+}
+
+export async function getAllSuppliers(): Promise<Supplier[]> {
+  const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 400,
+      query: {
+        match_all: {},
+      },
+      _source: {
+        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
+      },
+    }),
+  })
+
+  return res.json().then(mapSuppliers)
+}
+
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
   const res = await fetch(HM_SEARCH_URL + '/products/_search', {
     next: { revalidate: 900 },
@@ -1176,7 +1223,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
     })
 }
 
-export async function getNews(): Promise<News[]> {
+export async function getNews(): Promise<NewsType[]> {
   const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
