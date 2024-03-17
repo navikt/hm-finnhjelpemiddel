@@ -221,7 +221,7 @@ export const mapAgreementProducts = (
   return postBuckets
     .map((bucket) => mapPostBucket(bucket))
     .filter(
-      (post) => post.products.length > 0 && (filters?.delkontrakt?.includes(post.title) || !isFilteredOnDelkontrakt)
+      (post) => post.products.length > 0 && (!isFilteredOnDelkontrakt || filters?.delkontrakt?.includes(post.title))
     )
 }
 
