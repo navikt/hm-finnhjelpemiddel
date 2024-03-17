@@ -1,4 +1,6 @@
 import { mapAllNews } from '@/utils/news-util'
+import { formatNorwegianLetter } from '@/utils/string-util'
+import { Supplier, mapSuppliers } from '@/utils/supplier-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
@@ -36,8 +38,6 @@ import {
   ProductDocResponse,
   SearchResponse,
 } from './response-types'
-import { mapSuppliers, Supplier } from '@/utils/supplier-util'
-import { formatNorwegianLetter } from '@/utils/string-util'
 import { SearchData } from './search-state-util'
 
 export const PAGE_SIZE = 24
@@ -852,17 +852,7 @@ export const getProductsOnAgreement = ({
     })
 }
 
-export const getFiltersAgreement = ({
-  agreementId,
-  // searchData,
-}: {
-  agreementId: string
-  // searchData: SearchData
-}): Promise<FilterData> => {
-  // const { filters: activeFilters } = searchData
-  // const { leverandor } = activeFilters
-  // const allActiveFilters = [filterLeverandor(leverandor)]
-
+export const getFiltersAgreement = ({ agreementId }: { agreementId: string }): Promise<FilterData> => {
   const query = {
     bool: {
       must: {
@@ -888,16 +878,6 @@ export const getFiltersAgreement = ({
         },
       },
     },
-    // beregnetBarn: {
-    //   filter: {
-    //     bool: {
-    //       filter: [],
-    //     },
-    //   },
-    //   aggs: {
-    //     values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
-    //   },
-    // },
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
@@ -962,30 +942,6 @@ export async function getAgreement(id: string): Promise<AgreementDocResponse> {
     next: { revalidate: 900 },
     method: 'GET',
   })
-  return res.json()
-}
-
-export async function getAgreementFromLabel(label: string): Promise<SearchResponse> {
-  const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
-    next: { revalidate: 900 },
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        term: {
-          label: {
-            value: label,
-          },
-        },
-      },
-      // bool: {
-      //   should: { term: { 'agreements.label': label } },
-      // },
-    }),
-  })
-
   return res.json()
 }
 

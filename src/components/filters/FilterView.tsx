@@ -1,6 +1,5 @@
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
-import { FilterCategoryKeyServer } from '@/utils/api-util'
-import { FilterData } from '@/utils/api-util'
+import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { BodyShort, Heading, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
@@ -64,7 +63,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
   const noAvailableFilters =
-    !filters || !Object.values(filters).filter((data) => data.values.length).length || !Object.keys(filters).length
+    !filters || !Object.values(filters).filter((data) => data.values?.length).length || !Object.keys(filters).length
 
   if (!searchDataFilters.length && noAvailableFilters) {
     return (
