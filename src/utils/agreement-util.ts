@@ -218,7 +218,11 @@ export const mapAgreementProducts = (
     return allPostsWithEmpty.filter((post) => !isFilteredOnDelkontrakt || filters.delkontrakt?.includes(post.title))
   }
 
-  return postBuckets.map((bucket) => mapPostBucket(bucket)).filter((post) => post.products.length > 0)
+  return postBuckets
+    .map((bucket) => mapPostBucket(bucket))
+    .filter(
+      (post) => post.products.length > 0 && (filters?.delkontrakt?.includes(post.title) || !isFilteredOnDelkontrakt)
+    )
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {
