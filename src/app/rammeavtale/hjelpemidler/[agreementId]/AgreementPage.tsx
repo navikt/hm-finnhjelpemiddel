@@ -255,7 +255,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               </MobileOverlay>
             </div>
           )}
-          <AgreementResults posts={posts} formRef={searchFormRef}></AgreementResults>
+          <AgreementResults posts={posts} formRef={searchFormRef} postLoading={postsIsLoading}></AgreementResults>
         </HGrid>
       </FormProvider>
     </VStack>
