@@ -4,12 +4,20 @@ import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { ImageIcon } from '@navikt/aksel-icons'
-import { Alert, HStack, Heading, Show, ToggleGroup, VStack } from '@navikt/ds-react'
+import { Alert, HStack, Heading, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formRef: RefObject<HTMLFormElement> }) => {
+const AgreementResults = ({
+  posts,
+  formRef,
+  postLoading,
+}: {
+  posts: PostWithProducts[]
+  formRef: RefObject<HTMLFormElement>
+  postLoading: boolean
+}) => {
   const formMethods = useFormContext<FormSearchData>()
   const searchParams = useSearchParams()
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
@@ -67,6 +75,14 @@ const AgreementResults = ({ posts, formRef }: { posts: PostWithProducts[]; formR
             >
               {post.title}
             </Heading>
+            {post.products.length === 0 && postLoading && (
+              <HStack justify="center" style={{ marginTop: '18px' }}>
+                <Loader size="medium" title="Laster hjelpemidler" />
+              </HStack>
+            )}
+            {post.products.length === 0 && !postLoading && (
+              <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>
+            )}
             <HStack as="ol" gap={'4'}>
               {post.products.map((productWithRank) => (
                 <li key={productWithRank.product.id}>

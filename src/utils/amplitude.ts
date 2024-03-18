@@ -13,7 +13,8 @@ export enum amplitude_taxonomy {
 
 export enum digihot_customevents {
   VISNING_OVERSIKT = 'visning av sider fra hm-oversikt-app',
-  SØK_GJORT = 'søk gjort',
+  LEVERANDORPRODUKTER_KLIKKET = 'klikket på vis leverandørprodukter',
+  NAVIGERE = 'navigere',
 }
 
 const SKJEMANAVN = 'hm-oversikt'
@@ -58,6 +59,15 @@ export function logOversiktForsideVist() {
   logCustomEvent(digihot_customevents.VISNING_OVERSIKT)
 }
 
-/*export function logSøkGjort(søkeord: string, antallTreff: number, fikkTreff: boolean) {
-  logCustomEvent(digihot_customevents.SØK_GJORT, { søkeord, antallTreff, fikkTreff })
-}*/
+export function logNavigationEvent(komponent: string, destinasjon: string, lenketekst: string) {
+  logCustomEvent(digihot_customevents.NAVIGERE, {
+    komponent: komponent,
+    destinasjon: destinasjon,
+    lenketekst: lenketekst,
+  })
+}
+
+export function logLeverandorprodukterKlikket() {
+  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET)
+  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET)
+}

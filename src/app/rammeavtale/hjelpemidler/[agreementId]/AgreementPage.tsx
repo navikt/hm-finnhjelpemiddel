@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
+import { logNavigationEvent } from '@/utils/amplitude'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
@@ -125,9 +126,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
 
-  const posts = mapAgreementProducts(postBucktes, agreement).filter(
-    (post) => searchData.filters?.delkontrakt.length === 0 || searchData.filters?.delkontrakt.includes(post.title)
-  )
+  const posts = mapAgreementProducts(postBucktes, agreement, searchData.filters)
 
   const onReset = () => {
     formMethods.reset()
@@ -147,7 +146,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           {`${agreement.title}`}
         </Heading>
 
-        <LinkPanel href={`/rammeavtale/${agreement.id}`} className="agreement-page__link-to-search hide-print">
+        <LinkPanel
+          href={`/rammeavtale/${agreement.id}`}
+          className="agreement-page__link-to-search hide-print"
+          onClick={() =>
+            logNavigationEvent('hurtigoversikt', 'rammeavtale', 'Tilbehør, reservedeler og dokumenter med mer')
+          }
+        >
           Tilbehør, reservedeler og dokumenter med mer
         </LinkPanel>
       </VStack>
@@ -252,7 +257,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               </MobileOverlay>
             </div>
           )}
-          <AgreementResults posts={posts} formRef={searchFormRef}></AgreementResults>
+          <AgreementResults posts={posts} formRef={searchFormRef} postLoading={postsIsLoading}></AgreementResults>
         </HGrid>
       </FormProvider>
     </VStack>

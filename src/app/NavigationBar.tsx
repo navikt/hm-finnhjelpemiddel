@@ -1,12 +1,13 @@
+import { logNavigationEvent } from '@/utils/amplitude'
+import { useMenuStore } from '@/utils/global-state-util'
+import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, Hide, Show } from '@navikt/ds-react'
 import Image from 'next/image'
-import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import NextLink from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import BurgerMenuContent from './BurgerMenuContent'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
-import { useRouter } from 'next/navigation'
-import { useMenuStore } from '@/utils/global-state-util'
+import BurgerMenuContent from './BurgerMenuContent'
 
 //Bug: SearchTerm var en del av form -> fristiller searchterm fra form. Og setter searchterm i url med de andre paramaterne som er der (for å ikke overskrive)
 
@@ -16,12 +17,22 @@ const NavigationBar = () => {
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
+  const path = usePathname()
 
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)
       const q = new URLSearchParams(window.location.search)
       q.set('term', searchTerm)
+
+      if (path.includes('sok')) {
+        logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
+      } else if (path === '/') {
+        logNavigationEvent('forside', 'søk', 'Søk på forsiden')
+      } else {
+        logNavigationEvent('annet', 'søk', 'Søk fra annen side')
+      }
+
       router.push('/sok?' + q.toString())
     },
     [router]
@@ -69,7 +80,7 @@ const NavigationBar = () => {
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
-                    Avtale med NAV
+                    Meny
                   </Button>
                 </Hide>
                 <Show below="md" asChild>

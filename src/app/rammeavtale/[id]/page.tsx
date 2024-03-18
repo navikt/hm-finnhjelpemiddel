@@ -4,13 +4,14 @@ import { agreementHasNoProducts, mapAgreementFromDoc } from '@/utils/agreement-u
 import { getAgreement } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
-import { BodyLong, BodyShort, Heading, Link, LinkPanel } from '@/components/aksel-client'
+import { BodyLong, BodyShort, Heading, Link } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import { HStack, VStack } from '@navikt/ds-react'
+import { HStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
+import LinkToAgreement from './LinkToAgreement'
 
 type Props = {
   params: { id: string }
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AgreementPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.id))
-  const hrefHurtigoversikt = `/${params.id}`
+  const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.id}`
   // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   return (
@@ -55,11 +56,11 @@ export default async function AgreementPage({ params }: Props) {
                   <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
                 </div>
                 {!agreementHasNoProducts(agreement.identifier) && (
-                  <LinkPanel href={hrefHurtigoversikt} className="agreement-page__link-to-search">
-                    Produkter: {agreement.label}
-                  </LinkPanel>
+                  <LinkToAgreement
+                    hrefHurtigoversikt={hrefHurtigoversikt}
+                    agreementLabel={agreement.label}
+                  ></LinkToAgreement>
                 )}
-
                 <AgreementDescription agreement={agreement} />
               </article>
               <article>

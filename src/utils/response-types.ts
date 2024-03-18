@@ -91,7 +91,7 @@ export interface Hit {
   _type: string | null
   _id: string
   _score: string
-  _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse
+  _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse | SupplierInfoResponse
 }
 
 export interface ProductDocResponse {
@@ -250,7 +250,7 @@ export interface AttachmentsResponse {
   description: string
 }
 
-export interface News {
+export interface NewsType {
   id: string
   identifier: string
   title: string

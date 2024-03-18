@@ -1,4 +1,6 @@
 import { mapAllNews } from '@/utils/news-util'
+import { formatNorwegianLetter } from '@/utils/string-util'
+import { Supplier, mapSuppliers } from '@/utils/supplier-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
@@ -24,7 +26,7 @@ import {
 import {
   AgreementDocResponse,
   AgreementSearchResponse,
-  News,
+  NewsType,
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
@@ -452,17 +454,7 @@ export const getProductsOnAgreement = ({
     })
 }
 
-export const getFiltersAgreement = ({
-  agreementId,
-  // searchData,
-}: {
-  agreementId: string
-  // searchData: SearchData
-}): Promise<FilterData> => {
-  // const { filters: activeFilters } = searchData
-  // const { leverandor } = activeFilters
-  // const allActiveFilters = [filterLeverandor(leverandor)]
-
+export const getFiltersAgreement = ({ agreementId }: { agreementId: string }): Promise<FilterData> => {
   const query = {
     bool: {
       must: {
@@ -488,16 +480,6 @@ export const getFiltersAgreement = ({
         },
       },
     },
-    // beregnetBarn: {
-    //   filter: {
-    //     bool: {
-    //       filter: [],
-    //     },
-    //   },
-    //   aggs: {
-    //     values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
-    //   },
-    // },
   }
 
   return fetch(HM_SEARCH_URL + '/products/_search', {
@@ -565,30 +547,6 @@ export async function getAgreement(id: string): Promise<AgreementDocResponse> {
   return res.json()
 }
 
-export async function getAgreementFromLabel(label: string): Promise<SearchResponse> {
-  const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
-    next: { revalidate: 900 },
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        term: {
-          label: {
-            value: label,
-          },
-        },
-      },
-      // bool: {
-      //   should: { term: { 'agreements.label': label } },
-      // },
-    }),
-  })
-
-  return res.json()
-}
-
 export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
     next: { revalidate: 900 },
@@ -612,6 +570,51 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   })
 
   return res.json().then(mapAgreementLabels)
+}
+
+export async function getSuppliers(letter: string): Promise<Supplier[]> {
+  letter = formatNorwegianLetter(letter)
+
+  const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        match_phrase_prefix: {
+          name_startswith: letter,
+        },
+      },
+      _source: {
+        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
+      },
+    }),
+  })
+
+  return res.json().then(mapSuppliers)
+}
+
+export async function getAllSuppliers(): Promise<Supplier[]> {
+  const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 400,
+      query: {
+        match_all: {},
+      },
+      _source: {
+        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
+      },
+    }),
+  })
+
+  return res.json().then(mapSuppliers)
 }
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
@@ -663,13 +666,6 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
               seriesId: seriesIds,
             },
           },
-          filter: [
-            {
-              term: {
-                status: 'ACTIVE',
-              },
-            },
-          ],
         },
       },
       sort: [{ _score: { order: 'desc' } }, { 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
@@ -780,7 +776,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
     })
 }
 
-export async function getNews(): Promise<News[]> {
+export async function getNews(): Promise<NewsType[]> {
   const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
     next: { revalidate: 900 },
     method: 'POST',

@@ -1,12 +1,12 @@
 'use client'
 import { getNews } from '@/utils/api-util'
-import { News } from '@/utils/response-types'
+import { NewsType } from '@/utils/response-types'
 import { Box, Heading, VStack } from '@navikt/ds-react'
 import { Fragment, useMemo } from 'react'
 import useSWR from 'swr'
 
 function News() {
-  const { data, error } = useSWR<News[]>('/news/_search', getNews, {
+  const { data, error } = useSWR<NewsType[]>('/news/_search', getNews, {
     keepPreviousData: true,
   })
 
@@ -34,7 +34,7 @@ function News() {
                   padding="6"
                   background="surface-default"
                   borderRadius="large"
-                  style={{ maxWidth: '690px' }}
+                  className="home-page__news"
                   shadow="xsmall"
                 >
                   <VStack gap="1">

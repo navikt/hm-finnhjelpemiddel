@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const agreementId = params.agreementId
   const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-  //   const agreement = mapAgreementFromSearch(await getAgreementFromLabel(agreementLabel))
-  //TODO: må ha fornuftig title
+
+  //TODO: må ha fornuftig tittel
   return {
     title: agreement.label,
     description: `Produkter under avtale ${agreement.title} med NAV`,
