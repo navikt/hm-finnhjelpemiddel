@@ -139,7 +139,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading id="product_variants" level="3" size="medium" spacing>
+      <Heading id="produktvarianter" level="3" size="medium" spacing>
         Produktvarianter
       </Heading>
       {product.variantCount > 1 && (

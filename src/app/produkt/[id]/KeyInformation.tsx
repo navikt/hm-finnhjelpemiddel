@@ -19,14 +19,21 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
     router.push(`/produkt/${product.id}#agreement-info`)
   }
 
-  const bo = new Set(product.variants.flatMap((p) => p.bestillingsordning))
+  const bo = new Set(product.variants.map((p) => p.bestillingsordning))
 
-  const bestillingsordningTekst =
-    bo.size > 1
-      ? 'Kun noen varianter av dette produktet er på bestillingsordning. Se tabell nedenfor.'
-      : bo.has(true)
-        ? 'Ja'
-        : 'Nei'
+  const bestillingsordning =
+    bo.size > 1 ? (
+      <BodyShort>
+        Noen varianter.
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
+        </Link>
+      </BodyShort>
+    ) : bo.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
 
   if (!product.agreements?.length) {
     return (
@@ -40,7 +47,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{bestillingsordningTekst}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -72,7 +79,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{bestillingsordningTekst}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -118,7 +125,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <DefinitionList.Term>
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>
-        <DefinitionList.Definition>{bestillingsordningTekst}</DefinitionList.Definition>
+        <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
       </DefinitionList>
     </>
   )
