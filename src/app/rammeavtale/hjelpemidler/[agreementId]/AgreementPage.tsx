@@ -51,7 +51,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const [showSidebar, setShowSidebar] = useState(false)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
-  const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
 
   // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
@@ -133,11 +132,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <>
-      <AgreementPrintableVersion
-        agreement={agreement}
-        postWithProducts={posts}
-        pictureToggleValue={pictureToggleValue}
-      />
+      <AgreementPrintableVersion agreement={agreement} postWithProducts={posts} />
       <VStack className="main-wrapper--large spacing-bottom--large hide-print">
         <VStack gap="5" className="spacing-top--large spacing-bottom--large">
           <HStack gap="3">

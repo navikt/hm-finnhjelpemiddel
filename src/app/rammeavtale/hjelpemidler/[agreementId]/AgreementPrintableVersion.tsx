@@ -2,26 +2,22 @@
 
 import ProductCard from '@/components/ProductCard'
 import { Agreement, PostWithProducts } from '@/utils/agreement-util'
-import { HStack, Heading, Table, VStack } from '@navikt/ds-react'
+import { HStack, Table, VStack } from '@navikt/ds-react'
 
 interface Props {
   agreement: Agreement
   postWithProducts: PostWithProducts[]
-  pictureToggleValue: string
 }
 
-const AgreementPrintableVersion = ({ agreement, postWithProducts, pictureToggleValue }: Props) => {
+const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
   return (
-    <VStack className="printable-version spacing-top--medium" gap="4">
-      <Heading level="1" size="medium">
-        {agreement.title}
-      </Heading>
+    <VStack className="printable-version spacing-top--medium">
       <Table>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell scope="col"></Table.HeaderCell>
             <Table.HeaderCell scope="col">Delkontrakt</Table.HeaderCell>
-            <Table.HeaderCell scope="col">Produkter</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Hjelpemidler</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -31,14 +27,19 @@ const AgreementPrintableVersion = ({ agreement, postWithProducts, pictureToggleV
             return (
               <Table.Row key={i}>
                 <Table.DataCell>{nr}</Table.DataCell>
-                <Table.DataCell style={{ maxWidth: '20rem' }}>{titleWithoutPostNumber[1]}</Table.DataCell>
+                <Table.DataCell
+                  className="printable-version__post-title"
+                  style={{ maxWidth: '15rem', fontSize: '16px' }}
+                >
+                  {titleWithoutPostNumber[1]}
+                </Table.DataCell>
                 <Table.DataCell key={i}>
-                  <HStack gap="4" wrap>
+                  <HStack gap="2" wrap>
                     {products.map((productWithRank, i) => (
                       <ProductCard
                         product={productWithRank.product}
                         rank={productWithRank.rank}
-                        type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'plain'}
+                        type={'print'}
                         key={i}
                       />
                     ))}

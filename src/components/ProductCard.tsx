@@ -17,7 +17,7 @@ const ProductCard = ({
 }: {
   product: Product
   rank?: number
-  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox'
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
@@ -38,8 +38,24 @@ const ProductCard = ({
     cardClassName = 'product-card--removable'
   } else if (type === 'no-picture') {
     cardClassName = 'product-card--no-picture'
+  } else if (type === 'print') {
+    cardClassName = 'product-card--print'
   }
 
+  if (type === 'print') {
+    return (
+      <Box paddingInline="2" paddingBlock="1" className="product-card--print">
+        <VStack gap="1">
+          <Detail textColor="subtle">
+            {rank ? (rank < 90 ? `Rangering ${rank}` : 'Ingen rangering') : 'Ikke på avtale'}
+          </Detail>
+          <BodyShort size="small" className="text-line-clamp">
+            {product.title}
+          </BodyShort>
+        </VStack>
+      </Box>
+    )
+  }
   if (type === 'no-picture') {
     return (
       <Box
@@ -64,10 +80,6 @@ const ProductCard = ({
               {product.title}
             </BodyShort>
           </Link>
-
-          <BodyShort size="small" className="text-line-clamp printable-version">
-            {product.title}
-          </BodyShort>
         </VStack>
       </Box>
     )
@@ -101,10 +113,6 @@ const ProductCard = ({
               {product.title}
             </BodyShort>
           </Link>
-
-          <BodyShort size="small" className="text-line-clamp printable-version">
-            {product.title}
-          </BodyShort>
 
           {type === 'large-with-checkbox' && handleIsoButton && (
             <Button

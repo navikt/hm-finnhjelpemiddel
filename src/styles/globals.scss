@@ -393,13 +393,22 @@ main {
   overflow: hidden;
 }
 
+.printable-version {
+  &__post-title {
+    max-width: '15rem';
+    font-size: $a-font-size-medium;
+  }
+}
+
 @media print {
   .nav,
   .nav-bunn,
-  .product-card__checkbox,
-  .product-card__link,
   .hide-print {
     display: none;
+  }
+
+  @page {
+    size: landscape;
   }
 }
 
