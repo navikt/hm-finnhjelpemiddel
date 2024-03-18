@@ -110,9 +110,7 @@ export default function SearchPage() {
   }
 
   const onReset = () => {
-    // console.log('get values før', formMethods.getValues('filters'))
     formMethods.reset({ filters: initialFiltersFormState })
-    // console.log('get values etter', formMethods.getValues('filters'))
     setPage(1)
     router.replace(pathname)
   }
