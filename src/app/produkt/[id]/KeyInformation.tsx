@@ -23,7 +23,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
 
   const bestillingsordningTekst =
     bo.size > 1
-      ? 'Kun noen av variantene er på bestillingsordningen, se tabell lenger ned'
+      ? 'Kun noen varianter av dette produktet er på bestillingsordning. Se tabell nedenfor.'
       : bo.has(true)
         ? 'Ja'
         : 'Nei'
