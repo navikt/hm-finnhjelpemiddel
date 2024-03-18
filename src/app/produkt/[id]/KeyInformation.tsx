@@ -19,6 +19,15 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
     router.push(`/produkt/${product.id}#agreement-info`)
   }
 
+  const bo = new Set(product.variants.flatMap((p) => p.bestillingsordning))
+
+  const bestillingsordningTekst =
+    bo.size > 1
+      ? 'Kun noen av variantene er på bestillingsordningen, se tabell lenger ned'
+      : bo.has(true)
+        ? 'Ja'
+        : 'Nei'
+
   if (!product.agreements?.length) {
     return (
       <>
@@ -31,7 +40,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordningTekst}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -63,7 +72,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordningTekst}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -109,7 +118,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <DefinitionList.Term>
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>
-        <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+        <DefinitionList.Definition>{bestillingsordningTekst}</DefinitionList.Definition>
       </DefinitionList>
     </>
   )

@@ -242,6 +242,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
               ))}
             </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
+              ))}
+            </Table.Row>
             {Object.keys(rows).length > 0 &&
               Object.entries(rows).map(([key, row], i) => {
                 const isSortableRow = hasDifferentValues({ row })
