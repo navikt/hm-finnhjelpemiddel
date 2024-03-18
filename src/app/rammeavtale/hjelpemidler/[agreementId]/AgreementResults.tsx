@@ -3,8 +3,8 @@
 import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { FormSearchData } from '@/utils/search-state-util'
-import { ImageIcon } from '@navikt/aksel-icons'
-import { Alert, HStack, Heading, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
+import { ImageIcon, PrinterSmallIcon } from '@navikt/aksel-icons'
+import { Alert, Button, HStack, Heading, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -40,20 +40,32 @@ const AgreementResults = ({
             Delkontrakter
           </Heading>
         </Show>
-        <ToggleGroup
-          className="hide-print"
-          defaultValue="show-pictures"
-          onChange={handleSetToggle}
-          value={pictureToggleValue}
-          size="small"
-          variant="neutral"
-        >
-          <ToggleGroup.Item value="show-pictures">
-            <ImageIcon aria-hidden />
-            Vis bilde
-          </ToggleGroup.Item>
-          <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
-        </ToggleGroup>
+        <HStack gap="4">
+          <ToggleGroup
+            className="picture-toggle"
+            defaultValue="show-pictures"
+            onChange={handleSetToggle}
+            value={pictureToggleValue}
+            size="small"
+            variant="neutral"
+          >
+            <ToggleGroup.Item value="show-pictures">
+              <ImageIcon aria-hidden />
+              Vis bilde
+            </ToggleGroup.Item>
+            <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
+          </ToggleGroup>
+          <Button
+            size="small"
+            variant="secondary-neutral"
+            onClick={() => {
+              window.print()
+            }}
+            icon={<PrinterSmallIcon title="Pdf-oversikt" fontSize="1.5rem" />}
+          >
+            PDF-oversikt
+          </Button>
+        </HStack>
       </HStack>
       <VStack
         as="ol"

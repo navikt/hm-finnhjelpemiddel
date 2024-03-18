@@ -394,10 +394,17 @@ main {
 }
 
 @media print {
-  ol li {
-    break-inside: avoid-page;
-  }
+  .nav,
+  .nav-bunn,
+  .product-card__checkbox,
+  .product-card__link,
   .hide-print {
+    display: none;
+  }
+}
+
+@media screen {
+  .printable-version {
     display: none;
   }
 }

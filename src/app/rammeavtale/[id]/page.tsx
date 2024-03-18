@@ -41,7 +41,7 @@ export default async function AgreementPage({ params }: Props) {
             <div className="agreement-page__content main-wrapper--small">
               <article>
                 <div>
-                  <HStack gap="3" className="hide-print">
+                  <HStack gap="3">
                     <Link as={NextLink} href="/rammeavtale" variant="subtle">
                       Avtaler med NAV
                     </Link>
