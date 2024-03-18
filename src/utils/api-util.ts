@@ -9,15 +9,8 @@ import {
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
-  filterMaksBrukervekt,
-  filterMaksSetebredde,
-  filterMaksSetedybde,
-  filterMaksSetehoyde,
   filterMaterialeTrekk,
-  filterMinBrukervekt,
-  filterMinSetebredde,
-  filterMinSetedybde,
-  filterMinSetehoyde,
+  filterMinMax,
   filterProduktkategori,
   filterRammeavtale,
   filterTotalvekt,
@@ -251,33 +244,40 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     rammeavtale,
   } = filters
 
-  const allFilters = [
-    filterLengde(lengdeMinCM, lengdeMaxCM),
-    filterBredde(breddeMinCM, breddeMaxCM),
-    filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-    filterMinSetebredde(setebreddeMinCM),
-    filterMaksSetebredde(setebreddeMaksCM),
-    filterMinSetedybde(setedybdeMinCM),
-    filterMaksSetedybde(setedybdeMaksCM),
-    filterMinSetehoyde(setehoydeMinCM),
-    filterMaksSetehoyde(setehoydeMaksCM),
-    filterMinBrukervekt(brukervektMinKG),
-    filterMaksBrukervekt(brukervektMaksKG),
-    filterBeregnetBarn(beregnetBarn),
-    filterFyllmateriale(fyllmateriale),
-    filterMaterialeTrekk(materialeTrekk),
-    filterLeverandor(leverandor),
-    filterProduktkategori(produktkategori),
-    filterRammeavtale(rammeavtale),
-  ]
+  const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
+    lengdeCM: filterLengde(lengdeMinCM, lengdeMaxCM),
+    breddeCM: filterBredde(breddeMinCM, breddeMaxCM),
+    totalVektKG: filterTotalvekt(totalVektMinKG, totalVektMaxKG),
+    setebreddeMinCM: filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }),
+    setebreddeMaksCM: filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }),
+    setedybdeMinCM: filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }),
+    setedybdeMaksCM: filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }),
+    setehoydeMinCM: filterMinMax({ setehoydeMinCM }, { setehoydeMaksCM }),
+    setehoydeMaksCM: filterMinMax({ setehoydeMinCM }, { setehoydeMaksCM }),
+    brukervektMinKG: filterMinMax({ brukervektMinKG }, { brukervektMaksKG }),
+    brukervektMaksKG: filterMinMax({ brukervektMinKG }, { brukervektMaksKG }),
+    beregnetBarn: filterBeregnetBarn(beregnetBarn),
+    fyllmateriale: filterFyllmateriale(fyllmateriale),
+    materialeTrekk: filterMaterialeTrekk(materialeTrekk),
+    leverandor: filterLeverandor(leverandor),
+    produktkategori: filterProduktkategori(produktkategori),
+    rammeavtale: filterRammeavtale(rammeavtale),
+  }
 
-  const queryFilters: Array<any> = [
-    /*    {
-          term: {
-            status: 'ACTIVE',
-          },
-        },*/
-  ]
+  const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
+    [filterKey]: {
+      filter: {
+        bool: {
+          filter: Object.entries(filterKeyToAggsFilter)
+            .filter(([key, v]) => key !== filterKey && v != null)
+            .map(([_, v]) => v),
+        },
+      },
+      aggs,
+    },
+  })
+
+  const queryFilters: Array<any> = []
 
   if (hasAgreementsOnly) {
     queryFilters.push({
@@ -325,462 +325,64 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
       },
       post_filter: {
         bool: {
-          filter: allFilters,
+          filter: [
+            filterLengde(lengdeMinCM, lengdeMaxCM),
+            filterBredde(breddeMinCM, breddeMaxCM),
+            filterTotalvekt(totalVektMinKG, totalVektMaxKG),
+            filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }),
+            filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }),
+            filterMinMax({ setehoydeMinCM }, { setehoydeMaksCM }),
+            filterMinMax({ brukervektMinKG }, { brukervektMaksKG }),
+            filterBeregnetBarn(beregnetBarn),
+            filterFyllmateriale(fyllmateriale),
+            filterMaterialeTrekk(materialeTrekk),
+            filterLeverandor(leverandor),
+            filterProduktkategori(produktkategori),
+            filterRammeavtale(rammeavtale),
+            //Remove null values
+          ].filter(Boolean),
         },
       },
       aggs: {
-        lengdeCM: {
-          filter: {
-            bool: {
-              filter: allFilters,
-            },
+        ...aggsFilter('lengdeCM', toMinMaxAggs(`filters.lengdeCM`)),
+        ...aggsFilter('breddeCM', toMinMaxAggs(`filters.breddeCM`)),
+        ...aggsFilter('totalVektKG', toMinMaxAggs(`filters.totalVektKG`)),
+        ...aggsFilter('setebreddeMinCM', toMinMaxAggs(`filters.setebreddeMinCM`)),
+        ...aggsFilter('setebreddeMaksCM', toMinMaxAggs(`filters.setebreddeMaksCM`)),
+        ...aggsFilter('setedybdeMinCM', toMinMaxAggs(`filters.setedybdeMinCM`)),
+        ...aggsFilter('setedybdeMaksCM', toMinMaxAggs(`filters.setedybdeMaksCM`)),
+        ...aggsFilter('setehoydeMinCM', toMinMaxAggs(`filters.setehoydeMinCM`)),
+        ...aggsFilter('setehoydeMaksCM', toMinMaxAggs(`filters.setehoydeMaksCM`)),
+        ...aggsFilter('brukervektMinKG', toMinMaxAggs(`filters.brukervektMinKG`)),
+        ...aggsFilter('brukervektMaksKG', toMinMaxAggs(`filters.brukervektMaksKG`)),
+        ...aggsFilter('beregnetBarn', {
+          values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
+        }),
+        ...aggsFilter('fyllmateriale', {
+          values: {
+            terms: { field: 'filters.fyllmateriale', order: { _key: 'asc' }, size: 100 },
           },
-          aggs: {
-            ...toMinMaxAggs('filters.lengdeCM'),
+        }),
+        ...aggsFilter('materialeTrekk', {
+          values: {
+            terms: { field: 'filters.materialeTrekk', order: { _key: 'asc' }, size: 100 },
           },
-        },
-        breddeCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
+        }),
+        ...aggsFilter('leverandor', {
+          values: {
+            terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
           },
-          aggs: {
-            ...toMinMaxAggs('filters.breddeCM'),
+        }),
+        ...aggsFilter('produktkategori', {
+          values: {
+            terms: { field: 'isoCategoryName', size: 100 },
           },
-        },
-        totalVektKG: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
+        }),
+        ...aggsFilter('rammeavtale', {
+          values: {
+            terms: { field: 'agreements.label', order: { _key: 'asc' }, size: 100 },
           },
-          aggs: {
-            ...toMinMaxAggs('filters.totalVektKG'),
-          },
-        },
-        setebreddeMinCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(lengdeMinCM, lengdeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.setebreddeMinCM'),
-          },
-        },
-        setebreddeMaksCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.setebreddeMaksCM'),
-          },
-        },
-        setedybdeMinCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.setedybdeMinCM'),
-          },
-        },
-        setedybdeMaksCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.setedybdeMaksCM'),
-          },
-        },
-        setehoydeMinCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.setehoydeMinCM'),
-          },
-        },
-        setehoydeMaksCM: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.setehoydeMaksCM'),
-          },
-        },
-        brukervektMinKG: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.brukervektMinKG'),
-          },
-        },
-        brukervektMaksKG: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            ...toMinMaxAggs('filters.brukervektMaksKG'),
-          },
-        },
-        beregnetBarn: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
-          },
-        },
-        fyllmateriale: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            values: {
-              terms: { field: 'filters.fyllmateriale', order: { _key: 'asc' }, size: 100 },
-            },
-          },
-        },
-        materialeTrekk: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterFyllmateriale(fyllmateriale),
-                filterBeregnetBarn(beregnetBarn),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            values: {
-              terms: { field: 'filters.materialeTrekk', order: { _key: 'asc' }, size: 100 },
-            },
-          },
-        },
-        leverandor: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterProduktkategori(produktkategori),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            values: {
-              terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
-            },
-          },
-        },
-        produktkategori: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterRammeavtale(rammeavtale),
-              ],
-            },
-          },
-          aggs: {
-            values: {
-              terms: { field: 'isoCategoryName', size: 100 },
-            },
-          },
-        },
-        rammeavtale: {
-          filter: {
-            bool: {
-              filter: [
-                filterLengde(lengdeMinCM, lengdeMaxCM),
-                filterBredde(breddeMinCM, breddeMaxCM),
-                filterTotalvekt(totalVektMinKG, totalVektMaxKG),
-                filterMinSetebredde(setebreddeMinCM),
-                filterMaksSetebredde(setebreddeMaksCM),
-                filterMinSetedybde(setedybdeMinCM),
-                filterMaksSetedybde(setedybdeMaksCM),
-                filterMinSetehoyde(setehoydeMinCM),
-                filterMaksSetehoyde(setehoydeMaksCM),
-                filterMinBrukervekt(brukervektMinKG),
-                filterMaksBrukervekt(brukervektMaksKG),
-                filterBeregnetBarn(beregnetBarn),
-                filterFyllmateriale(fyllmateriale),
-                filterMaterialeTrekk(materialeTrekk),
-                filterLeverandor(leverandor),
-                filterProduktkategori(produktkategori),
-              ],
-            },
-          },
-          aggs: {
-            values: {
-              terms: { field: 'agreements.label', order: { _key: 'asc' }, size: 100 },
-            },
-          },
-        },
+        }),
       },
     }),
   })

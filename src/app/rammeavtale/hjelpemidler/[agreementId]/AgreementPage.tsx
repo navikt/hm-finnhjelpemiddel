@@ -64,8 +64,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
   }, [])
 
-  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = () => {
+    router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
+      scroll: false,
+    })
   }
 
   const {

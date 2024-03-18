@@ -27,10 +27,51 @@ export const initialFiltersFormState = {
 export type FilterFormState = typeof initialFiltersFormState
 export type FilterFormKey = keyof FilterFormState
 
+type MinMaxFilter =
+  | { setebreddeMinCM?: string }
+  | { setebreddeMaksCM?: string }
+  | { setedybdeMinCM?: string }
+  | { setedybdeMaksCM?: string }
+  | { setehoydeMinCM?: string }
+  | { setehoydeMaksCM?: string }
+  | { brukervektMinKG?: string }
+  | { brukervektMaksKG?: string }
+
+export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter) => {
+  const keyMin = Object.keys(min)[0]
+  const valueMin = Object.values(min)[0]
+  const keyMax = Object.keys(max)[0]
+  const valueMax = Object.values(max)[0]
+  if (!valueMin.length && !valueMax.length) return null
+
+  return {
+    bool: {
+      should: [
+        {
+          range: {
+            [`filters.${keyMin}`]: {
+              ...(valueMin && { gte: Number(valueMin) }),
+              ...(valueMax && { lte: Number(valueMax) }),
+            },
+          },
+        },
+        {
+          range: {
+            [`filters.${keyMax}`]: {
+              ...(valueMin && { gte: Number(valueMin) }),
+              ...(valueMax && { lte: Number(valueMax) }),
+            },
+          },
+        },
+      ],
+    },
+  }
+}
+
 const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
   const [min, max] = values
 
-  if (!min && !max) return { bool: { should: [] } }
+  if (!min && !max) return null
 
   return {
     bool: {
@@ -56,38 +97,6 @@ export const filterBredde = (minStr?: string, maxStr?: string) => {
 
 export const filterTotalvekt = (minStr?: string, maxStr?: string) => {
   return mapRangeFilter('totalVektKG', [minStr ? +minStr : null, maxStr ? +maxStr : null])
-}
-
-export const filterMinSetebredde = (valueStr?: string) => {
-  return mapRangeFilter('setebreddeMinCM', [valueStr ? +valueStr : null, null])
-}
-
-export const filterMaksSetebredde = (valueStr?: string) => {
-  return mapRangeFilter('setebreddeMaksCM', [null, valueStr ? +valueStr : null])
-}
-
-export const filterMinSetedybde = (valueStr?: string) => {
-  return mapRangeFilter('setedybdeMinCM', [valueStr ? +valueStr : null, null])
-}
-
-export const filterMaksSetedybde = (valueStr?: string) => {
-  return mapRangeFilter('setedybdeMaksCM', [null, valueStr ? +valueStr : null])
-}
-
-export const filterMinSetehoyde = (valueStr?: string) => {
-  return mapRangeFilter('setehoydeMinCM', [valueStr ? +valueStr : null, null])
-}
-
-export const filterMaksSetehoyde = (valueStr?: string) => {
-  return mapRangeFilter('setehoydeMaksCM', [null, valueStr ? +valueStr : null])
-}
-
-export const filterMinBrukervekt = (valueStr?: string) => {
-  return mapRangeFilter('brukervektMinKG', [valueStr ? +valueStr : null, null])
-}
-
-export const filterMaksBrukervekt = (valueStr?: string) => {
-  return mapRangeFilter('brukervektMaksKG', [null, valueStr ? +valueStr : null])
 }
 
 export const filterBeregnetBarn = (values: Array<string>) => ({
