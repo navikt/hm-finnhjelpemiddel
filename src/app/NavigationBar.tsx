@@ -9,8 +9,6 @@ import { useCallback, useEffect, useState } from 'react'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 
-//Bug: SearchTerm var en del av form -> fristiller searchterm fra form. Og setter searchterm i url med de andre paramaterne som er der (for å ikke overskrive)
-
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
