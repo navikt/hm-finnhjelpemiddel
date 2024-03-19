@@ -51,6 +51,7 @@ export interface ProductVariant {
   filters: { [key: string]: string | number }
   expired: string
   agreements: AgreementInfo[]
+  bestillingsordning?: boolean
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -74,7 +75,6 @@ interface Attributes {
   series?: string
   shortdescription?: string
   text?: string
-  bestillingsordning?: boolean
   commonCharacteristics?: TechData
   compatibleWith?: string[]
 }
@@ -221,6 +221,7 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     agreements: mapAgreementInfo(source.agreements),
     filters: source.filters,
     expired: source.expired,
+    bestillingsordning: source.attributes.bestillingsordning,
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
   }
 }

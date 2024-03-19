@@ -139,7 +139,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading id="product_variants" level="3" size="medium" spacing>
+      <Heading id="produktvarianter" level="3" size="medium" spacing>
         Produktvarianter
       </Heading>
       {product.variantCount > 1 && (
@@ -240,6 +240,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
               </Table.HeaderCell>
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
+              ))}
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
               ))}
             </Table.Row>
             {Object.keys(rows).length > 0 &&

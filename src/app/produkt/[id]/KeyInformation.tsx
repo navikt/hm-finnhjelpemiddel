@@ -19,6 +19,22 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
     router.push(`/produkt/${product.id}#agreement-info`)
   }
 
+  const bo = new Set(product.variants.map((p) => p.bestillingsordning))
+
+  const bestillingsordning =
+    bo.size > 1 ? (
+      <BodyShort>
+        Noen varianter.
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
+        </Link>
+      </BodyShort>
+    ) : bo.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
+
   if (!product.agreements?.length) {
     return (
       <>
@@ -31,7 +47,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -63,7 +79,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -109,7 +125,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         <DefinitionList.Term>
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>
-        <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+        <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
       </DefinitionList>
     </>
   )
