@@ -6,13 +6,15 @@ import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { Heading, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import useSWR from 'swr'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
 
 interface Props {
   searchOpen: boolean
   menuOpen: boolean
+
   setMenuOpen: (open: boolean) => void
   setSearchOpen: (open: boolean) => void
 }
@@ -20,6 +22,11 @@ interface Props {
 const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }: Props) => {
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
+  })
+  const outerContainerRef = useRef<HTMLDivElement>(null)
+
+  useOnClickOutside(outerContainerRef, () => {
+    setMenuOpen(false)
   })
 
   const router = useRouter()
@@ -44,7 +51,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
   return (
     <>
       {menuOpen && (
-        <div className="burgermenu-container">
+        <div className="burgermenu-container" ref={outerContainerRef}>
           <div className="burgermenu-container__content spacing-vertical--medium  main-wrapper--xlarge">
             <>
               <Heading level="2" size="small">
@@ -109,10 +116,10 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                 Leverandører
               </Heading>
               <Link
-                  className="burgermenu-container__link"
-                  as={NextLink}
-                  href="/leverandorer"
-                  onClick={() => setMenuOpen(false)}
+                className="burgermenu-container__link"
+                as={NextLink}
+                href="/leverandorer"
+                onClick={() => setMenuOpen(false)}
               >
                 <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
                 Leverandøroversikt
