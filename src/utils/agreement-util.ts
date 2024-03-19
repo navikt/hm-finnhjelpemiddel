@@ -12,6 +12,7 @@ import {
   SearchResponse,
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
+import { Supplier } from './supplier-util'
 
 export interface Agreement {
   id: string
@@ -54,6 +55,7 @@ export interface PostWithProducts {
   products: {
     rank: number
     product: Product
+    supplierName: string
   }[]
 }
 
@@ -153,6 +155,7 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
 export const mapAgreementProducts = (
   postBuckets: PostBucketResponse[],
   agreement: Agreement,
+  suppliers: Supplier[],
   filters: FilterFormState
 ): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
@@ -173,6 +176,7 @@ export const mapAgreementProducts = (
           return {
             rank: getRank(product, bucket.key) || 99,
             product: product,
+            supplierName: suppliers.find((supplier) => product.supplierId === supplier.id)?.name || '',
           }
         })
         .filter((prod) => {

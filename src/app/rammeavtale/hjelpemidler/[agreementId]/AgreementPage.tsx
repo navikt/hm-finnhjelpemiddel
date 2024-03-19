@@ -1,6 +1,6 @@
 'use client'
 
-import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+import { Filter, FilterData, getAllSuppliers, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -31,6 +31,7 @@ import useSWR from 'swr'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
+import { Supplier } from '@/utils/supplier-util'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -80,8 +81,16 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   })
 
   const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
-    { agreementId: agreement.id },
+    { agreementId: agreement.id, type: 'filterdata' },
     getFiltersAgreement,
+    {
+      keepPreviousData: true,
+    }
+  )
+
+  const { data: suppliersData } = useSWR<Supplier[]>(
+    { agreementId: agreement.id, type: 'supplierData' },
+    getAllSuppliers,
     {
       keepPreviousData: true,
     }
@@ -122,8 +131,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
-
-  const posts = mapAgreementProducts(postBucktes, agreement, searchData.filters)
+  const suppliers = suppliersData || []
+  const posts = mapAgreementProducts(postBucktes, agreement, suppliers, searchData.filters)
 
   const onReset = () => {
     formMethods.reset()
@@ -132,7 +141,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <>
-      <AgreementPrintableVersion agreement={agreement} postWithProducts={posts} />
+      <AgreementPrintableVersion postWithProducts={posts} />
       <VStack className="main-wrapper--large spacing-bottom--large hide-print">
         <VStack gap="5" className="spacing-top--large spacing-bottom--large">
           <HStack gap="3">

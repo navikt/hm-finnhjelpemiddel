@@ -10,14 +10,16 @@ import { useState } from 'react'
 import ProductImage from './ProductImage'
 
 const ProductCard = ({
+  type,
   product,
   rank,
-  type,
+  supplierName,
   handleIsoButton,
 }: {
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
   product: Product
   rank?: number
-  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
+  supplierName?: string
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
@@ -52,6 +54,7 @@ const ProductCard = ({
           <BodyShort size="small" className="text-line-clamp">
             {product.title}
           </BodyShort>
+          <Detail textColor="subtle">{supplierName}</Detail>
         </VStack>
       </Box>
     )

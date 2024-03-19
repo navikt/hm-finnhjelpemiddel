@@ -1,11 +1,10 @@
 'use client'
 
 import ProductCard from '@/components/ProductCard'
-import { Agreement, PostWithProducts } from '@/utils/agreement-util'
-import { HStack, Table, VStack } from '@navikt/ds-react'
+import { PostWithProducts } from '@/utils/agreement-util'
+import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react'
 
 interface Props {
-  agreement: Agreement
   postWithProducts: PostWithProducts[]
 }
 
@@ -35,14 +34,23 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
                 </Table.DataCell>
                 <Table.DataCell key={i}>
                   <HStack gap="2" wrap>
-                    {products.map((productWithRank, i) => (
-                      <ProductCard
-                        product={productWithRank.product}
-                        rank={productWithRank.rank}
-                        type={'print'}
-                        key={i}
-                      />
-                    ))}
+                    {!products.length ? (
+                      <BodyShort>Delkontrakten inneholder ingen hjelpemidler</BodyShort>
+                    ) : (
+                      <>
+                        {products.map((productWithRankAndSupplier, i) => {
+                          return (
+                            <ProductCard
+                              product={productWithRankAndSupplier.product}
+                              rank={productWithRankAndSupplier.rank}
+                              supplierName={productWithRankAndSupplier.supplierName}
+                              type={'print'}
+                              key={i}
+                            />
+                          )
+                        })}
+                      </>
+                    )}
                   </HStack>
                 </Table.DataCell>
               </Table.Row>
