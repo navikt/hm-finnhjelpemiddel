@@ -393,11 +393,27 @@ main {
   overflow: hidden;
 }
 
-@media print {
-  ol li {
-    break-inside: avoid-page;
+.printable-version {
+  &__post-title {
+    max-width: '15rem';
+    font-size: $a-font-size-medium;
   }
+}
+
+@media print {
+  .nav,
+  .nav-bunn,
   .hide-print {
+    display: none;
+  }
+
+  @page {
+    size: landscape;
+  }
+}
+
+@media screen {
+  .printable-version {
     display: none;
   }
 }
