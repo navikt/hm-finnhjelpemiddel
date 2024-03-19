@@ -151,7 +151,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
       )}
 
       <div className="comparing-table">
-        <Table>
+        <Table zebraStripes>
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
