@@ -1,4 +1,5 @@
-import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
+import { AgreementLabel, agreementHasNoProducts, agreementProductsLink } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
@@ -116,7 +117,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     <Link
                       className="burgermenu-container__link"
                       as={NextLink}
-                      href={`/rammeavtale/hjelpemidler/${agreement.id}`}
+                      href={agreementProductsLink(agreement.id)}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'hurtigoversikt', agreement.label)
