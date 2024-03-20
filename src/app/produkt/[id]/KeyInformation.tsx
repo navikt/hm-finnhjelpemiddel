@@ -61,7 +61,9 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
         </Heading>
         <DefinitionList>
           <DefinitionList.Term>Rangering</DefinitionList.Term>
-          <DefinitionList.Definition>{product.agreements[0].rank ?? 'Urangert'}</DefinitionList.Definition>
+          <DefinitionList.Definition>
+            {product.agreements[0].rank && product.agreements[0].rank < 90 ? product.agreements[0].rank : 'Urangert'}
+          </DefinitionList.Definition>
           <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
           <DefinitionList.Definition>
             <Link href="#" onClick={scrollToAgreementInfo}>
@@ -108,7 +110,9 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
                   </Link>
                 </Table.DataCell>
                 <Table.DataCell scope="row">{agreement.postTitle}</Table.DataCell>
-                <Table.DataCell align="center">{agreement.rank}</Table.DataCell>
+                <Table.DataCell align="center">
+                  {agreement.rank && agreement.rank < 90 ? agreement.rank : 'Urangert'}
+                </Table.DataCell>
               </Table.Row>
             )
           })}
