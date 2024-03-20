@@ -43,7 +43,6 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
                             <ProductCard
                               product={productWithRankAndSupplier.product}
                               rank={productWithRankAndSupplier.rank}
-                              supplierName={productWithRankAndSupplier.supplierName}
                               type={'print'}
                               key={i}
                             />

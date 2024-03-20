@@ -13,7 +13,6 @@ const ProductCard = ({
   type,
   product,
   rank,
-  supplierName,
   handleIsoButton,
 }: {
   type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
@@ -51,7 +50,7 @@ const ProductCard = ({
           <BodyShort size="small" className="text-line-clamp">
             {rank && rank < 90 && `${rank}: ${product.title}`}
           </BodyShort>
-          <Detail textColor="subtle">{supplierName}</Detail>
+          <Detail textColor="subtle">{product.supplierName}</Detail>
         </VStack>
       </Box>
     )
