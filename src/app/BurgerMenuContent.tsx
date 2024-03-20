@@ -9,7 +9,7 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
-import AutocompleteSearch from '../components/filters/AutocompleteSearch'
+import AutocompleteSearch from './AutocompleteSearch'
 
 interface Props {
   searchOpen: boolean

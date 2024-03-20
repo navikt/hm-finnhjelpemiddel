@@ -10,15 +10,17 @@ import useDebounce from '@/hooks/useDebounce'
 import useVirtualFocus from '@/hooks/useVirtualFocus'
 import { Suggestions, fetchSuggestions } from '@/utils/api-util'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
   onSearch: (searchTerm: string) => void
-  initialValue?: string
 }
 
-const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
+const AutocompleteSearch = ({ onSearch }: Props) => {
   const [openState, setOpenState] = useState(false)
-  const [inputValue, setInputValue] = useState(initialValue || '')
+  const searchParams = useSearchParams()
+  const searchParamValue = searchParams.get('term')
+  const [inputValue, setInputValue] = useState(searchParamValue ?? '')
   const [shouldFetch, setShouldFetch] = useState(true)
   const [selectedOption, setSelectedOption] = useState('')
 
@@ -33,10 +35,14 @@ const AutocompleteSearch = ({ onSearch, initialValue }: Props) => {
   const virtualFocus = useVirtualFocus(listContainerRef.current)
 
   useEffect(() => {
-    if (inputValue && !selectedOption && !initialValue) {
+    if (!searchParamValue) setInputValue('')
+  }, [searchParamValue])
+
+  useEffect(() => {
+    if (inputValue && !selectedOption && !searchParamValue) {
       setOpenState(true)
     } else setOpenState(false)
-  }, [inputValue, selectedOption, initialValue])
+  }, [inputValue, selectedOption, searchParamValue])
 
   useEffect(() => {
     if (selectedOption) setShouldFetch(false)
