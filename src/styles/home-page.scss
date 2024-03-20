@@ -62,12 +62,12 @@
 .about-us-page {
   width: 100%;
   height: 100%;
+  background-color: $a-deepblue-50;
 
   &__container {
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: $a-deepblue-50;
     padding: $a-spacing-8 $a-spacing-4;
 
     @include mixins.for-size(tablet-up) {
