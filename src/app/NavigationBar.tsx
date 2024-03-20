@@ -5,9 +5,10 @@ import { Button, Hide, Show } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -16,6 +17,12 @@ const NavigationBar = () => {
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
   const path = usePathname()
+
+  const outerContainerRef = useRef<HTMLElement>(null)
+
+  useOnClickOutside(outerContainerRef, () => {
+    setMenuOpen(false)
+  })
 
   const onSearch = useCallback(
     (searchTerm: string) => {
@@ -41,7 +48,7 @@ const NavigationBar = () => {
   }, [menuOpen, searchOpen, setMenuOpenGlobalState])
 
   return (
-    <nav className="nav">
+    <nav className="nav" ref={outerContainerRef}>
       <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
