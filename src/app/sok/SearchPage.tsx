@@ -111,9 +111,12 @@ export default function SearchPage() {
 
   const onReset = () => {
     formMethods.reset({ filters: initialFiltersFormState })
+    //Må også resette søkeordet.
+
     setPage(1)
     router.replace(pathname)
   }
+
   const products = data?.map((d) => d.products).flat()
 
   if (error) {

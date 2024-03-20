@@ -4,8 +4,9 @@ import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel
 import { Button, Hide, Show } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
