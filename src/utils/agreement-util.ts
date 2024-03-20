@@ -115,6 +115,7 @@ export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
     .map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
 }
 
+//Midlertidig så lenge det ikke er produkter på omgivelsekontrollavtalen
 export const agreementProductsLink = (id: string) => {
   if (
     process.env.BUILD_ENV === 'prod'
