@@ -87,7 +87,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
             Avtale med NAV
           </Heading>
 
-          {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && (
+          {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && product.agreements[0]?.rank < 90 && (
             <Alert variant="info" inline>
               Dette produktet er rangert som nummer {product.agreements[0].rank} i delkontrakten. Ta en titt på høyere
               rangerte produkter for å se om det passer ditt behov.
