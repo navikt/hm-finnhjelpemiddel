@@ -20,7 +20,7 @@ const AutocompleteSearch = ({ onSearch }: Props) => {
   const [openState, setOpenState] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
-  const [inputValue, setInputValue] = useState(searchParamValue)
+  const [inputValue, setInputValue] = useState(searchParamValue ?? '')
   const [shouldFetch, setShouldFetch] = useState(true)
   const [selectedOption, setSelectedOption] = useState('')
 
@@ -28,7 +28,7 @@ const AutocompleteSearch = ({ onSearch }: Props) => {
   const popoverRef = useRef<HTMLDivElement>(null)
   const listContainerRef = useRef<HTMLUListElement | null>(null)
 
-  const debouncedSearchValue = useDebounce<string>(inputValue ?? '', 100)
+  const debouncedSearchValue = useDebounce<string>(inputValue, 100)
   const { data: suggestions } = useSWR<Suggestions>(shouldFetch ? debouncedSearchValue : null, fetchSuggestions, {
     keepPreviousData: false,
   })
