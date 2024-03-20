@@ -26,12 +26,7 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
             return (
               <Table.Row key={i}>
                 <Table.DataCell>{nr}</Table.DataCell>
-                <Table.DataCell
-                  className="printable-version__post-title"
-                  style={{ maxWidth: '15rem', fontSize: '16px' }}
-                >
-                  {titleWithoutPostNumber[1]}
-                </Table.DataCell>
+                <Table.DataCell className="printable-version__post-title">{titleWithoutPostNumber[1]}</Table.DataCell>
                 <Table.DataCell key={i}>
                   <HStack gap="2" wrap>
                     {!products.length ? (
