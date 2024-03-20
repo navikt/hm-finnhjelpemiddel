@@ -114,7 +114,6 @@ export default function SearchPage() {
     setPage(1)
     router.replace(pathname)
   }
-
   const products = data?.map((d) => d.products).flat()
 
   if (error) {
