@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.8.4",
-    "@navikt/aksel-icons": "^6.2.0",
-    "@navikt/ds-css": "^6.2.0",
-    "@navikt/ds-react": "^6.2.0",
+    "@navikt/aksel-icons": "^6.3.2",
+    "@navikt/ds-css": "^6.3.2",
+    "@navikt/ds-react": "^6.3.2",
     "@navikt/ds-tokens": "^6.2.0",
     "@navikt/next-logger": "^1.23.0",
     "amplitude-js": "^8.21.9",
