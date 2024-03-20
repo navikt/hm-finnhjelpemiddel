@@ -1,6 +1,6 @@
 import { mapAllNews } from '@/utils/news-util'
 import { formatNorwegianLetter } from '@/utils/string-util'
-import { Supplier, mapSupplier, mapSuppliers } from '@/utils/supplier-util'
+import { Supplier, mapSuppliers } from '@/utils/supplier-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
@@ -617,33 +617,6 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
   return res.json().then(mapSuppliers)
 }
 
-// export async function getSuppliersForAgreement(agreementId: string): Promise<SearchResponse> {
-//   const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
-//     next: { revalidate: 900 },
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       size: 500,
-//       query: {
-//         bool: {
-//           must: {
-//             term: {
-//               agreementId: agreementId,
-//             },
-//           },
-//         },
-//       },
-//       _source: {
-//         includes: ['*'],
-//       },
-//     }),
-//   })
-
-//   return res.json()
-// }
-
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
   const res = await fetch(HM_SEARCH_URL + '/products/_search', {
     next: { revalidate: 900 },
@@ -659,13 +632,6 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
               seriesId: seriesId,
             },
           },
-          filter: [
-            /*            {
-                          term: {
-                            status: 'ACTIVE',
-                          },
-                        },*/
-          ],
         },
       },
       size: 150,
