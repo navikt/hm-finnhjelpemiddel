@@ -49,8 +49,6 @@ const AutocompleteSearch = ({ onSearch }: Props) => {
     else setShouldFetch(true)
   }, [selectedOption])
 
-  console.log({ searchParamValue }, { inputValue })
-
   useEffect(() => {
     virtualFocus.activeElement?.querySelector('button')?.focus()
   }, [virtualFocus.activeElement])
