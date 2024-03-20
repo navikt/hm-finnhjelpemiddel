@@ -115,6 +115,17 @@ export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
     .map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
 }
 
+export const agreementProductsLink = (id: string) => {
+  if (
+    process.env.BUILD_ENV === 'prod'
+      ? id === 'e3c8e7ca-8118-4c24-b2fd-13b765de99e3'
+      : id === '042360ce-ee2d-4275-b864-c4009b5af371'
+  ) {
+    return `/rammeavtale/${id}`
+  }
+  return `/rammeavtale/hjelpemidler/${id}`
+}
+
 export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabel => {
   return {
     id: source.id,
@@ -229,13 +240,4 @@ export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = [
-  'HMDB-8582',
-  'HMDB-8682',
-  'HMDB-8673',
-  'HMDB-8685',
-  'HMDB-8734',
-  'HMDB-8669',
-  //Omgivelseskontroll
-  'HMDB-8736',
-]
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734', 'HMDB-8669']

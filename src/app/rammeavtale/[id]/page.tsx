@@ -33,6 +33,11 @@ export default async function AgreementPage({ params }: Props) {
   const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.id}`
   // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
+  const dontShow =
+    (process.env.BUILD_ENV === 'prod'
+      ? agreement.id === 'e3c8e7ca-8118-4c24-b2fd-13b765de99e3'
+      : agreement.id === '042360ce-ee2d-4275-b864-c4009b5af371') || agreementHasNoProducts(agreement.identifier)
+
   return (
     <>
       {agreement && (
@@ -55,7 +60,7 @@ export default async function AgreementPage({ params }: Props) {
                   </BodyLong>
                   <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
                 </div>
-                {!agreementHasNoProducts(agreement.identifier) && (
+                {!dontShow && (
                   <LinkToAgreement
                     hrefHurtigoversikt={hrefHurtigoversikt}
                     agreementLabel={agreement.label}

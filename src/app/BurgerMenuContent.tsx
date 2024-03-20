@@ -1,4 +1,5 @@
-import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
+import { AgreementLabel, agreementHasNoProducts, agreementProductsLink } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
@@ -9,7 +10,6 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useRef } from 'react'
 import useSWR from 'swr'
 import AutocompleteSearch from '../components/filters/AutocompleteSearch'
-import useOnClickOutside from '@/hooks/useOnClickOutside'
 
 interface Props {
   searchOpen: boolean
@@ -100,7 +100,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                     <Link
                       className="burgermenu-container__link"
                       as={NextLink}
-                      href={`/rammeavtale/hjelpemidler/${agreement.id}`}
+                      href={agreementProductsLink(agreement.id)}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'hurtigoversikt', agreement.label)
