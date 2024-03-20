@@ -31,7 +31,13 @@
     z-index: 1;
   }
 
+  //Need to set background on every second to white to avoid the header to be transparent
+  tr:nth-child(2n) th {
+    background-color: white;
+  }
+
   tbody th {
+    background-color: inherit;
     border-right: 1px solid $a-bg-subtle;
   }
 
