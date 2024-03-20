@@ -24,7 +24,7 @@ jobs:
     env:
       BUILD_ENV: dev
       IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
-      CDN_URL: https://cdn.dev.nav.no/teamdigihot/grunndata/media/v1/
+      CDN_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
