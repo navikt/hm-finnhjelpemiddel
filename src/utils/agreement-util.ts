@@ -12,6 +12,7 @@ import {
   SearchResponse,
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
+import { Supplier } from './supplier-util'
 
 export interface Agreement {
   id: string

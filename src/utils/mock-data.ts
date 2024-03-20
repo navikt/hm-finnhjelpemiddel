@@ -65,5 +65,6 @@ export const accessoriesMock: Product[] = [
     photos: [{ uri: 'orig/52674.jpg' }],
     documents: [],
     supplierId: 'e9e27708-16be-4995-83a7-f857b77d0913',
+    supplierName: 'Levereandør AS',
   },
 ]

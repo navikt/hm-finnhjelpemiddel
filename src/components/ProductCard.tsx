@@ -10,14 +10,15 @@ import { useState } from 'react'
 import ProductImage from './ProductImage'
 
 const ProductCard = ({
+  type,
   product,
   rank,
-  type,
   handleIsoButton,
 }: {
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
   product: Product
   rank?: number
-  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
+  supplierName?: string
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
@@ -46,12 +47,10 @@ const ProductCard = ({
     return (
       <Box paddingInline="2" paddingBlock="1" className="product-card--print">
         <VStack gap="1">
-          <Detail textColor="subtle">
-            {rank ? (rank < 90 ? `Rangering ${rank}` : 'Ingen rangering') : 'Ikke på avtale'}
-          </Detail>
           <BodyShort size="small" className="text-line-clamp">
-            {product.title}
+            {rank && rank < 90 && `${rank}: ${product.title}`}
           </BodyShort>
+          <Detail textColor="subtle">{product.supplierName}</Detail>
         </VStack>
       </Box>
     )

@@ -27,6 +27,7 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+  supplierName: string
   agreements: AgreementInfo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
@@ -205,6 +206,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
     supplierId: firstVariant.supplier?.id,
+    supplierName: firstVariant.supplier?.name,
     agreements: uniquesAgreementsPostAndRanks,
   }
 }

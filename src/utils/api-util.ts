@@ -30,6 +30,7 @@ import {
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
+  SupplierInfoResponse,
 } from './response-types'
 import { SearchData } from './search-state-util'
 
@@ -613,7 +614,6 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
       },
     }),
   })
-
   return res.json().then(mapSuppliers)
 }
 
@@ -632,13 +632,6 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
               seriesId: seriesId,
             },
           },
-          filter: [
-            /*            {
-                          term: {
-                            status: 'ACTIVE',
-                          },
-                        },*/
-          ],
         },
       },
       size: 150,
