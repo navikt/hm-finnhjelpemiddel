@@ -28,7 +28,7 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
     Math.min(...product.agreements.map((agreement) => agreement.rank))
   const rank = product.agreements?.length === 1 ? product.agreements[0].rank : minRank
   const agreementRankText =
-    typeof rank === 'number' ? `Rangert som nr ${rank} på avtale med NAV.` : 'Er på avtale med NAV uten rangering.'
+    rank && rank < 90 ? `Rangert som nr ${rank} på avtale med NAV.` : 'Er på avtale med NAV uten rangering.'
   const allVariantsExpired = product.variants.every((variant) => variant.status === 'INACTIVE')
   const allVariantsExpiredDates = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
