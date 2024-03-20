@@ -6,7 +6,7 @@ import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import AutocompleteSearch from '../components/filters/AutocompleteSearch'
+import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { hotjar } from 'react-hotjar'
 import { usePathname } from 'next/navigation'
 
@@ -33,7 +33,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <>
+    <Suspense>
       {isMobileOverlayOpen && <div id="cover-main" />}
       <div id="modal-container"></div>
       <header>
@@ -46,7 +46,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       </main>
 
       <Footer />
-    </>
+    </Suspense>
   )
 }
 
