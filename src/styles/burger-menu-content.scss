@@ -24,8 +24,16 @@
       list-style: none;
       display: flex;
       flex-direction: column;
+      align-content: start;
       flex-wrap: wrap;
       padding-inline-start: 0;
+
+      @include mixins.for-size(desktop-up) {
+        max-height: 700px;
+      }
+      @include mixins.for-size(desktop-large-up) {
+        max-height: 500px;
+      }
 
       li {
         @include mixins.for-size(desktop-up) {
@@ -39,15 +47,6 @@
           text-align: left;
         }
       }
-    }
-  }
-
-  &__agreemment-list {
-    @include mixins.for-size(desktop-up) {
-      max-height: 700px;
-    }
-    @include mixins.for-size(desktop-large-up) {
-      max-height: 500px;
     }
   }
 
