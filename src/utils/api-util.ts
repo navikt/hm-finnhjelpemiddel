@@ -615,7 +615,7 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
       sort: [
         {
           "name_keyword": {
-            "order": "desc"
+            "order": "asc"
           }
         }
       ],
