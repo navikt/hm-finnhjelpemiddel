@@ -21,12 +21,12 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
         </Table.Header>
         <Table.Body>
           {postWithProducts.map(({ nr, title, products }, i) => {
-            const titleWithoutPostNumber = title.split(':' || '.')
+            const titleWithoutPostNumber = title.split(/[:.]\s*/)[1]
 
             return (
               <Table.Row key={i}>
                 <Table.DataCell>{nr}</Table.DataCell>
-                <Table.DataCell className="printable-version__post-title">{titleWithoutPostNumber[1]}</Table.DataCell>
+                <Table.DataCell className="printable-version__post-title">{titleWithoutPostNumber}</Table.DataCell>
                 <Table.DataCell key={i}>
                   <HStack gap="2" wrap>
                     {!products.length ? (

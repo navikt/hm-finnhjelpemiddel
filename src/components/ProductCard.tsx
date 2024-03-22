@@ -48,7 +48,7 @@ const ProductCard = ({
       <Box paddingInline="2" paddingBlock="1" className="product-card--print">
         <VStack gap="1">
           <BodyShort size="small" className="text-line-clamp">
-            {rank && rank < 90 && `${rank}: ${product.title}`}
+            {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
           </BodyShort>
           <Detail textColor="subtle">{product.supplierName}</Detail>
         </VStack>
