@@ -613,7 +613,7 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
         },
       },
       _source: {
-        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
+        includes: ['id', 'identifier', 'name', 'address', 'homepage', 'status'],
       },
     }),
   })
