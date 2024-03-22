@@ -612,13 +612,6 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
           },
         },
       },
-      sort: [
-        {
-          "name": {
-            "order": "desc"
-          }
-        }
-      ],
       _source: {
         includes: ['id', 'identifier', 'name', 'address', 'homepage', 'status'],
       },
