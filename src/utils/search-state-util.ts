@@ -3,7 +3,6 @@ import { FilterFormState, initialFiltersFormState } from './filter-util'
 export const initialSearchDataState = {
   searchTerm: '',
   isoCode: '',
-  hasAgreementsOnly: false,
   filters: initialFiltersFormState,
   sortOrder: undefined,
 }
@@ -26,7 +25,6 @@ export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
 export type SearchData = {
   searchTerm: string
   isoCode: string
-  hasAgreementsOnly: boolean
   filters: FilterFormState
   sortOrder?: SortOrder
   hidePictures?: string

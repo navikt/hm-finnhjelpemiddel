@@ -1,4 +1,4 @@
-import { FilterCategoryKeyServer } from './api-util'
+import { Filter, FilterCategoryKeyServer } from './api-util'
 
 export const initialFiltersFormState = {
   setebreddeMaksCM: '',
@@ -22,7 +22,10 @@ export const initialFiltersFormState = {
   produktkategori: [] as string[],
   rammeavtale: [] as string[],
   delkontrakt: [] as string[],
+  vis: [] as string[],
 }
+
+const visFilterLabels = ['På avtale med NAV', 'På digital søknad', 'På bestillingsordning', 'Utgåtte produkter']
 
 export type FilterFormState = typeof initialFiltersFormState
 export type FilterFormKey = keyof FilterFormState
@@ -66,6 +69,14 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter) => {
       ],
     },
   }
+}
+
+export const visFilters: Filter = {
+  values: visFilterLabels.map((filterLabel) => ({
+    key: filterLabel,
+    doc_count: 1,
+    label: filterLabel,
+  })),
 }
 
 const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
@@ -140,6 +151,36 @@ export const filterDelkontrakt = (values: Array<string>) => ({
     should: values.map((value) => ({ term: { 'agreements.postTitle': value } })),
   },
 })
+
+export const filterVis = (values: Array<string>) => {
+  const filters: any[] = values
+    .map((filterKey) => {
+      if (filterKey === 'På digital søknad') {
+        return {
+          term: { 'attributes.digitalSoknad': 'true' },
+        }
+      }
+      if (filterKey === 'På bestillingsordning') {
+        return {
+          term: { 'attributes.bestillingsordning': 'true' },
+        }
+      }
+      if (filterKey === 'På avtale med NAV') {
+        return {
+          match: { hasAgreement: 'true' },
+        }
+      }
+
+      return null
+    })
+    .filter((filter) => filter !== null)
+
+  values.includes('Utgåtte produkter')
+    ? filters.push({ terms: { status: ['ACTIVE', 'INACTIVE'] } })
+    : filters.push({ term: { status: { value: 'ACTIVE' } } })
+
+  return filters
+}
 
 export const toMinMaxAggs = (filterKey: string) => ({
   values: { terms: { field: filterKey } },

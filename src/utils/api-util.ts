@@ -14,6 +14,7 @@ import {
   filterProduktkategori,
   filterRammeavtale,
   filterTotalvekt,
+  filterVis,
   toMinMaxAggs,
 } from './filter-util'
 import {
@@ -30,7 +31,6 @@ import {
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
-  SupplierInfoResponse,
 } from './response-types'
 import { SearchData } from './search-state-util'
 
@@ -65,6 +65,8 @@ export type FilterCategoryKeyServer =
   | 'setehoydeMinCM'
   | 'setehoydeMaksCM'
 
+export type FilterCategoryKeyClient = 'vis'
+
 type RawFilterData = {
   [key in FilterCategoryKeyServer]: {
     doc_count: number
@@ -83,8 +85,83 @@ export type Filter = {
   max?: number
 }
 
+export const initialFilters = {
+  lengdeCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  breddeCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  brukervektMinKG: {
+    total_doc_count: 0,
+    values: [],
+  },
+  brukervektMaksKG: {
+    total_doc_count: 0,
+    values: [],
+  },
+  totalVektKG: {
+    total_doc_count: 0,
+    values: [],
+  },
+  fyllmateriale: {
+    total_doc_count: 0,
+    values: [],
+  },
+  materialeTrekk: {
+    total_doc_count: 0,
+    values: [],
+  },
+  beregnetBarn: {
+    total_doc_count: 0,
+    values: [],
+  },
+  leverandor: {
+    total_doc_count: 0,
+    values: [],
+  },
+  produktkategori: {
+    total_doc_count: 0,
+    values: [],
+  },
+  rammeavtale: {
+    total_doc_count: 0,
+    values: [],
+  },
+  delkontrakt: {
+    total_doc_count: 0,
+    values: [],
+  },
+  setebreddeMinCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  setebreddeMaksCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  setedybdeMinCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  setedybdeMaksCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  setehoydeMinCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+  setehoydeMaksCM: {
+    total_doc_count: 0,
+    values: [],
+  },
+}
+
 export type FilterData = {
-  [key in FilterCategoryKeyServer]: Filter
+  [key in FilterCategoryKeyServer | FilterCategoryKeyClient]: Filter
 }
 
 type FetchProps = {
@@ -218,7 +295,7 @@ const sortOptionsOpenSearch = {
 }
 
 export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<FetchProductsWithFilters> => {
-  const { searchTerm, isoCode, hasAgreementsOnly, sortOrder, filters } = searchData
+  const { searchTerm, isoCode, sortOrder, filters } = searchData
 
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
 
@@ -243,6 +320,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
     leverandor,
     produktkategori,
     rammeavtale,
+    vis,
   } = filters
 
   const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
@@ -279,14 +357,6 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
   })
 
   const queryFilters: Array<any> = []
-
-  if (hasAgreementsOnly) {
-    queryFilters.push({
-      match_bool_prefix: {
-        hasAgreement: hasAgreementsOnly,
-      },
-    })
-  }
 
   if (isoCode) {
     queryFilters.push({
@@ -340,6 +410,7 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
             filterLeverandor(leverandor),
             filterProduktkategori(produktkategori),
             filterRammeavtale(rammeavtale),
+            ...filterVis(vis),
             //Remove null values
           ].filter(Boolean),
         },
