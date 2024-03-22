@@ -13,7 +13,7 @@ export enum amplitude_taxonomy {
 
 export enum digihot_customevents {
   VISNING_OVERSIKT = 'visning av sider fra hm-oversikt-app',
-  LEVERANDORPRODUKTER_KLIKKET = 'klikket på vis leverandørprodukter',
+  LEVERANDORPRODUKTER_KLIKKET_V2 = 'klikket på vis leverandørprodukter',
   NAVIGERE = 'navigere',
 }
 
@@ -68,6 +68,5 @@ export function logNavigationEvent(komponent: string, destinasjon: string, lenke
 }
 
 export function logLeverandorprodukterKlikket() {
-  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET)
-  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET)
+  logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET_V2)
 }
