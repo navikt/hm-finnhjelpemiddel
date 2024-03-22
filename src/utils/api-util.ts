@@ -1,6 +1,6 @@
 import { mapAllNews } from '@/utils/news-util'
 import { formatNorwegianLetter } from '@/utils/string-util'
-import { Supplier, mapSuppliers } from '@/utils/supplier-util'
+import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
@@ -17,11 +17,11 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  Product,
-  ProductVariant,
-  mapProductVariant,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
+  mapProductVariant,
+  Product,
+  ProductVariant,
 } from './product-util'
 import {
   AgreementDocResponse,
@@ -30,7 +30,6 @@ import {
   PostBucketResponse,
   ProductDocResponse,
   SearchResponse,
-  SupplierInfoResponse,
 } from './response-types'
 import { SearchData } from './search-state-util'
 
@@ -395,9 +394,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
 
 //TODO bytte til label
 export const getProductsOnAgreement = ({
-  agreementId,
-  searchData,
-}: {
+                                         agreementId,
+                                         searchData,
+                                       }: {
   agreementId: string
   searchData: SearchData
 }): Promise<PostBucketResponse[]> => {
@@ -607,10 +606,14 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
     body: JSON.stringify({
       size: 400,
       query: {
-        match_all: {},
+        term: {
+          status: {
+            value: 'ACTIVE',
+          },
+        },
       },
       _source: {
-        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
+        includes: ['id', 'identifier', 'name', 'address', 'homepage', 'status'],
       },
     }),
   })
