@@ -1,8 +1,8 @@
-@use './_mixins';
+@use 'src/styles/mixins';
 
 @import '@navikt/ds-tokens/dist/tokens';
 
-.suppliers-page {
+.agreement-page {
   background-color: #faefee;
 
   &__content {
@@ -43,36 +43,6 @@
     }
   }
 
-  &__letter {
-    a {
-      border: 2px solid $a-deepblue-600;
-      border-radius: 5px;
-      background-color: $a-deepblue-600;
-      padding: 5px 10px;
-      font-size: 1.5rem;
-      margin-left: 5px;
-      color: $a-white;
-      text-decoration: none;
-
-    }
-  }
-
-
-  &__letter-disabled {
-    a {
-      pointer-events: none;
-      border: 2px solid  $a-gray-400;
-      border-radius: 5px;
-      background-color: $a-gray-400;
-      padding: 5px 10px;
-      font-size: 1.5rem;
-      margin-left: 5px;
-      color: $a-white;
-      text-decoration: none;
-
-    }
-  }
-
   &__description {
     display: flex;
     flex-direction: column;
@@ -88,17 +58,30 @@
   }
 
   &__list-container {
-    padding-top: $a-spacing-8;
     list-style: none;
     margin-block-start: 0;
     padding-inline-start: 0;
 
     li > div {
       @include mixins.for-size(tablet-up) {
-        margin: $a-spacing-4;
+        height: 3.75rem;
+        :first-child {
+          margin-left: 1rem;
+          padding-right: 4px;
+        }
+        :last-child {
+          margin-left: 1rem;
+        }
       }
     }
 
+    li {
+      padding: $a-spacing-2;
+
+      @include mixins.for-size(tablet-up) {
+        padding: 0;
+      }
+    }
 
     a {
       width: fit-content;
@@ -110,5 +93,22 @@
       color: black;
     }
   }
-  
+
+  &__sort-button {
+    width: fit-content;
+    padding-left: 1rem;
+    @include mixins.for-size(tablet-up) {
+      &-published {
+        margin-left: -6px;
+      }
+
+      &-expires {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  &__sort-selected {
+    background-color: $a-surface-action-subtle;
+  }
 }

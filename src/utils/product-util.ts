@@ -148,6 +148,7 @@ export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Pro
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
+
   return buckets
 }
 

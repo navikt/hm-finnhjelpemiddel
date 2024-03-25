@@ -150,7 +150,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
         </BodyLong>
       )}
 
-      <div className="comparing-table">
+      <div className="variants-table">
         <Table zebraStripes>
           <Table.Header>
             <Table.Row>
@@ -171,8 +171,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
           </Table.Header>
           <Table.Body>
             <Table.Row
-              className={classNames('comparing-table__sortable-row', {
-                'comparing-table__sorted-row': sortColumns.orderBy === 'HMS',
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
               })}
             >
               <Table.HeaderCell>
@@ -195,8 +195,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
             {product.agreements && product.agreements.length > 0 && (
               <Table.Row
-                className={classNames('comparing-table__sortable-row', {
-                  'comparing-table__sorted-row': sortColumns.orderBy === 'rank',
+                className={classNames('variants-table__sortable-row', {
+                  'variants-table__sorted-row': sortColumns.orderBy === 'rank',
                 })}
               >
                 <Table.HeaderCell>
@@ -221,8 +221,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
             )}
 
             <Table.Row
-              className={classNames('comparing-table__sortable-row', {
-                'comparing-table__sorted-row': sortColumns.orderBy === 'levart',
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'levart',
               })}
             >
               <Table.HeaderCell>
@@ -255,8 +255,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.Row
                     key={key + 'row' + i}
                     className={classNames(
-                      { 'comparing-table__sorted-row': key === sortColumns.orderBy },
-                      { 'comparing-table__sortable-row': isSortableRow }
+                      { 'variants-table__sorted-row': key === sortColumns.orderBy },
+                      { 'variants-table__sortable-row': isSortableRow }
                     )}
                   >
                     <Table.HeaderCell>
