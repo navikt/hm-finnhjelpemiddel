@@ -85,7 +85,7 @@ export type Filter = {
   max?: number
 }
 
-export const initialFilters = {
+export const initialFilters: Record<FilterCategoryKeyServer, { total_doc_count: number; values: string[] }> = {
   lengdeCM: {
     total_doc_count: 0,
     values: [],
@@ -349,7 +349,8 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
         bool: {
           filter: Object.entries(filterKeyToAggsFilter)
             .filter(([key, v]) => key !== filterKey && v != null)
-            .map(([_, v]) => v),
+            .map(([_, v]) => v)
+            .concat(filterVis(vis)),
         },
       },
       aggs,
