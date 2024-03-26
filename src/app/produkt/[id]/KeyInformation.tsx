@@ -20,16 +20,31 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
   }
 
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
+  const ds = new Set(product.variants.map((p) => p.digitalSoknad))
 
   const bestillingsordning =
     bo.size > 1 ? (
       <BodyShort>
-        Noen varianter.
+        Noen varianter.{' '}
         <Link as={NextLink} href="#produktvarianter">
           Se tabell nedenfor.
         </Link>
       </BodyShort>
     ) : bo.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
+
+  const digitalSoknad =
+    ds.size > 1 ? (
+      <BodyShort>
+        Noen varianter.{' '}
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
+        </Link>
+      </BodyShort>
+    ) : ds.has(true) ? (
       <BodyShort>Ja</BodyShort>
     ) : (
       <BodyShort>Nei</BodyShort>
@@ -48,6 +63,8 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+          <DefinitionList.Term>Digital søknad</DefinitionList.Term>
+          <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -82,6 +99,8 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+          <DefinitionList.Term>Digital søknad</DefinitionList.Term>
+          <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -130,6 +149,8 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>
         <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+        <DefinitionList.Term>Digital søknad</DefinitionList.Term>
+        <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
       </DefinitionList>
     </>
   )
