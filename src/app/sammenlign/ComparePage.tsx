@@ -14,21 +14,36 @@ import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/comp
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
 import { ArrowUndoIcon } from '@navikt/aksel-icons'
+import { useEffect, useState } from 'react'
 
 export default function ComparePage() {
   const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
   const router = useRouter()
+  const [shouldFetch, setShouldFetch] = useState(true)
 
-  const series = productsToCompare.map((product) => product.id)
+  const seriesToCompare = productsToCompare.map((product) => product.id)
 
   const { data, isLoading } = useSWR<FetchSeriesResponse>(
-    series,
-    productsToCompare.length > 0 ? fetchProductsWithVariants : null,
-    // Må sendes inn for å fikse typescript feil, open issue her: https://github.com/vercel/swr/issues/2826
-    {}
+    shouldFetch ? seriesToCompare : null,
+    fetchProductsWithVariants,
+    { keepPreviousData: true }
   )
 
-  const productsToCompareWithVariants: Product[] | undefined = data?.products
+  useEffect(() => {
+    // Check if all products to compare are already fetched
+    const allProductsFetched = seriesToCompare.every((serieId) =>
+      data?.products.some((product) => product.id === serieId)
+    )
+    setShouldFetch(!allProductsFetched)
+  }, [seriesToCompare, data])
+
+  // Filter out the products from SWR data that are not present in productsToCompare
+  const filteredData = data && {
+    ...data,
+    products: data.products.filter((product) => seriesToCompare.includes(product.id)),
+  }
+
+  const productsToCompareWithVariants: Product[] | undefined = filteredData?.products
   const sortedProductsToCompare =
     productsToCompareWithVariants && sortProductsOnAgreementPostAndRank(productsToCompareWithVariants)
 
@@ -59,7 +74,7 @@ export default function ComparePage() {
           Sammenlign produkter
         </Heading>
 
-        {productsToCompare.length === 0 && (
+        {sortedProductsToCompare && sortedProductsToCompare.length === 0 ? (
           <section>
             <NextLink
               className="navds-panel navds-link-panel navds-panel--border"
@@ -76,8 +91,9 @@ export default function ComparePage() {
               <ChevronRightIcon aria-hidden />
             </NextLink>
           </section>
+        ) : (
+          <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
         )}
-        {sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}
       </div>
     </AnimateLayout>
   )
