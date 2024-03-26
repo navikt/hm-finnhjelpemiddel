@@ -85,7 +85,7 @@ export type Filter = {
   max?: number
 }
 
-export const initialFilters: Record<FilterCategoryKeyServer, { total_doc_count: number; values: string[] }> = {
+export const initialFilters: Record<FilterCategoryKeyServer, { total_doc_count: number; values: Bucket[] }> = {
   lengdeCM: {
     total_doc_count: 0,
     values: [],
