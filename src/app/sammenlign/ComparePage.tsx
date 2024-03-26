@@ -21,26 +21,26 @@ export default function ComparePage() {
   const router = useRouter()
   const [shouldFetch, setShouldFetch] = useState(true)
 
-  const seriesToCompare = productsToCompare.map((product) => product.id)
+  const seriesIDsToCompare = productsToCompare.map((product) => product.id)
 
   const { data, isLoading } = useSWR<FetchSeriesResponse>(
-    shouldFetch ? seriesToCompare : null,
+    shouldFetch ? seriesIDsToCompare : null,
     fetchProductsWithVariants,
     { keepPreviousData: true }
   )
 
   useEffect(() => {
     // Check if all products to compare are already fetched
-    const allProductsFetched = seriesToCompare.every((serieId) =>
+    const allProductsFetched = seriesIDsToCompare.every((serieId) =>
       data?.products.some((product) => product.id === serieId)
     )
     setShouldFetch(!allProductsFetched)
-  }, [seriesToCompare, data])
+  }, [seriesIDsToCompare, data])
 
   // Filter out the products from SWR data that are not present in productsToCompare
   const filteredData = data && {
     ...data,
-    products: data.products.filter((product) => seriesToCompare.includes(product.id)),
+    products: data.products.filter((product) => seriesIDsToCompare.includes(product.id)),
   }
 
   const productsToCompareWithVariants: Product[] | undefined = filteredData?.products
