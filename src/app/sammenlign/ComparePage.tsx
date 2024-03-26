@@ -69,7 +69,7 @@ export default function ComparePage() {
 
   return (
     <AnimateLayout>
-      <div className="main-wrapper--large compare-page spacing-top--large spacing-bottom--xlarge">
+      <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
           Sammenlign produkter
         </Heading>
