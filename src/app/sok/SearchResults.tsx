@@ -1,13 +1,13 @@
 import { RefObject } from 'react'
 
-import { Alert, Button, HStack, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import ProductCard from '@/components/ProductCard'
 import { Product } from '@/utils/product-util'
-import { useFormContext } from 'react-hook-form'
 import { FormSearchData } from '@/utils/search-state-util'
+import { useFormContext } from 'react-hook-form'
 
 const SearchResults = ({
   products,
@@ -27,12 +27,32 @@ const SearchResults = ({
     formRef.current?.requestSubmit()
   }
 
+  const visFilters = formMethods.getValues(`filters.vis`)
+  const isUtgåttActive = visFilters.includes('Inkluder utgåtte hjelpemidler')
+
+  const handleSetUtgåttFilter = () => {
+    visFilters.push('Inkluder utgåtte hjelpemidler')
+    formMethods.setValue(`filters.vis`, visFilters)
+    formRef.current?.requestSubmit()
+  }
+
   useRestoreScroll('search-results', !isLoading)
 
   if (!products?.length || products.length === 0) {
     return (
       <div id="searchResults">
-        <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
+        <Alert variant="info">
+          {isUtgåttActive ? (
+            <BodyLong>Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</BodyLong>
+          ) : (
+            <HStack gap="1">
+              <BodyLong>Obs! Fant ingen hjelpemiddel. Kan hjelpemiddelet være utgått? </BodyLong>
+              <Button variant="tertiary" onClick={handleSetUtgåttFilter} size="xsmall">
+                Vis utgåtte hjelpemidler
+              </Button>
+            </HStack>
+          )}
+        </Alert>
       </div>
     )
   }
