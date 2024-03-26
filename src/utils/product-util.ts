@@ -27,6 +27,7 @@ export interface Product {
   photos: Photo[]
   documents: Document[]
   supplierId: string
+  supplierName: string
   agreements: AgreementInfo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
@@ -51,6 +52,7 @@ export interface ProductVariant {
   filters: { [key: string]: string | number }
   expired: string
   agreements: AgreementInfo[]
+  bestillingsordning?: boolean
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -74,7 +76,6 @@ interface Attributes {
   series?: string
   shortdescription?: string
   text?: string
-  bestillingsordning?: boolean
   commonCharacteristics?: TechData
   compatibleWith?: string[]
 }
@@ -147,6 +148,7 @@ export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Pro
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
+
   return buckets
 }
 
@@ -205,6 +207,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
     supplierId: firstVariant.supplier?.id,
+    supplierName: firstVariant.supplier?.name,
     agreements: uniquesAgreementsPostAndRanks,
   }
 }
@@ -221,6 +224,7 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     agreements: mapAgreementInfo(source.agreements),
     filters: source.filters,
     expired: source.expired,
+    bestillingsordning: source.attributes.bestillingsordning,
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
   }
 }

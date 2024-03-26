@@ -37,7 +37,6 @@ export const accessoriesMock: Product[] = [
       shortdescription:
         'Digital lydinngang. Automatic gain control. Justerbar tidsforsinkelse for tilkoblet lyd. Dekningsgrad i et tilnærmet kvadratisk rom er 140 kvm. ',
       text: 'Teleslyngeforsterker egnet til bruk i private hjem, spesielt tilpasset TV og radio, slik at man trådløst kan høre via telespolen i høreapparatet. Har analoge og digitale tilkoblinger og TV-sync for lyd uten ekko.   ',
-      bestillingsordning: false,
       commonCharacteristics: {},
     },
     agreements: agreements,
@@ -66,5 +65,6 @@ export const accessoriesMock: Product[] = [
     photos: [{ uri: 'orig/52674.jpg' }],
     documents: [],
     supplierId: 'e9e27708-16be-4995-83a7-f857b77d0913',
+    supplierName: 'Levereandør AS',
   },
 ]

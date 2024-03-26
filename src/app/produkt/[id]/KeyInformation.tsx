@@ -3,7 +3,7 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { Product } from '@/utils/product-util'
 import { ArrowDownIcon } from '@navikt/aksel-icons'
-import { BodyShort, Heading, HelpText, Link, Table, VStack } from '@navikt/ds-react'
+import { BodyShort, Heading, HelpText, Link, Table } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -19,9 +19,25 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
     router.push(`/produkt/${product.id}#agreement-info`)
   }
 
+  const bo = new Set(product.variants.map((p) => p.bestillingsordning))
+
+  const bestillingsordning =
+    bo.size > 1 ? (
+      <BodyShort>
+        Noen varianter.
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
+        </Link>
+      </BodyShort>
+    ) : bo.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
+
   if (!product.agreements?.length) {
     return (
-      <div className="product-info__key-information">
+      <>
         <Heading level="2" size="medium">
           Nøkkelinfo
         </Heading>
@@ -31,21 +47,23 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
         </DefinitionList>
-      </div>
+      </>
     )
   }
 
   if (product.agreements.length === 1) {
     return (
-      <div className="product-info__key-information">
+      <>
         <Heading level="2" size="medium">
           Nøkkelinfo
         </Heading>
         <DefinitionList>
           <DefinitionList.Term>Rangering</DefinitionList.Term>
-          <DefinitionList.Definition>{product.agreements[0].rank ?? 'Urangert'}</DefinitionList.Definition>
+          <DefinitionList.Definition>
+            {product.agreements[0].rank && product.agreements[0].rank < 90 ? product.agreements[0].rank : 'Urangert'}
+          </DefinitionList.Definition>
           <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
           <DefinitionList.Definition>
             <Link href="#" onClick={scrollToAgreementInfo}>
@@ -54,7 +72,7 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           </DefinitionList.Definition>
           <DefinitionList.Term>Avtale</DefinitionList.Term>
           <DefinitionList.Definition>
-            <Link as={NextLink} href={`/${product.agreements[0].id}`}>
+            <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${product.agreements[0].id}`}>
               <BodyShort> {product.agreements[0].title} </BodyShort>
             </Link>
           </DefinitionList.Definition>
@@ -63,59 +81,57 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <DefinitionList.Term>
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
+          <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
         </DefinitionList>
-      </div>
+      </>
     )
   }
 
   return (
-    <div className="product-info__key-information">
-      <VStack gap="4">
-        <Heading level="2" size="medium">
-          Nøkkelinfo
-        </Heading>
-        <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader scope="col">Avtale</Table.ColumnHeader>
-              <Table.ColumnHeader scope="col">Delkontrakt</Table.ColumnHeader>
-              <Table.ColumnHeader scope="col">Rangering</Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {product.agreements.map((agreement, i) => {
-              return (
-                <Table.Row key={i}>
-                  <Table.DataCell scope="row">{agreement.title}</Table.DataCell>
-                  <Table.DataCell scope="row">{agreement.postTitle}</Table.DataCell>
-                  <Table.DataCell align="center">{agreement.rank}</Table.DataCell>
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
-        <Link href="#" onClick={scrollToAgreementInfo}>
-          Se flere produkter på disse delkontrakene
-          <ArrowDownIcon title="a11y-title" fontSize="1.5rem" />
-        </Link>
+    <>
+      <Heading level="2" size="medium">
+        Nøkkelinfo
+      </Heading>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader scope="col">Avtale</Table.ColumnHeader>
+            <Table.ColumnHeader scope="col">Delkontrakt</Table.ColumnHeader>
+            <Table.ColumnHeader scope="col">Rangering</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {product.agreements.map((agreement, i) => {
+            return (
+              <Table.Row key={i}>
+                <Table.DataCell scope="row">
+                  <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${product.agreements[0].id}`}>
+                    {agreement.title}
+                  </Link>
+                </Table.DataCell>
+                <Table.DataCell scope="row">{agreement.postTitle}</Table.DataCell>
+                <Table.DataCell align="center">
+                  {agreement.rank && agreement.rank < 90 ? agreement.rank : 'Urangert'}
+                </Table.DataCell>
+              </Table.Row>
+            )
+          })}
+        </Table.Body>
+      </Table>
+      <Link href="#" onClick={scrollToAgreementInfo}>
+        Se flere produkter på disse delkontrakene
+        <ArrowDownIcon title="a11y-title" fontSize="1.5rem" />
+      </Link>
 
-        <DefinitionList>
-          <DefinitionList.Term>Avtale</DefinitionList.Term>
-          <DefinitionList.Definition>
-            <Link as={NextLink} href={`/${product.agreements[0].id}`}>
-              <BodyShort> {product.agreements[0].title} </BodyShort>
-            </Link>
-          </DefinitionList.Definition>
-          <DefinitionList.Term>Leverandør</DefinitionList.Term>
-          <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
-          <DefinitionList.Term>
-            <Bestillingsordning_HelpText />
-          </DefinitionList.Term>
-          <DefinitionList.Definition>{product.attributes.bestillingsordning ? 'Ja' : 'Nei'}</DefinitionList.Definition>
-        </DefinitionList>
-      </VStack>
-    </div>
+      <DefinitionList>
+        <DefinitionList.Term>Leverandør</DefinitionList.Term>
+        <DefinitionList.Definition>{supplierName}</DefinitionList.Definition>
+        <DefinitionList.Term>
+          <Bestillingsordning_HelpText />
+        </DefinitionList.Term>
+        <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+      </DefinitionList>
+    </>
   )
 }
 

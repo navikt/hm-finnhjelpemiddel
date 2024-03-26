@@ -1,14 +1,14 @@
+import { logNavigationEvent } from '@/utils/amplitude'
+import { useMenuStore } from '@/utils/global-state-util'
+import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, Hide, Show } from '@navikt/ds-react'
 import Image from 'next/image'
-import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import NextLink from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
-import AutocompleteSearch from '../components/filters/AutocompleteSearch'
-import { useRouter } from 'next/navigation'
-import { useMenuStore } from '@/utils/global-state-util'
-
-//Bug: SearchTerm var en del av form -> fristiller searchterm fra form. Og setter searchterm i url med de andre paramaterne som er der (for å ikke overskrive)
+import useOnClickOutside from '@/hooks/useOnClickOutside'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -16,12 +16,28 @@ const NavigationBar = () => {
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
+  const path = usePathname()
+
+  const outerContainerRef = useRef<HTMLElement>(null)
+
+  useOnClickOutside(outerContainerRef, () => {
+    setMenuOpen(false)
+  })
 
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)
       const q = new URLSearchParams(window.location.search)
       q.set('term', searchTerm)
+
+      if (path.includes('sok')) {
+        logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
+      } else if (path === '/') {
+        logNavigationEvent('forside', 'søk', 'Søk på forsiden')
+      } else {
+        logNavigationEvent('annet', 'søk', 'Søk fra annen side')
+      }
+
       router.push('/sok?' + q.toString())
     },
     [router]
@@ -32,7 +48,7 @@ const NavigationBar = () => {
   }, [menuOpen, searchOpen, setMenuOpenGlobalState])
 
   return (
-    <nav className="nav hide-print">
+    <nav className="nav" ref={outerContainerRef}>
       <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
@@ -69,7 +85,7 @@ const NavigationBar = () => {
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
-                    Avtale med NAV
+                    Meny
                   </Button>
                 </Hide>
                 <Show below="md" asChild>

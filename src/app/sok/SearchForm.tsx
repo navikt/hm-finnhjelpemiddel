@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
-import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
+import { SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, Switch } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 
 import { FilterData } from '@/utils/api-util'
 
@@ -35,26 +35,6 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       aria-controls="searchResults"
     >
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-
-      <div className="filter-container__agreement-switch">
-        <Controller
-          name="hasAgreementsOnly"
-          control={formMethods.control}
-          render={({ field }) => (
-            <Switch
-              checked={field.value}
-              onChange={(event) => {
-                formMethods.setValue('hasAgreementsOnly', event.currentTarget.checked)
-                formRef.current?.requestSubmit()
-              }}
-            >
-              Vis kun produkter på avtale med NAV
-            </Switch>
-          )}
-        />
-
-        {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-      </div>
 
       <FilterView filters={filters} />
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}

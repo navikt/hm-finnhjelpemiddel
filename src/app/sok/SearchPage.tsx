@@ -11,7 +11,7 @@ import useSWRInfinite from 'swr/infinite'
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, PAGE_SIZE, fetchProducts } from '@/utils/api-util'
+import { FetchProductsWithFilters, FilterData, PAGE_SIZE, fetchProducts, initialFilters } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -21,6 +21,7 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
+import { initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
@@ -55,8 +56,10 @@ export default function SearchPage() {
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
   }, [])
 
-  const onSubmit: SubmitHandler<FormSearchData> = (data) => {
-    router.replace(`${pathname}?${toSearchQueryString(data, searchData.searchTerm)}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = () => {
+    router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
+      scroll: false,
+    })
   }
 
   const {
@@ -107,11 +110,36 @@ export default function SearchPage() {
   }
 
   const onReset = () => {
-    formMethods.reset()
+    formMethods.reset({ filters: initialFiltersFormState })
     setPage(1)
     router.replace(pathname)
   }
   const products = data?.map((d) => d.products).flat()
+
+  if (error) {
+    return (
+      <HStack justify="center" style={{ marginTop: '48px' }}>
+        <Alert variant="error" title="Error med lasting av produkter">
+          Obs, her skjedde det noe feil :o
+        </Alert>
+      </HStack>
+    )
+  }
+
+  if (!data) {
+    return (
+      <HStack justify="center" style={{ marginTop: '48px' }}>
+        <Loader size="3xlarge" title="Laster produkter" />
+      </HStack>
+    )
+  }
+
+  const filtersFromData = data.at(-1)?.filters
+
+  const filters: FilterData = {
+    ...(filtersFromData ?? initialFilters),
+    vis: visFilters,
+  }
 
   if (error) {
     return (
@@ -143,7 +171,7 @@ export default function SearchPage() {
         <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
           {showSidebar && (
             <section className="filter-container">
-              <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
+              <SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />
               <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
                   ref={copyButtonDesktopRef}
@@ -207,7 +235,7 @@ export default function SearchPage() {
                       </Heading>
                     </MobileOverlay.Header>
                     <MobileOverlay.Content>
-                      <SearchForm onSubmit={onSubmit} filters={data?.at(-1)?.filters} ref={searchFormRef} />
+                      <SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />
                     </MobileOverlay.Content>
                     <MobileOverlay.Footer>
                       <VStack gap="2">

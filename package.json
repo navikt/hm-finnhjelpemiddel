@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.8.4",
-    "@navikt/aksel-icons": "^6.1.1",
-    "@navikt/ds-css": "^6.1.1",
-    "@navikt/ds-react": "^6.1.1",
-    "@navikt/ds-tokens": "^6.1.1",
+    "@navikt/aksel-icons": "^6.3.2",
+    "@navikt/ds-css": "^6.3.2",
+    "@navikt/ds-react": "^6.3.2",
+    "@navikt/ds-tokens": "^6.2.0",
     "@navikt/next-logger": "^1.23.0",
     "amplitude-js": "^8.21.9",
     "classnames": "^2.5.1",
@@ -23,7 +23,7 @@
     "query-string": "^9.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.50.0",
+    "react-hook-form": "^7.51.0",
     "react-hotjar": "^6.2.0",
     "react-intersection-observer": "^9.7.0",
     "react-snowfall": "^2.1.0",
@@ -42,8 +42,8 @@
     "eslint-config-next": "14.1.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "prettier": "^3.2.4",
-    "sass": "^1.71.1",
+    "sass": "^1.72.0",
     "sharp": "^0.33.2",
-    "typescript": "5.3.3"
+    "typescript": "5.4.2"
   }
 }

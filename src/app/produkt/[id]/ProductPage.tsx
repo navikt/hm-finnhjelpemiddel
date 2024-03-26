@@ -6,12 +6,13 @@ import { Heading } from '@/components/aksel-client'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
+import { VStack } from '@navikt/ds-react'
+import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
+import { AgreementInfo } from './AgreementInfo'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
-import { AgreementInfo } from './AgreementInfo'
 import { ProductsOnPost } from './page'
-import { Fragment } from 'react'
 
 type ProductProps = {
   product: Product
@@ -26,24 +27,23 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
     <>
       <AnimateLayout>
         <article className="product-info spacing-top--large">
-          <ProductPageTopInfo product={product} supplier={supplier} />
-          <section
-            className="product-info__characteristics"
-            aria-label="Produktegenskaper som alle produktvariantene har til felles"
-          >
-            <Heading level="2" size="medium" spacing>
-              Produktegenskaper
-            </Heading>
-            <Characteristics product={product} />
-          </section>
-          {product.variantCount > 1 && (
-            <section
-              className="product-info__product-variants"
-              aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
-            >
-              <ProductVariants product={product} />
+          <VStack gap={{ xs: '4', lg: '10' }} className="spacing-bottom--large">
+            <ProductPageTopInfo product={product} supplier={supplier} />
+            <section aria-label="Produktegenskaper som alle produktvariantene har til felles">
+              <Heading level="2" size="medium" spacing>
+                Produktegenskaper
+              </Heading>
+              <Characteristics product={product} />
             </section>
-          )}
+            {product.variantCount > 1 && (
+              <section
+                className="product-info__product-variants"
+                aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
+              >
+                <ProductVariants product={product} />
+              </section>
+            )}
+          </VStack>
           {productsOnPosts && productsOnPosts?.length > 0 && (
             <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
           )}

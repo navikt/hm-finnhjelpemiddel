@@ -118,7 +118,7 @@
     padding: $a-spacing-1 $a-spacing-2;
     text-align: start;
     z-index: 2;
-    justify-content: start;
+    justify-content: flex-start;
     text-decoration: underline;
 
     .navds-label {
@@ -213,4 +213,11 @@
     gap: 4px;
     padding: 0;
   }
+}
+
+.product-card--print {
+  @extend .product-card;
+
+  width: 190px;
+  height: auto;
 }

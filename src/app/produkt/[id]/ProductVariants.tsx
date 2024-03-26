@@ -139,7 +139,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading id="product_variants" level="3" size="medium" spacing>
+      <Heading id="produktvarianter" level="3" size="medium" spacing>
         Produktvarianter
       </Heading>
       {product.variantCount > 1 && (
@@ -150,8 +150,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
         </BodyLong>
       )}
 
-      <div className="comparing-table">
-        <Table>
+      <div className="variants-table">
+        <Table zebraStripes>
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
@@ -171,8 +171,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
           </Table.Header>
           <Table.Body>
             <Table.Row
-              className={classNames('comparing-table__sortable-row', {
-                'comparing-table__sorted-row': sortColumns.orderBy === 'HMS',
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
               })}
             >
               <Table.HeaderCell>
@@ -195,8 +195,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
             {product.agreements && product.agreements.length > 0 && (
               <Table.Row
-                className={classNames('comparing-table__sortable-row', {
-                  'comparing-table__sorted-row': sortColumns.orderBy === 'rank',
+                className={classNames('variants-table__sortable-row', {
+                  'variants-table__sorted-row': sortColumns.orderBy === 'rank',
                 })}
               >
                 <Table.HeaderCell>
@@ -221,8 +221,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
             )}
 
             <Table.Row
-              className={classNames('comparing-table__sortable-row', {
-                'comparing-table__sorted-row': sortColumns.orderBy === 'levart',
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'levart',
               })}
             >
               <Table.HeaderCell>
@@ -242,6 +242,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
               ))}
             </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
+              ))}
+            </Table.Row>
             {Object.keys(rows).length > 0 &&
               Object.entries(rows).map(([key, row], i) => {
                 const isSortableRow = hasDifferentValues({ row })
@@ -249,8 +255,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.Row
                     key={key + 'row' + i}
                     className={classNames(
-                      { 'comparing-table__sorted-row': key === sortColumns.orderBy },
-                      { 'comparing-table__sortable-row': isSortableRow }
+                      { 'variants-table__sorted-row': key === sortColumns.orderBy },
+                      { 'variants-table__sortable-row': isSortableRow }
                     )}
                   >
                     <Table.HeaderCell>

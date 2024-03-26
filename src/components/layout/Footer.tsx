@@ -6,7 +6,7 @@ import { Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
 const Footer = () => (
-  <footer className="nav-bunn hide-print">
+  <footer className="nav-bunn">
     <div className="nav-bunn__content">
       <div className="nav-bunn__info">
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />

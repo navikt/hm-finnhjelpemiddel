@@ -10,21 +10,21 @@ import { useState } from 'react'
 import ProductImage from './ProductImage'
 
 const ProductCard = ({
+  type,
   product,
   rank,
-  type,
   handleIsoButton,
 }: {
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
   product: Product
   rank?: number
-  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox'
+  supplierName?: string
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
-  const [showInPrintMode, setShowInPrintMode] = useState(false)
 
   const currentRank = rank ? rank : minRank
   let cardClassName = ''
@@ -39,16 +39,22 @@ const ProductCard = ({
     cardClassName = 'product-card--removable'
   } else if (type === 'no-picture') {
     cardClassName = 'product-card--no-picture'
+  } else if (type === 'print') {
+    cardClassName = 'product-card--print'
   }
 
-  window.addEventListener('beforeprint', () => {
-    setShowInPrintMode(true)
-  })
-
-  window.addEventListener('afterprint', () => {
-    setShowInPrintMode(false)
-  })
-
+  if (type === 'print') {
+    return (
+      <Box paddingInline="2" paddingBlock="1" className="product-card--print">
+        <VStack gap="1">
+          <BodyShort size="small" className="text-line-clamp">
+            {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
+          </BodyShort>
+          <Detail textColor="subtle">{product.supplierName}</Detail>
+        </VStack>
+      </Box>
+    )
+  }
   if (type === 'no-picture') {
     return (
       <Box
@@ -63,24 +69,16 @@ const ProductCard = ({
             </Detail>
             <CompareCheckbox product={product} />
           </HStack>
-          {!showInPrintMode && (
-            <Link
-              className="product-card__link"
-              href={`/produkt/${product.id}`}
-              aria-label={`Gå til ${product.title}`}
-              as={NextLink}
-            >
-              <BodyShort size="small" className="text-line-clamp ">
-                {product.title}
-              </BodyShort>
-            </Link>
-          )}
-
-          {showInPrintMode && (
+          <Link
+            className="product-card__link"
+            href={`/produkt/${product.id}`}
+            aria-label={`Gå til ${product.title}`}
+            as={NextLink}
+          >
             <BodyShort size="small" className="text-line-clamp">
               {product.title}
             </BodyShort>
-          )}
+          </Link>
         </VStack>
       </Box>
     )
@@ -104,24 +102,17 @@ const ProductCard = ({
             {currentRank !== Infinity ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
           </Detail>
 
-          {!showInPrintMode && (
-            <Link
-              className="product-card__link"
-              href={`/produkt/${product.id}`}
-              aria-label={`Gå til ${product.title}`}
-              as={NextLink}
-            >
-              <BodyShort size="small" className="text-line-clamp">
-                {product.title}
-              </BodyShort>
-            </Link>
-          )}
-
-          {showInPrintMode && (
+          <Link
+            className="product-card__link"
+            href={`/produkt/${product.id}`}
+            aria-label={`Gå til ${product.title}`}
+            as={NextLink}
+          >
             <BodyShort size="small" className="text-line-clamp">
               {product.title}
             </BodyShort>
-          )}
+          </Link>
+
           {type === 'large-with-checkbox' && handleIsoButton && (
             <Button
               className="product-card__iso-button"
@@ -147,17 +138,12 @@ const CompareCheckbox = ({ product }: { product: Product }) => {
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
-
-    // if (firstChecked) {
-    //   setCompareMenuState(CompareMenuState.Open)
-    //   setFirstChecked(false)
-    // }
   }
 
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
   return (
     <Checkbox
-      className="product-card__checkbox hide-print"
+      className="product-card__checkbox"
       size="small"
       value="Legg produktet til sammenligning"
       onChange={toggleCompareProduct}

@@ -4,7 +4,6 @@
 .burgermenu-container {
   position: absolute;
   top: 100px;
-  left: 0;
   min-height: 122px;
   background-color: white;
   display: flex;
@@ -13,6 +12,8 @@
   width: 100%;
   z-index: var(--z-index-dropdown-menu);
   box-shadow: inset 0 -1px 0 $a-gray-300;
+  border-bottom-left-radius: var(--a-border-radius-medium);
+  border-bottom-right-radius: var(--a-border-radius-medium);
 
   &__content {
     display: flex;
@@ -23,8 +24,16 @@
       list-style: none;
       display: flex;
       flex-direction: column;
+      align-content: flex-start;
       flex-wrap: wrap;
       padding-inline-start: 0;
+
+      @include mixins.for-size(desktop-up) {
+        max-height: 700px;
+      }
+      @include mixins.for-size(desktop-large-up) {
+        max-height: 500px;
+      }
 
       li {
         @include mixins.for-size(desktop-up) {
@@ -38,15 +47,6 @@
           text-align: left;
         }
       }
-    }
-  }
-
-  &__agreemment-list {
-    @include mixins.for-size(desktop-up) {
-      max-height: 700px;
-    }
-    @include mixins.for-size(desktop-large-up) {
-      max-height: 500px;
     }
   }
 

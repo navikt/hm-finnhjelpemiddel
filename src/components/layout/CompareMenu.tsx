@@ -37,7 +37,7 @@ const CompareMenu = () => {
 
   return (
     <div
-      className={classNames('compare-menu', 'hide-print', {
+      className={classNames('compare-menu', {
         open: compareMenuState === CompareMenuState.Open,
         close: compareMenuState === CompareMenuState.Minimized,
       })}

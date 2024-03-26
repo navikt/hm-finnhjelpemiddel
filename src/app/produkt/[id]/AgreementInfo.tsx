@@ -26,10 +26,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
   if (!allAgreementsTheSame) {
     return (
       <Bleed marginInline="full" asChild reflectivePadding>
-        <section
-          className="agreement-details spacing-top--large"
-          aria-label="Informasjon om rammeavtalene produktet er på"
-        >
+        <section className="agreement-details" aria-label="Informasjon om rammeavtalene produktet er på">
           <div className="agreement-details__content">
             <Heading level="3" size="large" id="agreement-info">
               Avtaler med Nav
@@ -84,16 +81,13 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
 
   return (
     <Bleed marginInline="full" asChild reflectivePadding>
-      <section
-        className="agreement-details spacing-top--large"
-        aria-label="Informasjon om rammeavtalen produktet er på"
-      >
+      <section className="agreement-details" aria-label="Informasjon om rammeavtalen produktet er på">
         <div className="agreement-details__content">
           <Heading level="3" size="large" id="agreement-info">
             Avtale med NAV
           </Heading>
 
-          {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && (
+          {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && product.agreements[0]?.rank < 90 && (
             <Alert variant="info" inline>
               Dette produktet er rangert som nummer {product.agreements[0].rank} i delkontrakten. Ta en titt på høyere
               rangerte produkter for å se om det passer ditt behov.

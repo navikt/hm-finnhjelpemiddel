@@ -9,7 +9,7 @@ import useSWR from 'swr'
 
 import { Bleed, Heading, Hide, HStack, Link, VStack } from '@navikt/ds-react'
 
-import { agreementHasNoProducts, AgreementLabel } from '@/utils/agreement-util'
+import { agreementHasNoProducts, AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -61,7 +61,7 @@ function Home() {
                       <div className="home-page__agreement-link" key={id}>
                         <Link
                           as={NextLink}
-                          href={`/${id}`}
+                          href={agreementProductsLink(id)}
                           onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label)}
                         >
                           {label}

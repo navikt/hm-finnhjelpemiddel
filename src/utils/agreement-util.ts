@@ -1,3 +1,4 @@
+import { FilterFormState } from './filter-util'
 import { Document, Product, mapDocuments, mapProductWithVariants } from './product-util'
 import {
   AgreementDocResponse,
@@ -11,6 +12,7 @@ import {
   SearchResponse,
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
+import { Supplier } from './supplier-util'
 
 export interface Agreement {
   id: string
@@ -116,6 +118,18 @@ export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {
     .map((hit: Hit) => mapAgreementLabel(hit._source as AgreementLabelResponse))
 }
 
+//Midlertidig så lenge det ikke er produkter på omgivelsekontrollavtalen
+export const agreementProductsLink = (id: string) => {
+  if (
+    process.env.BUILD_ENV === 'prod'
+      ? id === 'e3c8e7ca-8118-4c24-b2fd-13b765de99e3'
+      : id === '042360ce-ee2d-4275-b864-c4009b5af371'
+  ) {
+    return `/rammeavtale/${id}`
+  }
+  return `/rammeavtale/hjelpemidler/${id}`
+}
+
 export const mapAgreementLabel = (source: AgreementLabelResponse): AgreementLabel => {
   return {
     id: source.id,
@@ -151,24 +165,28 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
-export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreement: Agreement): PostWithProducts[] => {
+export const mapAgreementProducts = (
+  postBuckets: PostBucketResponse[],
+  agreement: Agreement,
+  filters: FilterFormState
+): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
-  const posts = postBuckets.map((post) => {
+
+  const mapPostBucket = (bucket: PostBucketResponse) => {
     let seen: string[] = []
-    const postTitle = getPostTitle(post.key)
     return {
-      nr: post.key,
-      title: postTitle ?? '',
-      products: post.topHitData.hits.hits
+      nr: bucket.key,
+      title: getPostTitle(bucket.key) ?? '',
+      products: bucket.topHitData.hits.hits
         .map((hit) => {
           const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
 
           return {
-            rank: getRank(product, post.key) || 99,
+            rank: getRank(product, bucket.key) || 99,
             product: product,
           }
         })
@@ -176,7 +194,7 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
           if (
             seen.includes(prod.product.id) ||
             !prod.product.agreements.some(
-              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === post.key
+              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === bucket.key
             )
           ) {
             return false
@@ -187,22 +205,43 @@ export const mapAgreementProducts = (postBuckets: PostBucketResponse[], agreemen
         })
         .sort((a, b) => a.rank - b.rank),
     }
+  }
+
+  const allPostsWithEmpty = Array.from({ length: agreement.posts.length }, (_, index) => {
+    const listItem = postBuckets.find((post) => post.key === index + 1)
+
+    return listItem
+      ? mapPostBucket(listItem)
+      : {
+          nr: index + 1,
+          title: getPostTitle(index + 1) ?? '',
+          products: [],
+        }
   })
 
-  return posts
+  const isFilteredOnDelkontrakt = filters.delkontrakt.length > 0
+  const isFilteredOnAnythingElse = Object.entries(filters).some(
+    ([key, values]) => key !== 'delkontrakt' && values.length > 0
+  )
+
+  // Viser kun de delkontraktene som ikke har produkter dersom det enten kun er filtrert på delkontrakter
+  // eller om det ikke er filtrert på noe
+  if (
+    (isFilteredOnDelkontrakt && !isFilteredOnAnythingElse) ||
+    (!isFilteredOnDelkontrakt && !isFilteredOnAnythingElse)
+  ) {
+    return allPostsWithEmpty.filter((post) => !isFilteredOnDelkontrakt || filters.delkontrakt?.includes(post.title))
+  }
+
+  return postBuckets
+    .map((bucket) => mapPostBucket(bucket))
+    .filter(
+      (post) => post.products.length > 0 && (!isFilteredOnDelkontrakt || filters?.delkontrakt?.includes(post.title))
+    )
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {
   return agreementWithNoProducts.includes(identifier)
 }
 
-export const agreementWithNoProducts = [
-  'HMDB-8582',
-  'HMDB-8682',
-  'HMDB-8673',
-  'HMDB-8685',
-  'HMDB-8734',
-  'HMDB-8669',
-  //Omgivelseskontroll
-  'HMDB-8736',
-]
+export const agreementWithNoProducts = ['HMDB-8582', 'HMDB-8682', 'HMDB-8673', 'HMDB-8685', 'HMDB-8734', 'HMDB-8669']
