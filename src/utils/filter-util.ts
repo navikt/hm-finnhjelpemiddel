@@ -25,7 +25,12 @@ export const initialFiltersFormState = {
   vis: [] as string[],
 }
 
-const visFilterLabels = ['På avtale med NAV', 'På digital søknad', 'På bestillingsordning', 'Utgåtte hjelpemidler']
+const visFilterLabels = [
+  'På avtale med NAV',
+  'På digital søknad',
+  'På bestillingsordning',
+  'Inkluder utgåtte hjelpemidler',
+]
 
 export type FilterFormState = typeof initialFiltersFormState
 export type FilterFormKey = keyof FilterFormState
@@ -175,7 +180,7 @@ export const filterVis = (values: Array<string>) => {
     })
     .filter((filter) => filter !== null)
 
-  values.includes('Utgåtte hjelpemidler')
+  values.includes('Inkluder utgåtte hjelpemidler')
     ? filters.push({ terms: { status: ['ACTIVE', 'INACTIVE'] } })
     : filters.push({ term: { status: { value: 'ACTIVE' } } })
 
