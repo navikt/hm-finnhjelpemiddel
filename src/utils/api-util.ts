@@ -467,9 +467,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
 
 //TODO bytte til label
 export const getProductsOnAgreement = ({
-                                         agreementId,
-                                         searchData,
-                                       }: {
+  agreementId,
+  searchData,
+}: {
   agreementId: string
   searchData: SearchData
 }): Promise<PostBucketResponse[]> => {

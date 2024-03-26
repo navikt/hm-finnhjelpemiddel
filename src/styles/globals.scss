@@ -3,12 +3,12 @@
 @import '@navikt/ds-css';
 @import '@navikt/ds-tokens/dist/tokens';
 @import './compare-menu.scss';
-@import './compare-page.scss';
-@import './comparing-table.scss';
+@import '../app/sammenlign/compare-page.scss';
+@import './variants-table.scss';
 @import './filter.scss';
-@import './home-page.scss';
+@import '../app/home-page.scss';
 @import './mobile-overlay';
-@import './not-found-page';
+@import '../app/[...not-found]/not-found-page.scss';
 @import './product-card.scss';
 @import './search.scss';
 @import './search-agreement.scss';
@@ -16,8 +16,8 @@
 @import './navigation-bar.scss';
 @import './burger-menu-content.scss';
 @import './z-index.scss';
-@import './agreement-page.scss';
-@import './suppliers-page.scss';
+@import '../app/rammeavtale/agreement-page.scss';
+@import '../app/leverandorer/suppliers-page.scss';
 
 html,
 body {
