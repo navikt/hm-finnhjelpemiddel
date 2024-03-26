@@ -28,10 +28,9 @@ import {
 } from '@navikt/ds-react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
+import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
-import AgreementPrintableVersion from './AgreementPrintableVersion'
-import { Supplier } from '@/utils/supplier-util'
 
 export type AgreementSearchData = {
   searchTerm: string

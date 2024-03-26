@@ -9,7 +9,6 @@ export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreement
 
   const searchTerm = searchParams.get('term') ?? ''
   const isoCode = searchParams.get('isoCode') ?? ''
-  const hasAgreementsOnly = searchParams.has('agreement')
   const hidePictures = searchParams.get('hidePictures') ?? ''
 
   const filterKeys = Object.keys(initialFiltersFormState).filter((filter) => searchParams?.has(filter))
@@ -25,7 +24,6 @@ export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreement
     sortOrder,
     searchTerm,
     isoCode,
-    hasAgreementsOnly,
     filters: { ...initialSearchDataState.filters, ...filters },
     hidePictures,
   }
@@ -34,7 +32,6 @@ export const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreement
 export const toSearchQueryString = (searchData: FormSearchData, searchTerm: string) => {
   return queryString.stringify({
     ...(searchData.sortOrder && { sortering: searchData.sortOrder }),
-    ...(searchData.hasAgreementsOnly ? { agreement: '' } : {}),
     ...(searchData.hidePictures ? { hidePictures: searchData.hidePictures } : {}),
     ...{ term: searchTerm },
     ...(searchData.isoCode && { isoCode: searchData.isoCode }),

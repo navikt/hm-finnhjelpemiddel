@@ -17,6 +17,7 @@ const checkboxFilterCategoriesLabels = {
   produktkategori: 'Produktkategori',
   rammeavtale: 'Rammeavtale',
   delkontrakt: 'Delkontrakt',
+  vis: 'Vis',
 }
 
 type ChecboxFilterKey = keyof typeof checkboxFilterCategoriesLabels
@@ -24,9 +25,10 @@ type ChecboxFilterKey = keyof typeof checkboxFilterCategoriesLabels
 type CheckboxFilterInputProps = {
   filter: { key: ChecboxFilterKey; data?: Filter }
   showSearch?: boolean
+  openByDefault?: boolean
 }
 
-export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInputProps) => {
+export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = undefined }: CheckboxFilterInputProps) => {
   const { key: filterKey, data: filterData } = filter
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
@@ -68,6 +70,7 @@ export const CheckboxFilter = ({ filter, showSearch = false }: CheckboxFilterInp
       className={classNames('checkbox-filter', {
         active: selectedFilters.length + selectedUnavailableFilters.length > 0,
       })}
+      open={openByDefault}
     >
       <>
         {showSearch && (
