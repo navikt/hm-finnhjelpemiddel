@@ -27,8 +27,8 @@ export const initialFiltersFormState = {
 
 const visFilterLabels = [
   'På avtale med NAV',
-  'På digital søknad',
   'På bestillingsordning',
+  'På digital behovsmelding',
   'Inkluder utgåtte hjelpemidler',
 ]
 
@@ -160,7 +160,7 @@ export const filterDelkontrakt = (values: Array<string>) => ({
 export const filterVis = (values: Array<string>) => {
   const filters: any[] = values
     .map((filterKey) => {
-      if (filterKey === 'På digital søknad') {
+      if (filterKey === 'På digital behovsmelding') {
         return {
           term: { 'attributes.digitalSoknad': 'true' },
         }

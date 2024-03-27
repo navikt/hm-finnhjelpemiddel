@@ -178,7 +178,7 @@ const Bestillingsordning_HelpText = () => {
 const DigitalSoknad_HelpText = () => {
   return (
     <div className="product-info__help-text">
-      Digital søknad
+      Digital behovsmelding
       <HelpText placement="right" strategy="absolute">
         Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg av
         hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.
