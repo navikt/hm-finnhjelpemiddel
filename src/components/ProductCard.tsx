@@ -82,6 +82,16 @@ const ProductCard = ({
             </Detail>
             <CompareCheckbox product={product} />
           </HStack>
+          {hmsNumbers && hmsNumbers?.length < 4 && (
+            <HStack gap="1">
+              {hmsNumbers.map((num, i) => (
+                <Detail key={num}>{`${num}${i === hmsNumbers.length - 1 ? '' : `,`}`}</Detail>
+              ))}
+            </HStack>
+          )}
+          {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
+            <Detail>Ant varianter: {variantCount}</Detail>
+          )}
           <Link
             className="product-card__link"
             href={`/produkt/${product.id}`}

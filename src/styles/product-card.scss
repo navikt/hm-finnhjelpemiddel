@@ -222,6 +222,10 @@
 .product-card--print {
   @extend .product-card;
 
+  * {
+    line-height: 18px;
+  }
+
   width: 190px;
   height: auto;
 }
