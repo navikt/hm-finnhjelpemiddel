@@ -13,12 +13,15 @@ const ProductCard = ({
   type,
   product,
   rank,
+  hmsNumbers,
+  variantCount,
   handleIsoButton,
 }: {
   type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
   product: Product
   rank?: number
-  supplierName?: string
+  hmsNumbers?: string[]
+  variantCount?: number
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
@@ -50,6 +53,16 @@ const ProductCard = ({
           <BodyShort size="small" className="text-line-clamp">
             {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
           </BodyShort>
+          {hmsNumbers && hmsNumbers?.length < 4 && (
+            <HStack gap="1">
+              {hmsNumbers.map((num, i) => (
+                <Detail key={num}>{`${num}${i === hmsNumbers.length - 1 ? '' : `,`}`}</Detail>
+              ))}
+            </HStack>
+          )}
+          {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
+            <Detail>Ant varianter: {variantCount}</Detail>
+          )}
           <Detail textColor="subtle">{product.supplierName}</Detail>
         </VStack>
       </Box>
@@ -89,6 +102,7 @@ const ProductCard = ({
       padding="2"
       className={classNames(cardClassName, {
         'product-card__checked': isInProductsToCompare && type !== 'plain' && type !== 'removable',
+        'extra-info': variantCount || hmsNumbers,
       })}
     >
       {type === 'plain' ? null : type === 'removable' ? (
@@ -102,6 +116,16 @@ const ProductCard = ({
             {currentRank !== Infinity ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
           </Detail>
 
+          {hmsNumbers && hmsNumbers?.length < 4 && (
+            <HStack gap="1">
+              {hmsNumbers.map((num, i) => (
+                <Detail key={num}>{`${num}${i === hmsNumbers.length - 1 ? '' : `,`}`}</Detail>
+              ))}
+            </HStack>
+          )}
+          {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
+            <Detail>Ant varianter: {variantCount}</Detail>
+          )}
           <Link
             className="product-card__link"
             href={`/produkt/${product.id}`}

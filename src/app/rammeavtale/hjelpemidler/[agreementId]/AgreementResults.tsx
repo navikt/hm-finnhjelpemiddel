@@ -104,6 +104,8 @@ const AgreementResults = ({
                     rank={productWithRank.rank}
                     type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
                     handleIsoButton={handleSetIsoFilter}
+                    hmsNumbers={productWithRank.hmsNumbers}
+                    variantCount={productWithRank.variantCount}
                   />
                 </li>
               ))}
