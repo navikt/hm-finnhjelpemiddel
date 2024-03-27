@@ -12,7 +12,6 @@ import {
   SearchResponse,
 } from './response-types'
 import { sortAlphabetically } from './sort-util'
-import { Supplier } from './supplier-util'
 
 export interface Agreement {
   id: string
@@ -52,6 +51,7 @@ export interface Post {
 export interface PostWithProducts {
   nr: number
   title: string
+  description: string
   products: {
     rank: number
     hmsNumbers?: string[]
@@ -171,38 +171,51 @@ export const mapAgreementProducts = (
   filters: FilterFormState
 ): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
+  const getPostDescription = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.description
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
     )?.rank
 
   const mapPostBucket = (bucket: PostBucketResponse) => {
-    let seen: string[] = []
+    let seen: { [id: string]: { count: number; hmsNumbers: string[] } } = {}
+
+    const products = bucket.topHitData.hits.hits
+      .map((hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
+      .filter((product) => {
+        const hmsNr = product.variants[0].hmsArtNr
+        if (
+          !product.agreements.some(
+            (productAgreement) => productAgreement.id === agreement.id && productAgreement.postNr === bucket.key
+          )
+        ) {
+          return false
+        } else if (Object.keys(seen).some((seenProduct) => seenProduct === product.id)) {
+          let obj = seen[product.id]
+          if (obj) {
+            obj.count += 1
+            hmsNr && obj.hmsNumbers.push(hmsNr)
+          }
+        } else {
+          seen[product.id] = {
+            count: 1,
+            hmsNumbers: hmsNr ? [hmsNr] : [],
+          }
+          return true
+        }
+      })
+
     return {
       nr: bucket.key,
       title: getPostTitle(bucket.key) ?? '',
-      products: bucket.topHitData.hits.hits
-        .map((hit) => {
-          const product = mapProductWithVariants(Array(hit._source as ProductSourceResponse))
-
-          return {
-            rank: getRank(product, bucket.key) || 99,
-            product: product,
-          }
-        })
-        .filter((prod) => {
-          if (
-            seen.includes(prod.product.id) ||
-            !prod.product.agreements.some(
-              (prodAgreement) => prodAgreement.id === agreement.id && prodAgreement.postNr === bucket.key
-            )
-          ) {
-            return false
-          } else {
-            seen.push(prod.product.id)
-            return true
-          }
-        })
+      description: getPostDescription(bucket.key) ?? ',',
+      products: products
+        .map((product) => ({
+          rank: getRank(product, bucket.key) || 99,
+          hmsNumbers: seen[product.id].hmsNumbers || [],
+          variantCount: seen[product.id].count || 1,
+          product: product,
+        }))
         .sort((a, b) => a.rank - b.rank),
     }
   }
@@ -215,6 +228,7 @@ export const mapAgreementProducts = (
       : {
           nr: index + 1,
           title: getPostTitle(index + 1) ?? '',
+          description: getPostDescription(index + 1) ?? '',
           products: [],
         }
   })
