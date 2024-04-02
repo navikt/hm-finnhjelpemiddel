@@ -20,16 +20,31 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
   }
 
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
+  const ds = new Set(product.variants.map((p) => p.digitalSoknad))
 
   const bestillingsordning =
     bo.size > 1 ? (
       <BodyShort>
-        Noen varianter.
+        Noen varianter.{' '}
         <Link as={NextLink} href="#produktvarianter">
           Se tabell nedenfor.
         </Link>
       </BodyShort>
     ) : bo.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
+
+  const digitalSoknad =
+    ds.size > 1 ? (
+      <BodyShort>
+        Noen varianter.{' '}
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
+        </Link>
+      </BodyShort>
+    ) : ds.has(true) ? (
       <BodyShort>Ja</BodyShort>
     ) : (
       <BodyShort>Nei</BodyShort>
@@ -48,6 +63,10 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+          <DefinitionList.Term>
+            <DigitalSoknad_HelpText />
+          </DefinitionList.Term>
+          <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -82,6 +101,10 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
             <Bestillingsordning_HelpText />
           </DefinitionList.Term>
           <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+          <DefinitionList.Term>
+            <DigitalSoknad_HelpText />
+          </DefinitionList.Term>
+          <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
         </DefinitionList>
       </>
     )
@@ -130,6 +153,10 @@ const KeyInformation = ({ product, supplierName }: KeyInformationProps) => {
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>
         <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+        <DefinitionList.Term>
+          <DigitalSoknad_HelpText />
+        </DefinitionList.Term>
+        <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
       </DefinitionList>
     </>
   )
@@ -144,6 +171,17 @@ const Bestillingsordning_HelpText = () => {
       <HelpText placement="right" strategy="absolute">
         Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
         hjelpemidler som hjelpemiddelsentralene har på lager.
+      </HelpText>
+    </div>
+  )
+}
+const DigitalSoknad_HelpText = () => {
+  return (
+    <div className="product-info__help-text">
+      Digital behovsmelding
+      <HelpText placement="right" strategy="absolute">
+        Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg av
+        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.
       </HelpText>
     </div>
   )

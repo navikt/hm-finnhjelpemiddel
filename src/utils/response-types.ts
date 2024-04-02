@@ -144,6 +144,7 @@ interface AttributeResponse {
   url?: string
   tags?: string[]
   bestillingsordning?: boolean
+  digitalSoknad?: boolean
 }
 
 export interface TechDataResponse {
