@@ -9,6 +9,8 @@ export interface Supplier {
   identifier: string
   name: string
   address?: string | null
+  postNr?: string | null
+  postLocation?: string | null
   email?: string | null
   phone?: string | null
   homepageUrl?: string | null
@@ -26,6 +28,8 @@ export const mapSupplier = (_source: SupplierInfoResponse): Supplier => {
     identifier: _source.identifier,
     name: _source.name,
     address: _source.address,
+    postNr: _source.postNr,
+    postLocation: _source.postLocation,
     email: _source.email,
     phone: _source.phone,
     homepageUrl: _source.homepage,
