@@ -28,7 +28,8 @@ export const SupplierAccordion = ({ supplier }: Props) => {
 
 const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
   <div>
-    {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
+    {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
+    {supplier.postNr && supplier.postLocation && <BodyShort>{supplier.postNr} {supplier.postLocation}</BodyShort>}
     {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
     {supplier.phone && <BodyShort>{supplier.phone}</BodyShort>}
     {supplier.homepageUrl && (

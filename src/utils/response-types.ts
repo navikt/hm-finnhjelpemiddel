@@ -180,6 +180,8 @@ export interface SupplierInfoResponse {
   status: Status
   name: string
   address?: string | null
+  postNr?: string | null
+  postLocation?: string | null
   email?: string | null
   phone?: string | null
   homepage?: string | null
