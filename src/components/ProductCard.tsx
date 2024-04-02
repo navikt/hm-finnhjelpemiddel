@@ -46,6 +46,17 @@ const ProductCard = ({
     cardClassName = 'product-card--print'
   }
 
+  const viewHmsOrCount = (
+    <>
+      {hmsNumbers && hmsNumbers?.length < 4 && (
+        <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
+      )}
+      {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
+        <Detail>Ant varianter: {variantCount}</Detail>
+      )}
+    </>
+  )
+
   if (type === 'print') {
     return (
       <Box paddingInline="2" paddingBlock="1" className="product-card--print">
@@ -53,12 +64,7 @@ const ProductCard = ({
           <BodyShort size="small" className="text-line-clamp">
             {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
           </BodyShort>
-          {hmsNumbers && hmsNumbers?.length < 4 && (
-            <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
-          )}
-          {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
-            <Detail>Ant varianter: {variantCount}</Detail>
-          )}
+          {viewHmsOrCount}
           <Detail textColor="subtle">{product.supplierName}</Detail>
         </VStack>
       </Box>
@@ -78,12 +84,7 @@ const ProductCard = ({
             </Detail>
             <CompareCheckbox product={product} />
           </HStack>
-          {hmsNumbers && hmsNumbers?.length < 4 && (
-            <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
-          )}
-          {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
-            <Detail>Ant varianter: {variantCount}</Detail>
-          )}
+          {viewHmsOrCount}
           <Link
             className="product-card__link"
             href={`/produkt/${product.id}`}
@@ -118,12 +119,7 @@ const ProductCard = ({
             {currentRank !== Infinity ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
           </Detail>
 
-          {hmsNumbers && hmsNumbers?.length < 4 && (
-            <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
-          )}
-          {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
-            <Detail>Ant varianter: {variantCount}</Detail>
-          )}
+          {viewHmsOrCount}
           <Link
             className="product-card__link"
             href={`/produkt/${product.id}`}

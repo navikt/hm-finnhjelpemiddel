@@ -4,7 +4,7 @@ import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { ImageIcon, PrinterSmallIcon } from '@navikt/aksel-icons'
-import { Alert, Button, HGrid, HStack, Heading, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
+import { Alert, Button, HGrid, HStack, Heading, HelpText, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -88,10 +88,8 @@ const AgreementResults = ({
               <Heading level="3" size="xsmall">
                 {post.title}
               </Heading>
-
               {/* <HelpText placement="right" strategy="absolute" style={{ paddingBottom: '4px' }}>
-                Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg
-                av hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.
+                {post.description}
               </HelpText> */}
             </HGrid>
             {post.products.length === 0 && postLoading && (
