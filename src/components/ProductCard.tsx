@@ -54,11 +54,7 @@ const ProductCard = ({
             {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
           </BodyShort>
           {hmsNumbers && hmsNumbers?.length < 4 && (
-            <HStack gap="1">
-              {hmsNumbers.map((num, i) => (
-                <Detail key={num}>{`${num}${i === hmsNumbers.length - 1 ? '' : `,`}`}</Detail>
-              ))}
-            </HStack>
+            <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
           )}
           {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
             <Detail>Ant varianter: {variantCount}</Detail>
@@ -83,11 +79,7 @@ const ProductCard = ({
             <CompareCheckbox product={product} />
           </HStack>
           {hmsNumbers && hmsNumbers?.length < 4 && (
-            <HStack gap="1">
-              {hmsNumbers.map((num, i) => (
-                <Detail key={num}>{`${num}${i === hmsNumbers.length - 1 ? '' : `,`}`}</Detail>
-              ))}
-            </HStack>
+            <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
           )}
           {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
             <Detail>Ant varianter: {variantCount}</Detail>
@@ -127,11 +119,7 @@ const ProductCard = ({
           </Detail>
 
           {hmsNumbers && hmsNumbers?.length < 4 && (
-            <HStack gap="1">
-              {hmsNumbers.map((num, i) => (
-                <Detail key={num}>{`${num}${i === hmsNumbers.length - 1 ? '' : `,`}`}</Detail>
-              ))}
-            </HStack>
+            <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
           )}
           {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
             <Detail>Ant varianter: {variantCount}</Detail>

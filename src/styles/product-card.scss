@@ -51,6 +51,11 @@
     }
   }
 
+  &__hms-numbers {
+    z-index: 2;
+    cursor: auto;
+  }
+
   .product-card-image-container {
     display: flex;
     justify-content: center;
