@@ -175,6 +175,7 @@ const Bestillingsordning_HelpText = () => {
     </div>
   )
 }
+
 const DigitalSoknad_HelpText = () => {
   return (
     <div className="product-info__help-text">

@@ -13,12 +13,15 @@ const ProductCard = ({
   type,
   product,
   rank,
+  hmsNumbers,
+  variantCount,
   handleIsoButton,
 }: {
   type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
   product: Product
   rank?: number
-  supplierName?: string
+  hmsNumbers?: string[]
+  variantCount?: number
   handleIsoButton?: (value: string) => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
@@ -43,6 +46,17 @@ const ProductCard = ({
     cardClassName = 'product-card--print'
   }
 
+  const viewHmsOrCount = (
+    <>
+      {hmsNumbers && hmsNumbers?.length < 4 && (
+        <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
+      )}
+      {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
+        <Detail>Ant varianter: {variantCount}</Detail>
+      )}
+    </>
+  )
+
   if (type === 'print') {
     return (
       <Box paddingInline="2" paddingBlock="1" className="product-card--print">
@@ -50,6 +64,7 @@ const ProductCard = ({
           <BodyShort size="small" className="text-line-clamp">
             {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
           </BodyShort>
+          {viewHmsOrCount}
           <Detail textColor="subtle">{product.supplierName}</Detail>
         </VStack>
       </Box>
@@ -69,6 +84,7 @@ const ProductCard = ({
             </Detail>
             <CompareCheckbox product={product} />
           </HStack>
+          {viewHmsOrCount}
           <Link
             className="product-card__link"
             href={`/produkt/${product.id}`}
@@ -89,6 +105,7 @@ const ProductCard = ({
       padding="2"
       className={classNames(cardClassName, {
         'product-card__checked': isInProductsToCompare && type !== 'plain' && type !== 'removable',
+        'extra-info': variantCount || hmsNumbers,
       })}
     >
       {type === 'plain' ? null : type === 'removable' ? (
@@ -102,6 +119,7 @@ const ProductCard = ({
             {currentRank !== Infinity ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
           </Detail>
 
+          {viewHmsOrCount}
           <Link
             className="product-card__link"
             href={`/produkt/${product.id}`}

@@ -51,6 +51,11 @@
     }
   }
 
+  &__hms-numbers {
+    z-index: 2;
+    cursor: auto;
+  }
+
   .product-card-image-container {
     display: flex;
     justify-content: center;
@@ -185,6 +190,10 @@
   }
 }
 
+.product-card--checkbox.extra-info {
+  height: 14.7rem;
+}
+
 .product-card--plain {
   box-shadow: 0 3px 7px -1px rgba(#000, 0.1);
 }
@@ -217,6 +226,10 @@
 
 .product-card--print {
   @extend .product-card;
+
+  * {
+    line-height: 18px;
+  }
 
   width: 190px;
   height: auto;

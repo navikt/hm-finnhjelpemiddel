@@ -33,13 +33,15 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
                       <BodyShort>Delkontrakten inneholder ingen hjelpemidler</BodyShort>
                     ) : (
                       <>
-                        {products.map((productWithRankAndSupplier, i) => {
+                        {products.map((product, i) => {
                           return (
                             <ProductCard
-                              product={productWithRankAndSupplier.product}
-                              rank={productWithRankAndSupplier.rank}
+                              product={product.product}
+                              rank={product.rank}
                               type={'print'}
                               key={i}
+                              hmsNumbers={product.hmsNumbers}
+                              variantCount={product.variantCount}
                             />
                           )
                         })}

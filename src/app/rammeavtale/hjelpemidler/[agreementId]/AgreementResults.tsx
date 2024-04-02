@@ -4,7 +4,7 @@ import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { ImageIcon, PrinterSmallIcon } from '@navikt/aksel-icons'
-import { Alert, Button, HStack, Heading, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
+import { Alert, Button, HGrid, HStack, Heading, HelpText, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -77,16 +77,21 @@ const AgreementResults = ({
           <VStack
             as="li"
             key={post.nr}
-            className="agreement-post"
             gap={{ xs: '2', md: pictureToggleValue === 'hide-pictures' ? '2' : '4' }}
+            className={
+              pictureToggleValue === 'hide-pictures'
+                ? 'agreement-post spacing-top--xsmall'
+                : 'agreement-post spacing-top--small'
+            }
           >
-            <Heading
-              level="3"
-              size="xsmall"
-              className={pictureToggleValue === 'hide-pictures' ? 'spacing-top--xsmall' : 'spacing-top--small'}
-            >
-              {post.title}
-            </Heading>
+            <HGrid columns="auto" align="start">
+              <Heading level="3" size="xsmall">
+                {post.title}
+              </Heading>
+              {/* <HelpText placement="right" strategy="absolute" style={{ paddingBottom: '4px' }}>
+                {post.description}
+              </HelpText> */}
+            </HGrid>
             {post.products.length === 0 && postLoading && (
               <HStack justify="center" style={{ marginTop: '18px' }}>
                 <Loader size="medium" title="Laster hjelpemidler" />
@@ -104,6 +109,8 @@ const AgreementResults = ({
                     rank={productWithRank.rank}
                     type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
                     handleIsoButton={handleSetIsoFilter}
+                    hmsNumbers={productWithRank.hmsNumbers}
+                    variantCount={productWithRank.variantCount}
                   />
                 </li>
               ))}
