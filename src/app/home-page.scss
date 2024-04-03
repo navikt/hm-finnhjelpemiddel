@@ -3,6 +3,12 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .home-page {
+  padding-top: $a-spacing-12;
+
+  @include mixins.for-size(tablet-up) {
+    padding-top: $a-spacing-24;
+  }
+
   &__heading {
     max-width: 530px;
     margin: $a-spacing-8 0;
@@ -14,8 +20,25 @@
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;
       margin: $a-spacing-16 0;
-      margin-bottom: $a-spacing-24;
+      margin-bottom: $a-spacing-10;
     }
+  }
+
+  &__link {
+    color: var(--nav-gra-nav-mork-gra, #262626);
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    text-decoration-line: underline;
+    text-underline-offset: 2px;
+  }
+
+  &__link:active {
+    color: $a-text-action-selected;
+    background-color: transparent;
+  }
+
+  &__link:hover {
+    text-decoration: none;
   }
 
   &__agreement-link {
@@ -35,21 +58,18 @@
       padding: $a-spacing-4 $a-spacing-5;
       width: 100%;
       justify-content: flex-start;
-      color: var(--nav-gra-nav-mork-gra, #262626);
-      font-size: 1.25rem;
-      line-height: 1.75rem;
-      text-decoration-line: underline;
-      text-underline-offset: 2px;
-    }
-
-    a:active {
-      background-color: transparent;
     }
 
     :hover {
       border-radius: $a-border-radius-large;
       box-shadow: $a-shadow-small;
       text-decoration: none;
+    }
+  }
+
+  &__links {
+    @include mixins.for-size(desktop-up) {
+      padding-left: 100px;
     }
   }
 
