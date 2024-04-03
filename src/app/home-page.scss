@@ -33,6 +33,7 @@
   }
 
   &__link:active {
+    color: $a-text-action-selected;
     background-color: transparent;
   }
 
