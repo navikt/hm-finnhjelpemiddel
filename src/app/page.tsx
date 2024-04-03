@@ -99,7 +99,7 @@ function Home() {
                         Produktvideoer
                       </Link>
                     </Heading>
-                    <BodyLong>Videoer av hjelpemidler på avtale med NAV.</BodyLong>
+                    <BodyLong>{`Videoer av hjelpemidler på avtale med NAV. (Kunnskapsbanken)`}</BodyLong>
                   </Box>
                 </HGrid>
               </VStack>
