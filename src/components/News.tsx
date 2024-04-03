@@ -21,8 +21,8 @@ function News() {
   const newsMigrationDate = new Date('February 01, 2024')
 
   return (
-    <>
-      <Heading level="2" size="medium" align="center" className="spacing-bottom--medium">
+    <VStack gap={{ xs: '6', md: '10' }}>
+      <Heading level="2" size="medium" align="center">
         Nyheter
       </Heading>
       <VStack gap="6" align="center" className="spacing-bottom--xlarge">
@@ -48,7 +48,7 @@ function News() {
             </Fragment>
           ))}
       </VStack>
-    </>
+    </VStack>
   )
 }
 
