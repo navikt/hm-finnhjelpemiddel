@@ -2,7 +2,6 @@ import {
   AgreementInfoResponse,
   Hit,
   MediaResponse,
-  MediaType,
   ProductDocResponse,
   ProductSourceResponse,
   SearchResponse,
@@ -25,6 +24,7 @@ export interface Product {
   accessory: boolean
   sparepart: boolean
   photos: Photo[]
+  videos: Video[]
   documents: Document[]
   supplierId: string
   supplierName: string
@@ -58,6 +58,11 @@ export interface ProductVariant {
 
 export interface Photo {
   uri: string
+}
+
+export interface Video {
+  uri: string
+  text?: string
 }
 
 export interface Document {
@@ -205,6 +210,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     accessory: firstVariant.accessory,
     sparepart: firstVariant.sparepart,
     photos: mapPhotoInfo(firstVariant.media),
+    videos: mapVideoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
     supplierId: firstVariant.supplier?.id,
     supplierName: firstVariant.supplier?.name,
@@ -233,7 +239,7 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
   return media
     .filter((media: MediaResponse) => {
-      if (!(media.type == MediaType.IMAGE && media.priority && media.uri) || seen[media.uri]) {
+      if (!(media.type === 'IMAGE' && media.priority && media.uri) || seen[media.uri]) {
         return false
       }
 
@@ -246,11 +252,29 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
     }))
 }
 
+const mapVideoInfo = (media: MediaResponse[]): Video[] => {
+  const seen: { [uri: string]: boolean } = {}
+  return media
+    .filter((media: MediaResponse) => {
+      if (!(media.type === 'VIDEO' && media.source === 'EXTERNALURL' && media.uri) || seen[media.uri]) {
+        return false
+      }
+
+      seen[media.uri] = true
+      return true
+    })
+    .sort((a: MediaResponse, b: MediaResponse) => a.priority - b.priority)
+    .map((video: MediaResponse) => ({
+      uri: video.uri,
+      text: video.text || '',
+    }))
+}
+
 export const mapDocuments = (media: MediaResponse[]): Document[] => {
   const seen: { [uri: string]: boolean } = {}
   return media
     .filter((media: MediaResponse) => {
-      if (!(media.type == MediaType.PDF && media.text && media.uri) || seen[media.uri]) {
+      if (!(media.type === 'PDF' && media.text && media.uri) || seen[media.uri]) {
         return false
       }
 

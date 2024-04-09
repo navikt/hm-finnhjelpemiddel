@@ -189,19 +189,9 @@ enum Status {
   INACTIVE,
 }
 
-enum MediaSourceType {
-  HMDB,
-  GCP,
-  EXTERNALURL,
-}
+export type MediaSourceType = 'HMDB' | 'REGISTER' | 'EXTERNALURL' | 'IMPORT' | 'UNKNOWN'
 
-export enum MediaType {
-  PDF = 'PDF',
-  IMAGE = 'IMAGE',
-  VIDEO = 'VIDEO',
-  OTHER = 'OTHER',
-}
-
+export type MediaType = 'PDF' | 'IMAGE' | 'VIDEO' | 'OTHER'
 export interface AgreementsSourceResponse {
   id: string
   identifier: string

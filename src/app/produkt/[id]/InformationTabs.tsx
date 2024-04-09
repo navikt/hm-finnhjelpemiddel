@@ -5,13 +5,14 @@ import React from 'react'
 import Link from 'next/link'
 
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, HStack, Heading, Tabs, VStack } from '@navikt/ds-react'
 
-import { Document, Product } from '@/utils/product-util'
+import { Document, Product, Video } from '@/utils/product-util'
 import { titleCapitalized } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
 
 import File from '@/components/File'
+import ReactPlayer from 'react-player'
 
 export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
@@ -26,6 +27,7 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
         label={`Tilhørende dokumenter (${product.documents.length})`}
         icon={<FilesIcon title="Dokumenter" />}
       />
+      <Tabs.Tab value="videos" label={`Videolenker (${product.videos.length})`} />
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
@@ -35,6 +37,11 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
     <Tabs.Panel value="documents" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
         <Documents documents={product.documents} />
+      </div>
+    </Tabs.Panel>
+    <Tabs.Panel value="videos" className="h-24 w-full p-4">
+      <div className="product-info__tabs__panel">
+        <Videos videos={product.videos} />
       </div>
     </Tabs.Panel>
   </Tabs>
@@ -102,3 +109,21 @@ const Documents = ({ documents }: { documents: Document[] }) => {
 }
 
 export default InformationTabs
+
+const Videos = ({ videos }: { videos: Video[] }) => {
+  if (!videos.length) {
+    return <BodyShort>Ingen videolenker til dette produktet.</BodyShort>
+  }
+  return (
+    <HStack as="ul" gap="8" className="video-list">
+      {videos.map((video, index) => (
+        <VStack as="li" key={index} gap="4">
+          <Link target="_blank" title={video.uri} href={video.uri}>
+            {video.text || video.uri}
+          </Link>
+          <ReactPlayer url={video.uri} controls={true} width="100%" height="100%" />
+        </VStack>
+      ))}
+    </HStack>
+  )
+}
