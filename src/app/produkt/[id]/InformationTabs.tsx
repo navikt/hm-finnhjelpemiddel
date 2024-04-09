@@ -70,6 +70,14 @@ export const InformationAccordion = ({ product, supplier }: { product: Product; 
         </div>
       </Accordion.Content>
     </Accordion.Item>
+    <Accordion.Item>
+      <Accordion.Header>Videolenker ({product.videos.length})</Accordion.Header>
+      <Accordion.Content>
+        <div className="product-info__accordion">
+          <Videos videos={product.videos} />
+        </div>
+      </Accordion.Content>
+    </Accordion.Item>
   </Accordion>
 )
 

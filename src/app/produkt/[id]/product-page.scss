@@ -68,6 +68,11 @@
   &__accordion {
     padding-top: $a-spacing-10;
     padding: $a-spacing-4 0;
+    margin-left: 0;
+  }
+
+  .navds-accordion__content {
+    padding: 0;
   }
 
   &__product-variants {
