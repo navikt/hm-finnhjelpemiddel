@@ -10,6 +10,7 @@ import { Accordion, BodyLong, BodyShort, HStack, Heading, Tabs, VStack } from '@
 import { Document, Product, Video } from '@/utils/product-util'
 import { titleCapitalized } from '@/utils/string-util'
 import { Supplier } from '@/utils/supplier-util'
+import { VideoplayerIcon } from '@navikt/aksel-icons'
 
 import File from '@/components/File'
 import ReactPlayer from 'react-player'
@@ -27,7 +28,11 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
         label={`Tilhørende dokumenter (${product.documents.length})`}
         icon={<FilesIcon title="Dokumenter" />}
       />
-      <Tabs.Tab value="videos" label={`Videolenker (${product.videos.length})`} />
+      <Tabs.Tab
+        value="videos"
+        label={`Videolenker (${product.videos.length})`}
+        icon={<VideoplayerIcon title="Videolenker" />}
+      />
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
