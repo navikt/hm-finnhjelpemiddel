@@ -84,13 +84,13 @@ const AgreementResults = ({
                 : 'agreement-post spacing-top--small'
             }
           >
-            <HGrid columns="auto" align="start">
+            <HGrid columns={'auto 30px'} align="start">
               <Heading level="3" size="xsmall">
                 {post.title}
               </Heading>
-              {/* <HelpText placement="right" strategy="absolute" style={{ paddingBottom: '4px' }}>
+              <HelpText placement="right" strategy="absolute" style={{ paddingBottom: '4px' }}>
                 {post.description}
-              </HelpText> */}
+              </HelpText>
             </HGrid>
             {post.products.length === 0 && postLoading && (
               <HStack justify="center" style={{ marginTop: '18px' }}>
