@@ -10,7 +10,6 @@ import {
   SeriesBucketResponse,
   TechDataResponse,
 } from './response-types'
-import { capitalize } from './string-util'
 
 export interface Product {
   id: string
@@ -77,7 +76,6 @@ interface Attributes {
   series?: string
   shortdescription?: string
   text?: string
-  commonCharacteristics?: TechData
   compatibleWith?: string[]
 }
 
@@ -158,33 +156,6 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     return mapProductVariant(source)
   })
 
-  const variantsCopy = variants
-  const allTechKeys = [...new Set(variantsCopy.flatMap((variant) => Object.keys(variant.techData)))]
-
-  let commonCharacteristics: TechData = {}
-
-  for (const key of allTechKeys) {
-    const firstObj = variants.find((v) => key in v.techData)!.techData[key]
-
-    const allTheSame =
-      variants.length > 1
-        ? variants
-            .filter((variant) => key in variant.techData)
-            .find(
-              (obj) =>
-                obj.techData[key].value !== firstObj.value ||
-                obj.techData[key].unit !== firstObj.unit ||
-                obj.techData[key].unit !== ''
-            ) === undefined
-        : true
-
-    if (allTheSame) {
-      Object.assign(commonCharacteristics, {
-        [key]: { value: firstObj.value.length > 1 ? capitalize(firstObj.value) : firstObj.value, unit: firstObj.unit },
-      })
-    }
-  }
-
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
   const firstVariant = sources[0]
   const allAgreementsForAllVariants = variants.flatMap((variant) => variant.agreements)
@@ -193,7 +164,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   return {
     id: firstVariant.seriesId,
     title: firstVariant.title,
-    attributes: { ...firstVariant.attributes, commonCharacteristics },
+    attributes: { ...firstVariant.attributes },
     variantCount: sources.length,
     variants: variants,
     compareData: {

@@ -324,28 +324,17 @@ main {
   }
 }
 
-.icon-wrapper {
-  width: 50px;
-  min-width: 50px;
-  height: 50px;
-  background-repeat: no-repeat;
-  background-size: contain;
+.agreement-wrapper {
+  height: 42px;
+  width: fit-content;
+  padding: 0 $a-spacing-5;
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  &--small {
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-  }
-
   &--green {
-    background-image: url('/assets/icons/agreementGreen.svg');
-  }
-
-  &--grey {
-    background-image: url('/assets/icons/agreementGrey.svg');
+    background-color: #ccf1d6;
   }
 }
 

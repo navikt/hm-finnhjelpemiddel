@@ -96,7 +96,6 @@
 .photo-slider-small {
   .arrow {
     cursor: pointer;
-    margin: 1rem;
     padding: 0;
   }
 
@@ -140,33 +139,24 @@
     }
   }
 
-  .dots {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding-top: 30px;
-  }
-
   .dot {
     padding: 0;
-    width: 15px;
-    height: 15px;
-    background-color: $a-deepblue-100;
+    width: 24px;
+    height: 24px;
+    background-color: $a-blue-100;
     border-radius: 50%;
-    margin: 0 10px;
   }
 
   .dot:hover {
     cursor: pointer;
-    background-color: $a-deepblue-200;
+    background-color: $a-blue-200;
   }
 
   .dot:disabled {
-    width: 18px;
-    height: 18px;
-    background-color: $a-deepblue-400;
+    width: 24px;
+    height: 24px;
+    background-color: $a-blue-400;
     border-radius: 50%;
-    margin: 0 10px;
     opacity: 1;
   }
 

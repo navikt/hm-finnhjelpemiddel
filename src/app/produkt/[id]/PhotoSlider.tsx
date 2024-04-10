@@ -6,8 +6,8 @@ import Image from 'next/image'
 
 import { AnimatePresence, Variants, motion } from 'framer-motion'
 
-import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@navikt/aksel-icons'
-import { Button } from '@navikt/ds-react'
+import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { Button, HStack, VStack } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
@@ -89,7 +89,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         src={src}
         setActive={setActive}
       />
-      <div className="photo-slider-small">
+      <VStack justify="space-between" className="photo-slider-small">
         <div className="photo-and-arrow-container">
           {!hasImages && (
             <CameraIcon
@@ -101,7 +101,6 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
           )}
           {numberOfImages === 1 && (
             <>
-              <div style={{ width: '40px', height: '40px' }}></div>
               <div className="photo-container">
                 <Image
                   role="button"
@@ -125,115 +124,117 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   }}
                 />
               </div>
-              <div style={{ width: '40px', height: '40px' }}></div>
             </>
           )}
 
           {numberOfImages > 1 && (
-            <>
-              <Button
-                aria-label="Forrige bilde"
-                variant="tertiary-neutral"
-                className="arrow"
-                onClick={() => {
-                  prevImage()
-                }}
-                icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
-              />
+            <div className="photo-container">
+              <AnimatePresence initial={false} custom={direction}>
+                <motion.div
+                  className="div-motion"
+                  key={src}
+                  custom={direction}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{
+                    x: { type: 'spring', stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 },
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = swipePower(offset.x, velocity.x)
 
-              <div className="photo-container">
-                <AnimatePresence initial={false} custom={direction}>
-                  <motion.div
-                    className="div-motion"
-                    key={src}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{
-                      x: { type: 'spring', stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 },
-                    }}
-                    drag="x"
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={1}
-                    onDragEnd={(e, { offset, velocity }) => {
-                      const swipe = swipePower(offset.x, velocity.x)
-
-                      if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
-                        nextImage()
-                      } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
-                        prevImage()
-                      }
-                    }}
-                  >
-                    <div className="next-image">
-                      <Image
-                        role="button"
-                        aria-label="Forstørr bildet"
-                        draggable="false"
-                        loader={largeImageLoader}
-                        src={src}
-                        alt={`Produktbilde ${active + 1} av ${photos.length}`}
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        sizes="(min-width: 66em) 33vw,
+                    if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
+                      nextImage()
+                    } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
+                      prevImage()
+                    }
+                  }}
+                >
+                  <div className="next-image">
+                    <Image
+                      role="button"
+                      aria-label="Forstørr bildet"
+                      draggable="false"
+                      loader={largeImageLoader}
+                      src={src}
+                      alt={`Produktbilde ${active + 1} av ${photos.length}`}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                        onClick={() => setModalIsOpen(true)}
-                        tabIndex={0}
-                        onKeyUpCapture={(event) => {
-                          if (event.key === 'Enter') {
-                            event.preventDefault()
-                            setModalIsOpen(true)
-                          }
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-              <Button
-                aria-label="Neste bilde"
-                variant="tertiary-neutral"
-                className="arrow"
-                onClick={() => {
-                  nextImage()
-                }}
-                icon={<ChevronRightIcon aria-hidden height={50} width={50} />}
-              />
-            </>
+                      onClick={() => setModalIsOpen(true)}
+                      tabIndex={0}
+                      onKeyUpCapture={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault()
+                          setModalIsOpen(true)
+                        }
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           )}
         </div>
-        <div className="dots">
-          {[...Array(numberOfImages).keys()].map((index) => {
-            if (index !== active) {
-              return (
-                <Button
-                  aria-label={`bilde ${index + 1} av ${numberOfImages}`}
-                  key={index}
-                  className={'dot'}
-                  onClick={() => {
-                    setActive(index)
-                  }}
-                />
-              )
-            } else {
-              return (
-                <Button
-                  disabled={true}
-                  aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
-                  key={index}
-                  className={'dot'}
-                />
-              )
-            }
-          })}
-        </div>
-      </div>
+        <HStack justify="space-between">
+          {numberOfImages > 1 && (
+            <Button
+              aria-label="Forrige bilde"
+              variant="tertiary-neutral"
+              className="arrow"
+              onClick={() => {
+                prevImage()
+              }}
+              icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
+            />
+          )}
+          <HStack className="dots" align="center" gap="2">
+            {[...Array(numberOfImages).keys()].map((index) => {
+              if (index !== active) {
+                return (
+                  <Button
+                    aria-label={`bilde ${index + 1} av ${numberOfImages}`}
+                    key={index}
+                    className={'dot'}
+                    onClick={() => {
+                      setActive(index)
+                    }}
+                  />
+                )
+              } else {
+                return (
+                  <Button
+                    disabled={true}
+                    aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
+                    key={index}
+                    className={'dot'}
+                  />
+                )
+              }
+            })}
+          </HStack>
+          {numberOfImages > 1 && (
+            <Button
+              aria-label="Neste bilde"
+              variant="tertiary-neutral"
+              className="arrow"
+              onClick={() => {
+                nextImage()
+              }}
+              icon={<ChevronRightIcon aria-hidden height={50} width={50} />}
+            />
+          )}
+        </HStack>
+      </VStack>
     </>
   )
 }
