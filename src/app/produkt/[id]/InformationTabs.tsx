@@ -28,11 +28,7 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
         label={`Tilhørende dokumenter (${product.documents.length})`}
         icon={<FilesIcon title="Dokumenter" />}
       />
-      <Tabs.Tab
-        value="videos"
-        label={`Videolenker (${product.videos.length})`}
-        icon={<VideoplayerIcon title="Videolenker" />}
-      />
+      <Tabs.Tab value="videos" label={`Video (${product.videos.length})`} icon={<VideoplayerIcon title="Video" />} />
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
@@ -71,7 +67,7 @@ export const InformationAccordion = ({ product, supplier }: { product: Product; 
       </Accordion.Content>
     </Accordion.Item>
     <Accordion.Item>
-      <Accordion.Header>Videolenker ({product.videos.length})</Accordion.Header>
+      <Accordion.Header>Video ({product.videos.length})</Accordion.Header>
       <Accordion.Content>
         <div className="product-info__accordion">
           <Videos videos={product.videos} />
