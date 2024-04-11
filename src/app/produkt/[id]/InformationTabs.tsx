@@ -1,24 +1,22 @@
 'use client'
 
-import React from 'react'
-
-import Link from 'next/link'
+import NextLink from 'next/link'
 
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyLong, BodyShort, Heading, Tabs } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, Heading, HelpText, Link, Tabs } from '@navikt/ds-react'
 
 import { Document, Product } from '@/utils/product-util'
 import { titleCapitalized } from '@/utils/string-util'
-import { Supplier } from '@/utils/supplier-util'
 
 import File from '@/components/File'
+import DefinitionList from '@/components/definition-list/DefinitionList'
 
-export const InformationTabs = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+export const InformationTabs = ({ product }: { product: Product }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
     <Tabs.List>
       <Tabs.Tab
         value="productDescription"
-        label="Produktbeskrivelse fra leverandør"
+        label="Produkt informasjon"
         icon={<InformationSquareIcon title="Skiftenøkkel" />}
       />
       <Tabs.Tab
@@ -29,7 +27,7 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
-        <SupplierInfo product={product} supplier={supplier} />
+        <ProductDescription product={product} />
       </div>
     </Tabs.Panel>
     <Tabs.Panel value="documents" className="h-24 w-full p-4">
@@ -40,13 +38,13 @@ export const InformationTabs = ({ product, supplier }: { product: Product; suppl
   </Tabs>
 )
 
-export const InformationAccordion = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
+export const InformationAccordion = ({ product }: { product: Product }) => (
   <Accordion>
     <Accordion.Item>
-      <Accordion.Header>Produktbeskrivelse fra leverandør</Accordion.Header>
+      <Accordion.Header>Produkt informasjon</Accordion.Header>
       <Accordion.Content>
         <div className="product-info__accordion">
-          <SupplierInfo product={product} supplier={supplier} />
+          <ProductDescription product={product} />
         </div>
       </Accordion.Content>
     </Accordion.Item>
@@ -61,30 +59,65 @@ export const InformationAccordion = ({ product, supplier }: { product: Product; 
   </Accordion>
 )
 
-const SupplierInfo = ({ product, supplier }: { product: Product; supplier: Supplier }) => (
-  <div className="product-info__supplier-info">
-    <Heading level="2" size="xsmall">
-      Produktbeskrivelse
-    </Heading>
-    {product.attributes.text && <BodyLong>{product.attributes.text}</BodyLong>}
-    {!product.attributes.text && 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
+const ProductDescription = ({ product }: { product: Product }) => {
+  const bo = new Set(product.variants.map((p) => p.bestillingsordning))
+  const ds = new Set(product.variants.map((p) => p.digitalSoknad))
 
-    <Heading level="2" size="xsmall" style={{ marginTop: '1.5rem' }}>
-      Leverandør
-    </Heading>
-    <>
-      <BodyShort>{supplier.name}</BodyShort>
-      {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
-      {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
-      {supplier.homepageUrl && (
-        <Link href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
-          Hjemmeside (åpnes i ny side)
+  const bestillingsordning =
+    bo.size > 1 ? (
+      <BodyShort>
+        Noen varianter.{' '}
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
         </Link>
-      )}
-    </>
-  </div>
-)
+      </BodyShort>
+    ) : bo.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
 
+  const digitalSoknad =
+    ds.size > 1 ? (
+      <BodyShort>
+        Noen varianter.{' '}
+        <Link as={NextLink} href="#produktvarianter">
+          Se tabell nedenfor.
+        </Link>
+      </BodyShort>
+    ) : ds.has(true) ? (
+      <BodyShort>Ja</BodyShort>
+    ) : (
+      <BodyShort>Nei</BodyShort>
+    )
+
+  return (
+    <div className="product-info__product-description">
+      <Heading level="2" size="medium" spacing>
+        Beskrivelse
+      </Heading>
+      <BodyLong spacing>
+        {product.attributes.text
+          ? product.attributes.text
+          : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
+      </BodyLong>
+      <DefinitionList>
+        <DefinitionList.Term>
+          <Bestillingsordning_HelpText />
+        </DefinitionList.Term>
+        <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
+        <DefinitionList.Term>
+          <DigitalSoknad_HelpText />
+        </DefinitionList.Term>
+        <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
+        <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
+        <DefinitionList.Definition>
+          {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}
+        </DefinitionList.Definition>
+      </DefinitionList>
+    </div>
+  )
+}
 const Documents = ({ documents }: { documents: Document[] }) => {
   if (!documents.length) {
     return <BodyShort>Ingen dokumenter på dette produktet.</BodyShort>
@@ -98,6 +131,30 @@ const Documents = ({ documents }: { documents: Document[] }) => {
         </li>
       ))}
     </ul>
+  )
+}
+
+const Bestillingsordning_HelpText = () => {
+  return (
+    <div className="product-info__help-text">
+      Bestillingsordning
+      <HelpText placement="right" strategy="absolute">
+        Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
+        hjelpemidler som hjelpemiddelsentralene har på lager.
+      </HelpText>
+    </div>
+  )
+}
+
+const DigitalSoknad_HelpText = () => {
+  return (
+    <div className="product-info__help-text">
+      Digital behovsmelding
+      <HelpText placement="right" strategy="absolute">
+        Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg av
+        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.
+      </HelpText>
+    </div>
   )
 }
 

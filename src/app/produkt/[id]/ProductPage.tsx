@@ -3,9 +3,14 @@ import { Supplier } from '@/utils/supplier-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
-import { VStack } from '@navikt/ds-react'
+import DefinitionList from '@/components/definition-list/DefinitionList'
+import { toValueAndUnit } from '@/utils/string-util'
+import { Heading, VStack } from '@navikt/ds-react'
+import { headers } from 'next/headers'
+import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
+import InformationTabs, { InformationAccordion } from './InformationTabs'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { ProductsOnPost } from './page'
@@ -21,16 +26,34 @@ type ProductProps = {
 const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts }: ProductProps) => {
   return (
     <AnimateLayout>
-      <VStack gap={{ xs: '4', lg: '10' }} className="spacing-bottom--large">
+      <VStack>
         <ProductPageTopInfo product={product} supplier={supplier} />
-
+        <ProductPageTabs product={product} />
         {product.variantCount > 1 && (
           <section
-            className="product-info__product-variants"
+            className="product-info__product-variants spacing-top--large"
             aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
           >
             <ProductVariants product={product} />
           </section>
+        )}
+
+        {product.variantCount === 1 && (
+          <VStack className="spacing-top--large">
+            <Heading level="2" size="medium" spacing>
+              Egenskaper
+            </Heading>
+            <DefinitionList horizontal>
+              {Object.entries(product.variants[0].techData).map(([key, value], i) => (
+                <Fragment key={i}>
+                  <DefinitionList.Term>{key}</DefinitionList.Term>
+                  <DefinitionList.Definition>
+                    {key !== undefined ? toValueAndUnit(value.value, value.unit) : '-'}
+                  </DefinitionList.Definition>
+                </Fragment>
+              ))}
+            </DefinitionList>
+          </VStack>
         )}
       </VStack>
       {productsOnPosts && productsOnPosts?.length > 0 && (
@@ -41,6 +64,21 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
       {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
       {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />}
     </AnimateLayout>
+  )
+}
+
+const ProductPageTabs = ({ product }: { product: Product }) => {
+  const headersList = headers()
+  const userAgent = headersList.get('user-agent')
+  const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
+
+  return (
+    <section
+      className="product-info__tabs spacing-top--large"
+      aria-label="Produktbeskrivelse og medfølgende dokumenter"
+    >
+      {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />}
+    </section>
   )
 }
 

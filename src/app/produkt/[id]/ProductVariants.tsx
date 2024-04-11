@@ -4,8 +4,8 @@ import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Table, Tag, VStack } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
@@ -75,13 +75,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   let sortedByKey = sortColumnsByRowKey(product.variants)
   const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
-  const techDataKeys = product.attributes.commonCharacteristics
-    ? allDataKeys.filter((key) => product.attributes.commonCharacteristics![key] === undefined)
-    : allDataKeys
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
-    ...techDataKeys.map((key) => ({
+    ...allDataKeys.map((key) => ({
       [key]: product.variants.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
@@ -189,7 +186,21 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Button>
               </Table.HeaderCell>
               {sortedByKey.map((variant) => (
-                <Table.DataCell key={variant.id}>{variant.hmsArtNr ?? '-'}</Table.DataCell>
+                <Table.DataCell key={variant.id}>
+                  {variant.hmsArtNr ? (
+                    <CopyButton
+                      size="small"
+                      className="hms-copy-button"
+                      copyText={variant.hmsArtNr}
+                      text={variant.hmsArtNr}
+                      activeText="Kopiert"
+                      variant="action"
+                      activeIcon={<ThumbUpIcon aria-hidden />}
+                    />
+                  ) : (
+                    '-'
+                  )}
+                </Table.DataCell>
               ))}
             </Table.Row>
 

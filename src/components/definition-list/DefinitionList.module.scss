@@ -28,3 +28,20 @@
     padding-top: 0;
   }
 }
+
+.definitionListHorizontal {
+  @include mixins.for-size(tablet-up) {
+    grid-template-columns: minmax(auto, max-content) auto;
+    row-gap: $a-spacing-1;
+    column-gap: $a-spacing-6;
+
+    dd,
+    dt {
+      padding-top: $a-spacing-2;
+    }
+  }
+
+  dt:first-child {
+    padding-top: $a-spacing-3;
+  }
+}
