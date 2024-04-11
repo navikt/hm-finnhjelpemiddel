@@ -5,7 +5,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { toValueAndUnit } from '@/utils/string-util'
-import { Heading, VStack } from '@navikt/ds-react'
+import { BodyShort, Heading, VStack } from '@navikt/ds-react'
 import { headers } from 'next/headers'
 import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
@@ -39,10 +39,13 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         )}
 
         {product.variantCount === 1 && (
-          <VStack className="spacing-top--large">
+          <VStack className="spacing-top--large spacing-bottom--medium">
             <Heading level="2" size="medium" spacing>
               Egenskaper
             </Heading>
+            {Object.entries(product.variants[0].techData).length === 0 && (
+              <BodyShort>Ingen egenskaper er registrert på dette hjelpemiddelet</BodyShort>
+            )}
             <DefinitionList horizontal>
               {Object.entries(product.variants[0].techData).map(([key, value], i) => (
                 <Fragment key={i}>
@@ -55,14 +58,14 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </DefinitionList>
           </VStack>
         )}
+        {productsOnPosts && productsOnPosts?.length > 0 && (
+          <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+        )}
+        {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
+        {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
+        {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
+        {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />}
       </VStack>
-      {productsOnPosts && productsOnPosts?.length > 0 && (
-        <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
-      )}
-      {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
-      {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
-      {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
-      {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />}
     </AnimateLayout>
   )
 }
