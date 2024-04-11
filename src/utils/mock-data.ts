@@ -64,6 +64,16 @@ export const accessoriesMock: Product[] = [
     accessory: false,
     sparepart: false,
     photos: [{ uri: 'orig/52674.jpg' }],
+    videos: [
+      {
+        uri: 'https://www.youtube.com/watch?v=nmstO_nDB80',
+        text: 'Video 1',
+      },
+      {
+        uri: 'https://www.youtube.com/watch?v=GZMpDioE2sY',
+        text: '',
+      },
+    ],
     documents: [],
     supplierId: 'e9e27708-16be-4995-83a7-f857b77d0913',
     supplierName: 'Levereandør AS',

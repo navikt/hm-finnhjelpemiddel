@@ -371,6 +371,18 @@ main {
   padding-left: $a-spacing-2;
 }
 
+.video-list {
+  padding: 0;
+  li {
+    padding: $a-spacing-4;
+    background-color: #ffffff;
+    box-shadow: $a-shadow-xsmall;
+    border-radius: $a-border-radius-medium;
+    width: 600px;
+    height: 500px;
+  }
+}
+
 .text-line-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 2;

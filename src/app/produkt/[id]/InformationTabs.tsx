@@ -3,13 +3,16 @@
 import NextLink from 'next/link'
 
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyLong, BodyShort, Heading, HelpText, Link, Tabs } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, HStack, Heading, HelpText, Link, Tabs, VStack } from '@navikt/ds-react'
 
-import { Document, Product } from '@/utils/product-util'
+import { Document, Product, Video } from '@/utils/product-util'
 import { titleCapitalized } from '@/utils/string-util'
 
-import File from '@/components/File'
 import DefinitionList from '@/components/definition-list/DefinitionList'
+import { VideoplayerIcon } from '@navikt/aksel-icons'
+
+import File from '@/components/File'
+import ReactPlayer from 'react-player'
 
 export const InformationTabs = ({ product }: { product: Product }) => (
   <Tabs defaultValue="productDescription" selectionFollowsFocus>
@@ -24,6 +27,7 @@ export const InformationTabs = ({ product }: { product: Product }) => (
         label={`Tilhørende dokumenter (${product.documents.length})`}
         icon={<FilesIcon title="Dokumenter" />}
       />
+      <Tabs.Tab value="videos" label={`Video (${product.videos.length})`} icon={<VideoplayerIcon title="Video" />} />
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
@@ -33,6 +37,11 @@ export const InformationTabs = ({ product }: { product: Product }) => (
     <Tabs.Panel value="documents" className="h-24 w-full p-4">
       <div className="product-info__tabs__panel">
         <Documents documents={product.documents} />
+      </div>
+    </Tabs.Panel>
+    <Tabs.Panel value="videos" className="h-24 w-full p-4">
+      <div className="product-info__tabs__panel">
+        <Videos videos={product.videos} />
       </div>
     </Tabs.Panel>
   </Tabs>
@@ -53,6 +62,14 @@ export const InformationAccordion = ({ product }: { product: Product }) => (
       <Accordion.Content>
         <div className="product-info__accordion">
           <Documents documents={product.documents} />
+        </div>
+      </Accordion.Content>
+    </Accordion.Item>
+    <Accordion.Item>
+      <Accordion.Header>Video ({product.videos.length})</Accordion.Header>
+      <Accordion.Content>
+        <div className="product-info__accordion">
+          <Videos videos={product.videos} />
         </div>
       </Accordion.Content>
     </Accordion.Item>
@@ -159,3 +176,21 @@ const DigitalSoknad_HelpText = () => {
 }
 
 export default InformationTabs
+
+const Videos = ({ videos }: { videos: Video[] }) => {
+  if (!videos.length) {
+    return <BodyShort>Ingen videolenker til dette produktet.</BodyShort>
+  }
+  return (
+    <HStack as="ul" gap="8" className="video-list">
+      {videos.map((video, index) => (
+        <VStack as="li" key={index} gap="4">
+          <Link target="_blank" title={video.uri} href={video.uri}>
+            {video.text || video.uri}
+          </Link>
+          <ReactPlayer url={video.uri} controls={true} width="100%" height="100%" />
+        </VStack>
+      ))}
+    </HStack>
+  )
+}
