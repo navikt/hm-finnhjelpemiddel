@@ -34,7 +34,7 @@
     max-height: 550px;
 
     @include mixins.for-size(desktop-up) {
-      padding: $a-spacing-10 $a-spacing-5;
+      padding: $a-spacing-5 $a-spacing-5;
       padding-bottom: 0;
     }
   }
