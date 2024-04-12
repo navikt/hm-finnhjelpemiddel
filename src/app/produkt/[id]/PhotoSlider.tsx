@@ -52,6 +52,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [direction, setDirection] = useState(0)
   const [src, setSrc] = useState(photos[active]?.uri)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
@@ -62,6 +63,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   }
 
   const nextImage = () => {
+    setIsLoading(true)
     const nextIndex = active !== numberOfImages - 1 ? active + 1 : 0
     setActive(nextIndex)
     setDirection(1)
@@ -90,18 +92,22 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         setActive={setActive}
       />
       <VStack className="photo-slider-small" align="center" justify="space-between">
-        {!hasImages && (
-          <div className="photo-container">
+        {isLoading && (
+          <HStack justify="center" style={{ marginTop: '18px', height: '100%' }}>
+            <Loader size="xlarge" title="Laster bilde" />
+          </HStack>
+        )}
+
+        <div className="photo-container">
+          {!hasImages && (
             <CameraIcon
               width={400}
               height={300}
               style={{ background: 'white' }}
               aria-label="Ingen bilde tilgjengelig"
             />
-          </div>
-        )}
-        {numberOfImages === 1 && (
-          <div className="photo-container">
+          )}
+          {numberOfImages === 1 && (
             <div>
               <Image
                 role="button"
@@ -123,13 +129,12 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                     setModalIsOpen(true)
                   }
                 }}
+                onLoad={() => setIsLoading(false)}
               />
             </div>
-          </div>
-        )}
+          )}
 
-        {numberOfImages > 1 && (
-          <div className="photo-container">
+          {numberOfImages > 1 && (
             <motion.div
               key={src}
               custom={direction}
@@ -178,12 +183,12 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       setModalIsOpen(true)
                     }
                   }}
-                  onLoad={() => <Loader size="large" />}
+                  onLoad={() => setIsLoading(false)}
                 />
               </div>
             </motion.div>
-          </div>
-        )}
+          )}
+        </div>
         {numberOfImages > 1 && (
           <HStack justify="space-between" className="navigation-bar">
             {numberOfImages > 1 && (
