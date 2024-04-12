@@ -87,4 +87,16 @@
       --ac-button-icon-margin: -6px;
     }
   }
+
+  &__rank-row-on-agreement {
+    .navds-table__data-cell {
+      padding-top: $a-spacing-1;
+      padding-bottom: $a-spacing-1;
+    }
+
+    .agreement-wrapper {
+      height: 36px;
+      padding: 0 $a-spacing-3;
+    }
+  }
 }

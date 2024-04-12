@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
+import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
@@ -93,8 +94,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
     return uniqueValues.size > 1
   }
 
-  const ranks = new Set(product.agreements.map((agr) => agr.rank))
-  const sortRank = ranks.size !== 1
+  const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
+  const hasAgreementVaries = hasAgreementSet.size > 1
+  const rankSet = new Set(product.agreements.map((agr) => agr.rank))
+  const sortRank = rankSet.size !== 1 || hasAgreementVaries
 
   const handleSortRow = (sortKey: string) => {
     setSortColumns({
@@ -234,7 +237,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
               <Table.Row
                 className={classNames(
                   { 'variants-table__sortable-row': sortRank },
-                  { 'variants-table__sorted-row': sortColumns.orderBy === 'rank' }
+                  { 'variants-table__sorted-row': sortColumns.orderBy === 'rank' },
+                  { 'variants-table__rank-row-on-agreement': hasAgreementSet.has(true) }
                 )}
               >
                 <Table.HeaderCell>
@@ -256,7 +260,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Table.HeaderCell>
                 {sortedByKey.map((variant) => (
                   <Fragment key={variant.id}>
-                    <Table.DataCell key={variant.id}>{formatAgreementRanks(variant.agreements!)}</Table.DataCell>
+                    <Table.DataCell key={variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
                   </Fragment>
                 ))}
               </Table.Row>
@@ -266,6 +270,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
               <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
+              ))}
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.digitalSoknad ? 'Ja' : 'Nei'}</Table.DataCell>
               ))}
             </Table.Row>
             {Object.keys(rows).length > 0 &&

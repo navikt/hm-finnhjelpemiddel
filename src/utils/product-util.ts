@@ -9,6 +9,7 @@ import {
   SeriesBucketResponse,
   TechDataResponse,
 } from './response-types'
+import { capitalize } from './string-util'
 
 export interface Product {
   id: string
@@ -267,7 +268,7 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
     {},
     ...data
       .filter((data: TechDataResponse) => data.key && data.value)
-      .map((data: TechDataResponse) => ({ [data.key]: { value: data.value, unit: data.unit } }))
+      .map((data: TechDataResponse) => ({ [data.key]: { value: capitalize(data.value), unit: data.unit } }))
   )
 }
 

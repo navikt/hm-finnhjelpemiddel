@@ -14,7 +14,6 @@ type KeyInformationProps = {
 
 const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
   const oa = new Set(product.variants.map((p) => p.hasAgreement))
-
   const hms = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
 
   const onAgreement =
