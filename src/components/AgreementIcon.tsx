@@ -10,8 +10,7 @@ const AgreementIcon = ({
   size?: 'small' | 'medium'
 }) => {
   // const isGreen = rank === 1 || rank === 99
-  const label =
-    rank === 99 ? (size === 'small' ? '-' : 'På avtale uten rangering') : size === 'small' ? rank : `Rangering ${rank}`
+  const label = rank === 99 ? (size === 'small' ? '-' : 'På avtale') : size === 'small' ? rank : `Rangering ${rank}`
   return (
     <span
       className={classNames(

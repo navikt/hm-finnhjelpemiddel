@@ -101,8 +101,8 @@ const OnAgreement_HelpText = () => {
     <div className="product-info__help-text">
       På avtale med NAV
       <HelpText placement="right" strategy="absolute">
-        Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
-        hjelpemidler som hjelpemiddelsentralene har på lager.
+        Ved søknad om et hjelpemiddel fra NAV skal du alltid først vurdere om et av hjelpemidlene i en avtale kan
+        benyttes for å dekke ditt behov.
       </HelpText>
     </div>
   )

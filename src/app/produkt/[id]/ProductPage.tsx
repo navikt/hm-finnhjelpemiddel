@@ -5,7 +5,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { toValueAndUnit } from '@/utils/string-util'
-import { BodyShort, Heading, VStack } from '@navikt/ds-react'
+import { Heading, VStack } from '@navikt/ds-react'
 import { headers } from 'next/headers'
 import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
@@ -43,10 +43,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             <Heading level="2" size="medium" spacing>
               Egenskaper
             </Heading>
-            {Object.entries(product.variants[0].techData).length === 0 && (
-              <BodyShort>Ingen egenskaper er registrert på dette hjelpemiddelet</BodyShort>
-            )}
+
             <DefinitionList horizontal>
+              <DefinitionList.Term>Artikkelnummer</DefinitionList.Term>
+              <DefinitionList.Definition>{product.variants[0].supplierRef}</DefinitionList.Definition>
               {Object.entries(product.variants[0].techData).map(([key, value], i) => (
                 <Fragment key={i}>
                   <DefinitionList.Term>{key}</DefinitionList.Term>

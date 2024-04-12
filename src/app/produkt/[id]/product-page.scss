@@ -34,8 +34,8 @@
     max-height: 550px;
 
     @include mixins.for-size(desktop-up) {
-      padding: $a-spacing-5 $a-spacing-5;
-      padding-bottom: 0;
+      padding-left: $a-spacing-5;
+      padding-right: $a-spacing-5;
     }
   }
 
@@ -132,10 +132,10 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: $a-spacing-2 $a-spacing-4;
+    padding: $a-spacing-4 $a-spacing-2;
 
     @include mixins.for-size(tablet-up) {
-      padding: $a-spacing-4 $a-spacing-8;
+      padding: $a-spacing-8 $a-spacing-4;
     }
 
     div {
