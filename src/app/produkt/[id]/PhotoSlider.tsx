@@ -116,7 +116,10 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 src={src}
                 fill
                 style={{ objectFit: 'contain' }}
-                onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
+                onError={() => {
+                  setSrc('/public/assets/midlertidig-manglende-bilde.jpg')
+                  setIsLoading(false)
+                }}
                 alt={'Produktbilde'}
                 sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
@@ -161,31 +164,32 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 }
               }}
             >
-              <div className="next-image">
-                <Image
-                  role="button"
-                  aria-label="Forstørr bildet"
-                  draggable="false"
-                  loader={largeImageLoader}
-                  src={src}
-                  onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
-                  alt={`Produktbilde ${active + 1} av ${photos.length}`}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                  sizes="(min-width: 66em) 33vw,
+              <Image
+                role="button"
+                aria-label="Forstørr bildet"
+                draggable="false"
+                loader={largeImageLoader}
+                src={src}
+                onError={() => {
+                  setSrc('/public/assets/midlertidig-manglende-bilde.jpg')
+                  setIsLoading(false)
+                }}
+                alt={`Produktbilde ${active + 1} av ${photos.length}`}
+                fill
+                style={{ objectFit: 'contain' }}
+                sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                  onClick={() => setModalIsOpen(true)}
-                  tabIndex={0}
-                  onKeyUpCapture={(event) => {
-                    if (event.key === 'Enter') {
-                      event.preventDefault()
-                      setModalIsOpen(true)
-                    }
-                  }}
-                  onLoad={() => setIsLoading(false)}
-                />
-              </div>
+                onClick={() => setModalIsOpen(true)}
+                tabIndex={0}
+                onKeyUpCapture={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault()
+                    setModalIsOpen(true)
+                  }
+                }}
+                onLoad={() => setIsLoading(false)}
+              />
             </motion.div>
           )}
         </div>
