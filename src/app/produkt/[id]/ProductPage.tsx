@@ -5,7 +5,8 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { toValueAndUnit } from '@/utils/string-util'
-import { Heading, VStack } from '@navikt/ds-react'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
+import { CopyButton, Heading, VStack } from '@navikt/ds-react'
 import { headers } from 'next/headers'
 import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
@@ -46,7 +47,17 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 
             <DefinitionList horizontal>
               <DefinitionList.Term>Artikkelnummer</DefinitionList.Term>
-              <DefinitionList.Definition>{product.variants[0].supplierRef}</DefinitionList.Definition>
+              <DefinitionList.Definition className="product-info__dd-supplier-ref">
+                <CopyButton
+                  size="small"
+                  className="hms-copy-button"
+                  copyText={product.variants[0].supplierRef}
+                  text={product.variants[0].supplierRef}
+                  activeText="Kopiert"
+                  variant="action"
+                  activeIcon={<ThumbUpIcon aria-hidden />}
+                />
+              </DefinitionList.Definition>
               {Object.entries(product.variants[0].techData).map(([key, value], i) => (
                 <Fragment key={i}>
                   <DefinitionList.Term>{key}</DefinitionList.Term>
