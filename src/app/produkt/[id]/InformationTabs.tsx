@@ -19,7 +19,7 @@ export const InformationTabs = ({ product }: { product: Product }) => (
     <Tabs.List>
       <Tabs.Tab
         value="productDescription"
-        label="Produkt informasjon"
+        label="Produktinformasjon"
         icon={<InformationSquareIcon title="Skiftenøkkel" />}
       />
       <Tabs.Tab
