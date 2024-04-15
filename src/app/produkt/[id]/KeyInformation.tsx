@@ -70,25 +70,11 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
           </DefinitionList.Definition>
         </>
       )}
-      {/* <DefinitionList.Term>Lev-artnr</DefinitionList.Term>
-      <DefinitionList.Definition>{product.variants[0].supplierRef}</DefinitionList.Definition> */}
+
       <DefinitionList.Term>
         <OnAgreement_HelpText />
       </DefinitionList.Term>
       <DefinitionList.Definition>{onAgreement}</DefinitionList.Definition>
-      {/* <DefinitionList.Term>
-          <Bestillingsordning_HelpText />
-        </DefinitionList.Term>
-        <DefinitionList.Definition>{bestillingsordning}</DefinitionList.Definition>
-        <DefinitionList.Term>
-          <DigitalSoknad_HelpText />
-        </DefinitionList.Term>
-        <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition> 
-        <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
-        <DefinitionList.Definition>
-          {product.isoCategoryTitle + '(' + product.isoCategory + ')'}
-        </DefinitionList.Definition>
-        */}
     </DefinitionList>
   )
 }
