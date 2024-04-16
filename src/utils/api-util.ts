@@ -467,9 +467,9 @@ export const fetchProducts = ({ from, size, searchData }: FetchProps): Promise<F
 
 //TODO bytte til label
 export const getProductsOnAgreement = ({
-                                         agreementId,
-                                         searchData,
-                                       }: {
+  agreementId,
+  searchData,
+}: {
   agreementId: string
   searchData: SearchData
 }): Promise<PostBucketResponse[]> => {
@@ -687,10 +687,10 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
       },
       sort: [
         {
-          "name_keyword": {
-            "order": "asc"
-          }
-        }
+          name_keyword: {
+            order: 'asc',
+          },
+        },
       ],
       _source: {
         includes: ['id', 'identifier', 'postNr', 'postLocation', 'name', 'address', 'homepage', 'status'],
