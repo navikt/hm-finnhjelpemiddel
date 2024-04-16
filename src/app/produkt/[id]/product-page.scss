@@ -123,6 +123,7 @@
   &__nav-button {
     background-color: #fff;
     justify-content: start;
+    min-height: 60px;
 
     @include mixins.for-size(tablet-up) {
       padding: $a-spacing-1 $a-spacing-5;
@@ -131,6 +132,10 @@
     .navds-label {
       text-align: left;
     }
+  }
+
+  &__product-description {
+    max-width: 700px;
   }
 }
 
@@ -227,37 +232,15 @@
 }
 
 .agreement-details {
-  margin-top: $a-spacing-9;
+  margin-top: $a-spacing-8;
+  padding-top: $a-spacing-10;
+  padding-bottom: $a-spacing-10;
   background-color: #faefee;
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: $a-spacing-4;
-    padding-top: $a-spacing-10;
-    padding-bottom: $a-spacing-10;
-  }
 
   &__agreement-link {
     display: flex;
     align-items: center;
     text-decoration: none;
-  }
-
-  &__products-on-post,
-  &__products-on-post-list {
-    display: flex;
-    gap: $a-spacing-4;
-  }
-
-  &__products-on-post-list {
-    flex-wrap: wrap;
-  }
-
-  &__products-on-post {
-    flex-direction: column;
-
-    margin-top: $a-spacing-4;
   }
 }
 

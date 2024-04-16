@@ -142,8 +142,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading id="produktvarianter" level="3" size="medium" spacing>
-        Produktvarianter
+      <Heading id="produktvarianter" level="2" size="large" spacing>
+        Varianter
       </Heading>
       {product.variantCount > 1 && (
         <BodyLong>

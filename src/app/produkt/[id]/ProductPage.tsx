@@ -1,17 +1,17 @@
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import AnimateLayout from '@/components/layout/AnimateLayout'
-
 import DefinitionList from '@/components/definition-list/DefinitionList'
+import AnimateLayout from '@/components/layout/AnimateLayout'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Button, CopyButton, HGrid, Heading, VStack } from '@navikt/ds-react'
+import { Bleed, Button, CopyButton, HGrid, Heading, VStack } from '@navikt/ds-react'
 import { headers } from 'next/headers'
+import NextLink from 'next/link'
 import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
-import InformationTabs, { InformationAccordion } from './InformationTabs'
+import { Documents, ProductDescription, Videos } from './InformationTabs'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { ProductsOnPost } from './page'
@@ -25,6 +25,10 @@ type ProductProps = {
 }
 
 const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts }: ProductProps) => {
+  const headersList = headers()
+  const userAgent = headersList.get('user-agent')
+  const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
+
   return (
     <AnimateLayout>
       <VStack>
@@ -34,42 +38,53 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           columns={{ sm: 'repeat(1, minmax(0, 300px))', md: 5 }}
           gap={{ xs: '2', lg: '7' }}
         >
-          <Button variant="tertiary" className="product-page__nav-button">
-            Informasjon og dokumenter
+          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#informasjon">
+            Generell informasjon
           </Button>
-          <Button variant="tertiary" className="product-page__nav-button">
+          {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#produktvarianter">
             Finn HMS-nummer
-          </Button>
+          </Button> */}
           {product.variantCount > 1 ? (
-            <Button variant="tertiary" className="product-page__nav-button">
-              Varinater
+            <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#produktvarianter">
+              Varianter
             </Button>
           ) : (
-            <Button variant="tertiary" className="product-page__nav-button">
+            <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
               Egenskaper
             </Button>
           )}
 
-          <Button variant="tertiary" className="product-page__nav-button">
+          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#video">
             Video
           </Button>
-          <Button variant="tertiary" className="product-page__nav-button">
+          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#dokumenter">
+            Dokumenter
+          </Button>
+          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#agreement-info">
             Avtale med NAV
           </Button>
         </HGrid>
-        <ProductPageTabs product={product} />
+
+        <section
+          className="product-page__tabs spacing-top--large"
+          aria-label="Beskrivelse og annen generell informasjon"
+        >
+          <ProductDescription product={product} />
+          {/* {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />} */}
+        </section>
+
         {product.variantCount > 1 && (
           <section
             className="product-page__product-variants spacing-top--large"
-            aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
+            aria-label="Tabell med informasjon på tvers av varianter som finnes"
           >
             <ProductVariants product={product} />
           </section>
         )}
 
         {product.variantCount === 1 && (
-          <VStack className="spacing-top--large spacing-bottom--medium">
-            <Heading level="2" size="medium" spacing>
+          <VStack as="section" className="spacing-top--large spacing-bottom--medium">
+            <Heading level="2" size="large" id="egenskaper" spacing>
               Egenskaper
             </Heading>
 
@@ -97,30 +112,35 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </DefinitionList>
           </VStack>
         )}
+
+        <section aria-label="Videolenker" className="spacing-top--large spacing-bottom--medium">
+          <Heading level="3" size="large" id="video" spacing>
+            Video
+          </Heading>
+          <Videos videos={product.videos} />
+        </section>
+
+        <section aria-label="Videolenker" className="spacing-top--large spacing-bottom--medium">
+          <Heading level="3" size="large" id="dokumenter" spacing>
+            Dokumenter
+          </Heading>
+          <Documents documents={product.documents} />
+        </section>
+
         {productsOnPosts && productsOnPosts?.length > 0 && (
-          <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+          <Bleed marginInline="full" asChild reflectivePadding>
+            <section className="agreement-details" aria-label="Informasjon om rammeavtalene hjelpemiddelet er på">
+              <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+            </section>
+          </Bleed>
         )}
+
         {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
         {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
         {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
         {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />}
       </VStack>
     </AnimateLayout>
-  )
-}
-
-const ProductPageTabs = ({ product }: { product: Product }) => {
-  const headersList = headers()
-  const userAgent = headersList.get('user-agent')
-  const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
-
-  return (
-    <section
-      className="product-page__tabs spacing-top--large"
-      aria-label="Produktbeskrivelse og medfølgende dokumenter"
-    >
-      {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />}
-    </section>
   )
 }
 

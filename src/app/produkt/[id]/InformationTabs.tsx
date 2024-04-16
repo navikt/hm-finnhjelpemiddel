@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyLong, BodyShort, HStack, Heading, HelpText, Link, Tabs, VStack } from '@navikt/ds-react'
 
-import { Document, Product, Video } from '@/utils/product-util'
+import { Document, Product } from '@/utils/product-util'
 import { titleCapitalized } from '@/utils/string-util'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
@@ -76,7 +76,7 @@ export const InformationAccordion = ({ product }: { product: Product }) => (
   </Accordion>
 )
 
-const ProductDescription = ({ product }: { product: Product }) => {
+export const ProductDescription = ({ product }: { product: Product }) => {
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
   const ds = new Set(product.variants.map((p) => p.digitalSoknad))
 
@@ -110,7 +110,7 @@ const ProductDescription = ({ product }: { product: Product }) => {
 
   return (
     <div className="product-page__product-description">
-      <Heading level="2" size="medium" spacing>
+      <Heading level="2" size="large" spacing id="informasjon">
         Beskrivelse
       </Heading>
       <BodyLong spacing>
@@ -119,6 +119,12 @@ const ProductDescription = ({ product }: { product: Product }) => {
           : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
       </BodyLong>
       <DefinitionList>
+        {/* <DefinitionList.Term>Beskrivelse</DefinitionList.Term>
+        <DefinitionList.Definition>
+          {product.attributes.text
+            ? product.attributes.text
+            : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
+        </DefinitionList.Definition> */}
         <DefinitionList.Term>
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>
@@ -135,9 +141,9 @@ const ProductDescription = ({ product }: { product: Product }) => {
     </div>
   )
 }
-const Documents = ({ documents }: { documents: Document[] }) => {
+export const Documents = ({ documents }: { documents: Document[] }) => {
   if (!documents.length) {
-    return <BodyShort>Ingen dokumenter på dette produktet.</BodyShort>
+    return <BodyShort>Ingen dokumenter er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
   }
 
   return (
@@ -177,9 +183,9 @@ const DigitalSoknad_HelpText = () => {
 
 export default InformationTabs
 
-const Videos = ({ videos }: { videos: Video[] }) => {
+export const Videos = ({ videos }: { videos: Video[] }) => {
   if (!videos.length) {
-    return <BodyShort>Ingen videolenker til dette produktet.</BodyShort>
+    return <BodyShort>Ingen videolenker er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
   }
   return (
     <HStack as="ul" gap="8" className="video-list">
