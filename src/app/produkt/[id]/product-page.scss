@@ -107,6 +107,31 @@
   &__dd-supplier-ref {
     padding-top: 0 !important;
   }
+
+  &__nav {
+    width: 100%;
+    background-color: $a-deepblue-50;
+    border-radius: $a-border-radius-xlarge;
+    justify-content: center;
+    padding: $a-spacing-5 $a-spacing-5;
+
+    @include mixins.for-size(tablet-up) {
+      padding: $a-spacing-10 $a-spacing-7;
+    }
+  }
+
+  &__nav-button {
+    background-color: #fff;
+    justify-content: start;
+
+    @include mixins.for-size(tablet-up) {
+      padding: $a-spacing-1 $a-spacing-5;
+    }
+
+    .navds-label {
+      text-align: left;
+    }
+  }
 }
 
 .photo-slider-small {

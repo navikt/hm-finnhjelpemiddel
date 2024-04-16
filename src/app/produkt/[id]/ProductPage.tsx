@@ -6,7 +6,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { CopyButton, Heading, VStack } from '@navikt/ds-react'
+import { Button, CopyButton, HGrid, Heading, VStack } from '@navikt/ds-react'
 import { headers } from 'next/headers'
 import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
@@ -29,6 +29,34 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
     <AnimateLayout>
       <VStack>
         <ProductPageTopInfo product={product} supplier={supplier} />
+        <HGrid
+          className="product-page__nav spacing-top--large"
+          columns={{ sm: 'repeat(1, minmax(0, 300px))', md: 5 }}
+          gap={{ xs: '2', lg: '7' }}
+        >
+          <Button variant="tertiary" className="product-page__nav-button">
+            Informasjon og dokumenter
+          </Button>
+          <Button variant="tertiary" className="product-page__nav-button">
+            Finn HMS-nummer
+          </Button>
+          {product.variantCount > 1 ? (
+            <Button variant="tertiary" className="product-page__nav-button">
+              Varinater
+            </Button>
+          ) : (
+            <Button variant="tertiary" className="product-page__nav-button">
+              Egenskaper
+            </Button>
+          )}
+
+          <Button variant="tertiary" className="product-page__nav-button">
+            Video
+          </Button>
+          <Button variant="tertiary" className="product-page__nav-button">
+            Avtale med NAV
+          </Button>
+        </HGrid>
         <ProductPageTabs product={product} />
         {product.variantCount > 1 && (
           <section
