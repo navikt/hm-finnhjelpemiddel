@@ -182,6 +182,14 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               ))}
             </Table.Row>
             <Table.Row>
+              <Table.HeaderCell className="side_header">HMS-nummer</Table.HeaderCell>
+              {productsToCompare.map((product) => (
+                <Table.DataCell key={product.id}>
+                  {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
+                </Table.DataCell>
+              ))}
+            </Table.Row>
+            <Table.Row>
               <Table.HeaderCell className="side_header">
                 <Heading level="2" size="medium">
                   Tekniske egenskaper
