@@ -19,7 +19,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
   return (
     <>
       <AnimateLayout>
-        <article className="product-info spacing-top--large">
+        <article className="spacing-top--large">
           <ProductPageTopInfo product={product} supplier={supplier} />
           <Bleed marginInline="full" asChild>
             <section className="product-page-section__container product-page-section__blue-background">

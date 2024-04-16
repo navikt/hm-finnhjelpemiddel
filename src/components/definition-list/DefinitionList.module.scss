@@ -4,8 +4,6 @@
 .definitionList {
   display: grid;
   grid-template-columns: 1fr;
-  column-gap: $a-spacing-6;
-  align-items: baseline;
   margin: 0;
 
   dt {
@@ -17,15 +15,33 @@
   dd {
     margin-left: 0;
     padding-top: 0;
+    padding-top: $a-spacing-1;
   }
 
   @include mixins.for-size(tablet-up) {
+    dt {
+      padding-top: $a-spacing-5;
+    }
+  }
+
+  dt:first-child {
+    padding-top: 0;
+  }
+}
+
+.definitionListHorizontal {
+  @include mixins.for-size(tablet-up) {
     grid-template-columns: minmax(auto, max-content) auto;
     row-gap: $a-spacing-1;
+    column-gap: $a-spacing-6;
 
     dd,
     dt {
       padding-top: $a-spacing-2;
     }
+  }
+
+  dt:first-child {
+    padding-top: $a-spacing-2;
   }
 }

@@ -4,9 +4,10 @@ import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Table, Tag, VStack } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
+import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
@@ -75,13 +76,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   let sortedByKey = sortColumnsByRowKey(product.variants)
   const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
-  const techDataKeys = product.attributes.commonCharacteristics
-    ? allDataKeys.filter((key) => product.attributes.commonCharacteristics![key] === undefined)
-    : allDataKeys
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
-    ...techDataKeys.map((key) => ({
+    ...allDataKeys.map((key) => ({
       [key]: product.variants.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
@@ -95,6 +93,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
     uniqueValues.delete('-')
     return uniqueValues.size > 1
   }
+
+  const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
+  const hasAgreementVaries = hasAgreementSet.size > 1
+  const rankSet = new Set(product.agreements.map((agr) => agr.rank))
+  const sortRank = rankSet.size !== 1 || hasAgreementVaries
 
   const handleSortRow = (sortKey: string) => {
     setSortColumns({
@@ -189,36 +192,23 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Button>
               </Table.HeaderCell>
               {sortedByKey.map((variant) => (
-                <Table.DataCell key={variant.id}>{variant.hmsArtNr ?? '-'}</Table.DataCell>
+                <Table.DataCell key={variant.id}>
+                  {variant.hmsArtNr ? (
+                    <CopyButton
+                      size="small"
+                      className="hms-copy-button"
+                      copyText={variant.hmsArtNr}
+                      text={variant.hmsArtNr}
+                      activeText="Kopiert"
+                      variant="action"
+                      activeIcon={<ThumbUpIcon aria-hidden />}
+                    />
+                  ) : (
+                    '-'
+                  )}
+                </Table.DataCell>
               ))}
             </Table.Row>
-
-            {product.agreements && product.agreements.length > 0 && (
-              <Table.Row
-                className={classNames('variants-table__sortable-row', {
-                  'variants-table__sorted-row': sortColumns.orderBy === 'rank',
-                })}
-              >
-                <Table.HeaderCell>
-                  <Button
-                    className="sort-button"
-                    size="xsmall"
-                    style={{ textAlign: 'left' }}
-                    variant="tertiary"
-                    onClick={() => handleSortRow('rank')}
-                    iconPosition="right"
-                    icon={iconBasedOnState('rank')}
-                  >
-                    Rangering
-                  </Button>
-                </Table.HeaderCell>
-                {sortedByKey.map((variant) => (
-                  <Fragment key={variant.id}>
-                    <Table.DataCell key={variant.id}>{formatAgreementRanks(variant.agreements!)}</Table.DataCell>
-                  </Fragment>
-                ))}
-              </Table.Row>
-            )}
 
             <Table.Row
               className={classNames('variants-table__sortable-row', {
@@ -235,17 +225,57 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   iconPosition="right"
                   icon={iconBasedOnState('levart')}
                 >
-                  Lev-artnr
+                  Artikkelnummer
                 </Button>
               </Table.HeaderCell>
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
               ))}
             </Table.Row>
+
+            {product.agreements && product.agreements.length > 0 && (
+              <Table.Row
+                className={classNames(
+                  { 'variants-table__sortable-row': sortRank },
+                  { 'variants-table__sorted-row': sortColumns.orderBy === 'rank' },
+                  { 'variants-table__rank-row-on-agreement': hasAgreementSet.has(true) }
+                )}
+              >
+                <Table.HeaderCell>
+                  {sortRank ? (
+                    <Button
+                      className="sort-button"
+                      size="xsmall"
+                      style={{ textAlign: 'left' }}
+                      variant="tertiary"
+                      onClick={() => handleSortRow('rank')}
+                      iconPosition="right"
+                      icon={iconBasedOnState('rank')}
+                    >
+                      Rangering
+                    </Button>
+                  ) : (
+                    <>Rangering</>
+                  )}
+                </Table.HeaderCell>
+                {sortedByKey.map((variant) => (
+                  <Fragment key={variant.id}>
+                    <Table.DataCell key={variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
+                  </Fragment>
+                ))}
+              </Table.Row>
+            )}
+
             <Table.Row>
               <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
+              ))}
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+              {sortedByKey.map((variant) => (
+                <Table.DataCell key={variant.id}>{variant.digitalSoknad ? 'Ja' : 'Nei'}</Table.DataCell>
               ))}
             </Table.Row>
             {Object.keys(rows).length > 0 &&

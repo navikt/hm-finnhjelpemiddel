@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 
-import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { Variants, motion } from 'framer-motion'
 
-import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@navikt/aksel-icons'
-import { Button } from '@navikt/ds-react'
+import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { Button, HStack, Loader, VStack } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
@@ -52,6 +52,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [direction, setDirection] = useState(0)
   const [src, setSrc] = useState(photos[active]?.uri)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(hasImages)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
@@ -62,6 +63,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   }
 
   const nextImage = () => {
+    setIsLoading(true)
     const nextIndex = active !== numberOfImages - 1 ? active + 1 : 0
     setActive(nextIndex)
     setDirection(1)
@@ -89,8 +91,14 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         src={src}
         setActive={setActive}
       />
-      <div className="photo-slider-small">
-        <div className="photo-and-arrow-container">
+      <VStack className="photo-slider-small" align="center" justify="space-between">
+        {isLoading && (
+          <HStack justify="center" style={{ marginTop: '18px', height: '100%' }}>
+            <Loader size="xlarge" title="Laster bilde" />
+          </HStack>
+        )}
+
+        <div className="photo-container">
           {!hasImages && (
             <CameraIcon
               width={400}
@@ -100,37 +108,94 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             />
           )}
           {numberOfImages === 1 && (
-            <>
-              <div style={{ width: '40px', height: '40px' }}></div>
-              <div className="photo-container">
-                <Image
-                  role="button"
-                  key={src}
-                  loader={largeImageLoader}
-                  src={src}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                  onError={() => setSrc('/public/assets/midlertidig-manglende-bilde.jpg')}
-                  alt={'Produktbilde'}
-                  sizes="(min-width: 66em) 33vw,
+            <div>
+              <Image
+                role="button"
+                key={src}
+                loader={largeImageLoader}
+                src={src}
+                fill
+                style={{ objectFit: 'contain' }}
+                onError={() => {
+                  setSrc('/public/assets/midlertidig-manglende-bilde.jpg')
+                  setIsLoading(false)
+                }}
+                alt={'Produktbilde'}
+                sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                  onClick={() => setModalIsOpen(true)}
-                  tabIndex={0}
-                  onKeyUpCapture={(event) => {
-                    if (event.key === 'Enter') {
-                      event.preventDefault()
-                      setModalIsOpen(true)
-                    }
-                  }}
-                />
-              </div>
-              <div style={{ width: '40px', height: '40px' }}></div>
-            </>
+                onClick={() => setModalIsOpen(true)}
+                tabIndex={0}
+                onKeyUpCapture={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault()
+                    setModalIsOpen(true)
+                  }
+                }}
+                onLoad={() => setIsLoading(false)}
+              />
+            </div>
           )}
 
           {numberOfImages > 1 && (
-            <>
+            <motion.div
+              key={src}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{
+                x: { type: 'spring', stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 },
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x)
+
+                if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
+                  nextImage()
+                } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
+                  prevImage()
+                }
+              }}
+            >
+              <Image
+                role="button"
+                aria-label="Forstørr bildet"
+                draggable="false"
+                loader={largeImageLoader}
+                src={src}
+                onError={() => {
+                  setSrc('/public/assets/midlertidig-manglende-bilde.jpg')
+                  setIsLoading(false)
+                }}
+                alt={`Produktbilde ${active + 1} av ${photos.length}`}
+                fill
+                style={{ objectFit: 'contain' }}
+                sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
+                onClick={() => setModalIsOpen(true)}
+                tabIndex={0}
+                onKeyUpCapture={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault()
+                    setModalIsOpen(true)
+                  }
+                }}
+                onLoad={() => setIsLoading(false)}
+              />
+            </motion.div>
+          )}
+        </div>
+        {numberOfImages > 1 && (
+          <HStack justify="space-between" className="navigation-bar">
+            {numberOfImages > 1 && (
               <Button
                 aria-label="Forrige bilde"
                 variant="tertiary-neutral"
@@ -140,62 +205,33 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 }}
                 icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
               />
-
-              <div className="photo-container">
-                <AnimatePresence initial={false} custom={direction}>
-                  <motion.div
-                    className="div-motion"
-                    key={src}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{
-                      x: { type: 'spring', stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 },
-                    }}
-                    drag="x"
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={1}
-                    onDragEnd={(e, { offset, velocity }) => {
-                      const swipe = swipePower(offset.x, velocity.x)
-
-                      if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
-                        nextImage()
-                      } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
-                        prevImage()
-                      }
-                    }}
-                  >
-                    <div className="next-image">
-                      <Image
-                        role="button"
-                        aria-label="Forstørr bildet"
-                        draggable="false"
-                        loader={largeImageLoader}
-                        src={src}
-                        alt={`Produktbilde ${active + 1} av ${photos.length}`}
-                        fill
-                        style={{ objectFit: 'contain' }}
-                        sizes="(min-width: 66em) 33vw,
-                      (min-width: 44em) 40vw,
-                      100vw"
-                        onClick={() => setModalIsOpen(true)}
-                        tabIndex={0}
-                        onKeyUpCapture={(event) => {
-                          if (event.key === 'Enter') {
-                            event.preventDefault()
-                            setModalIsOpen(true)
-                          }
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+            )}
+            <HStack className="dots" align="center" gap="2">
+              {[...Array(numberOfImages).keys()].map((index) => {
+                if (index !== active) {
+                  return (
+                    <Button
+                      aria-label={`bilde ${index + 1} av ${numberOfImages}`}
+                      key={index}
+                      className={'dot'}
+                      onClick={() => {
+                        setActive(index)
+                      }}
+                    />
+                  )
+                } else {
+                  return (
+                    <Button
+                      disabled={true}
+                      aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
+                      key={index}
+                      className={'dot'}
+                    />
+                  )
+                }
+              })}
+            </HStack>
+            {numberOfImages > 1 && (
               <Button
                 aria-label="Neste bilde"
                 variant="tertiary-neutral"
@@ -205,35 +241,10 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 }}
                 icon={<ChevronRightIcon aria-hidden height={50} width={50} />}
               />
-            </>
-          )}
-        </div>
-        <div className="dots">
-          {[...Array(numberOfImages).keys()].map((index) => {
-            if (index !== active) {
-              return (
-                <Button
-                  aria-label={`bilde ${index + 1} av ${numberOfImages}`}
-                  key={index}
-                  className={'dot'}
-                  onClick={() => {
-                    setActive(index)
-                  }}
-                />
-              )
-            } else {
-              return (
-                <Button
-                  disabled={true}
-                  aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
-                  key={index}
-                  className={'dot'}
-                />
-              )
-            }
-          })}
-        </div>
-      </div>
+            )}
+          </HStack>
+        )}
+      </VStack>
     </>
   )
 }
