@@ -32,7 +32,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         <ProductPageTabs product={product} />
         {product.variantCount > 1 && (
           <section
-            className="product-info__product-variants spacing-top--large"
+            className="product-page__product-variants spacing-top--large"
             aria-label="Tabell med informasjon på tvers av produktvarianter som finnes"
           >
             <ProductVariants product={product} />
@@ -47,7 +47,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 
             <DefinitionList horizontal>
               <DefinitionList.Term>Artikkelnummer</DefinitionList.Term>
-              <DefinitionList.Definition className="product-info__dd-supplier-ref">
+              <DefinitionList.Definition className="product-page__dd-supplier-ref">
                 <CopyButton
                   size="small"
                   className="hms-copy-button"
@@ -88,7 +88,7 @@ const ProductPageTabs = ({ product }: { product: Product }) => {
 
   return (
     <section
-      className="product-info__tabs spacing-top--large"
+      className="product-page__tabs spacing-top--large"
       aria-label="Produktbeskrivelse og medfølgende dokumenter"
     >
       {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />}

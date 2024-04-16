@@ -18,7 +18,7 @@ export const SupplierAccordion = ({ supplier }: Props) => {
         </Heading>
       </Accordion.Header>
       <Accordion.Content>
-        <div className="product-info__accordion">
+        <div className="product-page__accordion">
           <SupplierInfo supplier={supplier} />
         </div>
       </Accordion.Content>

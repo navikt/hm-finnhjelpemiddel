@@ -78,7 +78,7 @@ export default async function ProduktPage({ params }: Props) {
   const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
 
   return (
-    <div className="main-wrapper--large product-info">
+    <div className="main-wrapper--large product-page">
       {isAccessoryOrSparePart ? (
         <AccessoryOrSparePartPage product={product} supplier={supplier} matchingProducts={matchingProducts} />
       ) : (

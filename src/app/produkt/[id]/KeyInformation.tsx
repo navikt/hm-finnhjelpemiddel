@@ -83,7 +83,7 @@ export default KeyInformation
 
 const OnAgreement_HelpText = () => {
   return (
-    <div className="product-info__help-text">
+    <div className="product-page__help-text">
       På avtale med NAV
       <HelpText placement="right" strategy="absolute">
         Ved søknad om et hjelpemiddel fra NAV skal du alltid først vurdere om et av hjelpemidlene i en avtale kan

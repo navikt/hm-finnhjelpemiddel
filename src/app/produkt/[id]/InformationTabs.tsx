@@ -30,17 +30,17 @@ export const InformationTabs = ({ product }: { product: Product }) => (
       <Tabs.Tab value="videos" label={`Video (${product.videos.length})`} icon={<VideoplayerIcon title="Video" />} />
     </Tabs.List>
     <Tabs.Panel value="productDescription" className="h-24 w-full p-4">
-      <div className="product-info__tabs__panel">
+      <div className="product-page__tabs__panel">
         <ProductDescription product={product} />
       </div>
     </Tabs.Panel>
     <Tabs.Panel value="documents" className="h-24 w-full p-4">
-      <div className="product-info__tabs__panel">
+      <div className="product-page__tabs__panel">
         <Documents documents={product.documents} />
       </div>
     </Tabs.Panel>
     <Tabs.Panel value="videos" className="h-24 w-full p-4">
-      <div className="product-info__tabs__panel">
+      <div className="product-page__tabs__panel">
         <Videos videos={product.videos} />
       </div>
     </Tabs.Panel>
@@ -52,7 +52,7 @@ export const InformationAccordion = ({ product }: { product: Product }) => (
     <Accordion.Item>
       <Accordion.Header>Produktinformasjon</Accordion.Header>
       <Accordion.Content>
-        <div className="product-info__accordion">
+        <div className="product-page__accordion">
           <ProductDescription product={product} />
         </div>
       </Accordion.Content>
@@ -60,7 +60,7 @@ export const InformationAccordion = ({ product }: { product: Product }) => (
     <Accordion.Item>
       <Accordion.Header>Tilhørende dokumenter ({product.documents.length})</Accordion.Header>
       <Accordion.Content>
-        <div className="product-info__accordion">
+        <div className="product-page__accordion">
           <Documents documents={product.documents} />
         </div>
       </Accordion.Content>
@@ -68,7 +68,7 @@ export const InformationAccordion = ({ product }: { product: Product }) => (
     <Accordion.Item>
       <Accordion.Header>Video ({product.videos.length})</Accordion.Header>
       <Accordion.Content>
-        <div className="product-info__accordion">
+        <div className="product-page__accordion">
           <Videos videos={product.videos} />
         </div>
       </Accordion.Content>
@@ -109,7 +109,7 @@ const ProductDescription = ({ product }: { product: Product }) => {
     )
 
   return (
-    <div className="product-info__product-description">
+    <div className="product-page__product-description">
       <Heading level="2" size="medium" spacing>
         Beskrivelse
       </Heading>
@@ -153,7 +153,7 @@ const Documents = ({ documents }: { documents: Document[] }) => {
 
 const Bestillingsordning_HelpText = () => {
   return (
-    <div className="product-info__help-text">
+    <div className="product-page__help-text">
       Bestillingsordning
       <HelpText placement="right" strategy="absolute">
         Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle
@@ -165,7 +165,7 @@ const Bestillingsordning_HelpText = () => {
 
 const DigitalSoknad_HelpText = () => {
   return (
-    <div className="product-info__help-text">
+    <div className="product-page__help-text">
       Digital behovsmelding
       <HelpText placement="right" strategy="absolute">
         Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg av
