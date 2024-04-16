@@ -50,7 +50,7 @@ export const InformationTabs = ({ product }: { product: Product }) => (
 export const InformationAccordion = ({ product }: { product: Product }) => (
   <Accordion>
     <Accordion.Item>
-      <Accordion.Header>Produkt informasjon</Accordion.Header>
+      <Accordion.Header>Produktinformasjon</Accordion.Header>
       <Accordion.Content>
         <div className="product-info__accordion">
           <ProductDescription product={product} />
