@@ -52,7 +52,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [direction, setDirection] = useState(0)
   const [src, setSrc] = useState(photos[active]?.uri)
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(hasImages)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
