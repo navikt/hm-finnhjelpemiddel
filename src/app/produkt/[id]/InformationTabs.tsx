@@ -84,7 +84,7 @@ export const ProductDescription = ({ product }: { product: Product }) => {
     bo.size > 1 ? (
       <BodyShort>
         Noen varianter.{' '}
-        <Link as={NextLink} href="#produktvarianter">
+        <Link as={NextLink} href="#varianter">
           Se tabell nedenfor.
         </Link>
       </BodyShort>
@@ -98,7 +98,7 @@ export const ProductDescription = ({ product }: { product: Product }) => {
     ds.size > 1 ? (
       <BodyShort>
         Noen varianter.{' '}
-        <Link as={NextLink} href="#produktvarianter">
+        <Link as={NextLink} href="#varianter">
           Se tabell nedenfor.
         </Link>
       </BodyShort>

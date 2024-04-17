@@ -29,7 +29,7 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
       />
     ) : hms.size > 1 ? (
       <BodyShort>
-        <Link as={NextLink} href="#produktvarianter">
+        <Link as={NextLink} href="#varianter">
           Se tabell med varianter
         </Link>
       </BodyShort>
