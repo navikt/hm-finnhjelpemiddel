@@ -95,6 +95,43 @@ export interface AgreementInfo {
   expired: string
 }
 
+export const wheelchairFilters = ['Setebredde min', 'Setebredde maks', 'Setedybde min', 'Setedybde maks'] as const
+
+export type WheelchairFilter = (typeof wheelchairFilters)[number]
+
+export type HMSSuggestionWheelChair = {
+  hmsNumber: string
+  totalDiff?: number
+} & {
+  [K in WheelchairFilter]?: string
+}
+
+/**
+ * Maps SearchRespons into HMSSuggestionsWheelChair with tech data for specific filters
+ */
+export const mapHMSSuggestionFromSearchResponse = (data: SearchResponse): HMSSuggestionWheelChair[] => {
+  if (data.hits.hits.length) {
+    const product = mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
+
+    return product.variants.reduce((acc: HMSSuggestionWheelChair[], variant) => {
+      const techDataEntry: HMSSuggestionWheelChair = {
+        hmsNumber: variant.hmsArtNr ?? '',
+      }
+
+      Object.entries(variant.techData)
+        .filter(([key]) => wheelchairFilters.includes(key as WheelchairFilter))
+        .forEach(([key, value]) => {
+          techDataEntry[key as WheelchairFilter] = value.value
+        })
+
+      acc.push(techDataEntry)
+      return acc
+    }, [])
+  } else {
+    return []
+  }
+}
+
 /**
  * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
  */

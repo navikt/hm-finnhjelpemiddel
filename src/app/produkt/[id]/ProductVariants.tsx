@@ -147,6 +147,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
     numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
   } som ikke er på avtale med NAV.`
 
+  const showHMSSuggestion = product.isoCategory.startsWith('1222')
+  // {showHMSSuggestion && <HmsSuggestion product={product} />}
+
   return (
     <>
       <Heading level="2" size="large" spacing>
