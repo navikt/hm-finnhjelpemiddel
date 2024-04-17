@@ -32,7 +32,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   const isOnAgreement = product.agreements?.length > 0
   const hasAccessories = accessories.length > 0
   const hasSpareParts = spareParts.length > 0
-  const showHMSSuggestion = product.isoCategory.startsWith('1222')
+  const showHMSSuggestion = product.isoCategory.startsWith('1222') && process.env.BUILD_ENV !== 'prod'
 
   return (
     <AnimateLayout>
