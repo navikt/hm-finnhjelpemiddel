@@ -3,7 +3,6 @@ import { fetchProductsWithVariants, getProductWithVariants, getProductsInPost, g
 import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
-import { accessoriesMock } from '@/utils/mock-data'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 import { Metadata } from 'next'
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
@@ -33,9 +32,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProduktPage({ params }: Props) {
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
-  const product = accessoriesMock[0]
+  // const product = accessoriesMock[0]
 
-  // const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+  const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
@@ -73,9 +72,9 @@ export default async function ProduktPage({ params }: Props) {
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
 
-  // const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
+  const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
   // Kommenter ut den over og bruk den under for å se tilbehør på produktside (når man bruker mock)
-  const accessories = (!isAccessoryOrSparePart && matchingProducts) || []
+  // const accessories = (!isAccessoryOrSparePart && matchingProducts) || []
   const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
 
   return (
