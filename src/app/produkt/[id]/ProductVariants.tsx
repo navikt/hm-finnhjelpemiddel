@@ -19,7 +19,12 @@ type SortColumns = {
 
 const ProductVariants = ({ product }: { product: Product }) => {
   /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
-  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
+  const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
+
+  const [sortColumns, setSortColumns] = useState<SortColumns>({
+    orderBy: 'Expired',
+    direction: 'ascending',
+  })
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
     return variants.sort((variantA, variantB) => {
       if (sortColumns.orderBy === 'HMS') {
@@ -44,6 +49,13 @@ const ProductVariants = ({ product }: { product: Product }) => {
       }
       if (sortColumns.orderBy === 'Expired') {
         if (variantA.status && variantB.status) {
+          if (variantA.agreements.length > 0 && variantB.agreements.length === 0) {
+            return -1
+          }
+          if (variantB.agreements.length > 0 && variantA.agreements.length === 0) {
+            return 1
+          }
+
           return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
         }
         return -1
@@ -140,7 +152,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <Heading level="2" size="large" spacing>
         Varianter
       </Heading>
-      <BodyLong spacing>
+      <BodyLong className={classNames({ 'spacing-bottom--medium': !anyExpired })}>
         {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement} Nedenfor
         finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
         vil fremheves når de er sortert.

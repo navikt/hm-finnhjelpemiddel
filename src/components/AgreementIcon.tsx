@@ -30,7 +30,7 @@ const AgreementIcon = ({
   className?: string
   size?: 'xsmall' | 'small' | 'medium'
 }) => {
-  const onlyRankNumber = size === 'xsmall' || 'small'
+  const onlyRankNumber = size === 'xsmall' || size === 'small'
   const label =
     text || (rank === 99 ? (onlyRankNumber ? '-' : 'På avtale') : onlyRankNumber ? rank : `Rangering ${rank}`)
   return (

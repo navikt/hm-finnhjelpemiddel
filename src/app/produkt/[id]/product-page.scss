@@ -26,11 +26,11 @@
     }
 
     thead tr {
-      background-color: $a-surface-selected;
+      vertical-align: bottom;
     }
 
     thead tr > th:first-child {
-      background-color: $a-surface-selected;
+      vertical-align: bottom;
     }
   }
 
@@ -114,7 +114,7 @@
     margin-top: $a-spacing-9;
   }
 
-  &__top-page-container.not-on-agreement {
+  &__top-page-container.not-on-agreement-or-expired {
     @include mixins.for-size(desktop-up) {
       height: 490px;
     }

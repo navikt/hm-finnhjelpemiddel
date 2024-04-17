@@ -30,7 +30,8 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
         columns={{ xs: '1fr', md: '500px  390px' }}
         aria-label="Bilder og nøkkelinformasjon"
         className={classNames('product-page__top-page-container', {
-          'not-on-agreement': product.agreements?.length === 0,
+          'not-on-agreement-or-expired':
+            product.agreements?.length === 0 && (!allVariantsExpiredDates || !allVariantsExpired),
         })}
         gap={{ xs: '4', md: '10' }}
       >
