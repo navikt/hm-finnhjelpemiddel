@@ -154,6 +154,12 @@
   }
 }
 
+.not-on-agreement-or-expired {
+  .product-page__photo-slider-container {
+    max-height: 490px;
+  }
+}
+
 .photo-slider-small {
   height: 390px;
   @include mixins.for-size(tablet-up) {
