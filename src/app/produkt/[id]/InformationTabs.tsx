@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import { FilesIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyLong, BodyShort, HStack, Heading, HelpText, Link, Tabs, VStack } from '@navikt/ds-react'
 
-import { Document, Product } from '@/utils/product-util'
+import { Document, Product, Video } from '@/utils/product-util'
 import { titleCapitalized } from '@/utils/string-util'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
@@ -109,8 +109,8 @@ export const ProductDescription = ({ product }: { product: Product }) => {
     )
 
   return (
-    <div className="product-page__product-description">
-      <Heading level="2" size="large" spacing id="informasjon">
+    <>
+      <Heading level="2" size="large" spacing>
         Beskrivelse
       </Heading>
       <BodyLong spacing>
@@ -138,7 +138,7 @@ export const ProductDescription = ({ product }: { product: Product }) => {
           {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}
         </DefinitionList.Definition>
       </DefinitionList>
-    </div>
+    </>
   )
 }
 export const Documents = ({ documents }: { documents: Document[] }) => {

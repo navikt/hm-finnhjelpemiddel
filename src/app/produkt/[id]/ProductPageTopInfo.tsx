@@ -5,6 +5,7 @@ import AgreementIcon from '@/components/AgreementIcon'
 import { Alert, Heading } from '@/components/aksel-client'
 
 import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
 import { QrCodeComponent } from './QrCode'
@@ -28,7 +29,9 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
       <HGrid
         columns={{ xs: '1fr', md: '500px  390px' }}
         aria-label="Bilder og nøkkelinformasjon"
-        className="product-page__top-page-container"
+        className={classNames('product-page__top-page-container', {
+          'not-on-agreement': product.agreements?.length === 0,
+        })}
         gap={{ xs: '4', md: '10' }}
       >
         <div className="product-page__photo-slider-container">

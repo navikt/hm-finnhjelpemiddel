@@ -26,7 +26,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
   if (!allAgreementsTheSame) {
     return (
       <VStack gap="4">
-        <Heading level="3" size="large" id="agreement-info">
+        <Heading level="3" size="large">
           Avtaler med Nav
         </Heading>
 
@@ -39,13 +39,13 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
               {productsOnPosts.map((post) => {
                 if (post.agreementId === agreement.id) {
                   return (
-                    <div key={post.postTitle} className="agreement-details__products-on-post">
+                    <VStack gap="4" key={post.postTitle} className="spacing-top--small">
                       <Heading level="4" size="small" spacing>
                         {`Andre produkter på delkontrakt ${post.postTitle}`}
                       </Heading>
 
                       {post.products?.length ? (
-                        <div className="agreement-details__products-on-post-list">
+                        <HStack wrap gap="4">
                           {post.products?.map((product) => (
                             <ProductCard
                               key={product.id}
@@ -54,17 +54,20 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
                               type="plain"
                             />
                           ))}
-                        </div>
+                        </HStack>
                       ) : (
                         <BodyLong>Det finnes ingen andre produkter på samme delkontrakt</BodyLong>
                       )}
-                    </div>
+                    </VStack>
                   )
                 }
               })}
               <div className="spacing-top--small spacing-bottom--small">
-                <NextLink href={`/rammeavtale/${agreement.id}`} className="agreement-details__agreement-link">
-                  Les mer om {agreement.title}
+                <NextLink
+                  href={`/rammeavtale/hjelpemidler/${agreement.id}`}
+                  className="agreement-details__agreement-link"
+                >
+                  {`Se andre produkter på "${agreement.title}" avtalen`}
                   <ChevronRightIcon aria-hidden fontSize={'1.5rem'} />
                 </NextLink>
               </div>
@@ -77,7 +80,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
 
   return (
     <VStack gap="4">
-      <Heading level="3" size="large" id="agreement-info">
+      <Heading level="3" size="large">
         Avtale med NAV
       </Heading>
 
@@ -113,8 +116,11 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
 
       <div className="spacing-top--small">
         {product.agreements?.length && (
-          <NextLink href={`/rammeavtale/${product.agreements[0]?.id}`} className="agreement-details__agreement-link">
-            Les mer om {product.agreements[0]?.title}
+          <NextLink
+            href={`/rammeavtale/hjelpemidler/${product.agreements[0]?.id}`}
+            className="agreement-details__agreement-link"
+          >
+            {`Se andre produkter på "${product.agreements[0]?.title}" avtalen`}
             <ChevronRightIcon aria-hidden fontSize={'1.5rem'} />
           </NextLink>
         )}

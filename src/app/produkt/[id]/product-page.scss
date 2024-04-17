@@ -1,10 +1,23 @@
 @use 'src/styles/mixins';
 
+@import 'src/styles/z-index.scss';
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-page {
   p {
     max-width: 700px;
+  }
+
+  @include mixins.for-size(tablet-up) {
+    section:not(#agreement-infoWrapper) {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    #agreement-infoWrapper > div {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
   }
 
   .variants-table {
@@ -26,16 +39,13 @@
     gap: $a-spacing-1;
   }
 
-  &__product-description {
-    margin-bottom: $a-spacing-1;
-  }
-
   &__photo-slider-container {
-    max-height: 550px;
+    max-height: 580px;
 
     @include mixins.for-size(desktop-up) {
       padding-left: $a-spacing-5;
       padding-right: $a-spacing-5;
+      margin-top: $a-spacing-1;
     }
   }
 
@@ -95,13 +105,19 @@
 
   &__top-page-container {
     @include mixins.for-size(desktop-up) {
-      height: 555px;
+      height: 590px;
       margin-left: auto;
       margin-right: auto;
       max-width: 1258px;
     }
 
     margin-top: $a-spacing-9;
+  }
+
+  &__top-page-container.not-on-agreement {
+    @include mixins.for-size(desktop-up) {
+      height: 490px;
+    }
   }
 
   &__dd-supplier-ref {
@@ -117,6 +133,9 @@
 
     @include mixins.for-size(tablet-up) {
       padding: $a-spacing-10 $a-spacing-7;
+      position: sticky;
+      top: 0;
+      z-index: var(--z-index-cover);
     }
   }
 
@@ -132,10 +151,6 @@
     .navds-label {
       text-align: left;
     }
-  }
-
-  &__product-description {
-    max-width: 700px;
   }
 }
 
@@ -232,7 +247,6 @@
 }
 
 .agreement-details {
-  margin-top: $a-spacing-8;
   padding-top: $a-spacing-10;
   padding-bottom: $a-spacing-10;
   background-color: #faefee;
@@ -387,4 +401,30 @@
       object-fit: contain;
     }
   }
+}
+
+// -- Scroll-offset wrappers
+
+#informasjonWrapper,
+#varianterWrapper,
+#egenskaperWrapper,
+#videoerWrapper,
+#dokumenterWrapper,
+#agreement-infoWrapper {
+  position: relative;
+}
+
+#informasjon,
+#varianter,
+#egenskaper,
+#videoer,
+#dokumenter,
+#agreement-info {
+  position: absolute;
+  top: -35px;
+  @include mixins.for-size(tablet-up) {
+    top: -160px;
+  }
+
+  left: 0;
 }

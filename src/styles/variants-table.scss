@@ -5,7 +5,6 @@
 .variants-table {
   max-width: 1280px;
   overflow-x: scroll;
-  margin: $a-spacing-4 0;
 
   @include mixins.for-size(tablet-up) {
     .navds-table {

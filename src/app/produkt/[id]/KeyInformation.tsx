@@ -3,7 +3,7 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
-import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, CopyButton, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
@@ -15,24 +15,6 @@ type KeyInformationProps = {
 const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
   const oa = new Set(product.variants.map((p) => p.hasAgreement))
   const hms = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
-
-  const onAgreement =
-    oa.size > 1 ? (
-      <BodyShort>
-        Noen varianter.{' '}
-        <Link as={NextLink} href="#produktvarianter">
-          Se tabell nedenfor.
-        </Link>
-      </BodyShort>
-    ) : oa.has(true) ? (
-      <BodyShort>
-        <Link as={NextLink} href="#agreement-info">
-          Ja, les mer her <ArrowDownIcon color="" aria-hidden />
-        </Link>
-      </BodyShort>
-    ) : (
-      <BodyShort>Nei</BodyShort>
-    )
 
   const hmsNummer =
     hms.size === 1 ? (
@@ -54,12 +36,45 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
     ) : (
       <BodyShort>-</BodyShort>
     )
+
   return (
     <DefinitionList>
-      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
-      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
+      {product.agreements.length === 0 && (
+        <>
+          <DefinitionList.Term>
+            <OnAgreement_HelpText />
+          </DefinitionList.Term>
+          <DefinitionList.Definition>Nei</DefinitionList.Definition>
+        </>
+      )}
+
+      {product.agreements.length > 0 && (
+        <>
+          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
+          <DefinitionList.Definition>
+            {product.agreements.length > 1 ? (
+              <BodyShort>
+                Hjelpemiddelet er på flere delkontrakter.{' '}
+                <Link as={NextLink} href="#agreement-info">
+                  Se avtale informasjon.
+                </Link>
+              </BodyShort>
+            ) : (
+              <BodyShort>
+                <Link as={NextLink} href="#agreement-info">
+                  {product.agreements[0].postTitle}
+                </Link>
+              </BodyShort>
+            )}
+          </DefinitionList.Definition>
+        </>
+      )}
+
       <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
       <DefinitionList.Definition>{hmsNummer}</DefinitionList.Definition>
+      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
+      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
+
       {supplier && (
         <>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
@@ -70,11 +85,6 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
           </DefinitionList.Definition>
         </>
       )}
-
-      <DefinitionList.Term>
-        <OnAgreement_HelpText />
-      </DefinitionList.Term>
-      <DefinitionList.Definition>{onAgreement}</DefinitionList.Definition>
     </DefinitionList>
   )
 }

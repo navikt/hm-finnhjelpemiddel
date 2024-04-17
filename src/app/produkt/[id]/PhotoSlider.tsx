@@ -198,7 +198,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             {numberOfImages > 1 && (
               <Button
                 aria-label="Forrige bilde"
-                variant="tertiary-neutral"
+                variant="tertiary"
                 className="arrow"
                 onClick={() => {
                   prevImage()
@@ -234,7 +234,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
             {numberOfImages > 1 && (
               <Button
                 aria-label="Neste bilde"
-                variant="tertiary-neutral"
+                variant="tertiary"
                 className="arrow"
                 onClick={() => {
                   nextImage()
