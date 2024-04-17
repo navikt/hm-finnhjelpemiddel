@@ -337,6 +337,11 @@ main {
   &--green {
     background-color: #ccf1d6;
   }
+
+  &--xsmall {
+    height: 28px;
+    padding: 0 $a-spacing-2;
+  }
 }
 
 .read-more {

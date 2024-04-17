@@ -6,9 +6,9 @@ import { Bleed, BodyLong, Heading } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
 
-import ProductCardHorizontal from '@/components/ProductCardHorizontal'
 import ReadMore from '@/components/ReadMore'
 
+import ProductCard from '@/components/ProductCard'
 import './product-page.scss'
 
 type Props = {
@@ -56,14 +56,14 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
           </Heading>
           <div className="product-page-section__card-container">
             {firstProducts.map((acc, i) => (
-              <ProductCardHorizontal key={i} product={acc} />
+              <ProductCard type="horizontal" key={i} product={acc} />
             ))}
             {lastProducts && (
               <ReadMore
                 content={
                   <div className="product-page-section__card-container">
                     {lastProducts.map((acc, i) => (
-                      <ProductCardHorizontal key={i} product={acc} />
+                      <ProductCard type="horizontal" key={i} product={acc} />
                     ))}
                   </div>
                 }
