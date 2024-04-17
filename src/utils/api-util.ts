@@ -18,11 +18,14 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
+  HMSSuggestionWheelChair,
+  mapHMSSuggestionFromSearchResponse,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
   mapProductVariant,
   Product,
   ProductVariant,
+  wheelchairFilters,
 } from './product-util'
 import {
   AgreementDocResponse,
@@ -721,6 +724,73 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
     }),
   })
   return res.json()
+}
+
+export async function getProductWithVariantsSuggestions(
+  seriesId: string,
+  setebredde: string,
+  setedybde: string
+): Promise<HMSSuggestionWheelChair[]> {
+  const setebreddeMinCM = setebredde
+  const setebreddeMaksCM = setebredde
+  const setedybdeMinCM = setedybde
+  const setedybdeMaksCM = setedybde
+
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            term: {
+              seriesId: seriesId,
+            },
+          },
+        },
+      },
+      post_filter: {
+        bool: {
+          filter: [
+            filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }, true),
+            filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }, true),
+            //Remove null values
+          ].filter(Boolean),
+        },
+      },
+      size: 150,
+    }),
+  })
+  return res.json().then((data) => {
+    const suggestions = mapHMSSuggestionFromSearchResponse(data)
+
+    // Calculate the differences between user input and range values for each product
+    suggestions.forEach((suggestion) => {
+      let totalDiff = 0
+
+      // Calculate the difference for each wheelchair filter and add it to the total difference
+      wheelchairFilters.forEach((filter) => {
+        const value = suggestion[filter]
+        if (value) {
+          const filterValue = Number(value)
+          if (!isNaN(filterValue)) {
+            const userInputValue = filter.includes('Setebredde') ? Number(setebredde) : Number(setedybde)
+            totalDiff += Math.abs(filterValue - userInputValue)
+          }
+        }
+      })
+
+      suggestion.totalDiff = totalDiff
+    })
+
+    // Sort the list based on the total difference (ascending order)
+    suggestions.sort((a, b) => a.totalDiff! - b.totalDiff!)
+
+    return suggestions
+  })
 }
 
 export type FetchSeriesResponse = {
