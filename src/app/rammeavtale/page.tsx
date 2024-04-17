@@ -27,7 +27,7 @@ export default async function AgreementsInfoPage() {
               <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
             <BodyShort spacing>
-              {`Nedenfor finner du alle aktive avtaler for NAV Hjelpemniddel og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
+              {`Nedenfor finner du alle aktive avtaler for NAV Hjelpemidler og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
         og behov- og kravspesifikasjon med mer.`}
             </BodyShort>
 
