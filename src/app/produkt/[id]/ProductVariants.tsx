@@ -123,11 +123,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
     )
   }
 
-  const variantTitle = (title: string) => {
-    const replacedStr = title.replace(product.title, '')
-    return replacedStr === '' ? '-' : replacedStr
-  }
-
   const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
 
@@ -164,7 +159,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         Utgått
                       </Tag>
                     )}
-                    {variantTitle(variant.articleName)}
+                    {variant.articleName}
                   </VStack>
                 </Table.ColumnHeader>
               ))}
