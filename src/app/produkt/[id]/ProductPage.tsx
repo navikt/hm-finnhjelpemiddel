@@ -5,12 +5,13 @@ import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Bleed, Button, CopyButton, HGrid, Heading, VStack } from '@navikt/ds-react'
+import { Bleed, Button, CopyButton, HGrid, HStack, Heading, VStack } from '@navikt/ds-react'
 import { headers } from 'next/headers'
 import NextLink from 'next/link'
 import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
+import HmsSuggestion from './HmsSuggestion'
 import { Documents, ProductDescription, Videos } from './InformationTabs'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
@@ -31,6 +32,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   const isOnAgreement = product.agreements?.length > 0
   const hasAccessories = accessories.length > 0
   const hasSpareParts = spareParts.length > 0
+  const showHMSSuggestion = product.isoCategory.startsWith('1222')
 
   return (
     <AnimateLayout>
@@ -43,15 +45,23 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           hasSpareParts={hasSpareParts}
         />
 
-        <section
-          id="informasjonWrapper"
-          className="product-page__tabs spacing-top--large spacing-bottom--medium"
-          aria-label="Beskrivelse og annen generell informasjon"
-        >
-          <span id="informasjon"></span>
-          <ProductDescription product={product} />
-          {/* {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />} */}
-        </section>
+        <HStack justify="space-between">
+          <section
+            id="informasjonWrapper"
+            className="product-page__tabs spacing-top--large spacing-bottom--medium"
+            aria-label="Beskrivelse og annen generell informasjon"
+          >
+            <span id="informasjon" />
+            <ProductDescription product={product} />
+            {/* {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />} */}
+          </section>
+
+          {showHMSSuggestion && (
+            <aside className="spacing-top--large">
+              <HmsSuggestion product={product} />
+            </aside>
+          )}
+        </HStack>
 
         {product.variantCount > 1 && (
           <section
@@ -59,14 +69,14 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             className="product-page__product-variants spacing-top--large spacing-bottom--medium"
             aria-label="Tabell med informasjon på tvers av varianter som finnes"
           >
-            <span id="varianter"></span>
+            <span id="varianter" />
             <ProductVariants product={product} />
           </section>
         )}
 
         {product.variantCount === 1 && (
           <VStack as="section" id="egenskaperWrapper" className="spacing-top--large spacing-bottom--medium">
-            <span id="egenskaper"></span>
+            <span id="egenskaper" />
             <Heading level="2" size="large" spacing>
               Egenskaper
             </Heading>
@@ -97,7 +107,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         )}
 
         <section aria-label="Videolenker" id="videoerWrapper" className="spacing-top--large spacing-bottom--medium">
-          <span id="videoer"></span>
+          <span id="videoer" />
           <Heading level="3" size="large" spacing>
             Video
           </Heading>
@@ -105,7 +115,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         </section>
 
         <section aria-label="Videolenker" id="dokumenterWrapper" className="spacing-top--large spacing-bottom--large">
-          <span id="dokumenter"></span>
+          <span id="dokumenter" />
           <Heading level="3" size="large" spacing>
             Dokumenter
           </Heading>
@@ -133,7 +143,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               className="product-page-bleed-section product-page-bleed-section__yellow  spacing-top--small"
               aria-label="Tilbehør som passer til hjelpemiddelet"
             >
-              <span id="accessories"></span>
+              <span id="accessories" />
               <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />
             </section>
           </Bleed>
@@ -147,7 +157,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               className="product-page-bleed-section product-page-bleed-section__blue  spacing-top--small"
               aria-label="Reservedeler som passer til hjelpemiddelet"
             >
-              <span id="spareparts"></span>
+              <span id="spareparts" />
               <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />
             </section>
           </Bleed>
