@@ -29,44 +29,19 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   const userAgent = headersList.get('user-agent')
   const isMobileDevice = /Mobile|webOS|Android|iOS|iPhone|iPod|BlackBerry|Windows Phone/i.test(userAgent || '')
   const isOnAgreement = product.agreements?.length > 0
+  const hasAccessories = accessories.length > 0
+  const hasSpareParts = spareParts.length > 0
 
   return (
     <AnimateLayout>
       <VStack>
         <ProductPageTopInfo product={product} supplier={supplier} />
-        <HGrid
-          className="product-page__nav spacing-top--large"
-          columns={{ sm: 'repeat(1, minmax(0, 300px))', md: isOnAgreement ? 5 : 4 }}
-          gap={{ xs: '2', lg: '7' }}
-        >
-          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#informasjon">
-            Generell informasjon
-          </Button>
-          {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#produktvarianter">
-            Finn HMS-nummer
-          </Button> */}
-          {product.variantCount > 1 ? (
-            <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#varianter">
-              Varianter
-            </Button>
-          ) : (
-            <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
-              Egenskaper
-            </Button>
-          )}
-
-          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#videoer">
-            Video
-          </Button>
-          <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#dokumenter">
-            Dokumenter
-          </Button>
-          {isOnAgreement && (
-            <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#agreement-info">
-              Avtale med NAV
-            </Button>
-          )}
-        </HGrid>
+        <ProductNavigationBar
+          hasVariants={product.variantCount > 1}
+          isOnAgreement={isOnAgreement}
+          hasAccessories={hasAccessories}
+          hasSpareParts={hasSpareParts}
+        />
 
         <section
           id="informasjonWrapper"
@@ -141,7 +116,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
               id="agreement-infoWrapper"
-              className="agreement-details spacing-top--small"
+              className="product-page-bleed-section product-page-bleed-section__red spacing-top--small"
               aria-label="Informasjon om rammeavtalene hjelpemiddelet er på"
             >
               <span id="agreement-info"></span>
@@ -151,12 +126,96 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         )}
 
         {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
-        {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />}
+        {hasAccessories && (
+          <Bleed marginInline="full" asChild reflectivePadding>
+            <section
+              id="accessoriesWrapper"
+              className="product-page-bleed-section product-page-bleed-section__yellow  spacing-top--small"
+              aria-label="Tilbehør som passer til hjelpemiddelet"
+            >
+              <span id="accessories"></span>
+              <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />
+            </section>
+          </Bleed>
+        )}
         {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
-        {accessories.length > 0 && <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />}
+
+        {hasSpareParts && (
+          <Bleed marginInline="full" asChild reflectivePadding>
+            <section
+              id="sparepartsWrapper"
+              className="product-page-bleed-section product-page-bleed-section__blue  spacing-top--small"
+              aria-label="Reservedeler som passer til hjelpemiddelet"
+            >
+              <span id="spareparts"></span>
+              <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />
+            </section>
+          </Bleed>
+        )}
       </VStack>
     </AnimateLayout>
   )
 }
 
+const ProductNavigationBar = ({
+  hasVariants,
+  isOnAgreement,
+  hasAccessories,
+  hasSpareParts,
+}: {
+  hasVariants: boolean
+  isOnAgreement: boolean
+  hasAccessories: boolean
+  hasSpareParts: boolean
+}) => {
+  const bools = [isOnAgreement, hasAccessories, hasSpareParts]
+  const numberOfColumns = bools.reduce((acc, bool) => acc + (bool ? 1 : 0), 4)
+  return (
+    <HGrid
+      className="product-page__nav spacing-top--large"
+      columns={{ sm: 'repeat(1, minmax(0, 300px))', md: numberOfColumns }}
+      gap={{ xs: '2', lg: '7' }}
+    >
+      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#informasjon">
+        Generell informasjon
+      </Button>
+      {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#produktvarianter">
+            Finn HMS-nummer
+          </Button> */}
+      {hasVariants ? (
+        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#varianter">
+          Varianter
+        </Button>
+      ) : (
+        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
+          Egenskaper
+        </Button>
+      )}
+
+      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#videoer">
+        Video
+      </Button>
+      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#dokumenter">
+        Dokumenter
+      </Button>
+      {isOnAgreement && (
+        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#agreement-info">
+          Avtale med NAV
+        </Button>
+      )}
+
+      {hasAccessories && (
+        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#tilbehør">
+          Tilbehør
+        </Button>
+      )}
+
+      {hasSpareParts && (
+        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#reservedeler">
+          Reservedeler
+        </Button>
+      )}
+    </HGrid>
+  )
+}
 export default ProductPage

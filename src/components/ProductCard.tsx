@@ -116,7 +116,6 @@ const ProductCard = ({
   }
 
   if (type === 'horizontal') {
-    console.log({ product })
     return (
       <Box paddingInline="2" paddingBlock="2" className="product-card--horizontal">
         <HGrid gap="1" columns={{ xs: 1, md: 2 }} className="product-card__content">

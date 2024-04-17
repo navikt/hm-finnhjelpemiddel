@@ -145,13 +145,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <Heading level="2" size="large" spacing>
         Varianter
       </Heading>
-      {product.variantCount > 1 && (
-        <BodyLong>
-          {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
-          Nedenfor finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan
-          sorteres og vil fremheves når de er sortert.
-        </BodyLong>
-      )}
+      <BodyLong spacing>
+        {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement} Nedenfor
+        finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
+        vil fremheves når de er sortert.
+      </BodyLong>
 
       <div className="variants-table">
         <Table zebraStripes>

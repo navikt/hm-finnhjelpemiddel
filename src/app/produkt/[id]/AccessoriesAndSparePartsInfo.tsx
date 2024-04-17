@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 
-import { Bleed, BodyLong, Heading } from '@navikt/ds-react'
+import { BodyLong, HStack, Heading, VStack } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
 
@@ -23,59 +23,45 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
   }
   const firstProducts = products.slice(0, 4)
   const lastProducts = products.length > 4 && products.slice(4)
-  const classname = type === 'Accessories' ? '__yellow-background' : '__blue-background'
 
   if (!products.length) {
     return (
-      <section
-        className={`product-page-section__container product-page-section${classname}`}
-        aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
-      >
-        <div className="product-page-section__content">
-          <Heading level="2" size="medium" spacing ref={headingRef}>
-            {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
-          </Heading>
-          <BodyLong>
-            Det er ingen {type === 'Accessories' ? 'tilbehør' : 'reservedeler'} registrert som passer til dette
-            produktet
-          </BodyLong>
-        </div>
-      </section>
+      <VStack>
+        <Heading level="2" size="large" spacing ref={headingRef}>
+          {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+        </Heading>
+        <BodyLong>
+          Det er ingen {type === 'Accessories' ? 'tilbehør' : 'reservedeler'} registrert som passer til dette produktet
+        </BodyLong>
+      </VStack>
     )
   }
 
   return (
-    <Bleed marginInline="full" asChild reflectivePadding>
-      <section
-        className={`product-page-section__container product-page-section${classname}`}
-        aria-label={type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
-      >
-        <div className="product-page-section__content main-wrapper--large">
-          <Heading level="2" size="medium" spacing ref={headingRef}>
-            {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
-          </Heading>
-          <div className="product-page-section__card-container">
-            {firstProducts.map((acc, i) => (
-              <ProductCard type="horizontal" key={i} product={acc} />
-            ))}
-            {lastProducts && (
-              <ReadMore
-                content={
-                  <div className="product-page-section__card-container">
-                    {lastProducts.map((acc, i) => (
-                      <ProductCard type="horizontal" key={i} product={acc} />
-                    ))}
-                  </div>
-                }
-                buttonOpen={`Vis alle ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
-                buttonClose={`Vis færre ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
-                setFocus={setFocusOnHeading}
-              />
-            )}
-          </div>
-        </div>
-      </section>
-    </Bleed>
+    <VStack>
+      <Heading level="2" size="medium" spacing ref={headingRef}>
+        {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+      </Heading>
+      <HStack gap="4">
+        {firstProducts.map((acc, i) => (
+          <ProductCard type="horizontal" key={i} product={acc} />
+        ))}
+        {lastProducts && (
+          <ReadMore
+            content={
+              <HStack className="spacing-bottom--small">
+                {lastProducts.map((acc, i) => (
+                  <ProductCard type="horizontal" key={i} product={acc} />
+                ))}
+              </HStack>
+            }
+            buttonOpen={`Vis alle ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
+            buttonClose={`Vis færre ${type === 'Accessories' ? 'tilbehør' : 'reservedeler'}`}
+            setFocus={setFocusOnHeading}
+          />
+        )}
+      </HStack>
+    </VStack>
   )
 }
 
