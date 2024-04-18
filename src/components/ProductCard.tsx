@@ -8,6 +8,7 @@ import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useState } from 'react'
 import ProductImage from './ProductImage'
+import { useSearchParams } from 'next/navigation'
 
 const ProductCard = ({
   type,
@@ -28,6 +29,11 @@ const ProductCard = ({
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+
+  const params = useSearchParams()
+  const searchTerm = params.get('term')
+
+  const linkToProduct = `/produkt/${product.id}?term=${searchTerm}`
 
   const currentRank = rank ? rank : minRank
   let cardClassName = ''
@@ -87,7 +93,7 @@ const ProductCard = ({
           {viewHmsOrCount}
           <Link
             className="product-card__link"
-            href={`/produkt/${product.id}`}
+            href={linkToProduct}
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
           >
@@ -122,7 +128,7 @@ const ProductCard = ({
           {viewHmsOrCount}
           <Link
             className="product-card__link"
-            href={`/produkt/${product.id}`}
+            href={linkToProduct}
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
           >
