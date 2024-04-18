@@ -35,7 +35,11 @@ const AutocompleteSearch = ({ onSearch }: Props) => {
   const virtualFocus = useVirtualFocus(listContainerRef.current)
 
   useEffect(() => {
-    if (!searchParamValue) setInputValue('')
+    if (!searchParamValue) {
+      setInputValue('')
+    } else {
+      setInputValue(searchParamValue)
+    }
   }, [searchParamValue])
 
   useEffect(() => {
