@@ -3,7 +3,7 @@ import { Product } from '@/utils/product-util'
 import { BodyLong, BodyShort, Heading, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
-const ProductDescription = ({ product }: { product: Product }) => {
+const ProductInformation = ({ product }: { product: Product }) => {
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
   const ds = new Set(product.variants.map((p) => p.digitalSoknad))
 
@@ -93,4 +93,4 @@ const DigitalSoknad_HelpText = () => {
   )
 }
 
-export default ProductDescription
+export default ProductInformation

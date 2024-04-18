@@ -13,7 +13,7 @@ import ReactPlayer from 'react-player'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
-import ProductDescription from './ProductDescription'
+import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { ProductsOnPost } from './page'
@@ -50,7 +50,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             aria-label="Beskrivelse og annen generell informasjon"
           >
             <span id="informasjon" />
-            <ProductDescription product={product} />
+            <ProductInformation product={product} />
             {/* {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />} */}
           </section>
 
