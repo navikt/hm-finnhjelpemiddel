@@ -1,21 +1,20 @@
-import { Document, Product, Video } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
-import File from '@/components/File'
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import { titleCapitalized, toValueAndUnit } from '@/utils/string-util'
+import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Bleed, BodyShort, Button, CopyButton, HGrid, HStack, Heading, Link, VStack } from '@navikt/ds-react'
+import { Bleed, Button, CopyButton, HGrid, HStack, Heading, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { Fragment } from 'react'
-import ReactPlayer from 'react-player'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
 import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
+import { Documents, Videos } from './VideoAndDocuments'
 import { ProductsOnPost } from './page'
 
 type ProductProps = {
@@ -225,40 +224,6 @@ const ProductNavigationBar = ({
         </Button>
       )}
     </HGrid>
-  )
-}
-
-const Videos = ({ videos }: { videos: Video[] }) => {
-  if (!videos.length) {
-    return <BodyShort>Ingen videolenker er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
-  }
-  return (
-    <HStack as="ul" gap="8" className="video-list">
-      {videos.map((video, index) => (
-        <VStack as="li" key={index} gap="4">
-          <Link target="_blank" title={video.uri} href={video.uri}>
-            {video.text || video.uri}
-          </Link>
-          <ReactPlayer url={video.uri} controls={true} width="100%" height="100%" />
-        </VStack>
-      ))}
-    </HStack>
-  )
-}
-
-const Documents = ({ documents }: { documents: Document[] }) => {
-  if (!documents.length) {
-    return <BodyShort>Ingen dokumenter er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
-  }
-
-  return (
-    <ul className="document-list">
-      {documents.map((doc, index) => (
-        <li key={index}>
-          <File title={titleCapitalized(doc.title)} path={doc.uri} />
-        </li>
-      ))}
-    </ul>
   )
 }
 
