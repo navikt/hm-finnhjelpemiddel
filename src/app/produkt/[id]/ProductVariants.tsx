@@ -210,6 +210,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       activeText="Kopiert"
                       variant="action"
                       activeIcon={<ThumbUpIcon aria-hidden />}
+                      iconPosition="right"
                     />
                   ) : (
                     '-'

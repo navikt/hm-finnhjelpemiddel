@@ -26,6 +26,7 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
         activeText="HMS-nummer er kopiert"
         variant="action"
         activeIcon={<ThumbUpIcon aria-hidden />}
+        iconPosition="right"
       />
     ) : hms.size > 1 ? (
       <BodyShort>

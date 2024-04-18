@@ -82,7 +82,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </Heading>
 
             <DefinitionList horizontal>
-              <DefinitionList.Term>Artikkelnummer</DefinitionList.Term>
+              <DefinitionList.Term>Lev-artnr</DefinitionList.Term>
               <DefinitionList.Definition className="product-page__dd-supplier-ref">
                 <CopyButton
                   size="small"
@@ -92,6 +92,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
                   activeText="Kopiert"
                   variant="action"
                   activeIcon={<ThumbUpIcon aria-hidden />}
+                  iconPosition="right"
                 />
               </DefinitionList.Definition>
               {Object.entries(product.variants[0].techData).map(([key, value], i) => (
