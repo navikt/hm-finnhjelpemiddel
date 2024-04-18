@@ -1,6 +1,6 @@
-import File from '@/components/File'
-import { Document, Video } from '@/utils/product-util'
-import { titleCapitalized } from '@/utils/string-util'
+'use client'
+
+import { Video } from '@/utils/product-util'
 import { BodyShort, HStack, VStack } from '@navikt/ds-react'
 import Link from 'next/link'
 import ReactPlayer from 'react-player'
@@ -20,21 +20,5 @@ export const Videos = ({ videos }: { videos: Video[] }) => {
         </VStack>
       ))}
     </HStack>
-  )
-}
-
-export const Documents = ({ documents }: { documents: Document[] }) => {
-  if (!documents.length) {
-    return <BodyShort>Ingen dokumenter er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
-  }
-
-  return (
-    <ul className="document-list">
-      {documents.map((doc, index) => (
-        <li key={index}>
-          <File title={titleCapitalized(doc.title)} path={doc.uri} />
-        </li>
-      ))}
-    </ul>
   )
 }
