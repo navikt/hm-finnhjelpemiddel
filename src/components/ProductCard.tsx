@@ -46,7 +46,7 @@ const ProductCard = ({
   const params = useSearchParams()
   const searchTerm = params.get('term')
 
-  const linkToProduct = `/produkt/${product.id}?term=${searchTerm}`
+  const linkToProduct = searchTerm ? `/produkt/${product.id}?term=${searchTerm}` : `/produkt/${product.id}`
 
   const currentRank = rank ? rank : minRank
   const onAgreement = currentRank !== Infinity
@@ -134,7 +134,7 @@ const ProductCard = ({
           <VStack>
             <Link
               className="product-card__link"
-              href={`/produkt/${product.id}`}
+              href={linkToProduct}
               aria-label={`Gå til ${product.title}`}
               as={NextLink}
             >

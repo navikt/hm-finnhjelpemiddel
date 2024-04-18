@@ -234,7 +234,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   iconPosition="right"
                   icon={iconBasedOnState('levart')}
                 >
-                  Artikkelnummer
+                  Lev-artnr
                 </Button>
               </Table.HeaderCell>
               {sortedByKey.map((variant) => (
