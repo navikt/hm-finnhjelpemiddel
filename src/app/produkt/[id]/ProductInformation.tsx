@@ -46,12 +46,6 @@ const ProductInformation = ({ product }: { product: Product }) => {
           : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
       </BodyLong>
       <DefinitionList>
-        {/* <DefinitionList.Term>Beskrivelse</DefinitionList.Term>
-        <DefinitionList.Definition>
-          {product.attributes.text
-            ? product.attributes.text
-            : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
-        </DefinitionList.Definition> */}
         <DefinitionList.Term>
           <Bestillingsordning_HelpText />
         </DefinitionList.Term>

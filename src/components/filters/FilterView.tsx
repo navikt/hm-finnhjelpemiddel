@@ -1,7 +1,7 @@
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
 import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { BodyShort, Heading, VStack } from '@navikt/ds-react'
+import { BodyShort, HStack, Heading, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
@@ -100,6 +100,51 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
         <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
         <CheckboxFilter filter={{ key: 'leverandor', data: filters?.leverandor }} showSearch={true} />
       </VStack>
+    </VStack>
+  )
+}
+
+export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
+  const searchParams = useSearchParams()
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+
+  const searchDataFilters = Object.entries(searchData.filters)
+    .filter(([_, value]) => value.length)
+    .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
+
+  const noAvailableFilters =
+    !filters || !Object.values(filters).filter((data) => data.values?.length).length || !Object.keys(filters).length
+
+  if (!searchDataFilters.length && noAvailableFilters) {
+    return (
+      <div className="filter-container__filters">
+        <BodyShort>Ingen filtre tilgjengelig</BodyShort>
+      </div>
+    )
+  }
+
+  const availableAndSelectedFiltersSetedimensjoner = getAvailableAndSelectedFiltersSetedimensjoner(
+    searchDataFilters,
+    filters
+  )
+  const availableAndSelectedFiltersMålOgVekt = getAvailableAndSelectedFiltersMålOgVekt(searchDataFilters, filters)
+
+  return (
+    <VStack>
+      <Heading size="small" level="2">
+        Filtrer tabell
+      </Heading>
+      <HStack gap="2" className="filter-container__filters filter-container__horizontal">
+        {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
+          <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
+        )}
+        {availableAndSelectedFiltersMålOgVekt.length > 0 && (
+          <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
+        )}
+        <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
+        <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
+        <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
+      </HStack>
     </VStack>
   )
 }

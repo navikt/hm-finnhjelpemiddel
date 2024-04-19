@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -8,23 +8,65 @@ import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navi
 import { BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
+import { FilterViewProductPage } from '@/components/filters/FilterView'
+import { fetchProducts, FetchProductsWithFilters } from '@/utils/api-util'
+import { FilterFormState, initialFiltersFormState } from '@/utils/filter-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product, ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { FormProvider, useForm } from 'react-hook-form'
+import useSWR from 'swr'
+import ActiveFilters from '@/components/filters/ActiveFilters'
 
 type SortColumns = {
   orderBy: string | null
   direction: 'ascending' | 'descending'
 }
 
+type FilterFormStateProductPage = {
+  filters: FilterFormState
+}
+
 const ProductVariants = ({ product }: { product: Product }) => {
   /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
+  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+
+  const formMethods = useForm<FilterFormStateProductPage>({
+    defaultValues: {
+      filters: initialFiltersFormState,
+    },
+  })
+
+  const {
+    data: dataAndFilter,
+    isLoading: postsIsLoading,
+    error: postError,
+  } = useSWR<FetchProductsWithFilters>(
+    {
+      from: 0,
+      size: 150,
+      searchData: searchData,
+      dontCollapse: true,
+      seriesId: product.id,
+    },
+    fetchProducts,
+    { keepPreviousData: true }
+  )
+
+  const variants = dataAndFilter && dataAndFilter.products.flatMap((product) => product.variants[0].id)
+  const filters = dataAndFilter && dataAndFilter.filters
 
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
     direction: 'ascending',
   })
+
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
     return variants.sort((variantA, variantB) => {
       if (sortColumns.orderBy === 'HMS') {
@@ -147,8 +189,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
     numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
   } som ikke er på avtale med NAV.`
 
-  const showHMSSuggestion = product.isoCategory.startsWith('1222')
-  // {showHMSSuggestion && <HmsSuggestion product={product} />}
+  const onSubmit = () => {
+    router.replace(
+      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
+      {
+        scroll: false,
+      }
+    )
+  }
 
   return (
     <>
@@ -160,8 +208,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
         finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
         vil fremheves når de er sortert.
       </BodyLong>
-
-      <div className="variants-table">
+      <FormProvider {...formMethods}>
+        <form role="filter" onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+          <FilterViewProductPage filters={filters} />
+          <ActiveFilters selectedFilters={searchData.filters} />
+          <input type="submit" style={{ display: 'none' }} />
+        </form>
+      </FormProvider>
+      <div className="variants-table" id="variants-table">
         <Table zebraStripes>
           <Table.Header>
             <Table.Row>

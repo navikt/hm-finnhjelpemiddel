@@ -35,6 +35,25 @@
     border-bottom: 1px solid $a-border-divider;
   }
 
+  &__horizontal {
+    .checkbox-filter,
+    .input-filter {
+      min-width: 340px;
+      border: 1px solid $a-border-default !important;
+    }
+
+    .range-filter-input-group {
+      margin-left: $a-spacing-3;
+      input {
+        width: 100px;
+      }
+    }
+
+    details {
+      height: fit-content;
+    }
+  }
+
   &__filters {
     margin-top: $a-spacing-4;
     margin-bottom: $a-spacing-6;
