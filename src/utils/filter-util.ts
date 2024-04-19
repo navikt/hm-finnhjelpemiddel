@@ -45,12 +45,37 @@ type MinMaxFilter =
   | { brukervektMinKG?: string }
   | { brukervektMaksKG?: string }
 
-export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter) => {
+export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter, isHmsSuggestion?: boolean) => {
   const keyMin = Object.keys(min)[0]
   const valueMin = Object.values(min)[0]
   const keyMax = Object.keys(max)[0]
   const valueMax = Object.values(max)[0]
-  if (!valueMin.length && !valueMax.length) return null
+  if (!valueMin?.length || !valueMax?.length) return null
+
+  if (isHmsSuggestion) {
+    return {
+      bool: {
+        should: [
+          {
+            range: {
+              [`filters.${keyMin}`]: {
+                ...(valueMin && { gte: Number(valueMin) }),
+                ...(valueMax && { lte: Number(valueMax) + 3 }),
+              },
+            },
+          },
+          {
+            range: {
+              [`filters.${keyMax}`]: {
+                ...(valueMin && { gte: Number(valueMin) }),
+                ...(valueMax && { lte: Number(valueMax) + 3 }),
+              },
+            },
+          },
+        ],
+      },
+    }
+  }
 
   return {
     bool: {

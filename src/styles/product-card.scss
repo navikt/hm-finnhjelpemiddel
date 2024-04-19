@@ -145,6 +145,14 @@
       background-color: $a-gray-200;
     }
   }
+
+  &__product-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .product-card--large {
@@ -233,4 +241,23 @@
 
   width: 190px;
   height: auto;
+}
+
+.product-card--horizontal {
+  @extend .product-card;
+  width: auto;
+  height: auto;
+  max-width: 25rem;
+
+  @include mixins.for-size(tablet-up) {
+    height: 10rem;
+  }
+
+  .picture-container {
+    // margin-left: auto;
+    margin-right: auto;
+  }
+
+  box-shadow: $a-shadow-small;
+  outline: none;
 }

@@ -3,12 +3,25 @@
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Checkbox, Detail, HStack, Link, VStack } from '@navikt/ds-react'
+import {
+  BodyLong,
+  BodyShort,
+  Box,
+  Button,
+  Checkbox,
+  Detail,
+  HGrid,
+  HStack,
+  Heading,
+  Link,
+  VStack,
+} from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
-import { useState } from 'react'
-import ProductImage from './ProductImage'
 import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import AgreementIcon from './AgreementIcon'
+import ProductImage from './ProductImage'
 
 const ProductCard = ({
   type,
@@ -18,7 +31,7 @@ const ProductCard = ({
   variantCount,
   handleIsoButton,
 }: {
-  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print'
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print' | 'horizontal'
   product: Product
   rank?: number
   hmsNumbers?: string[]
@@ -33,9 +46,10 @@ const ProductCard = ({
   const params = useSearchParams()
   const searchTerm = params.get('term')
 
-  const linkToProduct = `/produkt/${product.id}?term=${searchTerm}`
+  const linkToProduct = searchTerm ? `/produkt/${product.id}?term=${searchTerm}` : `/produkt/${product.id}`
 
   const currentRank = rank ? rank : minRank
+  const onAgreement = currentRank !== Infinity
   let cardClassName = ''
 
   if (type === 'plain') {
@@ -50,6 +64,8 @@ const ProductCard = ({
     cardClassName = 'product-card--no-picture'
   } else if (type === 'print') {
     cardClassName = 'product-card--print'
+  } else if (type === 'horizontal') {
+    cardClassName = 'product-card--horizontal'
   }
 
   const viewHmsOrCount = (
@@ -86,7 +102,7 @@ const ProductCard = ({
         <VStack gap="1" className="product-card__content">
           <HStack justify={'space-between'}>
             <Detail textColor="subtle">
-              {rank ? (rank < 90 ? `Rangering ${rank}` : 'Ingen rangering') : 'Ikke på avtale'}
+              {onAgreement ? (currentRank < 90 ? `Rangering ${currentRank}` : 'Ingen rangering') : 'Ikke på avtale'}
             </Detail>
             <CompareCheckbox product={product} />
           </HStack>
@@ -102,6 +118,33 @@ const ProductCard = ({
             </BodyShort>
           </Link>
         </VStack>
+      </Box>
+    )
+  }
+
+  if (type === 'horizontal') {
+    return (
+      <Box paddingInline="2" paddingBlock="2" className="product-card--horizontal">
+        <HGrid gap="1" columns={{ xs: 1, md: 2 }} className="product-card__content">
+          <HGrid columns={onAgreement ? '0.3fr 0.7fr' : '1fr'} className="picture-container">
+            {onAgreement && <AgreementIcon rank={currentRank} size="xsmall" />}
+            <ProductImage src={firstImageSrc} productTitle={product.title} />
+          </HGrid>
+          {viewHmsOrCount}
+          <VStack>
+            <Link
+              className="product-card__link"
+              href={linkToProduct}
+              aria-label={`Gå til ${product.title}`}
+              as={NextLink}
+            >
+              <Heading size="xsmall">{product.title}</Heading>
+            </Link>
+            <BodyLong size="small" className="product-card__product-description">
+              {product.attributes.text}
+            </BodyLong>
+          </VStack>
+        </HGrid>
       </Box>
     )
   }
@@ -122,7 +165,7 @@ const ProductCard = ({
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">
-            {currentRank !== Infinity ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
+            {onAgreement ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
           </Detail>
 
           {viewHmsOrCount}

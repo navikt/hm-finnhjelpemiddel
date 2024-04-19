@@ -5,6 +5,7 @@ import AgreementIcon from '@/components/AgreementIcon'
 import { Alert, Heading } from '@/components/aksel-client'
 
 import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
 import { QrCodeComponent } from './QrCode'
@@ -28,10 +29,13 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
       <HGrid
         columns={{ xs: '1fr', md: '500px  390px' }}
         aria-label="Bilder og nøkkelinformasjon"
-        className="product-info__top-page-container"
+        className={classNames('product-page__top-page-container', {
+          'not-on-agreement-or-expired':
+            product.agreements?.length === 0 && (!allVariantsExpiredDates || !allVariantsExpired),
+        })}
         gap={{ xs: '4', md: '10' }}
       >
-        <div className="product-info__photo-slider-container">
+        <div className="product-page__photo-slider-container">
           {product.photos && <PhotoSlider photos={product.photos} />}
         </div>
         <VStack gap="9" className="spacing-top--medium">
@@ -41,7 +45,7 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             </Heading>
             {rank && <AgreementIcon rank={rank} />}
             {(allVariantsExpiredDates || allVariantsExpired) && (
-              <div className="product-info__expired-propducts">
+              <div className="product-page__expired-propducts">
                 <Alert variant="warning">Dette produktet er utgått</Alert>
               </div>
             )}

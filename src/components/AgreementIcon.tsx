@@ -28,10 +28,11 @@ const AgreementIcon = ({
   rank: number
   text?: string
   className?: string
-  size?: 'small' | 'medium'
+  size?: 'xsmall' | 'small' | 'medium'
 }) => {
+  const onlyRankNumber = size === 'xsmall' || size === 'small'
   const label =
-    text || (rank === 99 ? (size === 'small' ? '-' : 'På avtale') : size === 'small' ? rank : `Rangering ${rank}`)
+    text || (rank === 99 ? (onlyRankNumber ? '-' : 'På avtale') : onlyRankNumber ? rank : `Rangering ${rank}`)
   return (
     <span
       className={classNames(
@@ -39,6 +40,7 @@ const AgreementIcon = ({
         {
           'agreement-wrapper--green': true,
           'agreement-wrapper--small': size === 'small',
+          'agreement-wrapper--xsmall': size === 'xsmall',
         },
         className
       )}

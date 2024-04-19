@@ -19,7 +19,12 @@ type SortColumns = {
 
 const ProductVariants = ({ product }: { product: Product }) => {
   /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
-  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
+  const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
+
+  const [sortColumns, setSortColumns] = useState<SortColumns>({
+    orderBy: 'Expired',
+    direction: 'ascending',
+  })
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
     return variants.sort((variantA, variantB) => {
       if (sortColumns.orderBy === 'HMS') {
@@ -44,6 +49,13 @@ const ProductVariants = ({ product }: { product: Product }) => {
       }
       if (sortColumns.orderBy === 'Expired') {
         if (variantA.status && variantB.status) {
+          if (variantA.agreements.length > 0 && variantB.agreements.length === 0) {
+            return -1
+          }
+          if (variantB.agreements.length > 0 && variantA.agreements.length === 0) {
+            return 1
+          }
+
           return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
         }
         return -1
@@ -123,11 +135,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
     )
   }
 
-  const variantTitle = (title: string) => {
-    const replacedStr = title.replace(product.title, '')
-    return replacedStr === '' ? '-' : replacedStr
-  }
-
   const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
 
@@ -140,18 +147,19 @@ const ProductVariants = ({ product }: { product: Product }) => {
     numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
   } som ikke er på avtale med NAV.`
 
+  const showHMSSuggestion = product.isoCategory.startsWith('1222')
+  // {showHMSSuggestion && <HmsSuggestion product={product} />}
+
   return (
     <>
-      <Heading id="produktvarianter" level="3" size="medium" spacing>
-        Produktvarianter
+      <Heading level="2" size="large" spacing>
+        Varianter
       </Heading>
-      {product.variantCount > 1 && (
-        <BodyLong>
-          {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
-          Nedenfor finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan
-          sorteres og vil fremheves når de er sortert.
-        </BodyLong>
-      )}
+      <BodyLong className={classNames({ 'spacing-bottom--medium': !anyExpired })}>
+        {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement} Nedenfor
+        finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
+        vil fremheves når de er sortert.
+      </BodyLong>
 
       <div className="variants-table">
         <Table zebraStripes>
@@ -166,7 +174,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         Utgått
                       </Tag>
                     )}
-                    {variantTitle(variant.articleName)}
+                    {variant.articleName}
                   </VStack>
                 </Table.ColumnHeader>
               ))}
@@ -202,6 +210,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       activeText="Kopiert"
                       variant="action"
                       activeIcon={<ThumbUpIcon aria-hidden />}
+                      iconPosition="right"
                     />
                   ) : (
                     '-'
@@ -225,7 +234,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   iconPosition="right"
                   icon={iconBasedOnState('levart')}
                 >
-                  Artikkelnummer
+                  Lev-artnr
                 </Button>
               </Table.HeaderCell>
               {sortedByKey.map((variant) => (

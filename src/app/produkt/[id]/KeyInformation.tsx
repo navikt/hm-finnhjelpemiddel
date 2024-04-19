@@ -3,7 +3,7 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
-import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, CopyButton, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
@@ -16,24 +16,6 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
   const oa = new Set(product.variants.map((p) => p.hasAgreement))
   const hms = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
 
-  const onAgreement =
-    oa.size > 1 ? (
-      <BodyShort>
-        Noen varianter.{' '}
-        <Link as={NextLink} href="#produktvarianter">
-          Se tabell nedenfor.
-        </Link>
-      </BodyShort>
-    ) : oa.has(true) ? (
-      <BodyShort>
-        <Link as={NextLink} href="#agreement-info">
-          Ja, les mer her <ArrowDownIcon color="" aria-hidden />
-        </Link>
-      </BodyShort>
-    ) : (
-      <BodyShort>Nei</BodyShort>
-    )
-
   const hmsNummer =
     hms.size === 1 ? (
       <CopyButton
@@ -44,22 +26,56 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
         activeText="HMS-nummer er kopiert"
         variant="action"
         activeIcon={<ThumbUpIcon aria-hidden />}
+        iconPosition="right"
       />
     ) : hms.size > 1 ? (
       <BodyShort>
-        <Link as={NextLink} href="#produktvarianter">
+        <Link as={NextLink} href="#varianter">
           Se tabell med varianter
         </Link>
       </BodyShort>
     ) : (
       <BodyShort>-</BodyShort>
     )
+
   return (
     <DefinitionList>
-      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
-      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
+      {product.agreements.length === 0 && (
+        <>
+          <DefinitionList.Term>
+            <OnAgreement_HelpText />
+          </DefinitionList.Term>
+          <DefinitionList.Definition>Nei</DefinitionList.Definition>
+        </>
+      )}
+
+      {product.agreements.length > 0 && (
+        <>
+          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
+          <DefinitionList.Definition>
+            {product.agreements.length > 1 ? (
+              <BodyShort>
+                Hjelpemiddelet er på flere delkontrakter.{' '}
+                <Link as={NextLink} href="#agreement-info">
+                  Se avtale informasjon.
+                </Link>
+              </BodyShort>
+            ) : (
+              <BodyShort>
+                <Link as={NextLink} href="#agreement-info">
+                  {product.agreements[0].postTitle}
+                </Link>
+              </BodyShort>
+            )}
+          </DefinitionList.Definition>
+        </>
+      )}
+
       <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
       <DefinitionList.Definition>{hmsNummer}</DefinitionList.Definition>
+      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
+      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
+
       {supplier && (
         <>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
@@ -70,11 +86,6 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
           </DefinitionList.Definition>
         </>
       )}
-
-      <DefinitionList.Term>
-        <OnAgreement_HelpText />
-      </DefinitionList.Term>
-      <DefinitionList.Definition>{onAgreement}</DefinitionList.Definition>
     </DefinitionList>
   )
 }
@@ -83,7 +94,7 @@ export default KeyInformation
 
 const OnAgreement_HelpText = () => {
   return (
-    <div className="product-info__help-text">
+    <div className="product-page__help-text">
       På avtale med NAV
       <HelpText placement="right" strategy="absolute">
         Ved søknad om et hjelpemiddel fra NAV skal du alltid først vurdere om et av hjelpemidlene i en avtale kan
