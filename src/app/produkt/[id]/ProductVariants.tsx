@@ -18,7 +18,6 @@ import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import ActiveFilters from '@/components/filters/ActiveFilters'
 
 type SortColumns = {
   orderBy: string | null
@@ -43,6 +42,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
     },
   })
 
+  console.log({ searchData })
+
   const {
     data: dataAndFilter,
     isLoading: postsIsLoading,
@@ -56,12 +57,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
       seriesId: product.id,
     },
     fetchProducts,
-    { keepPreviousData: true }
+    { keepPreviousData: false }
   )
 
   const variants = dataAndFilter && dataAndFilter.products.flatMap((product) => product.variants[0].id)
   const filters = dataAndFilter && dataAndFilter.filters
-
+  console.log(variants?.length)
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
     direction: 'ascending',
@@ -209,9 +210,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
         vil fremheves når de er sortert.
       </BodyLong>
       <FormProvider {...formMethods}>
-        <form role="filter" onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+        <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
           <FilterViewProductPage filters={filters} />
-          <ActiveFilters selectedFilters={searchData.filters} />
+
           <input type="submit" style={{ display: 'none' }} />
         </form>
       </FormProvider>

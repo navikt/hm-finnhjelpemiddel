@@ -373,6 +373,7 @@ export const fetchProducts = ({
     produktkategori: filterProduktkategori(produktkategori),
     rammeavtale: filterRammeavtale(rammeavtale),
   }
+  console.log({ searchTermQuery })
 
   const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
     [filterKey]: {
