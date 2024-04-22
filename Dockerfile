@@ -8,7 +8,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 # Copy package.json and package-lock.json before other files
 # Utilise Docker cache to save re-installing dependencies if unchanged
-COPY package*.json package-lock.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
@@ -37,7 +37,7 @@ ARG CDN_URL
 ENV CDN_URL ${CDN_URL}
 
 # Build app
-RUN npm run build
+RUN npm run && npm run build
 
 FROM gcr.io/distroless/nodejs:18 as runtime
 
