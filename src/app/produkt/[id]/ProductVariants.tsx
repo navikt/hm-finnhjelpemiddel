@@ -152,7 +152,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading level="2" size="large" spacing>
+      <Heading level="2" size="large" spacing tabIndex={-1}>
         Varianter
       </Heading>
       <BodyLong className={classNames({ 'spacing-bottom--medium': !anyExpired })}>

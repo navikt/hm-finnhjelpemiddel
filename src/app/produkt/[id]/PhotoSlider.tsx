@@ -134,6 +134,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   }
                 }}
                 onLoad={() => setIsLoading(false)}
+                priority
               />
             </div>
           )}
@@ -190,6 +191,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                   }
                 }}
                 onLoad={() => setIsLoading(false)}
+                priority
               />
             </motion.div>
           )}
