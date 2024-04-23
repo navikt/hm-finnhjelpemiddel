@@ -37,7 +37,7 @@ const ProductInformation = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading level="2" size="large" spacing tabIndex={-1}>
+      <Heading level="2" size="large" spacing>
         Beskrivelse
       </Heading>
       <BodyLong spacing>
