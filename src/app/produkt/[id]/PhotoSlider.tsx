@@ -57,6 +57,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
 
   const prevImage = () => {
+    setIsLoading(true)
     const prevIndex = active !== 0 ? active - 1 : numberOfImages - 1
     setActive(prevIndex)
     setDirection(-1)
@@ -117,7 +118,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 fill
                 style={{ objectFit: 'contain' }}
                 onError={() => {
-                  setSrc('/public/assets/midlertidig-manglende-bilde.jpg')
+                  setSrc('/assets/image-error.png')
                   setIsLoading(false)
                 }}
                 alt={'Produktbilde'}
@@ -171,7 +172,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 loader={largeImageLoader}
                 src={src}
                 onError={() => {
-                  setSrc('/public/assets/midlertidig-manglende-bilde.jpg')
+                  setSrc('/assets/image-error.png')
                   setIsLoading(false)
                 }}
                 alt={`Produktbilde ${active + 1} av ${photos.length}`}
