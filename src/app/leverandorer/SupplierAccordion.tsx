@@ -11,9 +11,9 @@ interface Props {
 
 export const SupplierAccordion = ({ supplier }: Props) => {
   return (
-    <Accordion.Item>
+    <Accordion.Item id={supplier.id}>
       <Accordion.Header>
-        <Heading level="2" size="small" id={supplier.id}>
+        <Heading level="2" size="small">
           {supplier.name}
         </Heading>
       </Accordion.Header>
