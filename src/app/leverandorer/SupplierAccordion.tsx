@@ -10,8 +10,11 @@ interface Props {
 }
 
 export const SupplierAccordion = ({ supplier }: Props) => {
+  const location = window.location
+  const supplierId_url = location.hash.replace('#', '')
+
   return (
-    <Accordion.Item id={supplier.id}>
+    <Accordion.Item id={supplier.id} open={supplier.id === supplierId_url}>
       <Accordion.Header>
         <Heading level="2" size="small">
           {supplier.name}
