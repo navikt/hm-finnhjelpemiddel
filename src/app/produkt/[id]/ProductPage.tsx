@@ -115,8 +115,8 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         </section>
 
         <section aria-label="Dokumenter" id="dokumenterWrapper" className="spacing-top--large spacing-bottom--large">
-          <span id="dokumenter" />
-          <Heading level="3" size="large" spacing tabIndex={-1}>
+          <span id="dokumenter" tabIndex={-1} />
+          <Heading level="3" size="large" spacing>
             Dokumenter
           </Heading>
           <Documents documents={product.documents} />
