@@ -1,7 +1,7 @@
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
 import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { BodyShort, HStack, Heading, VStack } from '@navikt/ds-react'
+import { BodyShort, HStack, Heading, HelpText, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
@@ -130,10 +130,16 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
   const availableAndSelectedFiltersMålOgVekt = getAvailableAndSelectedFiltersMålOgVekt(searchDataFilters, filters)
 
   return (
-    <VStack>
-      <Heading size="small" level="2">
-        Filtrer tabell
-      </Heading>
+    <>
+      <HStack gap="2">
+        <Heading size="small" level="2">
+          Filtrer tabell
+        </Heading>
+        <HelpText placement="right" strategy="absolute">
+          Vi jobber kontinuerlig med å forbedre og tilgjengeliggjøre flere filtre. Det er kun de som vises her som er
+          tilgjengelig for dette hjelpemiddelet per i dag.
+        </HelpText>
+      </HStack>
       <HStack gap="2" className="filter-container__filters filter-container__horizontal">
         {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
           <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
@@ -145,7 +151,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
         <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
       </HStack>
-    </VStack>
+    </>
   )
 }
 
