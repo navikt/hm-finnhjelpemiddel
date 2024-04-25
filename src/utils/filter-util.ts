@@ -53,7 +53,6 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter, isHmsSuggesti
 
   if (!valueMin?.length && !valueMax?.length) return null
 
-  console.log({ keyMin }, { valueMin }, { keyMax }, { valueMax }, valueMax !== undefined)
   const mustClausesMin = []
   const mustClausesMax = []
   if (valueMin !== '') {
@@ -91,8 +90,6 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter, isHmsSuggesti
       },
     })
   }
-
-  console.log({ mustClausesMin }, { mustClausesMax })
 
   return {
     bool: {
