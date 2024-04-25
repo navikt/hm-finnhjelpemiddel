@@ -34,7 +34,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 
   return (
     <AnimateLayout>
-      <VStack>
+      <div>
         <ProductPageTopInfo product={product} supplier={supplier} />
         <ProductNavigationBar
           hasVariants={product.variantCount > 1}
@@ -160,7 +160,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </section>
           </Bleed>
         )}
-      </VStack>
+      </div>
     </AnimateLayout>
   )
 }

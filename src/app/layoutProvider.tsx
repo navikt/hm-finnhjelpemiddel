@@ -27,7 +27,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       initAmplitude()
       logOversiktForsideVist()
       if (process.env.NODE_ENV == 'production') {
-        hotjar.initialize(118350, 6)
+        hotjar.initialize({ id: 118350, sv: 6 })
       }
     }
   }, [])
