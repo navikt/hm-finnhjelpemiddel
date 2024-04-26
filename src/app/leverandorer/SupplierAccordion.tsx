@@ -4,15 +4,20 @@ import { logLeverandorprodukterKlikket } from '@/utils/amplitude'
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
+import { useState } from "react";
 
 interface Props {
   supplier: Supplier
 }
 
 export const SupplierAccordion = ({ supplier }: Props) => {
+  const location = window.location
+  const supplierId_url = location.hash.replace('#', '')
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
-    <Accordion.Item id={supplier.id}>
-      <Accordion.Header>
+    <Accordion.Item id={supplier.id} open={isOpen || supplier.id === supplierId_url}>
+      <Accordion.Header onClick={() => setIsOpen(!isOpen)}>
         <Heading level="2" size="small">
           {supplier.name}
         </Heading>
