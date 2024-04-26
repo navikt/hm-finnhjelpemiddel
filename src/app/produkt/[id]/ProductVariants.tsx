@@ -42,8 +42,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
     },
   })
 
-  console.log({ searchData })
-
   const {
     data: dataAndFilter,
     isLoading: postsIsLoading,
@@ -62,7 +60,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   const variants = dataAndFilter && dataAndFilter.products.flatMap((product) => product.variants[0].id)
   const filters = dataAndFilter && dataAndFilter.filters
-  console.log(variants?.length)
+
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
     direction: 'ascending',
