@@ -2,13 +2,10 @@ import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
 import File from '@/components/File'
-import DefinitionList from '@/components/definition-list/DefinitionList'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import { titleCapitalized, toValueAndUnit } from '@/utils/string-util'
-import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Bleed, BodyShort, Button, CopyButton, HGrid, HStack, Heading, VStack } from '@navikt/ds-react'
+import { titleCapitalized } from '@/utils/string-util'
+import { Bleed, BodyShort, Button, HGrid, HStack, Heading } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { Fragment } from 'react'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
@@ -37,7 +34,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
       <div>
         <ProductPageTopInfo product={product} supplier={supplier} />
         <ProductNavigationBar
-          hasVariants={product.variantCount > 1}
           isOnAgreement={isOnAgreement}
           hasAccessories={hasAccessories}
           hasSpareParts={hasSpareParts}
@@ -46,7 +42,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         <HStack justify="space-between">
           <section
             id="informasjonWrapper"
-            className="product-page__tabs spacing-top--large spacing-bottom--medium"
+            className="product-page__tabs spacing-top--xlarge"
             aria-label="Beskrivelse og annen generell informasjon"
           >
             <span id="informasjon" />
@@ -61,51 +57,16 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           )}
         </HStack>
 
-        {product.variantCount > 1 && (
-          <section
-            id="varianterWrapper"
-            className="product-page__product-variants spacing-top--large spacing-bottom--medium"
-            aria-label="Tabell med informasjon på tvers av varianter som finnes"
-          >
-            <span id="varianter" />
-            <ProductVariants product={product} />
-          </section>
-        )}
+        <section
+          id="egenskaperWrapper"
+          className="product-page__product-variants spacing-vertical--xlarge"
+          aria-label="Tabell med egenskaper på tvers av varianter som finnes"
+        >
+          <span id="egenskaper" />
+          <ProductVariants product={product} />
+        </section>
 
-        {product.variantCount === 1 && (
-          <VStack as="section" id="egenskaperWrapper" className="spacing-top--large spacing-bottom--medium">
-            <span id="egenskaper" />
-            <Heading level="2" size="large" spacing>
-              Egenskaper
-            </Heading>
-
-            <DefinitionList horizontal>
-              <DefinitionList.Term>Lev-artnr</DefinitionList.Term>
-              <DefinitionList.Definition className="product-page__dd-supplier-ref">
-                <CopyButton
-                  size="small"
-                  className="hms-copy-button"
-                  copyText={product.variants[0].supplierRef}
-                  text={product.variants[0].supplierRef}
-                  activeText="Kopiert"
-                  variant="action"
-                  activeIcon={<ThumbUpIcon aria-hidden />}
-                  iconPosition="right"
-                />
-              </DefinitionList.Definition>
-              {Object.entries(product.variants[0].techData).map(([key, value], i) => (
-                <Fragment key={i}>
-                  <DefinitionList.Term>{key}</DefinitionList.Term>
-                  <DefinitionList.Definition>
-                    {key !== undefined ? toValueAndUnit(value.value, value.unit) : '-'}
-                  </DefinitionList.Definition>
-                </Fragment>
-              ))}
-            </DefinitionList>
-          </VStack>
-        )}
-
-        <section aria-label="Videolenker" id="videoerWrapper" className="spacing-top--large spacing-bottom--medium">
+        <section aria-label="Videolenker" id="videoerWrapper" className="spacing-vertical--xlarge">
           <span id="videoer" />
           <Heading level="3" size="large" spacing>
             Video
@@ -113,7 +74,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           <Videos videos={product.videos} />
         </section>
 
-        <section aria-label="Videolenker" id="dokumenterWrapper" className="spacing-top--large spacing-bottom--large">
+        <section aria-label="Videolenker" id="dokumenterWrapper" className="spacing-vertical--xlarge">
           <span id="dokumenter" />
           <Heading level="3" size="large" spacing>
             Dokumenter
@@ -167,12 +128,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 }
 
 const ProductNavigationBar = ({
-  hasVariants,
   isOnAgreement,
   hasAccessories,
   hasSpareParts,
 }: {
-  hasVariants: boolean
   isOnAgreement: boolean
   hasAccessories: boolean
   hasSpareParts: boolean
@@ -191,22 +150,19 @@ const ProductNavigationBar = ({
       {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#varianter">
             Finn HMS-nummer
           </Button> */}
-      {hasVariants ? (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#varianter">
-          Varianter
-        </Button>
-      ) : (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
-          Egenskaper
-        </Button>
-      )}
+
+      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
+        Egenskaper
+      </Button>
 
       <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#videoer">
         Video
       </Button>
+
       <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#dokumenter">
         Dokumenter
       </Button>
+
       {isOnAgreement && (
         <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#agreement-info">
           Avtale med NAV
