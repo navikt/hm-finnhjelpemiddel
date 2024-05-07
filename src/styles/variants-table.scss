@@ -71,7 +71,7 @@
   }
 
   &__sortable-row {
-    .navds-table__header-cell {
+    .navds-table__header-cell.sortable {
       padding: 6px $a-spacing-1;
     }
   }
