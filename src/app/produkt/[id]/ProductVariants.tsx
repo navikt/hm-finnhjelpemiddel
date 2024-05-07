@@ -149,11 +149,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} ${
     numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
   } på avtale med NAV.`
-  const textViantsWithAndWithoutAgreement = `${
-    product.title
-  } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
-    numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-  } som ikke er på avtale med NAV.`
+  const textVariantsWithAndWithoutAgreement =
+    numberOfvariantsOnAgreement === 0
+      ? `${product.title} finnes i ${numberOfvariantsWithoutAgreement} ${
+          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+        } som ikke er på avtale med NAV.`
+      : `${
+          product.title
+        } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
+          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+        } som ikke er på avtale med NAV.`
 
   const textMultipleVariants =
     'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'
@@ -168,7 +173,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
         Egenskaper
       </Heading>
       <BodyLong className={classNames({ 'spacing-bottom--medium': !anyExpired })}>
-        {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
+        {numberOfvariantsWithoutAgreement > 0 ? textVariantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
         {product.variantCount === 1 ? textOnlyOne : textMultipleVariants}
       </BodyLong>
 
