@@ -153,7 +153,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
     numberOfvariantsOnAgreement === 0
       ? `${product.title} finnes i ${numberOfvariantsWithoutAgreement} ${
           numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        } som ikke er på avtale med NAV.`
+        }.`
       : `${
           product.title
         } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
