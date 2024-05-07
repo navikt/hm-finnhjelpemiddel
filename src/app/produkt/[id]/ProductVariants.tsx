@@ -177,7 +177,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 'variants-table__sorted-row': sortColumns.orderBy === 'artName',
               })}
             >
-              <Table.ColumnHeader>
+              <Table.ColumnHeader className="sortable">
                 <Button
                   className="sort-button"
                   size="xsmall"
@@ -210,7 +210,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
               })}
             >
-              <Table.HeaderCell>
+              <Table.HeaderCell className="sortable">
                 <Button
                   className="sort-button"
                   size="xsmall"
@@ -242,13 +242,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Table.DataCell>
               ))}
             </Table.Row>
-
             <Table.Row
               className={classNames('variants-table__sortable-row', {
                 'variants-table__sorted-row': sortColumns.orderBy === 'levart',
               })}
             >
-              <Table.HeaderCell>
+              <Table.HeaderCell className="sortable">
                 <Button
                   className="sort-button"
                   size="xsmall"
@@ -274,8 +273,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   { 'variants-table__rank-row-on-agreement': hasAgreementSet.has(true) }
                 )}
               >
-                <Table.HeaderCell>
-                  {sortRank ? (
+                {sortRank ? (
+                  <Table.HeaderCell className="sortable">
                     <Button
                       className="sort-button"
                       size="xsmall"
@@ -287,10 +286,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     >
                       Rangering
                     </Button>
-                  ) : (
-                    <>Rangering</>
-                  )}
-                </Table.HeaderCell>
+                  </Table.HeaderCell>
+                ) : (
+                  <Table.HeaderCell>Rangering</Table.HeaderCell>
+                )}
                 {sortedByKey.map((variant) => (
                   <Fragment key={variant.id}>
                     <Table.DataCell key={variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
@@ -322,8 +321,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       { 'variants-table__sortable-row': isSortableRow }
                     )}
                   >
-                    <Table.HeaderCell>
-                      {isSortableRow ? (
+                    {isSortableRow ? (
+                      <Table.HeaderCell className="sortable">
                         <Button
                           className="sort-button"
                           size="xsmall"
@@ -335,10 +334,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         >
                           {key}
                         </Button>
-                      ) : (
-                        key
-                      )}
-                    </Table.HeaderCell>
+                      </Table.HeaderCell>
+                    ) : (
+                      <Table.HeaderCell>{key}</Table.HeaderCell>
+                    )}
                     {row.map((value, i) => (
                       <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
                     ))}
