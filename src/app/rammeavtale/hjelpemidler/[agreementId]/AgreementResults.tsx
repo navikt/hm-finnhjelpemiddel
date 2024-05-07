@@ -61,9 +61,9 @@ const AgreementResults = ({
             onClick={() => {
               window.print()
             }}
-            icon={<PrinterSmallIcon title="Pdf-oversikt" fontSize="1.5rem" />}
+            icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
           >
-            PDF-oversikt
+            {`Hurtigoversikt (PF)`}
           </Button>
         </HStack>
       </HStack>

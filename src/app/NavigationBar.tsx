@@ -1,3 +1,4 @@
+import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
@@ -8,7 +9,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
-import useOnClickOutside from '@/hooks/useOnClickOutside'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -68,11 +68,10 @@ const NavigationBar = () => {
               {!menuOpen && (
                 <Button
                   className="nav-top-container__search-button"
-                  icon={
-                    searchOpen ? <XMarkIcon title="Lukk søkefelt" /> : <MagnifyingGlassIcon title="Åpne søkefelt" />
-                  }
+                  icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
                   variant="tertiary-neutral"
                   onClick={() => setSearchOpen(!searchOpen)}
+                  aria-expanded={searchOpen}
                 />
               )}
             </Show>
@@ -80,7 +79,7 @@ const NavigationBar = () => {
               <>
                 <Hide below="md">
                   <Button
-                    icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
+                    icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
                     variant="tertiary-neutral"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
@@ -90,9 +89,10 @@ const NavigationBar = () => {
                 </Hide>
                 <Show below="md" asChild>
                   <Button
-                    icon={menuOpen ? <XMarkIcon title="Lukk menyen" /> : <MenuHamburgerIcon title="Åpne menyen" />}
+                    icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
                     variant="tertiary-neutral"
                     onClick={() => setMenuOpen(!menuOpen)}
+                    aria-expanded={menuOpen}
                   />
                 </Show>
               </>
