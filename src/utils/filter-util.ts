@@ -50,50 +50,58 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter, isHmsSuggesti
   const valueMin = Object.values(min)[0]
   const keyMax = Object.keys(max)[0]
   const valueMax = Object.values(max)[0]
-  if (!valueMin?.length || !valueMax?.length) return null
 
-  if (isHmsSuggestion) {
-    return {
-      bool: {
-        should: [
-          {
-            range: {
-              [`filters.${keyMin}`]: {
-                ...(valueMin && { gte: Number(valueMin) }),
-                ...(valueMax && { lte: Number(valueMax) + 3 }),
-              },
-            },
-          },
-          {
-            range: {
-              [`filters.${keyMax}`]: {
-                ...(valueMin && { gte: Number(valueMin) }),
-                ...(valueMax && { lte: Number(valueMax) + 3 }),
-              },
-            },
-          },
-        ],
+  if (!valueMin?.length && !valueMax?.length) return null
+
+  const mustClausesMin = []
+  const mustClausesMax = []
+  if (valueMin !== '') {
+    mustClausesMin.push({
+      range: {
+        [`filters.${keyMin}`]: {
+          gte: Number(valueMin),
+        },
       },
-    }
+    })
+
+    mustClausesMax.push({
+      range: {
+        [`filters.${keyMax}`]: {
+          gte: Number(valueMin),
+        },
+      },
+    })
+  }
+
+  if (valueMax !== '') {
+    mustClausesMin.push({
+      range: {
+        [`filters.${keyMin}`]: {
+          lte: isHmsSuggestion ? Number(valueMax) + 3 : Number(valueMax),
+        },
+      },
+    })
+
+    mustClausesMax.push({
+      range: {
+        [`filters.${keyMax}`]: {
+          lte: isHmsSuggestion ? Number(valueMax) + 3 : Number(valueMax),
+        },
+      },
+    })
   }
 
   return {
     bool: {
       should: [
         {
-          range: {
-            [`filters.${keyMin}`]: {
-              ...(valueMin && { gte: Number(valueMin) }),
-              ...(valueMax && { lte: Number(valueMax) }),
-            },
+          bool: {
+            must: mustClausesMin,
           },
         },
         {
-          range: {
-            [`filters.${keyMax}`]: {
-              ...(valueMin && { gte: Number(valueMin) }),
-              ...(valueMax && { lte: Number(valueMax) }),
-            },
+          bool: {
+            must: mustClausesMax,
           },
         },
       ],

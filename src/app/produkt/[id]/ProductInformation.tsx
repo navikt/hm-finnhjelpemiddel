@@ -40,7 +40,7 @@ const ProductInformation = ({ product }: { product: Product }) => {
       <Heading level="2" size="large" spacing>
         Beskrivelse
       </Heading>
-      <BodyLong spacing>
+      <BodyLong spacing className="product-page__description">
         {product.attributes.text
           ? product.attributes.text
           : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}

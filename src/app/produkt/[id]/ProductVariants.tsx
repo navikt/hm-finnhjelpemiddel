@@ -70,7 +70,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
         }
         return -1
       }
-
+      if (sortColumns.orderBy === 'artName') {
+        if (variantA.articleName && variantB.articleName) {
+          return sortIntWithStringFallback(
+            variantA.articleName,
+            variantB.articleName,
+            sortColumns?.direction === 'descending'
+          )
+        }
+        return -1
+      }
       if (
         sortColumns.orderBy &&
         variantA.techData[sortColumns.orderBy]?.value &&
@@ -170,8 +179,24 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <div className="variants-table">
         <Table zebraStripes>
           <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
+            <Table.Row
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'artName',
+              })}
+            >
+              <Table.ColumnHeader className="sortable">
+                <Button
+                  className="sort-button"
+                  size="xsmall"
+                  style={{ textAlign: 'left' }}
+                  variant="tertiary"
+                  onClick={() => handleSortRow('artName')}
+                  iconPosition="right"
+                  icon={iconBasedOnState('artName')}
+                >
+                  Navn på variant
+                </Button>
+              </Table.ColumnHeader>
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>
                   <VStack gap="3">
@@ -195,8 +220,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 }
               )}
             >
-              <Table.HeaderCell>
-                {product.variantCount > 1 ? (
+              {product.variantCount > 1 ? (
+                <Table.HeaderCell className="sortable">
                   <Button
                     className="sort-button"
                     size="xsmall"
@@ -208,10 +233,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   >
                     HMS-nummer
                   </Button>
-                ) : (
-                  'HMS-nummer'
-                )}
-              </Table.HeaderCell>
+                </Table.HeaderCell>
+              ) : (
+                <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+              )}
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>
                   {variant.hmsArtNr ? (
@@ -231,7 +256,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Table.DataCell>
               ))}
             </Table.Row>
-
             <Table.Row
               className={classNames(
                 { 'variants-table__sortable-row': product.variantCount > 1 },
@@ -240,8 +264,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 }
               )}
             >
-              <Table.HeaderCell>
-                {product.variantCount > 1 ? (
+              {product.variantCount > 1 ? (
+                <Table.HeaderCell className="sortable">
                   <Button
                     className="sort-button"
                     size="xsmall"
@@ -253,10 +277,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   >
                     Lev-artnr
                   </Button>
-                ) : (
-                  'Lev-artnr'
-                )}
-              </Table.HeaderCell>
+                </Table.HeaderCell>
+              ) : (
+                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+              )}
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>
                   {variant.supplierRef ? (
@@ -285,8 +309,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   { 'variants-table__rank-row-on-agreement': hasAgreementSet.has(true) }
                 )}
               >
-                <Table.HeaderCell>
-                  {sortRank ? (
+                {sortRank ? (
+                  <Table.HeaderCell className="sortable">
                     <Button
                       className="sort-button"
                       size="xsmall"
@@ -298,10 +322,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     >
                       Rangering
                     </Button>
-                  ) : (
-                    <>Rangering</>
-                  )}
-                </Table.HeaderCell>
+                  </Table.HeaderCell>
+                ) : (
+                  <Table.HeaderCell>Rangering</Table.HeaderCell>
+                )}
                 {sortedByKey.map((variant) => (
                   <Fragment key={variant.id}>
                     <Table.DataCell key={variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
@@ -333,8 +357,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       { 'variants-table__sortable-row': isSortableRow }
                     )}
                   >
-                    <Table.HeaderCell>
-                      {isSortableRow ? (
+                    {isSortableRow ? (
+                      <Table.HeaderCell className="sortable">
                         <Button
                           className="sort-button"
                           size="xsmall"
@@ -346,10 +370,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         >
                           {key}
                         </Button>
-                      ) : (
-                        key
-                      )}
-                    </Table.HeaderCell>
+                      </Table.HeaderCell>
+                    ) : (
+                      <Table.HeaderCell>{key}</Table.HeaderCell>
+                    )}
                     {row.map((value, i) => (
                       <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
                     ))}
