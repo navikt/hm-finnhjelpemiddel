@@ -71,7 +71,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
         }
         return -1
       }
-
+      if (sortColumns.orderBy === 'artName') {
+        if (variantA.articleName && variantB.articleName) {
+          return sortIntWithStringFallback(
+            variantA.articleName,
+            variantB.articleName,
+            sortColumns?.direction === 'descending'
+          )
+        }
+        return -1
+      }
       if (
         sortColumns.orderBy &&
         variantA.techData[sortColumns.orderBy]?.value &&
@@ -160,12 +169,27 @@ const ProductVariants = ({ product }: { product: Product }) => {
         finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
         vil fremheves når de er sortert.
       </BodyLong>
-
       <div className="variants-table">
         <Table zebraStripes>
           <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
+            <Table.Row
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'artName',
+              })}
+            >
+              <Table.ColumnHeader className="sortable">
+                <Button
+                  className="sort-button"
+                  size="xsmall"
+                  style={{ textAlign: 'left' }}
+                  variant="tertiary"
+                  onClick={() => handleSortRow('artName')}
+                  iconPosition="right"
+                  icon={iconBasedOnState('artName')}
+                >
+                  Navn på variant
+                </Button>
+              </Table.ColumnHeader>
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>
                   <VStack gap="3">
@@ -186,7 +210,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
               })}
             >
-              <Table.HeaderCell>
+              <Table.HeaderCell className="sortable">
                 <Button
                   className="sort-button"
                   size="xsmall"
@@ -218,13 +242,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Table.DataCell>
               ))}
             </Table.Row>
-
             <Table.Row
               className={classNames('variants-table__sortable-row', {
                 'variants-table__sorted-row': sortColumns.orderBy === 'levart',
               })}
             >
-              <Table.HeaderCell>
+              <Table.HeaderCell className="sortable">
                 <Button
                   className="sort-button"
                   size="xsmall"
@@ -250,8 +273,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   { 'variants-table__rank-row-on-agreement': hasAgreementSet.has(true) }
                 )}
               >
-                <Table.HeaderCell>
-                  {sortRank ? (
+                {sortRank ? (
+                  <Table.HeaderCell className="sortable">
                     <Button
                       className="sort-button"
                       size="xsmall"
@@ -263,10 +286,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     >
                       Rangering
                     </Button>
-                  ) : (
-                    <>Rangering</>
-                  )}
-                </Table.HeaderCell>
+                  </Table.HeaderCell>
+                ) : (
+                  <Table.HeaderCell>Rangering</Table.HeaderCell>
+                )}
                 {sortedByKey.map((variant) => (
                   <Fragment key={variant.id}>
                     <Table.DataCell key={variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
@@ -298,8 +321,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       { 'variants-table__sortable-row': isSortableRow }
                     )}
                   >
-                    <Table.HeaderCell>
-                      {isSortableRow ? (
+                    {isSortableRow ? (
+                      <Table.HeaderCell className="sortable">
                         <Button
                           className="sort-button"
                           size="xsmall"
@@ -311,10 +334,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         >
                           {key}
                         </Button>
-                      ) : (
-                        key
-                      )}
-                    </Table.HeaderCell>
+                      </Table.HeaderCell>
+                    ) : (
+                      <Table.HeaderCell>{key}</Table.HeaderCell>
+                    )}
                     {row.map((value, i) => (
                       <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
                     ))}
