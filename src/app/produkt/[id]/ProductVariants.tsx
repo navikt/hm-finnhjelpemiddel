@@ -164,7 +164,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
     'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'
   const textOnlyOne = 'Nedenfor finner man en oversikt over egenskaper.'
 
-  const showHMSSuggestion = product.isoCategory.startsWith('1222')
+  // const showHMSSuggestion = product.isoCategory.startsWith('1222')
   // {showHMSSuggestion && <HmsSuggestion product={product} />}
 
   return (
@@ -189,19 +189,23 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 'variants-table__sorted-row': sortColumns.orderBy === 'artName',
               })}
             >
-              <Table.ColumnHeader className="sortable">
-                <Button
-                  className="sort-button"
-                  size="xsmall"
-                  style={{ textAlign: 'left' }}
-                  variant="tertiary"
-                  onClick={() => handleSortRow('artName')}
-                  iconPosition="right"
-                  icon={iconBasedOnState('artName')}
-                >
-                  Navn på variant
-                </Button>
-              </Table.ColumnHeader>
+              {product.variantCount > 1 ? (
+                <Table.ColumnHeader className="sortable">
+                  <Button
+                    className="sort-button"
+                    size="xsmall"
+                    style={{ textAlign: 'left' }}
+                    variant="tertiary"
+                    onClick={() => handleSortRow('artName')}
+                    iconPosition="right"
+                    icon={iconBasedOnState('artName')}
+                  >
+                    Navn på variant
+                  </Button>
+                </Table.ColumnHeader>
+              ) : (
+                <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+              )}
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>
                   <VStack gap="3">
