@@ -71,7 +71,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
         }
         return -1
       }
-
+      if (sortColumns.orderBy === 'artName') {
+        if (variantA.articleName && variantB.articleName) {
+          return sortIntWithStringFallback(
+            variantA.articleName,
+            variantB.articleName,
+            sortColumns?.direction === 'descending'
+          )
+        }
+        return -1
+      }
       if (
         sortColumns.orderBy &&
         variantA.techData[sortColumns.orderBy]?.value &&
@@ -160,12 +169,27 @@ const ProductVariants = ({ product }: { product: Product }) => {
         finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
         vil fremheves når de er sortert.
       </BodyLong>
-
       <div className="variants-table">
         <Table zebraStripes>
           <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
+            <Table.Row
+              className={classNames('variants-table__sortable-row', {
+                'variants-table__sorted-row': sortColumns.orderBy === 'artName',
+              })}
+            >
+              <Table.ColumnHeader>
+                <Button
+                  className="sort-button"
+                  size="xsmall"
+                  style={{ textAlign: 'left' }}
+                  variant="tertiary"
+                  onClick={() => handleSortRow('artName')}
+                  iconPosition="right"
+                  icon={iconBasedOnState('artName')}
+                >
+                  Navn på variant
+                </Button>
+              </Table.ColumnHeader>
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>
                   <VStack gap="3">

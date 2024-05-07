@@ -76,6 +76,12 @@
     }
   }
 
+  &__sortable-row-header {
+    .navds-table__header-cell {
+      padding: 6px $a-spacing-1;
+    }
+  }
+
   tbody &__sorted-row {
     th,
     td {
