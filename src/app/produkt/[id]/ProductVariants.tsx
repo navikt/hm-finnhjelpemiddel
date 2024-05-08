@@ -18,7 +18,6 @@ type SortColumns = {
 }
 
 const ProductVariants = ({ product }: { product: Product }) => {
-  /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
   const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
 
   const [sortColumns, setSortColumns] = useState<SortColumns>({
@@ -150,25 +149,38 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} ${
     numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
   } på avtale med NAV.`
-  const textViantsWithAndWithoutAgreement = `${
-    product.title
-  } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
-    numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-  } som ikke er på avtale med NAV.`
+  const textVariantsWithAndWithoutAgreement =
+    numberOfvariantsOnAgreement === 0
+      ? `${product.title} finnes i ${numberOfvariantsWithoutAgreement} ${
+          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+        }.`
+      : `${
+          product.title
+        } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
+          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+        } som ikke er på avtale med NAV.`
 
-  const showHMSSuggestion = product.isoCategory.startsWith('1222')
+  const textMultipleVariants =
+    'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'
+  const textOnlyOne = 'Nedenfor finner man en oversikt over egenskaper.'
+
+  // const showHMSSuggestion = product.isoCategory.startsWith('1222')
   // {showHMSSuggestion && <HmsSuggestion product={product} />}
 
   return (
     <>
       <Heading level="2" size="large" spacing>
-        Varianter
+        Egenskaper
       </Heading>
       <BodyLong className={classNames({ 'spacing-bottom--medium': !anyExpired })}>
-        {numberOfvariantsWithoutAgreement > 0 ? textViantsWithAndWithoutAgreement : textAllVariantsOnAgreement} Nedenfor
-        finner man en oversikt over de forskjellige variantene. Radene der variantene har ulike verdier kan sorteres og
-        vil fremheves når de er sortert.
+        {numberOfvariantsWithoutAgreement > 0 ? textVariantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
+        {product.variantCount === 1 ? textOnlyOne : textMultipleVariants}
       </BodyLong>
+
+      <Heading level="3" size="medium" spacing>
+        Varianter
+      </Heading>
+
       <div className="variants-table">
         <Table zebraStripes>
           <Table.Header>
@@ -177,19 +189,23 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 'variants-table__sorted-row': sortColumns.orderBy === 'artName',
               })}
             >
-              <Table.ColumnHeader className="sortable">
-                <Button
-                  className="sort-button"
-                  size="xsmall"
-                  style={{ textAlign: 'left' }}
-                  variant="tertiary"
-                  onClick={() => handleSortRow('artName')}
-                  iconPosition="right"
-                  icon={iconBasedOnState('artName')}
-                >
-                  Navn på variant
-                </Button>
-              </Table.ColumnHeader>
+              {product.variantCount > 1 ? (
+                <Table.ColumnHeader className="sortable">
+                  <Button
+                    className="sort-button"
+                    size="xsmall"
+                    style={{ textAlign: 'left' }}
+                    variant="tertiary"
+                    onClick={() => handleSortRow('artName')}
+                    iconPosition="right"
+                    icon={iconBasedOnState('artName')}
+                  >
+                    Navn på variant
+                  </Button>
+                </Table.ColumnHeader>
+              ) : (
+                <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+              )}
               {sortedByKey.map((variant) => (
                 <Table.ColumnHeader key={variant.id}>
                   <VStack gap="3">
@@ -206,23 +222,30 @@ const ProductVariants = ({ product }: { product: Product }) => {
           </Table.Header>
           <Table.Body>
             <Table.Row
-              className={classNames('variants-table__sortable-row', {
-                'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
-              })}
+              className={classNames(
+                { 'variants-table__sortable-row': product.variantCount > 1 },
+                {
+                  'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
+                }
+              )}
             >
-              <Table.HeaderCell className="sortable">
-                <Button
-                  className="sort-button"
-                  size="xsmall"
-                  style={{ textAlign: 'left' }}
-                  variant="tertiary"
-                  onClick={() => handleSortRow('HMS')}
-                  iconPosition="right"
-                  icon={iconBasedOnState('HMS')}
-                >
-                  HMS-nummer
-                </Button>
-              </Table.HeaderCell>
+              {product.variantCount > 1 ? (
+                <Table.HeaderCell className="sortable">
+                  <Button
+                    className="sort-button"
+                    size="xsmall"
+                    style={{ textAlign: 'left' }}
+                    variant="tertiary"
+                    onClick={() => handleSortRow('HMS')}
+                    iconPosition="right"
+                    icon={iconBasedOnState('HMS')}
+                  >
+                    HMS-nummer
+                  </Button>
+                </Table.HeaderCell>
+              ) : (
+                <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+              )}
               {sortedByKey.map((variant) => (
                 <Table.DataCell key={variant.id}>
                   {variant.hmsArtNr ? (
@@ -243,25 +266,47 @@ const ProductVariants = ({ product }: { product: Product }) => {
               ))}
             </Table.Row>
             <Table.Row
-              className={classNames('variants-table__sortable-row', {
-                'variants-table__sorted-row': sortColumns.orderBy === 'levart',
-              })}
+              className={classNames(
+                { 'variants-table__sortable-row': product.variantCount > 1 },
+                {
+                  'variants-table__sorted-row': sortColumns.orderBy === 'levart',
+                }
+              )}
             >
-              <Table.HeaderCell className="sortable">
-                <Button
-                  className="sort-button"
-                  size="xsmall"
-                  style={{ textAlign: 'left' }}
-                  variant="tertiary"
-                  onClick={() => handleSortRow('levart')}
-                  iconPosition="right"
-                  icon={iconBasedOnState('levart')}
-                >
-                  Lev-artnr
-                </Button>
-              </Table.HeaderCell>
+              {product.variantCount > 1 ? (
+                <Table.HeaderCell className="sortable">
+                  <Button
+                    className="sort-button"
+                    size="xsmall"
+                    style={{ textAlign: 'left' }}
+                    variant="tertiary"
+                    onClick={() => handleSortRow('levart')}
+                    iconPosition="right"
+                    icon={iconBasedOnState('levart')}
+                  >
+                    Lev-artnr
+                  </Button>
+                </Table.HeaderCell>
+              ) : (
+                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+              )}
               {sortedByKey.map((variant) => (
-                <Table.DataCell key={variant.id}>{variant.supplierRef}</Table.DataCell>
+                <Table.DataCell key={variant.id}>
+                  {variant.supplierRef ? (
+                    <CopyButton
+                      size="small"
+                      className="hms-copy-button"
+                      copyText={variant.supplierRef}
+                      text={variant.supplierRef}
+                      activeText="Kopiert"
+                      variant="action"
+                      activeIcon={<ThumbUpIcon aria-hidden />}
+                      iconPosition="right"
+                    />
+                  ) : (
+                    '-'
+                  )}
+                </Table.DataCell>
               ))}
             </Table.Row>
 
