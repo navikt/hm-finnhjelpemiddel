@@ -233,12 +233,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
           <input type="submit" style={{ display: 'none' }} />
         </form>
       </FormProvider>
-      <div className="variants-table" id="variants-table">
+
       <Heading level="3" size="medium" spacing>
         Varianter
       </Heading>
 
-      <div className="variants-table">
+      <div className="variants-table" id="variants-table">
         <Table zebraStripes>
           <Table.Header>
             <Table.Row
@@ -449,7 +449,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
           </Table.Body>
         </Table>
       </div>
-    </>  
-)}
+    </>
+  )
+}
 
 export default ProductVariants
