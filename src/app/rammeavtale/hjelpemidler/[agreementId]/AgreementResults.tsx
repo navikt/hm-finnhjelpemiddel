@@ -58,12 +58,13 @@ const AgreementResults = ({
           <Button
             size="small"
             variant="secondary-neutral"
+            className="hurtigoverikt-button"
             onClick={() => {
               window.print()
             }}
             icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
           >
-            {`Hurtigoversikt (PF)`}
+            {`Hurtigoversikt (PDF)`}
           </Button>
         </HStack>
       </HStack>

@@ -11,7 +11,7 @@ const ProductInformation = ({ product }: { product: Product }) => {
     bo.size > 1 ? (
       <BodyShort>
         Noen varianter.{' '}
-        <Link as={NextLink} href="#varianter">
+        <Link as={NextLink} href="#egenskaper">
           Se tabell nedenfor.
         </Link>
       </BodyShort>
@@ -25,7 +25,7 @@ const ProductInformation = ({ product }: { product: Product }) => {
     ds.size > 1 ? (
       <BodyShort>
         Noen varianter.{' '}
-        <Link as={NextLink} href="#varianter">
+        <Link as={NextLink} href="#egenskaper">
           Se tabell nedenfor.
         </Link>
       </BodyShort>
