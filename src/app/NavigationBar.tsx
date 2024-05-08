@@ -28,8 +28,7 @@ const NavigationBar = () => {
     (searchTerm: string) => {
       setMenuOpen(false)
       const q = new URLSearchParams(window.location.search)
-      q.set('term', searchTerm)
-
+      q.set('term', searchTerm.trim())
       if (path.includes('sok')) {
         logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
       } else if (path === '/') {

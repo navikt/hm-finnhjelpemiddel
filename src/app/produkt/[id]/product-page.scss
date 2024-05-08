@@ -34,6 +34,10 @@
     }
   }
 
+  &__description {
+    white-space: pre-wrap;
+  }
+
   &__help-text {
     display: flex;
     gap: $a-spacing-1;
@@ -395,7 +399,6 @@
 // -- Scroll-offset wrappers
 
 #informasjonWrapper,
-#varianterWrapper,
 #egenskaperWrapper,
 #videoerWrapper,
 #dokumenterWrapper,
@@ -404,7 +407,6 @@
 }
 
 #informasjon,
-#varianter,
 #egenskaper,
 #videoer,
 #dokumenter,
