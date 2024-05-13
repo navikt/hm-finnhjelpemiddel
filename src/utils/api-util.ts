@@ -373,7 +373,6 @@ export const fetchProducts = ({
     produktkategori: filterProduktkategori(produktkategori),
     rammeavtale: filterRammeavtale(rammeavtale),
   }
-  console.log({ searchTermQuery })
 
   const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
     [filterKey]: {
@@ -381,8 +380,7 @@ export const fetchProducts = ({
         bool: {
           filter: Object.entries(filterKeyToAggsFilter)
             .filter(([key, v]) => key !== filterKey && v != null)
-            .map(([_, v]) => v)
-            .concat(filterVis(vis)),
+            .map(([_, v]) => v),
         },
       },
       aggs,
@@ -497,6 +495,107 @@ export const fetchProducts = ({
     .then((res) => res.json())
     .then((data) => {
       return { products: mapProductsFromCollapse(data), filters: mapFilters(data) }
+    })
+}
+
+export const getProductFilters = ({ seriesId }: { seriesId: string }): Promise<FilterData> => {
+  const query = {
+    bool: {
+      must: {
+        term: {
+          seriesId: seriesId,
+        },
+      },
+    },
+  }
+
+  const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
+    lengdeCM: filterLengde(undefined, undefined),
+    breddeCM: filterBredde(undefined, undefined),
+    totalVektKG: filterTotalvekt(undefined, undefined),
+    setebreddeMinCM: filterMinMax({ setebreddeMinCM: undefined }, { setebreddeMaksCM: undefined }),
+    setebreddeMaksCM: filterMinMax({ setebreddeMinCM: undefined }, { setebreddeMaksCM: undefined }),
+    setedybdeMinCM: filterMinMax({ setedybdeMinCM: undefined }, { setedybdeMaksCM: undefined }),
+    setedybdeMaksCM: filterMinMax({ setedybdeMinCM: undefined }, { setedybdeMaksCM: undefined }),
+    setehoydeMinCM: filterMinMax({ setehoydeMinCM: undefined }, { setehoydeMaksCM: undefined }),
+    setehoydeMaksCM: filterMinMax({ setehoydeMinCM: undefined }, { setehoydeMaksCM: undefined }),
+    brukervektMinKG: filterMinMax({ brukervektMinKG: undefined }, { brukervektMaksKG: undefined }),
+    brukervektMaksKG: filterMinMax({ brukervektMinKG: undefined }, { brukervektMaksKG: undefined }),
+    beregnetBarn: filterBeregnetBarn([]),
+    fyllmateriale: filterFyllmateriale([]),
+    materialeTrekk: filterMaterialeTrekk([]),
+    leverandor: filterLeverandor([]),
+    produktkategori: filterProduktkategori([]),
+    rammeavtale: filterRammeavtale([]),
+  }
+
+  const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
+    [filterKey]: {
+      filter: {
+        bool: {
+          filter: Object.entries(filterKeyToAggsFilter)
+            .filter(([key, v]) => key !== filterKey && v != null)
+            .map(([_, v]) => v),
+        },
+      },
+      aggs,
+    },
+  })
+
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: 0,
+      query,
+      aggs: {
+        ...aggsFilter('lengdeCM', toMinMaxAggs(`filters.lengdeCM`)),
+        ...aggsFilter('breddeCM', toMinMaxAggs(`filters.breddeCM`)),
+        ...aggsFilter('totalVektKG', toMinMaxAggs(`filters.totalVektKG`)),
+        ...aggsFilter('setebreddeMinCM', toMinMaxAggs(`filters.setebreddeMinCM`)),
+        ...aggsFilter('setebreddeMaksCM', toMinMaxAggs(`filters.setebreddeMaksCM`)),
+        ...aggsFilter('setedybdeMinCM', toMinMaxAggs(`filters.setedybdeMinCM`)),
+        ...aggsFilter('setedybdeMaksCM', toMinMaxAggs(`filters.setedybdeMaksCM`)),
+        ...aggsFilter('setehoydeMinCM', toMinMaxAggs(`filters.setehoydeMinCM`)),
+        ...aggsFilter('setehoydeMaksCM', toMinMaxAggs(`filters.setehoydeMaksCM`)),
+        ...aggsFilter('brukervektMinKG', toMinMaxAggs(`filters.brukervektMinKG`)),
+        ...aggsFilter('brukervektMaksKG', toMinMaxAggs(`filters.brukervektMaksKG`)),
+        ...aggsFilter('beregnetBarn', {
+          values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
+        }),
+        ...aggsFilter('fyllmateriale', {
+          values: {
+            terms: { field: 'filters.fyllmateriale', order: { _key: 'asc' }, size: 100 },
+          },
+        }),
+        ...aggsFilter('materialeTrekk', {
+          values: {
+            terms: { field: 'filters.materialeTrekk', order: { _key: 'asc' }, size: 100 },
+          },
+        }),
+        ...aggsFilter('leverandor', {
+          values: {
+            terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
+          },
+        }),
+        ...aggsFilter('produktkategori', {
+          values: {
+            terms: { field: 'isoCategoryName', size: 100 },
+          },
+        }),
+        ...aggsFilter('rammeavtale', {
+          values: {
+            terms: { field: 'agreements.label', order: { _key: 'asc' }, size: 100 },
+          },
+        }),
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data: any) => {
+      return mapFilters(data)
     })
 }
 

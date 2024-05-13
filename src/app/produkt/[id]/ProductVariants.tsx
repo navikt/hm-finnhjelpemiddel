@@ -9,7 +9,7 @@ import { BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navi
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { FilterViewProductPage } from '@/components/filters/FilterView'
-import { fetchProducts, FetchProductsWithFilters } from '@/utils/api-util'
+import { fetchProducts, FetchProductsWithFilters, FilterData, getProductFilters } from '@/utils/api-util'
 import { FilterFormState, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product, ProductVariant } from '@/utils/product-util'
@@ -58,8 +58,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
     { keepPreviousData: false }
   )
 
+  const { data: filtersFromData, isLoading: filterIsLoading } = useSWR<FilterData>(
+    { seriesId: product.id },
+    getProductFilters,
+    {
+      keepPreviousData: true,
+    }
+  )
+
   const variants = dataAndFilter && dataAndFilter.products.flatMap((product) => product.variants[0].id)
-  const filters = dataAndFilter && dataAndFilter.filters
+  const filters = filtersFromData && filtersFromData
 
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
