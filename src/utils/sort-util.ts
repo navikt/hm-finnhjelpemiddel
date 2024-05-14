@@ -6,7 +6,7 @@ const stringComparator = (a: string, b: string) => {
   if (b === '-' && a !== '-') {
     return -1 // "-" should come last
   }
-
+  
   if (a < b || b === undefined) {
     return -1
   }
@@ -24,7 +24,7 @@ export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: bool
   if (parseInt(keyA) && parseInt(keyB)) {
     return desc ? parseInt(keyB) - parseInt(keyA) : parseInt(keyA) - parseInt(keyB)
   }
-
+  
   return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
 
