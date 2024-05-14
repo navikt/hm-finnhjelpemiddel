@@ -1,9 +1,11 @@
+import { FilterFormStateProductPage } from '@/app/produkt/[id]/ProductVariants'
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
 import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { BodyShort, HStack, Heading, HelpText, VStack } from '@navikt/ds-react'
+import { BodyShort, Chips, HStack, Heading, HelpText, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { CheckboxFilter } from './CheckboxFilter'
 
 const minMaxFilterKeyMapSete: Record<'setedimensjoner', MinMaxGroupFilter[]> = {
@@ -107,6 +109,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+  const formMethods = useFormContext<FilterFormStateProductPage>()
 
   const searchDataFilters = Object.entries(searchData.filters)
     .filter(([_, value]) => value.length)
@@ -128,6 +131,13 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
     filters
   )
   const availableAndSelectedFiltersMålOgVekt = getAvailableAndSelectedFiltersMålOgVekt(searchDataFilters, filters)
+  const filterChips = Object.entries(searchData.filters)
+    .filter(([_, values]) => values.length > 0)
+    .flatMap(([key, values]) => ({
+      key,
+      values,
+      label: key,
+    }))
 
   return (
     <>
@@ -150,6 +160,24 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
         <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
         <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
+      </HStack>
+
+      <HStack gap="12">
+        <Chips>
+          {filterChips.map(({ key, label, values }, i) => {
+            return (
+              <Chips.Removable
+                key={key + i}
+                onClick={(event) => {
+                  formMethods.setValue(`filters.${key}`, '')
+                  event.currentTarget?.form?.requestSubmit()
+                }}
+              >
+                {`${label}: ${values}`}
+              </Chips.Removable>
+            )
+          })}
+        </Chips>
       </HStack>
     </>
   )

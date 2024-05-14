@@ -24,7 +24,7 @@ type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-type FilterFormStateProductPage = {
+export type FilterFormStateProductPage = {
   filters: FilterFormState
 }
 
@@ -37,6 +37,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const formMethods = useForm<FilterFormStateProductPage>({
+    mode: 'onSubmit',
+    shouldFocusError: false,
     defaultValues: {
       filters: { ...initialFiltersFormState, ...searchData.filters },
     },
