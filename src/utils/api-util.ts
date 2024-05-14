@@ -20,6 +20,7 @@ import {
 import {
   HMSSuggestionWheelChair,
   mapHMSSuggestionFromSearchResponse,
+  mapProductFromSeriesId,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
   mapProductVariant,
@@ -494,7 +495,16 @@ export const fetchProducts = ({
   })
     .then((res) => res.json())
     .then((data) => {
-      return { products: mapProductsFromCollapse(data), filters: mapFilters(data) }
+      const products = dontCollapse
+        ? data.hits.hits.length > 0
+          ? new Array(mapProductFromSeriesId(data))
+          : []
+        : mapProductsFromCollapse(data)
+
+      return {
+        products: products,
+        filters: mapFilters(data),
+      }
     })
 }
 
