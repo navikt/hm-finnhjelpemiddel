@@ -1,12 +1,13 @@
-const stringComparator = (a: string, b: string) => {
+const stringComparator = (c: string, d: string) => {
   // Handle special cases for "-"
+  let a = c.trim().replace(/\s/g, '')
+  let b = d.trim().replace(/\s/g, '')
   if (a === '-' && b !== '-') {
     return 1 // "-" should come last
   }
   if (b === '-' && a !== '-') {
     return -1 // "-" should come last
   }
-
   if (a < b || b === undefined) {
     return -1
   }
@@ -24,7 +25,6 @@ export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: bool
   if (parseInt(keyA) && parseInt(keyB)) {
     return desc ? parseInt(keyB) - parseInt(keyA) : parseInt(keyA) - parseInt(keyB)
   }
-
   return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
 
