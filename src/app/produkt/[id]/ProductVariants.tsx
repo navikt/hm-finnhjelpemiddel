@@ -38,7 +38,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   const formMethods = useForm<FilterFormStateProductPage>({
     defaultValues: {
-      filters: initialFiltersFormState,
+      filters: { ...initialFiltersFormState, ...searchData.filters },
     },
   })
 
