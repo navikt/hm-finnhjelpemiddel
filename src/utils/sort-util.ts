@@ -24,6 +24,7 @@ export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: bool
   if (parseInt(keyA) && parseInt(keyB)) {
     return desc ? parseInt(keyB) - parseInt(keyA) : parseInt(keyA) - parseInt(keyB)
   }
+  
   return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
 
