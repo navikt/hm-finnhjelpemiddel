@@ -1,7 +1,7 @@
 const stringComparator = (c: string, d: string) => {
   // Handle special cases for "-"
-  let a = c.trim().replace(/\s/g, '')
-  let b = d.trim().replace(/\s/g, '')
+  const a = c.trim().replace(/\s/g, '')
+  const b = d.trim().replace(/\s/g, '')
   if (a === '-' && b !== '-') {
     return 1 // "-" should come last
   }
