@@ -73,8 +73,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
       if (sortColumns.orderBy === 'artName') {
         if (variantA.articleName && variantB.articleName) {
           return sortIntWithStringFallback(
-            variantA.articleName,
-            variantB.articleName,
+            variantA.articleName.trim().replace(/\s/g, ''),
+            variantB.articleName.trim().replace(/\s/g, ''),
             sortColumns?.direction === 'descending'
           )
         }
