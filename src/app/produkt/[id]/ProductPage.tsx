@@ -146,7 +146,7 @@ const ProductNavigationBar = ({
       <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#informasjon">
         Generell informasjon
       </Button>
-      {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#varianter">
+      {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
             Finn HMS-nummer
           </Button> */}
 
