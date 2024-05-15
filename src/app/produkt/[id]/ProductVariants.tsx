@@ -44,6 +44,15 @@ const ProductVariants = ({ product }: { product: Product }) => {
     },
   })
 
+  const onSubmit = () => {
+    router.replace(
+      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
+      {
+        scroll: false,
+      }
+    )
+  }
+
   const {
     data: dataAndFilter,
     isLoading: postsIsLoading,
