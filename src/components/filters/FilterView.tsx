@@ -1,9 +1,9 @@
 import { FilterFormStateProductPage } from '@/app/produkt/[id]/ProductVariants'
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
 import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
-import { mapSearchParams } from '@/utils/mapSearchParams'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { BodyShort, Chips, HStack, Heading, HelpText, VStack } from '@navikt/ds-react'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { CheckboxFilter } from './CheckboxFilter'
@@ -107,13 +107,22 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 }
 
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
+  const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
+  const searchTerm = searchParams.get('term')
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
   const formMethods = useFormContext<FilterFormStateProductPage>()
 
   const searchDataFilters = Object.entries(searchData.filters)
     .filter(([_, value]) => value.length)
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
+
+  const onRemoveSearchTerm = () => {
+    router.replace(`${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, '')}`, {
+      scroll: false,
+    })
+  }
 
   const noAvailableFilters =
     !filters || !Object.values(filters).filter((data) => data.values?.length).length || !Object.keys(filters).length
@@ -150,7 +159,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           tilgjengelig for dette hjelpemiddelet per i dag.
         </HelpText>
       </HStack>
-      <HStack gap="2" className="filter-container__filters filter-container__horizontal">
+      <HStack gap="2" className="filter-container__filters filter-container__horizontal spacing-bottom--medium">
         {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
           <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
         )}
@@ -162,8 +171,11 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
       </HStack>
 
-      <HStack gap="12">
+      <HStack gap="12" className="spacing-bottom--small">
         <Chips>
+          {searchTerm && (
+            <Chips.Removable onClick={() => onRemoveSearchTerm()}>{`Søkeord: ${searchTerm}`}</Chips.Removable>
+          )}
           {filterChips.map(({ key, label, values }, i) => {
             return (
               <Chips.Removable

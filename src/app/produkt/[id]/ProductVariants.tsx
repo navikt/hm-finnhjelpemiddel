@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -34,7 +34,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const router = useRouter()
   const pathname = usePathname()
   const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
-  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+  const searchData = mapSearchParams(searchParams)
 
   const formMethods = useForm<FilterFormStateProductPage>({
     mode: 'onSubmit',
@@ -246,13 +246,15 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <Heading level="3" size="medium" spacing>
         Varianter
       </Heading>
-      <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
-          <FilterViewProductPage filters={filters} />
+      {product.variants.length > 1 && (
+        <FormProvider {...formMethods}>
+          <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+            <FilterViewProductPage filters={filters} />
 
-          <input type="submit" style={{ display: 'none' }} />
-        </form>
-      </FormProvider>
+            <input type="submit" style={{ display: 'none' }} />
+          </form>
+        </FormProvider>
+      )}
 
       {productVariants.length === 0 && <Alert variant="warning">Ingen av variantene matcher filteret ditt</Alert>}
 
