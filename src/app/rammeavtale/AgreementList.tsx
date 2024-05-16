@@ -1,6 +1,7 @@
 'use client'
 
 import { AgreementLabel } from '@/utils/agreement-util'
+import { logKlikk } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
@@ -46,6 +47,7 @@ const AgreementList = () => {
   }, [data, sortColumn])
 
   const handleSortColumn = (sortKey: string) => {
+    logKlikk(`agreements-sort-${sortKey}`)
     setSortColumn({
       orderBy: sortKey,
       direction:
