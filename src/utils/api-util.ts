@@ -585,21 +585,6 @@ export const getProductFilters = ({ seriesId }: { seriesId: string }): Promise<F
             terms: { field: 'filters.materialeTrekk', order: { _key: 'asc' }, size: 100 },
           },
         }),
-        ...aggsFilter('leverandor', {
-          values: {
-            terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
-          },
-        }),
-        ...aggsFilter('produktkategori', {
-          values: {
-            terms: { field: 'isoCategoryName', size: 100 },
-          },
-        }),
-        ...aggsFilter('rammeavtale', {
-          values: {
-            terms: { field: 'agreements.label', order: { _key: 'asc' }, size: 100 },
-          },
-        }),
       },
     }),
   })

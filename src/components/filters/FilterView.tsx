@@ -1,6 +1,7 @@
 import { FilterFormStateProductPage } from '@/app/produkt/[id]/ProductVariants'
 import FilterMinMaxGroup, { MinMaxGroupFilter } from '@/components/filters/RangeFilter'
 import { FilterCategoryKeyServer, FilterData } from '@/utils/api-util'
+import { FilterFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { BodyShort, Chips, HStack, Heading, HelpText, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -143,7 +144,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
   const filterChips = Object.entries(searchData.filters)
     .filter(([_, values]) => values.length > 0)
     .flatMap(([key, values]) => ({
-      key,
+      key: key as keyof FilterFormState,
       values,
       label: key,
     }))
@@ -167,8 +168,12 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
         )}
         <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
-        <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
-        <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
+        {(filters?.fyllmateriale?.values?.length ?? 0) > 1 && (
+          <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
+        )}
+        {(filters?.materialeTrekk?.values?.length ?? 0) > 1 && (
+          <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
+        )}
       </HStack>
 
       <HStack gap="12" className="spacing-bottom--small">

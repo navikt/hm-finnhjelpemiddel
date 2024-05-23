@@ -36,23 +36,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
   const searchData = mapSearchParams(searchParams)
 
-  const formMethods = useForm<FilterFormStateProductPage>({
-    mode: 'onSubmit',
-    shouldFocusError: false,
-    defaultValues: {
-      filters: { ...initialFiltersFormState, ...searchData.filters },
-    },
-  })
-
-  const onSubmit = () => {
-    router.replace(
-      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
-      {
-        scroll: false,
-      }
-    )
-  }
-
   const {
     data: dataAndFilter,
     isLoading: postsIsLoading,
@@ -77,17 +60,54 @@ const ProductVariants = ({ product }: { product: Product }) => {
     }
   )
 
+  const relevantFilterKeys = filtersFromData
+    ? Object.entries(filtersFromData)
+        .filter(([_, filter]) => filter.values.length > 1)
+        .flatMap(([key]) => key)
+    : []
+
+  let relevantFilters: FilterFormState = initialFiltersFormState
+
   useEffect(() => {
+    relevantFilters = {
+      ...initialFiltersFormState,
+      ...Object.fromEntries(
+        Object.entries(searchData.filters).filter(([key]) => {
+          if (['breddeMinCM', 'breddeMaxCM'].includes(key)) {
+            return relevantFilterKeys.includes('breddeCM')
+          } else if (['lengdeMinCM', 'lengdeMaxCM'].includes(key)) {
+            return relevantFilterKeys.includes('lengdeCM')
+          } else {
+            return relevantFilterKeys.includes(key)
+          }
+        })
+      ),
+    }
+
+    router.replace(`${pathname}?${toSearchQueryString({ filters: relevantFilters }, searchData.searchTerm)}`, {
+      scroll: false,
+    })
+  }, [filtersFromData])
+
+  const formMethods = useForm<FilterFormStateProductPage>({
+    mode: 'onSubmit',
+    shouldFocusError: false,
+    defaultValues: {
+      filters: { ...initialFiltersFormState, ...searchData.filters },
+    },
+  })
+
+  const onSubmit = () => {
     router.replace(
       `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
       {
         scroll: false,
       }
     )
-  }, [filtersFromData])
+  }
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
-  const filters = filtersFromData && filtersFromData
+  const filters = filtersFromData
 
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
