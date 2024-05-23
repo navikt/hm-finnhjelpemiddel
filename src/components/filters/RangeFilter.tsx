@@ -122,8 +122,7 @@ const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; 
           return (
             <TextField
               size="small"
-              type="text"
-              inputMode="decimal"
+              type="number"
               min={0}
               label={inputName === 'Min' ? 'min' : 'max'}
               data-invalid={fieldState.invalid ? '' : undefined}

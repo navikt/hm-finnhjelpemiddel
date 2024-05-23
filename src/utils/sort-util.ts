@@ -21,10 +21,10 @@ export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = f
 }
 
 export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: boolean = false) => {
-  if (parseInt(keyA) && parseInt(keyB)) {
-    return desc ? parseInt(keyB) - parseInt(keyA) : parseInt(keyA) - parseInt(keyB)
+  if (parseFloat(keyA) && parseFloat(keyB)) {
+    return desc ? parseFloat(keyB) - parseFloat(keyA) : parseFloat(keyA) - parseFloat(keyB)
   }
-  
+
   return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
 

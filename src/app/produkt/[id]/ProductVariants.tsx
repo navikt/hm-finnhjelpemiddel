@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -76,6 +76,15 @@ const ProductVariants = ({ product }: { product: Product }) => {
       keepPreviousData: true,
     }
   )
+
+  useEffect(() => {
+    router.replace(
+      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
+      {
+        scroll: false,
+      }
+    )
+  }, [filtersFromData])
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
   const filters = filtersFromData && filtersFromData
