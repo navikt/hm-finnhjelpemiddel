@@ -39,9 +39,7 @@ type Props = {
 const RangeFilter = ({ groupTitle, filters }: Props) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
-
   const numberOfactiveFiltersInGroup = filters.filter((f) => [f.min, f.max].some((k) => searchData.filters[k].length))
-
   const showMoreLabel =
     numberOfactiveFiltersInGroup.length > 0 ? `${groupTitle} (${numberOfactiveFiltersInGroup.length})` : `${groupTitle}`
 

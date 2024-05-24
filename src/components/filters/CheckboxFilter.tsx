@@ -36,7 +36,7 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
 
   const { control, watch } = useFormContext<FormSearchData>()
 
-  const watchFilter = watch(`filters.${filterKey}`)
+  const watchFilter = watch(`filters.${filterKey}`) || []
   const selectedFilters =
     filterData?.values?.filter((f) => searchData.filters[filterKey].includes(f.key as string)) || []
 

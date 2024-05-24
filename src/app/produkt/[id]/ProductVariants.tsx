@@ -285,7 +285,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
         </FormProvider>
       )}
 
-      {productVariants.length === 0 && <Alert variant="warning">Ingen av variantene matcher filteret ditt</Alert>}
+      {productVariants.length === 0 && (
+        <Alert variant="warning" className="spacing-top--medium">
+          Ingen av variantene matcher filteret ditt
+        </Alert>
+      )}
 
       {productVariants.length > 0 && (
         <div className="variants-table" id="variants-table">

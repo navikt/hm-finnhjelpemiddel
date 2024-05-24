@@ -167,7 +167,9 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         {availableAndSelectedFiltersMålOgVekt.length > 0 && (
           <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
         )}
-        <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
+        {(filters?.beregnetBarn?.values?.length ?? 0) > 1 && (
+          <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
+        )}
         {(filters?.fyllmateriale?.values?.length ?? 0) > 1 && (
           <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
         )}
