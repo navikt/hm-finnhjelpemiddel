@@ -8,7 +8,7 @@ import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navi
 import { Alert, BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
-import { FilterViewProductPage } from '@/components/filters/FilterView'
+import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 import { fetchProducts, FetchProductsWithFilters, FilterData, getProductFilters } from '@/utils/api-util'
 import { FilterFormState, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
@@ -275,7 +275,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
       <Heading level="3" size="medium" spacing>
         Varianter
       </Heading>
-      {product.variants.length > 1 && (
+      {product.variants.length > 1 && relevantFilterKeys.length > 0 && (
         <FormProvider {...formMethods}>
           <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
             <FilterViewProductPage filters={filters} />

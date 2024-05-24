@@ -25,6 +25,31 @@ export const initialFiltersFormState = {
   vis: [] as string[],
 }
 
+export const filtersFormStateLabel = {
+  setebreddeMaksCM: 'Setebredde maks',
+  setebreddeMinCM: 'Setebredde min',
+  setedybdeMaksCM: 'Setedybde maks',
+  setehoydeMaksCM: 'Setehøyde maks',
+  setehoydeMinCM: 'Setehøyde min',
+  setedybdeMinCM: 'Setedybde min',
+  totalVektMinKG: 'Totalvekt min',
+  totalVektMaxKG: 'Totalvekt maks',
+  lengdeMinCM: 'Lengde min',
+  lengdeMaxCM: 'Lengde maks',
+  breddeMinCM: 'Bredde min',
+  breddeMaxCM: 'Bredde maks',
+  brukervektMinKG: 'Brukervekt min',
+  brukervektMaksKG: 'Brukervekt maks',
+  beregnetBarn: 'Beregnet på barn',
+  fyllmateriale: 'Fyllmateriale',
+  materialeTrekk: 'Trekkmateriale',
+  leverandor: 'Leverandør',
+  produktkategori: 'Produktkategori',
+  rammeavtale: 'Rammeavtale',
+  delkontrakt: 'Delkontrakt',
+  vis: 'Vis',
+}
+
 const visFilterLabels = [
   'På avtale med NAV',
   'På bestillingsordning',

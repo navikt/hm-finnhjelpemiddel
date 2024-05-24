@@ -54,7 +54,6 @@ const ProductCard = ({
   const searchTerm = searchParams.get('term')
   const searchData = mapSearchParams(searchParams)
 
-  // const linkToProduct = searchTerm ? `/produkt/${product.id}?term=${searchTerm}` : `/produkt/${product.id}`
   const linkToProduct = `/produkt/${product.id}?${queryString}`
 
   const currentRank = rank ? rank : minRank
