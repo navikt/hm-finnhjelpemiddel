@@ -10,6 +10,7 @@ import {
   TechDataResponse,
 } from './response-types'
 import { capitalize } from './string-util'
+import * as console from "console";
 
 export interface Product {
   id: string
@@ -322,3 +323,12 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
     }
   })
 }
+
+export function containsHTML(input: string | undefined): boolean {
+  if (!input) {
+    return false
+  }
+  const htmlRegex = /<[^>]*>/;
+  return htmlRegex.test(input);
+}
+
