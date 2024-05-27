@@ -10,7 +10,6 @@ import {
   TechDataResponse,
 } from './response-types'
 import { capitalize } from './string-util'
-import * as console from "console";
 
 export interface Product {
   id: string
