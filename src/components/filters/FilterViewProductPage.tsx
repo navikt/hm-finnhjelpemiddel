@@ -1,9 +1,8 @@
 import { FilterFormStateProductPage } from '@/app/produkt/[id]/ProductVariants'
 import FilterMinMaxGroup from '@/components/filters/RangeFilter'
 import { FilterData } from '@/utils/api-util'
-import { FilterFormState, filtersFormStateLabel } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
-import { BodyShort, Chips, HStack, Heading, HelpText } from '@navikt/ds-react'
+import { BodyShort, HStack, Heading, HelpText } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -22,12 +21,6 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
     .filter(([_, value]) => value.length)
     .reduce((newList, [key]) => [...newList, key], [] as Array<string>)
 
-  const onRemoveSearchTerm = () => {
-    router.replace(`${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, '')}`, {
-      scroll: false,
-    })
-  }
-
   const noAvailableFilters =
     !filters || !Object.values(filters).filter((data) => data.values?.length).length || !Object.keys(filters).length
 
@@ -44,13 +37,6 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
     filters
   )
   const availableAndSelectedFiltersMålOgVekt = getAvailableAndSelectedFiltersMålOgVekt(searchDataFilters, filters)
-  const filterChips = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.length > 0)
-    .flatMap(([key, values]) => ({
-      key: key as keyof FilterFormState,
-      values,
-      label: filtersFormStateLabel[key as keyof FilterFormState],
-    }))
 
   return (
     <>
@@ -79,27 +65,6 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         {(filters?.materialeTrekk?.values?.length ?? 0) > 1 && (
           <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
         )}
-      </HStack>
-
-      <HStack gap="12" className="spacing-bottom--small">
-        <Chips>
-          {searchTerm && (
-            <Chips.Removable onClick={() => onRemoveSearchTerm()}>{`Søkeord: ${searchTerm}`}</Chips.Removable>
-          )}
-          {filterChips.map(({ key, label, values }, i) => {
-            return (
-              <Chips.Removable
-                key={key + i}
-                onClick={(event) => {
-                  formMethods.setValue(`filters.${key}`, '')
-                  event.currentTarget?.form?.requestSubmit()
-                }}
-              >
-                {`${label}: ${values}`}
-              </Chips.Removable>
-            )
-          })}
-        </Chips>
       </HStack>
     </>
   )
