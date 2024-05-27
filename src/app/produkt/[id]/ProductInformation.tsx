@@ -1,5 +1,5 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
-import { containsHTML, Product } from '@/utils/product-util'
+import { containsHTML, Product, validateHTML } from '@/utils/product-util'
 import { BodyLong, BodyShort, Heading, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
@@ -7,7 +7,7 @@ const ProductInformation = ({ product }: { product: Product }) => {
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
   const ds = new Set(product.variants.map((p) => p.digitalSoknad))
 
-  const htmlDescription = containsHTML(product.attributes.text)
+  const htmlDescription = containsHTML(product.attributes.text) && validateHTML(product.attributes.text)
 
   const bestillingsordning =
     bo.size > 1 ? (

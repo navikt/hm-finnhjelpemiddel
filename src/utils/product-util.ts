@@ -331,3 +331,16 @@ export function containsHTML(input: string | undefined): boolean {
   return htmlRegex.test(input);
 }
 
+export function validateHTML(input: string | undefined): boolean {
+  if (!input) {
+    return false
+  }
+  const allowedTagsRegex = /<\/?(p|br|strong|italic|ul|li|ol)[^>]*>/gi;
+  const allTagsRegex = /<\/?[^>]+(>|$)/g;
+
+  const allowedTags = input.match(allowedTagsRegex) || [];
+  const allTags = input.match(allTagsRegex) || [];
+
+  return allowedTags.length === allTags.length;
+}
+
