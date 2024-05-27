@@ -1,11 +1,13 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
-import { Product } from '@/utils/product-util'
+import { containsHTML, Product, validateHTML } from '@/utils/product-util'
 import { BodyLong, BodyShort, Heading, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
 const ProductInformation = ({ product }: { product: Product }) => {
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
   const ds = new Set(product.variants.map((p) => p.digitalSoknad))
+
+  const htmlDescription = containsHTML(product.attributes.text) && validateHTML(product.attributes.text)
 
   const bestillingsordning =
     bo.size > 1 ? (
@@ -40,11 +42,19 @@ const ProductInformation = ({ product }: { product: Product }) => {
       <Heading level="2" size="large" spacing>
         Beskrivelse
       </Heading>
-      <BodyLong spacing className="product-page__description">
-        {product.attributes.text
-          ? product.attributes.text
-          : 'Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.'}
-      </BodyLong>
+      {!product.attributes.text &&
+        <BodyLong spacing className="product-page__description">
+          Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.
+        </BodyLong>
+      }
+      {product.attributes.text &&
+        htmlDescription &&
+        <div dangerouslySetInnerHTML={{ __html: product.attributes.text }} />
+      }
+      {product.attributes.text && !htmlDescription &&
+        <BodyLong spacing className="product-page__description">{product.attributes.text}</BodyLong>
+      }
+
       <DefinitionList>
         {/* <DefinitionList.Term>Beskrivelse</DefinitionList.Term>
         <DefinitionList.Definition>
