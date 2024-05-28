@@ -64,6 +64,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
     }
   )
 
+  // Alle filtre man får med fra søket er ikke relevante for alle produkter
+  // så vi filtrerer ut de som ikke er relevante
   const relevantFilterKeys = filtersFromData
     ? Object.entries(filtersFromData)
         .filter(([_, filter]) => filter.values.length > 1)
@@ -77,6 +79,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
       ...initialFiltersFormState,
       ...Object.fromEntries(
         Object.entries(searchData.filters).filter(([key]) => {
+          // Det er forskjellig navn på filterene for bredde og lengde i filterdata og i searchData
+          // så vi må sjekke om de eksisterer manuelt
           if (['breddeMinCM', 'breddeMaxCM'].includes(key)) {
             return relevantFilterKeys.includes('breddeCM')
           } else if (['lengdeMinCM', 'lengdeMaxCM'].includes(key)) {
