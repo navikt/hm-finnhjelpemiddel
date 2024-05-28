@@ -8,7 +8,13 @@ import useSWR from 'swr'
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { findUniqueStringValues, formatAgreementRanks, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
+import {
+  findUniqueStringValues,
+  formatAgreementPosts,
+  formatAgreementRanks,
+  toValueAndUnit,
+  tryParseNumber,
+} from '@/utils/string-util'
 
 import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -176,6 +182,14 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               })}
             </Table.Row>
             <Table.Row>
+              <Table.HeaderCell className="side_header">Delkontrakt</Table.HeaderCell>
+              {productsToCompare.map((product) => {
+                return (
+                  <Table.DataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
+                )
+              })}
+            </Table.Row>
+            <Table.Row>
               <Table.HeaderCell className="side_header">Antall varianter</Table.HeaderCell>
               {productsToCompare.map((product) => (
                 <Table.DataCell key={product.id}>{product.variantCount}</Table.DataCell>
@@ -187,6 +201,12 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
                 <Table.DataCell key={product.id}>
                   {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
                 </Table.DataCell>
+              ))}
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell className="side_header">Leverandør</Table.HeaderCell>
+              {productsToCompare.map((product) => (
+                <Table.DataCell key={product.id}>{product.supplierName}</Table.DataCell>
               ))}
             </Table.Row>
             <Table.Row>
