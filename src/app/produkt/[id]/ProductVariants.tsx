@@ -29,7 +29,10 @@ export type FilterFormStateProductPage = {
 }
 
 const ProductVariants = ({ product }: { product: Product }) => {
-  /*  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'HMS', direction: 'ascending' })*/
+  const [sortColumns, setSortColumns] = useState<SortColumns>({
+    orderBy: 'Expired',
+    direction: 'ascending',
+  })
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -109,11 +112,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
   const filters = filtersFromData
-
-  const [sortColumns, setSortColumns] = useState<SortColumns>({
-    orderBy: 'Expired',
-    direction: 'ascending',
-  })
 
   const sortColumnsByRowKey = (variants: ProductVariant[]) => {
     return variants.sort((variantA, variantB) => {

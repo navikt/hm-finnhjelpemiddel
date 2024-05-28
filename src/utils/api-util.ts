@@ -432,7 +432,8 @@ export const fetchProducts = ({
           filterLeverandor(leverandor),
           filterProduktkategori(produktkategori),
           filterRammeavtale(rammeavtale),
-          ...filterVis(vis),
+          //Filtrer bare på aktive produkter dersom vi ikke henter basert på serieId(produktside)
+          ...(seriesId ? [filterVis(vis)] : []),
           //Remove null values
         ].filter(Boolean),
       },
