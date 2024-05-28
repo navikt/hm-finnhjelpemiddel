@@ -63,6 +63,13 @@ export const formatAgreementRanks = (agreements: AgreementInfo[]): string => {
     .join(', ')
 }
 
+export const formatAgreementPosts = (agreements: AgreementInfo[]): string => {
+  return agreements
+    .map((ag) => ag.postNr)
+    .sort()
+    .join(', ')
+}
+
 export const formatNorwegianLetter = (letter: string): string => {
   switch (letter) {
     case '%C3%85':
