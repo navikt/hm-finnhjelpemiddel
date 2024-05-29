@@ -14,46 +14,57 @@ function AboutUs() {
         <div className="about-us-page__container">
           <article>
             <Heading level="1" size="medium" spacing>
-              Om nettstedet
+              Om Finnhjelpemiddel
             </Heading>
-
-            <BodyLong spacing>FinnHjelpemiddel eies og driftes av NAV Hjelpemidler og tilrettelegging.</BodyLong>
             <Heading level="2" size="small">
-              Målgrupper
+              En nav tjeneste
             </Heading>
             <BodyLong spacing>
-              Hovedmålgruppene for FinnHjelpemiddel er innbyggere, kommuner og NAV hjelpemiddelsentraler.
+              FinnHjelpemiddel er en NAV tjeneste og tilbyr en oversikt over alle tilgjengelige hjelpemidler på det
+              norske markedet. Nettsiden og tjenesten eies og driftes av NAV Hjelpemidler og tilrettelegging.
+            </BodyLong>
+            <BodyLong spacing>
+              På FinnHjelpemiddel finner du informasjon om hjelpemidler som er på avtale med NAV og andre hjelpemidler
+              som er tilgjengelige på det norske markedet uten avtale.
             </BodyLong>
             <Heading level="2" size="small">
-              Innhold
+              Hjelpemidler på avtale med NAV
             </Heading>
             <BodyLong spacing>
-              På FinnHjelpemiddel vil du finne informasjon om hjelpemidler på det norske markedet. Hjelpemidlene
-              presenteres med tekst, bilder, brosjyrer, bruksanvisninger og tekniske data med mer. Du vil også finne
-              informasjon om avtaler med NAV.
-            </BodyLong>
-            <Heading level="2" size="small">
-              Avtale med NAV
-            </Heading>
-            <BodyLong spacing>
-              NAV må følge regelverket for offentlige anskaffelser og har derfor avtaler med leverandører av
-              hjelpemidler innen aktuelle hjelpemiddelområder. Hjelpemidlene som er på avtale med NAV er markert på
-              FinnHjelpemiddel, og har egne innganger til hjelpemiddelvisning og informasjon.
+              NAV må følge regelverket for offentlige anskaffelser og har derfor inngått avtaler med leverandører av
+              hjelpemidler innen ulike områder. Hjelpemidlene som er på avtale med NAV er market og har egne innganger
+              for visning og informasjon.
             </BodyLong>
             <Heading level="2" size="small">
               Hva er et hjelpemiddel?
             </Heading>
             <BodyLong spacing>
-              Et hjelpemiddel på FinnHjelpemiddel er et produkt som er spesiallaget for personer med
-              funksjonsnedsettelse.
+              Et hjelpemiddel er et produkt som er spesiallaget for personer med funksjonsnedsettelse.
             </BodyLong>
-            <Heading level="2" size="medium">
-              Tilbakemeldinger
+            <Heading level="2" size="small">
+              Målgruppe
             </Heading>
             <BodyLong spacing>
-              Vi setter pris på tilbakemeldinger om feil og mangler. Dette kan meldes til e-postadresse{' '}
-              <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>. Vi vil så raskt som mulig
-              undersøke og utbedre eventuelle feil og mangler.
+              FinnHjelpemiddel henvender seg til innbyggere, kommuner, leverandører og hjelpemiddelsentraler som har
+              behov for eller arbeider med hjelpemidler.
+            </BodyLong>
+            <Heading level="2" size="small">
+              Tekniske feil og mangler
+            </Heading>
+            <BodyLong spacing>
+              Vi setter stor pris på tilbakemeldinger angående tekniske feil og mangler på nettsiden. Vennligst gi
+              tilbakemelding til <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link> eller trykk
+              på den blå knappen på høyre side "tilbakemelding".
+            </BodyLong>
+            <Heading level="2" size="small">
+              Spørsmål eller problemer
+            </Heading>
+            <BodyLong spacing>
+              Ved spørsmål eller problemer angående et hjelpemiddel, vennligst kontakt din kommune eller nærmeste{' '}
+              <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/kontakt-nav-hjelpemiddelsentral">
+                hjelpemiddelsentral
+              </Link>{' '}
+              for assistanse.
             </BodyLong>
           </article>
         </div>
