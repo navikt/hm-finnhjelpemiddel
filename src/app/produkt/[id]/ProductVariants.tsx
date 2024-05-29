@@ -42,8 +42,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   const {
     data: dataAndFilter,
-    isLoading: postsIsLoading,
-    error: postError,
+    isLoading: dataIsLoading,
+    error: dataError,
   } = useSWR<FetchProductsWithFilters>(
     {
       from: 0,
@@ -53,7 +53,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
       seriesId: product.id,
     },
     fetchProducts,
-    { keepPreviousData: false }
+    { keepPreviousData: true }
   )
 
   const { data: filtersFromData, isLoading: filterIsLoading } = useSWR<FilterData>(
@@ -286,37 +286,37 @@ const ProductVariants = ({ product }: { product: Product }) => {
         {product.variantCount === 1 ? textOnlyOne : textMultipleVariants}
       </BodyLong>
 
-      {product.variants.length > 1 && relevantFilterKeys.length > 0 && (
+      {product.variantCount > 1 && (
         <FormProvider {...formMethods}>
           <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
-            <FilterViewProductPage filters={filters} />
-
+            {relevantFilterKeys.length > 0 && <FilterViewProductPage filters={filters} />}
             <input type="submit" style={{ display: 'none' }} />
+
+            {(searchTerm || filterChips.length > 0) && (
+              <Chips className="spacing-bottom--medium">
+                {searchTerm && (
+                  <Chips.Removable onClick={() => onRemoveSearchTerm()}>{`Søkeord: ${searchTerm}`}</Chips.Removable>
+                )}
+                {filterChips.map(({ key, label, values }, i) => {
+                  return (
+                    <Chips.Removable
+                      key={key + i}
+                      onClick={(event) => {
+                        formMethods.setValue(`filters.${key}`, '')
+                        event.currentTarget?.form?.requestSubmit()
+                        console.log('HWH')
+                      }}
+                    >
+                      {`${label}: ${values}`}
+                    </Chips.Removable>
+                  )
+                })}
+              </Chips>
+            )}
           </form>
         </FormProvider>
       )}
-      {(searchTerm || filterChips.length > 0) && (
-        <>
-          <Chips className="spacing-bottom--medium">
-            {searchTerm && (
-              <Chips.Removable onClick={() => onRemoveSearchTerm()}>{`Søkeord: ${searchTerm}`}</Chips.Removable>
-            )}
-            {filterChips.map(({ key, label, values }, i) => {
-              return (
-                <Chips.Removable
-                  key={key + i}
-                  onClick={(event) => {
-                    formMethods.setValue(`filters.${key}`, '')
-                    event.currentTarget?.form?.requestSubmit()
-                  }}
-                >
-                  {`${label}: ${values}`}
-                </Chips.Removable>
-              )
-            })}
-          </Chips>
-        </>
-      )}
+
       {product.variantCount > 1 && (
         <Heading
           level="3"
