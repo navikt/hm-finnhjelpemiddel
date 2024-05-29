@@ -1,21 +1,15 @@
-import { FilterFormStateProductPage } from '@/app/produkt/[id]/ProductVariants'
 import FilterMinMaxGroup from '@/components/filters/RangeFilter'
 import { FilterData } from '@/utils/api-util'
-import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 import { BodyShort, HStack, Heading, HelpText } from '@navikt/ds-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { CheckboxFilter } from './CheckboxFilter'
 import { getAvailableAndSelectedFiltersMålOgVekt, getAvailableAndSelectedFiltersSetedimensjoner } from './FilterView'
 
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
-  const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()
-  const searchTerm = searchParams.get('term')
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
-  const formMethods = useFormContext<FilterFormStateProductPage>()
 
   const searchDataFilters = Object.entries(searchData.filters)
     .filter(([_, value]) => value.length)
