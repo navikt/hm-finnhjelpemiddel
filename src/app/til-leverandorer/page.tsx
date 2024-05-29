@@ -1,6 +1,6 @@
 'use client'
-import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
 import AnimateLayout from '@/components/layout/AnimateLayout'
+import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
 
 function ToSuppliers() {
   return (
@@ -70,6 +70,13 @@ function ToSuppliers() {
               Standard «NS-EN ISO 9999 - Hjelpemidler for personer med nedsatt funksjonsevne». Standarden er basert på
               oversettelse fra engelsk utført av{' '}
               <Link href="https://online.standard.no/ns-en-iso-9999-2022"> Standard Norge.</Link>
+            </BodyLong>
+            <Heading level="2" size="small">
+              Kontakt oss
+            </Heading>
+            <BodyLong spacing>
+              Ved spørsmål knyttet til FinnHjelpemiddel ta kontakt på{' '}
+              <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
             </BodyLong>
           </article>
         </div>
