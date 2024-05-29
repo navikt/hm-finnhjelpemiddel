@@ -33,6 +33,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
     orderBy: 'Expired',
     direction: 'ascending',
   })
+
+  const [searchTermIsHms, setSearchTermIsHms] = useState(false)
+
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -92,9 +95,18 @@ const ProductVariants = ({ product }: { product: Product }) => {
       ),
     }
 
-    router.replace(`${pathname}?${toSearchQueryString({ filters: relevantFilters }, searchData.searchTerm)}`, {
-      scroll: false,
-    })
+    const hmsNumbers = product.variants.flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+    const supplierRefs = product.variants.flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+    const isSearchTermInHms = hmsNumbers.includes(searchData.searchTerm?.toLowerCase())
+    if (isSearchTermInHms) setSearchTermIsHms(true)
+    const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
+
+    router.replace(
+      `${pathname}?${toSearchQueryString({ filters: relevantFilters }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
+      {
+        scroll: false,
+      }
+    )
   }, [filtersFromData])
 
   const formMethods = useForm<FilterFormStateProductPage>({
@@ -263,13 +275,29 @@ const ProductVariants = ({ product }: { product: Product }) => {
     'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'
   const textOnlyOne = 'Nedenfor finner man en oversikt over egenskaper.'
 
+  type ExtendedFilterFormState = FilterFormState & {
+    'HMS-nummer': unknown
+    'Lev-artnr': unknown
+  }
+
   const filterChips = Object.entries(searchData.filters)
     .filter(([_, values]) => values.length > 0)
     .flatMap(([key, values]) => ({
-      key: key as keyof FilterFormState,
+      key: key as keyof ExtendedFilterFormState,
       values,
       label: filtersFormStateLabel[key as keyof FilterFormState],
     }))
+    .concat(
+      searchData.searchTerm
+        ? [
+            {
+              key: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+              values: searchData.searchTerm,
+              label: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+            },
+          ]
+        : []
+    )
 
   const onRemoveSearchTerm = () => {
     router.replace(`${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, '')}`, {
@@ -294,17 +322,17 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
             {(searchTerm || filterChips.length > 0) && (
               <Chips className="spacing-bottom--medium">
-                {searchTerm && (
-                  <Chips.Removable onClick={() => onRemoveSearchTerm()}>{`Søkeord: ${searchTerm}`}</Chips.Removable>
-                )}
                 {filterChips.map(({ key, label, values }, i) => {
                   return (
                     <Chips.Removable
                       key={key + i}
                       onClick={(event) => {
-                        formMethods.setValue(`filters.${key}`, '')
-                        event.currentTarget?.form?.requestSubmit()
-                        console.log('HWH')
+                        if (key === 'HMS-nummer' || key === 'Lev-artnr') {
+                          onRemoveSearchTerm()
+                        } else {
+                          formMethods.setValue(`filters.${key}`, '')
+                          event.currentTarget?.form?.requestSubmit()
+                        }
                       }}
                     >
                       {`${label}: ${values}`}
