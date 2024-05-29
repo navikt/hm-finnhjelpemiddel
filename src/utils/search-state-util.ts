@@ -24,7 +24,7 @@ export function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
 
 export type SearchData = {
   searchTerm: string
-  isoCode: string
+  isoCode?: string
   filters: FilterFormState
   sortOrder?: SortOrder
   hidePictures?: string

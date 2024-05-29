@@ -47,7 +47,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           >
             <span id="informasjon" />
             <ProductInformation product={product} />
-            {/* {isMobileDevice ? <InformationAccordion product={product} /> : <InformationTabs product={product} />} */}
           </section>
 
           {showHMSSuggestion && (

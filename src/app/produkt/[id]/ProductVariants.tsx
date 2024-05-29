@@ -1,118 +1,152 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
-import { Product, ProductVariant } from '@/utils/product-util'
-import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
-import { formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
+import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
+import { fetchProducts, FetchProductsWithFilters, FilterData, getProductFilters } from '@/utils/api-util'
+import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
+import { Product } from '@/utils/product-util'
+import { toValueAndUnit } from '@/utils/string-util'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { FormProvider, useForm } from 'react-hook-form'
+import useSWR from 'swr'
+import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
 
-type SortColumns = {
+export type SortColumns = {
   orderBy: string | null
   direction: 'ascending' | 'descending'
 }
 
-const ProductVariants = ({ product }: { product: Product }) => {
-  const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
+export type FilterFormStateProductPage = {
+  filters: FilterFormState
+}
 
+const ProductVariants = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
     direction: 'ascending',
   })
-  const sortColumnsByRowKey = (variants: ProductVariant[]) => {
-    return variants.sort((variantA, variantB) => {
-      if (sortColumns.orderBy === 'HMS') {
-        if (variantA.hmsArtNr && variantB.hmsArtNr) {
-          return sortIntWithStringFallback(
-            variantA.hmsArtNr,
-            variantB.hmsArtNr,
-            sortColumns?.direction === 'descending'
-          )
-        }
-        return -1
-      }
-      if (sortColumns.orderBy === 'levart') {
-        if (variantA.supplierRef && variantB.supplierRef) {
-          return sortIntWithStringFallback(
-            variantA.supplierRef,
-            variantB.supplierRef,
-            sortColumns?.direction === 'descending'
-          )
-        }
-        return -1
-      }
-      if (sortColumns.orderBy === 'Expired') {
-        if (variantA.status && variantB.status) {
-          if (variantA.agreements.length > 0 && variantB.agreements.length === 0) {
-            return -1
-          }
-          if (variantB.agreements.length > 0 && variantA.agreements.length === 0) {
-            return 1
-          }
+  const [searchTermIsHms, setSearchTermIsHms] = useState(false)
 
-          return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
-        }
-        return -1
-      }
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+  const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
+  const searchData = mapSearchParams(searchParams)
+  const searchTerm = searchParams.get('term')
 
-      if (sortColumns.orderBy === 'rank') {
-        if (variantA.agreements && variantA.agreements) {
-          return sortAlphabetically(
-            formatAgreementRanks(variantA.agreements!),
-            formatAgreementRanks(variantB.agreements!),
-            sortColumns?.direction === 'descending'
-          )
-        }
-        return -1
+  const {
+    data: dataAndFilter,
+    isLoading: dataIsLoading,
+    error: dataError,
+  } = useSWR<FetchProductsWithFilters>(
+    {
+      from: 0,
+      size: 150,
+      searchData: searchData,
+      dontCollapse: true,
+      seriesId: product.id,
+    },
+    fetchProducts,
+    { keepPreviousData: true }
+  )
+
+  const { data: filtersFromData, isLoading: filterIsLoading } = useSWR<FilterData>(
+    { seriesId: product.id },
+    getProductFilters,
+    {
+      keepPreviousData: true,
+    }
+  )
+
+  // Alle filtre man får med fra søket er ikke relevante for alle produkter
+  // så vi filtrerer ut de som ikke er relevante
+  const relevantFilterKeys = filtersFromData
+    ? Object.entries(filtersFromData)
+        .filter(([_, filter]) => filter.values.length > 1)
+        .flatMap(([key]) => key)
+    : []
+
+  let relevantFilters: FilterFormState = initialFiltersFormState
+
+  useEffect(() => {
+    relevantFilters = {
+      ...initialFiltersFormState,
+      ...Object.fromEntries(
+        Object.entries(searchData.filters).filter(([key]) => {
+          // Det er forskjellig navn på filterene for bredde og lengde i filterdata og i searchData
+          // så vi må sjekke om de eksisterer manuelt
+          if (['breddeMinCM', 'breddeMaxCM'].includes(key)) {
+            return relevantFilterKeys.includes('breddeCM')
+          } else if (['lengdeMinCM', 'lengdeMaxCM'].includes(key)) {
+            return relevantFilterKeys.includes('lengdeCM')
+          } else {
+            return relevantFilterKeys.includes(key)
+          }
+        })
+      ),
+    }
+
+    const hmsNumbers = product.variants.flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+    const supplierRefs = product.variants.flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+    const isSearchTermInHms = hmsNumbers.includes(searchData.searchTerm?.toLowerCase())
+    if (isSearchTermInHms) setSearchTermIsHms(true)
+    const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
+
+    router.replace(
+      `${pathname}?${toSearchQueryString({ filters: relevantFilters }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
+      {
+        scroll: false,
       }
-      if (sortColumns.orderBy === 'artName') {
-        if (variantA.articleName && variantB.articleName) {
-          return sortAlphabetically(
-            variantA.articleName.trim().replace(/\s/g, ''),
-            variantB.articleName.trim().replace(/\s/g, ''),
-            sortColumns?.direction === 'descending'
-          )
-        }
-        return -1
+    )
+  }, [filtersFromData])
+
+  const formMethods = useForm<FilterFormStateProductPage>({
+    mode: 'onSubmit',
+    shouldFocusError: false,
+    defaultValues: {
+      filters: { ...initialFiltersFormState, ...searchData.filters },
+    },
+  })
+
+  const onSubmit = () => {
+    router.replace(
+      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
+      {
+        scroll: false,
       }
-      if (
-        sortColumns.orderBy &&
-        variantA.techData[sortColumns.orderBy]?.value &&
-        variantB.techData[sortColumns.orderBy]?.value
-      ) {
-        return sortIntWithStringFallback(
-          variantA.techData[sortColumns.orderBy].value,
-          variantB.techData[sortColumns.orderBy].value,
-          sortColumns.direction === 'descending'
-        )
-      } else return -1
-    })
+    )
   }
 
-  let sortedByKey = sortColumnsByRowKey(product.variants)
+  const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
+  const filters = filtersFromData
+
+  const productVariants = productWithFilteredVariants
+    ? productWithFilteredVariants.length > 0
+      ? productWithFilteredVariants[0].variants
+      : []
+    : product.variants
+
+  let sortedByKey = sortColumnsByRowKey(productVariants, sortColumns)
   const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
     ...allDataKeys.map((key) => ({
-      [key]: product.variants.map((variant) =>
+      [key]: productVariants.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
       ),
     }))
   )
-
-  const hasDifferentValues = ({ row }: { row: string[] }) => {
-    let uniqueValues = new Set(row)
-    uniqueValues.delete('-')
-    return uniqueValues.size > 1
-  }
 
   const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
   const hasAgreementVaries = hasAgreementSet.size > 1
@@ -146,42 +180,96 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
 
-  const textAllVariantsOnAgreement = `${product.title} finnes i ${numberOfvariantsOnAgreement} ${
-    numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
-  } på avtale med NAV.`
-  const textVariantsWithAndWithoutAgreement =
-    numberOfvariantsOnAgreement === 0
-      ? `${product.title} finnes i ${numberOfvariantsWithoutAgreement} ${
-          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        }.`
-      : `${
-          product.title
-        } finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
-          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        } som ikke er på avtale med NAV.`
+  type ExtendedFilterFormState = FilterFormState & {
+    'HMS-nummer': unknown
+    'Lev-artnr': unknown
+  }
 
-  const textMultipleVariants =
-    'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'
-  const textOnlyOne = 'Nedenfor finner man en oversikt over egenskaper.'
+  const filterChips = Object.entries(searchData.filters)
+    .filter(([_, values]) => values.length > 0)
+    .flatMap(([key, values]) => ({
+      key: key as keyof ExtendedFilterFormState,
+      values,
+      label: filtersFormStateLabel[key as keyof FilterFormState],
+    }))
+    .concat(
+      searchData.searchTerm
+        ? [
+            {
+              key: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+              values: searchData.searchTerm,
+              label: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+            },
+          ]
+        : []
+    )
 
-  // const showHMSSuggestion = product.isoCategory.startsWith('1222')
-  // {showHMSSuggestion && <HmsSuggestion product={product} />}
+  const onRemoveSearchTerm = () => {
+    router.replace(`${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, '')}`, {
+      scroll: false,
+    })
+  }
 
   return (
     <>
       <Heading level="2" size="large" spacing>
         Egenskaper
       </Heading>
-      <BodyLong className={classNames({ 'spacing-bottom--medium': !anyExpired })}>
-        {numberOfvariantsWithoutAgreement > 0 ? textVariantsWithAndWithoutAgreement : textAllVariantsOnAgreement}{' '}
-        {product.variantCount === 1 ? textOnlyOne : textMultipleVariants}
+      <BodyLong className="spacing-bottom--medium">
+        {egenskaperText(
+          product.title,
+          product.variantCount,
+          numberOfvariantsOnAgreement,
+          numberOfvariantsWithoutAgreement
+        )}
       </BodyLong>
 
-      <Heading level="3" size="medium" spacing>
-        Varianter
-      </Heading>
+      {product.variantCount > 1 && (
+        <FormProvider {...formMethods}>
+          <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+            {relevantFilterKeys.length > 0 && <FilterViewProductPage filters={filters} />}
+            <input type="submit" style={{ display: 'none' }} />
 
-      <div className="variants-table">
+            {(searchTerm || filterChips.length > 0) && (
+              <Chips className="spacing-bottom--medium">
+                {filterChips.map(({ key, label, values }, i) => {
+                  return (
+                    <Chips.Removable
+                      key={key + i}
+                      onClick={(event) => {
+                        if (key === 'HMS-nummer' || key === 'Lev-artnr') {
+                          onRemoveSearchTerm()
+                        } else {
+                          formMethods.setValue(`filters.${key}`, '')
+                          event.currentTarget?.form?.requestSubmit()
+                        }
+                      }}
+                    >
+                      {`${label}: ${values}`}
+                    </Chips.Removable>
+                  )
+                })}
+              </Chips>
+            )}
+          </form>
+        </FormProvider>
+      )}
+
+      {product.variantCount > 1 && (
+        <Heading
+          level="3"
+          size="small"
+          className={classNames({ 'spacing-bottom--small': !anyExpired })}
+        >{`${productVariants.length} av ${product.variantCount} varianter:`}</Heading>
+      )}
+
+      {productVariants.length === 0 && (
+        <Alert variant="warning" className="spacing-top--medium">
+          Ingen av variantene matcher filteret ditt
+        </Alert>
+      )}
+
+      <div className="variants-table" id="variants-table">
         <Table zebraStripes>
           <Table.Header>
             <Table.Row

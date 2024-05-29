@@ -4,7 +4,11 @@
 
 .suggestion-container {
   background-color: #ece4f5;
-  width: 24rem;
+  width: 100%;
+
+  @include mixins.for-size(tablet-up) {
+    max-width: 24rem;
+  }
 
   .divider {
     margin-top: 2rem;

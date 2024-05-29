@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react'
-import { Label, HStack, VStack, Detail, TextField, Button } from '@navikt/ds-react'
 import ShowMore from '@/components/ShowMore'
-import { Controller, useFormContext } from 'react-hook-form'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { useSearchParams } from 'next/navigation'
-import classNames from 'classnames'
-import { TrashIcon } from '@navikt/aksel-icons'
 import { FormSearchData } from '@/utils/search-state-util'
+import { TrashIcon } from '@navikt/aksel-icons'
+import { Button, Detail, HStack, Label, TextField, VStack } from '@navikt/ds-react'
+import classNames from 'classnames'
+import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 
 type PickedFiltersFormKey =
   | 'setebreddeMaksCM'
@@ -39,9 +39,7 @@ type Props = {
 const RangeFilter = ({ groupTitle, filters }: Props) => {
   const searchParams = useSearchParams()
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
-
   const numberOfactiveFiltersInGroup = filters.filter((f) => [f.min, f.max].some((k) => searchData.filters[k].length))
-
   const showMoreLabel =
     numberOfactiveFiltersInGroup.length > 0 ? `${groupTitle} (${numberOfactiveFiltersInGroup.length})` : `${groupTitle}`
 
@@ -109,7 +107,7 @@ const FilterMinMaxRow = ({
 const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; filterKey: PickedFiltersFormKey }) => {
   const formMethods = useFormContext<FormSearchData>()
 
-  const rule = inputName === 'Min' ? { min: 0 } : { max: 99999 }
+  const rule = { min: 0, max: 99999 }
 
   return (
     <VStack>
@@ -123,6 +121,7 @@ const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; 
             <TextField
               size="small"
               type="number"
+              min={0}
               label={inputName === 'Min' ? 'min' : 'max'}
               data-invalid={fieldState.invalid ? '' : undefined}
               hideLabel

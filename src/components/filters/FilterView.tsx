@@ -106,7 +106,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
 
 export default FilterView
 
-const getAvailableAndSelectedFiltersSetedimensjoner = (
+export const getAvailableAndSelectedFiltersSetedimensjoner = (
   searchDataFilters: string[],
   filtersFromServer?: FilterData
 ): MinMaxGroupFilter[] => {
@@ -124,7 +124,8 @@ const getAvailableAndSelectedFiltersSetedimensjoner = (
       const filterKey = filterKeyStr as FilterCategoryKeyServer
       const filter = minMaxFilterKeyMapSete['setedimensjoner'].find((f) => f.min === filterKey || f.max === filterKey)
       const isEmpty = filterValue.min === null && filterValue.max === null
-      if (filter && !isEmpty) selectedFiltersSetedimensjoner.set(filter.name, filter)
+      const onlyOneValue = filterValue.values.length === 1
+      if (filter && !isEmpty && !onlyOneValue) selectedFiltersSetedimensjoner.set(filter.name, filter)
     })
   const validFiltersArray = Array.from(selectedFiltersSetedimensjoner.values())
 
@@ -133,7 +134,7 @@ const getAvailableAndSelectedFiltersSetedimensjoner = (
   return validFiltersArray
 }
 
-const getAvailableAndSelectedFiltersMålOgVekt = (
+export const getAvailableAndSelectedFiltersMålOgVekt = (
   searchDataFilters: string[],
   filtersFromServer?: FilterData
 ): MinMaxGroupFilter[] => {
@@ -153,7 +154,8 @@ const getAvailableAndSelectedFiltersMålOgVekt = (
         (f) => f.filterNameServer === filterKey || f.min === filterKey || f.max === filterKey
       )
       const isEmpty = filterValue.min === null && filterValue.max === null
-      if (filter && !isEmpty) selectedFiltersMålOgVekt.set(filter.name, filter)
+      const onlyOneValue = filterValue.values.length === 1
+      if (filter && !isEmpty && !onlyOneValue) selectedFiltersMålOgVekt.set(filter.name, filter)
     })
 
   const validFiltersArray = Array.from(selectedFiltersMålOgVekt.values())

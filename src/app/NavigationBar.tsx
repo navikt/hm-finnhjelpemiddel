@@ -27,19 +27,25 @@ const NavigationBar = () => {
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)
-      const q = new URLSearchParams(window.location.search)
-      q.set('term', searchTerm.trim())
+      const qWithFilters = new URLSearchParams(window.location.search)
+      const qNoFilters = new URLSearchParams()
+
+      qWithFilters.set('term', searchTerm.trim())
+      qNoFilters.set('term', searchTerm.trim())
       if (path.includes('sok')) {
         logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
+        router.push('/sok?' + qWithFilters.toString())
       } else if (path === '/') {
         logNavigationEvent('forside', 'søk', 'Søk på forsiden')
+        router.push('/sok?' + qWithFilters.toString())
+      } else if (path.includes('produkt')) {
+        router.push('/sok?' + qNoFilters.toString())
       } else {
         logNavigationEvent('annet', 'søk', 'Søk fra annen side')
+        router.push('/sok?' + qWithFilters.toString())
       }
-
-      router.push('/sok?' + q.toString())
     },
-    [router]
+    [router, path]
   )
 
   useEffect(() => {
