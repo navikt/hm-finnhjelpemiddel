@@ -95,5 +95,5 @@ export const egenskaperText = (
 
   return `${
     numberOfvariantsWithoutAgreement > 0 ? variantsWithAndWithoutAgreement : allVariantsOnAgreement
-  }} ${variantCount === 1 ? textOnlyOne : textMultipleVariants}`
+  } ${variantCount === 1 ? textOnlyOne : textMultipleVariants}`
 }
