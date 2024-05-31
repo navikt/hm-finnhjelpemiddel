@@ -54,7 +54,7 @@ function AboutUs() {
             <BodyLong spacing>
               Vi setter stor pris på tilbakemeldinger angående tekniske feil og mangler på nettsiden. Vennligst gi
               tilbakemelding til <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link> eller trykk
-              på den blå knappen på høyre side "tilbakemelding".
+              på den blå knappen på høyre side.
             </BodyLong>
             <Heading level="2" size="small">
               Spørsmål eller problemer
