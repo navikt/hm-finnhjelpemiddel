@@ -89,6 +89,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
             return relevantFilterKeys.includes('lengdeCM')
           } else if (key === 'vis') {
             return true
+          } else if (['totalVektMinKG', 'totalVektMaxKG'].includes(key)) {
+            return relevantFilterKeys.includes('totalVektKG')
+          } else if (['brukervektMinKG', 'brukervektMaxKG'].includes(key)) {
+            return relevantFilterKeys.includes('brukervektKG')
           } else {
             return relevantFilterKeys.includes(key)
           }
@@ -113,7 +117,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const formMethods = useForm<FilterFormStateProductPage>({
     mode: 'onSubmit',
     shouldFocusError: false,
-    defaultValues: {
+    values: {
       filters: { ...initialFiltersFormState, ...searchData.filters },
     },
   })
