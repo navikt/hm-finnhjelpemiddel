@@ -29,7 +29,6 @@ export const TagFilter = ({ filterKey, filter }: Props) => {
     field: { value: string[]; onChange: (value: string[]) => void },
     valueKey: string
   ): void => {
-    event.preventDefault() // To prevent any default action if needed
     const newValue: string[] = field.value.includes(valueKey)
       ? field.value.filter((key: string) => key !== valueKey)
       : [...field.value, valueKey]
