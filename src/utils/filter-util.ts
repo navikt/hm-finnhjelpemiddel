@@ -240,7 +240,11 @@ export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) =
         }
       }
 
-      return null
+      if (filterKey === 'Ikke på avtale') {
+        return {
+          match: { hasAgreement: 'false' },
+        }
+      }
     })
     .filter((filter) => filter !== null)
 
