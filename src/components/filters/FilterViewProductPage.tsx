@@ -1,11 +1,12 @@
 import FilterMinMaxGroup from '@/components/filters/RangeFilter'
-import { FilterData } from '@/utils/api-util'
+import { Filter, FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { BodyShort, HStack, Heading, HelpText } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
 import { getAvailableAndSelectedFiltersMålOgVekt, getAvailableAndSelectedFiltersSetedimensjoner } from './FilterView'
+import { TagFilter } from './TagFilter'
 
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()
@@ -43,6 +44,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           tilgjengelig for dette hjelpemiddelet per i dag.
         </HelpText>
       </HStack>
+
       <HStack gap="2" className="filter-container__filters filter-container__horizontal spacing-bottom--medium">
         {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
           <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
@@ -60,6 +62,8 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
         )}
       </HStack>
+
+      {filters?.vis && <TagFilter filterKey="vis" filter={filters?.vis} />}
     </>
   )
 }

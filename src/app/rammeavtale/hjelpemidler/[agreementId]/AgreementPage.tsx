@@ -55,14 +55,18 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
-      ...initialAgreementSearchDataState,
+      hidePictures: 'show-pictures',
       ...searchData,
+      filters: { ...initialAgreementSearchDataState.filters, ...searchData.filters, vis: ['På avtale'] },
     },
   })
 
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
+    router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
+      scroll: false,
+    })
   }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {

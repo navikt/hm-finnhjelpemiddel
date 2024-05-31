@@ -215,7 +215,7 @@ export const filterDelkontrakt = (values: Array<string>) => ({
   },
 })
 
-export const filterVis = (values: Array<string>) => {
+export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) => {
   const filters: any[] = values
     .map((filterKey) => {
       if (filterKey === 'På digital behovsmelding') {
@@ -228,9 +228,15 @@ export const filterVis = (values: Array<string>) => {
           term: { 'attributes.bestillingsordning': 'true' },
         }
       }
-      if (filterKey === 'På avtale med NAV') {
+      if (filterKey === 'På avtale med NAV' || filterKey === 'På avtale') {
         return {
           match: { hasAgreement: 'true' },
+        }
+      }
+
+      if (filterKey === 'Utgått') {
+        return {
+          term: { status: 'INACTIVE' },
         }
       }
 
@@ -238,9 +244,23 @@ export const filterVis = (values: Array<string>) => {
     })
     .filter((filter) => filter !== null)
 
-  values.includes('Inkluder utgåtte hjelpemidler')
-    ? filters.push({ terms: { status: ['ACTIVE', 'INACTIVE'] } })
-    : filters.push({ term: { status: { value: 'ACTIVE' } } })
+  if (onlyActiveAsDefault) {
+    if (values.includes('Inkluder utgåtte hjelpemidler')) {
+      filters.push({
+        terms: {
+          status: ['ACTIVE', 'INACTIVE'],
+        },
+      })
+    } else {
+      filters.push({
+        term: {
+          status: {
+            value: 'ACTIVE',
+          },
+        },
+      })
+    }
+  }
 
   return filters
 }

@@ -172,3 +172,37 @@ form {
     outline: 2px solid var(--a-red-400);
   }
 }
+
+.filter-tag {
+  padding: 6px $a-spacing-3;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &__green {
+    background-color: #ccf1d6;
+    background-color: $a-surface-success-subtle;
+  }
+  &__green.filter-tag__selected {
+    background-color: #244c2f;
+    color: $a-text-on-inverted;
+  }
+
+  &__blue {
+    background-color: #cce2f0;
+    background-color: $a-surface-alt-3-subtle;
+  }
+  &__blue.filter-tag__selected {
+    background-color: $a-surface-alt-3;
+    color: $a-text-on-inverted;
+  }
+
+  &__orange {
+    background-color: #ffd799;
+    background-color: $a-orange-200;
+  }
+  &__orange.filter-tag__selected {
+    background-color: $a-orange-600;
+    color: $a-text-on-inverted;
+  }
+}
