@@ -45,7 +45,7 @@ const AgreementResults = ({
             Delkontrakter
           </Heading>
         </Show>
-        <HStack gap="4">
+        <HStack gap="4" style={{ flexWrap: 'wrap-reverse' }}>
           <ToggleGroup
             className="picture-toggle"
             defaultValue="show-pictures"
@@ -53,6 +53,7 @@ const AgreementResults = ({
             value={pictureToggleValue}
             size="small"
             variant="neutral"
+            style={{ minWidth: '222px' }}
           >
             <ToggleGroup.Item value="show-pictures">
               <ImageIcon aria-hidden />
