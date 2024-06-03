@@ -7,7 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import { Controller, useFormContext } from 'react-hook-form'
 
 const tagFilterCategoriesLabels = {
-  vis: 'Vis',
+  status: 'Status',
 }
 
 type TagFilterKey = keyof typeof tagFilterCategoriesLabels
@@ -29,10 +29,12 @@ export const TagFilter = ({ filterKey, filter }: Props) => {
     field: { value: string[]; onChange: (value: string[]) => void },
     valueKey: string
   ): void => {
-    const newValue: string[] = field.value.includes(valueKey)
-      ? field.value.filter((key: string) => key !== valueKey)
-      : [...field.value, valueKey]
-    field.onChange(newValue)
+    // Use this to allow mulitple selections
+    // const newValue: string[] = field.value.includes(valueKey)
+    //   ? field.value.filter((key: string) => key !== valueKey)
+    //   : [...field.value, valueKey]
+    const newValueOnlyOne = field.value.includes(valueKey) ? [] : [valueKey]
+    field.onChange(newValueOnlyOne)
     event.currentTarget?.form?.requestSubmit()
   }
 

@@ -1,5 +1,5 @@
 import FilterMinMaxGroup from '@/components/filters/RangeFilter'
-import { Filter, FilterData } from '@/utils/api-util'
+import { FilterData } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { BodyShort, HStack, Heading, HelpText } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
@@ -63,7 +63,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         )}
       </HStack>
 
-      {filters?.vis && <TagFilter filterKey="vis" filter={filters?.vis} />}
+      {filters?.status && <TagFilter filterKey="status" filter={filters?.status} />}
     </>
   )
 }

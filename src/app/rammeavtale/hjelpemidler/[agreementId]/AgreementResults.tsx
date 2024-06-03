@@ -27,11 +27,6 @@ const AgreementResults = ({
     formRef.current?.requestSubmit()
   }
 
-  const handleSetIsoFilter = (value: string) => {
-    formMethods.setValue(`filters.produktkategori`, [value])
-    formRef.current?.requestSubmit()
-  }
-
   return (
     <VStack gap={{ xs: '4' }}>
       <HStack justify="space-between">

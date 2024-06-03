@@ -57,7 +57,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     defaultValues: {
       hidePictures: 'show-pictures',
       ...searchData,
-      filters: { ...initialAgreementSearchDataState.filters, ...searchData.filters, vis: ['På avtale'] },
+      filters: { ...initialAgreementSearchDataState.filters, ...searchData.filters, status: ['På avtale'] },
     },
   })
 

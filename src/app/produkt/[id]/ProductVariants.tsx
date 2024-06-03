@@ -87,7 +87,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
             return relevantFilterKeys.includes('breddeCM')
           } else if (['lengdeMinCM', 'lengdeMaxCM'].includes(key)) {
             return relevantFilterKeys.includes('lengdeCM')
-          } else if (key === 'vis') {
+          } else if (key === 'status') {
             return true
           } else if (['totalVektMinKG', 'totalVektMaxKG'].includes(key)) {
             return relevantFilterKeys.includes('totalVektKG')
@@ -135,7 +135,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
   const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
 
-  const filterVis: Filter = {
+  const filterStatus: Filter = {
     values: [
       {
         key: 'På avtale',
@@ -153,7 +153,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   }
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
-  const filters = filtersFromData ? { ...filtersFromData, vis: filterVis } : filtersFromData
+  const filters = filtersFromData ? { ...filtersFromData, status: filterStatus } : filtersFromData
 
   const productVariants = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
