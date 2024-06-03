@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
@@ -210,7 +210,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   }
 
   const filterChips = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.length > 0)
+    .filter(([key, values]) => values.length > 0 && key !== 'status')
     .flatMap(([key, values]) => ({
       key: key as keyof ExtendedFilterFormState,
       values: Array.isArray(values) ? values.join(', ') : values,
@@ -283,7 +283,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
         <Heading
           level="3"
           size="small"
-          className={classNames({ 'spacing-bottom--small': !anyExpired })}
+          className="spacing-vertical--small"
         >{`${productVariants.length} av ${product.variantCount} varianter:`}</Heading>
       )}
 
@@ -297,6 +297,31 @@ const ProductVariants = ({ product }: { product: Product }) => {
         <div className="variants-table" id="variants-table">
           <Table zebraStripes>
             <Table.Header>
+              <Table.Row className="variants-table__status-row">
+                <Table.HeaderCell></Table.HeaderCell>
+                {productVariants.map((variant) => (
+                  <Table.HeaderCell key={variant.id}>
+                    {variant.hasAgreement ? (
+                      <Tag
+                        size="small"
+                        variant="neutral-moderate"
+                        className="filter-tag__green"
+                        style={{ minWidth: '89px' }}
+                      >
+                        På avtale
+                      </Tag>
+                    ) : variant.status === 'INACTIVE' ? (
+                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
+                        Utgått
+                      </Tag>
+                    ) : (
+                      <Tag size="small" variant="neutral-moderate">
+                        Ikke på avtale
+                      </Tag>
+                    )}
+                  </Table.HeaderCell>
+                ))}
+              </Table.Row>
               <Table.Row
                 className={classNames('variants-table__sortable-row', {
                   'variants-table__sorted-row': sortColumns.orderBy === 'artName',
@@ -320,16 +345,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>Navn på variant</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.ColumnHeader key={variant.id}>
-                    <VStack gap="3">
-                      {variant.status === 'INACTIVE' && (
-                        <Tag size="small" variant="warning-moderate">
-                          Utgått
-                        </Tag>
-                      )}
-                      {variant.articleName}
-                    </VStack>
-                  </Table.ColumnHeader>
+                  <Table.ColumnHeader key={variant.id}>{variant.articleName}</Table.ColumnHeader>
                 ))}
               </Table.Row>
             </Table.Header>

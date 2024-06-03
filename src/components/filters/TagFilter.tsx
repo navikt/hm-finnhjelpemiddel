@@ -1,8 +1,7 @@
 import { Filter } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { FormSearchData } from '@/utils/search-state-util'
-import { HStack } from '@navikt/ds-react'
-import classNames from 'classnames'
+import { Chips } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { Controller, useFormContext } from 'react-hook-form'
 
@@ -17,7 +16,7 @@ type Props = {
   filter: Filter
 }
 
-export const TagFilter = ({ filterKey, filter }: Props) => {
+export const ChipsFilter = ({ filterKey, filter }: Props) => {
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
   const formMethods = useFormContext<FormSearchData>()
@@ -43,55 +42,19 @@ export const TagFilter = ({ filterKey, filter }: Props) => {
       control={formMethods.control}
       name={`filters.${filterKey}`}
       render={({ field }) => (
-        <HStack gap="2" className="filter-tags spacing-bottom--medium">
+        <Chips className="spacing-bottom--medium">
           {filter?.values.map((value) => (
-            <TagButton
-              key={value.key}
-              label={value.label || value.key.toString()}
-              doc_count={value.doc_count}
+            <Chips.Toggle
               selected={selectedFilters.includes(value)}
-              color={
-                value.key === 'På avtale'
-                  ? 'green'
-                  : value.key === 'Ikke på avtale'
-                    ? 'blue'
-                    : value.key === 'Utgått'
-                      ? 'orange'
-                      : 'default'
-              }
-              onClickFunction={(event) => handleFilterClick(event, field, value.key.toString())}
-            />
+              checkmark={false}
+              key={value.key}
+              onClick={(event) => handleFilterClick(event, field, value.key.toString())}
+            >
+              {value.label || value.key.toString()}
+            </Chips.Toggle>
           ))}
-        </HStack>
+        </Chips>
       )}
     />
-  )
-}
-
-const TagButton = ({
-  label,
-  doc_count,
-  selected,
-  color = 'default',
-  onClickFunction,
-}: {
-  label: string
-  doc_count: number
-  selected: boolean
-  color?: Color
-  onClickFunction: (event: React.MouseEvent<HTMLButtonElement>) => void
-}) => {
-  return (
-    <button
-      className={classNames(
-        'filter-tag',
-        { 'filter-tag__selected': selected },
-        { 'filter-tag__default': color === 'default' },
-        { 'filter-tag__green': color === 'green' },
-        { 'filter-tag__blue': color === 'blue' },
-        { 'filter-tag__orange': color === 'orange' }
-      )}
-      onClick={onClickFunction}
-    >{`${label} (${doc_count})`}</button>
   )
 }

@@ -32,6 +32,14 @@
     thead tr > th:first-child {
       vertical-align: bottom;
     }
+
+    &__status-row {
+      th.navds-table__header-cell {
+        border-bottom: none;
+        padding: 0.15rem 0.75rem;
+        padding-top: 0.75rem;
+      }
+    }
   }
 
   &__description {

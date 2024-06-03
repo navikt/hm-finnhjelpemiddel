@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
 import { getAvailableAndSelectedFiltersMålOgVekt, getAvailableAndSelectedFiltersSetedimensjoner } from './FilterView'
-import { TagFilter } from './TagFilter'
+import { ChipsFilter } from './TagFilter'
 
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()
@@ -63,7 +63,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
         )}
       </HStack>
 
-      {filters?.status && <TagFilter filterKey="status" filter={filters?.status} />}
+      {filters?.status && <ChipsFilter filterKey="status" filter={filters?.status} />}
     </>
   )
 }
