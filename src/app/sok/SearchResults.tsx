@@ -1,10 +1,11 @@
-import { RefObject } from 'react'
+import { RefObject, useState } from 'react'
 
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 import ProductCard from '@/components/ProductCard'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
@@ -21,10 +22,19 @@ const SearchResults = ({
   formRef: RefObject<HTMLFormElement>
 }) => {
   const formMethods = useFormContext<FormSearchData>()
+  const { setCompareMenuState } = useHydratedCompareStore()
+  const [firstCompareClick, setFirstCompareClick] = useState(true)
 
   const handleSetIsoFilter = (value: string) => {
     formMethods.setValue(`filters.produktkategori`, [value])
     formRef.current?.requestSubmit()
+  }
+
+  const handleCompareClick = () => {
+    if (firstCompareClick) {
+      setCompareMenuState(CompareMenuState.Open)
+    }
+    setFirstCompareClick(false)
   }
 
   const visFilters = formMethods.getValues(`filters.vis`)
@@ -68,7 +78,12 @@ const SearchResults = ({
       >
         {products.map((product) => (
           <li key={product.id}>
-            <ProductCard product={product} handleIsoButton={handleSetIsoFilter} type="large-with-checkbox" />
+            <ProductCard
+              product={product}
+              handleIsoButton={handleSetIsoFilter}
+              handleCompareClick={handleCompareClick}
+              type="large-with-checkbox"
+            />
           </li>
         ))}
       </HStack>

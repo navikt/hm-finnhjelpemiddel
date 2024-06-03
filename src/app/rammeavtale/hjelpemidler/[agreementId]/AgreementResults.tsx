@@ -2,11 +2,12 @@
 
 import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { ImageIcon, PrinterSmallIcon } from '@navikt/aksel-icons'
 import { Alert, Button, HGrid, HStack, Heading, HelpText, Loader, Show, ToggleGroup, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
-import { RefObject } from 'react'
+import { RefObject, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 const AgreementResults = ({
@@ -20,16 +21,20 @@ const AgreementResults = ({
 }) => {
   const formMethods = useFormContext<FormSearchData>()
   const searchParams = useSearchParams()
+  const { setCompareMenuState } = useHydratedCompareStore()
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
+  const [firstCompareClick, setFirstCompareClick] = useState(true)
 
   const handleSetToggle = (value: string) => {
     formMethods.setValue('hidePictures', value)
     formRef.current?.requestSubmit()
   }
 
-  const handleSetIsoFilter = (value: string) => {
-    formMethods.setValue(`filters.produktkategori`, [value])
-    formRef.current?.requestSubmit()
+  const handleCompareClick = () => {
+    if (firstCompareClick) {
+      setCompareMenuState(CompareMenuState.Open)
+    }
+    setFirstCompareClick(false)
   }
 
   return (
@@ -40,7 +45,7 @@ const AgreementResults = ({
             Delkontrakter
           </Heading>
         </Show>
-        <HStack gap="4">
+        <HStack gap="4" style={{ flexWrap: 'wrap-reverse' }}>
           <ToggleGroup
             className="picture-toggle"
             defaultValue="show-pictures"
@@ -48,6 +53,7 @@ const AgreementResults = ({
             value={pictureToggleValue}
             size="small"
             variant="neutral"
+            style={{ minWidth: '222px' }}
           >
             <ToggleGroup.Item value="show-pictures">
               <ImageIcon aria-hidden />
@@ -109,9 +115,9 @@ const AgreementResults = ({
                     product={productWithRank.product}
                     rank={productWithRank.rank}
                     type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
-                    handleIsoButton={handleSetIsoFilter}
                     hmsNumbers={productWithRank.hmsNumbers}
                     variantCount={productWithRank.variantCount}
+                    handleCompareClick={handleCompareClick}
                   />
                 </li>
               ))}

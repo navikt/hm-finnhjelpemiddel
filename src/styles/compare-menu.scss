@@ -41,6 +41,7 @@
     align-items: center;
     justify-content: flex-start;
     padding: $a-spacing-4 0;
+    gap: $a-spacing-4;
 
     h2 {
       max-width: 250px;
@@ -78,7 +79,7 @@
     @include mixins.for-size(desktop-up) {
       flex-wrap: nowrap;
       justify-content: initial;
-      $mask: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent 100%);
+      $mask: linear-gradient(90deg, transparent, #000 3%, #000 99%, transparent 100%);
       -webkit-mask-image: $mask;
       mask-image: $mask;
       overflow-x: auto;
