@@ -31,6 +31,7 @@ const ProductCard = ({
   hmsNumbers,
   variantCount,
   handleIsoButton,
+  handleCompareClick,
 }: {
   type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print' | 'horizontal'
   product: Product
@@ -38,6 +39,7 @@ const ProductCard = ({
   hmsNumbers?: string[]
   variantCount?: number
   handleIsoButton?: (value: string) => void
+  handleCompareClick?: () => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
@@ -112,7 +114,7 @@ const ProductCard = ({
             <Detail textColor="subtle">
               {onAgreement ? (currentRank < 90 ? `Rangering ${currentRank}` : 'Ingen rangering') : 'Ikke på avtale'}
             </Detail>
-            <CompareCheckbox product={product} />
+            <CompareCheckbox product={product} handleCompareClick={handleCompareClick} />
           </HStack>
           {viewHmsOrCount}
           <Link
@@ -168,7 +170,7 @@ const ProductCard = ({
       {type === 'plain' ? null : type === 'removable' ? (
         <RemoveButton product={product} />
       ) : (
-        <CompareCheckbox product={product} />
+        <CompareCheckbox product={product} handleCompareClick={handleCompareClick} />
       )}
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
@@ -206,10 +208,17 @@ const ProductCard = ({
   )
 }
 
-const CompareCheckbox = ({ product }: { product: Product }) => {
+const CompareCheckbox = ({
+  product,
+  handleCompareClick,
+}: {
+  product: Product
+  handleCompareClick: (() => void) | undefined
+}) => {
   const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
 
   const toggleCompareProduct = () => {
+    handleCompareClick && handleCompareClick()
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
       ? removeProduct(product)
       : setProductToCompare(product)
