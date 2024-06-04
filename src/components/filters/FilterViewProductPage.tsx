@@ -5,6 +5,7 @@ import { BodyShort, HStack, Heading, HelpText } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
+import { ChipsFilter } from './ChipsFilter'
 import { getAvailableAndSelectedFiltersMålOgVekt, getAvailableAndSelectedFiltersSetedimensjoner } from './FilterView'
 
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
@@ -43,6 +44,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           tilgjengelig for dette hjelpemiddelet per i dag.
         </HelpText>
       </HStack>
+
       <HStack gap="2" className="filter-container__filters filter-container__horizontal spacing-bottom--medium">
         {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
           <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
@@ -60,6 +62,8 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
         )}
       </HStack>
+
+      {filters?.status && <ChipsFilter filterKey="status" filter={filters?.status} />}
     </>
   )
 }

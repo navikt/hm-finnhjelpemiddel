@@ -5,11 +5,11 @@ import { Fragment, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
-import { fetchProducts, FetchProductsWithFilters, FilterData, getProductFilters } from '@/utils/api-util'
+import { fetchProducts, FetchProductsWithFilters, Filter, FilterData, getProductFilters } from '@/utils/api-util'
 import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product } from '@/utils/product-util'
@@ -87,6 +87,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
             return relevantFilterKeys.includes('breddeCM')
           } else if (['lengdeMinCM', 'lengdeMaxCM'].includes(key)) {
             return relevantFilterKeys.includes('lengdeCM')
+          } else if (key === 'status') {
+            return true
           } else if (['totalVektMinKG', 'totalVektMaxKG'].includes(key)) {
             return relevantFilterKeys.includes('totalVektKG')
           } else if (['brukervektMinKG', 'brukervektMaxKG'].includes(key)) {
@@ -129,8 +131,29 @@ const ProductVariants = ({ product }: { product: Product }) => {
     )
   }
 
+  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
+  const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
+  const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
+
+  const statusFilter: Filter = {
+    values: [
+      {
+        key: 'På avtale',
+        doc_count: numberOfvariantsOnAgreement,
+      },
+      {
+        key: 'Ikke på avtale',
+        doc_count: numberOfvariantsWithoutAgreement,
+      },
+      {
+        key: 'Utgått',
+        doc_count: numberOfvariantsExpired,
+      },
+    ],
+  }
+
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
-  const filters = filtersFromData
+  const filters = filtersFromData ? { ...filtersFromData, status: statusFilter } : filtersFromData
 
   const productVariants = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
@@ -181,19 +204,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
     )
   }
 
-  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
-  const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
-
   type ExtendedFilterFormState = FilterFormState & {
     'HMS-nummer': unknown
     'Lev-artnr': unknown
   }
 
   const filterChips = Object.entries(searchData.filters)
-    .filter(([_, values]) => values.length > 0)
+    .filter(([key, values]) => values.length > 0 && key !== 'status')
     .flatMap(([key, values]) => ({
       key: key as keyof ExtendedFilterFormState,
-      values,
+      values: Array.isArray(values) ? values.join(', ') : values,
       label: filtersFormStateLabel[key as keyof FilterFormState],
     }))
     .concat(
@@ -263,19 +283,45 @@ const ProductVariants = ({ product }: { product: Product }) => {
         <Heading
           level="3"
           size="small"
-          className={classNames({ 'spacing-bottom--small': !anyExpired })}
+          className="spacing-vertical--small"
         >{`${productVariants.length} av ${product.variantCount} varianter:`}</Heading>
       )}
 
       {productVariants.length === 0 && (
-        <Alert variant="warning" className="spacing-top--medium">
+        <Alert variant="warning" className="spacing-top--small">
           Ingen av variantene matcher filteret ditt
         </Alert>
       )}
+
       {productVariants.length > 0 && (
         <div className="variants-table" id="variants-table">
           <Table zebraStripes>
             <Table.Header>
+              <Table.Row className="variants-table__status-row">
+                <Table.HeaderCell></Table.HeaderCell>
+                {productVariants.map((variant) => (
+                  <Table.HeaderCell key={variant.id}>
+                    {variant.hasAgreement ? (
+                      <Tag
+                        size="small"
+                        variant="neutral-moderate"
+                        className="filter-chip__green"
+                        style={{ minWidth: '89px' }}
+                      >
+                        På avtale
+                      </Tag>
+                    ) : variant.status === 'INACTIVE' ? (
+                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
+                        Utgått
+                      </Tag>
+                    ) : (
+                      <Tag size="small" variant="neutral-moderate">
+                        Ikke på avtale
+                      </Tag>
+                    )}
+                  </Table.HeaderCell>
+                ))}
+              </Table.Row>
               <Table.Row
                 className={classNames('variants-table__sortable-row', {
                   'variants-table__sorted-row': sortColumns.orderBy === 'artName',
@@ -299,16 +345,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>Navn på variant</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.ColumnHeader key={variant.id}>
-                    <VStack gap="3">
-                      {variant.status === 'INACTIVE' && (
-                        <Tag size="small" variant="warning-moderate">
-                          Utgått
-                        </Tag>
-                      )}
-                      {variant.articleName}
-                    </VStack>
-                  </Table.ColumnHeader>
+                  <Table.ColumnHeader key={variant.id}>{variant.articleName}</Table.ColumnHeader>
                 ))}
               </Table.Row>
             </Table.Header>

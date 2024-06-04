@@ -139,6 +139,7 @@ export default function SearchPage() {
   const filters: FilterData = {
     ...(filtersFromData ?? initialFilters),
     vis: visFilters,
+    status: { values: [] },
   }
 
   if (error) {

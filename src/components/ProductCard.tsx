@@ -1,7 +1,6 @@
 'use client'
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
-import { mapSearchParams } from '@/utils/mapSearchParams'
 import { Product } from '@/utils/product-util'
 import { MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
 import {
@@ -20,7 +19,7 @@ import {
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
 
@@ -47,16 +46,7 @@ const ProductCard = ({
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   const searchParams = useSearchParams()
-  const params = Object.fromEntries(searchParams.entries())
-
-  const queryString = useMemo(() => {
-    return new URLSearchParams(params).toString()
-  }, [params])
-
-  const searchTerm = searchParams.get('term')
-  const searchData = mapSearchParams(searchParams)
-
-  const linkToProduct = `/produkt/${product.id}?${queryString}`
+  const linkToProduct = `/produkt/${product.id}?${searchParams}`
 
   const currentRank = rank ? rank : minRank
   const onAgreement = currentRank !== Infinity

@@ -10,7 +10,6 @@ export const initialSearchDataState = {
 export const initialAgreementSearchDataState = {
   searchTerm: '',
   filters: initialFiltersFormState,
-  newFilters: initialFiltersFormState,
   hidePictures: 'show-pictures',
 }
 

@@ -13,6 +13,7 @@ import {
   filterMinMax,
   filterProduktkategori,
   filterRammeavtale,
+  filterStatus,
   filterTotalvekt,
   filterVis,
   toMinMaxAggs,
@@ -68,7 +69,7 @@ export type FilterCategoryKeyServer =
   | 'setehoydeMinCM'
   | 'setehoydeMaksCM'
 
-export type FilterCategoryKeyClient = 'vis'
+export type FilterCategoryKeyClient = 'vis' | 'status'
 
 type RawFilterData = {
   [key in FilterCategoryKeyServer]: {
@@ -353,6 +354,7 @@ export const fetchProducts = ({
     produktkategori,
     rammeavtale,
     vis,
+    status,
   } = filters
 
   const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
@@ -433,7 +435,8 @@ export const fetchProducts = ({
           filterProduktkategori(produktkategori),
           filterRammeavtale(rammeavtale),
           //Filtrer bare på aktive produkter dersom vi ikke henter basert på serieId(produktside)
-          ...(seriesId ? [] : filterVis(vis)),
+          ...filterVis(seriesId === undefined, vis),
+          filterStatus(status),
           //Remove null values
         ].filter(Boolean),
       },

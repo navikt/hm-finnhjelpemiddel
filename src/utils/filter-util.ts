@@ -23,6 +23,7 @@ export const initialFiltersFormState = {
   rammeavtale: [] as string[],
   delkontrakt: [] as string[],
   vis: [] as string[],
+  status: [] as string[],
 }
 
 export const filtersFormStateLabel = {
@@ -48,6 +49,7 @@ export const filtersFormStateLabel = {
   rammeavtale: 'Rammeavtale',
   delkontrakt: 'Delkontrakt',
   vis: 'Vis',
+  status: 'Status',
 }
 
 const visFilterLabels = [
@@ -215,7 +217,7 @@ export const filterDelkontrakt = (values: Array<string>) => ({
   },
 })
 
-export const filterVis = (values: Array<string>) => {
+export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) => {
   const filters: any[] = values
     .map((filterKey) => {
       if (filterKey === 'På digital behovsmelding') {
@@ -233,16 +235,49 @@ export const filterVis = (values: Array<string>) => {
           match: { hasAgreement: 'true' },
         }
       }
-
-      return null
     })
-    .filter((filter) => filter !== null)
+    .filter(Boolean)
 
-  values.includes('Inkluder utgåtte hjelpemidler')
-    ? filters.push({ terms: { status: ['ACTIVE', 'INACTIVE'] } })
-    : filters.push({ term: { status: { value: 'ACTIVE' } } })
+  if (onlyActiveAsDefault) {
+    if (values.includes('Inkluder utgåtte hjelpemidler')) {
+      filters.push({
+        terms: {
+          status: ['ACTIVE', 'INACTIVE'],
+        },
+      })
+    } else {
+      filters.push({
+        term: {
+          status: {
+            value: 'ACTIVE',
+          },
+        },
+      })
+    }
+  }
 
   return filters
+}
+
+export const filterStatus = (values: Array<string>) => {
+  const filterKey = values[0]
+  if (filterKey === 'På avtale') {
+    return {
+      match: { hasAgreement: 'true' },
+    }
+  }
+  if (filterKey === 'Ikke på avtale') {
+    return {
+      match: { hasAgreement: 'false' },
+    }
+  }
+  if (filterKey === 'Utgått') {
+    return {
+      term: { status: 'INACTIVE' },
+    }
+  }
+
+  return null
 }
 
 export const toMinMaxAggs = (filterKey: string) => ({
