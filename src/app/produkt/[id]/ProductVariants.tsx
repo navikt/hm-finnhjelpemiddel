@@ -135,7 +135,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
   const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
 
-  const filterStatus: Filter = {
+  const statusFilter: Filter = {
     values: [
       {
         key: 'På avtale',
@@ -153,7 +153,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   }
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
-  const filters = filtersFromData ? { ...filtersFromData, status: filterStatus } : filtersFromData
+  const filters = filtersFromData ? { ...filtersFromData, status: statusFilter } : filtersFromData
 
   const productVariants = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
