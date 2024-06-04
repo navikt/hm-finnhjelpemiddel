@@ -305,7 +305,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       <Tag
                         size="small"
                         variant="neutral-moderate"
-                        className="filter-tag__green"
+                        className="filter-chip__green"
                         style={{ minWidth: '89px' }}
                       >
                         På avtale

@@ -39,6 +39,15 @@
         padding: 0.15rem 0.75rem;
         padding-top: 0.75rem;
       }
+
+      .navds-tag--small {
+        padding-top: 3px;
+        padding-bottom: 2px;
+      }
+
+      .filter-chip__green {
+        background-color: $a-surface-success-subtle;
+      }
     }
   }
 

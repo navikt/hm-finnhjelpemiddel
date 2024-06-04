@@ -5,8 +5,8 @@ import { BodyShort, HStack, Heading, HelpText } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { CheckboxFilter } from './CheckboxFilter'
+import { ChipsFilter } from './ChipsFilter'
 import { getAvailableAndSelectedFiltersMålOgVekt, getAvailableAndSelectedFiltersSetedimensjoner } from './FilterView'
-import { ChipsFilter } from './TagFilter'
 
 export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => {
   const searchParams = useSearchParams()

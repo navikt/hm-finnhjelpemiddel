@@ -5,14 +5,13 @@ import { Chips } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { Controller, useFormContext } from 'react-hook-form'
 
-const tagFilterCategoriesLabels = {
+const chispFilterCategoriesLabels = {
   status: 'Status',
 }
 
-type TagFilterKey = keyof typeof tagFilterCategoriesLabels
-type Color = 'default' | 'green' | 'blue' | 'orange'
+type ChipsFilterKey = keyof typeof chispFilterCategoriesLabels
 type Props = {
-  filterKey: TagFilterKey
+  filterKey: ChipsFilterKey
   filter: Filter
 }
 
