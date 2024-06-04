@@ -50,7 +50,7 @@ export const ChipsFilter = ({ filterKey, filter }: Props) => {
               key={value.key}
               onClick={(event) => handleFilterClick(event, field, value.key.toString())}
             >
-              {value.label || value.key.toString()}
+              {`${value.label || value.key.toString()} (${value.doc_count})`}
             </Chips.Toggle>
           ))}
         </Chips>
