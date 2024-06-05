@@ -3,7 +3,7 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
-import { ThumbUpIcon } from '@navikt/aksel-icons'
+import { ExternalLinkIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, CopyButton, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
@@ -76,6 +76,7 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
       <DefinitionList.Term>Produktkategori</DefinitionList.Term>
       <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
 
+
       {supplier && (
         <>
           <DefinitionList.Term>Leverandør</DefinitionList.Term>
@@ -83,6 +84,14 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
             <Link as={NextLink} href={`/leverandorer#${supplier.id}`}>
               {supplier.name}
             </Link>
+
+
+          </DefinitionList.Definition>
+          <DefinitionList.Definition>
+            {product.attributes.url && (
+              <Link href={product.attributes.url} target={"_blank"}>Leverandørens
+                produktside <ExternalLinkIcon /></Link>
+            )}
           </DefinitionList.Definition>
         </>
       )}

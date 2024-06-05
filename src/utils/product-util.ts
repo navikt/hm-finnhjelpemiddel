@@ -83,6 +83,7 @@ interface Attributes {
   shortdescription?: string
   text?: string
   compatibleWith?: string[]
+  url?: string
 }
 
 export interface AgreementInfo {
