@@ -84,8 +84,6 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
             <Link as={NextLink} href={`/leverandorer#${supplier.id}`}>
               {supplier.name}
             </Link>
-
-
           </DefinitionList.Definition>
           {product.attributes.url && (
             <DefinitionList.Definition>
