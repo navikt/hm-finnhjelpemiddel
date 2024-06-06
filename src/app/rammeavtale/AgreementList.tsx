@@ -5,7 +5,7 @@ import { logKlikk } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Box, Button, HGrid, HStack, Link, Loader, Show, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
@@ -62,13 +62,23 @@ const AgreementList = () => {
   const iconBasedOnState = (key: string) => {
     return sortColumn.orderBy === key ? (
       sortColumn.direction === 'ascending' ? (
-        <ArrowUpIcon title="Sort ascending" height={30} width={30} />
+        <ArrowUpIcon title="Sort ascending" height={30} width={30} aria-hidden={true} />
       ) : (
-        <ArrowDownIcon title="Sort descending" height={30} width={30} />
+        <ArrowDownIcon title="Sort descending" height={30} width={30} aria-hidden={true} />
       )
     ) : (
-      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} />
+      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
     )
+  }
+
+  const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
+
+  const getAriaLabel = (ariaLabelKey: string) => {
+    return sortColumn.direction === 'ascending'
+      ? `${ariaLabelKey} sortert stigende, trykk for å endre`
+      : sortColumn.direction === 'descending'
+        ? `${ariaLabelKey} sortert synkende, trykk for å endre`
+        : ariaLabelKey + defaultAriaLabel
   }
 
   return (
@@ -78,7 +88,7 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'title',
           })}
-          aria-label="Sorter på tittel"
+          aria-label={sortColumn.orderBy === 'title' ? getAriaLabel('Tittel ') : defaultAriaLabel + ' tittel'}
           aria-selected={sortColumn.orderBy === 'title'}
           size="xsmall"
           variant="tertiary"
@@ -92,7 +102,9 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button agreement-page__sort-button-published', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'published',
           })}
-          aria-label="Sorter på publisert dato"
+          aria-label={
+            sortColumn.orderBy === 'published' ? getAriaLabel('Aktiv fra dato ') : defaultAriaLabel + ' aktiv fra dato'
+          }
           aria-selected={sortColumn.orderBy === 'published'}
           size="xsmall"
           variant="tertiary"
@@ -107,7 +119,9 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button agreement-page__sort-button-expires', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
           })}
-          aria-label="Sorter på tittel"
+          aria-label={
+            sortColumn.orderBy === 'expires' ? getAriaLabel('Aktiv til dato ') : defaultAriaLabel + ' aktiv til dato'
+          }
           aria-selected={sortColumn.orderBy === 'expires'}
           size="xsmall"
           variant="tertiary"
