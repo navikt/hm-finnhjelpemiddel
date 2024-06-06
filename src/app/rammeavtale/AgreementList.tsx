@@ -22,7 +22,6 @@ const AgreementList = () => {
   const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
-  const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
 
   const sortedData = useMemo(() => {
     if (!data) return []
@@ -72,11 +71,13 @@ const AgreementList = () => {
     )
   }
 
+  const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
+
   const getAriaLabel = (ariaLabelKey: string) => {
     return sortColumn.direction === 'ascending'
       ? `${ariaLabelKey} sortert stigende, trykk for å endre`
       : sortColumn.direction === 'descending'
-        ? `${ariaLabelKey}  sortert synkende, trykk for å endre`
+        ? `${ariaLabelKey} sortert synkende, trykk for å endre`
         : ariaLabelKey + defaultAriaLabel
   }
 
