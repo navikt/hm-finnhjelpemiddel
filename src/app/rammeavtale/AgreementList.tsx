@@ -19,11 +19,10 @@ type SortColumns = {
 
 const AgreementList = () => {
   const [sortColumn, setSortColumn] = useState<SortColumns>({ orderBy: 'title', direction: 'ascending' })
-  const [sortAriaLabel, setSortAriaLabel] = useState('Tittel sortert stigende, trykk for å endre')
   const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
   })
-  const defaultAriaLabel: string = `Trykk for å sortere stigende eller synkende`
+  const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
 
   const sortedData = useMemo(() => {
     if (!data) return []
@@ -73,14 +72,12 @@ const AgreementList = () => {
     )
   }
 
-  const handleAriaLabel = (ariaLabelKey: string) => {
-    return setSortAriaLabel(
-      sortColumn.direction === 'ascending'
-        ? `${ariaLabelKey} sortert synkende, trykk for å endre`
-        : sortColumn.direction === 'descending'
-          ? `${ariaLabelKey} sortert stigende, trykk for å endre`
-          : ariaLabelKey + defaultAriaLabel
-    )
+  const getAriaLabel = (ariaLabelKey: string) => {
+    return sortColumn.direction === 'ascending'
+      ? `${ariaLabelKey} sortert stigende, trykk for å endre`
+      : sortColumn.direction === 'descending'
+        ? `${ariaLabelKey}  sortert synkende, trykk for å endre`
+        : ariaLabelKey + defaultAriaLabel
   }
 
   return (
@@ -90,14 +87,11 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'title',
           })}
-          aria-label={sortColumn.orderBy === 'title' ? sortAriaLabel : defaultAriaLabel + ' tittel'}
+          aria-label={sortColumn.orderBy === 'title' ? getAriaLabel('Tittel ') : defaultAriaLabel + ' tittel'}
           aria-selected={sortColumn.orderBy === 'title'}
           size="xsmall"
           variant="tertiary"
-          onClick={() => {
-            handleSortColumn('title')
-            handleAriaLabel('Title ')
-          }}
+          onClick={() => handleSortColumn('title')}
           iconPosition="right"
           icon={iconBasedOnState('title')}
         >
@@ -107,14 +101,13 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button agreement-page__sort-button-published', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'published',
           })}
-          aria-label={sortColumn.orderBy === 'published' ? sortAriaLabel : defaultAriaLabel + ' aktiv fra dato'}
+          aria-label={
+            sortColumn.orderBy === 'published' ? getAriaLabel('Aktiv fra dato ') : defaultAriaLabel + ' aktiv fra dato'
+          }
           aria-selected={sortColumn.orderBy === 'published'}
           size="xsmall"
           variant="tertiary"
-          onClick={() => {
-            handleSortColumn('published')
-            handleAriaLabel('Aktiv fra dato ')
-          }}
+          onClick={() => handleSortColumn('published')}
           iconPosition="right"
           icon={iconBasedOnState('published')}
         >
@@ -125,14 +118,13 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button agreement-page__sort-button-expires', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
           })}
-          aria-label={sortColumn.orderBy === 'expires' ? sortAriaLabel : defaultAriaLabel + ' aktiv til dato'}
+          aria-label={
+            sortColumn.orderBy === 'expires' ? getAriaLabel('Aktiv til dato ') : defaultAriaLabel + ' aktiv til dato'
+          }
           aria-selected={sortColumn.orderBy === 'expires'}
           size="xsmall"
           variant="tertiary"
-          onClick={() => {
-            handleSortColumn('expires')
-            handleAriaLabel('Aktiv til dato ')
-          }}
+          onClick={() => handleSortColumn('expires')}
           iconPosition="right"
           icon={iconBasedOnState('expires')}
         >
