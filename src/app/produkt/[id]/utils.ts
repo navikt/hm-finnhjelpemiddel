@@ -9,6 +9,12 @@ export const hasDifferentValues = ({ row }: { row: string[] }) => {
   return uniqueValues.size > 1
 }
 
+// Define the custom order for statuses
+const statusOrder: { [key: string]: number } = {
+  ACTIVE: 1,
+  INACTIVE: 2,
+}
+
 export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: SortColumns) => {
   return variants.sort((variantA, variantB) => {
     if (sortColumns.orderBy === 'HMS') {
@@ -24,17 +30,19 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
       return -1
     }
     if (sortColumns.orderBy === 'Expired') {
-      if (variantA.status && variantB.status) {
-        if (variantA.agreements.length > 0 && variantB.agreements.length === 0) {
-          return -1
-        }
-        if (variantB.agreements.length > 0 && variantA.agreements.length === 0) {
-          return 1
-        }
-
-        return sortAlphabetically(variantA.status, variantB.status, sortColumns?.direction === 'descending')
+      if (variantA.hasAgreement !== variantB.hasAgreement) {
+        return variantA.hasAgreement ? -1 : 1
       }
-      return -1
+
+      if (variantA.status !== variantB.status) {
+        return statusOrder[variantA.status] - statusOrder[variantB.status]
+      }
+
+      return sortAlphabetically(
+        variantA.articleName.trim().replace(/\s/g, ''),
+        variantB.articleName.trim().replace(/\s/g, ''),
+        sortColumns?.direction === 'descending'
+      )
     }
 
     if (sortColumns.orderBy === 'rank') {
