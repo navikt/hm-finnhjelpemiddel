@@ -18,6 +18,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 export type SortColumns = {
   orderBy: string | null
@@ -195,12 +196,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
-        <ArrowUpIcon title="Sort ascending" height={30} width={30} />
+        <ArrowUpIcon title="Sort ascending" height={30} width={30} aria-hidden={true} />
       ) : (
-        <ArrowDownIcon title="Sort descending" height={30} width={30} />
+        <ArrowDownIcon title="Sort descending" height={30} width={30} aria-hidden={true} />
       )
     ) : (
-      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} />
+      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
     )
   }
 
@@ -331,6 +332,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.ColumnHeader className="sortable">
                     <Button
                       className="sort-button"
+                      aria-label={
+                        sortColumns.orderBy === 'artName'
+                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Navn på variant ' })
+                          : defaultAriaLabel + ' navn på variant'
+                      }
+                      aria-selected={sortColumns.orderBy === 'artName'}
                       size="xsmall"
                       style={{ textAlign: 'left' }}
                       variant="tertiary"
@@ -362,6 +369,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell className="sortable">
                     <Button
                       className="sort-button"
+                      aria-label={
+                        sortColumns.orderBy === 'HMS'
+                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'HMS-nummer ' })
+                          : defaultAriaLabel + ' HMS-nummer'
+                      }
+                      aria-selected={sortColumns.orderBy === 'HMS'}
                       size="xsmall"
                       style={{ textAlign: 'left' }}
                       variant="tertiary"
@@ -385,7 +398,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         text={variant.hmsArtNr}
                         activeText="Kopiert"
                         variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
+                        activeIcon={<ThumbUpIcon aria-hidden={true} />}
                         iconPosition="right"
                       />
                     ) : (
@@ -406,6 +419,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell className="sortable">
                     <Button
                       className="sort-button"
+                      aria-label={
+                        sortColumns.orderBy === 'levart'
+                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Lev-artnr ' })
+                          : defaultAriaLabel + ' lev-artnr'
+                      }
+                      aria-selected={sortColumns.orderBy === 'levart'}
                       size="xsmall"
                       style={{ textAlign: 'left' }}
                       variant="tertiary"
@@ -429,7 +448,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         text={variant.supplierRef}
                         activeText="Kopiert"
                         variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
+                        activeIcon={<ThumbUpIcon aria-hidden={true} />}
                         iconPosition="right"
                       />
                     ) : (
@@ -451,6 +470,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     <Table.HeaderCell className="sortable">
                       <Button
                         className="sort-button"
+                        aria-label={
+                          sortColumns.orderBy === 'rank'
+                            ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Rangering ' })
+                            : defaultAriaLabel + ' rangering'
+                        }
+                        aria-selected={sortColumns.orderBy === 'rank'}
                         size="xsmall"
                         style={{ textAlign: 'left' }}
                         variant="tertiary"
@@ -499,6 +524,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         <Table.HeaderCell className="sortable">
                           <Button
                             className="sort-button"
+                            aria-label={
+                              sortColumns.orderBy === key
+                                ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: key + ' ' })
+                                : defaultAriaLabel + ' ' + key.toLowerCase()
+                            }
+                            aria-selected={sortColumns.orderBy === key}
                             size="xsmall"
                             style={{ textAlign: 'left' }}
                             variant="tertiary"
