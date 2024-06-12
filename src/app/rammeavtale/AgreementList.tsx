@@ -11,6 +11,7 @@ import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useMemo, useState } from 'react'
 import useSWR from 'swr'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 type SortColumns = {
   orderBy: string | null
@@ -71,16 +72,6 @@ const AgreementList = () => {
     )
   }
 
-  const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
-
-  const getAriaLabel = (ariaLabelKey: string) => {
-    return sortColumn.direction === 'ascending'
-      ? `${ariaLabelKey} sortert stigende, trykk for å endre`
-      : sortColumn.direction === 'descending'
-        ? `${ariaLabelKey} sortert synkende, trykk for å endre`
-        : ariaLabelKey + defaultAriaLabel
-  }
-
   return (
     <>
       <HGrid columns={{ xs: '1fr 1fr 1fr', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
@@ -88,7 +79,14 @@ const AgreementList = () => {
           className={classNames('agreement-page__sort-button', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'title',
           })}
-          aria-label={sortColumn.orderBy === 'title' ? getAriaLabel('Tittel ') : defaultAriaLabel + ' tittel'}
+          aria-label={
+            sortColumn.orderBy === 'title'
+              ? getAriaLabel({
+                  sortColumns: sortColumn,
+                  ariaLabelKey: 'Tittel ',
+                })
+              : defaultAriaLabel + ' tittel'
+          }
           aria-selected={sortColumn.orderBy === 'title'}
           size="xsmall"
           variant="tertiary"
@@ -103,7 +101,12 @@ const AgreementList = () => {
             'agreement-page__sort-selected': sortColumn.orderBy === 'published',
           })}
           aria-label={
-            sortColumn.orderBy === 'published' ? getAriaLabel('Aktiv fra dato ') : defaultAriaLabel + ' aktiv fra dato'
+            sortColumn.orderBy === 'published'
+              ? getAriaLabel({
+                  sortColumns: sortColumn,
+                  ariaLabelKey: 'Aktiv fra dato ',
+                })
+              : defaultAriaLabel + ' aktiv fra dato'
           }
           aria-selected={sortColumn.orderBy === 'published'}
           size="xsmall"
@@ -120,7 +123,12 @@ const AgreementList = () => {
             'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
           })}
           aria-label={
-            sortColumn.orderBy === 'expires' ? getAriaLabel('Aktiv til dato ') : defaultAriaLabel + ' aktiv til dato'
+            sortColumn.orderBy === 'expires'
+              ? getAriaLabel({
+                  sortColumns: sortColumn,
+                  ariaLabelKey: 'Aktiv til dato ',
+                })
+              : defaultAriaLabel + ' aktiv til dato'
           }
           aria-selected={sortColumn.orderBy === 'expires'}
           size="xsmall"

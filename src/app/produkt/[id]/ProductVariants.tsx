@@ -18,6 +18,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 export type SortColumns = {
   orderBy: string | null
@@ -204,16 +205,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
     )
   }
 
-  const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
-
-  const getAriaLabel = (ariaLabelKey: string) => {
-    return sortColumns.direction === 'ascending'
-      ? `${ariaLabelKey} sortert stigende, trykk for å endre`
-      : sortColumns.direction === 'descending'
-        ? `${ariaLabelKey} sortert synkende, trykk for å endre`
-        : defaultAriaLabel + ariaLabelKey
-  }
-
   type ExtendedFilterFormState = FilterFormState & {
     'HMS-nummer': unknown
     'Lev-artnr': unknown
@@ -308,7 +299,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
           <Table zebraStripes>
             <Table.Header>
               <Table.Row className="variants-table__status-row">
-                {/*                <Table.HeaderCell></Table.HeaderCell>*/}
+                <Table.HeaderCell></Table.HeaderCell>
                 {productVariants.map((variant) => (
                   <Table.HeaderCell key={variant.id}>
                     {variant.hasAgreement ? (
@@ -343,7 +334,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       className="sort-button"
                       aria-label={
                         sortColumns.orderBy === 'artName'
-                          ? getAriaLabel('Navn på variant ')
+                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Navn på variant ' })
                           : defaultAriaLabel + ' navn på variant'
                       }
                       aria-selected={sortColumns.orderBy === 'artName'}
@@ -379,7 +370,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     <Button
                       className="sort-button"
                       aria-label={
-                        sortColumns.orderBy === 'HMS' ? getAriaLabel('HMS-nummer ') : defaultAriaLabel + ' HMS-nummer'
+                        sortColumns.orderBy === 'HMS'
+                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'HMS-nummer ' })
+                          : defaultAriaLabel + ' HMS-nummer'
                       }
                       aria-selected={sortColumns.orderBy === 'HMS'}
                       size="xsmall"
@@ -427,7 +420,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     <Button
                       className="sort-button"
                       aria-label={
-                        sortColumns.orderBy === 'levart' ? getAriaLabel('Lev-artnr ') : defaultAriaLabel + ' lev-artnr'
+                        sortColumns.orderBy === 'levart'
+                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Lev-artnr ' })
+                          : defaultAriaLabel + ' lev-artnr'
                       }
                       aria-selected={sortColumns.orderBy === 'levart'}
                       size="xsmall"
@@ -476,7 +471,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
                       <Button
                         className="sort-button"
                         aria-label={
-                          sortColumns.orderBy === 'rank' ? getAriaLabel('Rangering ') : defaultAriaLabel + ' rangering'
+                          sortColumns.orderBy === 'rank'
+                            ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Rangering ' })
+                            : defaultAriaLabel + ' rangering'
                         }
                         aria-selected={sortColumns.orderBy === 'rank'}
                         size="xsmall"
@@ -529,7 +526,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                             className="sort-button"
                             aria-label={
                               sortColumns.orderBy === key
-                                ? getAriaLabel(key + ' ')
+                                ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: key + ' ' })
                                 : defaultAriaLabel + ' ' + key.toLowerCase()
                             }
                             aria-selected={sortColumns.orderBy === key}
