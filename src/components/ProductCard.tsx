@@ -70,10 +70,10 @@ const ProductCard = ({
 
   const viewHmsOrCount = (
     <>
-      {hmsNumbers && hmsNumbers?.length < 4 && (
+      {hmsNumbers && hmsNumbers?.length === 1 && (
         <Detail className="product-card__hms-numbers">{hmsNumbers.join(', ')}</Detail>
       )}
-      {((variantCount && hmsNumbers && hmsNumbers?.length >= 4) || (variantCount && !hmsNumbers)) && (
+      {((variantCount && hmsNumbers && hmsNumbers?.length > 1) || (variantCount && !hmsNumbers)) && (
         <Detail>Ant varianter: {variantCount}</Detail>
       )}
     </>
@@ -101,12 +101,11 @@ const ProductCard = ({
       >
         <VStack gap="1" className="product-card__content">
           <HStack justify={'space-between'}>
-            <Detail textColor="subtle">
-              {onAgreement ? (currentRank < 90 ? `Rangering ${currentRank}` : 'Ingen rangering') : 'Ikke på avtale'}
-            </Detail>
+            {viewHmsOrCount}
             <CompareCheckbox product={product} handleCompareClick={handleCompareClick} />
           </HStack>
-          {viewHmsOrCount}
+          <Detail textColor="subtle">{product.supplierName}</Detail>
+
           <Link
             className="product-card__link"
             href={linkToProduct}
@@ -114,7 +113,7 @@ const ProductCard = ({
             as={NextLink}
           >
             <BodyShort size="small" className="text-line-clamp">
-              {product.title}
+              {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
             </BodyShort>
           </Link>
         </VStack>
@@ -179,6 +178,8 @@ const ProductCard = ({
               {product.title}
             </BodyShort>
           </Link>
+
+          {type === 'checkbox' && <Detail>{product.supplierName}</Detail>}
 
           {type === 'large-with-checkbox' && handleIsoButton && (
             <Button
