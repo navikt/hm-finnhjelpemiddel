@@ -1,11 +1,11 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Chips, CopyButton, Heading, HStack, Loader, Table, Tag } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
@@ -75,10 +75,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
         .flatMap(([key]) => key)
     : []
 
-  let relevantFilters: FilterFormState = initialFiltersFormState
+  let relevantFilters = useRef(initialFiltersFormState)
 
   useEffect(() => {
-    relevantFilters = {
+    relevantFilters.current = {
       ...initialFiltersFormState,
       ...Object.fromEntries(
         Object.entries(searchData.filters).filter(([key]) => {
@@ -108,7 +108,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
     const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
 
     router.replace(
-      `${pathname}?${toSearchQueryString({ filters: relevantFilters }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
+      `${pathname}?${toSearchQueryString({ filters: relevantFilters.current }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
       {
         scroll: false,
       }
@@ -252,6 +252,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
       {product.variantCount > 1 && (
         <FormProvider {...formMethods}>
           <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+            {filterIsLoading && (
+              <HStack style={{ margin: '38px' }}>
+                <Loader size="xlarge" title="Laster bilde" />
+              </HStack>
+            )}
             {relevantFilterKeys.length > 0 && <FilterViewProductPage filters={filters} />}
             <input type="submit" style={{ display: 'none' }} />
 

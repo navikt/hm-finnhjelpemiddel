@@ -33,7 +33,7 @@ function AboutUs() {
             <BodyLong spacing>
               NAV må følge regelverket for offentlige anskaffelser og har derfor inngått avtaler med leverandører av
               hjelpemidler innen ulike områder. Hjelpemidler som er avtalt med NAV er merket med en grønn markering hvor
-              det står "rangering …" og har egne innganger for visning og informasjon.
+              det står &quot;rangering …&quot; og har egne innganger for visning og informasjon.
             </BodyLong>
             <Heading level="2" size="small" spacing>
               Hva er et hjelpemiddel?
@@ -63,7 +63,7 @@ function AboutUs() {
             </BodyLong>
             <BodyLong spacing>
               Hvis du leser dette på en PC, kan du også gi oss tilbakemelding ved å klikke på den blå knappen til høyre,
-              merket med "Tilbakemelding".
+              merket med &quot;Tilbakemelding&quot;.
             </BodyLong>
           </article>
         </div>
