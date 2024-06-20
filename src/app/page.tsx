@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { BodyLong, Box, Heading, HGrid, Hide, HStack, Link, VStack } from '@navikt/ds-react'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import News from '@/components/News'
+import NewsList from '@/components/NewsList'
 import AgreementList from './rammeavtale/AgreementList'
 
 function Home() {
@@ -27,7 +27,7 @@ function Home() {
             <AgreementList />
             <VStack gap="18">
               <InformationNavLinks />
-              <News />
+              <NewsList />
             </VStack>
           </HGrid>
 

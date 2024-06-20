@@ -1,4 +1,4 @@
-import { mapAllNews } from '@/utils/news-util'
+import { mapAllNews, News } from '@/utils/news-util'
 import { formatNorwegianLetter } from '@/utils/string-util'
 import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
@@ -29,13 +29,7 @@ import {
   ProductVariant,
   wheelchairFilters,
 } from './product-util'
-import {
-  AgreementDocResponse,
-  AgreementSearchResponse,
-  NewsType,
-  PostBucketResponse,
-  SearchResponse,
-} from './response-types'
+import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
 
 export const PAGE_SIZE = 24
@@ -1045,7 +1039,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
     })
 }
 
-export async function getNews(): Promise<NewsType[]> {
+export async function getNews(): Promise<News[]> {
   const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
     next: { revalidate: 900 },
     method: 'POST',

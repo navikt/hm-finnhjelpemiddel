@@ -5,10 +5,11 @@ import { Heading, VStack } from '@navikt/ds-react'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
-function News() {
+const NewsList = () => {
   const { data, error } = useSWR<News[]>('/news/_search', getNews, {
     keepPreviousData: true,
   })
+
   const newsMigrationDate = new Date('April 01, 2024')
 
   const sortedData = useMemo(() => {
@@ -18,7 +19,7 @@ function News() {
     return sorted
       .sort((a, b) => b.published.getTime() - a.published.getTime())
       .filter((news) => news.published.getTime() >= newsMigrationDate.getTime() && news.expired >= new Date(Date.now()))
-  }, [data, newsMigrationDate])
+  }, [data])
 
   const type = (news: News): [string, string] | string => {
     const splitTitle = news.title.split(':')
@@ -54,4 +55,4 @@ function News() {
   )
 }
 
-export default News
+export default NewsList
