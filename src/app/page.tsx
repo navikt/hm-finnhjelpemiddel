@@ -1,36 +1,14 @@
 'use client'
 
-import { useMemo } from 'react'
-
 import Image from 'next/image'
-import NextLink from 'next/link'
-
-import useSWR from 'swr'
 
 import { BodyLong, Box, Heading, HGrid, Hide, HStack, Link, VStack } from '@navikt/ds-react'
 
-import { agreementHasNoProducts, AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
-import { getAgreementLabels } from '@/utils/api-util'
-
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import News from '@/components/News'
-import { logNavigationEvent } from '@/utils/amplitude'
-import { sortAlphabetically } from '@/utils/sort-util'
+import AgreementList from './rammeavtale/AgreementList'
 
 function Home() {
-  const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
-    keepPreviousData: true,
-  })
-
-  const sortedAgreements = useMemo(() => {
-    if (!agreements) return []
-    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
-    // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
-
-    return filteredData
-  }, [agreements])
-
   return (
     <AnimateLayout>
       <div className="main-wrapper home-page">
@@ -45,30 +23,14 @@ function Home() {
             </Heading>
           </HStack>
 
-          <VStack gap={{ xs: '6', md: '10' }}>
-            <Heading level="2" size="medium">
-              Hjelpemidler på avtale med NAV
-            </Heading>
+          <HGrid gap="20" columns={'2.5fr 1fr'}>
+            <AgreementList />
 
-            <HStack gap="5">
-              {sortedAgreements?.map(({ id, label }) => {
-                //Wish to replace id by label in url
-                let hrefSok = `/sok?agreement&rammeavtale=${label}`
-                return (
-                  <div className="home-page__agreement-link" key={id}>
-                    <Link
-                      as={NextLink}
-                      href={agreementProductsLink(id)}
-                      onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label)}
-                      className="home-page__link"
-                    >
-                      {label}
-                    </Link>
-                  </div>
-                )
-              })}
-            </HStack>
-          </VStack>
+            <Heading level="1" size="small">
+              AS
+            </Heading>
+          </HGrid>
+
           <VStack align="center" gap={{ xs: '6', md: '10' }}>
             <Heading level="2" size="medium" align="center">
               Trenger du mer informasjon?

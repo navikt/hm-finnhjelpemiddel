@@ -3,15 +3,15 @@
 import { AgreementLabel } from '@/utils/agreement-util'
 import { logKlikk } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, HGrid, HStack, Link, Loader, Show, VStack } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Box, Button, HGrid, HStack, Heading, Link, Loader, Show, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useMemo, useState } from 'react'
 import useSWR from 'swr'
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 type SortColumns = {
   orderBy: string | null
@@ -50,7 +50,7 @@ const AgreementList = () => {
   const handleSortColumn = (sortKey: string) => {
     logKlikk(`agreements-sort-${sortKey}`)
     setSortColumn({
-      orderBy: sortKey,
+      orderBy: sortKey === sortColumn.orderBy && sortColumn.direction === 'descending' ? 'title' : sortKey,
       direction:
         sortKey === sortColumn.orderBy
           ? sortColumn.direction === 'ascending'
@@ -73,31 +73,13 @@ const AgreementList = () => {
   }
 
   return (
-    <>
+    <VStack gap="4">
       <HGrid columns={{ xs: '1fr 1fr 1fr', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
+        <Heading level="2" size="medium">
+          På avtale med NAV
+        </Heading>
         <Button
           className={classNames('agreement-page__sort-button', {
-            'agreement-page__sort-selected': sortColumn.orderBy === 'title',
-          })}
-          aria-label={
-            sortColumn.orderBy === 'title'
-              ? getAriaLabel({
-                  sortColumns: sortColumn,
-                  ariaLabelKey: 'Tittel ',
-                })
-              : defaultAriaLabel + ' tittel'
-          }
-          aria-selected={sortColumn.orderBy === 'title'}
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => handleSortColumn('title')}
-          iconPosition="right"
-          icon={iconBasedOnState('title')}
-        >
-          Tittel
-        </Button>
-        <Button
-          className={classNames('agreement-page__sort-button agreement-page__sort-button-published', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'published',
           })}
           aria-label={
@@ -114,12 +96,13 @@ const AgreementList = () => {
           onClick={() => handleSortColumn('published')}
           iconPosition="right"
           icon={iconBasedOnState('published')}
+          style={{ justifySelf: 'center' }}
         >
           <Show above="md">Aktiv fra</Show>
           <Show below="md">Fra</Show>
         </Button>
         <Button
-          className={classNames('agreement-page__sort-button agreement-page__sort-button-expires', {
+          className={classNames('agreement-page__sort-button', {
             'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
           })}
           aria-label={
@@ -136,22 +119,23 @@ const AgreementList = () => {
           onClick={() => handleSortColumn('expires')}
           iconPosition="right"
           icon={iconBasedOnState('expires')}
+          style={{ justifySelf: 'center' }}
         >
           <Show above="md">Aktiv til</Show>
           <Show below="md">Til</Show>
         </Button>
       </HGrid>
 
-      <VStack as="ol" gap="4" id="agreement-list" className="agreement-page__list-container">
+      <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (
-            <Box as="li" key={label.identifier} borderRadius="medium" borderColor="border-subtle" borderWidth="1">
+            <Box as="li" key={label.identifier}>
               <HGrid columns={{ xs: '1', md: '4fr 1fr 1fr' }} align="center">
                 <Link as={NextLink} href={`/rammeavtale/${label.id}`}>
                   {`${label.label} `}
                 </Link>
-                <BodyShort>{`Fra ${dateToString(label.published)}`}</BodyShort>
-                <BodyShort>{`Til ${dateToString(label.expires)}`}</BodyShort>
+                <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
+                <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.expires)}`}</BodyShort>
               </HGrid>
             </Box>
           ))}
@@ -162,7 +146,7 @@ const AgreementList = () => {
           </HStack>
         )}
       </VStack>
-    </>
+    </VStack>
   )
 }
 
