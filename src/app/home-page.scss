@@ -73,6 +73,10 @@
   &__news {
     max-width: 690px;
     width: 100%;
+    background-color: $ny-nav-orange-light;
+    padding: $a-spacing-8 $a-spacing-10;
+    padding-bottom: $a-spacing-10;
+    border-top: 6px solid $ny-nav-purple-dark;
   }
 }
 

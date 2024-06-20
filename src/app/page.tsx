@@ -23,12 +23,12 @@ function Home() {
             </Heading>
           </HStack>
 
-          <HGrid gap="20" columns={'2.5fr 1fr'}>
+          <HGrid gap="18" columns={'2fr 1fr'}>
             <AgreementList />
-
-            <Heading level="1" size="small">
-              AS
-            </Heading>
+            <VStack gap="18">
+              <InformationNavLinks />
+              <News />
+            </VStack>
           </HGrid>
 
           <VStack align="center" gap={{ xs: '6', md: '10' }}>
@@ -62,10 +62,38 @@ function Home() {
               </Box>
             </HGrid>
           </VStack>
-          <News />
         </VStack>
       </div>
     </AnimateLayout>
+  )
+}
+
+const InformationNavLinks = () => {
+  return (
+    <VStack gap={{ xs: '6', md: '8' }}>
+      <Heading level="2" size="medium">
+        Informasjon på nav.no
+      </Heading>
+      <VStack gap="7">
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.kunnskapsbanken.net/">Informasjon om hjelpemidler og tilrettelegging</Link>
+        </HGrid>
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.kunnskapsbanken.net/">Dette må du vite før du søker som privatperson</Link>
+        </HGrid>
+
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.kunnskapsbanken.net/">Søknad og skjema for hjelpemidler</Link>
+        </HGrid>
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.kunnskapsbanken.net/">Kunnskapsbanken</Link>
+        </HGrid>
+      </VStack>
+    </VStack>
   )
 }
 

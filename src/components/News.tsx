@@ -1,51 +1,53 @@
 'use client'
 import { getNews } from '@/utils/api-util'
-import { NewsType } from '@/utils/response-types'
-import { Box, Heading, VStack } from '@navikt/ds-react'
-import { Fragment, useMemo } from 'react'
+import { News } from '@/utils/news-util'
+import { Heading, VStack } from '@navikt/ds-react'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 
 function News() {
-  const { data, error } = useSWR<NewsType[]>('/news/_search', getNews, {
+  const { data, error } = useSWR<News[]>('/news/_search', getNews, {
     keepPreviousData: true,
   })
+  const newsMigrationDate = new Date('April 01, 2024')
 
   const sortedData = useMemo(() => {
     if (!data) return []
     const sorted = [...data] // Create a copy of data to avoid modifying it in place
-    sorted.sort((a, b) => b.published.getTime() - a.published.getTime())
 
     return sorted
-  }, [data])
+      .sort((a, b) => b.published.getTime() - a.published.getTime())
+      .filter((news) => news.published.getTime() >= newsMigrationDate.getTime() && news.expired >= new Date(Date.now()))
+  }, [data, newsMigrationDate])
 
-  const newsMigrationDate = new Date('February 01, 2024')
+  const type = (news: News): [string, string] | string => {
+    const splitTitle = news.title.split(':')
+    return splitTitle.length > 1 ? [news.title.split(':')[0], news.title.split(':')[1]] : news.title
+  }
 
   return (
-    <VStack gap={{ xs: '6', md: '10' }}>
-      <Heading level="2" size="medium" align="center">
-        Nyheter
+    <VStack gap={{ xs: '6', md: '8' }}>
+      <Heading level="2" size="medium">
+        Siste nytt
       </Heading>
-      <VStack gap="6" align="center" className="spacing-bottom--xlarge">
+      <VStack gap="6" className="spacing-bottom--xlarge">
         {data &&
           sortedData.map((news) => (
-            <Fragment key={news.identifier}>
-              {news.published.getTime() >= newsMigrationDate.getTime() && news.expired >= new Date(Date.now()) && (
-                <Box
-                  padding="6"
-                  background="surface-default"
-                  borderRadius="large"
-                  className="home-page__news"
-                  shadow="xsmall"
-                >
-                  <VStack gap="1">
-                    <Heading level="3" size="small" spacing>
-                      {news.title}
-                    </Heading>
-                    <div dangerouslySetInnerHTML={{ __html: news.text }} />
-                  </VStack>
-                </Box>
-              )}
-            </Fragment>
+            <div className="home-page__news" key={news.identifier}>
+              <VStack gap="1">
+                <Heading level="3" size="small" spacing style={{ fontWeight: '700' }}>
+                  {Array.isArray(type(news)) ? type(news)[0] : type(news)}
+                </Heading>
+
+                {Array.isArray(type(news)) && (
+                  <Heading level="4" size="small" spacing>
+                    {type(news)[1]}
+                  </Heading>
+                )}
+
+                <div dangerouslySetInnerHTML={{ __html: news.text }} />
+              </VStack>
+            </div>
           ))}
       </VStack>
     </VStack>
