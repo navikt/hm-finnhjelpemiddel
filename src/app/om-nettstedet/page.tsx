@@ -14,7 +14,7 @@ function AboutUs() {
         <div className="about-us-page__container">
           <article>
             <Heading level="1" size="medium" className="spacing-top--small spacing-bottom--medium">
-              Om Finnhjelpemiddel
+              Om FinnHjelpemiddel
             </Heading>
             <Heading level="2" size="small" spacing>
               Et nettsted fra NAV
@@ -35,7 +35,7 @@ function AboutUs() {
               hjelpemidler innen ulike områder. Hjelpemidler som er avtalt med NAV er merket med en grønn markering hvor
               det står "rangering …" og har egne innganger for visning og informasjon.
             </BodyLong>
-            <Heading level="2" size="small">
+            <Heading level="2" size="small" spacing>
               Hva er et hjelpemiddel?
             </Heading>
             <BodyLong spacing>
