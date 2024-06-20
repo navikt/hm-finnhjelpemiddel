@@ -10,6 +10,7 @@ import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag } from 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 import { fetchProducts, FetchProductsWithFilters, Filter, FilterData, getProductFilters } from '@/utils/api-util'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product } from '@/utils/product-util'
@@ -18,7 +19,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 export type SortColumns = {
   orderBy: string | null
@@ -163,7 +163,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
     : product.variants
 
   let sortedByKey = sortColumnsByRowKey(productVariants, sortColumns)
-  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
+  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},

@@ -65,17 +65,15 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
       }
       return -1
     }
-    if (
-      sortColumns.orderBy &&
-      variantA.techData[sortColumns.orderBy]?.value &&
-      variantB.techData[sortColumns.orderBy]?.value
-    ) {
+    if (sortColumns.orderBy) {
       return sortIntWithStringFallback(
-        variantA.techData[sortColumns.orderBy].value,
-        variantB.techData[sortColumns.orderBy].value,
+        variantA.techData[sortColumns.orderBy]?.value || '-',
+        variantB.techData[sortColumns.orderBy]?.value || '-',
         sortColumns.direction === 'descending'
       )
-    } else return -1
+    } else {
+      return -1
+    }
   })
 }
 

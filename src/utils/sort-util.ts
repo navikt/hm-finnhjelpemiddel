@@ -21,6 +21,13 @@ export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = f
 }
 
 export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: boolean = false) => {
+  // Handle special cases for "-"
+  if (keyA === '-' && keyB !== '-') {
+    return 1 // "-" should come last
+  }
+  if (keyB === '-' && keyA !== '-') {
+    return -1 // "-" should come last
+  }
   if (parseFloat(keyA) && parseFloat(keyB)) {
     return desc ? parseFloat(keyB) - parseFloat(keyA) : parseFloat(keyA) - parseFloat(keyB)
   }
