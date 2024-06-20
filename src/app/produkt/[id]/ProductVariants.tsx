@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -39,7 +39,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-  const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
   const searchData = mapSearchParams(searchParams)
   const searchTerm = searchParams.get('term')
 
@@ -75,10 +74,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
         .flatMap(([key]) => key)
     : []
 
-  let relevantFilters = useRef(initialFiltersFormState)
-
   useEffect(() => {
-    relevantFilters.current = {
+    let relevantFilters = {
       ...initialFiltersFormState,
       ...Object.fromEntries(
         Object.entries(searchData.filters).filter(([key]) => {
@@ -108,7 +105,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
     const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
 
     router.replace(
-      `${pathname}?${toSearchQueryString({ filters: relevantFilters.current }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
+      `${pathname}?${toSearchQueryString({ filters: relevantFilters }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
       {
         scroll: false,
       }
