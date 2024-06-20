@@ -290,7 +290,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
       {productVariants.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
-          Ingen av variantene matcher filteret ditt
+          Ingen av variantene passer med filteret ditt
         </Alert>
       )}
 
