@@ -1,5 +1,6 @@
 @use 'src/styles/mixins';
 
+@import 'src/styles/_variables';
 @import '@navikt/ds-tokens/dist/tokens';
 
 .home-page {
@@ -11,11 +12,7 @@
 
   &__heading {
     max-width: 530px;
-    margin: $a-spacing-8 0;
-
-    h1 {
-      font-weight: 400;
-    }
+    color: $ny-nav-purple-dark;
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;
