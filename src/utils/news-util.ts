@@ -1,12 +1,12 @@
-import { Hit, NewsType, NewsResponse, SearchResponse } from '@/utils/response-types'
+import { Hit, NewsResponse, SearchResponse } from '@/utils/response-types'
 
-export const mapAllNews = (data: SearchResponse): NewsType[] => {
+export const mapAllNews = (data: SearchResponse): News[] => {
   return data.hits.hits.map((hit: Hit) => {
     return mapNews(hit._source as unknown as NewsResponse)
   })
 }
 
-export const mapNews = (source: NewsResponse): NewsType => {
+export const mapNews = (source: NewsResponse): News => {
   return {
     id: source.id,
     identifier: source.identifier,
@@ -16,4 +16,14 @@ export const mapNews = (source: NewsResponse): NewsType => {
     expired: new Date(source.expired) ?? '',
     published: new Date(source.published) ?? '',
   }
+}
+
+export interface News {
+  id: string
+  identifier: string
+  title: string
+  text: string
+  status: 'INACTIVE' | 'ACTIVE'
+  published: Date //date
+  expired: Date //date
 }

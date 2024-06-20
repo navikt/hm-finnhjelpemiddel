@@ -58,8 +58,9 @@ const NavigationBar = () => {
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
             <NextLink href="/" className="logo">
-              <Image src="/nav-logo.svg" width="50" height="35" alt="Til forsiden" />
+              <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
               <span className="logo__text">
+                <span> / </span>
                 <span>FinnHjelpemiddel</span>
               </span>
             </NextLink>
@@ -74,7 +75,7 @@ const NavigationBar = () => {
                 <Button
                   className="nav-top-container__search-button"
                   icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
-                  variant="tertiary-neutral"
+                  variant="tertiary"
                   onClick={() => setSearchOpen(!searchOpen)}
                   aria-expanded={searchOpen}
                 />
@@ -85,7 +86,7 @@ const NavigationBar = () => {
                 <Hide below="md">
                   <Button
                     icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary-neutral"
+                    variant="tertiary"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
@@ -95,7 +96,7 @@ const NavigationBar = () => {
                 <Show below="md" asChild>
                   <Button
                     icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary-neutral"
+                    variant="tertiary"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   />

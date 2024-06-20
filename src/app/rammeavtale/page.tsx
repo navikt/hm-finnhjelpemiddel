@@ -4,9 +4,8 @@ import { BodyLong, Heading } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import DefinitionList from '@/components/definition-list/DefinitionList'
-import { Alert, BodyShort } from '@navikt/ds-react'
+import { BodyShort } from '@navikt/ds-react'
 import { Metadata } from 'next'
-import Link from 'next/link'
 import AgreementList from './AgreementList'
 
 export const metadata: Metadata = {
@@ -24,7 +23,7 @@ export default async function AgreementsInfoPage() {
               <Heading level="1" size="large" className="spacing-bottom--small">
                 Avtaler på hjelpemiddelområdet
               </Heading>
-              <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
+              <Image src="/nav-logo-red.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
             <BodyShort spacing>
               {`Nedenfor finner du alle aktive avtaler for NAV Hjelpemidler og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
@@ -32,23 +31,6 @@ export default async function AgreementsInfoPage() {
             </BodyShort>
 
             <AgreementList />
-
-            <Alert variant="info">
-              Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og
-              hjelpemidler for seksuallivet her:
-              <ul>
-                <li>
-                  <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-                    Høreapparat, ørepropper og tinnitusmaskerere
-                  </Link>
-                </li>
-                <li>
-                  <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
-                    Hjelpemidler for seksuallivet
-                  </Link>
-                </li>
-              </ul>
-            </Alert>
           </article>
           <article>
             <Heading level="2" size="medium" id="se-at-et-hjelpemiddel-er-på-avtale" spacing>

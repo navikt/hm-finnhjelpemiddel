@@ -1,33 +1,26 @@
 @use 'src/styles/mixins';
 
+@import 'src/styles/_variables';
 @import '@navikt/ds-tokens/dist/tokens';
 
 .home-page {
-  padding-top: $a-spacing-12;
-
+  padding-top: $a-spacing-8;
   @include mixins.for-size(tablet-up) {
     padding-top: $a-spacing-24;
   }
 
   &__heading {
     max-width: 530px;
-    margin: $a-spacing-8 0;
-
-    h1 {
-      font-weight: 400;
-    }
+    color: $ny-nav-purple-dark;
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;
-      margin: $a-spacing-16 0;
+      margin: $a-spacing-12 0;
       margin-bottom: $a-spacing-10;
     }
   }
 
   &__link {
-    color: $a-text-default;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
     text-decoration-line: underline;
     text-underline-offset: 2px;
   }
@@ -41,41 +34,37 @@
     text-decoration: none;
   }
 
-  &__agreement-link {
-    display: flex;
-    width: 100%;
-    height: 125px;
-    align-items: stretch;
-    border-radius: $a-border-radius-large;
-    background: #fff;
-    box-shadow: $a-shadow-xsmall;
-
-    @include mixins.for-size(phone-up) {
-      width: 299px;
-    }
-
-    a {
-      padding: $a-spacing-4 $a-spacing-5;
-      width: 100%;
-      justify-content: flex-start;
-    }
-
-    :hover {
-      border-radius: $a-border-radius-large;
-      box-shadow: $a-shadow-small;
-      text-decoration: none;
-    }
-  }
-
-  &__links {
-    @include mixins.for-size(desktop-up) {
-      padding-left: 100px;
-    }
-  }
-
   &__news {
     max-width: 690px;
     width: 100%;
+    background-color: $ny-nav-orange-light;
+    padding: $a-spacing-6 $a-spacing-6;
+    padding-bottom: $a-spacing-10;
+    border-top: 6px solid $ny-nav-purple-dark;
+
+    @include mixins.for-size(tablet-up) {
+      padding: $a-spacing-8 $a-spacing-10;
+    }
+  }
+
+  &__kontakt-oss {
+    background-color: #f1f5f9;
+    padding-bottom: 100px;
+    padding-top: 100px;
+  }
+
+  &__kontakt-oss-container {
+    margin-top: $a-spacing-12;
+  }
+
+  &__kontakt-oss-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 100%;
+    height: 64px;
+    width: 64px;
   }
 }
 

@@ -3,15 +3,28 @@
 import { AgreementLabel } from '@/utils/agreement-util'
 import { logKlikk } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, HGrid, HStack, Link, Loader, Show, VStack } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyShort,
+  Box,
+  Button,
+  HGrid,
+  HStack,
+  Heading,
+  Hide,
+  Link,
+  Loader,
+  Show,
+  VStack,
+} from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useMemo, useState } from 'react'
 import useSWR from 'swr'
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 type SortColumns = {
   orderBy: string | null
@@ -50,7 +63,7 @@ const AgreementList = () => {
   const handleSortColumn = (sortKey: string) => {
     logKlikk(`agreements-sort-${sortKey}`)
     setSortColumn({
-      orderBy: sortKey,
+      orderBy: sortKey === sortColumn.orderBy && sortColumn.direction === 'descending' ? 'title' : sortKey,
       direction:
         sortKey === sortColumn.orderBy
           ? sortColumn.direction === 'ascending'
@@ -73,96 +86,106 @@ const AgreementList = () => {
   }
 
   return (
-    <>
-      <HGrid columns={{ xs: '1fr 1fr 1fr', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
-        <Button
-          className={classNames('agreement-page__sort-button', {
-            'agreement-page__sort-selected': sortColumn.orderBy === 'title',
-          })}
-          aria-label={
-            sortColumn.orderBy === 'title'
-              ? getAriaLabel({
-                  sortColumns: sortColumn,
-                  ariaLabelKey: 'Tittel ',
-                })
-              : defaultAriaLabel + ' tittel'
-          }
-          aria-selected={sortColumn.orderBy === 'title'}
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => handleSortColumn('title')}
-          iconPosition="right"
-          icon={iconBasedOnState('title')}
-        >
-          Tittel
-        </Button>
-        <Button
-          className={classNames('agreement-page__sort-button agreement-page__sort-button-published', {
-            'agreement-page__sort-selected': sortColumn.orderBy === 'published',
-          })}
-          aria-label={
-            sortColumn.orderBy === 'published'
-              ? getAriaLabel({
-                  sortColumns: sortColumn,
-                  ariaLabelKey: 'Aktiv fra dato ',
-                })
-              : defaultAriaLabel + ' aktiv fra dato'
-          }
-          aria-selected={sortColumn.orderBy === 'published'}
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => handleSortColumn('published')}
-          iconPosition="right"
-          icon={iconBasedOnState('published')}
-        >
-          <Show above="md">Aktiv fra</Show>
-          <Show below="md">Fra</Show>
-        </Button>
-        <Button
-          className={classNames('agreement-page__sort-button agreement-page__sort-button-expires', {
-            'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
-          })}
-          aria-label={
-            sortColumn.orderBy === 'expires'
-              ? getAriaLabel({
-                  sortColumns: sortColumn,
-                  ariaLabelKey: 'Aktiv til dato ',
-                })
-              : defaultAriaLabel + ' aktiv til dato'
-          }
-          aria-selected={sortColumn.orderBy === 'expires'}
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => handleSortColumn('expires')}
-          iconPosition="right"
-          icon={iconBasedOnState('expires')}
-        >
-          <Show above="md">Aktiv til</Show>
-          <Show below="md">Til</Show>
-        </Button>
+    <VStack gap="4">
+      <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center" className="agreement-page__list-header">
+        <Heading level="2" size="medium">
+          På avtale med NAV
+        </Heading>
+        <Hide below="lg" asChild>
+          <Button
+            className={classNames('agreement-page__sort-button', {
+              'agreement-page__sort-selected': sortColumn.orderBy === 'published',
+            })}
+            aria-label={
+              sortColumn.orderBy === 'published'
+                ? getAriaLabel({
+                    sortColumns: sortColumn,
+                    ariaLabelKey: 'Aktiv fra dato ',
+                  })
+                : defaultAriaLabel + ' aktiv fra dato'
+            }
+            aria-selected={sortColumn.orderBy === 'published'}
+            size="xsmall"
+            variant="tertiary"
+            onClick={() => handleSortColumn('published')}
+            iconPosition="right"
+            icon={iconBasedOnState('published')}
+            style={{ justifySelf: 'center' }}
+          >
+            Aktiv fra
+          </Button>
+        </Hide>
+        <Hide below="lg" asChild>
+          <Button
+            className={classNames('agreement-page__sort-button', {
+              'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
+            })}
+            aria-label={
+              sortColumn.orderBy === 'expires'
+                ? getAriaLabel({
+                    sortColumns: sortColumn,
+                    ariaLabelKey: 'Aktiv til dato ',
+                  })
+                : defaultAriaLabel + ' aktiv til dato'
+            }
+            aria-selected={sortColumn.orderBy === 'expires'}
+            size="xsmall"
+            variant="tertiary"
+            onClick={() => handleSortColumn('expires')}
+            iconPosition="right"
+            icon={iconBasedOnState('expires')}
+            style={{ justifySelf: 'center' }}
+          >
+            Aktiv til
+          </Button>
+        </Hide>
       </HGrid>
 
-      <VStack as="ol" gap="4" id="agreement-list" className="agreement-page__list-container">
+      <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (
-            <Box as="li" key={label.identifier} borderRadius="medium" borderColor="border-subtle" borderWidth="1">
-              <HGrid columns={{ xs: '1', md: '4fr 1fr 1fr' }} align="center">
-                <Link as={NextLink} href={`/rammeavtale/${label.id}`}>
+            <Box as="li" key={label.identifier} className="agreement-page__list-item">
+              <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center">
+                <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>
                   {`${label.label} `}
                 </Link>
-                <BodyShort>{`Fra ${dateToString(label.published)}`}</BodyShort>
-                <BodyShort>{`Til ${dateToString(label.expires)}`}</BodyShort>
+                <Hide below="lg" asChild>
+                  <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
+                </Hide>
+                <Hide below="lg" asChild>
+                  <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.expires)}`}</BodyShort>
+                </Hide>
+                <Show below="lg" asChild>
+                  <ChevronRightIcon aria-hidden fontSize={'1.55rem'} />
+                </Show>
               </HGrid>
             </Box>
           ))}
-        {error && <Alert variant="warning">Obs, her mangler det noe data :o</Alert>}
+        {/* {error && <Alert variant="warning">Obs, her mangler det noe data :o</Alert>} */}
         {!data && (
           <HStack justify="center" style={{ marginTop: '18px' }}>
             <Loader size="xlarge" title="Laster produkter" />
           </HStack>
         )}
+
+        <Alert variant="info" className="spacing-top--large">
+          Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
+          for seksuallivet her:
+          <ul className="spacing-vertical--small">
+            <li>
+              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
+                Høreapparat, ørepropper og tinnitusmaskerere
+              </Link>
+            </li>
+            <li>
+              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
+                Hjelpemidler for seksuallivet
+              </Link>
+            </li>
+          </ul>
+        </Alert>
       </VStack>
-    </>
+    </VStack>
   )
 }
 
