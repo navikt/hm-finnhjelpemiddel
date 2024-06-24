@@ -5,11 +5,12 @@ import { Fragment, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Chips, CopyButton, Heading, Table, Tag } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Chips, CopyButton, Heading, HStack, Loader, Table, Tag } from '@navikt/ds-react'
 
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 import { fetchProducts, FetchProductsWithFilters, Filter, FilterData, getProductFilters } from '@/utils/api-util'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product } from '@/utils/product-util'
@@ -18,7 +19,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 
 export type SortColumns = {
   orderBy: string | null
@@ -39,7 +39,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
-  const anyExpired = product.variants.some((product) => product.status === 'INACTIVE')
   const searchData = mapSearchParams(searchParams)
   const searchTerm = searchParams.get('term')
 
@@ -75,10 +74,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
         .flatMap(([key]) => key)
     : []
 
-  let relevantFilters: FilterFormState = initialFiltersFormState
-
   useEffect(() => {
-    relevantFilters = {
+    let relevantFilters = {
       ...initialFiltersFormState,
       ...Object.fromEntries(
         Object.entries(searchData.filters).filter(([key]) => {
@@ -163,7 +160,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
     : product.variants
 
   let sortedByKey = sortColumnsByRowKey(productVariants, sortColumns)
-  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))]
+  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
@@ -252,6 +249,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
       {product.variantCount > 1 && (
         <FormProvider {...formMethods}>
           <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+            {filterIsLoading && (
+              <HStack style={{ margin: '38px' }}>
+                <Loader size="xlarge" title="Laster bilde" />
+              </HStack>
+            )}
             {relevantFilterKeys.length > 0 && <FilterViewProductPage filters={filters} />}
             <input type="submit" style={{ display: 'none' }} />
 
@@ -290,7 +292,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
       {productVariants.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
-          Ingen av variantene matcher filteret ditt
+          Ingen av variantene passer med filteret ditt
         </Alert>
       )}
 

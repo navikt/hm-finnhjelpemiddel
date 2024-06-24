@@ -40,6 +40,8 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
 
   return (
     <DefinitionList>
+      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
+      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
       {product.agreements.length === 0 && (
         <>
           <DefinitionList.Term>
@@ -73,9 +75,6 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
 
       <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
       <DefinitionList.Definition>{hmsNummer}</DefinitionList.Definition>
-      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
-      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
-
 
       {supplier && (
         <>
@@ -87,7 +86,7 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
           </DefinitionList.Definition>
           {product.attributes.url && (
             <DefinitionList.Definition>
-              <Link href={product.attributes.url} target={"_blank"}>
+              <Link href={product.attributes.url} target={'_blank'}>
                 Leverandørens produktside <ExternalLinkIcon />
               </Link>
             </DefinitionList.Definition>

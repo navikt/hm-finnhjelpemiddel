@@ -1,5 +1,6 @@
 'use client'
 
+import { DownloadIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useEffect, useState } from 'react'
@@ -22,7 +23,14 @@ export const QrCodeComponent = ({ value }: { value: string }) => {
   }
 
   return (
-    <Button variant="secondary" as="a" className="product-page__qr-code-link" href={qrUrl} download={value + '-qr.png'}>
+    <Button
+      variant="secondary"
+      as="a"
+      className="product-page__qr-code-link"
+      href={qrUrl}
+      download={value + '-qr.png'}
+      icon={<DownloadIcon aria-hidden fontSize="1.5rem" />}
+    >
       Last ned QR-kode
       <div className="product-page__qr-code-hidden">
         <QRCodeCanvas includeMargin={true} value={valueToUrl(value)} id="qr-canvas" />
