@@ -160,7 +160,13 @@ export const getAvailableAndSelectedFiltersMålOgVekt = (
 
   const validFiltersArray = Array.from(selectedFiltersMålOgVekt.values())
 
-  validFiltersArray.sort((a, b) => a.name.localeCompare(b.name))
+  const order = ['Lengde', 'Bredde', 'Totalvekt', 'Brukervekt']
+  validFiltersArray.sort((a, b) => {
+    const indexA = order.indexOf(a.name)
+    const indexB = order.indexOf(b.name)
+
+    return (indexA === -1 ? order.length : indexA) - (indexB === -1 ? order.length : indexB)
+  })
 
   return validFiltersArray
 }

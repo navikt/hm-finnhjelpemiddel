@@ -80,17 +80,9 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter, isHmsSuggesti
 
   if (!valueMin?.length && !valueMax?.length) return null
 
-  const mustClausesMin = []
-  const mustClausesMax = []
+  const mustClausesMin: any[] = []
+  const mustClausesMax: any[] = []
   if (valueMin !== '') {
-    mustClausesMin.push({
-      range: {
-        [`filters.${keyMin}`]: {
-          gte: Number(valueMin),
-        },
-      },
-    })
-
     mustClausesMax.push({
       range: {
         [`filters.${keyMax}`]: {
@@ -108,30 +100,11 @@ export const filterMinMax = (min: MinMaxFilter, max: MinMaxFilter, isHmsSuggesti
         },
       },
     })
-
-    mustClausesMax.push({
-      range: {
-        [`filters.${keyMax}`]: {
-          lte: isHmsSuggestion ? Number(valueMax) + 3 : Number(valueMax),
-        },
-      },
-    })
   }
 
   return {
     bool: {
-      should: [
-        {
-          bool: {
-            must: mustClausesMin,
-          },
-        },
-        {
-          bool: {
-            must: mustClausesMax,
-          },
-        },
-      ],
+      must: mustClausesMax.concat(mustClausesMin),
     },
   }
 }

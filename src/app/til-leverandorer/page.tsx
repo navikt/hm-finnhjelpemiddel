@@ -8,20 +8,20 @@ function ToSuppliers() {
       <AnimateLayout>
         <div className="about-us-page__container">
           <article>
-            <Heading level="1" size="medium" spacing>
+            <Heading level="1" size="medium" className="spacing-top--small spacing-bottom--medium">
               Om FinnHjelpemiddel for leverandører
             </Heading>
-            <Heading level="2" size="small">
+            <Heading level="2" size="small" spacing>
               Om nettstedet
             </Heading>
             <BodyLong spacing>FinnHjelpemiddel eies og driftes av NAV Hjelpemidler og tilrettelegging.</BodyLong>
-            <Heading level="2" size="small">
+            <Heading level="2" size="small" spacing>
               Målgrupper
             </Heading>
             <BodyLong spacing>
               Hovedmålgruppene for FinnHjelpemiddel er innbyggere, kommuner og NAV hjelpemiddelsentraler.
             </BodyLong>
-            <Heading level="2" size="small">
+            <Heading level="2" size="small" spacing>
               Hva er et hjelpemiddel?
             </Heading>
             <BodyLong>
@@ -62,7 +62,7 @@ function ToSuppliers() {
               Hjelpemidler som er under utvikling og som ikke er lansert kan ikke legges inn i FinnHjelpemiddel.
               Leverandørene i FinnHjelpemiddel må være norske, eller ha norske underleverandører.
             </BodyLong>
-            <Heading level="2" size="small">
+            <Heading level="2" size="small" spacing>
               Produktkategorier
             </Heading>
             <BodyLong spacing>
@@ -71,7 +71,7 @@ function ToSuppliers() {
               oversettelse fra engelsk utført av{' '}
               <Link href="https://online.standard.no/ns-en-iso-9999-2022"> Standard Norge.</Link>
             </BodyLong>
-            <Heading level="2" size="small">
+            <Heading level="2" size="small" spacing>
               Kontakt oss
             </Heading>
             <BodyLong spacing>

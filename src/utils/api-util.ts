@@ -406,6 +406,8 @@ export const fetchProducts = ({
     },
   }
 
+  const filterBreddePrint = filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM })
+
   const body: QueryObject = {
     from,
     size,
@@ -852,6 +854,9 @@ export async function getProductWithVariantsSuggestions(
   const setebreddeMaksCM = setebredde
   const setedybdeMinCM = setedybde
   const setedybdeMaksCM = setedybde
+
+  const breddeFilter = filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }, true)
+  const dybdeFilter = filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }, true)
 
   const res = await fetch(HM_SEARCH_URL + '/products/_search', {
     next: { revalidate: 900 },
