@@ -48,16 +48,15 @@ function Home() {
               <HGrid gap="8" columns={{ xs: 1, md: 3 }} className="home-page__kontakt-oss-container">
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
-                    <Buildings2Icon aria-hidden fontSize={'32px'} />
+                    <Chat2Icon aria-hidden fontSize={'32px'} />
                   </div>
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
-                      Kontakt din kommune
+                      <Link href="https://www.nav.no/kontaktoss" className="home-page__link">
+                        Kontakt NAV
+                      </Link>
                     </Heading>
-                    <BodyLong spacing>
-                      Les om kommunens rolle i oppfølging av hjelpemidler på deres egen nettside.
-                    </BodyLong>
-                    <BodyLong>Din kommunes nettside er: www.navnetpådinkommune.kommune.no</BodyLong>
+                    <BodyLong>Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i NAV.</BodyLong>
                   </div>
                 </HGrid>
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
@@ -76,15 +75,18 @@ function Home() {
 
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
-                    <Chat2Icon aria-hidden fontSize={'32px'} />
+                    <Buildings2Icon aria-hidden fontSize={'32px'} />
                   </div>
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
-                      <Link href="https://www.nav.no/kontaktoss" className="home-page__link">
-                        Kontakt NAV
-                      </Link>
+                      Kontakt din kommune
                     </Heading>
-                    <BodyLong>Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i NAV.</BodyLong>
+                    <BodyLong spacing>
+                      Les om kommunens rolle i oppfølging av hjelpemidler på deres egen nettside.
+                    </BodyLong>
+                    <BodyLong style={{ hyphens: 'auto', wordBreak: 'break-word' }}>
+                      Din kommunes nettside er: www.navnetpådinkommune.kommune.no
+                    </BodyLong>
                   </div>
                 </HGrid>
               </HGrid>
