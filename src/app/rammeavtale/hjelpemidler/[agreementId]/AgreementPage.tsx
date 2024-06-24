@@ -155,7 +155,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               logNavigationEvent('hurtigoversikt', 'rammeavtale', 'Tilbehør, reservedeler og dokumenter med mer')
             }
           >
-            Tilbehør, reservedeler og dokumenter med mer
+            Om rammeavtalen med NAV
           </LinkPanel>
         </VStack>
 

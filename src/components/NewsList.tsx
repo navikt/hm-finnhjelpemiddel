@@ -36,7 +36,7 @@ const NewsList = () => {
           sortedData.map((news) => (
             <div className="home-page__news" key={news.identifier}>
               <VStack gap="1">
-                <Heading level="3" size="small" spacing style={{ fontWeight: '700' }}>
+                <Heading level="3" size="small" spacing>
                   {Array.isArray(type(news)) ? type(news)[0] : type(news)}
                 </Heading>
 
@@ -46,7 +46,7 @@ const NewsList = () => {
                   </Heading>
                 )}
 
-                <div dangerouslySetInnerHTML={{ __html: news.text }} />
+                <div dangerouslySetInnerHTML={{ __html: news.text }} style={{ fontSize: '1.25rem' }} />
               </VStack>
             </div>
           ))}

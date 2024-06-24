@@ -4,8 +4,14 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .home-page {
-  padding-top: $a-spacing-12;
+  p,
+  button > span,
+  a,
+  .navds-alert__wrapper {
+    font-size: 1.25rem;
+  }
 
+  padding-top: $a-spacing-8;
   @include mixins.for-size(tablet-up) {
     padding-top: $a-spacing-24;
   }
@@ -16,7 +22,7 @@
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;
-      margin: $a-spacing-16 0;
+      margin: $a-spacing-12 0;
       margin-bottom: $a-spacing-10;
     }
   }
@@ -35,39 +41,17 @@
     text-decoration: none;
   }
 
-  &__agreement-link {
-    display: flex;
-    width: 100%;
-    height: 125px;
-    align-items: stretch;
-    border-radius: $a-border-radius-large;
-    background: #fff;
-    box-shadow: $a-shadow-xsmall;
-
-    @include mixins.for-size(phone-up) {
-      width: 299px;
-    }
-
-    a {
-      padding: $a-spacing-4 $a-spacing-5;
-      width: 100%;
-      justify-content: flex-start;
-    }
-
-    :hover {
-      border-radius: $a-border-radius-large;
-      box-shadow: $a-shadow-small;
-      text-decoration: none;
-    }
-  }
-
   &__news {
     max-width: 690px;
     width: 100%;
     background-color: $ny-nav-orange-light;
-    padding: $a-spacing-8 $a-spacing-10;
+    padding: $a-spacing-6 $a-spacing-6;
     padding-bottom: $a-spacing-10;
     border-top: 6px solid $ny-nav-purple-dark;
+
+    @include mixins.for-size(tablet-up) {
+      padding: $a-spacing-8 $a-spacing-10;
+    }
   }
 
   &__kontakt-oss {
@@ -77,7 +61,7 @@
   }
 
   &__kontakt-oss-container {
-    margin-top: $a-spacing-16;
+    margin-top: $a-spacing-12;
   }
 
   &__kontakt-oss-icon {

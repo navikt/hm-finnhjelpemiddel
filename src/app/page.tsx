@@ -12,19 +12,22 @@ import AgreementList from './rammeavtale/AgreementList'
 function Home() {
   return (
     <AnimateLayout>
-      <div className="main-wrapper home-page">
+      <div className="home-page">
         <VStack className="main-wrapper--xlarge" gap={{ xs: '12', lg: '20' }}>
-          <HStack gap={{ xs: '10', lg: '20' }}>
+          <HStack gap={{ xs: '4', lg: '20' }}>
             <Hide below="lg">
-              <Image src="/holding-hands-logo.svg" width="180" height="180" alt="Illustrasjon" aria-hidden />
+              <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="Illustrasjon" aria-hidden />
             </Hide>
+            <Show below="lg">
+              <Image src="/logo-med-rullestol.svg" width="80" height="80" alt="Illustrasjon" aria-hidden />
+            </Show>
 
             <Heading level="1" size="large" className="home-page__heading">
-              Finn hjelpemiddel i Norges største samling av hjelpemidler på nett.
+              Søk i Norges største samling av hjelpemidler på nett
             </Heading>
           </HStack>
 
-          <HGrid gap={{ xs: '10', md: '18' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
+          <HGrid gap={{ xs: '12', md: '18' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
             <Show below="md">
               <InformationNavLinks />
             </Show>
@@ -39,16 +42,30 @@ function Home() {
 
           <Bleed marginInline="full" asChild reflectivePadding>
             <div className="home-page__kontakt-oss">
-              <Heading level="2" size="large" spacing>
+              <Heading level="2" size="medium">
                 Kontakt oss
               </Heading>
               <HGrid gap="8" columns={{ xs: 1, md: 3 }} className="home-page__kontakt-oss-container">
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
+                    <Buildings2Icon aria-hidden fontSize={'32px'} />
+                  </div>
+                  <div className="spacing-top--small">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
+                      Kontakt din kommune
+                    </Heading>
+                    <BodyLong spacing>
+                      Les om kommunens rolle i oppfølging av hjelpemidler på deres egen nettside.
+                    </BodyLong>
+                    <BodyLong>Din kommunes nettside er: www.navnetpådinkommune.kommune.no</BodyLong>
+                  </div>
+                </HGrid>
+                <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
+                  <div className="home-page__kontakt-oss-icon">
                     <LocationPinIcon aria-hidden fontSize={'32px'} />
                   </div>
                   <div className="spacing-top--small">
-                    <Heading level="4" size="medium" className="spacing-bottom--medium">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
                       <Link href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral" className="home-page__link">
                         Finn din hjelpemiddelsentral
                       </Link>
@@ -56,27 +73,13 @@ function Home() {
                     <BodyLong>Finn kontaktinformasjon og les om inn- og utlevering av hjelpemidler.</BodyLong>
                   </div>
                 </HGrid>
-                <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
-                  <div className="home-page__kontakt-oss-icon">
-                    <Buildings2Icon aria-hidden fontSize={'32px'} />
-                  </div>
-                  <div className="spacing-top--small">
-                    <Heading level="4" size="medium" className="spacing-bottom--medium">
-                      <Link href="https://www.dinstartside.no/oversikt-kommuner-norge.php" className="home-page__link">
-                        Kontakt din kommune
-                      </Link>
-                    </Heading>
-                    <BodyLong>
-                      Finn kontaktinformasjon til din kommune og les om kommunens rolle i oppfølging av hjelpemidler.
-                    </BodyLong>
-                  </div>
-                </HGrid>
+
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
                     <Chat2Icon aria-hidden fontSize={'32px'} />
                   </div>
                   <div className="spacing-top--small">
-                    <Heading level="4" size="medium" className="spacing-bottom--medium">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
                       <Link href="https://www.nav.no/kontaktoss" className="home-page__link">
                         Kontakt NAV
                       </Link>

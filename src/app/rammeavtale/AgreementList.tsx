@@ -6,8 +6,21 @@ import { getAgreementLabels } from '@/utils/api-util'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, HGrid, HStack, Heading, Hide, Link, Loader, VStack } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyShort,
+  Box,
+  Button,
+  HGrid,
+  HStack,
+  Heading,
+  Hide,
+  Link,
+  Loader,
+  Show,
+  VStack,
+} from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useMemo, useState } from 'react'
@@ -131,8 +144,8 @@ const AgreementList = () => {
       <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (
-            <Box as="li" key={label.identifier}>
-              <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center">
+            <Box as="li" key={label.identifier} className="agreement-page__list-item">
+              <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center">
                 <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>
                   {`${label.label} `}
                 </Link>
@@ -142,15 +155,35 @@ const AgreementList = () => {
                 <Hide below="lg" asChild>
                   <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.expires)}`}</BodyShort>
                 </Hide>
+                <Show below="lg" asChild>
+                  <ChevronRightIcon aria-hidden fontSize={'1.55rem'} />
+                </Show>
               </HGrid>
             </Box>
           ))}
-        {error && <Alert variant="warning">Obs, her mangler det noe data :o</Alert>}
+        {/* {error && <Alert variant="warning">Obs, her mangler det noe data :o</Alert>} */}
         {!data && (
           <HStack justify="center" style={{ marginTop: '18px' }}>
             <Loader size="xlarge" title="Laster produkter" />
           </HStack>
         )}
+
+        <Alert variant="info" className="spacing-top--large">
+          Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
+          for seksuallivet her:
+          <ul className="spacing-vertical--small">
+            <li>
+              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
+                Høreapparat, ørepropper og tinnitusmaskerere
+              </Link>
+            </li>
+            <li>
+              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
+                Hjelpemidler for seksuallivet
+              </Link>
+            </li>
+          </ul>
+        </Alert>
       </VStack>
     </VStack>
   )

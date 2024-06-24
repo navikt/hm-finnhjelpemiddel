@@ -1,16 +1,18 @@
-import React from 'react'
-
 import Image from 'next/image'
 
-import { Link } from '@navikt/ds-react'
+import { Bleed, BodyLong, Link } from '@navikt/ds-react'
+
 import NextLink from 'next/link'
 
 const Footer = () => (
-  <footer className="nav-bunn">
-    <div className="nav-bunn__content">
-      <div className="nav-bunn__info">
+  <footer className="main-wrapper--xlarge" style={{ width: '100%' }}>
+    <Bleed marginInline="full" asChild reflectivePadding>
+      <div className="nav-bunn nav-bunn__info">
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />
         <div>
+          <BodyLong weight="semibold" size="large">
+            Finnhjelpemiddel er en NAV tjeneste
+          </BodyLong>
           <Link as={NextLink} href="/om-nettstedet">
             Om FinnHjelpemiddel
           </Link>
@@ -30,7 +32,7 @@ const Footer = () => (
           </Link>
         </div>
       </div>
-    </div>
+    </Bleed>
   </footer>
 )
 export default Footer
