@@ -133,7 +133,7 @@ const AgreementList = () => {
           sortedData.map((label) => (
             <Box as="li" key={label.identifier}>
               <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center">
-                <Link as={NextLink} href={`/rammeavtale/${label.id}`}>
+                <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>
                   {`${label.label} `}
                 </Link>
                 <Hide below="lg" asChild>
