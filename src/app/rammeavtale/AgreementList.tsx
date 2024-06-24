@@ -7,7 +7,7 @@ import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
 import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, HGrid, HStack, Heading, Link, Loader, Show, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, Button, HGrid, HStack, Heading, Hide, Link, Loader, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useMemo, useState } from 'react'
@@ -74,68 +74,74 @@ const AgreementList = () => {
 
   return (
     <VStack gap="4">
-      <HGrid columns={{ xs: '1fr 1fr 1fr', md: '4fr 1fr 1fr' }} align="center" className="agreement-page__list-header">
+      <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center" className="agreement-page__list-header">
         <Heading level="2" size="medium">
           På avtale med NAV
         </Heading>
-        <Button
-          className={classNames('agreement-page__sort-button', {
-            'agreement-page__sort-selected': sortColumn.orderBy === 'published',
-          })}
-          aria-label={
-            sortColumn.orderBy === 'published'
-              ? getAriaLabel({
-                  sortColumns: sortColumn,
-                  ariaLabelKey: 'Aktiv fra dato ',
-                })
-              : defaultAriaLabel + ' aktiv fra dato'
-          }
-          aria-selected={sortColumn.orderBy === 'published'}
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => handleSortColumn('published')}
-          iconPosition="right"
-          icon={iconBasedOnState('published')}
-          style={{ justifySelf: 'center' }}
-        >
-          <Show above="md">Aktiv fra</Show>
-          <Show below="md">Fra</Show>
-        </Button>
-        <Button
-          className={classNames('agreement-page__sort-button', {
-            'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
-          })}
-          aria-label={
-            sortColumn.orderBy === 'expires'
-              ? getAriaLabel({
-                  sortColumns: sortColumn,
-                  ariaLabelKey: 'Aktiv til dato ',
-                })
-              : defaultAriaLabel + ' aktiv til dato'
-          }
-          aria-selected={sortColumn.orderBy === 'expires'}
-          size="xsmall"
-          variant="tertiary"
-          onClick={() => handleSortColumn('expires')}
-          iconPosition="right"
-          icon={iconBasedOnState('expires')}
-          style={{ justifySelf: 'center' }}
-        >
-          <Show above="md">Aktiv til</Show>
-          <Show below="md">Til</Show>
-        </Button>
+        <Hide below="lg" asChild>
+          <Button
+            className={classNames('agreement-page__sort-button', {
+              'agreement-page__sort-selected': sortColumn.orderBy === 'published',
+            })}
+            aria-label={
+              sortColumn.orderBy === 'published'
+                ? getAriaLabel({
+                    sortColumns: sortColumn,
+                    ariaLabelKey: 'Aktiv fra dato ',
+                  })
+                : defaultAriaLabel + ' aktiv fra dato'
+            }
+            aria-selected={sortColumn.orderBy === 'published'}
+            size="xsmall"
+            variant="tertiary"
+            onClick={() => handleSortColumn('published')}
+            iconPosition="right"
+            icon={iconBasedOnState('published')}
+            style={{ justifySelf: 'center' }}
+          >
+            Aktiv fra
+          </Button>
+        </Hide>
+        <Hide below="lg" asChild>
+          <Button
+            className={classNames('agreement-page__sort-button', {
+              'agreement-page__sort-selected': sortColumn.orderBy === 'expires',
+            })}
+            aria-label={
+              sortColumn.orderBy === 'expires'
+                ? getAriaLabel({
+                    sortColumns: sortColumn,
+                    ariaLabelKey: 'Aktiv til dato ',
+                  })
+                : defaultAriaLabel + ' aktiv til dato'
+            }
+            aria-selected={sortColumn.orderBy === 'expires'}
+            size="xsmall"
+            variant="tertiary"
+            onClick={() => handleSortColumn('expires')}
+            iconPosition="right"
+            icon={iconBasedOnState('expires')}
+            style={{ justifySelf: 'center' }}
+          >
+            Aktiv til
+          </Button>
+        </Hide>
       </HGrid>
 
       <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (
             <Box as="li" key={label.identifier}>
-              <HGrid columns={{ xs: '1', md: '4fr 1fr 1fr' }} align="center">
+              <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center">
                 <Link as={NextLink} href={`/rammeavtale/${label.id}`}>
                   {`${label.label} `}
                 </Link>
-                <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
-                <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.expires)}`}</BodyShort>
+                <Hide below="lg" asChild>
+                  <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
+                </Hide>
+                <Hide below="lg" asChild>
+                  <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.expires)}`}</BodyShort>
+                </Hide>
               </HGrid>
             </Box>
           ))}

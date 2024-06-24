@@ -22,9 +22,6 @@
   }
 
   &__link {
-    color: $a-text-default;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
     text-decoration-line: underline;
     text-underline-offset: 2px;
   }
@@ -64,12 +61,6 @@
     }
   }
 
-  &__links {
-    @include mixins.for-size(desktop-up) {
-      padding-left: 100px;
-    }
-  }
-
   &__news {
     max-width: 690px;
     width: 100%;
@@ -77,6 +68,26 @@
     padding: $a-spacing-8 $a-spacing-10;
     padding-bottom: $a-spacing-10;
     border-top: 6px solid $ny-nav-purple-dark;
+  }
+
+  &__kontakt-oss {
+    background-color: #f1f5f9;
+    padding-bottom: 100px;
+    padding-top: 100px;
+  }
+
+  &__kontakt-oss-container {
+    margin-top: $a-spacing-16;
+  }
+
+  &__kontakt-oss-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 100%;
+    height: 64px;
+    width: 64px;
   }
 }
 

@@ -63,6 +63,7 @@
     padding-inline-start: 0;
 
     li > div {
+      height: 2.5rem;
       @include mixins.for-size(tablet-up) {
         height: 5rem;
         :first-child {
