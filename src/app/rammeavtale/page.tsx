@@ -23,7 +23,7 @@ export default async function AgreementsInfoPage() {
               <Heading level="1" size="large" className="spacing-bottom--small">
                 Avtaler på hjelpemiddelområdet
               </Heading>
-              <Image src="/nav-logo.svg" width="65" height="41" alt="" aria-hidden={true} />
+              <Image src="/nav-logo-red.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
             <BodyShort spacing>
               {`Nedenfor finner du alle aktive avtaler for NAV Hjelpemidler og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
