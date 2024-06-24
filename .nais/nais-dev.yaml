@@ -11,6 +11,7 @@ spec:
   port: 3000
   ingresses:
     - 'https://finnhjelpemiddel.intern.dev.nav.no'
+    - 'https://finnhjelpemiddel.ansatt.dev.nav.no'
   accessPolicy:
     outbound:
       rules:
