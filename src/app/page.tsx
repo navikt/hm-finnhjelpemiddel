@@ -27,7 +27,7 @@ function Home() {
             </Heading>
           </HStack>
 
-          <HGrid gap={{ xs: '12', md: '18' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
+          <HGrid gap={{ xs: '12', md: '14' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
             <Show below="md">
               <InformationNavLinks />
             </Show>
