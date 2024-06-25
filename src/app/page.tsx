@@ -79,6 +79,14 @@ function Home() {
                   </div>
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
+                      <Link href="https://www.nav.no/samarbeidspartner/lege/hjelpemidler" className="home-page__link">
+                        Kontakt din kommune
+                      </Link>
+                    </Heading>
+                    <BodyLong>Les om kommunens rolle i oppfølging av hjelpemidler.</BodyLong>
+                  </div>
+                  {/* <div className="spacing-top--small">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
                       Kontakt din kommune
                     </Heading>
                     <BodyLong spacing>
@@ -87,7 +95,7 @@ function Home() {
                     <BodyLong style={{ hyphens: 'auto', wordBreak: 'break-word' }}>
                       Din kommunes nettside er: www.navnetpådinkommune.kommune.no
                     </BodyLong>
-                  </div>
+                  </div> */}
                 </HGrid>
               </HGrid>
             </div>
