@@ -16,10 +16,10 @@ function Home() {
         <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '20' }}>
           <HStack gap={{ xs: '4', lg: '20' }}>
             <Hide below="lg">
-              <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="Illustrasjon" aria-hidden />
+              <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel" aria-hidden />
             </Hide>
             <Show below="lg">
-              <Image src="/logo-med-rullestol.svg" width="80" height="80" alt="Illustrasjon" aria-hidden />
+              <Image src="/logo-med-rullestol.svg" width="80" height="80" alt="FinnHjelpemiddel" aria-hidden />
             </Show>
 
             <Heading level="1" size="large" className="home-page__heading">
