@@ -23,7 +23,7 @@ const NavigationBar = () => {
   useOnClickOutside(outerContainerRef, () => {
     setMenuOpen(false)
   })
-
+  //TODO: Bruke useSearchParems her?
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)

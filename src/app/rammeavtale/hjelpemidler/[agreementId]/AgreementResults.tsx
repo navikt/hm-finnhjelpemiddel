@@ -113,6 +113,7 @@ const AgreementResults = ({
                   <ProductCard
                     key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                     product={productWithRank.product}
+                    linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                     rank={productWithRank.rank}
                     type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
                     hmsNumbers={productWithRank.hmsNumbers}

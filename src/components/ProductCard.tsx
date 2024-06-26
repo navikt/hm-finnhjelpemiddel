@@ -26,6 +26,7 @@ import ProductImage from './ProductImage'
 const ProductCard = ({
   type,
   product,
+  linkOverwrite,
   rank,
   hmsNumbers,
   variantCount,
@@ -34,6 +35,7 @@ const ProductCard = ({
 }: {
   type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print' | 'horizontal'
   product: Product
+  linkOverwrite?: string
   rank?: number
   hmsNumbers?: string[]
   variantCount?: number
@@ -46,7 +48,7 @@ const ProductCard = ({
   const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   const searchParams = useSearchParams()
-  const linkToProduct = `/produkt/${product.id}?${searchParams}`
+  const linkToProduct = linkOverwrite || `/produkt/${product.id}?${searchParams}`
 
   const currentRank = rank ? rank : minRank
   const onAgreement = currentRank !== Infinity
