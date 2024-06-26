@@ -6,14 +6,45 @@ import { Bleed, BodyLong, Heading, HGrid, Hide, HStack, Link, Show, VStack } fro
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
+import { logNavigationEvent } from '@/utils/amplitude'
 import { Buildings2Icon, Chat2Icon, LocationPinIcon } from '@navikt/aksel-icons'
+import { usePathname, useRouter } from 'next/navigation'
+import AutocompleteSearch from './AutocompleteSearch'
 import AgreementList from './rammeavtale/AgreementList'
 
+import { useCallback } from 'react'
+
 function Home() {
+  const path = usePathname()
+  const router = useRouter()
+
+  const onSearch = useCallback(
+    (searchTerm: string) => {
+      const qWithFilters = new URLSearchParams(window.location.search)
+      const qNoFilters = new URLSearchParams()
+
+      qWithFilters.set('term', searchTerm.trim())
+      qNoFilters.set('term', searchTerm.trim())
+      if (path.includes('sok')) {
+        logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
+        router.push('/sok?' + qWithFilters.toString())
+      } else if (path === '/') {
+        logNavigationEvent('forside', 'søk', 'Søk på forsiden')
+        router.push('/sok?' + qWithFilters.toString())
+      } else if (path.includes('produkt')) {
+        router.push('/sok?' + qNoFilters.toString())
+      } else {
+        logNavigationEvent('annet', 'søk', 'Søk fra annen side')
+        router.push('/sok?' + qWithFilters.toString())
+      }
+    },
+    [router, path]
+  )
+
   return (
     <AnimateLayout>
       <div className="home-page">
-        <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '20' }}>
+        <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '32' }}>
           <HStack gap={{ xs: '4', lg: '20' }}>
             <Hide below="lg">
               <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel" aria-hidden />
@@ -22,9 +53,12 @@ function Home() {
               <Image src="/logo-med-rullestol.svg" width="80" height="80" alt="FinnHjelpemiddel" aria-hidden />
             </Show>
 
-            <Heading level="1" size="large" className="home-page__heading">
-              Søk i Norges største samling av hjelpemidler på nett
-            </Heading>
+            <div>
+              <Heading level="1" size="large" className="home-page__heading">
+                Søk i Norges største samling av hjelpemidler på nett
+              </Heading>
+              <AutocompleteSearch onSearch={onSearch} hideLabel />
+            </div>
           </HStack>
 
           <HGrid gap={{ xs: '12', md: '14' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>

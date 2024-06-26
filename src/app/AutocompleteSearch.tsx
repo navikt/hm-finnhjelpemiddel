@@ -14,9 +14,10 @@ import { useSearchParams } from 'next/navigation'
 
 type Props = {
   onSearch: (searchTerm: string) => void
+  hideLabel?: boolean
 }
 
-const AutocompleteSearch = ({ onSearch }: Props) => {
+const AutocompleteSearch = ({ onSearch, hideLabel = false }: Props) => {
   const [openState, setOpenState] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
@@ -119,9 +120,8 @@ const AutocompleteSearch = ({ onSearch }: Props) => {
       <Search
         value={inputValue}
         ref={searchFieldRef}
-        label="Skriv ett eller flere søkeord"
-        variant="simple"
-        hideLabel={true}
+        label="SØK"
+        hideLabel={hideLabel}
         size="medium"
         role="combobox"
         aria-expanded={openState}

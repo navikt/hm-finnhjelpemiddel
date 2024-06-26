@@ -1,13 +1,12 @@
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
-import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, Hide, Show } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 
 const NavigationBar = () => {
@@ -64,23 +63,9 @@ const NavigationBar = () => {
                 <span>FinnHjelpemiddel</span>
               </span>
             </NextLink>
-            <Hide below="md" className="nav-top-container__search">
-              <AutocompleteSearch onSearch={onSearch} />
-            </Hide>
           </div>
 
           <div className="nav-top-container__menu-icons">
-            <Show below="md" asChild>
-              {!menuOpen && (
-                <Button
-                  className="nav-top-container__search-button"
-                  icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
-                  variant="tertiary"
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  aria-expanded={searchOpen}
-                />
-              )}
-            </Show>
             {!searchOpen && (
               <>
                 <Hide below="md">
@@ -90,7 +75,7 @@ const NavigationBar = () => {
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
-                    Meny
+                    Meny og søk
                   </Button>
                 </Hide>
                 <Show below="md" asChild>
@@ -110,6 +95,7 @@ const NavigationBar = () => {
           searchOpen={searchOpen}
           setMenuOpen={setMenuOpen}
           setSearchOpen={setSearchOpen}
+          onSearch={onSearch}
         />
       </div>
     </nav>
