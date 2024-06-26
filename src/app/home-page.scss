@@ -4,13 +4,6 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .home-page {
-  // p,
-  // button > span,
-  // a,
-  // .navds-alert__wrapper {
-  //   font-size: 1.25rem;
-  // }
-
   padding-top: $a-spacing-8;
   @include mixins.for-size(tablet-up) {
     padding-top: $a-spacing-24;
