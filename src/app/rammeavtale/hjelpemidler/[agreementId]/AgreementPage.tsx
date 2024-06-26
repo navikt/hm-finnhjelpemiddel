@@ -3,7 +3,7 @@
 import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
@@ -50,7 +50,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
 
-  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+  const searchData = mapSearchParams(searchParams)
 
   // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
