@@ -75,7 +75,7 @@ const NavigationBar = () => {
                 <Button
                   className="nav-top-container__search-button"
                   icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
-                  variant="tertiary-neutral"
+                  variant="tertiary"
                   onClick={() => setSearchOpen(!searchOpen)}
                   aria-expanded={searchOpen}
                 />
@@ -86,7 +86,7 @@ const NavigationBar = () => {
                 <Hide below="md">
                   <Button
                     icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary-neutral"
+                    variant="tertiary"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   >
@@ -96,7 +96,7 @@ const NavigationBar = () => {
                 <Show below="md" asChild>
                   <Button
                     icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary-neutral"
+                    variant="tertiary"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-expanded={menuOpen}
                   />
