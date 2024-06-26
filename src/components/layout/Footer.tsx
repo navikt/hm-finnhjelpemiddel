@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { Bleed, BodyLong, Link } from '@navikt/ds-react'
+import { Bleed, Link } from '@navikt/ds-react'
 
 import NextLink from 'next/link'
 
@@ -10,9 +10,6 @@ const Footer = () => (
       <div className="nav-bunn nav-bunn__info">
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />
         <div>
-          <BodyLong weight="semibold" size="large">
-            Finnhjelpemiddel er en NAV tjeneste
-          </BodyLong>
           <Link as={NextLink} href="/om-nettstedet">
             Om FinnHjelpemiddel
           </Link>
