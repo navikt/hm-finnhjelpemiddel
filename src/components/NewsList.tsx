@@ -46,7 +46,7 @@ const NewsList = () => {
                   </Heading>
                 )}
 
-                <div dangerouslySetInnerHTML={{ __html: news.text }} style={{ fontSize: '1.25rem' }} />
+                <div dangerouslySetInnerHTML={{ __html: news.text }} />
               </VStack>
             </div>
           ))}
