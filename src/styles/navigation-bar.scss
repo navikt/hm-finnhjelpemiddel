@@ -31,6 +31,10 @@
   &__menu-icons {
     display: flex;
     align-items: center;
+
+    button .navds-label {
+      font-size: 1.25rem;
+    }
   }
 
   &__search {
@@ -47,7 +51,7 @@
   align-items: center;
   height: 100%;
   text-decoration: none;
-  gap: 6px;
+  gap: 12px;
   color: $a-text-default;
 
   &:focus-visible {
@@ -60,12 +64,9 @@
 
   &__text {
     display: flex;
-    flex-direction: column;
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  img {
-    margin-bottom: 5px;
+    flex-direction: row;
+    gap: $a-spacing-2;
+    font-size: 1.25rem;
+    font-weight: 400;
   }
 }

@@ -66,28 +66,15 @@ main {
 }
 
 .nav-bunn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: $a-spacing-16 $a-spacing-5;
-  padding-bottom: $a-spacing-20;
-  background: $a-deepblue-800;
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 1280px;
-  }
+  background-color: $a-deepblue-800;
+  padding-bottom: 100px;
+  padding-top: 100px;
 
   &__info {
     display: flex;
-    flex-direction: row;
-    gap: $a-spacing-4;
-    width: 100%;
-    max-width: 1280px;
-    color: $a-gray-200;
+    flex-direction: column;
+    gap: $a-spacing-10;
+    color: $a-white;
 
     a {
       color: $a-white;
@@ -100,7 +87,7 @@ main {
     div {
       display: flex;
       flex-direction: column;
-      gap: $a-spacing-2;
+      gap: $a-spacing-4;
     }
   }
 }
@@ -148,10 +135,6 @@ main {
       padding-left: 0;
       padding-right: 0;
     }
-  }
-
-  &--background-blue {
-    background-color: #e6eef4;
   }
 }
 

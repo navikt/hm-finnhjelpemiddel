@@ -1,114 +1,129 @@
 'use client'
 
-import { useMemo } from 'react'
-
 import Image from 'next/image'
-import NextLink from 'next/link'
 
-import useSWR from 'swr'
-
-import { Bleed, BodyLong, Box, Heading, HGrid, Hide, HStack, Link, VStack } from '@navikt/ds-react'
-
-import { agreementHasNoProducts, AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
-import { getAgreementLabels } from '@/utils/api-util'
+import { Bleed, BodyLong, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import News from '@/components/News'
-import { logNavigationEvent } from '@/utils/amplitude'
-import { sortAlphabetically } from '@/utils/sort-util'
+import NewsList from '@/components/NewsList'
+import { Buildings2Icon, Chat2Icon, LocationPinIcon } from '@navikt/aksel-icons'
+import AgreementList from './rammeavtale/AgreementList'
 
 function Home() {
-  const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
-    keepPreviousData: true,
-  })
-
-  const sortedAgreements = useMemo(() => {
-    if (!agreements) return []
-    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
-    // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
-
-    return filteredData
-  }, [agreements])
-
   return (
-    <>
-      <AnimateLayout>
-        <Bleed marginInline="full" asChild reflectivePadding>
-          <div className="main-wrapper--background-blue home-page">
-            <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '20' }}>
-              <HStack justify={{ xl: 'space-between' }} gap={{ lg: '20' }}>
-                <div className="home-page__heading">
-                  <Heading level="1" size="large">
-                    Finn hjelpemiddel i Norges største samling av hjelpemidler på nett.
-                  </Heading>
-                </div>
-                <Hide below="lg">
-                  <Image src="/illustrasjon.svg" width="316" height="173" alt="Illustrasjon" aria-hidden />
-                </Hide>
-              </HStack>
+    <AnimateLayout>
+      <div className="home-page">
+        <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '20' }}>
+          <HStack gap={{ xs: '4', lg: '20' }}>
+            <Hide below="lg">
+              <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel" aria-hidden />
+            </Hide>
+            <Show below="lg">
+              <Image src="/logo-med-rullestol.svg" width="80" height="80" alt="FinnHjelpemiddel" aria-hidden />
+            </Show>
 
-              <VStack gap={{ xs: '6', md: '10' }}>
-                <Heading level="2" size="medium">
-                  Hjelpemidler på avtale med NAV
-                </Heading>
+            <Heading level="1" size="large" className="home-page__heading">
+              Søk i Norges største samling av hjelpemidler på nett
+            </Heading>
+          </HStack>
 
-                <HStack gap="5">
-                  {sortedAgreements?.map(({ id, label }) => {
-                    //Wish to replace id by label in url
-                    let hrefSok = `/sok?agreement&rammeavtale=${label}`
-                    return (
-                      <div className="home-page__agreement-link" key={id}>
-                        <Link
-                          as={NextLink}
-                          href={agreementProductsLink(id)}
-                          onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label)}
-                          className="home-page__link"
-                        >
-                          {label}
-                        </Link>
-                      </div>
-                    )
-                  })}
-                </HStack>
-              </VStack>
-              <VStack align="center" gap={{ xs: '6', md: '10' }}>
-                <Heading level="2" size="medium" align="center">
-                  Trenger du mer informasjon?
-                </Heading>
-                <HGrid gap="8" columns={{ xs: 1, md: 'repeat(3, minmax(0, 19rem))' }} className="home-page__links">
-                  <Box padding="4">
-                    <Heading level="3" size="small" className="spacing-bottom--small">
-                      <Link href="https://www.nav.no/hjelpemidler" className="home-page__link">
-                        nav.no/hjelpemidler
-                      </Link>
-                    </Heading>
-                    <BodyLong>Generell informasjon om hvem som kan få hjelpemidler og hvordan man søker.</BodyLong>
-                  </Box>
-                  <Box padding="4">
-                    <Heading level="3" size="small" className="spacing-bottom--small">
-                      <Link href="https://www.kunnskapsbanken.net/" className="home-page__link">
-                        Kunnskapsbanken
-                      </Link>
-                    </Heading>
-                    <BodyLong>Fagstoff og kurs innen hjelpemidler og tilrettelegging.</BodyLong>
-                  </Box>
-                  <Box padding="4">
-                    <Heading level="3" size="small" className="spacing-bottom--small">
-                      <Link href="https://www.kunnskapsbanken.net/produktvideoer/" className="home-page__link">
-                        Produktvideoer
-                      </Link>
-                    </Heading>
-                    <BodyLong>{`Videoer av hjelpemidler på avtale med NAV. (Kunnskapsbanken)`}</BodyLong>
-                  </Box>
-                </HGrid>
-              </VStack>
-              <News />
+          <HGrid gap={{ xs: '12', md: '14' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
+            <Show below="md">
+              <InformationNavLinks />
+            </Show>
+            <AgreementList />
+            <VStack gap="18">
+              <Hide below="md">
+                <InformationNavLinks />
+              </Hide>
+              <NewsList />
             </VStack>
-          </div>
-        </Bleed>
-      </AnimateLayout>
-    </>
+          </HGrid>
+
+          <Bleed marginInline="full" asChild reflectivePadding>
+            <div className="home-page__kontakt-oss">
+              <Heading level="2" size="medium">
+                Kontakt oss
+              </Heading>
+              <HGrid gap="8" columns={{ xs: 1, md: 3 }} className="home-page__kontakt-oss-container">
+                <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
+                  <div className="home-page__kontakt-oss-icon">
+                    <Chat2Icon aria-hidden fontSize={'32px'} />
+                  </div>
+                  <div className="spacing-top--small">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
+                      <Link href="https://www.nav.no/kontaktoss" className="home-page__link">
+                        Kontakt NAV
+                      </Link>
+                    </Heading>
+                    <BodyLong>Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i NAV.</BodyLong>
+                  </div>
+                </HGrid>
+                <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
+                  <div className="home-page__kontakt-oss-icon">
+                    <LocationPinIcon aria-hidden fontSize={'32px'} />
+                  </div>
+                  <div className="spacing-top--small">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
+                      <Link href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral" className="home-page__link">
+                        Finn din hjelpemiddelsentral
+                      </Link>
+                    </Heading>
+                    <BodyLong>Finn kontaktinformasjon og les om inn- og utlevering av hjelpemidler.</BodyLong>
+                  </div>
+                </HGrid>
+
+                <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
+                  <div className="home-page__kontakt-oss-icon">
+                    <Buildings2Icon aria-hidden fontSize={'32px'} />
+                  </div>
+                  <div className="spacing-top--small">
+                    <Heading level="4" size="small" className="spacing-bottom--medium">
+                      <Link
+                        href="https://www.nav.no/samarbeidspartner/lege/hjelpemidler#kommunens-ansvar"
+                        className="home-page__link"
+                      >
+                        Kontakt din kommune
+                      </Link>
+                    </Heading>
+                    <BodyLong>Les om kommunens rolle i oppfølging av hjelpemidler.</BodyLong>
+                  </div>
+                </HGrid>
+              </HGrid>
+            </div>
+          </Bleed>
+        </VStack>
+      </div>
+    </AnimateLayout>
+  )
+}
+
+const InformationNavLinks = () => {
+  return (
+    <VStack gap={{ xs: '6', md: '8' }}>
+      <Heading level="2" size="medium">
+        Informasjon på nav.no
+      </Heading>
+      <VStack gap="7">
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.nav.no/om-hjelpemidler">Informasjon om hjelpemidler og tilrettelegging</Link>
+        </HGrid>
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.nav.no/om-hjelpemidler#hvem">Dette må du vite før du søker som privatperson</Link>
+        </HGrid>
+
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.nav.no/soknader">Søknad og skjema for hjelpemidler</Link>
+        </HGrid>
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link href="https://www.kunnskapsbanken.net/">Kunnskapsbanken</Link>
+        </HGrid>
+      </VStack>
+    </VStack>
   )
 }
 

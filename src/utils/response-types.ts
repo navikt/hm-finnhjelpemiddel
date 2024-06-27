@@ -39,24 +39,7 @@ export interface AgreementSearchResponse {
 
 export interface PostBucketResponse {
   doc_count: number
-  //key = postnr
-  key: number
-  topHitData: {
-    hits: {
-      total: object
-      hits: Hit[]
-    }
-  }
-  // seriesId: {
-  //   buckets: SeriesTopHitBucket[]
-  //   doc_count_error_upper_bound: number
-  //   sum_other_doc_count: number
-  // }
-}
 
-interface SeriesTopHitBucket {
-  doc_count: number
-  //key = seriesId
   key: number
   topHitData: {
     hits: {
@@ -177,7 +160,7 @@ export interface AgreementInfoResponse {
 export interface SupplierInfoResponse {
   id: string
   identifier: string
-  status: Status
+  status: 'INACTIVE' | 'ACTIVE'
   name: string
   address?: string | null
   postNr?: string | null
@@ -185,11 +168,6 @@ export interface SupplierInfoResponse {
   email?: string | null
   phone?: string | null
   homepage?: string | null
-}
-
-enum Status {
-  ACTIVE,
-  INACTIVE,
 }
 
 export type MediaSourceType = 'HMDB' | 'REGISTER' | 'EXTERNALURL' | 'IMPORT' | 'UNKNOWN'
@@ -243,22 +221,12 @@ export interface AttachmentsResponse {
   description: string
 }
 
-export interface NewsType {
-  id: string
-  identifier: string
-  title: string
-  text: string
-  status: Status
-  published: Date //date
-  expired: Date //date
-}
-
 export interface NewsResponse {
   id: string
   identifier: string
   title: string
   text: string
-  status: Status
+  status: 'INACTIVE' | 'ACTIVE'
   published: Date //date
   expired: Date //date
   created: Date //date
