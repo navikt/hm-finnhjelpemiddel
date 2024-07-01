@@ -1,17 +1,18 @@
 'use client'
 
+import { SupplierAccordion } from '@/app/leverandorer/SupplierAccordion'
+import { Supplier } from '@/utils/supplier-util'
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
-import { Supplier } from "@/utils/supplier-util";
-import { SupplierAccordion } from "@/app/leverandorer/SupplierAccordion";
+import { useEffect } from 'react'
 
 type Props = {
   suppliers: Supplier[]
   letter: string
 }
 const SupplierList = ({ suppliers, letter }: Props) => {
-
-  if (suppliers.length === 0) return null
-
+  useEffect(() => {
+    scrollToElement(window.location.hash.slice(1))
+  }, [])
 
   return (
     <div>
@@ -24,10 +25,18 @@ const SupplierList = ({ suppliers, letter }: Props) => {
             {suppliers.map((supplier) => (
               <SupplierAccordion supplier={supplier} key={supplier.id} />
             ))}
-          </Accordion>)}
+          </Accordion>
+        )}
       </VStack>
     </div>
   )
 }
 
 export default SupplierList
+
+function scrollToElement(id: string) {
+  if (!id) return
+  const el = document.getElementById(id)
+  if (!el) return
+  el.scrollIntoView()
+}
