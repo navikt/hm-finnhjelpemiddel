@@ -10,8 +10,6 @@ type Props = {
   letter: string
 }
 const SupplierList = ({ suppliers, letter }: Props) => {
-  if (suppliers.length === 0) return null
-
   useEffect(() => {
     scrollToElement(window.location.hash.slice(1))
   }, [])
