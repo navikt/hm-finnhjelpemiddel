@@ -168,7 +168,7 @@ const AgreementList = () => {
           </HStack>
         )}
       </VStack>
-      <Alert variant="info" className="spacing-top--large">
+      <Alert variant="info" className="agreement-page__alert-info spacing-top--large">
         Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
         for seksuallivet her:
         <ul className="spacing-vertical--small">

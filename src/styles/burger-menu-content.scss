@@ -45,10 +45,12 @@
   }
 
   &__category-list {
-    columns: 2;
-    -webkit-columns: 2;
-    -moz-columns: 2;
-    list-style-position: inside;
+    @include mixins.for-size(phone-up) {
+      columns: 2;
+      -webkit-columns: 2;
+      -moz-columns: 2;
+      list-style-position: inside;
+    }
 
     li {
       padding: $a-spacing-2 0;

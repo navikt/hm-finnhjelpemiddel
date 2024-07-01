@@ -3,6 +3,7 @@ import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, HStack, Hide, Show } from '@navikt/ds-react'
+import classNames from 'classnames'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -56,19 +57,21 @@ const NavigationBar = () => {
     <nav className="nav" ref={outerContainerRef}>
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
-          <div className="nav-top-container__logo-and-search-field">
-            <NextLink href="/" className="logo">
-              <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
-              <span className="logo__text">
-                <span> / </span>
-                <span>FinnHjelpemiddel</span>
-              </span>
-            </NextLink>
-          </div>
+          <NextLink href="/" className={classNames('logo', { hide: searchOpen })}>
+            <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
+            <Hide as="span" below="md" className="logo__text">
+              <span> / </span>
+              <span>FinnHjelpemiddel</span>
+            </Hide>
+          </NextLink>
 
           <div className="nav-top-container__menu-buttons-container">
             <HStack wrap={false}>
-              {searchOpen && <AutocompleteSearch onSearch={onSearch} secondary />}
+              {searchOpen && (
+                <div className="nav-top-container_search">
+                  <AutocompleteSearch onSearch={onSearch} secondary />
+                </div>
+              )}
               <Button
                 className="nav-top-container__search-button"
                 icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
