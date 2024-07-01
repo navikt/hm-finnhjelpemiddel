@@ -1,4 +1,5 @@
 import { Filter, FilterCategoryKeyServer } from './api-util'
+import { categories, getIsoCategoryBasedOnProductCategory } from './category-util'
 
 export const initialFiltersFormState = {
   setebreddeMaksCM: '',
@@ -24,6 +25,7 @@ export const initialFiltersFormState = {
   delkontrakt: [] as string[],
   vis: [] as string[],
   status: [] as string[],
+  categories: [] as string[],
 }
 
 export const filtersFormStateLabel = {
@@ -50,6 +52,7 @@ export const filtersFormStateLabel = {
   delkontrakt: 'Delkontrakt',
   vis: 'Vis',
   status: 'Status',
+  categories: 'Kategori',
 }
 
 const visFilterLabels = [
@@ -114,6 +117,14 @@ export const visFilters: Filter = {
     key: filterLabel,
     doc_count: 1,
     label: filterLabel,
+  })),
+}
+
+export const categoryFilters: Filter = {
+  values: categories.map((filterLabel) => ({
+    key: filterLabel.name,
+    doc_count: 1,
+    label: filterLabel.name,
   })),
 }
 
@@ -230,6 +241,29 @@ export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) =
   }
 
   return filters
+}
+
+export const filterProductCategory = (values: Array<string>) => {
+  const shoudList = values.map((value) => {
+    if (value === 'Barn og unge') {
+      return { term: { 'filters.beregnetBarn': 'JA' } }
+    }
+    if (value === 'Synsnedsettelse') {
+      return { prefix: { isoCategory: '2203' } }
+    }
+    if (value === 'Hørselsnedsettelse') {
+      return ['221824', '221827', '221830', '221833', '221836'].map((prefix) => ({
+        prefix: { isoCategory: prefix },
+      }))
+    }
+    return { prefix: { isoCategory: getIsoCategoryBasedOnProductCategory(value) } }
+  })
+
+  return {
+    bool: {
+      should: shoudList,
+    },
+  }
 }
 
 export const filterStatus = (values: Array<string>) => {

@@ -1,7 +1,4 @@
-import { AgreementLabel, agreementHasNoProducts } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
-import { getAgreementLabels } from '@/utils/api-util'
-import { sortAlphabetically } from '@/utils/sort-util'
 import {
   BriefcaseIcon,
   Buildings2Icon,
@@ -20,36 +17,13 @@ import {
 } from '@navikt/aksel-icons'
 import { HGrid, Heading, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useMemo } from 'react'
-import useSWR from 'swr'
-import AutocompleteSearch from './AutocompleteSearch'
 
 interface Props {
-  searchOpen: boolean
   menuOpen: boolean
-
   setMenuOpen: (open: boolean) => void
-  setSearchOpen: (open: boolean) => void
-  onSearch: (searchTerm: string) => void
 }
 
-const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen, onSearch }: Props) => {
-  const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
-    keepPreviousData: true,
-  })
-
-  const router = useRouter()
-
-  const sortedAgreements = useMemo(() => {
-    if (!agreements) return []
-    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
-    // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
-
-    return filteredData
-  }, [agreements])
-
+const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
   return (
     <>
       {menuOpen && (
@@ -80,66 +54,55 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen, o
                   ))}
                 </ul>
               </div>
-              <VStack gap={{ xs: '8', md: '16' }}>
-                <AutocompleteSearch onSearch={onSearch} />
 
-                <VStack gap={{ xs: '1', md: '4' }}>
-                  <Heading level="2" size="small">
-                    SNARVEIER
-                  </Heading>
-                  <VStack as={'ul'} gap={{ xs: '4', md: '6' }}>
-                    <li>
-                      <Link
-                        as={NextLink}
-                        href="/rammeavtale"
-                        onClick={() => {
-                          setMenuOpen(false)
-                          logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
-                        }}
-                      >
-                        Avtaler med NAV
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        as={NextLink}
-                        href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
-                        onClick={() => {
-                          setMenuOpen(false)
-                          logNavigationEvent(
-                            'meny',
-                            'rammeavtale',
-                            'Slik kan du se at et hjelpemiddel er på avtale med NAV'
-                          )
-                        }}
-                      >
-                        Slik kan du se at et hjelpemiddel er på avtale med NAV
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        as={NextLink}
-                        href="/leverandorer"
-                        onClick={() => {
-                          setMenuOpen(false)
-                          logNavigationEvent('meny', 'leverandorer', 'Leverandøroversikt')
-                        }}
-                      >
-                        Leverandøroversikt
-                      </Link>
-                    </li>
-                  </VStack>
+              <VStack gap={{ xs: '1', md: '5' }}>
+                <Heading level="2" size="small">
+                  SNARVEIER
+                </Heading>
+                <VStack as={'ul'} gap={{ xs: '4', md: '6' }}>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href="/rammeavtale"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
+                      }}
+                    >
+                      Avtaler med NAV
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigationEvent(
+                          'meny',
+                          'rammeavtale',
+                          'Slik kan du se at et hjelpemiddel er på avtale med NAV'
+                        )
+                      }}
+                    >
+                      Slik kan du se at et hjelpemiddel er på avtale med NAV
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href="/leverandorer"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigationEvent('meny', 'leverandorer', 'Leverandøroversikt')
+                      }}
+                    >
+                      Leverandøroversikt
+                    </Link>
+                  </li>
                 </VStack>
               </VStack>
             </HGrid>
-          </div>
-        </div>
-      )}
-
-      {searchOpen && (
-        <div className="burgermenu-container">
-          <div className="burgermenu-container__content">
-            <AutocompleteSearch onSearch={onSearch} />
           </div>
         </div>
       )}
@@ -152,55 +115,85 @@ const kategorier = [
     name: 'Funksjonsstøtte',
     icon: <HandBandageIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '04' },
   },
   {
     name: 'Trening og aktivitet',
     icon: <WeightIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '05' },
   },
   {
     name: 'Egenomsorg og pleie',
     icon: <HeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '09' },
   },
-  { name: 'Mobilitet', icon: <WheelchairIcon aria-hidden fontSize={'24px'} color="#0067C5" />, link: 'www.vg.no' },
+  {
+    name: 'Mobilitet',
+    icon: <WheelchairIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
+    link: 'www.vg.no',
+    filter: { isoCategory: '12' },
+  },
   {
     name: 'Husarbeid og deltakelse',
     icon: <HouseHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '15' },
   },
   {
     name: 'Miljøtilrettelegging',
     icon: <Buildings2Icon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '18' },
   },
-  { name: 'Barn og unge', icon: <TeddyBearIcon aria-hidden fontSize={'24px'} color="#0067C5" />, link: 'www.vg.no' },
+  {
+    name: 'Barn og unge',
+    icon: <TeddyBearIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
+    link: 'www.vg.no',
+    filter: {},
+  },
   {
     name: 'Kommunikasjonsverktøy',
     icon: <PersonChatIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '22' },
   },
   {
     name: 'Håndteringsverktøy',
     icon: <HandShakeHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '24' },
   },
   {
     name: 'Omgivelseskontroll',
     icon: <KeyHorizontalIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '27' },
   },
   {
     name: 'Deltakelse i arbeidslivet',
     icon: <BriefcaseIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '28' },
   },
-  { name: 'Synsnedsettelse', icon: <EyeIcon aria-hidden fontSize={'24px'} color="#0067C5" />, link: 'www.vg.no' },
-  { name: 'Hørselsnedsettelse', icon: <EarIcon aria-hidden fontSize={'24px'} color="#0067C5" />, link: 'www.vg.no' },
+  {
+    name: 'Synsnedsettelse',
+    icon: <EyeIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
+    link: 'www.vg.no',
+    filter: {},
+  },
+  {
+    name: 'Hørselsnedsettelse',
+    icon: <EarIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
+    link: 'www.vg.no',
+    filter: {},
+  },
   {
     name: 'Psykososial funksjonsstøtte',
     icon: <HeadHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
     link: 'www.vg.no',
+    filter: { isoCategory: '30' },
   },
 ]
 

@@ -28,9 +28,10 @@
     min-width: 50%;
   }
 
-  &__menu-icons {
+  &__menu-buttons-container {
     display: flex;
     align-items: center;
+    // gap: $a-spacing-2;
 
     button .navds-label {
       font-size: 1.25rem;

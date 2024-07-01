@@ -11,6 +11,7 @@ import {
   filterLeverandor,
   filterMaterialeTrekk,
   filterMinMax,
+  filterProductCategory,
   filterProduktkategori,
   filterRammeavtale,
   filterStatus,
@@ -63,7 +64,7 @@ export type FilterCategoryKeyServer =
   | 'setehoydeMinCM'
   | 'setehoydeMaksCM'
 
-export type FilterCategoryKeyClient = 'vis' | 'status'
+export type FilterCategoryKeyClient = 'vis' | 'status' | 'category'
 
 type RawFilterData = {
   [key in FilterCategoryKeyServer]: {
@@ -349,6 +350,7 @@ export const fetchProducts = ({
     rammeavtale,
     vis,
     status,
+    categories,
   } = filters
 
   const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
@@ -433,6 +435,7 @@ export const fetchProducts = ({
           //Filtrer bare på aktive produkter dersom vi ikke henter basert på serieId(produktside)
           ...filterVis(seriesId === undefined, vis),
           filterStatus(status),
+          filterProductCategory(categories),
           //Remove null values
         ].filter(Boolean),
       },
@@ -1011,6 +1014,7 @@ export type Suggestions = Array<{ text: string; data: ProductVariant }>
 
 //TODO: Bør denne returnere Product? Vet ikke om vi trenger det
 export const fetchSuggestions = (term: string): Promise<Suggestions> => {
+  console.log({ term })
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
@@ -1040,6 +1044,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
       const suggestions: Suggestions = data.suggest.keywords_suggest
         .at(0)
         .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
+      console.log({ suggestions })
       return suggestions
     })
 }

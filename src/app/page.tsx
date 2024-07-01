@@ -57,7 +57,7 @@ function Home() {
               <Heading level="1" size="large" className="home-page__heading">
                 Søk i Norges største samling av hjelpemidler på nett
               </Heading>
-              <AutocompleteSearch onSearch={onSearch} hideLabel />
+              <AutocompleteSearch onSearch={onSearch} />
             </div>
           </HStack>
 

@@ -1,12 +1,13 @@
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
-import { MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Button, Hide, Show } from '@navikt/ds-react'
+import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { Button, HStack, Hide, Show } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 
 const NavigationBar = () => {
@@ -48,12 +49,12 @@ const NavigationBar = () => {
   )
 
   useEffect(() => {
-    setMenuOpenGlobalState(menuOpen || searchOpen)
-  }, [menuOpen, searchOpen, setMenuOpenGlobalState])
+    setMenuOpenGlobalState(menuOpen)
+  }, [menuOpen, setMenuOpenGlobalState])
 
   return (
     <nav className="nav" ref={outerContainerRef}>
-      <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
+      <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
             <NextLink href="/" className="logo">
@@ -65,38 +66,43 @@ const NavigationBar = () => {
             </NextLink>
           </div>
 
-          <div className="nav-top-container__menu-icons">
-            {!searchOpen && (
-              <>
-                <Hide below="md">
-                  <Button
-                    icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-expanded={menuOpen}
-                  >
-                    Meny og søk
-                  </Button>
-                </Hide>
-                <Show below="md" asChild>
-                  <Button
-                    icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-expanded={menuOpen}
-                  />
-                </Show>
-              </>
-            )}
+          <div className="nav-top-container__menu-buttons-container">
+            <HStack wrap={false}>
+              {searchOpen && <AutocompleteSearch onSearch={onSearch} secondary />}
+              <Button
+                className="nav-top-container__search-button"
+                icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
+                variant="tertiary"
+                onClick={() => setSearchOpen(!searchOpen)}
+                aria-expanded={searchOpen}
+              >
+                {searchOpen ? '' : 'Søk'}
+              </Button>
+            </HStack>
+
+            <>
+              <Hide below="md">
+                <Button
+                  icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
+                  variant="tertiary"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  aria-expanded={menuOpen}
+                >
+                  Meny
+                </Button>
+              </Hide>
+              <Show below="md" asChild>
+                <Button
+                  icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
+                  variant="tertiary"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  aria-expanded={menuOpen}
+                />
+              </Show>
+            </>
           </div>
         </div>
-        <BurgerMenuContent
-          menuOpen={menuOpen}
-          searchOpen={searchOpen}
-          setMenuOpen={setMenuOpen}
-          setSearchOpen={setSearchOpen}
-          onSearch={onSearch}
-        />
+        <BurgerMenuContent menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       </div>
     </nav>
   )

@@ -21,7 +21,7 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { initialFiltersFormState, visFilters } from '@/utils/filter-util'
+import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
@@ -139,6 +139,7 @@ export default function SearchPage() {
   const filters: FilterData = {
     ...(filtersFromData ?? initialFilters),
     vis: visFilters,
+    category: categoryFilters,
     status: { values: [] },
   }
 

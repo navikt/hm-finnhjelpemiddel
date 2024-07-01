@@ -167,24 +167,39 @@ const AgreementList = () => {
             <Loader size="xlarge" title="Laster produkter" />
           </HStack>
         )}
-
-        <Alert variant="info" className="spacing-top--large">
-          Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
-          for seksuallivet her:
-          <ul className="spacing-vertical--small">
-            <li>
-              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-                Høreapparat, ørepropper og tinnitusmaskerere
-              </Link>
-            </li>
-            <li>
-              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
-                Hjelpemidler for seksuallivet
-              </Link>
-            </li>
-          </ul>
-        </Alert>
       </VStack>
+      <Alert variant="info" className="spacing-top--large">
+        Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
+        for seksuallivet her:
+        <ul className="spacing-vertical--small">
+          <li>
+            <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr">
+              Bil
+            </Link>
+          </li>
+          <li>
+            <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr/spesialutstyr-og-tilpasning">
+              Bilombygg
+            </Link>
+          </li>
+          <li>
+            <Link href="https://www.nav.no/forerhund">Førerhund</Link>
+          </li>
+          <li>
+            <Link href="https://www.nav.no/servicehund">Servicehund</Link>
+          </li>
+          <li>
+            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
+              Hjelpemidler for seksuallivet
+            </Link>
+          </li>
+          <li>
+            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
+              Høreapparat, ørepropper og tinnitusmaskerere
+            </Link>
+          </li>
+        </ul>
+      </Alert>
     </VStack>
   )
 }
