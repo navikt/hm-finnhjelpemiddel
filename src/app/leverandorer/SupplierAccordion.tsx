@@ -4,7 +4,7 @@ import { logLeverandorprodukterKlikket } from '@/utils/amplitude'
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useState } from "react";
+import { useState } from 'react'
 
 interface Props {
   supplier: Supplier
