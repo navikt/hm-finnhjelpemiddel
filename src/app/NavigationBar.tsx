@@ -15,7 +15,7 @@ const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
-  const [searchOpen, setSearchOpen] = useState(searchParamValue !== '')
+  const [searchOpen, setSearchOpen] = useState(searchParamValue !== '' && searchParamValue !== null)
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -26,6 +26,7 @@ const NavigationBar = () => {
   useOnClickOutside(outerContainerRef, () => {
     setMenuOpen(false)
   })
+
   //TODO: Bruke useSearchParems her?
   const onSearch = useCallback(
     (searchTerm: string) => {
