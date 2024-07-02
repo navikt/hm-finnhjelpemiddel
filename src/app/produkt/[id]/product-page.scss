@@ -153,9 +153,9 @@
 
     @include mixins.for-size(tablet-up) {
       padding: $a-spacing-10 $a-spacing-7;
-      //position: sticky;
-      //top: 0;
-      //z-index: var(--z-index-cover);
+      position: sticky;
+      top: 0;
+      z-index: var(--z-index-cover);
     }
   }
 

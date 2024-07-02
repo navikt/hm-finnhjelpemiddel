@@ -4,7 +4,7 @@ import { Supplier } from '@/utils/supplier-util'
 import File from '@/components/File'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { titleCapitalized } from '@/utils/string-util'
-import { Bleed, BodyShort, Button, HGrid, HStack, Heading } from '@navikt/ds-react'
+import { Bleed, BodyShort, Button, Heading, HGrid, HStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
@@ -32,30 +32,31 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <ProductPageTopInfo product={product} supplier={supplier} />
-        <ProductNavigationBar
-          isOnAgreement={isOnAgreement}
-          hasAccessories={hasAccessories}
-          hasSpareParts={hasSpareParts}
-        />
+        <div>
+          <ProductPageTopInfo product={product} supplier={supplier} />
+          <ProductNavigationBar
+            isOnAgreement={isOnAgreement}
+            hasAccessories={hasAccessories}
+            hasSpareParts={hasSpareParts}
+          />
 
-        <HStack justify="space-between">
-          <section
-            id="informasjonWrapper"
-            className="product-page__tabs spacing-top--xlarge"
-            aria-label="Beskrivelse og annen generell informasjon"
-          >
-            <span id="informasjon" />
-            <ProductInformation product={product} />
-          </section>
+          <HStack justify="space-between">
+            <section
+              id="informasjonWrapper"
+              className="product-page__tabs spacing-top--xlarge"
+              aria-label="Beskrivelse og annen generell informasjon"
+            >
+              <span id="informasjon" />
+              <ProductInformation product={product} />
+            </section>
 
-          {showHMSSuggestion && (
-            <aside className="spacing-top--large">
-              <HmsSuggestion product={product} />
-            </aside>
-          )}
-        </HStack>
-
+            {showHMSSuggestion && (
+              <aside className="spacing-top--large">
+                <HmsSuggestion product={product} />
+              </aside>
+            )}
+          </HStack>
+        </div>
         <section
           id="egenskaperWrapper"
           className="product-page__product-variants spacing-vertical--xlarge"
@@ -127,10 +128,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 }
 
 const ProductNavigationBar = ({
-  isOnAgreement,
-  hasAccessories,
-  hasSpareParts,
-}: {
+                                isOnAgreement,
+                                hasAccessories,
+                                hasSpareParts,
+                              }: {
   isOnAgreement: boolean
   hasAccessories: boolean
   hasSpareParts: boolean
