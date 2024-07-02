@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -51,6 +52,11 @@ const NavigationBar = () => {
   useEffect(() => {
     setMenuOpenGlobalState(menuOpen || searchOpen)
   }, [menuOpen, searchOpen, setMenuOpenGlobalState])
+
+  useKeyboardShortcut({
+    key: 'Escape',
+    onKeyPressed: () => setMenuOpen(false),
+  })
 
   return (
     <nav className="nav" ref={outerContainerRef}>
