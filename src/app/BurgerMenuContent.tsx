@@ -1,20 +1,5 @@
 import { logNavigationEvent } from '@/utils/amplitude'
-import {
-  BriefcaseIcon,
-  Buildings2Icon,
-  EarIcon,
-  EyeIcon,
-  HandBandageIcon,
-  HandShakeHeartIcon,
-  HeadHeartIcon,
-  HeartIcon,
-  HouseHeartIcon,
-  KeyHorizontalIcon,
-  PersonChatIcon,
-  TeddyBearIcon,
-  WeightIcon,
-  WheelchairIcon,
-} from '@navikt/aksel-icons'
+import { categories } from '@/utils/category-util'
 import { HGrid, Heading, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
@@ -36,18 +21,18 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                 </Heading>
 
                 <ul className="burgermenu-container__category-list">
-                  {kategorier.map((kategori) => (
-                    <li key={kategori.name}>
+                  {categories.map((category) => (
+                    <li key={category.name}>
                       <HGrid gap="6" columns={'50px auto'}>
-                        <div className="burgermenu-container__category-icon">{kategori.icon}</div>
+                        <div className="burgermenu-container__category-icon">{category.icon}</div>
                         <Link
                           as={NextLink}
-                          href={kategori.link}
+                          href={category.link}
                           onClick={() => {
                             setMenuOpen(false)
                           }}
                         >
-                          {kategori.name}
+                          {category.name}
                         </Link>
                       </HGrid>
                     </li>
@@ -109,92 +94,5 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
     </>
   )
 }
-
-const kategorier = [
-  {
-    name: 'Funksjonsstøtte',
-    icon: <HandBandageIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '04' },
-  },
-  {
-    name: 'Trening og aktivitet',
-    icon: <WeightIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '05' },
-  },
-  {
-    name: 'Egenomsorg og pleie',
-    icon: <HeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '09' },
-  },
-  {
-    name: 'Mobilitet',
-    icon: <WheelchairIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '12' },
-  },
-  {
-    name: 'Husarbeid og deltakelse',
-    icon: <HouseHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '15' },
-  },
-  {
-    name: 'Miljøtilrettelegging',
-    icon: <Buildings2Icon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '18' },
-  },
-  {
-    name: 'Barn og unge',
-    icon: <TeddyBearIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: {},
-  },
-  {
-    name: 'Kommunikasjonsverktøy',
-    icon: <PersonChatIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '22' },
-  },
-  {
-    name: 'Håndteringsverktøy',
-    icon: <HandShakeHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '24' },
-  },
-  {
-    name: 'Omgivelseskontroll',
-    icon: <KeyHorizontalIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '27' },
-  },
-  {
-    name: 'Deltakelse i arbeidslivet',
-    icon: <BriefcaseIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '28' },
-  },
-  {
-    name: 'Synsnedsettelse',
-    icon: <EyeIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: {},
-  },
-  {
-    name: 'Hørselsnedsettelse',
-    icon: <EarIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: {},
-  },
-  {
-    name: 'Psykososial funksjonsstøtte',
-    icon: <HeadHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-    link: 'www.vg.no',
-    filter: { isoCategory: '30' },
-  },
-]
 
 export default BurgerMenuContent
