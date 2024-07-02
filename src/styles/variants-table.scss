@@ -3,7 +3,7 @@
 @import '@navikt/ds-tokens/dist/tokens';
 
 .variants-table {
-  width: 100%;
+  max-width: 1280px;
   max-height: 98vh;
   overflow: auto;
 
