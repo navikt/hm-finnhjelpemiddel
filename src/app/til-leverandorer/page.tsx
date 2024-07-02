@@ -1,6 +1,6 @@
 'use client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
+import { BodyLong, Heading, Link, List } from '@navikt/ds-react'
 
 function ToSuppliers() {
   return (
@@ -9,30 +9,21 @@ function ToSuppliers() {
         <div className="about-us-page__container">
           <article>
             <Heading level="1" size="medium" className="spacing-top--small spacing-bottom--medium">
-              Om FinnHjelpemiddel for leverandører
+              For leverandører
             </Heading>
-            <Heading level="2" size="small" spacing>
-              Om nettstedet
-            </Heading>
-            <BodyLong spacing>FinnHjelpemiddel eies og driftes av NAV Hjelpemidler og tilrettelegging.</BodyLong>
-            <Heading level="2" size="small" spacing>
-              Målgrupper
-            </Heading>
-            <BodyLong spacing>
-              Hovedmålgruppene for FinnHjelpemiddel er innbyggere, kommuner og NAV hjelpemiddelsentraler.
-            </BodyLong>
-            <Heading level="2" size="small" spacing>
+            <Heading level="2" size="small" spacing id="hva-er-et-hjelpemiddel">
               Hva er et hjelpemiddel?
             </Heading>
-            <BodyLong>
-              På FinnHjelpemiddel forholder vi oss i hovedsak til folketrygdens definisjon av et hjelpemiddel. Det vil
-              si at hjelpemidlene som presenteres er spesiallaget for personer med funksjonsnedsettelse. For mer
-              informasjon om hva som defineres som et hjelpemiddel, se
+            <BodyLong spacing>
+              FinnHjelpemiddel forholder seg i hovedsak til folketrygdens definisjon av et hjelpemiddel. Det vil si at
+              hjelpemidlene som presenteres er spesiallaget for personer med funksjonsnedsettelse. For mer informasjon
+              om hva som defineres som et hjelpemiddel, se{' '}
               <Link href="https://lovdata.no/nav/rundskriv/r10-07acd/KAPITTEL_1-1-2.#KAPITTEL_1-1-2">
-                rundskriv til folketrygdloven § 10-7.
+                rundskriv til folketrygdloven § 10-7
               </Link>
+              .
             </BodyLong>
-            <BodyShort>Produkter som klart faller utenfor hjelpemiddelbegrepet i denne sammenhengen er:</BodyShort>
+            <BodyLong>Produkter som klart faller utenfor hjelpemiddelbegrepet i denne sammenhengen er:</BodyLong>
             <List as="ul">
               <List.Item>Vanlige møbler</List.Item>
               <List.Item>Brune- og hvitevarer</List.Item>
@@ -54,14 +45,12 @@ function ToSuppliers() {
               </List.Item>
               <List.Item>Behandlingshjelpemidler</List.Item>
             </List>
-            <BodyShort spacing>
-              Definisjonen av et hjelpemiddel vil endre seg over tid og kriteriene for registrering FinnHjelpemiddel vil
-              derfor bli vurdert jevnlig.
-            </BodyShort>
             <BodyLong spacing>
-              Hjelpemidler som er under utvikling og som ikke er lansert kan ikke legges inn i FinnHjelpemiddel.
-              Leverandørene i FinnHjelpemiddel må være norske, eller ha norske underleverandører.
+              Definisjonen av et hjelpemiddel vil endre seg over tid og kriteriene for registrering i FinnHjelpemiddel
+              vil derfor bli vurdert jevnlig. Hjelpemidler som er under utvikling og som ikke er lansert vil ikke bli
+              publisert.
             </BodyLong>
+
             <Heading level="2" size="small" spacing>
               Produktkategorier
             </Heading>
@@ -72,10 +61,21 @@ function ToSuppliers() {
               <Link href="https://online.standard.no/ns-en-iso-9999-2022"> Standard Norge.</Link>
             </BodyLong>
             <Heading level="2" size="small" spacing>
+              Hvem kan registrere hjelpemidler?
+            </Heading>
+            <BodyLong>
+              {`Leverandørene i FinnHjelpemiddel må være norske, eller ha norske underleverandører. Hjelpemidlene som skal
+              registreres må fylle kriteriene for et hjelpemiddel (se over).`}
+            </BodyLong>
+            <BodyLong spacing>
+              Send en henvendelse til <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link> for å
+              få informasjon om innlogging.
+            </BodyLong>
+            <Heading level="2" size="small" spacing>
               Kontakt oss
             </Heading>
             <BodyLong spacing>
-              Ved spørsmål knyttet til FinnHjelpemiddel ta kontakt på{' '}
+              Ved spørsmål eller tilbakemeldinger ta kontakt på{' '}
               <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
             </BodyLong>
           </article>

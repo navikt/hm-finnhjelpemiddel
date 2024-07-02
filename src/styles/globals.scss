@@ -78,10 +78,10 @@ main {
 
     a {
       color: $a-white;
-      --ac-link-active-text: black;
-      --ac-link-active-bg: white;
-      --ac-link-focus-text: black;
-      --ac-link-focus-bg: white;
+      --ac-link-active-text: #cce1ff;
+      --ac-link-active-bg: transparent;
+      --ac-link-focus-text: #cce1ff;
+      --ac-link-focus-bg: transparent;
     }
 
     div {
