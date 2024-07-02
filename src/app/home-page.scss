@@ -12,6 +12,7 @@
   &__heading {
     max-width: 530px;
     color: $ny-nav-purple-dark;
+    margin-bottom: $a-spacing-5;
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;

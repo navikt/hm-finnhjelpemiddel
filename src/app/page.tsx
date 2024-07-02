@@ -44,8 +44,8 @@ function Home() {
   return (
     <AnimateLayout>
       <div className="home-page">
-        <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '32' }}>
-          <HStack gap={{ xs: '4', lg: '20' }}>
+        <VStack className="main-wrapper--large" gap={{ xs: '12', md: '32' }}>
+          <HStack gap={{ xs: '4', md: '20' }}>
             <Hide below="lg">
               <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel" aria-hidden />
             </Hide>

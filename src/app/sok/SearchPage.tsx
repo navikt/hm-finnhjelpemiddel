@@ -209,7 +209,11 @@ export default function SearchPage() {
           )}
 
           <VStack gap={{ xs: '4', lg: '8' }}>
-            <HStack justify="space-between" className="results__header">
+            <HStack
+              justify={{ xs: 'start', lg: 'space-between' }}
+              gap={{ xs: '4', lg: '0' }}
+              className="results__header"
+            >
               <Show above="lg">
                 <VStack justify="space-between">
                   <Heading level="2" size="small" ref={searchResultRef}>

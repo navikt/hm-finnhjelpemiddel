@@ -5,14 +5,14 @@ import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
   filterBredde,
+  filterCategory,
   filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
   filterLeverandor,
   filterMaterialeTrekk,
   filterMinMax,
-  filterProductCategory,
-  filterProduktkategori,
+  filterProduktkategoriISO,
   filterRammeavtale,
   filterStatus,
   filterTotalvekt,
@@ -369,7 +369,7 @@ export const fetchProducts = ({
     fyllmateriale: filterFyllmateriale(fyllmateriale),
     materialeTrekk: filterMaterialeTrekk(materialeTrekk),
     leverandor: filterLeverandor(leverandor),
-    produktkategori: filterProduktkategori(produktkategori),
+    produktkategori: filterProduktkategoriISO(produktkategori),
     rammeavtale: filterRammeavtale(rammeavtale),
   }
 
@@ -378,8 +378,11 @@ export const fetchProducts = ({
       filter: {
         bool: {
           filter: Object.entries(filterKeyToAggsFilter)
-            .filter(([key, v]) => key !== filterKey && v != null)
-            .map(([_, v]) => v),
+            .filter(([key, v]) => {
+              return key !== filterKey && v != null
+            })
+            .map(([_, v]) => v)
+            .concat([...filterVis(seriesId === undefined, vis), filterCategory(categories)]),
         },
       },
       aggs,
@@ -430,12 +433,12 @@ export const fetchProducts = ({
           filterFyllmateriale(fyllmateriale),
           filterMaterialeTrekk(materialeTrekk),
           filterLeverandor(leverandor),
-          filterProduktkategori(produktkategori),
+          filterProduktkategoriISO(produktkategori),
           filterRammeavtale(rammeavtale),
           //Filtrer bare på aktive produkter dersom vi ikke henter basert på serieId(produktside)
           ...filterVis(seriesId === undefined, vis),
           filterStatus(status),
-          filterProductCategory(categories),
+          filterCategory(categories),
           //Remove null values
         ].filter(Boolean),
       },
@@ -538,7 +541,7 @@ export const getProductFilters = ({ seriesId }: { seriesId: string }): Promise<F
     fyllmateriale: filterFyllmateriale([]),
     materialeTrekk: filterMaterialeTrekk([]),
     leverandor: filterLeverandor([]),
-    produktkategori: filterProduktkategori([]),
+    produktkategori: filterProduktkategoriISO([]),
     rammeavtale: filterRammeavtale([]),
   }
 

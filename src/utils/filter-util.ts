@@ -183,7 +183,7 @@ export const filterLeverandor = (values: Array<string>) => ({
   },
 })
 
-export const filterProduktkategori = (values: Array<string>) => ({
+export const filterProduktkategoriISO = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { isoCategoryName: value } })),
   },
@@ -243,25 +243,20 @@ export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) =
   return filters
 }
 
-export const filterProductCategory = (values: Array<string>) => {
-  const shoudList = values.map((value) => {
+export const filterCategory = (values: Array<string>) => {
+  const shouldList = values.flatMap<any>((value) => {
     if (value === 'Barn og unge') {
-      return { term: { 'filters.beregnetBarn': 'JA' } }
-    }
-    if (value === 'Synsnedsettelse') {
-      return { prefix: { isoCategory: '2203' } }
-    }
-    if (value === 'Hørselsnedsettelse') {
-      return ['221824', '221827', '221830', '221833', '221836'].map((prefix) => ({
+      return [{ term: { 'filters.beregnetBarn': 'JA' } }]
+    } else {
+      return getIsoCategoryBasedOnProductCategory(value).map((prefix) => ({
         prefix: { isoCategory: prefix },
       }))
     }
-    return { prefix: { isoCategory: getIsoCategoryBasedOnProductCategory(value) } }
   })
 
   return {
     bool: {
-      should: shoudList,
+      should: shouldList,
     },
   }
 }
