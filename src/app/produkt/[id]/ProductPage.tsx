@@ -32,7 +32,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <div>
           <ProductPageTopInfo product={product} supplier={supplier} />
           <ProductNavigationBar
             isOnAgreement={isOnAgreement}
@@ -56,7 +55,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               </aside>
             )}
           </HStack>
-        </div>
         <section
           id="egenskaperWrapper"
           className="product-page__product-variants spacing-vertical--xlarge"
