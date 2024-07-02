@@ -4,7 +4,8 @@
 
 .variants-table {
   max-width: 1280px;
-  overflow-x: scroll;
+  max-height: 98vh;
+  overflow: auto;
 
   @include mixins.for-size(tablet-up) {
     .navds-table {
@@ -16,6 +17,13 @@
   table {
     border-collapse: separate;
     border-spacing: 0;
+  }
+
+  table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
   }
 
   thead tr > th:first-child {
@@ -42,6 +50,12 @@
 
   tbody .navds-table__row--shade-on-hover:hover th {
     background-color: $a-bg-subtle;
+  }
+
+  table thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
   }
 
   .sort-button {
