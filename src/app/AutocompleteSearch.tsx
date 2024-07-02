@@ -124,8 +124,7 @@ const AutocompleteSearch = ({ onSearch, secondary = false }: Props) => {
         hideLabel={true}
         size="medium"
         role="combobox"
-        // variant="secondary"
-        variant={secondary ? 'secondary' : 'simple'}
+        variant={secondary ? 'simple' : 'primary'}
         aria-expanded={openState}
         aria-controls={'suggestion-list'}
         aria-autocomplete="list"

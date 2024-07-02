@@ -6,14 +6,16 @@ import { Button, HStack, Hide, Show } from '@navikt/ds-react'
 import classNames from 'classnames'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
+  const searchParams = useSearchParams()
+  const searchParamValue = searchParams.get('term')
+  const [searchOpen, setSearchOpen] = useState(searchParamValue !== '')
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
