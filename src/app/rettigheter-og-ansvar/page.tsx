@@ -25,20 +25,13 @@ function RightsResponsibilities() {
               kopiere eller anvende dem på noen måte uten samtykke fra NAV.
             </BodyLong>
             <BodyLong spacing>
-              Alle opplysninger i FinnHjelpemiddel kan bli endret eller oppdatert uten varsel og feil kan forekomme.
-            </BodyLong>
-            <BodyLong spacing>
-              NAV påtar seg ikke ansvaret for innholdet i produktinformasjonen. Bruk av opplysningene skjer på eget
-              ansvar. Informasjonen på FinnHjelpemiddel er basert på informasjon gitt av leverandøren av hjelpemiddelet.{' '}
-            </BodyLong>
-            <BodyLong spacing>
-              NAV fraskriver seg et hvert ansvar for direkte eller indirekte tap som er en følge av bruk av
-              opplysningene gitt i FinnHjelpemiddel, uavhengig av om tapet skyldes feil, uklare opplysninger, virus
-              eller har andre årsaker.
-            </BodyLong>
-            <BodyLong>
-              NAV støtter ikke andre nettsteder som lenkes til FinnHjelpemiddel. NAV påtar seg ikke ansvar for innholdet
-              på disse nettstedene.
+              Alle opplysninger i FinnHjelpemiddel kan bli endret eller oppdatert uten varsel og vi ønsker å gjøre
+              oppmerksom på at feil kan forekomme. NAV påtar seg ikke ansvaret for innholdet i produktinformasjonen.
+              Bruk av opplysningene skjer på eget ansvar. Informasjonen på FinnHjelpemiddel er basert på informasjon
+              gitt av leverandører av hjelpemidler. NAV fraskriver seg ansvar for direkte eller indirekte tap som er en
+              følge av bruk av opplysningene gitt i FinnHjelpemiddel, uavhengig av om tapet skyldes feil, uklare
+              opplysninger, virus eller har andre årsaker. NAV støtter ikke andre nettsteder som lenkes til fra
+              FinnHjelpemiddel og påtar seg ikke ansvar for innholdet på disse nettstedene.
             </BodyLong>
           </article>
         </div>

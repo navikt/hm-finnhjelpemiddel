@@ -17,7 +17,7 @@ const Footer = () => (
             Rettigheter og ansvar
           </Link>
           <Link as={NextLink} href="/til-leverandorer">
-            Til leverandører
+            For leverandører
           </Link>
           <Link
             as={NextLink}
