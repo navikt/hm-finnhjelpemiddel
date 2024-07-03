@@ -7,6 +7,10 @@
   max-height: 98vh;
   overflow: auto;
 
+  @include mixins.for-size(phone-only) {
+    max-height: 70vh;
+  }
+
   @include mixins.for-size(tablet-up) {
     .navds-table {
       width: auto;
