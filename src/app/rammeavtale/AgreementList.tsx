@@ -1,21 +1,21 @@
 'use client'
 
-import { AgreementLabel } from '@/utils/agreement-util'
+import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { logKlikk } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { dateToString } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyShort,
   Box,
   Button,
-  HGrid,
-  HStack,
   Heading,
+  HGrid,
   Hide,
+  HStack,
   Link,
   Loader,
   Show,
@@ -146,7 +146,8 @@ const AgreementList = () => {
           sortedData.map((label) => (
             <Box as="li" key={label.identifier} className="agreement-page__list-item">
               <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center">
-                <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>
+                {/*<Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>*/}
+                <Link as={NextLink} href={agreementProductsLink(label.id)}>
                   {`${label.label} `}
                 </Link>
                 <Hide below="lg" asChild>

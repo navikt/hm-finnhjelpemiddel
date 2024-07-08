@@ -1,5 +1,5 @@
 import { FilterFormState } from './filter-util'
-import { Document, Product, mapDocuments, mapProductWithVariants } from './product-util'
+import { Document, mapDocuments, mapProductWithVariants, Product } from './product-util'
 import {
   AgreementDocResponse,
   AgreementLabelResponse,
@@ -124,6 +124,13 @@ export const agreementProductsLink = (id: string) => {
     process.env.BUILD_ENV === 'prod'
       ? id === 'e3c8e7ca-8118-4c24-b2fd-13b765de99e3'
       : id === '042360ce-ee2d-4275-b864-c4009b5af371'
+  ) {
+    return `/rammeavtale/${id}`
+  }
+  if (
+    process.env.BUILD_ENV === 'dev'
+      ? id === '042360ce-ee2d-4275-b864-c4009b5af371'
+      : id === 'e3c8e7ca-8118-4c24-b2fd-13b765de99e3'
   ) {
     return `/rammeavtale/${id}`
   }
