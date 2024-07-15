@@ -82,7 +82,6 @@ export const categories = [
   {
     name: 'Barn og unge',
     icon: <TeddyBearIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Barn%20og%20unge',
   },
   {
@@ -93,37 +92,31 @@ export const categories = [
   {
     name: 'Håndteringsverktøy',
     icon: <HandShakeHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Håndteringsverktøy',
   },
   {
     name: 'Omgivelseskontroll',
     icon: <KeyHorizontalIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Omgivelseskontroll',
   },
   {
     name: 'Deltakelse i arbeidslivet',
     icon: <BriefcaseIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Deltakelse%20i%20arbeidslivet',
   },
   {
     name: 'Synsnedsettelse',
     icon: <EyeIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Synsnedsettelse',
   },
   {
     name: 'Hørselsnedsettelse',
     icon: <EarIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Hørselsnedsettelse',
   },
   {
     name: 'Psykososial funksjonsstøtte',
     icon: <HeadHeartIcon aria-hidden fontSize={'24px'} color="#0067C5" />,
-
     link: '/sok?categories=Psykososial%20funksjonsstøtte',
   },
 ]
