@@ -18,6 +18,7 @@ const checkboxFilterCategoriesLabels = {
   rammeavtale: 'Rammeavtale',
   delkontrakt: 'Delkontrakt',
   vis: 'Vis',
+  categories: 'Kategori',
 }
 
 type ChecboxFilterKey = keyof typeof checkboxFilterCategoriesLabels

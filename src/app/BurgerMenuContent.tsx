@@ -1,143 +1,93 @@
-import useOnClickOutside from '@/hooks/useOnClickOutside'
-import { AgreementLabel, agreementHasNoProducts, agreementProductsLink } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
-import { getAgreementLabels } from '@/utils/api-util'
-import { sortAlphabetically } from '@/utils/sort-util'
-import { ChevronRightIcon } from '@navikt/aksel-icons'
-import { HStack, Heading, Link } from '@navikt/ds-react'
+import { categories } from '@/utils/category-util'
+import { HGrid, Heading, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useCallback, useMemo } from 'react'
-import useSWR from 'swr'
-import AutocompleteSearch from './AutocompleteSearch'
 
 interface Props {
-  searchOpen: boolean
   menuOpen: boolean
-
   setMenuOpen: (open: boolean) => void
-  setSearchOpen: (open: boolean) => void
 }
 
-const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }: Props) => {
-  const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
-    keepPreviousData: true,
-  })
-
-  const router = useRouter()
-
-  const onSearch = useCallback(
-    (searchTerm: string) => {
-      setSearchOpen(false)
-      router.push('/sok?term=' + searchTerm)
-    },
-    [router, setSearchOpen]
-  )
-
-  const sortedAgreements = useMemo(() => {
-    if (!agreements) return []
-    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
-    // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
-
-    return filteredData
-  }, [agreements])
-
+const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
   return (
     <>
       {menuOpen && (
         <div className="burgermenu-container">
-          <div className="burgermenu-container__content spacing-vertical--medium  main-wrapper--xlarge">
-            <>
-              <HStack>
-                <div>
-                  <Heading level="2" size="small">
-                    Avtale med NAV
-                  </Heading>
-                  <ul>
-                    <li>
-                      <Link
-                        className="burgermenu-container__link"
-                        as={NextLink}
-                        href="/rammeavtale"
-                        onClick={() => {
-                          setMenuOpen(false)
-                          logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
-                        }}
-                      >
-                        <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
-                        Avtaler med NAV
-                      </Link>
+          <div className="burgermenu-container__content main-wrapper--large">
+            <HGrid columns={{ xs: 1, md: '4fr 3fr' }} gap={{ xs: '8', md: '16' }}>
+              <div>
+                <Heading level="2" size="small">
+                  KATEGORIER
+                </Heading>
+
+                <ul className="burgermenu-container__category-list">
+                  {categories.map((category) => (
+                    <li key={category.name}>
+                      <HGrid gap="6" columns={'50px auto'}>
+                        <div className="burgermenu-container__category-icon">{category.icon}</div>
+                        <Link
+                          as={NextLink}
+                          href={category.link}
+                          onClick={() => {
+                            setMenuOpen(false)
+                          }}
+                        >
+                          {category.name}
+                        </Link>
+                      </HGrid>
                     </li>
-                    <li>
-                      <Link
-                        className="burgermenu-container__link"
-                        as={NextLink}
-                        href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
-                        onClick={() => {
-                          setMenuOpen(false)
-                          logNavigationEvent(
-                            'meny',
-                            'rammeavtale',
-                            'Slik kan du se at et hjelpemiddel er på avtale med NAV'
-                          )
-                        }}
-                      >
-                        <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
-                        Slik kan du se at et hjelpemiddel er på avtale med NAV
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <Heading level="2" size="small" style={{ marginTop: '4px' }}>
-                    Leverandører
-                  </Heading>
-                  <ul>
-                    <li>
-                      <Link
-                        className="burgermenu-container__link"
-                        as={NextLink}
-                        href="/leverandorer"
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
-                        Leverandøroversikt
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </HStack>
-              <Heading level="2" size="small" style={{ marginTop: '4px' }}>
-                Hjelpemidler på avtale med NAV
-              </Heading>
-              <ul>
-                {sortedAgreements.map((agreement) => (
-                  <li key={agreement.id}>
+                  ))}
+                </ul>
+              </div>
+
+              <VStack gap={{ xs: '1', md: '5' }}>
+                <Heading level="2" size="small">
+                  SNARVEIER
+                </Heading>
+                <VStack as={'ul'} gap={{ xs: '4', md: '6' }}>
+                  <li>
                     <Link
-                      className="burgermenu-container__link"
                       as={NextLink}
-                      href={agreementProductsLink(agreement.id)}
+                      href="/rammeavtale"
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent('meny', 'hurtigoversikt', agreement.label)
+                        logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
                       }}
                     >
-                      <ChevronRightIcon aria-hidden title="Pil mote høyre" fontSize="1.5rem" />
-                      {agreement.label}
+                      Avtaler med NAV
                     </Link>
                   </li>
-                ))}
-              </ul>
-            </>
-          </div>
-        </div>
-      )}
-
-      {searchOpen && (
-        <div className="burgermenu-container">
-          <div className="burgermenu-container__content">
-            <AutocompleteSearch onSearch={onSearch} />
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigationEvent(
+                          'meny',
+                          'rammeavtale',
+                          'Slik kan du se at et hjelpemiddel er på avtale med NAV'
+                        )
+                      }}
+                    >
+                      Slik kan du se at et hjelpemiddel er på avtale med NAV
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href="/leverandorer"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigationEvent('meny', 'leverandorer', 'Leverandøroversikt')
+                      }}
+                    >
+                      Leverandøroversikt
+                    </Link>
+                  </li>
+                </VStack>
+              </VStack>
+            </HGrid>
           </div>
         </div>
       )}

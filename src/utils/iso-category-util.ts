@@ -1,24 +1,24 @@
 type Filters = [string, string][]
 
-export const getIsoCategoriesForLevel = (isoCode: string, level: number): Filters => {
+const getIsoCategoriesForLevel = (isoCode: string, level: number): Filters => {
   const isoCodeForLevel = level === 1 ? '' : getIsoCodeForLevel(isoCode, level - 1)
   return Object.entries(IsoCategories).filter(([key, _]) => key.length === level * 2 && key.startsWith(isoCodeForLevel))
 }
 
-export function getIsoCategoryName(key: string): string | undefined {
+function getIsoCategoryName(key: string): string | undefined {
   return IsoCategories[key as keyof typeof IsoCategories]
 }
 
-export const getIsoCodeForLevel = (isoCode: string, level: number): string => {
+const getIsoCodeForLevel = (isoCode: string, level: number): string => {
   const isoCodeArray = getIsoCodeLevels(isoCode)
   return isoCodeArray?.at(level - 1) ? isoCodeArray.slice(0, level).join('') : ''
 }
 
-export const getIsoCodeLevels = (isoCode: string): Array<string> | null => {
+const getIsoCodeLevels = (isoCode: string): Array<string> | null => {
   return isoCode.match(new RegExp('.{1,2}', 'g'))
 }
 
-export const IsoCategories = {
+const IsoCategories = {
   '04': 'Hjelpemidler for å måle, støtte, trene eller erstatte kroppsfunksjoner',
   '0403': 'Hjelpemidler for respirasjon',
   '040303': 'Luftbehandlere ved innånding',

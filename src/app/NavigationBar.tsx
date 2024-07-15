@@ -2,10 +2,11 @@ import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Button, Hide, Show } from '@navikt/ds-react'
+import { Button, HStack, Hide, Show } from '@navikt/ds-react'
+import classNames from 'classnames'
 import Image from 'next/image'
 import NextLink from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
@@ -13,7 +14,9 @@ import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
+  const searchParams = useSearchParams()
+  const searchParamValue = searchParams.get('term')
+  const [searchOpen, setSearchOpen] = useState(searchParamValue !== '' && searchParamValue !== null)
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -24,6 +27,7 @@ const NavigationBar = () => {
   useOnClickOutside(outerContainerRef, () => {
     setMenuOpen(false)
   })
+
   //TODO: Bruke useSearchParems her?
   const onSearch = useCallback(
     (searchTerm: string) => {
@@ -50,8 +54,8 @@ const NavigationBar = () => {
   )
 
   useEffect(() => {
-    setMenuOpenGlobalState(menuOpen || searchOpen)
-  }, [menuOpen, searchOpen, setMenuOpenGlobalState])
+    setMenuOpenGlobalState(menuOpen)
+  }, [menuOpen, setMenuOpenGlobalState])
 
   useKeyboardShortcut({
     key: 'Escape',
@@ -60,63 +64,57 @@ const NavigationBar = () => {
 
   return (
     <nav className="nav" ref={outerContainerRef}>
-      <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
+      <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
-          <div className="nav-top-container__logo-and-search-field">
-            <NextLink href="/" className="logo">
-              <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
-              <span className="logo__text">
-                <span> / </span>
-                <span>FinnHjelpemiddel</span>
-              </span>
-            </NextLink>
-            <Hide below="md" className="nav-top-container__search">
-              <AutocompleteSearch onSearch={onSearch} />
+          <NextLink href="/" className={classNames('logo', { hide: searchOpen })}>
+            <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
+            <Hide as="span" below="md" className="logo__text">
+              <span> / </span>
+              <span>FinnHjelpemiddel</span>
             </Hide>
-          </div>
+          </NextLink>
 
-          <div className="nav-top-container__menu-icons">
-            <Show below="md" asChild>
-              {!menuOpen && (
-                <Button
-                  className="nav-top-container__search-button"
-                  icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
-                  variant="tertiary"
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  aria-expanded={searchOpen}
-                />
+          <div className="nav-top-container__menu-buttons-container">
+            <HStack wrap={false}>
+              {searchOpen && (
+                <div className="nav-top-container_search">
+                  <AutocompleteSearch onSearch={onSearch} secondary />
+                </div>
               )}
-            </Show>
-            {!searchOpen && (
-              <>
-                <Hide below="md">
-                  <Button
-                    icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-expanded={menuOpen}
-                  >
-                    Meny
-                  </Button>
-                </Hide>
-                <Show below="md" asChild>
-                  <Button
-                    icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
-                    variant="tertiary"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-expanded={menuOpen}
-                  />
-                </Show>
-              </>
-            )}
+              <Button
+                className="nav-top-container__search-button"
+                icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
+                variant="tertiary"
+                onClick={() => setSearchOpen(!searchOpen)}
+                aria-expanded={searchOpen}
+              >
+                {searchOpen ? '' : 'Søk'}
+              </Button>
+            </HStack>
+
+            <>
+              <Hide below="md">
+                <Button
+                  icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
+                  variant="tertiary"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  aria-expanded={menuOpen}
+                >
+                  Meny
+                </Button>
+              </Hide>
+              <Show below="md" asChild>
+                <Button
+                  icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
+                  variant="tertiary"
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  aria-expanded={menuOpen}
+                />
+              </Show>
+            </>
           </div>
         </div>
-        <BurgerMenuContent
-          menuOpen={menuOpen}
-          searchOpen={searchOpen}
-          setMenuOpen={setMenuOpen}
-          setSearchOpen={setSearchOpen}
-        />
+        <BurgerMenuContent menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       </div>
     </nav>
   )

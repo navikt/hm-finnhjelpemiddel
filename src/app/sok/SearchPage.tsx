@@ -21,7 +21,7 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { initialFiltersFormState, visFilters } from '@/utils/filter-util'
+import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
@@ -139,6 +139,7 @@ export default function SearchPage() {
   const filters: FilterData = {
     ...(filtersFromData ?? initialFilters),
     vis: visFilters,
+    category: categoryFilters,
     status: { values: [] },
   }
 
@@ -208,7 +209,11 @@ export default function SearchPage() {
           )}
 
           <VStack gap={{ xs: '4', lg: '8' }}>
-            <HStack justify="space-between" className="results__header">
+            <HStack
+              justify={{ xs: 'start', lg: 'space-between' }}
+              gap={{ xs: '4', lg: '0' }}
+              className="results__header"
+            >
               <Show above="lg">
                 <VStack justify="space-between">
                   <Heading level="2" size="small" ref={searchResultRef}>
