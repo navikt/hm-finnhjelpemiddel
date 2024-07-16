@@ -16,7 +16,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
   useEffect(() => {
     const attachmentId_Url = window.location.hash.slice(1)
     if (attachmentId_Url === id && cardRef.current) {
-      cardRef.current.style.scrollMargin = '60px'
+      // cardRef.current.style.scrollMargin = '60px'
       cardRef.current.scrollIntoView({ behavior: 'smooth' })
 
       setIsOpen(true)
