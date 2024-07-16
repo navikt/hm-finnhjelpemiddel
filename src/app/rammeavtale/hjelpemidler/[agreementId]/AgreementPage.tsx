@@ -138,7 +138,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
       <VStack className="main-wrapper--large spacing-bottom--large hide-print">
-        <VStack gap="5" className="spacing-top--xlarge spacing-bottom--large">
+        <VStack gap="5" className="spacing-vertical--xlarge">
           <HStack gap="3">
             <Link as={NextLink} href="/" variant="subtle">
               Hjelpemidler på avtale med NAV
@@ -155,7 +155,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
           </div>
 
-          <HGrid gap="4" columns={{ xs: 1, sm: 3 }} className="spacing-bottom--large spacing-top--small">
+          <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
             <LinkPanelLocal
               href={`/rammeavtale/${agreement.id}#Tilbehor`}
               icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} />}
