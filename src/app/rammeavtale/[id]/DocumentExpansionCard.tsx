@@ -21,7 +21,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
 
       setIsOpen(true)
     }
-  }, [cardRef.current])
+  }, [id])
 
   return (
     <ExpansionCard

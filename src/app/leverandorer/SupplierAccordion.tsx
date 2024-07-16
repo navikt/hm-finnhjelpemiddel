@@ -23,7 +23,7 @@ export const SupplierAccordion = ({ supplier }: Props) => {
 
       setIsOpen(true)
     }
-  }, [supplierRef.current, supplierId_url])
+  }, [supplierId_url, supplier.id])
 
   return (
     <Accordion.Item id={supplier.id} ref={supplierRef} open={isOpen}>
