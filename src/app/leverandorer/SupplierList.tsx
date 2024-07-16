@@ -3,17 +3,12 @@
 import { SupplierAccordion } from '@/app/leverandorer/SupplierAccordion'
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
-import { useEffect } from 'react'
 
 type Props = {
   suppliers: Supplier[]
   letter: string
 }
 const SupplierList = ({ suppliers, letter }: Props) => {
-  useEffect(() => {
-    scrollToElement(window.location.hash.slice(1))
-  }, [])
-
   return (
     <div>
       <Heading id={letter} size={'xlarge'} className="spacing-bottom--small">
@@ -33,10 +28,3 @@ const SupplierList = ({ suppliers, letter }: Props) => {
 }
 
 export default SupplierList
-
-function scrollToElement(id: string) {
-  if (!id) return
-  const el = document.getElementById(id)
-  if (!el) return
-  el.scrollIntoView()
-}

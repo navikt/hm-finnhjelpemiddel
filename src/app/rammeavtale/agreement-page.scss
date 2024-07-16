@@ -5,6 +5,11 @@
 .agreement-page {
   background-color: #faefee;
 
+  &__heading {
+    max-width: 670px;
+    color: $ny-nav-purple-dark;
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
