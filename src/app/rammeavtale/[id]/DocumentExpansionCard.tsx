@@ -33,7 +33,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
     >
       <ExpansionCard.Header id={id}>
         <ExpansionCard.Title as="h2" size="small" style={{ fontSize: '18px' }}>
-          {isOpen ? `${attachment.title} åpen` : `${attachment.title} lukket`}
+          {attachment.title}
         </ExpansionCard.Title>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
