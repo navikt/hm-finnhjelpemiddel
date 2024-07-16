@@ -166,7 +166,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               href={`/rammeavtale/${agreement.id}#Reservedeler`}
               icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} />}
               title="Reservedeler"
-              description="Gå til avtalens reservedelslister i PDF-format"
+              description="Gå til avtalens reservedellister i PDF-format"
             />
             <LinkPanelLocal
               href={`/rammeavtale/${agreement.id}`}
