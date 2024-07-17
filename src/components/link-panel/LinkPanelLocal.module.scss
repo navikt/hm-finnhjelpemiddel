@@ -12,6 +12,11 @@
   color: $a-deepblue-700;
   align-items: flex-start;
 
+  &:active {
+    color: $a-text-action-selected;
+    background-color: transparent;
+  }
+
   @include mixins.for-size(tablet-up) {
     padding: $a-spacing-4;
   }
@@ -21,12 +26,10 @@
     text-underline-offset: 2px;
   }
 
-  &__title:active {
-    color: $a-text-action-selected;
-    background-color: transparent;
-  }
-  &__title:hover {
-    text-decoration: none;
+  &:hover {
+    .linkPanel__title {
+      text-decoration: none;
+    }
   }
 
   &__description {
