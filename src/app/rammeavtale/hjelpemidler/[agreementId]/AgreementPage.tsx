@@ -157,7 +157,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
           <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
             <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}#Tilbehor`}
+              href={`/rammeavtale/${agreement.id}/tilbehor`}
               icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} />}
               title="Tilbehør"
               description="Gå til avtalens tilbehørslister i PDF-format"
