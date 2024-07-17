@@ -1,0 +1,35 @@
+@use '../../styles/_mixins';
+@import '@navikt/ds-tokens/dist/tokens';
+
+.linkPanel {
+  box-shadow: $a-shadow-small;
+  border-radius: $a-border-radius-large;
+  padding: $a-spacing-2;
+  max-width: 28rem;
+  text-decoration: inherit;
+  text-decoration-thickness: 0.0625em;
+  text-underline-offset: 2px;
+  color: $a-deepblue-700;
+  align-items: flex-start;
+
+  @include mixins.for-size(tablet-up) {
+    padding: $a-spacing-4;
+  }
+
+  &__title {
+    text-decoration-line: underline;
+    text-underline-offset: 2px;
+  }
+
+  &__title:active {
+    color: $a-text-action-selected;
+    background-color: transparent;
+  }
+  &__title:hover {
+    text-decoration: none;
+  }
+
+  &__description {
+    color: $a-text-default;
+  }
+}

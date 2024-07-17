@@ -7,21 +7,22 @@ import { useEffect, useRef, useState } from 'react'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
+import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import { logNavigationEvent } from '@/utils/amplitude'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
-import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
+import { dateToString } from '@/utils/string-util'
+import { FilesIcon, FilterIcon, PackageIcon, TrashIcon, WrenchIcon } from '@navikt/aksel-icons'
 import {
   Alert,
+  BodyLong,
   BodyShort,
   Button,
   HGrid,
   HStack,
   Heading,
   Link,
-  LinkPanel,
   Loader,
   Popover,
   VStack,
@@ -137,26 +138,43 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
       <VStack className="main-wrapper--large spacing-bottom--large hide-print">
-        <VStack gap="5" className="spacing-top--large spacing-bottom--large">
+        <VStack gap="5" className="spacing-vertical--xlarge">
           <HStack gap="3">
             <Link as={NextLink} href="/" variant="subtle">
               Hjelpemidler på avtale med NAV
             </Link>
             <BodyShort textColor="subtle">/</BodyShort>
           </HStack>
-          <Heading level="1" size="large">
+          <Heading level="1" size="large" className="agreement-page__heading">
             {`${agreement.title}`}
           </Heading>
+          <div>
+            <BodyLong size="small">
+              {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
+            </BodyLong>
+            <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
+          </div>
 
-          <LinkPanel
-            href={`/rammeavtale/${agreement.id}`}
-            className="agreement-page__link-to-search"
-            onClick={() =>
-              logNavigationEvent('hurtigoversikt', 'rammeavtale', 'Tilbehør, reservedeler og dokumenter med mer')
-            }
-          >
-            Om rammeavtalen med NAV
-          </LinkPanel>
+          <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
+            <LinkPanelLocal
+              href={`/rammeavtale/${agreement.id}#Tilbehor`}
+              icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} />}
+              title="Tilbehør"
+              description="Gå til avtalens tilbehørslister i PDF-format"
+            />
+            <LinkPanelLocal
+              href={`/rammeavtale/${agreement.id}#Reservedeler`}
+              icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} />}
+              title="Reservedeler"
+              description="Gå til avtalens reservedellister i PDF-format"
+            />
+            <LinkPanelLocal
+              href={`/rammeavtale/${agreement.id}`}
+              icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} />}
+              title="Om avtalen"
+              description="Les om avtalen og se tilhørende dokumenter"
+            />
+          </HGrid>
         </VStack>
 
         <FormProvider {...formMethods}>

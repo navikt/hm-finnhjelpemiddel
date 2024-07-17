@@ -1,3 +1,4 @@
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
@@ -9,7 +10,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
-import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -63,7 +63,7 @@ const NavigationBar = () => {
       <div className={menuOpen || searchOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <div className="nav-top-container__logo-and-search-field">
-            <NextLink href="/" className="logo">
+            <NextLink href="/" className="logo" onClick={() => setMenuOpen(false)}>
               <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
               <span className="logo__text">
                 <span> / </span>

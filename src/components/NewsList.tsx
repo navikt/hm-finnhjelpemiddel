@@ -10,9 +10,8 @@ const NewsList = () => {
     keepPreviousData: true,
   })
 
-  const newsMigrationDate = new Date('April 01, 2024')
-
   const sortedData = useMemo(() => {
+    const newsMigrationDate = new Date('April 01, 2024')
     if (!data) return []
     const sorted = [...data] // Create a copy of data to avoid modifying it in place
 
