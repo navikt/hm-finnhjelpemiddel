@@ -4,8 +4,8 @@ Frontend for søk og visning av hjelpemidler
 
 Lever under:
 
--   prod-gcp: https://finnhjelpemiddel.nav.no/
--   dev-gcp: https://finnhjelpemiddel.intern.dev.nav.no/
+- prod-gcp: https://finnhjelpemiddel.nav.no/
+- dev-gcp: https://finnhjelpemiddel.intern.dev.nav.no/
 
 Bygget på [nextjs](https://nextjs.org/).
 
@@ -24,7 +24,6 @@ I din `.bashrc` eller `.zshrc`, sett følgende miljøvariabel:
 
 Tokenet må autoriseres for bruk mot navikt-organisasjonen i Github (configure SSO knappen ved siden av tokenet i GitHub)
 
-
 ```bash
 npm run dev
 # or
@@ -37,7 +36,13 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 ### Portforward
 
+Logg inn på gcloud:
+`gcloud auth login`
+
+First time:
+`kubectl config set-context dev-gcp --namespace=teamdigihot`
+`kubectl config use-context dev-gcp --namespace=teamdigihot`
+
 To get products locally from 8080:
 
 `kubectl port-forward $(kubectl get pods -l app=hm-grunndata-search -o custom-columns=:metadata.name) 8080`
-
