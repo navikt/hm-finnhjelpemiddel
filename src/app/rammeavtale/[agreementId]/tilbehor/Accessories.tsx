@@ -11,7 +11,7 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large hide-print" gap="4" paddingBlock="4 0">
-      <Link as={NextLink} href={`/rammeavtale/hjelpemiddel/${agreement.id}`} variant="subtle">
+      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}`} variant="subtle">
         {`${agreement.title}`}
       </Link>
       <Heading level="1" size="large" className="agreement-page__heading">
