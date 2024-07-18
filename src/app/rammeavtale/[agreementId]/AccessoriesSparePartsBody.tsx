@@ -1,10 +1,9 @@
 'use client'
 
-import { BodyLong, BodyShort, Heading, HStack, Link, Pagination, Search, Select, Table, VStack } from '@navikt/ds-react'
+import {HStack, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import styles from "./AccessoriesSparPartsBody.module.scss"
 
-import ReadMore from '@/components/ReadMore'
 import { Agreement, agreementHasNoProducts } from '@/utils/agreement-util'
-import NextLink from 'next/link'
 import { useState } from 'react'
 
 const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
@@ -17,8 +16,8 @@ const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
     <>
       <HStack gap="4">
         <form role="search">
-          <Search label="Søk alle NAV sine sider" variant="secondary" />
-          <Select label="Hvilket land har du bosted i?">
+          <Search label="Søk alle NAV sine sider" variant="secondary" className={styles.alignFiltration} />
+          <Select label="Hvilket land har du bosted i?" className={styles.alignFiltration}>
             <option value="">Velg land</option>
             <option value="norge">Norge</option>
             <option value="sverige">Sverige</option>
