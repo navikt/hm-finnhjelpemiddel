@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react'
-import Accessories from '@/app/rammeavtale/[agreementId]/tilbehor/Accessories'
 import { Metadata } from 'next'
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
+import SpareParts from '@/app/rammeavtale/[agreementId]/reservedeler/SpareParts'
 
 type Props = {
   params: { agreementId: string }
@@ -23,5 +23,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AccessoriesPage({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
 
-  return <Accessories agreement={agreement} />
+  return <SpareParts agreement={agreement} />
 }
