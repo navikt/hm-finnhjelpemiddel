@@ -1,15 +1,38 @@
 'use client'
 
-import { HStack, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import { Alert, HStack, Pagination, Search, Select, Table } from '@navikt/ds-react'
 
 import { Agreement } from '@/utils/agreement-util'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import etacData from '../../../../mockData/Etac.json'
+import lev2Data from '../../../../mockData/lev2.json'
+
+type Supplier = {
+  name: string
+  data: SupplierData[]
+}
+
+type SupplierData = {
+  HMSArtnr: string
+  Beskrivelse: string
+  LeverandørensArtnr: string
+}
 
 const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
   const [page, setPage] = useState(1)
   const rowsPerPage = 14
+  const [selectSupplier, setSelectSupplier] = useState<string>('Etac')
 
-  console.log(agreement)
+  const suppliers: Supplier[] = [
+    { name: 'Etac', data: etacData },
+    { name: 'Leverandør 2', data: lev2Data },
+  ]
+
+  const updateSelectedSupplier = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectSupplier(event.target.value)
+  }
+
+  const supplierData = suppliers.find((supplier) => supplier.name === selectSupplier)?.data || []
 
   return (
     <>
@@ -18,11 +41,12 @@ const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
           <div>
             <Search label="Søk" hideLabel={false} variant="secondary" />
           </div>
-          <Select label="Hvilket land har du bosted i?">
-            <option value="">Velg land</option>
-            <option value="norge">Norge</option>
-            <option value="sverige">Sverige</option>
-            {/*<option value="danmark">Danmark</option>  //Bytte options med map*/}
+          <Select label="Velg leverandør" onChange={updateSelectedSupplier}>
+            {suppliers.map((supplier, i) => (
+              <option key={i} value={supplier.name}>
+                {supplier.name}
+              </option>
+            ))}
           </Select>
         </HStack>
       </form>
@@ -35,31 +59,23 @@ const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <Table.Row>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-            <Table.HeaderCell scope="row">Test</Table.HeaderCell>
-          </Table.Row>
+          {supplierData.map((item, i) => (
+            <Table.Row key={i}>
+              <Table.DataCell> {item.HMSArtnr}</Table.DataCell>
+              <Table.DataCell> {item.Beskrivelse}</Table.DataCell>
+              <Table.DataCell> {item.LeverandørensArtnr}</Table.DataCell>
+            </Table.Row>
+          ))}
         </Table.Body>
       </Table>
-      {false && (
+      {/*    {false && (
         <Pagination
           page={page}
           onPageChange={setPage}
           count={Math.ceil(3 / rowsPerPage)} //Erstatt 3 med tilbeør /reservedeler datalengde
           size="small"
         />
-      )}
+      )}*/}
     </>
   )
 }
