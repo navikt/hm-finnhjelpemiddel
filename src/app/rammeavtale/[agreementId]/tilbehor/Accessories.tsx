@@ -5,9 +5,13 @@ import { Heading, Link, VStack } from '@navikt/ds-react'
 import { Agreement } from '@/utils/agreement-util'
 import NextLink from 'next/link'
 import AccessoriesSparePartsBody from '@/app/rammeavtale/[agreementId]/AccessoriesSparePartsBody'
+import rawE from "../../../../../mockData/Etac.json"
 
 const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const headingRef = useRef<HTMLHeadingElement>(null)
+
+  const data = rawE;
+  console.log(data);
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large hide-print" gap="4" paddingBlock="4 0">
