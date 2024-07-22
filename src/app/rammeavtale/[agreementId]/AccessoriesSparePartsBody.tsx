@@ -7,6 +7,10 @@ import React, { useState } from 'react'
 import etacData from '../../../../mockData/Etac.json'
 import lev2Data from '../../../../mockData/lev2.json'
 import levUData from '../../../../mockData/levUData.json'
+import { useSearchParams, useRouter, usePathname } from 'next/navigation'
+import useSWR from 'swr'
+import { fetchProductTEMPNAME, FetchSeriesResponse } from '@/utils/api-util'
+import { Product } from '@/utils/product-util'
 
 type Supplier = {
   name: string
@@ -23,6 +27,19 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   const [page, setPage] = useState(1)
   const rowsPerPage = 15
   const [selectSupplier, setSelectSupplier] = useState<string>('Etac')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const searchTermValue = searchParams.get('accessoriesTerm') || ''
+  const [inputValue, setInputValue] = useState(searchTermValue ?? '')
+  const [shouldFetch, setShouldFetch] = useState(true)
+
+  const { data, isLoading, error } = useSWR<FetchSeriesResponse>(
+    shouldFetch ? { agreementId: agreement.id, searchTerm: searchTermValue } : null,
+    fetchProductTEMPNAME,
+    { keepPreviousData: true })
+
+  console.log({ data })
 
   const suppliers: Supplier[] = [
     { name: 'Etac', data: etacData },
@@ -35,6 +52,15 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     setPage(1)
   }
 
+  const onSearch = () => {
+    router.replace(
+      `${pathname}?accessoriesTerm=${inputValue}`,
+      {
+        scroll: false,
+      },
+    )
+    setShouldFetch(true)
+  }
   const supplierData = suppliers.find((supplier) => supplier.name === selectSupplier)?.data || []
   const supplierName = suppliers.find((supplier) => supplier.name === selectSupplier)?.name
 
@@ -43,20 +69,28 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
 
   return (
     <>
-      <form role="search">
-        <HStack gap="10">
-          <div>
-            <Search label="Søk" hideLabel={false} variant="secondary" />
-          </div>
-          <Select label="Velg leverandør" onChange={updateSelectedSupplier}>
-            {suppliers.map((supplier, i) => (
-              <option key={i} value={supplier.name}>
-                {supplier.name}
-              </option>
-            ))}
-          </Select>
-        </HStack>
-      </form>
+      <HStack gap="10">
+        <div>
+          <Search label="Søk"
+                  hideLabel={false}
+                  variant="secondary"
+                  onChange={(value) => {
+                    setShouldFetch(false)
+                    setInputValue(value)
+                  }}
+                  onSearchClick={(searchTerm) => {
+                    onSearch()
+                  }}
+          />
+        </div>
+        <Select label="Velg leverandør" onChange={updateSelectedSupplier}>
+          {suppliers.map((supplier, i) => (
+            <option key={i} value={supplier.name}>
+              {supplier.name}
+            </option>
+          ))}
+        </Select>
+      </HStack>
       {supplierData.length === 0 ? (
         <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
           <Alert variant="info">
@@ -74,11 +108,11 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {sortData.map((item, i) => (
+              {data && data.products.map((item, i) => (
                 <Table.Row key={i}>
-                  <Table.DataCell> {item.HMSArtnr}</Table.DataCell>
-                  <Table.DataCell> {item.Beskrivelse}</Table.DataCell>
-                  <Table.DataCell> {item.LeverandørensArtnr}</Table.DataCell>
+                  <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
+                  <Table.DataCell> {item.title}</Table.DataCell>
+                  <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
                 </Table.Row>
               ))}
             </Table.Body>
@@ -86,11 +120,11 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
         )
       )}
 
-      {supplierData.length > rowsPerPage && (
+      {data && data.products.length > rowsPerPage && (
         <Pagination
           page={page}
           onPageChange={setPage}
-          count={Math.ceil(supplierData.length / rowsPerPage)}
+          count={Math.ceil(data.products.length / rowsPerPage)}
           size="small"
         />
       )}

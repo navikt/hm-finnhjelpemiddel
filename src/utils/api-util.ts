@@ -31,6 +31,7 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
+import body from '@navikt/ds-react/src/table/Body'
 
 export const PAGE_SIZE = 24
 
@@ -764,6 +765,49 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   })
 
   return res.json().then(mapAgreementLabels)
+}
+
+export const fetchProductTEMPNAME = ({ agreementId,searchTerm }: { agreementId: string, searchTerm:string }): Promise<FetchSeriesResponse> => {
+  const termQuery = {query_string:{
+    query:searchTerm,fields:["title"]
+  }}
+
+  let must: any[] = [{
+    term: {
+      'agreements.id': {
+        value: agreementId,
+      },
+    }
+  }]
+
+  if (searchTerm) {
+    must = must.concat([termQuery])
+  }
+
+  const query = {
+    bool: {
+      must:must,
+    },
+  }
+  const filters = {}
+
+   return fetch(HM_SEARCH_URL + `/products/_search`, {
+    next: {revalidate: 900},
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size:100,
+      query,
+      //aggs: { ...filters }
+      })
+  }).then(
+     (res) =>res.json()
+   ).then((data) => {
+     console.log({data})
+     return { products : mapProductsFromCollapse(data)}
+   })
 }
 
 export async function getSuppliers(letter: string): Promise<Supplier[]> {
