@@ -1,11 +1,12 @@
 'use client'
 
-import { Alert, HStack, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import { Alert, HGrid, HStack, Pagination, Search, Select, Table } from '@navikt/ds-react'
 
 import { Agreement } from '@/utils/agreement-util'
 import React, { useState } from 'react'
 import etacData from '../../../../mockData/Etac.json'
 import lev2Data from '../../../../mockData/lev2.json'
+import levUData from '../../../../mockData/levUData.json'
 
 type Supplier = {
   name: string
@@ -18,21 +19,27 @@ type SupplierData = {
   LeverandørensArtnr: string
 }
 
-const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
+const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreement; itemType: string }) => {
   const [page, setPage] = useState(1)
-  const rowsPerPage = 14
+  const rowsPerPage = 15
   const [selectSupplier, setSelectSupplier] = useState<string>('Etac')
 
   const suppliers: Supplier[] = [
     { name: 'Etac', data: etacData },
     { name: 'Leverandør 2', data: lev2Data },
+    { name: 'Leverandør uten data', data: levUData },
   ]
 
   const updateSelectedSupplier = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectSupplier(event.target.value)
+    setPage(1)
   }
 
   const supplierData = suppliers.find((supplier) => supplier.name === selectSupplier)?.data || []
+  const supplierName = suppliers.find((supplier) => supplier.name === selectSupplier)?.name
+
+  let sortData = supplierData
+  sortData = sortData.slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   return (
     <>
@@ -50,32 +57,43 @@ const AccessoriesSparePartsBody = ({ agreement }: { agreement: Agreement }) => {
           </Select>
         </HStack>
       </form>
-      <Table zebraStripes>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
-            <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-            <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {supplierData.map((item, i) => (
-            <Table.Row key={i}>
-              <Table.DataCell> {item.HMSArtnr}</Table.DataCell>
-              <Table.DataCell> {item.Beskrivelse}</Table.DataCell>
-              <Table.DataCell> {item.LeverandørensArtnr}</Table.DataCell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
-      {/*    {false && (
+      {supplierData.length === 0 ? (
+        <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+          <Alert variant="error">
+            Det er ingen {itemType} tilknyttet {supplierName}.
+          </Alert>
+        </HGrid>
+      ) : (
+        supplierData && (
+          <Table zebraStripes>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
+                <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+                <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {sortData.map((item, i) => (
+                <Table.Row key={i}>
+                  <Table.DataCell> {item.HMSArtnr}</Table.DataCell>
+                  <Table.DataCell> {item.Beskrivelse}</Table.DataCell>
+                  <Table.DataCell> {item.LeverandørensArtnr}</Table.DataCell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        )
+      )}
+
+      {supplierData.length > rowsPerPage && (
         <Pagination
           page={page}
           onPageChange={setPage}
-          count={Math.ceil(3 / rowsPerPage)} //Erstatt 3 med tilbeør /reservedeler datalengde
+          count={Math.ceil(supplierData.length / rowsPerPage)}
           size="small"
         />
-      )}*/}
+      )}
     </>
   )
 }

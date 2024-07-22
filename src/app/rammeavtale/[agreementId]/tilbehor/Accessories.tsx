@@ -8,6 +8,7 @@ import AccessoriesSparePartsBody from '@/app/rammeavtale/[agreementId]/Accessori
 
 const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const pageTitle = 'Tilbehør'
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large hide-print" gap="4" paddingBlock="4 0">
@@ -15,9 +16,9 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
         {`${agreement.title}`}
       </Link>
       <Heading level="1" size="large" className="agreement-page__heading">
-        Tilbehør
+        {pageTitle}
       </Heading>
-      <AccessoriesSparePartsBody agreement={agreement} />
+      <AccessoriesSparePartsBody agreement={agreement} itemType={pageTitle.toLowerCase()} />
     </VStack>
   )
 }
