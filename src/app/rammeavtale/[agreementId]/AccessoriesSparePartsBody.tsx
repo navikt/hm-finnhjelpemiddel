@@ -9,7 +9,7 @@ import lev2Data from '../../../../mockData/lev2.json'
 import levUData from '../../../../mockData/levUData.json'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import useSWR from 'swr'
-import { fetchProductTEMPNAME, FetchSeriesResponse } from '@/utils/api-util'
+import { fetchProductTEMPNAME, FetchSeriesResponse, FilterData, getFiltersAgreement } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 
 type Supplier = {
@@ -26,7 +26,7 @@ type SupplierData = {
 const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreement; itemType: string }) => {
   const [page, setPage] = useState(1)
   const rowsPerPage = 15
-  const [selectSupplier, setSelectSupplier] = useState<string>('Etac')
+  const [currentSelectedSupplier, setcurrentSelectedSupplier] = useState<string>('')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -40,16 +40,15 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     { keepPreviousData: true }
   )
 
-  const suppliers: Supplier[] = [
-    { name: 'Etac', data: etacData },
-    { name: 'Leverandør 2', data: lev2Data },
-    { name: 'Leverandør uten data', data: levUData },
-  ]
+  const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
+    { agreementId: agreement.id, type: 'filterdata' },
+    getFiltersAgreement,
+    {
+      keepPreviousData: true,
+    }
+  )
+  const supplierNames = filtersFromData && filtersFromData.leverandor.values
 
-  const updateSelectedSupplier = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectSupplier(event.target.value)
-    setPage(1)
-  }
 
   const onSearch = () => {
     router.replace(`${pathname}?accessoriesTerm=${inputValue}`, {
@@ -57,11 +56,8 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     })
     setShouldFetch(true)
   }
-  const supplierData = suppliers.find((supplier) => supplier.name === selectSupplier)?.data || []
-  const supplierName = suppliers.find((supplier) => supplier.name === selectSupplier)?.name
 
-  let sortData = supplierData
-  sortData = sortData.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  //const supplierName = suppliers.key.find((supplier) => supplier.name === selectSupplier)?.name
 
   return (
     <>
@@ -80,10 +76,10 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
             }}
           />
         </div>
-        <Select label="Velg leverandør" onChange={updateSelectedSupplier}>
-          {suppliers.map((supplier, i) => (
-            <option key={i} value={supplier.name}>
-              {supplier.name}
+        <Select label="Velg leverandør" onChange={(val) =>setcurrentSelectedSupplier(val.target.value)}>
+          {supplierNames && supplierNames.map((supplier, i) => (
+            <option key={i} value={supplier.key}>
+              {supplier.key}
             </option>
           ))}
         </Select>
@@ -93,11 +89,11 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
       {data && data.products.length === 0 ? (
         <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
           <Alert variant="info">
-            Det er ingen {itemType} tilknyttet {supplierName}.
+            Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
           </Alert>
         </HGrid>
       ) : (
-        supplierData && (
+        (
           <Table zebraStripes>
             <Table.Header>
               <Table.Row>
