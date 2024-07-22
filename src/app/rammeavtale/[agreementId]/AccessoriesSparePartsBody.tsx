@@ -59,7 +59,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
       </form>
       {supplierData.length === 0 ? (
         <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
-          <Alert variant="error">
+          <Alert variant="info">
             Det er ingen {itemType} tilknyttet {supplierName}.
           </Alert>
         </HGrid>
