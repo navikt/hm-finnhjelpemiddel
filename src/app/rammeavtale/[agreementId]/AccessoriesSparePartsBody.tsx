@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, HGrid, HStack, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import { Alert, HGrid, HStack, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
 
 import { Agreement } from '@/utils/agreement-util'
 import React, { useState } from 'react'
@@ -37,9 +37,8 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   const { data, isLoading, error } = useSWR<FetchSeriesResponse>(
     shouldFetch ? { agreementId: agreement.id, searchTerm: searchTermValue } : null,
     fetchProductTEMPNAME,
-    { keepPreviousData: true })
-
-  console.log({ data })
+    { keepPreviousData: true }
+  )
 
   const suppliers: Supplier[] = [
     { name: 'Etac', data: etacData },
@@ -53,12 +52,9 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   }
 
   const onSearch = () => {
-    router.replace(
-      `${pathname}?accessoriesTerm=${inputValue}`,
-      {
-        scroll: false,
-      },
-    )
+    router.replace(`${pathname}?accessoriesTerm=${inputValue}`, {
+      scroll: false,
+    })
     setShouldFetch(true)
   }
   const supplierData = suppliers.find((supplier) => supplier.name === selectSupplier)?.data || []
@@ -71,16 +67,17 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     <>
       <HStack gap="10">
         <div>
-          <Search label="Søk"
-                  hideLabel={false}
-                  variant="secondary"
-                  onChange={(value) => {
-                    setShouldFetch(false)
-                    setInputValue(value)
-                  }}
-                  onSearchClick={(searchTerm) => {
-                    onSearch()
-                  }}
+          <Search
+            label="Søk"
+            hideLabel={false}
+            variant="secondary"
+            onChange={(value) => {
+              setShouldFetch(false)
+              setInputValue(value)
+            }}
+            onSearchClick={(searchTerm) => {
+              onSearch()
+            }}
           />
         </div>
         <Select label="Velg leverandør" onChange={updateSelectedSupplier}>
@@ -91,7 +88,9 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
           ))}
         </Select>
       </HStack>
-      {supplierData.length === 0 ? (
+      {isLoading && <Loader size="3xlarge" />}
+
+      {data && data.products.length === 0 ? (
         <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
           <Alert variant="info">
             Det er ingen {itemType} tilknyttet {supplierName}.
@@ -108,13 +107,14 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {data && data.products.map((item, i) => (
-                <Table.Row key={i}>
-                  <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
-                  <Table.DataCell> {item.title}</Table.DataCell>
-                  <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
-                </Table.Row>
-              ))}
+              {data &&
+                data.products.map((item, i) => (
+                  <Table.Row key={i}>
+                    <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
+                    <Table.DataCell> {item.title}</Table.DataCell>
+                    <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
+                  </Table.Row>
+                ))}
             </Table.Body>
           </Table>
         )
