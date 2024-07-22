@@ -10,6 +10,7 @@ import reportAccessibility from '@/utils/reportAccessibility'
 import Footer from '@/components/layout/Footer'
 import NavigationBar from '@/app/NavigationBar'
 import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
+import Skiplink from '@/components/skiplinks/Skiplink'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -35,8 +36,10 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <Suspense>
       {isMobileOverlayOpen && <div id="cover-main" />}
+      <span id={'top-element'} tabIndex={-1} />
       <div id="modal-container"></div>
       <header>
+        <Skiplink />
         <NavigationBar />
       </header>
 
