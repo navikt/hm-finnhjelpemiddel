@@ -26,7 +26,7 @@ type SupplierData = {
 const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreement; itemType: string }) => {
   const [page, setPage] = useState(1)
   const rowsPerPage = 15
-  const [currentSelectedSupplier, setcurrentSelectedSupplier] = useState<string>('')
+  const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string>('ALL')
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -37,7 +37,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   const { data, isLoading, error } = useSWR<FetchSeriesResponse>(
     shouldFetch ? { agreementId: agreement.id, searchTerm: searchTermValue } : null,
     fetchProductTEMPNAME,
-    { keepPreviousData: true }
+    { keepPreviousData: true },
   )
 
   const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
@@ -45,10 +45,14 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     getFiltersAgreement,
     {
       keepPreviousData: true,
-    }
+    },
   )
   const supplierNames = filtersFromData && filtersFromData.leverandor.values
 
+
+  const handelSupplierFilter = (supplierName: string) => {
+    return currentSelectedSupplier === 'ALL' || supplierName === currentSelectedSupplier
+  }
 
   const onSearch = () => {
     router.replace(`${pathname}?accessoriesTerm=${inputValue}`, {
@@ -57,8 +61,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     setShouldFetch(true)
   }
 
-  //const supplierName = suppliers.key.find((supplier) => supplier.name === selectSupplier)?.name
-console.log(data)
+  console.log(data)
   return (
     <>
       <HStack gap="10">
@@ -76,9 +79,12 @@ console.log(data)
             }}
           />
         </div>
-        <Select label="Velg leverandør" onChange={(val) =>setcurrentSelectedSupplier(val.target.value)}>
+        <Select label="Velg leverandør" onChange={(val) => setCurrentSelectedSupplier(val.target.value)}>
+          <option key={0} value={'ALL'}>
+            Alle
+          </option>
           {supplierNames && supplierNames.map((supplier, i) => (
-            <option key={i} value={supplier.key}>
+            <option key={i + 1} value={supplier.key}>
               {supplier.key}
             </option>
           ))}
@@ -105,14 +111,14 @@ console.log(data)
             <Table.Body>
               {data &&
                 data.products
-                  .filter((item) => item.supplierName === currentSelectedSupplier)
+                  .filter((item) => handelSupplierFilter(item.supplierName)) // not sure if this is necessry if we are searching
                   .map((item, i) => (
-                  <Table.Row key={i}>
-                    <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
-                    <Table.DataCell> {item.title}</Table.DataCell>
-                    <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
-                  </Table.Row>
-                ))}
+                    <Table.Row key={i}>
+                      <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
+                      <Table.DataCell> {item.title}</Table.DataCell>
+                      <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
+                    </Table.Row>
+                  ))}
             </Table.Body>
           </Table>
         )
