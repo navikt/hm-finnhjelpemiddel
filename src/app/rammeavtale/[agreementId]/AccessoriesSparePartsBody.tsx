@@ -58,7 +58,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   }
 
   //const supplierName = suppliers.key.find((supplier) => supplier.name === selectSupplier)?.name
-
+console.log(data)
   return (
     <>
       <HStack gap="10">
@@ -104,7 +104,9 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
             </Table.Header>
             <Table.Body>
               {data &&
-                data.products.map((item, i) => (
+                data.products
+                  .filter((item) => item.supplierName === currentSelectedSupplier)
+                  .map((item, i) => (
                   <Table.Row key={i}>
                     <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
                     <Table.DataCell> {item.title}</Table.DataCell>
