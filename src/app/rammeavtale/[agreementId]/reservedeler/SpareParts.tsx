@@ -19,6 +19,10 @@ const SpareParts = ({ agreement }: { agreement: Agreement }) => {
       <Heading level="1" size="large" className="agreement-page__heading">
         {pageTitle}
       </Heading>
+      <span>
+        Reservedeler er deler som ikke endrer hovedproduktets funksjon, men som erstatter en utslitt eller ødelagt del
+        på et produkt i standard utgave. De delene tilbehøret består av er også reservedeler.
+      </span>
       <AccessoriesSparePartsBody agreement={agreement} itemType={pageTitle.toLowerCase()} />
     </VStack>
   )

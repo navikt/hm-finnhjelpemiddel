@@ -788,7 +788,7 @@ export const fetchProductTEMPNAME = ({
   const termQuery = {
     query_string: {
       query: searchTerm,
-      fields: ['title'],
+      fields: ['title', 'hmsArtNr', 'supplier.name', 'supplierRef'],
     },
   }
   const selectedSupplierQuery = {

@@ -113,6 +113,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
             <Table.Row>
               <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
               <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Leverandør</Table.HeaderCell>
               <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -122,6 +123,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
                 <Table.Row key={i}>
                   <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
                   <Table.DataCell> {item.title}</Table.DataCell>
+                  <Table.DataCell> {item.supplierName}</Table.DataCell>
                   <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
                 </Table.Row>
               ))}

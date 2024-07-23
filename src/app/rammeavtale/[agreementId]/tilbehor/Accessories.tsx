@@ -18,6 +18,10 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
       <Heading level="1" size="large" className="agreement-page__heading">
         {pageTitle}
       </Heading>
+      <span>
+        Tilbehør er deler som endrer hovedproduktets funksjon. Tilbehør kan monteres i tillegg til, eller i stedet for
+        en del som er påmontert i en standard utgave av hovedproduktet.
+      </span>
       <AccessoriesSparePartsBody agreement={agreement} itemType={pageTitle.toLowerCase()} />
     </VStack>
   )
