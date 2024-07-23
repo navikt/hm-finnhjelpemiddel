@@ -12,7 +12,7 @@ import AgreementList from './rammeavtale/AgreementList'
 function Home() {
   return (
     <AnimateLayout>
-      <div className="home-page" id="hovedinnhold">
+      <div className="home-page">
         <VStack className="main-wrapper--large" gap={{ xs: '12', lg: '20' }}>
           <HStack gap={{ xs: '4', lg: '20' }}>
             <Hide below="lg">

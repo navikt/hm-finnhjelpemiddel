@@ -46,7 +46,7 @@ export default async function AgreementPage({ params }: Props) {
           <AnimateLayout>
             <div className="agreement-page__content main-wrapper--small">
               <article>
-                <div id="hovedinnhold">
+                <div>
                   <HStack gap="3">
                     <Link as={NextLink} href="/rammeavtale" variant="subtle">
                       Avtaler med NAV

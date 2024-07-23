@@ -36,14 +36,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <Suspense>
       {isMobileOverlayOpen && <div id="cover-main" />}
-      <span id={'top-element'} tabIndex={-1} />
       <div id="modal-container"></div>
       <header>
         <Skiplink />
         <NavigationBar />
       </header>
 
-      <main>
+      <main id="hovedinnhold">
         {isMenuOpen && <div id="cover-main" />}
         {children}
       </main>

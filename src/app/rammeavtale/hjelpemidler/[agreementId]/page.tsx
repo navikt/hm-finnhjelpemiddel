@@ -24,7 +24,6 @@ export default async function Page({ params }: Props) {
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
   return (
     <Suspense>
-      <div id="hovedinnhold"></div>
       <AgreementPage agreement={agreement} />
     </Suspense>
   )
