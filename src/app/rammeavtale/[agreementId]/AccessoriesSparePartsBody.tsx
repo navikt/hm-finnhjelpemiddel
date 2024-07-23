@@ -51,6 +51,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
 
 
   const handelSupplierFilter = (supplierName: string) => {
+    console.log(supplierName)
     return currentSelectedSupplier === 'ALL' || supplierName === currentSelectedSupplier
   }
 
@@ -61,7 +62,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     setShouldFetch(true)
   }
 
-  const sortData = data && data.products.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  const slicedData = data && data.products.slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   return (
     <>
@@ -93,7 +94,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
       </HStack>
       {isLoading && <Loader size="3xlarge" />}
 
-      {data && data.products.length === 0 ? (
+      {slicedData && slicedData.length === 0 ? (
         <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
           <Alert variant="info">
             Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
@@ -110,8 +111,8 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {sortData &&
-                sortData
+              {slicedData &&
+                slicedData
                   .filter((item) => handelSupplierFilter(item.supplierName)) // not sure if this is necessry if we are searching
                   .map((item, i) => (
                     <Table.Row key={i}>
