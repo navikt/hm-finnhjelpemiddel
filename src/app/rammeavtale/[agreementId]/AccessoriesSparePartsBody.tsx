@@ -102,11 +102,17 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
       {isLoading && <Loader size="3xlarge" />}
 
       {data && data.products.length === 0 ? (
-        <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
-          <Alert variant="info">
-            Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
-          </Alert>
-        </HGrid>
+        currentSelectedSupplier === null ? (
+          <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+            <Alert variant="info">Det er ingen treff på søket: {searchTermValue}.</Alert>
+          </HGrid>
+        ) : (
+          <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+            <Alert variant="info">
+              Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
+            </Alert>
+          </HGrid>
+        )
       ) : (
         <Table zebraStripes>
           <Table.Header>
