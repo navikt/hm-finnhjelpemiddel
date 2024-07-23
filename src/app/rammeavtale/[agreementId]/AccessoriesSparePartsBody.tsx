@@ -61,7 +61,8 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     setShouldFetch(true)
   }
 
-  console.log(data)
+  const sortData = data && data.products.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+
   return (
     <>
       <HStack gap="10">
@@ -109,8 +110,8 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {data &&
-                data.products
+              {sortData &&
+                sortData
                   .filter((item) => handelSupplierFilter(item.supplierName)) // not sure if this is necessry if we are searching
                   .map((item, i) => (
                     <Table.Row key={i}>
