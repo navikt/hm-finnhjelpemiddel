@@ -67,14 +67,15 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
       <HStack gap="10">
         <div>
           <Search
+            defaultValue={inputValue}
             label="Søk"
             hideLabel={false}
-            variant="secondary"
+            variant="simple"
             onChange={(value) => {
               setShouldFetch(false)
               setInputValue(value)
             }}
-            onSearchClick={(searchTerm) => {
+            onKeyUp={(searchTerm) => {
               onSearch()
             }}
           />
