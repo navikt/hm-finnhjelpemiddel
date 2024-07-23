@@ -767,47 +767,76 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   return res.json().then(mapAgreementLabels)
 }
 
-export const fetchProductTEMPNAME = ({ agreementId,searchTerm }: { agreementId: string, searchTerm:string }): Promise<FetchSeriesResponse> => {
-  const termQuery = {query_string:{
-    query:searchTerm,fields:["title"]
-  }}
+export type FetchProductsWithPaginationResponse = {
+  products: Product[]
+  totalHits: number
+}
 
-  let must: any[] = [{
-    term: {
-      'agreements.id': {
-        value: agreementId,
+export const fetchProductTEMPNAME = ({
+  agreementId,
+  searchTerm,
+  selectedSupplier,
+  currentPage,
+  pageSize,
+}: {
+  agreementId: string
+  searchTerm: string
+  selectedSupplier?: string
+  currentPage: number
+  pageSize: number
+}): Promise<FetchProductsWithPaginationResponse> => {
+  const termQuery = {
+    query_string: {
+      query: searchTerm,
+      fields: ['title'],
+    },
+  }
+  const selectedSupplierQuery = {
+    term: { 'supplier.name': { value: selectedSupplier } },
+  }
+
+  let must: any[] = [
+    {
+      term: {
+        'agreements.id': {
+          value: agreementId,
+        },
       },
-    }
-  }]
+    },
+  ]
 
   if (searchTerm) {
     must = must.concat([termQuery])
   }
+  if (selectedSupplier) {
+    must = must.concat([selectedSupplierQuery])
+  }
 
   const query = {
     bool: {
-      must:must,
+      must: must,
     },
   }
   const filters = {}
 
-   return fetch(HM_SEARCH_URL + `/products/_search`, {
-    next: {revalidate: 900},
+  return fetch(HM_SEARCH_URL + `/products/_search`, {
+    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      size:100,
+      size: pageSize,
+      from: pageSize * (currentPage - 1),
       query,
+      track_total_hits: true,
       //aggs: { ...filters }
-      })
-  }).then(
-     (res) =>res.json()
-   ).then((data) => {
-     console.log({data})
-     return { products : mapProductsFromCollapse(data)}
-   })
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return { products: mapProductsFromCollapse(data), totalHits: data.hits.total.value }
+    })
 }
 
 export async function getSuppliers(letter: string): Promise<Supplier[]> {

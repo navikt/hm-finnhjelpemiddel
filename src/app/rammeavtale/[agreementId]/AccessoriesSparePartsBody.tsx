@@ -4,29 +4,19 @@ import { Alert, HGrid, HStack, Loader, Pagination, Search, Select, Table } from 
 
 import { Agreement } from '@/utils/agreement-util'
 import React, { useState } from 'react'
-import etacData from '../../../../mockData/Etac.json'
-import lev2Data from '../../../../mockData/lev2.json'
-import levUData from '../../../../mockData/levUData.json'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import useSWR from 'swr'
-import { fetchProductTEMPNAME, FetchSeriesResponse, FilterData, getFiltersAgreement } from '@/utils/api-util'
-import { Product } from '@/utils/product-util'
-
-type Supplier = {
-  name: string
-  data: SupplierData[]
-}
-
-type SupplierData = {
-  HMSArtnr: string
-  Beskrivelse: string
-  LeverandørensArtnr: string
-}
+import {
+  FetchProductsWithPaginationResponse,
+  fetchProductTEMPNAME,
+  FilterData,
+  getFiltersAgreement,
+} from '@/utils/api-util'
 
 const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreement; itemType: string }) => {
   const [page, setPage] = useState(1)
   const rowsPerPage = 15
-  const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string>('ALL')
+  const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string | null>(null)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -34,10 +24,18 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   const [inputValue, setInputValue] = useState(searchTermValue ?? '')
   const [shouldFetch, setShouldFetch] = useState(true)
 
-  const { data, isLoading, error } = useSWR<FetchSeriesResponse>(
-    shouldFetch ? { agreementId: agreement.id, searchTerm: searchTermValue } : null,
+  const { data, isLoading, error } = useSWR<FetchProductsWithPaginationResponse>(
+    shouldFetch
+      ? {
+          agreementId: agreement.id,
+          searchTerm: searchTermValue,
+          selectedSupplier: currentSelectedSupplier,
+          pageSize: rowsPerPage,
+          currentPage: page,
+        }
+      : null,
     fetchProductTEMPNAME,
-    { keepPreviousData: true },
+    { keepPreviousData: true }
   )
 
   const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
@@ -45,15 +43,9 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     getFiltersAgreement,
     {
       keepPreviousData: true,
-    },
+    }
   )
   const supplierNames = filtersFromData && filtersFromData.leverandor.values
-
-
-  const handelSupplierFilter = (supplierName: string) => {
-    console.log(supplierName)
-    return currentSelectedSupplier === 'ALL' || supplierName === currentSelectedSupplier
-  }
 
   const onSearch = () => {
     router.replace(`${pathname}?accessoriesTerm=${inputValue}`, {
@@ -62,7 +54,13 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
     setShouldFetch(true)
   }
 
-  const slicedData = data && data.products.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  const handleOptions = (optionsTargetValue: string) => {
+    if (optionsTargetValue === 'ALL') {
+      setCurrentSelectedSupplier(null)
+    } else {
+      setCurrentSelectedSupplier(optionsTargetValue)
+    }
+  }
 
   return (
     <>
@@ -81,58 +79,57 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
             }}
           />
         </div>
-        <Select label="Velg leverandør" onChange={(val) => setCurrentSelectedSupplier(val.target.value)}>
+        <Select
+          label="Velg leverandør"
+          onChange={(option) => {
+            handleOptions(option.target.value)
+            setShouldFetch(true)
+            setPage(1)
+          }}
+        >
           <option key={0} value={'ALL'}>
             Alle
           </option>
-          {supplierNames && supplierNames.map((supplier, i) => (
-            <option key={i + 1} value={supplier.key}>
-              {supplier.key}
-            </option>
-          ))}
+          {supplierNames &&
+            supplierNames.map((supplier, i) => (
+              <option key={i + 1} value={supplier.key}>
+                {supplier.key}
+              </option>
+            ))}
         </Select>
       </HStack>
       {isLoading && <Loader size="3xlarge" />}
 
-      {slicedData && slicedData.length === 0 ? (
+      {data && data.products.length === 0 ? (
         <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
           <Alert variant="info">
             Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
           </Alert>
         </HGrid>
       ) : (
-        (
-          <Table zebraStripes>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {slicedData &&
-                slicedData
-                  .filter((item) => handelSupplierFilter(item.supplierName)) // not sure if this is necessry if we are searching
-                  .map((item, i) => (
-                    <Table.Row key={i}>
-                      <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
-                      <Table.DataCell> {item.title}</Table.DataCell>
-                      <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
-                    </Table.Row>
-                  ))}
-            </Table.Body>
-          </Table>
-        )
+        <Table zebraStripes>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {data &&
+              data.products.map((item, i) => (
+                <Table.Row key={i}>
+                  <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
+                  <Table.DataCell> {item.title}</Table.DataCell>
+                  <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
+                </Table.Row>
+              ))}
+          </Table.Body>
+        </Table>
       )}
 
-      {data && data.products.length > rowsPerPage && (
-        <Pagination
-          page={page}
-          onPageChange={setPage}
-          count={Math.ceil(data.products.length / rowsPerPage)}
-          size="small"
-        />
+      {data && data.totalHits > rowsPerPage && (
+        <Pagination page={page} onPageChange={setPage} count={Math.ceil(data.totalHits / rowsPerPage)} size="small" />
       )}
     </>
   )
