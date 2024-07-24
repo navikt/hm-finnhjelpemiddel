@@ -31,8 +31,6 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
-import body from '@navikt/ds-react/src/table/Body'
-
 export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
@@ -787,7 +785,7 @@ export const fetchProductTEMPNAME = ({
 }): Promise<FetchProductsWithPaginationResponse> => {
   const termQuery = {
     query_string: {
-      query: searchTerm,
+      query: searchTerm + '~4',
       fields: ['title', 'hmsArtNr', 'supplier.name', 'supplierRef'],
     },
   }

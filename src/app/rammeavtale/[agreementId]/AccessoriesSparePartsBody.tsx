@@ -71,13 +71,11 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
             label="Søk"
             hideLabel={false}
             variant="simple"
+            clearButton={false}
             onChange={(value) => {
-              setShouldFetch(false)
               setInputValue(value)
             }}
-            onKeyUp={(searchTerm) => {
-              onSearch()
-            }}
+            onKeyUp={onSearch}
           />
         </div>
         <Select
@@ -104,12 +102,18 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
       {data && data.products.length === 0 ? (
         currentSelectedSupplier === null ? (
           <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
-            <Alert variant="info">Det er ingen treff på søket: {searchTermValue}.</Alert>
+            <Alert variant="info">{`Det er ingen treff på søket '${searchTermValue}'.`}</Alert>
+          </HGrid>
+        ) : inputValue === '' ? (
+          <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+            <Alert variant="info">
+              Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
+            </Alert>
           </HGrid>
         ) : (
           <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
             <Alert variant="info">
-              Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
+              {`Det er ingen treff på søket '${searchTermValue}' for ${itemType} tilknyttet ${currentSelectedSupplier}.`}
             </Alert>
           </HGrid>
         )
@@ -120,7 +124,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
               <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
               <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
               <Table.HeaderCell scope="col">Leverandør</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Levart-nummer</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
