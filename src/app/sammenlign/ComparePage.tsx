@@ -19,7 +19,7 @@ import {
 import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
-import { ArrowUndoIcon } from '@navikt/aksel-icons'
+import { ArrowLeftIcon } from '@navikt/aksel-icons'
 import { useEffect, useState } from 'react'
 
 export default function ComparePage() {
@@ -157,7 +157,7 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
   return (
     <section>
       <Link as={NextLink} href="" onClick={() => router.back()}>
-        <ArrowUndoIcon title="a11y-title" fontSize="1.5rem" />
+        <ArrowLeftIcon fontSize="1.5rem" aria-hidden />
         Legg til flere produkter
       </Link>
       <div className="compare-table-container">

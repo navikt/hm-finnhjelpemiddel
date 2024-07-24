@@ -10,6 +10,7 @@ import reportAccessibility from '@/utils/reportAccessibility'
 import Footer from '@/components/layout/Footer'
 import NavigationBar from '@/app/NavigationBar'
 import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
+import { Link } from '@navikt/ds-react'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -37,10 +38,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       {isMobileOverlayOpen && <div id="cover-main" />}
       <div id="modal-container"></div>
       <header>
+        <Link href={'#hovedinnhold'} variant="subtle" className="skiplink">
+          Hopp til hovedinnhold
+        </Link>
         <NavigationBar />
       </header>
 
-      <main>
+      <main id="hovedinnhold">
         {isMenuOpen && <div id="cover-main" />}
         {children}
       </main>

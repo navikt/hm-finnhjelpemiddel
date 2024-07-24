@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 
-import { Variants, motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 
 import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button, HStack, Loader, VStack } from '@navikt/ds-react'
@@ -13,6 +13,7 @@ import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
 
 import PhotoSliderModal from './PhotoSliderModal'
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 
 type ImageSliderProps = {
   photos: Photo[]
@@ -55,6 +56,11 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [isLoading, setIsLoading] = useState(hasImages)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
+
+  useKeyboardShortcut({
+    key: 'Escape',
+    onKeyPressed: () => setModalIsOpen(false),
+  })
 
   const prevImage = () => {
     setIsLoading(true)
