@@ -17,6 +17,11 @@
     background-color: transparent;
   }
 
+  &:focus-visible {
+    color: $a-text-action-selected;
+    background-color: transparent;
+  }
+
   @include mixins.for-size(tablet-up) {
     padding: $a-spacing-4;
   }
