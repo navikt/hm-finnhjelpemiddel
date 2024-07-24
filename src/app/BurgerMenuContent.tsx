@@ -1,4 +1,4 @@
-import useOnClickOutside from '@/hooks/useOnClickOutside'
+import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { AgreementLabel, agreementHasNoProducts, agreementProductsLink } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
@@ -9,7 +9,6 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
-import AutocompleteSearch from './AutocompleteSearch'
 
 interface Props {
   searchOpen: boolean
