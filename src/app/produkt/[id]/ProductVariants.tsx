@@ -234,9 +234,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading level="2" size="large" spacing>
-        Egenskaper
-      </Heading>
       <BodyLong className="spacing-bottom--medium">
         {egenskaperText(
           product.title,

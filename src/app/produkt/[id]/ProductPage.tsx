@@ -32,49 +32,49 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-          <ProductPageTopInfo product={product} supplier={supplier} />
-          <ProductNavigationBar
-            isOnAgreement={isOnAgreement}
-            hasAccessories={hasAccessories}
-            hasSpareParts={hasSpareParts}
-          />
+        <ProductPageTopInfo product={product} supplier={supplier} />
+        <ProductNavigationBar
+          isOnAgreement={isOnAgreement}
+          hasAccessories={hasAccessories}
+          hasSpareParts={hasSpareParts}
+        />
 
-          <HStack justify="space-between">
-            <section
-              id="informasjonWrapper"
-              className="product-page__tabs spacing-top--xlarge"
-              aria-label="Beskrivelse og annen generell informasjon"
-            >
-              <span id="informasjon" />
-              <ProductInformation product={product} />
-            </section>
+        <HStack justify="space-between">
+          <section
+            className="product-page__tabs spacing-top--xlarge"
+            aria-label="Beskrivelse og annen generell informasjon"
+          >
+            <Heading level="2" size="large" spacing id="informasjon" tabIndex={-1}>
+              Beskrivelse
+            </Heading>
+            <ProductInformation product={product} />
+          </section>
 
-            {showHMSSuggestion && (
-              <aside className="spacing-top--large">
-                <HmsSuggestion product={product} />
-              </aside>
-            )}
-          </HStack>
+          {showHMSSuggestion && (
+            <aside className="spacing-top--large">
+              <HmsSuggestion product={product} />
+            </aside>
+          )}
+        </HStack>
         <section
-          id="egenskaperWrapper"
           className="product-page__product-variants spacing-vertical--xlarge"
           aria-label="Tabell med egenskaper på tvers av varianter som finnes"
         >
-          <span id="egenskaper" />
+          <Heading level="2" size="large" spacing id="egenskaper" tabIndex={-1}>
+            Egenskaper
+          </Heading>
           <ProductVariants product={product} />
         </section>
 
-        <section aria-label="Videolenker" id="videoerWrapper" className="spacing-vertical--xlarge">
-          <span id="videoer" />
-          <Heading level="3" size="large" spacing>
+        <section aria-label="Videolenker" className="spacing-vertical--xlarge">
+          <Heading level="2" size="large" spacing id="video" tabIndex={-1}>
             Video
           </Heading>
           <Videos videos={product.videos} />
         </section>
 
-        <section aria-label="Videolenker" id="dokumenterWrapper" className="spacing-vertical--xlarge">
-          <span id="dokumenter" />
-          <Heading level="3" size="large" spacing>
+        <section aria-label="Videolenker" className="spacing-vertical--xlarge">
+          <Heading level="2" size="large" spacing id="dokumenter" tabIndex={-1}>
             Dokumenter
           </Heading>
           <Documents documents={product.documents} />
@@ -83,12 +83,15 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         {productsOnPosts && productsOnPosts?.length > 0 && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
-              id="agreement-infoWrapper"
               className="product-page-bleed-section product-page-bleed-section__red spacing-top--small"
               aria-label="Informasjon om rammeavtalene hjelpemiddelet er på"
             >
-              <span id="agreement-info"></span>
-              <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+              <div>
+                <Heading level="2" size="large" spacing id="agreement-info" tabIndex={-1}>
+                  Avtale med Nav
+                </Heading>
+                <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+              </div>
             </section>
           </Bleed>
         )}
@@ -97,11 +100,9 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         {hasAccessories && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
-              id="accessoriesWrapper"
               className="product-page-bleed-section product-page-bleed-section__yellow  spacing-top--small"
               aria-label="Tilbehør som passer til hjelpemiddelet"
             >
-              <span id="accessories" />
               <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />
             </section>
           </Bleed>
@@ -111,11 +112,9 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         {hasSpareParts && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
-              id="sparepartsWrapper"
               className="product-page-bleed-section product-page-bleed-section__blue  spacing-top--small"
               aria-label="Reservedeler som passer til hjelpemiddelet"
             >
-              <span id="spareparts" />
               <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />
             </section>
           </Bleed>
@@ -126,10 +125,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 }
 
 const ProductNavigationBar = ({
-                                isOnAgreement,
-                                hasAccessories,
-                                hasSpareParts,
-                              }: {
+  isOnAgreement,
+  hasAccessories,
+  hasSpareParts,
+}: {
   isOnAgreement: boolean
   hasAccessories: boolean
   hasSpareParts: boolean
@@ -153,7 +152,7 @@ const ProductNavigationBar = ({
         Egenskaper
       </Button>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#videoer">
+      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#video">
         Video
       </Button>
 

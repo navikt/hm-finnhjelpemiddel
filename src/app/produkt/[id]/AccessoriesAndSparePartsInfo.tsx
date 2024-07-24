@@ -27,7 +27,14 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
   if (!products.length) {
     return (
       <VStack>
-        <Heading level="2" size="large" spacing ref={headingRef}>
+        <Heading
+          level="2"
+          size="large"
+          spacing
+          id={type === 'Accessories' ? 'tilbehør' : 'reservedeler'}
+          ref={headingRef}
+          tabIndex={-1}
+        >
           {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
         </Heading>
         <BodyLong>
