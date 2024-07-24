@@ -1,6 +1,6 @@
-import { fetchProductsWithVariants, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
+import { fetchProductsWithVariants, getProductsInPost, getProductWithVariants, getSupplier } from '@/utils/api-util'
 // import { accessoriesMock } from '@/utils/mock-data'
-import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
+import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'

@@ -1,10 +1,10 @@
 import AutocompleteSearch from '@/components/AutocompleteSearch'
-import { AgreementLabel, agreementHasNoProducts, agreementProductsLink } from '@/utils/agreement-util'
+import { agreementHasNoProducts, AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
-import { HStack, Heading, Link } from '@navikt/ds-react'
+import { Heading, HStack, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
@@ -64,7 +64,7 @@ const BurgerMenuContent = ({ searchOpen, menuOpen, setMenuOpen, setSearchOpen }:
                           logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
                         }}
                       >
-                        <ChevronRightIcon aria-hidden title="Pil mot høyre" fontSize="1.5rem" />
+                        <ChevronRightIcon aria-hidden fontSize="1.5rem" />
                         Avtaler med NAV
                       </Link>
                     </li>
