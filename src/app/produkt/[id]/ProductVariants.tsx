@@ -103,13 +103,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
     const isSearchTermInHms = hmsNumbers.includes(searchData.searchTerm?.toLowerCase())
     if (isSearchTermInHms) setSearchTermIsHms(true)
     const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
-
-    router.replace(
-      `${pathname}?${toSearchQueryString({ filters: relevantFilters }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
-      {
-        scroll: false,
-      }
+    const currentHash = window.location.hash
+    const newQueryString = toSearchQueryString(
+      { filters: relevantFilters },
+      isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : ''
     )
+    router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
   }, [filtersFromData])
 
   const formMethods = useForm<FilterFormStateProductPage>({
@@ -121,12 +122,19 @@ const ProductVariants = ({ product }: { product: Product }) => {
   })
 
   const onSubmit = () => {
-    router.replace(
-      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
-      {
-        scroll: false,
-      }
-    )
+    const currentHash = window.location.hash
+    const newQueryString = toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)
+    router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
+  }
+
+  const onRemoveSearchTerm = () => {
+    const currentHash = window.location.hash
+    const newQueryString = toSearchQueryString({ filters: formMethods.getValues().filters }, '')
+    router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
   }
 
   const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
@@ -225,12 +233,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
           ]
         : []
     )
-
-  const onRemoveSearchTerm = () => {
-    router.replace(`${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, '')}`, {
-      scroll: false,
-    })
-  }
 
   return (
     <>

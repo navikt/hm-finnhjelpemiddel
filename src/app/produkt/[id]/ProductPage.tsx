@@ -5,7 +5,7 @@ import File from '@/components/File'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { titleCapitalized } from '@/utils/string-util'
 import { Bleed, BodyShort, Button, Heading, HGrid, HStack } from '@navikt/ds-react'
-import NextLink from 'next/link'
+import { default as Link } from 'next/link'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
@@ -44,8 +44,11 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             className="product-page__tabs spacing-top--xlarge"
             aria-label="Beskrivelse og annen generell informasjon"
           >
-            <Heading level="2" size="large" spacing id="informasjon" tabIndex={-1}>
-              Beskrivelse
+            <div className="product-page__header_anchorOffset" id="informasjon" tabIndex={-1}></div>
+            <Heading level="2" size="large" spacing>
+              <Link href={'#informasjon'} className="product-page__header_anchorLink">
+                Beskrivelse
+              </Link>
             </Heading>
             <ProductInformation product={product} />
           </section>
@@ -60,22 +63,31 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           className="product-page__product-variants spacing-vertical--xlarge"
           aria-label="Tabell med egenskaper på tvers av varianter som finnes"
         >
-          <Heading level="2" size="large" spacing id="egenskaper" tabIndex={-1}>
-            Egenskaper
+          <div className="product-page__header_anchorOffset" id="egenskaper" tabIndex={-1}></div>
+          <Heading level="2" size="large" spacing>
+            <Link href={'#egenskaper'} className="product-page__header_anchorLink">
+              Egenskaper
+            </Link>
           </Heading>
           <ProductVariants product={product} />
         </section>
 
         <section aria-label="Videolenker" className="spacing-vertical--xlarge">
-          <Heading level="2" size="large" spacing id="video" tabIndex={-1}>
-            Video
+          <div className="product-page__header_anchorOffset" id="video" tabIndex={-1}></div>
+          <Heading level="2" size="large" spacing>
+            <Link href={'#video'} className="product-page__header_anchorLink">
+              Video
+            </Link>
           </Heading>
           <Videos videos={product.videos} />
         </section>
 
-        <section aria-label="Videolenker" className="spacing-vertical--xlarge">
-          <Heading level="2" size="large" spacing id="dokumenter" tabIndex={-1}>
-            Dokumenter
+        <section aria-label="Dokumenter" className="spacing-vertical--xlarge">
+          <div className="product-page__header_anchorOffset" id="dokumenter" tabIndex={-1}></div>
+          <Heading level="2" size="large" spacing>
+            <Link href={'#dokumenter'} className="product-page__header_anchorLink">
+              Dokumenter
+            </Link>
           </Heading>
           <Documents documents={product.documents} />
         </section>
@@ -87,8 +99,11 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               aria-label="Informasjon om rammeavtalene hjelpemiddelet er på"
             >
               <div>
-                <Heading level="2" size="large" spacing id="agreement-info" tabIndex={-1}>
-                  Avtale med Nav
+                <div className="product-page__header_anchorOffset" id="agreement-info" tabIndex={-1}></div>
+                <Heading level="2" size="large" spacing>
+                  <Link href={'#agreement-info'} className="product-page__header_anchorLink">
+                    Avtale med Nav
+                  </Link>
                 </Heading>
                 <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
               </div>
@@ -141,39 +156,39 @@ const ProductNavigationBar = ({
       columns={{ sm: 'repeat(1, minmax(0, 300px))', md: numberOfColumns }}
       gap={{ xs: '2', lg: '7' }}
     >
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#informasjon">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#informasjon">
         Generell informasjon
       </Button>
       {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
             Finn HMS-nummer
           </Button> */}
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#egenskaper">
         Egenskaper
       </Button>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#video">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#video">
         Video
       </Button>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#dokumenter">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#dokumenter">
         Dokumenter
       </Button>
 
       {isOnAgreement && (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#agreement-info">
+        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#agreement-info">
           Avtale med NAV
         </Button>
       )}
 
       {hasAccessories && (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#tilbehør">
+        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#tilbehør">
           Tilbehør
         </Button>
       )}
 
       {hasSpareParts && (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#reservedeler">
+        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#reservedeler">
           Reservedeler
         </Button>
       )}

@@ -9,8 +9,18 @@
   }
 
   h2 {
-    scroll-margin: 60px;
+    // scroll-margin: 60px;
     width: fit-content;
+  }
+
+  &__header_anchorOffset {
+    position: relative;
+    transform: translateY(calc(var(--a-spacing-20) * -1));
+  }
+
+  &__header_anchorLink {
+    color: inherit;
+    text-decoration: inherit;
   }
 
   @include mixins.for-size(tablet-up) {

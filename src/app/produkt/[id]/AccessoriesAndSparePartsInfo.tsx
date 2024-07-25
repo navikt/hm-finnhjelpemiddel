@@ -9,6 +9,7 @@ import { Product } from '@/utils/product-util'
 import ReadMore from '@/components/ReadMore'
 
 import ProductCard from '@/components/ProductCard'
+import Link from 'next/link'
 import './product-page.scss'
 
 type Props = {
@@ -27,16 +28,20 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
   if (!products.length) {
     return (
       <VStack>
-        <Heading
-          level="2"
-          size="large"
-          spacing
+        <div
+          className="product-page__header_anchorOffset"
           id={type === 'Accessories' ? 'tilbehør' : 'reservedeler'}
-          ref={headingRef}
           tabIndex={-1}
-        >
-          {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+        ></div>
+        <Heading level="2" size="large" spacing>
+          <Link
+            href={type === 'Accessories' ? '#tilbehør' : '#reservedeler'}
+            className="product-page__header_anchorLink"
+          >
+            {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+          </Link>
         </Heading>
+
         <BodyLong>
           Det er ingen {type === 'Accessories' ? 'tilbehør' : 'reservedeler'} registrert som passer til dette produktet
         </BodyLong>
@@ -46,8 +51,15 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
 
   return (
     <VStack>
-      <Heading level="2" size="medium" spacing ref={headingRef}>
-        {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+      <div
+        className="product-page__header_anchorOffset"
+        id={type === 'Accessories' ? 'tilbehør' : 'reservedeler'}
+        tabIndex={-1}
+      ></div>
+      <Heading level="2" size="large" spacing>
+        <Link href={type === 'Accessories' ? '#tilbehør' : '#reservedeler'} className="product-page__header_anchorLink">
+          {type === 'Accessories' ? 'Tilbehør' : 'Reservedeler'}
+        </Link>
       </Heading>
       <HStack gap="4">
         {firstProducts.map((acc, i) => (
