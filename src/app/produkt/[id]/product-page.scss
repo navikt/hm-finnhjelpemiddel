@@ -243,32 +243,6 @@
       }
     }
   }
-
-  .dot {
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    background-color: $a-blue-100;
-    border-radius: 50%;
-  }
-
-  .dot:hover {
-    cursor: pointer;
-    background-color: $a-blue-200;
-  }
-
-  .dot:disabled {
-    width: 24px;
-    height: 24px;
-    background-color: $a-blue-400;
-    border-radius: 50%;
-    opacity: 1;
-  }
-
-  .dot:disabled:hover,
-  .dot:disabled:focus {
-    cursor: not-allowed;
-  }
 }
 
 .agreement-summary {
