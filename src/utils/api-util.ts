@@ -784,9 +784,12 @@ export const fetchProductTEMPNAME = ({
   pageSize: number
 }): Promise<FetchProductsWithPaginationResponse> => {
   const termQuery = {
-    query_string: {
-      query: searchTerm + '~4',
+    multi_match: {
+      query: searchTerm,
+      type: 'bool_prefix',
+      operator: 'and',
       fields: ['title', 'hmsArtNr', 'supplier.name', 'supplierRef'],
+      lenient: true,
     },
   }
   const selectedSupplierQuery = {
@@ -810,11 +813,6 @@ export const fetchProductTEMPNAME = ({
     must = must.concat([selectedSupplierQuery])
   }
 
-  const query = {
-    bool: {
-      must: must,
-    },
-  }
   const filters = {}
 
   return fetch(HM_SEARCH_URL + `/products/_search`, {
@@ -826,7 +824,11 @@ export const fetchProductTEMPNAME = ({
     body: JSON.stringify({
       size: pageSize,
       from: pageSize * (currentPage - 1),
-      query,
+      query: {
+        bool: {
+          must: must,
+        },
+      },
       track_total_hits: true,
       //aggs: { ...filters }
     }),
