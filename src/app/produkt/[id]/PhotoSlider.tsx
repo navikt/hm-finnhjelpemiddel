@@ -7,13 +7,13 @@ import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
 
 import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Button, HStack, Loader, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
 
-import PhotoSliderModal from './PhotoSliderModal'
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
+import PhotoSliderModal from './PhotoSliderModal'
 
 type ImageSliderProps = {
   photos: Photo[]
@@ -201,7 +201,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
           )}
         </div>
         {numberOfImages > 1 && (
-          <HStack justify="space-between" className="navigation-bar">
+          <HStack justify="space-between" className="navigation-bar" align={'center'}>
             {numberOfImages > 1 && (
               <Button
                 aria-label="Forrige bilde"
@@ -213,31 +213,9 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 icon={<ChevronLeftIcon aria-hidden height={50} width={50} />}
               />
             )}
-            <HStack className="dots" align="center" gap="2">
-              {[...Array(numberOfImages).keys()].map((index) => {
-                if (index !== active) {
-                  return (
-                    <Button
-                      aria-label={`bilde ${index + 1} av ${numberOfImages}`}
-                      key={index}
-                      className={'dot'}
-                      onClick={() => {
-                        setActive(index)
-                      }}
-                    />
-                  )
-                } else {
-                  return (
-                    <Button
-                      disabled={true}
-                      aria-label={`Valgt bilde. Bilde ${index + 1} av ${numberOfImages}`}
-                      key={index}
-                      className={'dot'}
-                    />
-                  )
-                }
-              })}
-            </HStack>
+            <BodyShort size="large">
+              {active + 1} / {numberOfImages}
+            </BodyShort>
             {numberOfImages > 1 && (
               <Button
                 aria-label="Neste bilde"
