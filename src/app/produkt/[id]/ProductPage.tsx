@@ -1,3 +1,4 @@
+
 import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -14,7 +15,6 @@ import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
 import { ProductsOnPost } from './page'
-import { useFlag } from "@/toggles/context";
 
 type ProductProps = {
   product: Product
@@ -30,12 +30,9 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   const hasSpareParts = spareParts.length > 0
   const showHMSSuggestion = product.isoCategory.startsWith('1222')
 
-  const flag = useFlag("adminreg.test")
-
   return (
     <AnimateLayout>
       <div>
-        {flag.enabled && <div>{flag.name} is enabled</div>}
         <ProductPageTopInfo product={product} supplier={supplier} />
         <ProductNavigationBar
           isOnAgreement={isOnAgreement}

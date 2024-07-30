@@ -1,3 +1,5 @@
+'use client'
+
 import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -9,6 +11,7 @@ import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
 import { QrCodeComponent } from './QrCode'
+import { useFlag } from "@/toggles/context";
 
 type ProductPageTopInfoProps = {
   product: Product
@@ -24,8 +27,10 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
   const allVariantsExpired = product.variants.every((variant) => variant.status === 'INACTIVE')
   const allVariantsExpiredDates = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
+  const flag = useFlag("adminreg.test")
   return (
     <>
+      {flag.enabled && <div>{flag.name} is enabled</div>}
       <HGrid
         columns={{ xs: '1fr', md: '500px  390px' }}
         aria-label="Bilder og nøkkelinformasjon"
