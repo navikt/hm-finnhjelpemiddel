@@ -1,3 +1,4 @@
+
 import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -140,10 +141,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 }
 
 const ProductNavigationBar = ({
-  isOnAgreement,
-  hasAccessories,
-  hasSpareParts,
-}: {
+                                isOnAgreement,
+                                hasAccessories,
+                                hasSpareParts,
+                              }: {
   isOnAgreement: boolean
   hasAccessories: boolean
   hasSpareParts: boolean

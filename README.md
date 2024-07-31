@@ -46,3 +46,11 @@ First time:
 To get products locally from 8080:
 
 `kubectl port-forward $(kubectl get pods -l app=hm-grunndata-search -o custom-columns=:metadata.name) 8080`
+
+### Feature toggles
+
+Feature toggles er satt opp i [unleash](https://unleash.nais.io/). 
+Toggles kan kun brukes i client-komponenter per nå via useFlag(name: string) hook.
+Toggles administreres i unleash UI https://teamdigihot-unleash-web.iap.nav.cloud.nais.io/
+
+Appen henter kun inn toggles definert i `src/utils/featureToggles.ts` så evt. nye toggles må legges til her.
