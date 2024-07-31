@@ -13,6 +13,7 @@ import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
 import { Link } from '@navikt/ds-react'
 import { useFeatureFlags } from "@/app/FeatureApi";
 import { FlagProvider } from "@/toggles/context";
+import { LOCAL_TOGGLES } from "@/toggles/toggles";
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -20,7 +21,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   const { isMenuOpen } = useMenuStore()
   const { isMobileOverlayOpen } = useMobileOverlayStore()
 
-  const toggles = useFeatureFlags();
+
+  const toggles = useToggles();
+
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
@@ -61,5 +64,10 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
 }
 
 reportAccessibility(React)
+
+function useToggles() {
+  const featureFlags = useFeatureFlags();
+  return process.env.NODE_ENV === 'development' ? LOCAL_TOGGLES : featureFlags;
+}
 
 export default LayoutProvider
