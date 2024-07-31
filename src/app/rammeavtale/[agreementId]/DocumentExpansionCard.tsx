@@ -27,7 +27,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
     <ExpansionCard
       ref={cardRef}
       size="small"
-      aria-label="Heading-size small demo"
+      aria-label={`Inneholder dokumenter tilknyttet ${attachment.title}`}
       open={isOpen}
       onToggle={() => setIsOpen(!isOpen)}
     >

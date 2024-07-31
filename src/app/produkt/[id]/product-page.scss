@@ -8,6 +8,21 @@
     max-width: 700px;
   }
 
+  h2 {
+    // scroll-margin: 60px;
+    width: fit-content;
+  }
+
+  &__header_anchorOffset {
+    position: relative;
+    transform: translateY(calc(var(--a-spacing-20) * -1));
+  }
+
+  &__header_anchorLink {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
   @include mixins.for-size(tablet-up) {
     section:not(.product-page-bleed-section) {
       padding-left: 12px;
@@ -228,32 +243,6 @@
       }
     }
   }
-
-  .dot {
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    background-color: $a-blue-100;
-    border-radius: 50%;
-  }
-
-  .dot:hover {
-    cursor: pointer;
-    background-color: $a-blue-200;
-  }
-
-  .dot:disabled {
-    width: 24px;
-    height: 24px;
-    background-color: $a-blue-400;
-    border-radius: 50%;
-    opacity: 1;
-  }
-
-  .dot:disabled:hover,
-  .dot:disabled:focus {
-    cursor: not-allowed;
-  }
 }
 
 .agreement-summary {
@@ -411,28 +400,4 @@
       object-fit: contain;
     }
   }
-}
-
-// -- Scroll-offset wrappers
-
-#informasjonWrapper,
-#egenskaperWrapper,
-#videoerWrapper,
-#dokumenterWrapper,
-#agreement-infoWrapper {
-  position: relative;
-}
-
-#informasjon,
-#egenskaper,
-#videoer,
-#dokumenter,
-#agreement-info {
-  position: absolute;
-  top: -35px;
-  @include mixins.for-size(tablet-up) {
-    top: -160px;
-  }
-
-  left: 0;
 }

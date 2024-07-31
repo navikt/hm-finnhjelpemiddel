@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
- * Middleware is run on every document request, it
- * generates unleash session id
+ * Middleware is run on every document request
  */
 export default async function middleware(req: NextRequest): Promise<NextResponse> {
   const requestHeaders = new Headers(req.headers)

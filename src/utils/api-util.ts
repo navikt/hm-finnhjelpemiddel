@@ -31,6 +31,8 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
+import { Fetcher } from "swr";
+
 export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
@@ -1139,4 +1141,30 @@ export async function getNews(): Promise<News[]> {
     }),
   })
   return res.json().then(mapAllNews)
+}
+
+export const fetcherGET: Fetcher<any, string> = (url) =>
+  fetch(url, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      return res.json().then((data) => {
+        throw new CustomError(data.errorMessage || res.statusText, res.status);
+      });
+    }
+    return res.json();
+  });
+
+export class CustomError extends Error {
+  status: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = "CustomError";
+    this.status = statusCode;
+  }
 }

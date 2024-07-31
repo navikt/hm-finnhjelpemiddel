@@ -111,7 +111,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais-dev.yaml,.nais/unleash-apitoken.yaml
+          RESOURCE: .nais/nais-dev.yaml
           VAR: image=${{ env.docker_image }}
 
   deploy-to-prod:
@@ -125,5 +125,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/nais-prod.yaml,.nais/unleash-apitoken.yaml
+          RESOURCE: .nais/nais-prod.yaml
           VAR: image=${{ env.docker_image }}

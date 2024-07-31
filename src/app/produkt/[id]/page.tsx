@@ -1,6 +1,6 @@
-import { fetchProductsWithVariants, getProductWithVariants, getProductsInPost, getSupplier } from '@/utils/api-util'
+import { fetchProductsWithVariants, getProductsInPost, getProductWithVariants, getSupplier } from '@/utils/api-util'
 // import { accessoriesMock } from '@/utils/mock-data'
-import { Product, mapProductFromSeriesId, mapProductsFromCollapse } from '@/utils/product-util'
+import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import AccessoryOrSparePartPage from './AccessoryOrSparePartPage'
 import ProductPage from './ProductPage'
 import './product-page.scss'
+import { useFlag } from "@/toggles/context";
 
 export interface ProductsOnPost {
   agreementId: string
@@ -31,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProduktPage({ params }: Props) {
+
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
 

@@ -1,3 +1,4 @@
+
 import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -5,7 +6,7 @@ import File from '@/components/File'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { titleCapitalized } from '@/utils/string-util'
 import { Bleed, BodyShort, Button, Heading, HGrid, HStack } from '@navikt/ds-react'
-import NextLink from 'next/link'
+import { default as Link } from 'next/link'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
@@ -32,50 +33,62 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-          <ProductPageTopInfo product={product} supplier={supplier} />
-          <ProductNavigationBar
-            isOnAgreement={isOnAgreement}
-            hasAccessories={hasAccessories}
-            hasSpareParts={hasSpareParts}
-          />
+        <ProductPageTopInfo product={product} supplier={supplier} />
+        <ProductNavigationBar
+          isOnAgreement={isOnAgreement}
+          hasAccessories={hasAccessories}
+          hasSpareParts={hasSpareParts}
+        />
 
-          <HStack justify="space-between">
-            <section
-              id="informasjonWrapper"
-              className="product-page__tabs spacing-top--xlarge"
-              aria-label="Beskrivelse og annen generell informasjon"
-            >
-              <span id="informasjon" />
-              <ProductInformation product={product} />
-            </section>
+        <HStack justify="space-between">
+          <section
+            className="product-page__tabs spacing-top--xlarge"
+            aria-label="Beskrivelse og annen generell informasjon"
+          >
+            <div className="product-page__header_anchorOffset" id="informasjon" tabIndex={-1}></div>
+            <Heading level="2" size="large" spacing>
+              <Link href={'#informasjon'} className="product-page__header_anchorLink">
+                Beskrivelse
+              </Link>
+            </Heading>
+            <ProductInformation product={product} />
+          </section>
 
-            {showHMSSuggestion && (
-              <aside className="spacing-top--large">
-                <HmsSuggestion product={product} />
-              </aside>
-            )}
-          </HStack>
+          {showHMSSuggestion && (
+            <aside className="spacing-top--large">
+              <HmsSuggestion product={product} />
+            </aside>
+          )}
+        </HStack>
         <section
-          id="egenskaperWrapper"
           className="product-page__product-variants spacing-vertical--xlarge"
           aria-label="Tabell med egenskaper på tvers av varianter som finnes"
         >
-          <span id="egenskaper" />
+          <div className="product-page__header_anchorOffset" id="egenskaper" tabIndex={-1}></div>
+          <Heading level="2" size="large" spacing>
+            <Link href={'#egenskaper'} className="product-page__header_anchorLink">
+              Egenskaper
+            </Link>
+          </Heading>
           <ProductVariants product={product} />
         </section>
 
-        <section aria-label="Videolenker" id="videoerWrapper" className="spacing-vertical--xlarge">
-          <span id="videoer" />
-          <Heading level="3" size="large" spacing>
-            Video
+        <section aria-label="Videolenker" className="spacing-vertical--xlarge">
+          <div className="product-page__header_anchorOffset" id="video" tabIndex={-1}></div>
+          <Heading level="2" size="large" spacing>
+            <Link href={'#video'} className="product-page__header_anchorLink">
+              Video
+            </Link>
           </Heading>
           <Videos videos={product.videos} />
         </section>
 
-        <section aria-label="Videolenker" id="dokumenterWrapper" className="spacing-vertical--xlarge">
-          <span id="dokumenter" />
-          <Heading level="3" size="large" spacing>
-            Dokumenter
+        <section aria-label="Dokumenter" className="spacing-vertical--xlarge">
+          <div className="product-page__header_anchorOffset" id="dokumenter" tabIndex={-1}></div>
+          <Heading level="2" size="large" spacing>
+            <Link href={'#dokumenter'} className="product-page__header_anchorLink">
+              Dokumenter
+            </Link>
           </Heading>
           <Documents documents={product.documents} />
         </section>
@@ -83,12 +96,18 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         {productsOnPosts && productsOnPosts?.length > 0 && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
-              id="agreement-infoWrapper"
               className="product-page-bleed-section product-page-bleed-section__red spacing-top--small"
               aria-label="Informasjon om rammeavtalene hjelpemiddelet er på"
             >
-              <span id="agreement-info"></span>
-              <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+              <div>
+                <div className="product-page__header_anchorOffset" id="agreement-info" tabIndex={-1}></div>
+                <Heading level="2" size="large" spacing>
+                  <Link href={'#agreement-info'} className="product-page__header_anchorLink">
+                    Avtale med Nav
+                  </Link>
+                </Heading>
+                <AgreementInfo product={product} productsOnPosts={productsOnPosts} />
+              </div>
             </section>
           </Bleed>
         )}
@@ -97,11 +116,9 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         {hasAccessories && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
-              id="accessoriesWrapper"
               className="product-page-bleed-section product-page-bleed-section__yellow  spacing-top--small"
               aria-label="Tilbehør som passer til hjelpemiddelet"
             >
-              <span id="accessories" />
               <AccessoriesAndSparePartsInfo products={accessories} type={'Accessories'} />
             </section>
           </Bleed>
@@ -111,11 +128,9 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
         {hasSpareParts && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
-              id="sparepartsWrapper"
               className="product-page-bleed-section product-page-bleed-section__blue  spacing-top--small"
               aria-label="Reservedeler som passer til hjelpemiddelet"
             >
-              <span id="spareparts" />
               <AccessoriesAndSparePartsInfo products={accessories} type={'Spare parts'} />
             </section>
           </Bleed>
@@ -142,39 +157,39 @@ const ProductNavigationBar = ({
       columns={{ sm: 'repeat(1, minmax(0, 300px))', md: numberOfColumns }}
       gap={{ xs: '2', lg: '7' }}
     >
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#informasjon">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#informasjon">
         Generell informasjon
       </Button>
       {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
             Finn HMS-nummer
           </Button> */}
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#egenskaper">
         Egenskaper
       </Button>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#videoer">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#video">
         Video
       </Button>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#dokumenter">
+      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#dokumenter">
         Dokumenter
       </Button>
 
       {isOnAgreement && (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#agreement-info">
+        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#agreement-info">
           Avtale med NAV
         </Button>
       )}
 
       {hasAccessories && (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#tilbehør">
+        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#tilbehør">
           Tilbehør
         </Button>
       )}
 
       {hasSpareParts && (
-        <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#reservedeler">
+        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#reservedeler">
           Reservedeler
         </Button>
       )}
