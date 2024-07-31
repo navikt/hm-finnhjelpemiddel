@@ -32,6 +32,7 @@ import useSWR from 'swr'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
+import { useFlag } from '@/toggles/context'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -42,6 +43,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const showAccessoriesAndSparePartsList = useFlag("finnhjelpemiddel.vis-tilbehor-og-reservedel-lister")
+
+  console.log(showAccessoriesAndSparePartsList)
 
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
