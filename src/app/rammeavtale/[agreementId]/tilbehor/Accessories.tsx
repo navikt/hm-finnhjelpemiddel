@@ -1,14 +1,25 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Heading, Link, VStack } from '@navikt/ds-react'
 import { Agreement } from '@/utils/agreement-util'
 import NextLink from 'next/link'
 import AccessoriesSparePartsBody from '@/app/rammeavtale/[agreementId]/AccessoriesSparePartsBody'
+import { useFlag } from '@/toggles/context'
+import { useRouter } from 'next/navigation'
 
 const Accessories = ({ agreement }: { agreement: Agreement }) => {
+
   const headingRef = useRef<HTMLHeadingElement>(null)
   const pageTitle = 'Tilbehør'
+
+  const router = useRouter();
+  const shoulRedirect = !useFlag("finnhjelpemiddel.vis-tilbehor-og-reservedel-lister")
+  useEffect(() => {
+    if (shoulRedirect) {
+      router.push(`/rammeavtale/${agreement.id}#Tilbehor`)
+    }
+  }, [shoulRedirect])
 
   return (
     <VStack className="main-wrapper--large spacing-bottom--large hide-print" gap="4" paddingBlock="4 0">

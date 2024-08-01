@@ -45,7 +45,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const searchParams = useSearchParams()
   const showAccessoriesAndSparePartsList = useFlag("finnhjelpemiddel.vis-tilbehor-og-reservedel-lister")
 
-  console.log(showAccessoriesAndSparePartsList)
 
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
@@ -160,14 +159,24 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           </div>
 
           <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
+
             <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}/tilbehor`}
+              href={
+                showAccessoriesAndSparePartsList
+                  ? `/rammeavtale/${agreement.id}/tilbehor`
+                  : `/rammeavtale/${agreement.id}#Tilbehor`
+              }
               icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} />}
               title="Tilbehør"
               description="Gå til avtalens tilbehørslister i PDF-format"
             />
+
             <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}/reservedeler`}
+              href={
+                showAccessoriesAndSparePartsList
+                  ? `/rammeavtale/${agreement.id}/reservedeler`
+                  : `/rammeavtale/${agreement.id}#Reservedeler`
+              }
               icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} />}
               title="Reservedeler"
               description="Gå til avtalens reservedellister i PDF-format"
