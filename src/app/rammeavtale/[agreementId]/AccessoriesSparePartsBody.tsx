@@ -27,12 +27,12 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
   const { data, isLoading, error } = useSWR<FetchProductsWithPaginationResponse>(
     shouldFetch
       ? {
-          agreementId: agreement.id,
-          searchTerm: searchTermValue,
-          selectedSupplier: currentSelectedSupplier,
-          pageSize: rowsPerPage,
-          currentPage: page,
-        }
+        agreementId: agreement.id,
+        searchTerm: searchTermValue,
+        selectedSupplier: currentSelectedSupplier,
+        pageSize: rowsPerPage,
+        currentPage: page,
+      }
       : null,
     fetchProductTEMPNAME,
     { keepPreviousData: true }

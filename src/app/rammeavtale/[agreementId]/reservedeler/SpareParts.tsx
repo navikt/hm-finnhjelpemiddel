@@ -14,11 +14,9 @@ const SpareParts = ({ agreement }: { agreement: Agreement }) => {
   const pageTitle = 'Reservedeler'
 
   const router = useRouter();
-  const shoulRedirect = useFlag("finnhjelpemiddel.vis-tilbehor-og-reservedel-lister")
+  const useNewFeature = useFlag("finnhjelpemiddel.vis-tilbehor-og-reservedel-lister")
 
-
-  if (shoulRedirect) { router.push(`/rammeavtale/${agreement.id}#Reservedeler`) }
-  else {
+  if (useNewFeature.enabled) {
     return (
       <VStack className="main-wrapper--large spacing-bottom--large hide-print" gap="4" paddingBlock="4 0">
         <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}`} variant="subtle">
@@ -35,7 +33,9 @@ const SpareParts = ({ agreement }: { agreement: Agreement }) => {
       </VStack>
     )
   }
-
+  else {
+    router.replace(`/rammeavtale/${agreement.id}#Reservedeler`)
+  }
 }
 
 export default SpareParts

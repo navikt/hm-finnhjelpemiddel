@@ -162,7 +162,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
             <LinkPanelLocal
               href={
-                showAccessoriesAndSparePartsList
+                showAccessoriesAndSparePartsList.enabled
                   ? `/rammeavtale/${agreement.id}/tilbehor`
                   : `/rammeavtale/${agreement.id}#Tilbehor`
               }
@@ -173,7 +173,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
             <LinkPanelLocal
               href={
-                showAccessoriesAndSparePartsList
+                showAccessoriesAndSparePartsList.enabled
                   ? `/rammeavtale/${agreement.id}/reservedeler`
                   : `/rammeavtale/${agreement.id}#Reservedeler`
               }
