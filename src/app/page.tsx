@@ -6,6 +6,7 @@ import { Bleed, BodyLong, Heading, HGrid, Hide, HStack, Link, Show, VStack } fro
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
+import { logKlikk } from '@/utils/amplitude'
 import { Buildings2Icon, Chat2Icon, LocationPinIcon } from '@navikt/aksel-icons'
 import AgreementList from './rammeavtale/AgreementList'
 
@@ -107,20 +108,48 @@ const InformationNavLinks = () => {
       <VStack gap="7">
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
-          <Link href="https://www.nav.no/om-hjelpemidler">Informasjon om hjelpemidler og tilrettelegging</Link>
+          <Link
+            href="https://www.nav.no/om-hjelpemidler"
+            onClick={() => {
+              logKlikk('forsidelenke-informasjon-om-hjelpemidler')
+            }}
+          >
+            Informasjon om hjelpemidler og tilrettelegging
+          </Link>
         </HGrid>
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
-          <Link href="https://www.nav.no/om-hjelpemidler#hvem">Dette må du vite før du søker som privatperson</Link>
+          <Link
+            href="https://www.nav.no/om-hjelpemidler#hvem"
+            onClick={() => {
+              logKlikk('forsidelenke-dette-ma-du-vite-for-du-soker-som-privatperson')
+            }}
+          >
+            Dette må du vite før du søker som privatperson
+          </Link>
         </HGrid>
 
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
-          <Link href="https://www.nav.no/soknader">Søknad og skjema for hjelpemidler</Link>
+          <Link
+            href="https://www.nav.no/soknader"
+            onClick={() => {
+              logKlikk('forsidelenke-soknad-og-skjema-for-hjelpemidler')
+            }}
+          >
+            Søknad og skjema for hjelpemidler
+          </Link>
         </HGrid>
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
-          <Link href="https://www.kunnskapsbanken.net/">Kunnskapsbanken</Link>
+          <Link
+            href="https://www.kunnskapsbanken.net/"
+            onClick={() => {
+              logKlikk('forsidelenke-kunnskapsbanken')
+            }}
+          >
+            Kunnskapsbanken
+          </Link>
         </HGrid>
       </VStack>
     </VStack>
