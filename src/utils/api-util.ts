@@ -192,14 +192,12 @@ const makeSearchTermQuery = ({
 }) => {
   const commonBoosting = {
     negative: {
-      bool: {
-        must: {
-          bool: {},
-        },
+      match: {
+        status: 'INACTIVE'
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 1,
+    negative_boost: 0.1,
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
@@ -317,12 +315,12 @@ type QueryObject = {
 }
 
 export const fetchProducts = ({
-  from,
-  size,
-  searchData,
-  dontCollapse = false,
-  seriesId,
-}: FetchProps): Promise<FetchProductsWithFilters> => {
+                                from,
+                                size,
+                                searchData,
+                                dontCollapse = false,
+                                seriesId,
+                              }: FetchProps): Promise<FetchProductsWithFilters> => {
   const { searchTerm, isoCode, sortOrder, filters } = searchData
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
   const searchTermQuery = makeSearchTermQuery({ searchTerm, seriesId })
@@ -597,9 +595,9 @@ export const getProductFilters = ({ seriesId }: { seriesId: string }): Promise<F
 
 //TODO bytte til label
 export const getProductsOnAgreement = ({
-  agreementId,
-  searchData,
-}: {
+                                         agreementId,
+                                         searchData,
+                                       }: {
   agreementId: string
   searchData: SearchData
 }): Promise<PostBucketResponse[]> => {
