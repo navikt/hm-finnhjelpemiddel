@@ -815,8 +815,6 @@ export const fetchProductTEMPNAME = ({
     must = must.concat([selectedSupplierQuery])
   }
 
-  const filters = {}
-
   return fetch(HM_SEARCH_URL + `/products/_search`, {
     next: { revalidate: 900 },
     method: 'POST',
@@ -832,7 +830,6 @@ export const fetchProductTEMPNAME = ({
         },
       },
       track_total_hits: true,
-      //aggs: { ...filters }
     }),
   })
     .then((res) => res.json())

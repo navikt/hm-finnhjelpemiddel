@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, HGrid, HStack, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import { Alert, HGrid, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
 
 import { Agreement } from '@/utils/agreement-util'
 import React, { useState } from 'react'
@@ -64,22 +64,20 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
 
   return (
     <>
-      <HStack gap="10">
-        <div>
-          <Search
-            defaultValue={inputValue}
-            label="Søk"
-            hideLabel={false}
-            variant="simple"
-            clearButton={false}
-            onChange={(value) => {
-              setInputValue(value)
-            }}
-            onKeyUp={onSearch}
-          />
-        </div>
+      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: "600px" }} marginBlock="10 4">
+        <Search
+          defaultValue={inputValue}
+          label="Søk"
+          hideLabel={false}
+          variant="simple"
+          clearButton={false}
+          onChange={(value) => {
+            setInputValue(value)
+          }}
+          onKeyUp={onSearch}
+        />
         <Select
-          label="Velg leverandør"
+          label="Leverandør"
           onChange={(option) => {
             handleOptions(option.target.value)
             setShouldFetch(true)
@@ -96,7 +94,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
               </option>
             ))}
         </Select>
-      </HStack>
+      </HGrid>
       {isLoading && <Loader size="3xlarge" />}
 
       {data && data.products.length === 0 ? (
@@ -118,13 +116,13 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
           </HGrid>
         )
       ) : (
-        <Table zebraStripes>
+        <Table zebraStripes >
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
               <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
               <Table.HeaderCell scope="col">Leverandør</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Levart-nummer</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>

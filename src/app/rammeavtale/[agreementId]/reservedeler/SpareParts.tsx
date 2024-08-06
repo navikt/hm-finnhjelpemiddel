@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { Heading, Link, VStack } from '@navikt/ds-react'
 import { Agreement } from '@/utils/agreement-util'
 import NextLink from 'next/link'
-import AccessoriesSparePartsBody from '@/app/rammeavtale/[agreementId]/AccessoriesSparePartsBody'
+import AccessoriesOrSparePartsTable from '@/app/rammeavtale/[agreementId]/AccessoriesOrSparePartsTable'
 import { useFlag } from '@/toggles/context'
 import { useRouter } from 'next/navigation'
 
@@ -25,11 +25,7 @@ const SpareParts = ({ agreement }: { agreement: Agreement }) => {
         <Heading level="1" size="large" className="agreement-page__heading">
           {pageTitle}
         </Heading>
-        <span>
-          Reservedeler er deler som ikke endrer hovedproduktets funksjon, men som erstatter en utslitt eller ødelagt del
-          på et produkt i standard utgave. De delene tilbehøret består av er også reservedeler.
-        </span>
-        <AccessoriesSparePartsBody agreement={agreement} itemType={pageTitle.toLowerCase()} />
+        <AccessoriesOrSparePartsTable agreement={agreement} itemType={pageTitle.toLowerCase()} />
       </VStack>
     )
   }

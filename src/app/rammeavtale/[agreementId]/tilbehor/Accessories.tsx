@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Heading, Link, VStack } from '@navikt/ds-react'
 import { Agreement } from '@/utils/agreement-util'
 import NextLink from 'next/link'
-import AccessoriesSparePartsBody from '@/app/rammeavtale/[agreementId]/AccessoriesSparePartsBody'
+import AccessoriesOrSparePartsTable from '@/app/rammeavtale/[agreementId]/AccessoriesOrSparePartsTable'
 import { useFlag } from '@/toggles/context'
 import { useRouter } from 'next/navigation'
 
@@ -25,11 +25,7 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
         <Heading level="1" size="large" className="agreement-page__heading">
           {pageTitle}
         </Heading>
-        <span>
-          Tilbehør er deler som endrer hovedproduktets funksjon. Tilbehør kan monteres i tillegg til, eller i stedet for
-          en del som er påmontert i en standard utgave av hovedproduktet.
-        </span>
-        <AccessoriesSparePartsBody agreement={agreement} itemType={pageTitle.toLowerCase()} />
+        <AccessoriesOrSparePartsTable agreement={agreement} itemType={pageTitle.toLowerCase()} />
       </VStack>
     )
   }
