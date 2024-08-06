@@ -497,10 +497,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 </Table.Row>
               )}
 
-              {product.agreements && postSet.size > 1 && (
+              {product.agreements && product.agreements.length > 0 && (
                 <Table.Row
                   className={classNames(
-                    { 'variants-table__sortable-row': sortRank },
+                    { 'variants-table__sortable-row': postSet.size > 1 },
                     { 'variants-table__sorted-row': sortColumns.orderBy === 'postNr' }
                   )}
                 >
