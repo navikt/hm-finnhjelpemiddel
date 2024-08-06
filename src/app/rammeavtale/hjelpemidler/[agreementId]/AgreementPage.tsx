@@ -4,10 +4,13 @@ import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from 
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import useSWR from 'swr'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
+import { useFlag } from '@/toggles/context'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
@@ -27,12 +30,9 @@ import {
   Popover,
   VStack,
 } from '@navikt/ds-react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import useSWR from 'swr'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
-import { useFlag } from '@/toggles/context'
 
 export type AgreementSearchData = {
   searchTerm: string

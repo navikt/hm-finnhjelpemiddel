@@ -1,7 +1,8 @@
+import { Metadata } from 'next'
+
 import SpareParts from '@/app/rammeavtale/[agreementId]/reservedeler/SpareParts'
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
-import { Metadata } from 'next'
 
 type Props = {
   params: { agreementId: string }

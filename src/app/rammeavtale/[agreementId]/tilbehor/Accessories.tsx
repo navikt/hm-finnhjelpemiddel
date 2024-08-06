@@ -1,12 +1,13 @@
 'use client'
 
+import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useRef } from 'react'
+
 import AccessoriesOrSparePartsTable from '@/app/rammeavtale/[agreementId]/AccessoriesOrSparePartsTable'
 import { useFlag } from '@/toggles/context'
 import { Agreement } from '@/utils/agreement-util'
 import { BodyShort, Heading, HStack, Link, VStack } from '@navikt/ds-react'
-import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useRef } from 'react'
 
 const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const headingRef = useRef<HTMLHeadingElement>(null)

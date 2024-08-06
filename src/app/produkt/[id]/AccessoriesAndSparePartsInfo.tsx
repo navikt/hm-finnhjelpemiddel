@@ -1,15 +1,13 @@
 'use client'
 
+import Link from 'next/link'
 import { useRef } from 'react'
 
 import { BodyLong, HStack, Heading, VStack } from '@navikt/ds-react'
 
-import { Product } from '@/utils/product-util'
-
-import ReadMore from '@/components/ReadMore'
-
 import ProductCard from '@/components/ProductCard'
-import Link from 'next/link'
+import ReadMore from '@/components/ReadMore'
+import { Product } from '@/utils/product-util'
 import './product-page.scss'
 
 type Props = {

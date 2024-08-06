@@ -1,5 +1,9 @@
 'use client'
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import useSWR from 'swr'
+
 import { Agreement } from '@/utils/agreement-util'
 import {
   fetchAccessoriesAndSpareParts,
@@ -8,9 +12,6 @@ import {
   getFiltersAgreement,
 } from '@/utils/api-util'
 import { Alert, HGrid, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import useSWR from 'swr'
 
 const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agreement; isSparepart: boolean }) => {
   const [page, setPage] = useState(1)
