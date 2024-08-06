@@ -133,7 +133,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       100vw"
                 onClick={() => setModalIsOpen(true)}
                 tabIndex={0}
-                onKeyUpCapture={(event) => {
+                onKeyDown={(event) => {
                   if (event.key === 'Enter') {
                     event.preventDefault()
                     setModalIsOpen(true)
@@ -153,7 +153,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
               animate="center"
               exit="exit"
               whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              // whileTap={{ scale: 0.9 }}
               transition={{
                 x: { type: 'spring', stiffness: 300, damping: 30 },
                 opacity: { duration: 0.2 },
@@ -189,7 +189,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                       100vw"
                 onClick={() => setModalIsOpen(true)}
                 tabIndex={0}
-                onKeyUpCapture={(event) => {
+                onKeyDown={(event) => {
                   if (event.key === 'Enter') {
                     event.preventDefault()
                     setModalIsOpen(true)
