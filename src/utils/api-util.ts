@@ -207,7 +207,7 @@ const makeSearchTermQuery = ({
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.2,
+    negative_boost: 0.5,
   }
 
 
