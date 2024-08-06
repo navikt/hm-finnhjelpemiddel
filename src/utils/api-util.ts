@@ -190,7 +190,7 @@ const makeSearchTermQuery = ({
   agreementId?: string
   seriesId?: string
 }) => {
-  const commonBoosting = {
+  const negativeBoostInactiveProducts = {
     negative: {
       match: {
         status: 'INACTIVE'
@@ -199,6 +199,17 @@ const makeSearchTermQuery = ({
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
     negative_boost: 0.2,
   }
+
+  const negativeBoostNonAgreementProducts = {
+    negative: {
+      match: {
+        hasAgreement: false
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.5,
+  }
+
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
 
@@ -224,7 +235,8 @@ const makeSearchTermQuery = ({
               zero_terms_query: 'all',
             },
           },
-          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
       {
@@ -235,7 +247,8 @@ const makeSearchTermQuery = ({
               boost: '0.1',
             },
           },
-          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
       {
@@ -246,7 +259,8 @@ const makeSearchTermQuery = ({
               boost: '0.1',
             },
           },
-          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
     ],
