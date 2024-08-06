@@ -1,6 +1,6 @@
 import { ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
-import { formatAgreementRanks } from '@/utils/string-util'
+import { formatAgreementPosts, formatAgreementRanks } from '@/utils/string-util'
 import { SortColumns } from './ProductVariants'
 
 export const hasDifferentValues = ({ row }: { row: string[] }) => {
@@ -50,6 +50,16 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
         return sortAlphabetically(
           formatAgreementRanks(variantA.agreements!),
           formatAgreementRanks(variantB.agreements!),
+          sortColumns?.direction === 'descending'
+        )
+      }
+      return -1
+    }
+    if (sortColumns.orderBy === 'postNr') {
+      if (variantA.agreements && variantA.agreements) {
+        return sortAlphabetically(
+          formatAgreementPosts(variantA.agreements!),
+          formatAgreementPosts(variantB.agreements!),
           sortColumns?.direction === 'descending'
         )
       }
