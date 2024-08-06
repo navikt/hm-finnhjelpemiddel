@@ -16,6 +16,7 @@ export enum digihot_customevents {
   LEVERANDORPRODUKTER_KLIKKET_V2 = 'klikket på vis leverandørprodukter',
   NAVIGERE = 'navigere',
   KLIKK = 'klikk på knapp',
+  ERROR_URL = 'feil ved url',
 }
 
 const SKJEMANAVN = 'hm-oversikt'
@@ -75,5 +76,10 @@ export function logLeverandorprodukterKlikket() {
 export function logKlikk(buttonName: string) {
   logCustomEvent(digihot_customevents.KLIKK, {
     buttonName: buttonName,
+  })
+}
+export function logErrorOnUrl(url: string) {
+  logCustomEvent(digihot_customevents.ERROR_URL, {
+    url: url,
   })
 }
