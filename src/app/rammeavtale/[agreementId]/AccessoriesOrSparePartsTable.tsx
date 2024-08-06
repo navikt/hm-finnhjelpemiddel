@@ -1,19 +1,18 @@
 'use client'
 
 import { Alert, HGrid, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
-
 import { Agreement } from '@/utils/agreement-util'
 import React, { useState } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import useSWR from 'swr'
 import {
   FetchProductsWithPaginationResponse,
-  fetchProductTEMPNAME,
+  fetchAccessoriesAndSpareParts,
   FilterData,
   getFiltersAgreement,
 } from '@/utils/api-util'
 
-const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreement; itemType: string }) => {
+const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agreement; isSparepart: boolean }) => {
   const [page, setPage] = useState(1)
   const rowsPerPage = 15
   const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string | null>(null)
@@ -32,9 +31,10 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
         selectedSupplier: currentSelectedSupplier,
         pageSize: rowsPerPage,
         currentPage: page,
+        isSparepart: isSparepart
       }
       : null,
-    fetchProductTEMPNAME,
+    fetchAccessoriesAndSpareParts,
     { keepPreviousData: true }
   )
 
@@ -64,7 +64,7 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
 
   return (
     <>
-      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: "600px" }} marginBlock="10 4">
+      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: "600px" }} marginBlock="10 4" >
         <Search
           defaultValue={inputValue}
           label="Søk"
@@ -96,22 +96,26 @@ const AccessoriesSparePartsBody = ({ agreement, itemType }: { agreement: Agreeme
         </Select>
       </HGrid>
       {isLoading && <Loader size="3xlarge" />}
-
       {data && data.products.length === 0 ? (
         currentSelectedSupplier === null ? (
-          <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
-            <Alert variant="info">{`Det er ingen treff på søket '${searchTermValue}'.`}</Alert>
-          </HGrid>
-        ) : inputValue === '' ? (
+          searchTermValue === '' ? (
+            <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+              <Alert variant="info">{`Det er ingen ${isSparepart ? "reservedeler" : "tilbehør"} på denne avtalen enda.`}</Alert>
+            </HGrid>
+          ) : (
+            <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+              <Alert variant="info">{`Det er ingen treff på søket '${searchTermValue}'.`}</Alert>
+            </HGrid>)
+        ) : searchTermValue === '' ? (
           <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
             <Alert variant="info">
-              Det er ingen {itemType} tilknyttet {currentSelectedSupplier}.
+              Det er ingen {isSparepart ? "reservedeler" : "tilbehør"} tilknyttet {currentSelectedSupplier}.
             </Alert>
           </HGrid>
         ) : (
           <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
             <Alert variant="info">
-              {`Det er ingen treff på søket '${searchTermValue}' for ${itemType} tilknyttet ${currentSelectedSupplier}.`}
+              {`Det er ingen treff på søket '${searchTermValue}' for ${isSparepart ? "reservedeler" : "tilbehør"} tilknyttet ${currentSelectedSupplier}.`}
             </Alert>
           </HGrid>
         )

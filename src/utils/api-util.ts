@@ -772,25 +772,27 @@ export type FetchProductsWithPaginationResponse = {
   totalHits: number
 }
 
-export const fetchProductTEMPNAME = ({
+export const fetchAccessoriesAndSpareParts = ({
   agreementId,
   searchTerm,
   selectedSupplier,
   currentPage,
   pageSize,
+  isSparepart,
 }: {
   agreementId: string
   searchTerm: string
   selectedSupplier?: string
   currentPage: number
   pageSize: number
+  isSparepart: boolean
 }): Promise<FetchProductsWithPaginationResponse> => {
   const termQuery = {
     multi_match: {
       query: searchTerm,
       type: 'bool_prefix',
       operator: 'and',
-      fields: ['title', 'hmsArtNr', 'supplier.name', 'supplierRef'],
+      fields: ['title', 'hmsArtNr', 'supplierRef', 'supplier.name'],
       lenient: true,
     },
   }
@@ -798,14 +800,16 @@ export const fetchProductTEMPNAME = ({
     term: { 'supplier.name': { value: selectedSupplier } },
   }
 
+
   let must: any[] = [
     {
       term: {
         'agreements.id': {
           value: agreementId,
         },
-      },
+      }
     },
+
   ]
 
   if (searchTerm) {
@@ -813,6 +817,16 @@ export const fetchProductTEMPNAME = ({
   }
   if (selectedSupplier) {
     must = must.concat([selectedSupplierQuery])
+  }
+
+  if (isSparepart) {
+    must = must.concat([{
+      term: { sparePart: true },
+    }])
+  } else {
+    must = must.concat([{
+      term: { accessory: true },
+    }])
   }
 
   return fetch(HM_SEARCH_URL + `/products/_search`, {

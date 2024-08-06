@@ -11,21 +11,20 @@ import { useRouter } from 'next/navigation'
 const SpareParts = ({ agreement }: { agreement: Agreement }) => {
 
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const pageTitle = 'Reservedeler'
 
   const router = useRouter();
   const useNewFeature = useFlag("finnhjelpemiddel.vis-tilbehor-og-reservedel-lister")
 
   if (useNewFeature.enabled) {
     return (
-      <VStack className="main-wrapper--large spacing-bottom--large hide-print" gap="4" paddingBlock="4 0">
+      <VStack className="main-wrapper--large spacing-vertical--xlarge hide-print" gap="4">
         <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}`} variant="subtle">
           {`${agreement.title}`}
         </Link>
         <Heading level="1" size="large" className="agreement-page__heading">
-          {pageTitle}
+          Reservedeler
         </Heading>
-        <AccessoriesOrSparePartsTable agreement={agreement} itemType={pageTitle.toLowerCase()} />
+        <AccessoriesOrSparePartsTable agreement={agreement} isSparepart={true} />
       </VStack>
     )
   }
