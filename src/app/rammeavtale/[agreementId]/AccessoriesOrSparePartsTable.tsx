@@ -1,16 +1,16 @@
 'use client'
 
-import { Alert, HGrid, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
 import { Agreement } from '@/utils/agreement-util'
-import React, { useState } from 'react'
-import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import useSWR from 'swr'
 import {
-  FetchProductsWithPaginationResponse,
   fetchAccessoriesAndSpareParts,
+  FetchProductsWithPaginationResponse,
   FilterData,
   getFiltersAgreement,
 } from '@/utils/api-util'
+import { Alert, HGrid, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import useSWR from 'swr'
 
 const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agreement; isSparepart: boolean }) => {
   const [page, setPage] = useState(1)
@@ -26,13 +26,13 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
   const { data, isLoading, error } = useSWR<FetchProductsWithPaginationResponse>(
     shouldFetch
       ? {
-        agreementId: agreement.id,
-        searchTerm: searchTermValue,
-        selectedSupplier: currentSelectedSupplier,
-        pageSize: rowsPerPage,
-        currentPage: page,
-        isSparepart: isSparepart
-      }
+          agreementId: agreement.id,
+          searchTerm: searchTermValue,
+          selectedSupplier: currentSelectedSupplier,
+          pageSize: rowsPerPage,
+          currentPage: page,
+          isSparepart: isSparepart,
+        }
       : null,
     fetchAccessoriesAndSpareParts,
     { keepPreviousData: true }
@@ -64,7 +64,7 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
 
   return (
     <>
-      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: "600px" }} marginBlock="10 4" >
+      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: '600px' }} marginBlock="7 3">
         <Search
           defaultValue={inputValue}
           label="Søk"
@@ -99,28 +99,29 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
       {data && data.products.length === 0 ? (
         currentSelectedSupplier === null ? (
           searchTermValue === '' ? (
-            <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
-              <Alert variant="info">{`Det er ingen ${isSparepart ? "reservedeler" : "tilbehør"} på denne avtalen enda.`}</Alert>
+            <HGrid gap="12" columns="minmax(16rem, 55rem)">
+              <Alert variant="info">{`Det er ingen ${isSparepart ? 'reservedeler' : 'tilbehør'} på denne avtalen enda.`}</Alert>
             </HGrid>
           ) : (
-            <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+            <HGrid gap="12" columns="minmax(16rem, 55rem)">
               <Alert variant="info">{`Det er ingen treff på søket '${searchTermValue}'.`}</Alert>
-            </HGrid>)
+            </HGrid>
+          )
         ) : searchTermValue === '' ? (
-          <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+          <HGrid gap="12" columns="minmax(16rem, 55rem)">
             <Alert variant="info">
-              Det er ingen {isSparepart ? "reservedeler" : "tilbehør"} tilknyttet {currentSelectedSupplier}.
+              Det er ingen {isSparepart ? 'reservedeler' : 'tilbehør'} tilknyttet {currentSelectedSupplier}.
             </Alert>
           </HGrid>
         ) : (
-          <HGrid gap="12" columns="minmax(16rem, 55rem)" paddingBlock="4">
+          <HGrid gap="12" columns="minmax(16rem, 55rem)">
             <Alert variant="info">
-              {`Det er ingen treff på søket '${searchTermValue}' for ${isSparepart ? "reservedeler" : "tilbehør"} tilknyttet ${currentSelectedSupplier}.`}
+              {`Det er ingen treff på søket '${searchTermValue}' for ${isSparepart ? 'reservedeler' : 'tilbehør'} tilknyttet ${currentSelectedSupplier}.`}
             </Alert>
           </HGrid>
         )
       ) : (
-        <Table zebraStripes >
+        <Table zebraStripes>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
