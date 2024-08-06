@@ -19,9 +19,9 @@ import {
   BodyLong,
   BodyShort,
   Button,
+  Heading,
   HGrid,
   HStack,
-  Heading,
   Link,
   Loader,
   Popover,
@@ -32,6 +32,7 @@ import useSWR from 'swr'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
+import { useFlag } from '@/toggles/context'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -42,6 +43,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const showAccessoriesAndSparePartsList = useFlag('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
@@ -157,20 +159,29 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
           <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
             <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}#Tilbehor`}
-              icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} />}
+              href={
+                showAccessoriesAndSparePartsList.enabled
+                  ? `/rammeavtale/${agreement.id}/tilbehor`
+                  : `/rammeavtale/${agreement.id}#Tilbehor`
+              }
+              icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
               title="Tilbehør"
               description="Gå til avtalens tilbehørslister i PDF-format"
             />
+
             <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}#Reservedeler`}
-              icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} />}
+              href={
+                showAccessoriesAndSparePartsList.enabled
+                  ? `/rammeavtale/${agreement.id}/reservedeler`
+                  : `/rammeavtale/${agreement.id}#Reservedeler`
+              }
+              icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
               title="Reservedeler"
               description="Gå til avtalens reservedellister i PDF-format"
             />
             <LinkPanelLocal
               href={`/rammeavtale/${agreement.id}`}
-              icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} />}
+              icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
               title="Om avtalen"
               description="Les om avtalen og se tilhørende dokumenter"
             />

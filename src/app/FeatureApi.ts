@@ -4,6 +4,7 @@ import { fetcherGET } from "@/utils/api-util";
 import { IToggle } from "@/toggles/context";
 
 export function useFeatureFlags() {
+
   const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join("&");
   const path = `/adminregister/features?${queryParams}`;
 

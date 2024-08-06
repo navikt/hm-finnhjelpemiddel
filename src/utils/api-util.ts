@@ -190,7 +190,7 @@ const makeSearchTermQuery = ({
   agreementId?: string
   seriesId?: string
 }) => {
-  const commonBoosting = {
+  const negativeBoostInactiveProducts = {
     negative: {
       match: {
         status: 'INACTIVE'
@@ -199,6 +199,17 @@ const makeSearchTermQuery = ({
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
     negative_boost: 0.2,
   }
+
+  const negativeBoostNonAgreementProducts = {
+    negative: {
+      match: {
+        hasAgreement: false
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.5,
+  }
+
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
 
@@ -224,7 +235,8 @@ const makeSearchTermQuery = ({
               zero_terms_query: 'all',
             },
           },
-          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
       {
@@ -235,7 +247,8 @@ const makeSearchTermQuery = ({
               boost: '0.1',
             },
           },
-          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
       {
@@ -246,7 +259,8 @@ const makeSearchTermQuery = ({
               boost: '0.1',
             },
           },
-          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
     ],
@@ -763,6 +777,91 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   })
 
   return res.json().then(mapAgreementLabels)
+}
+
+export type FetchProductsWithPaginationResponse = {
+  products: Product[]
+  totalHits: number
+}
+
+export const fetchAccessoriesAndSpareParts = ({
+  agreementId,
+  searchTerm,
+  selectedSupplier,
+  currentPage,
+  pageSize,
+  isSparepart,
+}: {
+  agreementId: string
+  searchTerm: string
+  selectedSupplier?: string
+  currentPage: number
+  pageSize: number
+  isSparepart: boolean
+}): Promise<FetchProductsWithPaginationResponse> => {
+  const termQuery = {
+    multi_match: {
+      query: searchTerm,
+      type: 'bool_prefix',
+      operator: 'and',
+      fields: ['title', 'hmsArtNr', 'supplierRef', 'supplier.name'],
+      lenient: true,
+    },
+  }
+  const selectedSupplierQuery = {
+    term: { 'supplier.name': { value: selectedSupplier } },
+  }
+
+
+  let must: any[] = [
+    {
+      term: {
+        'agreements.id': {
+          value: agreementId,
+        },
+      }
+    },
+
+  ]
+
+  if (searchTerm) {
+    must = must.concat([termQuery])
+  }
+  if (selectedSupplier) {
+    must = must.concat([selectedSupplierQuery])
+  }
+
+  if (isSparepart) {
+    must = must.concat([{
+      term: { sparePart: true },
+    }])
+  } else {
+    must = must.concat([{
+      term: { accessory: true },
+    }])
+  }
+
+  return fetch(HM_SEARCH_URL + `/products/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: pageSize,
+      from: pageSize * (currentPage - 1),
+      query: {
+        bool: {
+          must: must,
+        },
+      },
+      track_total_hits: true,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return { products: mapProductsFromCollapse(data), totalHits: data.hits.total.value }
+    })
 }
 
 export async function getSuppliers(letter: string): Promise<Supplier[]> {
