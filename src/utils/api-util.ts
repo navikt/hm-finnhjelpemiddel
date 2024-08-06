@@ -192,14 +192,12 @@ const makeSearchTermQuery = ({
 }) => {
   const commonBoosting = {
     negative: {
-      bool: {
-        must: {
-          bool: {},
-        },
+      match: {
+        status: 'INACTIVE'
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 1,
+    negative_boost: 0.2,
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
