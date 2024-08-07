@@ -7,7 +7,7 @@ import { useRef } from 'react'
 import AccessoriesOrSparePartsTable from '@/app/rammeavtale/[agreementId]/AccessoriesOrSparePartsTable'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement } from '@/utils/agreement-util'
-import { BodyShort, Heading, HStack, Link, VStack } from '@navikt/ds-react'
+import { BodyShort, Heading, HStack, Link, Loader, VStack } from '@navikt/ds-react'
 
 const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -17,25 +17,26 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
 
   console.log({ useNewFeature })
 
-  if (useNewFeature) {
-    return (
-      <VStack className="main-wrapper--large spacing-vertical--xlarge hide-print" gap="4">
-        <HStack gap="3">
-          <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}`} variant="subtle">
-            {`${agreement.title}`}
-          </Link>
-          <BodyShort textColor="subtle">/</BodyShort>
-        </HStack>
-        <Heading level="1" size="large" className="agreement-page__heading">
-          Tilbehør
-        </Heading>
-        <AccessoriesOrSparePartsTable agreement={agreement} isSparepart={false} />
-      </VStack>
-    )
-  } else {
-    console.log('router push')
-    // router.push(`/rammeavtale/${agreement.id}#Tilbehor`)
+  if (useNewFeature === false) {
+    router.push(`/rammeavtale/${agreement.id}#Tilbehor`)
   }
+  if (useNewFeature === undefined) {
+    return <Loader>Loading...</Loader>
+  }
+  return (
+    <VStack className="main-wrapper--large spacing-vertical--xlarge hide-print" gap="4">
+      <HStack gap="3">
+        <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}`} variant="subtle">
+          {`${agreement.title}`}
+        </Link>
+        <BodyShort textColor="subtle">/</BodyShort>
+      </HStack>
+      <Heading level="1" size="large" className="agreement-page__heading">
+        Tilbehør
+      </Heading>
+      <AccessoriesOrSparePartsTable agreement={agreement} isSparepart={false} />
+    </VStack>
+  )
 }
 
 export default Accessories

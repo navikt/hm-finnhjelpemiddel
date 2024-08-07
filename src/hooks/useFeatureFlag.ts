@@ -4,8 +4,8 @@ import { fetcherGET } from '@/utils/api-util'
 import useSWR from 'swr'
 
 interface IFeatureFlags {
-  toggles: IToggle[]
-  isEnabled: (toggle: string) => boolean
+  toggles: IToggle[] | undefined
+  isEnabled: (toggle: string) => boolean | undefined
 }
 
 export function useFeatureFlags(): IFeatureFlags {
@@ -32,15 +32,17 @@ export function useFeatureFlags(): IFeatureFlags {
     }
   }
 
-  const toggles: IToggle[] = EXPECTED_TOGGLES.map((toggle) => ({
-    name: toggle,
-    enabled: data ? data[toggle] : false,
-  }))
+  const toggles: IToggle[] | undefined = data
+    ? EXPECTED_TOGGLES.map((toggle) => ({
+        name: toggle,
+        enabled: data ? data[toggle] : false,
+      }))
+    : undefined
 
   return {
     toggles,
     isEnabled: (toggle: string) => {
-      return toggles.find((flag) => flag.name === toggle)?.enabled || false
+      return toggles?.find((flag) => flag.name === toggle)?.enabled
     },
   }
 }
