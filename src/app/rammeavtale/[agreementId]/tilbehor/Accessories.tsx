@@ -13,12 +13,14 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const featureFlags = useFeatureFlags()
   const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
-  if (useNewFeature === false) {
-    router.replace(`/rammeavtale/${agreement.id}#Tilbehor`)
-  }
   if (useNewFeature === undefined) {
     return <Loader>Loading...</Loader>
   }
+
+  if (useNewFeature === false) {
+    router.replace(`/rammeavtale/${agreement.id}#Tilbehor`)
+  }
+
   return (
     <VStack className="main-wrapper--large spacing-vertical--xlarge hide-print" gap="4">
       <HStack gap="3">

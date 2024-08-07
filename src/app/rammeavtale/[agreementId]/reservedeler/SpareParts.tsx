@@ -13,11 +13,12 @@ const SpareParts = ({ agreement }: { agreement: Agreement }) => {
   const featureFlags = useFeatureFlags()
   const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
-  if (useNewFeature === false) {
-    router.replace(`/rammeavtale/${agreement.id}#Reservedeler`)
-  }
   if (useNewFeature === undefined) {
     return <Loader>Loading...</Loader>
+  }
+
+  if (useNewFeature === false) {
+    router.replace(`/rammeavtale/${agreement.id}#Reservedeler`)
   }
 
   return (
