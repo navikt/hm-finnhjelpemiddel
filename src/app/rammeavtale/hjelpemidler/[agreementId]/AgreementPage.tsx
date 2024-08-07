@@ -7,11 +7,10 @@ import { useEffect, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 
-import { useFeatureFlags } from '@/app/FeatureApi'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
-import { LOCAL_TOGGLES } from '@/toggles/toggles'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
@@ -45,13 +44,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const featureFlags = useFeatureFlags()
-  // const showAccessoriesAndSparePartsList = useFlag('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-  const featureFlagsByEnv = process.env.NODE_ENV === 'development' ? LOCAL_TOGGLES : featureFlags
-  const showAccessoriesAndSparePartsList = featureFlagsByEnv.find(
-    (flag) => flag.name === 'finnhjelpemiddel.vis-tilbehor-og-reservedel-lister'
-  )?.enabled
-
-  console.log('showAccessoriesAndSparePartsList', featureFlags, featureFlagsByEnv, showAccessoriesAndSparePartsList)
+  const showAccessoriesAndSparePartsList = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)

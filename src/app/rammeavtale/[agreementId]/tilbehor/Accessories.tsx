@@ -5,17 +5,17 @@ import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
 
 import AccessoriesOrSparePartsTable from '@/app/rammeavtale/[agreementId]/AccessoriesOrSparePartsTable'
-import { useFlag } from '@/toggles/context'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement } from '@/utils/agreement-util'
 import { BodyShort, Heading, HStack, Link, VStack } from '@navikt/ds-react'
 
 const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const headingRef = useRef<HTMLHeadingElement>(null)
-
   const router = useRouter()
-  const useNewFeature = useFlag('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+  const featureFlags = useFeatureFlags()
+  const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
-  if (useNewFeature.enabled) {
+  if (useNewFeature) {
     return (
       <VStack className="main-wrapper--large spacing-vertical--xlarge hide-print" gap="4">
         <HStack gap="3">
