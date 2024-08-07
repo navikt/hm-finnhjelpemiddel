@@ -56,7 +56,7 @@ const visFilterLabels = [
   'På avtale med NAV',
   'På bestillingsordning',
   'På digital behovsmelding',
-  'Inkluder utgåtte hjelpemidler',
+  'Skjul utgåtte hjelpemidler',
 ]
 
 export type FilterFormState = typeof initialFiltersFormState
@@ -190,7 +190,7 @@ export const filterDelkontrakt = (values: Array<string>) => ({
   },
 })
 
-export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) => {
+export const filterVis = (activeAndInactiveAsDefault: boolean, values: Array<string>) => {
   const filters: any[] = values
     .map((filterKey) => {
       if (filterKey === 'På digital behovsmelding') {
@@ -211,19 +211,19 @@ export const filterVis = (onlyActiveAsDefault: boolean, values: Array<string>) =
     })
     .filter(Boolean)
 
-  if (onlyActiveAsDefault) {
-    if (values.includes('Inkluder utgåtte hjelpemidler')) {
-      filters.push({
-        terms: {
-          status: ['ACTIVE', 'INACTIVE'],
-        },
-      })
-    } else {
+  if (activeAndInactiveAsDefault) {
+    if (values.includes('Skjul utgåtte hjelpemidler')) {
       filters.push({
         term: {
           status: {
             value: 'ACTIVE',
           },
+        },
+      })
+    } else {
+      filters.push({
+        terms: {
+          status: ['ACTIVE', 'INACTIVE'],
         },
       })
     }
