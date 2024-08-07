@@ -49,8 +49,16 @@ To get products locally from 8080:
 
 ### Feature toggles
 
-Feature toggles er satt opp i [unleash](https://unleash.nais.io/). 
-Toggles kan kun brukes i client-komponenter per nå via useFlag(name: string) hook.
+Feature toggles er satt opp i [unleash](https://unleash.nais.io/).
+Toggles kan kun brukes i client-komponenter per nå ved:
+
+```
+const featureFlags = useFeatureFlags()
+const useNewFeature = featureFlags.isEnabled("toggleName")
+```
+
+Når toggle hentes er den _undefined_, og det lønner seg å håndetere i visningen.
+
 Toggles administreres i unleash UI https://teamdigihot-unleash-web.iap.nav.cloud.nais.io/
 
 Appen henter kun inn toggles definert i `src/utils/featureToggles.ts` så evt. nye toggles må legges til her.
