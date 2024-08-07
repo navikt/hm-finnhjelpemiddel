@@ -15,6 +15,8 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const featureFlags = useFeatureFlags()
   const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
+  console.log({ useNewFeature })
+
   if (useNewFeature) {
     return (
       <VStack className="main-wrapper--large spacing-vertical--xlarge hide-print" gap="4">
@@ -31,7 +33,8 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
       </VStack>
     )
   } else {
-    router.push(`/rammeavtale/${agreement.id}#Tilbehor`)
+    console.log('router push')
+    // router.push(`/rammeavtale/${agreement.id}#Tilbehor`)
   }
 }
 
