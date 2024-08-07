@@ -190,6 +190,18 @@ const makeSearchTermQuery = ({
   agreementId?: string
   seriesId?: string
 }) => {
+  const commonBoosting = {
+    negative: {
+      bool: {
+        must: {
+          bool: {},
+        },
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 1,
+  }
+
   const negativeBoostInactiveProducts = {
     negative: {
       match: {
@@ -197,7 +209,7 @@ const makeSearchTermQuery = ({
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.2,
+    negative_boost: 0.01 ,
   }
 
   const negativeBoostNonAgreementProducts = {
@@ -207,9 +219,8 @@ const makeSearchTermQuery = ({
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.5,
+    negative_boost: 0.1 ,
   }
-
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
 
@@ -235,6 +246,7 @@ const makeSearchTermQuery = ({
               zero_terms_query: 'all',
             },
           },
+          ...commonBoosting,
           ...negativeBoostInactiveProducts,
           ...negativeBoostNonAgreementProducts,
         },
@@ -247,8 +259,8 @@ const makeSearchTermQuery = ({
               boost: '0.1',
             },
           },
+          ...commonBoosting,
           ...negativeBoostInactiveProducts,
-          ...negativeBoostNonAgreementProducts,
         },
       },
       {
@@ -259,10 +271,11 @@ const makeSearchTermQuery = ({
               boost: '0.1',
             },
           },
+          ...commonBoosting,
           ...negativeBoostInactiveProducts,
-          ...negativeBoostNonAgreementProducts,
         },
       },
+
     ],
   }
 
@@ -1191,3 +1204,4 @@ export class CustomError extends Error {
     this.status = statusCode;
   }
 }
+
