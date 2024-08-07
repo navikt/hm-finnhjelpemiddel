@@ -443,8 +443,7 @@ export const fetchProducts = ({
           filterLeverandor(leverandor),
           filterProduktkategori(produktkategori),
           filterRammeavtale(rammeavtale),
-          //Filtrer bare på aktive produkter dersom vi ikke henter basert på serieId(produktside)
-          ...filterVis(seriesId === undefined, vis),
+          ...filterVis(vis),
           filterStatus(status),
           //Remove null values
         ].filter(Boolean),
