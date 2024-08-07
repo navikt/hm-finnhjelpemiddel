@@ -11,7 +11,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
 
   useEffect(() => {
     logErrorOnUrl(path)
-  }, [error])
+  }, [error, path])
 
   return (
     <div className="main-wrapper--large spacing-vertical--xlarge">

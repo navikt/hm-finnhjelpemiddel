@@ -11,6 +11,11 @@ interface IFeatureFlags {
 export function useFeatureFlags(): IFeatureFlags {
   const isDevelopment = process.env.NODE_ENV === 'development'
 
+  const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join('&')
+  const path = `/adminregister/features?${queryParams}`
+
+  const { data, error } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
+
   if (isDevelopment) {
     return {
       toggles: LOCAL_TOGGLES,
@@ -19,11 +24,6 @@ export function useFeatureFlags(): IFeatureFlags {
       },
     }
   }
-
-  const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join('&')
-  const path = `/adminregister/features?${queryParams}`
-
-  const { data, error } = useSWR<Record<string, boolean>>(path, fetcherGET)
 
   if (error) {
     return {
