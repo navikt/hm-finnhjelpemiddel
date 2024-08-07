@@ -1,29 +1,22 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import React, { Suspense, useEffect } from 'react'
 import { hotjar } from 'react-hotjar'
-import { usePathname } from 'next/navigation'
 
 import { initAmplitude, logOversiktForsideVist } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
-import Footer from '@/components/layout/Footer'
 import NavigationBar from '@/app/NavigationBar'
+import Footer from '@/components/layout/Footer'
 import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
 import { Link } from '@navikt/ds-react'
-import { useFeatureFlags } from "@/app/FeatureApi";
-import { FlagProvider } from "@/toggles/context";
-import { LOCAL_TOGGLES } from "@/toggles/toggles";
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   const { isMenuOpen } = useMenuStore()
   const { isMobileOverlayOpen } = useMobileOverlayStore()
-
-
-  const toggles = useToggles();
-
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
@@ -41,33 +34,26 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <FlagProvider toggles={toggles ?? []}>
-      <Suspense>
-        {isMobileOverlayOpen && <div id="cover-main" />}
-        <div id="modal-container"></div>
-        <header>
-          <Link href={'#hovedinnhold'} variant="subtle" className="skiplink">
-            Hopp til hovedinnhold
-          </Link>
-          <NavigationBar />
-        </header>
+    <Suspense>
+      {isMobileOverlayOpen && <div id="cover-main" />}
+      <div id="modal-container"></div>
+      <header>
+        <Link href={'#hovedinnhold'} variant="subtle" className="skiplink">
+          Hopp til hovedinnhold
+        </Link>
+        <NavigationBar />
+      </header>
 
-        <main id="hovedinnhold">
-          {isMenuOpen && <div id="cover-main" />}
-          {children}
-        </main>
+      <main id="hovedinnhold">
+        {isMenuOpen && <div id="cover-main" />}
+        {children}
+      </main>
 
-        <Footer />
-      </Suspense>
-    </FlagProvider>
+      <Footer />
+    </Suspense>
   )
 }
 
 reportAccessibility(React)
-
-function useToggles() {
-  const featureFlags = useFeatureFlags();
-  return process.env.NODE_ENV === 'development' ? LOCAL_TOGGLES : featureFlags;
-}
 
 export default LayoutProvider
