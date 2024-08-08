@@ -10,6 +10,7 @@ import useSWR from 'swr'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
@@ -42,8 +43,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  // const showAccessoriesAndSparePartsList = useFlag('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-
+  const featureFlags = useFeatureFlags()
+  const showAccessoriesAndSparePartsList = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
@@ -159,9 +160,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
             <LinkPanelLocal
               href={
-                // showAccessoriesAndSparePartsList.enabled
-                //   ? `/rammeavtale/${agreement.id}/tilbehor`
-                `/rammeavtale/${agreement.id}#Tilbehor`
+                showAccessoriesAndSparePartsList
+                  ? `/rammeavtale/${agreement.id}/tilbehor`
+                  : `/rammeavtale/${agreement.id}#Tilbehor`
               }
               icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
               title="Tilbehør"
@@ -170,9 +171,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
             <LinkPanelLocal
               href={
-                // showAccessoriesAndSparePartsList.enabled
-                //   ? `/rammeavtale/${agreement.id}/reservedeler`
-                `/rammeavtale/${agreement.id}#Reservedeler`
+                showAccessoriesAndSparePartsList
+                  ? `/rammeavtale/${agreement.id}/reservedeler`
+                  : `/rammeavtale/${agreement.id}#Reservedeler`
               }
               icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
               title="Reservedeler"
