@@ -10,7 +10,6 @@ import useSWR from 'swr'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
@@ -43,8 +42,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const featureFlags = useFeatureFlags()
-  const showAccessoriesAndSparePartsList = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+  // const featureFlags = useFeatureFlags()
+  const showAccessoriesAndSparePartsList = false
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
