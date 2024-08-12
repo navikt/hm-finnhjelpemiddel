@@ -43,7 +43,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   // const featureFlags = useFeatureFlags()
-  const showAccessoriesAndSparePartsList = false
+  const isDevelopment = process.env.BUILD_ENV === 'dev'
+  const showAccessoriesAndSparePartsList = isDevelopment
+
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
