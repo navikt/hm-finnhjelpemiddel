@@ -12,7 +12,7 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
   // const featureFlags = useFeatureFlags()
   // const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
   const isDevelopment = process.env.BUILD_ENV === 'dev'
-  const useNewFeature = isDevelopment
+  const useNewFeature = false
 
   if (useNewFeature === undefined) {
     return <Loader>Loading...</Loader>

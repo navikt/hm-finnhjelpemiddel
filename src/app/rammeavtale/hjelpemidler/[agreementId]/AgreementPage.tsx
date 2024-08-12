@@ -44,7 +44,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const searchParams = useSearchParams()
   // const featureFlags = useFeatureFlags()
   const isDevelopment = process.env.BUILD_ENV === 'dev'
-  const showAccessoriesAndSparePartsList = isDevelopment
+  const showAccessoriesAndSparePartsList = false
 
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
