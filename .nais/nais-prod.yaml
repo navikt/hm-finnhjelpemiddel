@@ -18,3 +18,7 @@ spec:
   env:
     - name: RUNTIME_ENVIRONMENT
       value: prod
+  filesFrom:
+    - emptyDir:
+        medium: Memory
+      mountPath: /app/.next/cache
