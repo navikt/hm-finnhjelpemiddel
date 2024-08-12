@@ -46,6 +46,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const isDevelopment = process.env.BUILD_ENV === 'dev'
   const showAccessoriesAndSparePartsList = false
 
+  console.log(
+    'build env:',
+    process.env.BUILD_ENV,
+    'node env:',
+    process.env.NODE_ENV,
+    'runtime env:',
+    process.env.RUNTIME_ENVIRONMENT
+  )
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
