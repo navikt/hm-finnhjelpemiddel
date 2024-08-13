@@ -23,7 +23,4 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/cache
-    - emptyDir:
-        medium: Memory
-      mountPath: /app/.next/server/app
 
