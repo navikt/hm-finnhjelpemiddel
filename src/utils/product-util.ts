@@ -208,7 +208,15 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   return {
     id: firstVariant.seriesId,
     title: firstVariant.title,
-    attributes: { ...firstVariant.attributes },
+    attributes: {
+      manufacturer: firstVariant.attributes.manufacturer,
+      articlename: firstVariant.attributes.articlename,
+      series: firstVariant.attributes.series,
+      shortdescription: firstVariant.attributes.shortdescription,
+      text: firstVariant.attributes.text,
+      compatibleWith: firstVariant.attributes.compatible,
+      url: firstVariant.attributes.url,
+    },
     variantCount: sources.length,
     variants: variants,
     compareData: {
@@ -216,15 +224,15 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
       agreementRank: null,
     },
     isoCategory: firstVariant.isoCategory,
-    isoCategoryTitle: firstVariant.isoCategoryTitle,
+    isoCategoryTitle: "Dummy ISO Category Title",
     isoCategoryText: firstVariant.isoCategoryText,
     accessory: firstVariant.accessory,
     sparepart: firstVariant.sparepart,
     photos: mapPhotoInfo(firstVariant.media),
     videos: mapVideoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
-    supplierId: firstVariant.supplier?.id,
-    supplierName: firstVariant.supplier?.name,
+    supplierId: firstVariant.supplier?.id ?? "",
+    supplierName: firstVariant.supplier?.name ?? "",
     agreements: uniquesAgreementsPostAndRanks,
   }
 }
@@ -302,12 +310,12 @@ export const mapDocuments = (media: MediaResponse[]): Document[] => {
 }
 
 const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
-  return Object.assign(
-    {},
-    ...data
-      .filter((data: TechDataResponse) => data.key && data.value)
-      .map((data: TechDataResponse) => ({ [data.key]: { value: capitalize(data.value), unit: data.unit } }))
-  )
+  return data
+    .filter((data: TechDataResponse) => Boolean(data.key && data.value))
+    .reduce((acc: TechData, data: TechDataResponse) => {
+      acc[data.key] = { value: capitalize(data.value), unit: data.unit };
+      return acc;
+    }, {});
 }
 
 const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {

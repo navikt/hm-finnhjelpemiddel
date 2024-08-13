@@ -188,6 +188,7 @@ export const mapAgreementProducts = (
     let seen: { [id: string]: { count: number; hmsNumbers: string[] } } = {}
 
     const products = bucket.topHitData.hits.hits
+      .filter((hit) => Array.isArray(hit._source) && hit._source.length > 0)
       .map((hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
       .filter((product) => {
         const hmsNr = product.variants[0].hmsArtNr
