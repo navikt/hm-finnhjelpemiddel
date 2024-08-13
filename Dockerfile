@@ -51,9 +51,6 @@ WORKDIR /app
 # see: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 COPY --from=builder /app/public ./public
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
