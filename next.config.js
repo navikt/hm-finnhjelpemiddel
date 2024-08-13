@@ -5,10 +5,6 @@ const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX || undefined,
   reactStrictMode: true,
   swcMinify: true,
-  i18n: {
-    locales: ['no'],
-    defaultLocale: 'no',
-  },
   async rewrites() {
     return [
       {
