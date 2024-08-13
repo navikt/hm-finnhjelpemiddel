@@ -200,6 +200,10 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     return mapProductVariant(source)
   })
 
+  if (sources.length === 0) {
+    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants. ${JSON.stringify(sources)}`)
+  }
+
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
   const firstVariant = sources[0]
   const allAgreementsForAllVariants = variants.flatMap((variant) => variant.agreements)
@@ -208,7 +212,15 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   return {
     id: firstVariant.seriesId,
     title: firstVariant.title,
-    attributes: { ...firstVariant.attributes },
+    attributes: {
+      manufacturer: firstVariant.attributes.manufacturer,
+      articlename: firstVariant.attributes.articlename,
+      series: firstVariant.attributes.series,
+      shortdescription: firstVariant.attributes.shortdescription,
+      text: firstVariant.attributes.text,
+      compatibleWith: firstVariant.attributes.compatible,
+      url: firstVariant.attributes.url,
+    },
     variantCount: sources.length,
     variants: variants,
     compareData: {
@@ -223,8 +235,8 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     videos: mapVideoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
-    supplierId: firstVariant.supplier?.id,
-    supplierName: firstVariant.supplier?.name,
+    supplierId: firstVariant.supplier?.id ?? "",
+    supplierName: firstVariant.supplier?.name ?? "",
     agreements: uniquesAgreementsPostAndRanks,
   }
 }
