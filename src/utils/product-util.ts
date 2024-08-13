@@ -144,6 +144,9 @@ export const mapProductsFromCollapse = (data: SearchResponse): Product[] => {
  * Maps results from search for seriesId into one product with all variants
  */
 export const mapProductFromSeriesId = (data: SearchResponse): Product => {
+  if (data.hits.hits.map((h) => h._source as ProductSourceResponse).length === 0) {
+    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants ${data}`)
+  }
   return mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
 }
 
@@ -201,7 +204,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   })
 
   if (sources.length === 0) {
-    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants. ${JSON.stringify(sources)}`)
+    throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
   }
 
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
