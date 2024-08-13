@@ -10,6 +10,7 @@ import useSWR from 'swr'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
@@ -42,18 +43,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  // const featureFlags = useFeatureFlags()
-  const isDevelopment = process.env.BUILD_ENV === 'dev'
-  const showAccessoriesAndSparePartsList = false
 
-  console.log(
-    'build env:',
-    process.env.BUILD_ENV,
-    'node env:',
-    process.env.NODE_ENV,
-    'runtime env:',
-    process.env.RUNTIME_ENVIRONMENT
-  )
+  const featureFlags = useFeatureFlags()
+  const showAccessoriesAndSparePartsList = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
@@ -123,7 +116,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     )
   }
 
-  if (!postBucktes || !filtersFromData) {
+  if (!postBucktes || !filtersFromData || featureFlags.isLoading) {
     return (
       <HStack justify="center" style={{ marginTop: '48px' }}>
         <Loader size="3xlarge" title="Laster produkter" />

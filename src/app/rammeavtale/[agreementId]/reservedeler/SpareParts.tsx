@@ -4,15 +4,14 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import AccessoriesOrSparePartsTable from '@/app/rammeavtale/[agreementId]/AccessoriesOrSparePartsTable'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement } from '@/utils/agreement-util'
 import { BodyShort, Heading, HStack, Link, Loader, VStack } from '@navikt/ds-react'
 
 const SpareParts = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
-  // const featureFlags = useFeatureFlags()
-  // const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-  const isDevelopment = process.env.BUILD_ENV === 'dev'
-  const useNewFeature = false
+  const featureFlags = useFeatureFlags()
+  const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
   if (useNewFeature === undefined) {
     return <Loader>Loading...</Loader>
