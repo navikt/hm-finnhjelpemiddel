@@ -13,7 +13,7 @@ const Accessories = ({ agreement }: { agreement: Agreement }) => {
   const featureFlags = useFeatureFlags()
   const useNewFeature = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
-  if (useNewFeature === undefined) {
+  if (featureFlags.isLoading || useNewFeature === undefined) {
     return <Loader>Loading...</Loader>
   }
 
