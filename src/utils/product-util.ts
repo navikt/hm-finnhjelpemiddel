@@ -145,7 +145,7 @@ export const mapProductsFromCollapse = (data: SearchResponse): Product[] => {
  */
 export const mapProductFromSeriesId = (data: SearchResponse): Product => {
   if (data.hits.hits.map((h) => h._source as ProductSourceResponse).length === 0) {
-    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants ${data}`)
+    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants ${JSON.stringify(data)}`)
   }
   return mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
 }
