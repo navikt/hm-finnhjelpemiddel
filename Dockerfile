@@ -1,5 +1,5 @@
 # Base on offical Node.js Alpine image
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 
 # Set working directory
 WORKDIR /app
@@ -43,8 +43,8 @@ FROM gcr.io/distroless/nodejs:18 as runtime
 
 WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1069 nodejs
+RUN adduser --system --uid 1069 nextjs
 
 # Copy only needed files for next app
 # see: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
