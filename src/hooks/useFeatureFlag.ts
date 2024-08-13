@@ -42,6 +42,8 @@ export function useFeatureFlags(): IFeatureFlags {
       }))
     : undefined
 
+  console.log('toggles', toggles)
+
   return {
     toggles,
     isEnabled: (toggle: string) => {
