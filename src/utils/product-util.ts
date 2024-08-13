@@ -112,7 +112,9 @@ export type HMSSuggestionWheelChair = {
  */
 export const mapHMSSuggestionFromSearchResponse = (data: SearchResponse): HMSSuggestionWheelChair[] => {
   if (data.hits.hits.length) {
-    const product = mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
+    const product = mapProductWithVariants(data.hits.hits
+      .filter((hit) => Array(hit._source).length > 0)
+      .map((h) => h._source as ProductSourceResponse))
 
     return product.variants.reduce((acc: HMSSuggestionWheelChair[], variant) => {
       const techDataEntry: HMSSuggestionWheelChair = {
@@ -137,14 +139,18 @@ export const mapHMSSuggestionFromSearchResponse = (data: SearchResponse): HMSSug
  * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
  */
 export const mapProductsFromCollapse = (data: SearchResponse): Product[] => {
-  return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
+  return data.hits.hits
+    .filter((hit) => Array(hit._source).length > 0)
+    .map((hit: Hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
 }
 
 /**
  * Maps results from search for seriesId into one product with all variants
  */
 export const mapProductFromSeriesId = (data: SearchResponse): Product => {
-  return mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
+  return mapProductWithVariants(data.hits.hits
+    .filter((hit) => Array(hit._source).length > 0)
+    .map((h) => h._source as ProductSourceResponse))
 }
 
 /**
@@ -189,7 +195,9 @@ function filterUniqueCombinationsOfPostAndRank(agreementInfos: AgreementInfo[]):
  */
 export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Product[] => {
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
-    mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
+    mapProductWithVariants(bucket.products.hits.hits
+      .filter((hit) => Array(hit._source).length > 0)
+      .map((h) => h._source as ProductSourceResponse))
   )
 
   return buckets
