@@ -10,7 +10,6 @@ import {
   TechDataResponse,
 } from './response-types'
 import { capitalize } from './string-util'
-import * as console from "console";
 
 export interface Product {
   id: string
@@ -202,8 +201,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
   })
 
   if (sources.length === 0) {
-    console.log("ProductSourceResponse array is empty", sources)
-    throw new Error("ProductSourceResponse array is empty. Cannot map product with variants.")
+    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants. ${JSON.stringify(sources)}`)
   }
 
   // TODO: Should we use the first variant? Values should be the same but should we check that they are?
