@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useInView } from 'react-intersection-observer'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
@@ -22,7 +23,6 @@ import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
-import { useInView } from 'react-intersection-observer'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
 
