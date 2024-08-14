@@ -15,7 +15,9 @@ export function useFeatureFlags(): IFeatureFlags {
   const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join('&')
   const path = `/adminregister/features?${queryParams}`
 
-  const { data, isLoading } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
+  const { data, isLoading } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET, {
+    shouldRetryOnError: false,
+  })
 
   if (isDevelopment) {
     return {
