@@ -168,24 +168,23 @@ const AgreementList = () => {
             <Loader size="xlarge" title="Laster produkter" />
           </HStack>
         )}
-
-        <Alert variant="info" className="spacing-top--large">
-          Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
-          for seksuallivet her:
-          <ul className="spacing-vertical--small">
-            <li>
-              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-                Høreapparat, ørepropper og tinnitusmaskerere
-              </Link>
-            </li>
-            <li>
-              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
-                Hjelpemidler for seksuallivet
-              </Link>
-            </li>
-          </ul>
-        </Alert>
       </VStack>
+      <Alert variant="info">
+        Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
+        for seksuallivet her:
+        <ul className="spacing-vertical--small">
+          <li>
+            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
+              Høreapparat, ørepropper og tinnitusmaskerere
+            </Link>
+          </li>
+          <li>
+            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
+              Hjelpemidler for seksuallivet
+            </Link>
+          </li>
+        </ul>
+      </Alert>
     </VStack>
   )
 }

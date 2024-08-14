@@ -6,6 +6,7 @@ import useSWR from 'swr'
 interface IFeatureFlags {
   toggles: IToggle[] | undefined
   isEnabled: (toggle: string) => boolean | undefined
+  isLoading: boolean
 }
 
 export function useFeatureFlags(): IFeatureFlags {
@@ -14,7 +15,7 @@ export function useFeatureFlags(): IFeatureFlags {
   const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join('&')
   const path = `/adminregister/features?${queryParams}`
 
-  const { data, error } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
+  const { data, isLoading } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
 
   if (isDevelopment) {
     return {
@@ -22,13 +23,7 @@ export function useFeatureFlags(): IFeatureFlags {
       isEnabled: (toggle: string) => {
         return LOCAL_TOGGLES.find((flag) => flag.name === toggle)?.enabled || false
       },
-    }
-  }
-
-  if (error) {
-    return {
-      toggles: [],
-      isEnabled: () => false,
+      isLoading: false,
     }
   }
 
@@ -44,5 +39,6 @@ export function useFeatureFlags(): IFeatureFlags {
     isEnabled: (toggle: string) => {
       return toggles?.find((flag) => flag.name === toggle)?.enabled
     },
+    isLoading,
   }
 }

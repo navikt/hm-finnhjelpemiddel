@@ -10,25 +10,14 @@ import useSWR from 'swr'
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
 import { FilesIcon, FilterIcon, PackageIcon, TrashIcon, WrenchIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Button,
-  Heading,
-  HGrid,
-  HStack,
-  Link,
-  Loader,
-  Popover,
-  VStack,
-} from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Heading, HGrid, HStack, Link, Loader, Popover, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
@@ -42,18 +31,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  // const featureFlags = useFeatureFlags()
-  const isDevelopment = process.env.BUILD_ENV === 'dev'
-  const showAccessoriesAndSparePartsList = false
 
-  console.log(
-    'build env:',
-    process.env.BUILD_ENV,
-    'node env:',
-    process.env.NODE_ENV,
-    'runtime env:',
-    process.env.RUNTIME_ENVIRONMENT
-  )
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
@@ -76,9 +54,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-    router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
-      scroll: false,
-    })
+    // router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
+    //   scroll: false,
+    // })
   }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
@@ -111,16 +89,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         doc_count: 1,
         label: post.title,
       })),
-  }
-
-  if (postError) {
-    return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Alert variant="error" title="Error med lasting av produkter">
-          Obs, her skjedde det noe feil :o
-        </Alert>
-      </HStack>
-    )
   }
 
   if (!postBucktes || !filtersFromData) {
@@ -166,35 +134,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
           </div>
 
-          <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
-            <LinkPanelLocal
-              href={
-                showAccessoriesAndSparePartsList
-                  ? `/rammeavtale/${agreement.id}/tilbehor`
-                  : `/rammeavtale/${agreement.id}#Tilbehor`
-              }
-              icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              title="Tilbehør"
-              description="Gå til avtalens tilbehørslister i PDF-format"
-            />
-
-            <LinkPanelLocal
-              href={
-                showAccessoriesAndSparePartsList
-                  ? `/rammeavtale/${agreement.id}/reservedeler`
-                  : `/rammeavtale/${agreement.id}#Reservedeler`
-              }
-              icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              title="Reservedeler"
-              description="Gå til avtalens reservedellister i PDF-format"
-            />
-            <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}`}
-              icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              title="Om avtalen"
-              description="Les om avtalen og se tilhørende dokumenter"
-            />
-          </HGrid>
+          <TopLinks agreementId={agreement.id} />
         </VStack>
 
         <FormProvider {...formMethods}>
@@ -297,11 +237,63 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </MobileOverlay>
               </div>
             )}
-            <AgreementResults posts={posts} formRef={searchFormRef} postLoading={postsIsLoading} />
+
+            <AgreementResults
+              posts={posts}
+              formRef={searchFormRef}
+              postLoading={postsIsLoading}
+              postError={postError}
+            />
           </HGrid>
         </FormProvider>
       </VStack>
     </>
+  )
+}
+
+const TopLinks = ({ agreementId }: { agreementId: string }) => {
+  const { toggles, isEnabled, isLoading } = useFeatureFlags()
+
+  if (isLoading) {
+    return (
+      <HStack justify="center" style={{ marginTop: '28px' }}>
+        <Loader size="xlarge" title="Laster..." />
+      </HStack>
+    )
+  }
+
+  const showAccessoriesAndSparePartsList = isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+
+  return (
+    <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
+      <LinkPanelLocal
+        href={
+          showAccessoriesAndSparePartsList
+            ? `/rammeavtale/${agreementId}/tilbehor`
+            : `/rammeavtale/${agreementId}#Tilbehor`
+        }
+        icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Tilbehør"
+        description="Gå til avtalens tilbehørslister i PDF-format"
+      />
+
+      <LinkPanelLocal
+        href={
+          showAccessoriesAndSparePartsList
+            ? `/rammeavtale/${agreementId}/reservedeler`
+            : `/rammeavtale/${agreementId}#Reservedeler`
+        }
+        icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Reservedeler"
+        description="Gå til avtalens reservedellister i PDF-format"
+      />
+      <LinkPanelLocal
+        href={`/rammeavtale/${agreementId}`}
+        icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Om avtalen"
+        description="Les om avtalen og se tilhørende dokumenter"
+      />
+    </HGrid>
   )
 }
 

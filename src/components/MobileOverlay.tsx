@@ -15,7 +15,7 @@ const modalVariants: Variants = {
     },
   },
   open: {
-    height: '90%',
+    height: '97%',
     transition: {
       ease: 'easeOut',
       duration: 0.4,
@@ -33,7 +33,7 @@ const MobileOverlay = ({ open, children }: { open: boolean; children: React.Reac
         exit="closed"
         variants={modalVariants}
         className={classNames('mobile-overlay', { 'mobile-overlay--open': open })}
-        onAnimationComplete={() => window.scrollTo({ top: 0 })} // Prevents jumping when content changes
+        // onAnimationComplete={() => window.scrollTo({ top: 0 })} // Prevents jumping when content changes
       >
         {children}
       </motion.div>

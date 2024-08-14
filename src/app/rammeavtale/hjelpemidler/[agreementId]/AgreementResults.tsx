@@ -14,10 +14,12 @@ const AgreementResults = ({
   posts,
   formRef,
   postLoading,
+  postError,
 }: {
   posts: PostWithProducts[]
   formRef: RefObject<HTMLFormElement>
   postLoading: boolean
+  postError: boolean
 }) => {
   const formMethods = useFormContext<FormSearchData>()
   const searchParams = useSearchParams()
@@ -126,7 +128,15 @@ const AgreementResults = ({
           </VStack>
         ))}
       </VStack>
-      {posts.length === 0 && <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>}
+      {postError && (
+        <Alert variant="error" title="Error med lasting av produkter">
+          Det har skjedd en feil ved innhenting av produkter. Vennligst prøv igjen senere.
+        </Alert>
+      )}
+
+      {!postError && posts.length === 0 && (
+        <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
+      )}
     </VStack>
   )
 }
