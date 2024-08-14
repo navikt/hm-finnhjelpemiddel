@@ -262,8 +262,6 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
     )
   }
 
-  console.log('toggles', toggles)
-
   const showAccessoriesAndSparePartsList = isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
   return (
