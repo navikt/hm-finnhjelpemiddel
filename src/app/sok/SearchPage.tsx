@@ -161,7 +161,7 @@ export default function SearchPage() {
 
   return (
     <VStack className="main-wrapper--xlarge spacing-bottom--large">
-      <Heading level="1" size="large" className={'spacing-top--xlarge spacing-bottom--xlarge'} ref={searchResultRef}>
+      <Heading level="1" size="large" className="spacing-top--xlarge spacing-bottom--xlarge" ref={searchResultRef}>
         Alle hjelpemidler
       </Heading>
       <span ref={pageTopRef} />
