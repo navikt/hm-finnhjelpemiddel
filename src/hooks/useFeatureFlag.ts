@@ -10,7 +10,7 @@ interface IFeatureFlags {
 }
 
 export function useFeatureFlags(): IFeatureFlags {
-  const isDevelopment = process.env.BUILD_ENV === 'dev'
+  const isDevelopment = process.env.NODE_ENV === 'development'
 
   const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join('&')
   const path = `/adminregister/features?${queryParams}`
@@ -41,8 +41,6 @@ export function useFeatureFlags(): IFeatureFlags {
         enabled: data ? data[toggle] : false,
       }))
     : undefined
-
-  console.log('toggles', toggles)
 
   return {
     toggles,
