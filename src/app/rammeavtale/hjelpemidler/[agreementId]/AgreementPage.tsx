@@ -252,7 +252,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 }
 
 const TopLinks = ({ agreementId }: { agreementId: string }) => {
-  const { isEnabled, isLoading } = useFeatureFlags()
+  const { toggles, isEnabled, isLoading } = useFeatureFlags()
 
   if (isLoading) {
     return (
@@ -261,6 +261,8 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
       </HStack>
     )
   }
+
+  console.log('toggles', toggles)
 
   const showAccessoriesAndSparePartsList = isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
 
