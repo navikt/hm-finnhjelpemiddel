@@ -18,6 +18,7 @@ export function useFeatureFlags(): IFeatureFlags {
   const { data, error, isLoading } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
 
   if (isDevelopment) {
+    console.log('chooses develpment :O', LOCAL_TOGGLES)
     return {
       toggles: LOCAL_TOGGLES,
       isEnabled: (toggle: string) => {
@@ -41,6 +42,8 @@ export function useFeatureFlags(): IFeatureFlags {
         enabled: data ? data[toggle] : false,
       }))
     : undefined
+
+  console.log('toggles in hook', toggles)
 
   return {
     toggles,

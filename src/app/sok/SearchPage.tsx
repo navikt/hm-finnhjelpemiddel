@@ -1,8 +1,8 @@
 'use client'
 
+import { useInView } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useInView } from 'react-intersection-observer'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
@@ -34,6 +34,7 @@ export default function SearchPage() {
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
+  const pageTopRef = useRef<HTMLHeadingElement>(null)
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
@@ -41,6 +42,15 @@ export default function SearchPage() {
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
+  const isInView = useInView(pageTopRef)
+
+  const setFocusOnSearchResults = () => {
+    if (pageTopRef.current) {
+      pageTopRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  console.log('isINView', isInView)
 
   const formMethods = useForm<FormSearchData>({
     mode: 'onSubmit',
@@ -101,13 +111,6 @@ export default function SearchPage() {
       setPage(nextPage)
     }
   }, [data, page, setPage, pathname, router, searchParams])
-
-  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
-  const searchResultRef = useRef<HTMLHeadingElement>(null)
-
-  const setFocusOnSearchResults = () => {
-    searchResultRef.current && searchResultRef.current.scrollIntoView()
-  }
 
   const onReset = () => {
     formMethods.reset({ filters: initialFiltersFormState })
@@ -211,7 +214,7 @@ export default function SearchPage() {
             <HStack justify="space-between" className="results__header">
               <Show above="lg">
                 <VStack justify="space-between">
-                  <Heading level="2" size="small" ref={searchResultRef}>
+                  <Heading level="2" size="small">
                     Hjelpemiddel
                   </Heading>
                   <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>
@@ -284,7 +287,7 @@ export default function SearchPage() {
             <AnimateLayout>
               <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} formRef={searchFormRef} />
             </AnimateLayout>
-            {!isAtPageTop && (
+            {!isInView && (
               <Button
                 type="button"
                 className="search__page-up-button"

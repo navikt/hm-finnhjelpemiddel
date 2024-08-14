@@ -17,19 +17,7 @@ import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
 import { FilesIcon, FilterIcon, PackageIcon, TrashIcon, WrenchIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Button,
-  Heading,
-  HGrid,
-  HStack,
-  Link,
-  Loader,
-  Popover,
-  VStack,
-} from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Heading, HGrid, HStack, Link, Loader, Popover, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
@@ -46,7 +34,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const featureFlags = useFeatureFlags()
   const showAccessoriesAndSparePartsList = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-
+  console.log('Feature flags in page', featureFlags)
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
@@ -69,9 +57,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-    router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
-      scroll: false,
-    })
+    // router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
+    //   scroll: false,
+    // })
   }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
@@ -104,16 +92,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         doc_count: 1,
         label: post.title,
       })),
-  }
-
-  if (postError) {
-    return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Alert variant="error" title="Error med lasting av produkter">
-          Obs, her skjedde det noe feil :o
-        </Alert>
-      </HStack>
-    )
   }
 
   if (!postBucktes || !filtersFromData || featureFlags.isLoading) {
@@ -290,7 +268,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </MobileOverlay>
               </div>
             )}
-            <AgreementResults posts={posts} formRef={searchFormRef} postLoading={postsIsLoading} />
+
+            <AgreementResults
+              posts={posts}
+              formRef={searchFormRef}
+              postLoading={postsIsLoading}
+              postError={postError}
+            />
           </HGrid>
         </FormProvider>
       </VStack>
