@@ -1,6 +1,5 @@
 'use client'
 
-import { useInView } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -23,6 +22,7 @@ import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
+import { useInView } from 'react-intersection-observer'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
 
@@ -34,7 +34,6 @@ export default function SearchPage() {
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
-  const pageTopRef = useRef<HTMLHeadingElement>(null)
 
   const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
@@ -42,15 +41,12 @@ export default function SearchPage() {
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
-  const isInView = useInView(pageTopRef)
+  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
+  const searchResultRef = useRef<HTMLHeadingElement>(null)
 
   const setFocusOnSearchResults = () => {
-    if (pageTopRef.current) {
-      pageTopRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
+    searchResultRef.current && searchResultRef.current.scrollIntoView()
   }
-
-  console.log('isINView', isInView)
 
   const formMethods = useForm<FormSearchData>({
     mode: 'onSubmit',
@@ -165,11 +161,11 @@ export default function SearchPage() {
 
   return (
     <VStack className="main-wrapper--xlarge spacing-bottom--large">
-      <VStack gap="5" className="spacing-top--xlarge spacing-bottom--xlarge">
-        <Heading level="1" size="large" ref={pageTopRef}>
-          Alle hjelpemidler
-        </Heading>
-      </VStack>
+      <Heading level="1" size="large" className={'spacing-top--xlarge spacing-bottom--xlarge'} ref={searchResultRef}>
+        Alle hjelpemidler
+      </Heading>
+      <span ref={pageTopRef} />
+
       <FormProvider {...formMethods}>
         <CompareMenu />
         <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
@@ -234,7 +230,7 @@ export default function SearchPage() {
                   </Button>
                   <MobileOverlay open={isMobileOverlayOpen}>
                     <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-                      <Heading level="1" size="medium">
+                      <Heading level="2" size="medium">
                         Filtrer søket
                       </Heading>
                     </MobileOverlay.Header>
@@ -287,7 +283,7 @@ export default function SearchPage() {
             <AnimateLayout>
               <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} formRef={searchFormRef} />
             </AnimateLayout>
-            {!isInView && (
+            {!isAtPageTop && (
               <Button
                 type="button"
                 className="search__page-up-button"

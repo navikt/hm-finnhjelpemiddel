@@ -15,23 +15,14 @@ export function useFeatureFlags(): IFeatureFlags {
   const queryParams = EXPECTED_TOGGLES.map((toggle) => `feature=${toggle}`).join('&')
   const path = `/adminregister/features?${queryParams}`
 
-  const { data, error, isLoading } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
+  const { data, isLoading } = useSWR<Record<string, boolean>>(isDevelopment ? null : path, fetcherGET)
 
   if (isDevelopment) {
-    console.log('chooses develpment :O', LOCAL_TOGGLES)
     return {
       toggles: LOCAL_TOGGLES,
       isEnabled: (toggle: string) => {
         return LOCAL_TOGGLES.find((flag) => flag.name === toggle)?.enabled || false
       },
-      isLoading: false,
-    }
-  }
-
-  if (error) {
-    return {
-      toggles: [],
-      isEnabled: () => false,
       isLoading: false,
     }
   }
@@ -42,8 +33,6 @@ export function useFeatureFlags(): IFeatureFlags {
         enabled: data ? data[toggle] : false,
       }))
     : undefined
-
-  console.log('toggles in hook', toggles)
 
   return {
     toggles,

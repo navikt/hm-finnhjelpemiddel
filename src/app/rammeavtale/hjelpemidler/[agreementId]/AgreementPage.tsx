@@ -32,9 +32,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const featureFlags = useFeatureFlags()
-  const showAccessoriesAndSparePartsList = featureFlags.isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-  console.log('Feature flags in page', featureFlags)
   const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
@@ -94,7 +91,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       })),
   }
 
-  if (!postBucktes || !filtersFromData || featureFlags.isLoading) {
+  if (!postBucktes || !filtersFromData) {
     return (
       <HStack justify="center" style={{ marginTop: '48px' }}>
         <Loader size="3xlarge" title="Laster produkter" />
@@ -137,35 +134,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
           </div>
 
-          <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
-            <LinkPanelLocal
-              href={
-                showAccessoriesAndSparePartsList
-                  ? `/rammeavtale/${agreement.id}/tilbehor`
-                  : `/rammeavtale/${agreement.id}#Tilbehor`
-              }
-              icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              title="Tilbehør"
-              description="Gå til avtalens tilbehørslister i PDF-format"
-            />
-
-            <LinkPanelLocal
-              href={
-                showAccessoriesAndSparePartsList
-                  ? `/rammeavtale/${agreement.id}/reservedeler`
-                  : `/rammeavtale/${agreement.id}#Reservedeler`
-              }
-              icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              title="Reservedeler"
-              description="Gå til avtalens reservedellister i PDF-format"
-            />
-            <LinkPanelLocal
-              href={`/rammeavtale/${agreement.id}`}
-              icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              title="Om avtalen"
-              description="Les om avtalen og se tilhørende dokumenter"
-            />
-          </HGrid>
+          <TopLinks agreementId={agreement.id} />
         </VStack>
 
         <FormProvider {...formMethods}>
@@ -279,6 +248,52 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         </FormProvider>
       </VStack>
     </>
+  )
+}
+
+const TopLinks = ({ agreementId }: { agreementId: string }) => {
+  const { isEnabled, isLoading } = useFeatureFlags()
+
+  if (isLoading) {
+    return (
+      <HStack justify="center" style={{ marginTop: '28px' }}>
+        <Loader size="xlarge" title="Laster..." />
+      </HStack>
+    )
+  }
+
+  const showAccessoriesAndSparePartsList = isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+
+  return (
+    <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
+      <LinkPanelLocal
+        href={
+          showAccessoriesAndSparePartsList
+            ? `/rammeavtale/${agreementId}/tilbehor`
+            : `/rammeavtale/${agreementId}#Tilbehor`
+        }
+        icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Tilbehør"
+        description="Gå til avtalens tilbehørslister i PDF-format"
+      />
+
+      <LinkPanelLocal
+        href={
+          showAccessoriesAndSparePartsList
+            ? `/rammeavtale/${agreementId}/reservedeler`
+            : `/rammeavtale/${agreementId}#Reservedeler`
+        }
+        icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Reservedeler"
+        description="Gå til avtalens reservedellister i PDF-format"
+      />
+      <LinkPanelLocal
+        href={`/rammeavtale/${agreementId}`}
+        icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Om avtalen"
+        description="Les om avtalen og se tilhørende dokumenter"
+      />
+    </HGrid>
   )
 }
 

@@ -1,3 +1,4 @@
+import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
@@ -9,7 +10,6 @@ import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
-import AutocompleteSearch from '@/components/AutocompleteSearch'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -65,10 +65,12 @@ const NavigationBar = () => {
           <div className="nav-top-container__logo-and-search-field">
             <NextLink href="/" className="logo" onClick={() => setMenuOpen(false)}>
               <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
-              <span className="logo__text">
-                <span> / </span>
-                <span>FinnHjelpemiddel</span>
-              </span>
+              <Hide below="sm">
+                <span className="logo__text">
+                  <span> / </span>
+                  <span>FinnHjelpemiddel</span>
+                </span>
+              </Hide>
             </NextLink>
             <Hide below="md" className="nav-top-container__search">
               <AutocompleteSearch onSearch={onSearch} />
