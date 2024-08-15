@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}-PROD
 
 jobs:
   build-prod:
