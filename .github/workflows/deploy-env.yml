@@ -11,7 +11,7 @@ on:
           - PROD
 
 env:
-  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.event.inputs.environment }}
 
 jobs:
   build-dev:
