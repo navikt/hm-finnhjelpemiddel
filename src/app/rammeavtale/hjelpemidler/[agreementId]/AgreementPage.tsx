@@ -262,7 +262,10 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
     )
   }
 
-  const showAccessoriesAndSparePartsList = isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+  const isHygieneAvtale = '034fccf7-c481-4c2b-9867-4d092f89c0fe' || '22469a9d-0cc2-41c4-8564-085b0d836144'
+
+  const showAccessoriesAndSparePartsList =
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && isHygieneAvtale
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
