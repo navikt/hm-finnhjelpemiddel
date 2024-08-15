@@ -135,16 +135,19 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
           </Table.Header>
           <Table.Body>
             {data &&
-              data.products.map((item, i) => (
-                <Table.Row key={i}>
-                  <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
-                  <Table.DataCell> {item.title}</Table.DataCell>
-                  <Show above="sm" asChild>
-                    <Table.DataCell> {item.supplierName}</Table.DataCell>
-                  </Show>
-                  <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
-                </Table.Row>
-              ))}
+              data.products.map((item, i) => {
+                console.log({ item })
+                return (
+                  <Table.Row key={i}>
+                    <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
+                    <Table.DataCell> {item.variants[0].articleName}</Table.DataCell>
+                    <Show above="sm" asChild>
+                      <Table.DataCell> {item.supplierName}</Table.DataCell>
+                    </Show>
+                    <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
+                  </Table.Row>
+                )
+              })}
           </Table.Body>
         </Table>
       )}

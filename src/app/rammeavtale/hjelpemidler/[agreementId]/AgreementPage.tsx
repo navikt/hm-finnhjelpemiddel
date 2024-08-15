@@ -262,8 +262,8 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
     )
   }
 
-  const isHygieneAvtale = '034fccf7-c481-4c2b-9867-4d092f89c0fe' || '22469a9d-0cc2-41c4-8564-085b0d836144'
-
+  const isHygieneAvtale =
+    agreementId === '034fccf7-c481-4c2b-9867-4d092f89c0fe' || agreementId === '22469a9d-0cc2-41c4-8564-085b0d836144'
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && isHygieneAvtale
 
@@ -277,7 +277,11 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
         }
         icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
         title="Tilbehør"
-        description="Gå til avtalens tilbehørslister i PDF-format"
+        description={
+          showAccessoriesAndSparePartsList
+            ? 'Gå til avtalens tilbehørslister'
+            : 'Gå til avtalens tilbehørslister i PDF-format'
+        }
       />
 
       <LinkPanelLocal
@@ -288,7 +292,11 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
         }
         icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
         title="Reservedeler"
-        description="Gå til avtalens reservedellister i PDF-format"
+        description={
+          showAccessoriesAndSparePartsList
+            ? 'Gå til avtalens reservedellister'
+            : 'Gå til avtalens reservedellister i PDF-format'
+        }
       />
       <LinkPanelLocal
         href={`/rammeavtale/${agreementId}`}
