@@ -11,11 +11,11 @@ import {
   FilterData,
   getFiltersAgreement,
 } from '@/utils/api-util'
-import { Alert, HGrid, Loader, Pagination, Search, Select, Table } from '@navikt/ds-react'
+import { Alert, HGrid, HStack, Loader, Pagination, Search, Select, Show, Table } from '@navikt/ds-react'
 
 const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agreement; isSparepart: boolean }) => {
   const [page, setPage] = useState(1)
-  const rowsPerPage = 15
+  const rowsPerPage = 16
   const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string | null>(null)
   const router = useRouter()
   const pathname = usePathname()
@@ -127,26 +127,49 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
             <Table.Row>
               <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
               <Table.HeaderCell scope="col">Beskrivelse</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Leverandør</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Leverandør artikkelnummer</Table.HeaderCell>
+              <Show above="sm" asChild>
+                <Table.HeaderCell scope="col">Leverandør</Table.HeaderCell>
+              </Show>
+              <Table.HeaderCell scope="col">Lev-artnr</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {data &&
-              data.products.map((item, i) => (
-                <Table.Row key={i}>
-                  <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
-                  <Table.DataCell> {item.title}</Table.DataCell>
-                  <Table.DataCell> {item.supplierName}</Table.DataCell>
-                  <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
-                </Table.Row>
-              ))}
+              data.products.map((item, i) => {
+                console.log({ item })
+                return (
+                  <Table.Row key={i}>
+                    <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
+                    <Table.DataCell> {item.variants[0].articleName}</Table.DataCell>
+                    <Show above="sm" asChild>
+                      <Table.DataCell> {item.supplierName}</Table.DataCell>
+                    </Show>
+                    <Table.DataCell> {item.variants[0].supplierRef}</Table.DataCell>
+                  </Table.Row>
+                )
+              })}
           </Table.Body>
         </Table>
       )}
 
       {data && data.totalHits > rowsPerPage && (
-        <Pagination page={page} onPageChange={setPage} count={Math.ceil(data.totalHits / rowsPerPage)} size="small" />
+        <>
+          <Show above="sm" asChild>
+            <HStack marginBlock={'2'}>
+              <Pagination page={page} onPageChange={setPage} count={Math.ceil(data.totalHits / rowsPerPage)} />
+            </HStack>
+          </Show>
+          <Show below="sm" asChild>
+            <HStack justify={'center'} marginBlock={'2'}>
+              <Pagination
+                page={page}
+                onPageChange={setPage}
+                count={Math.ceil(data.totalHits / rowsPerPage)}
+                size="xsmall"
+              />
+            </HStack>
+          </Show>
+        </>
       )}
     </>
   )
