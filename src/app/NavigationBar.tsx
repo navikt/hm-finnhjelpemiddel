@@ -61,6 +61,16 @@ const NavigationBar = () => {
     onKeyPressed: () => setMenuOpen(false),
   })
 
+  const removeSearchTerm = () => {
+    const qWithFilters = new URLSearchParams(window.location.search)
+    qWithFilters.set('term', '')
+
+    const currentHash = window.location.hash
+    router.replace(`${path}?${qWithFilters}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
+  }
+
   return (
     <nav className="nav" ref={outerContainerRef}>
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
@@ -85,7 +95,12 @@ const NavigationBar = () => {
                 className="nav-top-container__search-button"
                 icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
                 variant="tertiary"
-                onClick={() => setSearchOpen(!searchOpen)}
+                onClick={() => {
+                  if (searchOpen) {
+                    removeSearchTerm()
+                  }
+                  setSearchOpen(!searchOpen)
+                }}
                 aria-expanded={searchOpen}
               >
                 {searchOpen ? '' : 'Søk'}

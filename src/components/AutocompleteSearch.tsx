@@ -134,10 +134,11 @@ const AutocompleteSearch = ({ onSearch, secondary = false }: Props) => {
         onSearchClick={(searchTerm) => {
           onSearch(searchTerm)
         }}
-        onClear={() => {
-          setSelectedOption('')
-          onSearch('')
-        }}
+        // onClear={() => {
+        //   setSelectedOption('')
+        //   onSearch('')
+        // }}
+        clearButton={false}
         onKeyUp={handleKeyUpInInputField}
         onFocus={() => virtualFocus.reset()}
       />
