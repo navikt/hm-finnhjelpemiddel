@@ -1,14 +1,14 @@
+import AutocompleteSearch from '@/components/AutocompleteSearch'
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, HStack, Hide, Show } from '@navikt/ds-react'
-import classNames from 'classnames'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import AutocompleteSearch from './AutocompleteSearch'
 import BurgerMenuContent from './BurgerMenuContent'
 
 const NavigationBar = () => {
@@ -56,15 +56,21 @@ const NavigationBar = () => {
     setMenuOpenGlobalState(menuOpen)
   }, [menuOpen, setMenuOpenGlobalState])
 
+  useKeyboardShortcut({
+    key: 'Escape',
+    onKeyPressed: () => setMenuOpen(false),
+  })
+
   return (
     <nav className="nav" ref={outerContainerRef}>
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
-          <NextLink href="/" className={classNames('logo', { hide: searchOpen })}>
+          <NextLink href="/" className="logo" onClick={() => setMenuOpen(false)}>
             <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
-            <Hide as="span" below="md" className="logo__text">
-              <span> / </span>
-              <span>FinnHjelpemiddel</span>
+            <Hide below="sm">
+              <span className="logo__text">
+                <span>FinnHjelpemiddel</span>
+              </span>
             </Hide>
           </NextLink>
 

@@ -108,7 +108,7 @@ const PhotoSliderModal = ({
               }}
             >
               <Image
-                tabIndex={0}
+                tabIndex={-1}
                 draggable="false"
                 loader={largeImageLoader}
                 src={src}

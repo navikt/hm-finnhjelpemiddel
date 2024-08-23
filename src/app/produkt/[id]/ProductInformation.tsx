@@ -1,6 +1,6 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, Heading, HelpText, Link } from '@navikt/ds-react'
+import { BodyLong, BodyShort, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
 const ProductInformation = ({ product }: { product: Product }) => {
@@ -39,21 +39,19 @@ const ProductInformation = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <Heading level="2" size="large" spacing>
-        Beskrivelse
-      </Heading>
-      {!product.attributes.text &&
+      {!product.attributes.text && (
         <BodyLong spacing className="product-page__description">
           Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.
         </BodyLong>
-      }
-      {product.attributes.text &&
-        htmlDescription &&
+      )}
+      {product.attributes.text && htmlDescription && (
         <div dangerouslySetInnerHTML={{ __html: product.attributes.text }} />
-      }
-      {product.attributes.text && !htmlDescription &&
-        <BodyLong spacing className="product-page__description">{product.attributes.text}</BodyLong>
-      }
+      )}
+      {product.attributes.text && !htmlDescription && (
+        <BodyLong spacing className="product-page__description">
+          {product.attributes.text}
+        </BodyLong>
+      )}
 
       <DefinitionList>
         <DefinitionList.Term>

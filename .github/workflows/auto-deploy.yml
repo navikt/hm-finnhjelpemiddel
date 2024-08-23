@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}-PROD
 
 jobs:
   build-prod:
@@ -46,7 +46,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and publish Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -70,5 +70,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/nais-prod.yaml,.nais/unleash-apitoken.yaml
+          RESOURCE: .nais/nais-prod.yaml
           VAR: image=${{ env.docker_image }}

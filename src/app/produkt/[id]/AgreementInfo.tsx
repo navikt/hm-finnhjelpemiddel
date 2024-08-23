@@ -26,10 +26,6 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
   if (!allAgreementsTheSame) {
     return (
       <VStack gap="4">
-        <Heading level="3" size="large">
-          Avtaler med Nav
-        </Heading>
-
         {uniqueAgreements.map((agreement) => {
           return (
             <VStack gap="4" key={agreement.id} className="spacing-bottom--medium">
@@ -80,10 +76,6 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
 
   return (
     <VStack gap="4">
-      <Heading level="3" size="large">
-        Avtale med NAV
-      </Heading>
-
       {product.agreements?.length === 1 && product.agreements[0]?.rank > 1 && product.agreements[0]?.rank < 90 && (
         <Alert variant="info" inline>
           Dette produktet er rangert som nummer {product.agreements[0].rank} i delkontrakten. Ta en titt på høyere

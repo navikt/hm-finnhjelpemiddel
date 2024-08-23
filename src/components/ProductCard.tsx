@@ -10,9 +10,9 @@ import {
   Button,
   Checkbox,
   Detail,
+  Heading,
   HGrid,
   HStack,
-  Heading,
   Link,
   VStack,
 } from '@navikt/ds-react'
@@ -187,7 +187,7 @@ const ProductCard = ({
             <Button
               className="product-card__iso-button"
               variant="tertiary-neutral"
-              icon={<PackageIcon />}
+              icon={<PackageIcon aria-hidden />}
               onClick={() => handleIsoButton(product.isoCategoryTitle)}
             >
               {product.isoCategoryTitle}

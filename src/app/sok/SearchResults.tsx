@@ -38,11 +38,11 @@ const SearchResults = ({
   }
 
   const visFilters = formMethods.getValues(`filters.vis`)
-  const isUtgåttActive = visFilters.includes('Inkluder utgåtte hjelpemidler')
+  const isHideUtgåttActive = visFilters.includes('Skjul utgåtte hjelpemidler')
 
   const handleSetUtgåttFilter = () => {
-    visFilters.push('Inkluder utgåtte hjelpemidler')
-    formMethods.setValue(`filters.vis`, visFilters)
+    const visFiltersUpdated = visFilters.filter((item) => item !== 'Skjul utgåtte hjelpemidler')
+    formMethods.setValue(`filters.vis`, visFiltersUpdated)
     formRef.current?.requestSubmit()
   }
 
@@ -52,7 +52,7 @@ const SearchResults = ({
     return (
       <div id="searchResults">
         <Alert variant="info">
-          {isUtgåttActive ? (
+          {!isHideUtgåttActive ? (
             <BodyLong>Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</BodyLong>
           ) : (
             <HStack gap="1">

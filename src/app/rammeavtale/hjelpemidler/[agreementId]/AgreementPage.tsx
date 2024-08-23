@@ -4,30 +4,20 @@ import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from 
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import useSWR from 'swr'
 
 import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
+import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import { logNavigationEvent } from '@/utils/amplitude'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
-import { FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyShort,
-  Button,
-  HGrid,
-  HStack,
-  Heading,
-  Link,
-  LinkPanel,
-  Loader,
-  Popover,
-  VStack,
-} from '@navikt/ds-react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import useSWR from 'swr'
+import { dateToString } from '@/utils/string-util'
+import { FilesIcon, FilterIcon, PackageIcon, TrashIcon, WrenchIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Button, Heading, HGrid, HStack, Link, Loader, Popover, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
@@ -64,9 +54,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-    router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
-      scroll: false,
-    })
+    // router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
+    //   scroll: false,
+    // })
   }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
@@ -101,16 +91,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       })),
   }
 
-  if (postError) {
-    return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Alert variant="error" title="Error med lasting av produkter">
-          Obs, her skjedde det noe feil :o
-        </Alert>
-      </HStack>
-    )
-  }
-
   if (!postBucktes || !filtersFromData) {
     return (
       <HStack justify="center" style={{ marginTop: '48px' }}>
@@ -137,26 +117,24 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
       <VStack className="main-wrapper--large spacing-bottom--large hide-print">
-        <VStack gap="5" className="spacing-top--large spacing-bottom--large">
+        <VStack gap="5" className="spacing-vertical--xlarge">
           <HStack gap="3">
             <Link as={NextLink} href="/" variant="subtle">
               Hjelpemidler på avtale med NAV
             </Link>
             <BodyShort textColor="subtle">/</BodyShort>
           </HStack>
-          <Heading level="1" size="large">
+          <Heading level="1" size="large" className="agreement-page__heading">
             {`${agreement.title}`}
           </Heading>
+          <div>
+            <BodyLong size="small">
+              {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
+            </BodyLong>
+            <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
+          </div>
 
-          <LinkPanel
-            href={`/rammeavtale/${agreement.id}`}
-            className="agreement-page__link-to-search"
-            onClick={() =>
-              logNavigationEvent('hurtigoversikt', 'rammeavtale', 'Tilbehør, reservedeler og dokumenter med mer')
-            }
-          >
-            Om rammeavtalen med NAV
-          </LinkPanel>
+          <TopLinks agreementId={agreement.id} />
         </VStack>
 
         <FormProvider {...formMethods}>
@@ -259,11 +237,80 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </MobileOverlay>
               </div>
             )}
-            <AgreementResults posts={posts} formRef={searchFormRef} postLoading={postsIsLoading} />
+
+            <AgreementResults
+              posts={posts}
+              formRef={searchFormRef}
+              postLoading={postsIsLoading}
+              postError={postError}
+            />
           </HGrid>
         </FormProvider>
       </VStack>
     </>
+  )
+}
+
+const TopLinks = ({ agreementId }: { agreementId: string }) => {
+  const { toggles, isEnabled, isLoading } = useFeatureFlags()
+
+  if (isLoading) {
+    return (
+      <HStack justify="center" style={{ marginTop: '28px' }}>
+        <Loader size="xlarge" title="Laster..." />
+      </HStack>
+    )
+  }
+
+  const isHygieneAvtale =
+    agreementId === '034fccf7-c481-4c2b-9867-4d092f89c0fe' || agreementId === '22469a9d-0cc2-41c4-8564-085b0d836144'
+
+  const isLofteplattformAndHyieneInDev =
+    agreementId === '039c71d2-d325-47c0-99ec-8ac85748d40d' ||
+    agreementId === '4432dc25-88c1-429e-95f3-0ed55836335e' ||
+    agreementId === '034fccf7-c481-4c2b-9867-4d092f89c0fe'
+
+  const showAccessoriesAndSparePartsList =
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && isLofteplattformAndHyieneInDev
+
+  return (
+    <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
+      <LinkPanelLocal
+        href={
+          showAccessoriesAndSparePartsList
+            ? `/rammeavtale/${agreementId}/tilbehor`
+            : `/rammeavtale/${agreementId}#Tilbehor`
+        }
+        icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Tilbehør"
+        description={
+          showAccessoriesAndSparePartsList
+            ? 'Gå til avtalens tilbehørslister'
+            : 'Gå til avtalens tilbehørslister i PDF-format'
+        }
+      />
+
+      <LinkPanelLocal
+        href={
+          showAccessoriesAndSparePartsList
+            ? `/rammeavtale/${agreementId}/reservedeler`
+            : `/rammeavtale/${agreementId}#Reservedeler`
+        }
+        icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Reservedeler"
+        description={
+          showAccessoriesAndSparePartsList
+            ? 'Gå til avtalens reservedellister'
+            : 'Gå til avtalens reservedellister i PDF-format'
+        }
+      />
+      <LinkPanelLocal
+        href={`/rammeavtale/${agreementId}`}
+        icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+        title="Om avtalen"
+        description="Les om avtalen og se tilhørende dokumenter"
+      />
+    </HGrid>
   )
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -14,7 +14,7 @@ import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product } from '@/utils/product-util'
-import { toValueAndUnit } from '@/utils/string-util'
+import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
@@ -103,13 +103,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
     const isSearchTermInHms = hmsNumbers.includes(searchData.searchTerm?.toLowerCase())
     if (isSearchTermInHms) setSearchTermIsHms(true)
     const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
-
-    router.replace(
-      `${pathname}?${toSearchQueryString({ filters: relevantFilters }, isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : '')}`,
-      {
-        scroll: false,
-      }
+    const currentHash = window.location.hash
+    const newQueryString = toSearchQueryString(
+      { filters: relevantFilters },
+      isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : ''
     )
+    router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
   }, [filtersFromData])
 
   const formMethods = useForm<FilterFormStateProductPage>({
@@ -121,12 +122,19 @@ const ProductVariants = ({ product }: { product: Product }) => {
   })
 
   const onSubmit = () => {
-    router.replace(
-      `${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)}`,
-      {
-        scroll: false,
-      }
-    )
+    const currentHash = window.location.hash
+    const newQueryString = toSearchQueryString({ filters: formMethods.getValues().filters }, searchData.searchTerm)
+    router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
+  }
+
+  const onRemoveSearchTerm = () => {
+    const currentHash = window.location.hash
+    const newQueryString = toSearchQueryString({ filters: formMethods.getValues().filters }, '')
+    router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
+      scroll: false,
+    })
   }
 
   const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
@@ -176,6 +184,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
   const hasAgreementVaries = hasAgreementSet.size > 1
   const rankSet = new Set(product.agreements.map((agr) => agr.rank))
+  const postSet = new Set(product.agreements.map((agr) => agr.postNr))
   const sortRank = rankSet.size !== 1 || hasAgreementVaries
 
   const handleSortRow = (sortKey: string) => {
@@ -226,17 +235,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
         : []
     )
 
-  const onRemoveSearchTerm = () => {
-    router.replace(`${pathname}?${toSearchQueryString({ filters: formMethods.getValues().filters }, '')}`, {
-      scroll: false,
-    })
-  }
-
   return (
     <>
-      <Heading level="2" size="large" spacing>
-        Egenskaper
-      </Heading>
       <BodyLong className="spacing-bottom--medium">
         {egenskaperText(
           product.title,
@@ -303,7 +303,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
               <Table.Row className="variants-table__status-row">
                 <Table.HeaderCell></Table.HeaderCell>
                 {productVariants.map((variant) => (
-                  <Table.HeaderCell key={variant.id}>
+                  <Table.HeaderCell key={'onagreement-' + variant.id}>
                     {variant.hasAgreement ? (
                       <Tag
                         size="small"
@@ -354,7 +354,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>Navn på variant</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.ColumnHeader key={variant.id}>{variant.articleName}</Table.ColumnHeader>
+                  <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
                 ))}
               </Table.Row>
             </Table.Header>
@@ -391,7 +391,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>
+                  <Table.DataCell key={'hms-' + variant.id}>
                     {variant.hmsArtNr ? (
                       <CopyButton
                         size="small"
@@ -441,7 +441,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>
+                  <Table.DataCell key={'supref-' + variant.id}>
                     {variant.supplierRef ? (
                       <CopyButton
                         size="small"
@@ -492,9 +492,45 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     <Table.HeaderCell>Rangering</Table.HeaderCell>
                   )}
                   {sortedByKey.map((variant) => (
-                    <Fragment key={variant.id}>
-                      <Table.DataCell key={variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
-                    </Fragment>
+                    <Table.DataCell key={'rank-' + variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
+
+              {product.agreements && product.agreements.length > 0 && (
+                <Table.Row
+                  className={classNames(
+                    { 'variants-table__sortable-row': postSet.size > 1 },
+                    { 'variants-table__sorted-row': sortColumns.orderBy === 'postNr' }
+                  )}
+                >
+                  {sortRank ? (
+                    <Table.HeaderCell className="sortable">
+                      <Button
+                        className="sort-button"
+                        aria-label={
+                          sortColumns.orderBy === 'postNr'
+                            ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Delkontrakt ' })
+                            : defaultAriaLabel + ' delkontrakt'
+                        }
+                        aria-selected={sortColumns.orderBy === 'postNr'}
+                        size="xsmall"
+                        style={{ textAlign: 'left' }}
+                        variant="tertiary"
+                        onClick={() => handleSortRow('postNr')}
+                        iconPosition="right"
+                        icon={iconBasedOnState('postNr')}
+                      >
+                        Delkontrakt
+                      </Button>
+                    </Table.HeaderCell>
+                  ) : (
+                    <Table.HeaderCell>Delkontrakt</Table.HeaderCell>
+                  )}
+                  {sortedByKey.map((variant) => (
+                    <Table.DataCell key={'post-' + variant.id}>
+                      {formatAgreementPosts(variant.agreements)}
+                    </Table.DataCell>
                   ))}
                 </Table.Row>
               )}
@@ -502,13 +538,17 @@ const ProductVariants = ({ product }: { product: Product }) => {
               <Table.Row>
                 <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
+                  <Table.DataCell key={'bestillingsordning-' + variant.id}>
+                    {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                  </Table.DataCell>
                 ))}
               </Table.Row>
               <Table.Row>
                 <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={variant.id}>{variant.digitalSoknad ? 'Ja' : 'Nei'}</Table.DataCell>
+                  <Table.DataCell key={'behovsmelding-' + variant.id}>
+                    {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                  </Table.DataCell>
                 ))}
               </Table.Row>
               {Object.keys(rows).length > 0 &&

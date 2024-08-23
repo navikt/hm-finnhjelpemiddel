@@ -1,7 +1,8 @@
+import NextLink from 'next/link'
+
 import { logNavigationEvent } from '@/utils/amplitude'
 import { categories } from '@/utils/category-util'
-import { HGrid, Heading, Link, VStack } from '@navikt/ds-react'
-import NextLink from 'next/link'
+import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
 
 interface Props {
   menuOpen: boolean
@@ -30,6 +31,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                           href={category.link}
                           onClick={() => {
                             setMenuOpen(false)
+                            logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
                           }}
                         >
                           {category.name}

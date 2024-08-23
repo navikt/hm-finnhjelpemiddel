@@ -41,6 +41,12 @@ export default function SearchPage() {
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
+  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
+  const searchResultRef = useRef<HTMLHeadingElement>(null)
+
+  const setFocusOnSearchResults = () => {
+    searchResultRef.current && searchResultRef.current.scrollIntoView()
+  }
 
   const formMethods = useForm<FormSearchData>({
     mode: 'onSubmit',
@@ -102,13 +108,6 @@ export default function SearchPage() {
     }
   }, [data, page, setPage, pathname, router, searchParams])
 
-  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
-  const searchResultRef = useRef<HTMLHeadingElement>(null)
-
-  const setFocusOnSearchResults = () => {
-    searchResultRef.current && searchResultRef.current.scrollIntoView()
-  }
-
   const onReset = () => {
     formMethods.reset({ filters: initialFiltersFormState })
     setPage(1)
@@ -163,11 +162,11 @@ export default function SearchPage() {
 
   return (
     <VStack className="main-wrapper--xlarge spacing-bottom--large">
-      <VStack gap="5" className="spacing-top--xlarge spacing-bottom--xlarge">
-        <Heading level="1" size="large" ref={pageTopRef}>
-          Alle hjelpemidler
-        </Heading>
-      </VStack>
+      <Heading level="1" size="large" className="spacing-top--xlarge spacing-bottom--xlarge" ref={searchResultRef}>
+        Alle hjelpemidler
+      </Heading>
+      <span ref={pageTopRef} />
+
       <FormProvider {...formMethods}>
         <CompareMenu />
         <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
@@ -216,7 +215,7 @@ export default function SearchPage() {
             >
               <Show above="lg">
                 <VStack justify="space-between">
-                  <Heading level="2" size="small" ref={searchResultRef}>
+                  <Heading level="2" size="small">
                     Hjelpemiddel
                   </Heading>
                   <BodyShort aria-live="polite" style={{ marginLeft: '2px' }}>
@@ -236,7 +235,7 @@ export default function SearchPage() {
                   </Button>
                   <MobileOverlay open={isMobileOverlayOpen}>
                     <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-                      <Heading level="1" size="medium">
+                      <Heading level="2" size="medium">
                         Filtrer søket
                       </Heading>
                     </MobileOverlay.Header>

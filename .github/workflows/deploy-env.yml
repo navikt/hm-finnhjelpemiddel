@@ -11,7 +11,7 @@ on:
           - PROD
 
 env:
-  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.event.inputs.environment }}
 
 jobs:
   build-dev:
@@ -34,7 +34,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and publish Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -73,7 +73,7 @@ jobs:
       - name: Build application
         run: npm run build
       - name: Upload static files to NAV CDN
-        uses: navikt/frontend/actions/cdn-upload/v1@main
+        uses: navikt/frontend/actions/cdn-upload/v2@master
         with:
           cdn-team-name: teamdigihot
           source: ./.next/static
@@ -85,7 +85,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and publish Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -111,7 +111,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais-dev.yaml,.nais/unleash-apitoken.yaml
+          RESOURCE: .nais/nais-dev.yaml
           VAR: image=${{ env.docker_image }}
 
   deploy-to-prod:
@@ -125,5 +125,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: .nais/nais-prod.yaml,.nais/unleash-apitoken.yaml
+          RESOURCE: .nais/nais-prod.yaml
           VAR: image=${{ env.docker_image }}

@@ -32,6 +32,7 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
+import { Fetcher } from "swr";
 
 export const PAGE_SIZE = 24
 
@@ -202,6 +203,26 @@ const makeSearchTermQuery = ({
     negative_boost: 1,
   }
 
+  const negativeBoostInactiveProducts = {
+    negative: {
+      match: {
+        status: 'INACTIVE'
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.01 ,
+  }
+
+  const negativeBoostNonAgreementProducts = {
+    negative: {
+      match: {
+        hasAgreement: false
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.1 ,
+  }
+
   const queryStringSearchTerm = removeReservedChars(searchTerm)
 
   //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
@@ -227,6 +248,8 @@ const makeSearchTermQuery = ({
             },
           },
           ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
         },
       },
       {
@@ -238,6 +261,7 @@ const makeSearchTermQuery = ({
             },
           },
           ...commonBoosting,
+          ...negativeBoostInactiveProducts,
         },
       },
       {
@@ -249,8 +273,10 @@ const makeSearchTermQuery = ({
             },
           },
           ...commonBoosting,
+          ...negativeBoostInactiveProducts,
         },
       },
+
     ],
   }
 
@@ -435,8 +461,7 @@ export const fetchProducts = ({
           filterLeverandor(leverandor),
           filterProduktkategoriISO(produktkategori),
           filterRammeavtale(rammeavtale),
-          //Filtrer bare på aktive produkter dersom vi ikke henter basert på serieId(produktside)
-          ...filterVis(seriesId === undefined, vis),
+          ...filterVis(vis),
           filterStatus(status),
           filterCategory(categories),
           //Remove null values
@@ -772,6 +797,91 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   return res.json().then(mapAgreementLabels)
 }
 
+export type FetchProductsWithPaginationResponse = {
+  products: Product[]
+  totalHits: number
+}
+
+export const fetchAccessoriesAndSpareParts = ({
+  agreementId,
+  searchTerm,
+  selectedSupplier,
+  currentPage,
+  pageSize,
+  isSparepart,
+}: {
+  agreementId: string
+  searchTerm: string
+  selectedSupplier?: string
+  currentPage: number
+  pageSize: number
+  isSparepart: boolean
+}): Promise<FetchProductsWithPaginationResponse> => {
+  const termQuery = {
+    multi_match: {
+      query: searchTerm,
+      type: 'bool_prefix',
+      operator: 'and',
+      fields: ['title', 'hmsArtNr', 'supplierRef', 'supplier.name'],
+      lenient: true,
+    },
+  }
+  const selectedSupplierQuery = {
+    term: { 'supplier.name': { value: selectedSupplier } },
+  }
+
+
+  let must: any[] = [
+    {
+      term: {
+        'agreements.id': {
+          value: agreementId,
+        },
+      }
+    },
+
+  ]
+
+  if (searchTerm) {
+    must = must.concat([termQuery])
+  }
+  if (selectedSupplier) {
+    must = must.concat([selectedSupplierQuery])
+  }
+
+  if (isSparepart) {
+    must = must.concat([{
+      term: { sparePart: true },
+    }])
+  } else {
+    must = must.concat([{
+      term: { accessory: true },
+    }])
+  }
+
+  return fetch(HM_SEARCH_URL + `/products/_search`, {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: pageSize,
+      from: pageSize * (currentPage - 1),
+      query: {
+        bool: {
+          must: must,
+        },
+      },
+      track_total_hits: true,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return { products: mapProductsFromCollapse(data), totalHits: data.hits.total.value }
+    })
+}
+
 export async function getSuppliers(letter: string): Promise<Supplier[]> {
   letter = formatNorwegianLetter(letter)
 
@@ -1075,3 +1185,30 @@ export async function getNews(): Promise<News[]> {
   })
   return res.json().then(mapAllNews)
 }
+
+export const fetcherGET: Fetcher<any, string> = (url) =>
+  fetch(url, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      return res.json().then((data) => {
+        throw new CustomError(data.errorMessage || res.statusText, res.status);
+      });
+    }
+    return res.json();
+  });
+
+export class CustomError extends Error {
+  status: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.name = "CustomError";
+    this.status = statusCode;
+  }
+}
+

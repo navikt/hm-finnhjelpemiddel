@@ -1,5 +1,9 @@
 # Base on offical Node.js Alpine image
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
+
+
+RUN addgroup --system --gid 1069 nodejs
+RUN adduser --system --uid 1069 nextjs
 
 # Set working directory
 WORKDIR /app
@@ -46,8 +50,14 @@ WORKDIR /app
 # Copy only needed files for next app
 # see: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 # Expose the listening port
 EXPOSE 3000

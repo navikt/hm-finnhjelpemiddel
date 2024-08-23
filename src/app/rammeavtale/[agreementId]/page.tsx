@@ -14,11 +14,11 @@ import DocumentExpansionCard from './DocumentExpansionCard'
 import LinkToAgreement from './LinkToAgreement'
 
 type Props = {
-  params: { id: string }
+  params: { agreementId: string }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const agreementId = params.id
+  const agreementId = params.agreementId
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
   const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
 
@@ -29,8 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AgreementPage({ params }: Props) {
-  const agreement = mapAgreementFromDoc(await getAgreement(params.id))
-  const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.id}`
+  const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
+  const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.agreementId}`
   // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
   //Midlertidig så lenge det ikke er produkter på omgivelsekontrollavtalen
