@@ -113,26 +113,27 @@ export default function SearchPage() {
     setPage(1)
     router.replace(pathname)
   }
-  const products = data?.map((d) => d.products).flat()
 
-  if (error) {
+  if (error || !data) {
     return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Alert variant="error" title="Error med lasting av produkter">
-          Obs, her skjedde det noe feil :o
-        </Alert>
-      </HStack>
+      <div className="main-wrapper--xlarge spacing-bottom--large">
+        <Heading level="1" size="large" className="spacing-top--xlarge spacing-bottom--xlarge" ref={searchResultRef}>
+          Alle hjelpemidler
+        </Heading>
+        <HStack justify="center" style={{ marginTop: '48px' }}>
+          {error ? (
+            <Alert variant="error" title="Error med lasting av produkter">
+              Obs, her skjedde det noe feil :o
+            </Alert>
+          ) : (
+            !data && <Loader size="3xlarge" title="Laster produkter" />
+          )}
+        </HStack>
+      </div>
     )
   }
 
-  if (!data) {
-    return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Loader size="3xlarge" title="Laster produkter" />
-      </HStack>
-    )
-  }
-
+  const products = data.map((d) => d.products).flat()
   const filtersFromData = data.at(-1)?.filters
 
   const filters: FilterData = {
@@ -142,26 +143,8 @@ export default function SearchPage() {
     status: { values: [] },
   }
 
-  if (error) {
-    return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Alert variant="error" title="Error med lasting av produkter">
-          Obs, her skjedde det noe feil :o
-        </Alert>
-      </HStack>
-    )
-  }
-
-  if (!products) {
-    return (
-      <HStack justify="center" style={{ marginTop: '48px' }}>
-        <Loader size="3xlarge" title="Laster produkter" />
-      </HStack>
-    )
-  }
-
   return (
-    <VStack className="main-wrapper--xlarge spacing-bottom--large">
+    <div className="main-wrapper--xlarge spacing-bottom--large">
       <Heading level="1" size="large" className="spacing-top--xlarge spacing-bottom--xlarge" ref={searchResultRef}>
         Alle hjelpemidler
       </Heading>
@@ -299,6 +282,6 @@ export default function SearchPage() {
           </VStack>
         </HGrid>
       </FormProvider>
-    </VStack>
+    </div>
   )
 }
