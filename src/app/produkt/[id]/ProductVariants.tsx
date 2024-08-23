@@ -34,7 +34,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
     orderBy: 'Expired',
     direction: 'ascending',
   })
-  const [searchTermIsHms, setSearchTermIsHms] = useState(false)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -50,7 +49,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
     {
       from: 0,
       size: 150,
-      searchData: searchData,
+      searchData: {
+        ...searchData,
+        searchTerm: '',
+      },
       dontCollapse: true,
       seriesId: product.id,
     },
@@ -98,16 +100,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
       ),
     }
 
-    const hmsNumbers = product.variants.flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
-    const supplierRefs = product.variants.flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
-    const isSearchTermInHms = hmsNumbers.includes(searchData.searchTerm?.toLowerCase())
-    if (isSearchTermInHms) setSearchTermIsHms(true)
-    const isSearchTermInSupplierRef = supplierRefs.includes(searchData.searchTerm?.toLowerCase())
     const currentHash = window.location.hash
-    const newQueryString = toSearchQueryString(
-      { filters: relevantFilters },
-      isSearchTermInHms || isSearchTermInSupplierRef ? searchData.searchTerm : ''
-    )
+    const newQueryString = toSearchQueryString({ filters: relevantFilters }, searchData.searchTerm)
     router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, {
       scroll: false,
     })
@@ -158,22 +152,33 @@ const ProductVariants = ({ product }: { product: Product }) => {
     ],
   }
 
+  const searchTermMatchesHms = product.variants
+    .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+  const searchTermMatchesSupplierRef = product.variants
+    .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
   const filters = filtersFromData ? { ...filtersFromData, status: statusFilter } : filtersFromData
 
-  const productVariants = productWithFilteredVariants
+  const productVariantsToShow = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
-      ? productWithFilteredVariants[0].variants
+      ? searchTermMatchesHms
+        ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
+        : searchTermMatchesSupplierRef
+          ? productWithFilteredVariants[0].variants.filter((variant) => variant.supplierRef === searchData.searchTerm)
+          : productWithFilteredVariants[0].variants
       : []
     : product.variants
 
-  let sortedByKey = sortColumnsByRowKey(productVariants, sortColumns)
+  let sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
   const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
     ...allDataKeys.map((key) => ({
-      [key]: productVariants.map((variant) =>
+      [key]: productVariantsToShow.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
@@ -216,6 +221,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
     'Lev-artnr': unknown
   }
 
+  const showTermTag = searchTermMatchesHms || searchTermMatchesSupplierRef
+
   const filterChips = Object.entries(searchData.filters)
     .filter(([key, values]) => values.length > 0 && key !== 'status')
     .flatMap(([key, values]) => ({
@@ -224,12 +231,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
       label: filtersFormStateLabel[key as keyof FilterFormState],
     }))
     .concat(
-      searchData.searchTerm
+      searchData.searchTerm && showTermTag
         ? [
             {
-              key: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+              key: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
               values: searchData.searchTerm,
-              label: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+              label: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
             },
           ]
         : []
@@ -287,22 +294,22 @@ const ProductVariants = ({ product }: { product: Product }) => {
           level="3"
           size="small"
           className="spacing-vertical--small"
-        >{`${productVariants.length} av ${product.variantCount} varianter:`}</Heading>
+        >{`${productVariantsToShow.length} av ${product.variantCount} varianter:`}</Heading>
       )}
 
-      {productVariants.length === 0 && (
+      {productVariantsToShow.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
           Ingen av variantene passer med filteret ditt
         </Alert>
       )}
 
-      {productVariants.length > 0 && (
+      {productVariantsToShow.length > 0 && (
         <div className="variants-table" id="variants-table">
           <Table zebraStripes>
             <Table.Header>
               <Table.Row className="variants-table__status-row">
                 <Table.HeaderCell></Table.HeaderCell>
-                {productVariants.map((variant) => (
+                {productVariantsToShow.map((variant) => (
                   <Table.HeaderCell key={'onagreement-' + variant.id}>
                     {variant.hasAgreement ? (
                       <Tag
