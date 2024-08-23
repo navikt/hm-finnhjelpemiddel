@@ -56,6 +56,10 @@ const NavigationBar = () => {
     setMenuOpenGlobalState(menuOpen)
   }, [menuOpen, setMenuOpenGlobalState])
 
+  useEffect(() => {
+    setSearchOpen(searchParamValue !== '' && searchParamValue !== null)
+  }, [path, searchParamValue])
+
   useKeyboardShortcut({
     key: 'Escape',
     onKeyPressed: () => setMenuOpen(false),
