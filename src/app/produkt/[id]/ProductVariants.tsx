@@ -304,7 +304,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Table.HeaderCell></Table.HeaderCell>
                 {productVariants.map((variant) => (
                   <Table.HeaderCell key={'onagreement-' + variant.id}>
-                    {variant.hasAgreement ? (
+                    {variant.status === 'INACTIVE' ? (
+                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
+                        Utgått
+                      </Tag>
+                    ) : variant.hasAgreement ? (
                       <Tag
                         size="small"
                         variant="neutral-moderate"
@@ -312,10 +316,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         style={{ minWidth: '89px' }}
                       >
                         På avtale
-                      </Tag>
-                    ) : variant.status === 'INACTIVE' ? (
-                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
-                        Utgått
                       </Tag>
                     ) : (
                       <Tag size="small" variant="neutral-moderate">

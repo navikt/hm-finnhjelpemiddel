@@ -1,6 +1,7 @@
 import { mapAllNews, News } from '@/utils/news-util'
 import { formatNorwegianLetter } from '@/utils/string-util'
 import { mapSuppliers, Supplier } from '@/utils/supplier-util'
+import { Fetcher } from 'swr'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
@@ -31,7 +32,6 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
-import { Fetcher } from "swr";
 
 export const PAGE_SIZE = 24
 
@@ -205,21 +205,21 @@ const makeSearchTermQuery = ({
   const negativeBoostInactiveProducts = {
     negative: {
       match: {
-        status: 'INACTIVE'
+        status: 'INACTIVE',
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.01 ,
+    negative_boost: 0.01,
   }
 
   const negativeBoostNonAgreementProducts = {
     negative: {
       match: {
-        hasAgreement: false
+        hasAgreement: false,
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.1 ,
+    negative_boost: 0.1,
   }
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
@@ -275,7 +275,6 @@ const makeSearchTermQuery = ({
           ...negativeBoostInactiveProducts,
         },
       },
-
     ],
   }
 
@@ -824,16 +823,14 @@ export const fetchAccessoriesAndSpareParts = ({
     term: { 'supplier.name': { value: selectedSupplier } },
   }
 
-
   let must: any[] = [
     {
       term: {
         'agreements.id': {
           value: agreementId,
         },
-      }
+      },
     },
-
   ]
 
   if (searchTerm) {
@@ -844,13 +841,17 @@ export const fetchAccessoriesAndSpareParts = ({
   }
 
   if (isSparepart) {
-    must = must.concat([{
-      term: { sparePart: true },
-    }])
+    must = must.concat([
+      {
+        term: { sparePart: true },
+      },
+    ])
   } else {
-    must = must.concat([{
-      term: { accessory: true },
-    }])
+    must = must.concat([
+      {
+        term: { accessory: true },
+      },
+    ])
   }
 
   return fetch(HM_SEARCH_URL + `/products/_search`, {
@@ -1180,27 +1181,26 @@ export async function getNews(): Promise<News[]> {
 
 export const fetcherGET: Fetcher<any, string> = (url) =>
   fetch(url, {
-    method: "GET",
-    credentials: "include",
+    method: 'GET',
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   }).then((res) => {
     if (!res.ok) {
       return res.json().then((data) => {
-        throw new CustomError(data.errorMessage || res.statusText, res.status);
-      });
+        throw new CustomError(data.errorMessage || res.statusText, res.status)
+      })
     }
-    return res.json();
-  });
+    return res.json()
+  })
 
 export class CustomError extends Error {
-  status: number;
+  status: number
 
   constructor(message: string, statusCode: number) {
-    super(message);
-    this.name = "CustomError";
-    this.status = statusCode;
+    super(message)
+    this.name = 'CustomError'
+    this.status = statusCode
   }
 }
-
