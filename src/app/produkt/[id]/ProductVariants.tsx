@@ -141,6 +141,10 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
   const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
 
+  const moreThanOneStatus =
+    [numberOfvariantsExpired, numberOfvariantsOnAgreement, numberOfvariantsWithoutAgreement].filter((num) => num > 0)
+      .length > 1
+
   const statusFilter: Filter = {
     values: [
       {
@@ -254,7 +258,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Loader size="xlarge" title="Laster bilde" />
               </HStack>
             )}
-            {relevantFilterKeys.length > 0 && <FilterViewProductPage filters={filters} />}
+            {(relevantFilterKeys.length > 0 || moreThanOneStatus) && <FilterViewProductPage filters={filters} />}
             <input type="submit" style={{ display: 'none' }} />
 
             {(searchTerm || filterChips.length > 0) && (
