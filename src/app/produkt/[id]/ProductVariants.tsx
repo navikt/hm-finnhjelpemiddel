@@ -374,7 +374,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 )}
               >
                 {product.variantCount > 1 ? (
-                  <Table.HeaderCell className="sortable">
+                  <Table.HeaderCell className="sortable sticky-head">
                     <Button
                       className="sort-button"
                       aria-label={
@@ -397,7 +397,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={'hms-' + variant.id}>
+                  <Table.DataCell key={'hms-' + variant.id} className="sticky-cell">
                     {variant.hmsArtNr ? (
                       <CopyButton
                         size="small"
