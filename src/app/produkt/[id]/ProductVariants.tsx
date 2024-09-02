@@ -137,7 +137,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
     })
   }
 
-  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
+  const numberOfvariantsOnAgreement = product.variants.filter(
+    (variant) => variant.hasAgreement === true || variant.status === 'ACTIVE'
+  ).length
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
   const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
 
