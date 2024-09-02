@@ -629,7 +629,17 @@ export const getProductsOnAgreement = ({
   const { searchTerm, filters: activeFilters } = searchData
 
   const { leverandor, delkontrakt } = activeFilters
-  const allActiveFilters = [filterLeverandor(leverandor), filterDelkontrakt(delkontrakt)]
+  const allActiveFilters = [
+    filterLeverandor(leverandor),
+    filterDelkontrakt(delkontrakt),
+    {
+      term: {
+        status: {
+          value: 'ACTIVE',
+        },
+      },
+    },
+  ]
 
   const searchTermQuery = makeSearchTermQuery({ searchTerm, agreementId })
 
