@@ -7,6 +7,7 @@
   max-height: 98vh;
   overflow: auto;
 
+
   @include mixins.for-size(phone-only) {
     max-height: 75vh;
   }
@@ -40,6 +41,7 @@
     left: 0;
     width: 250px;
     z-index: 1;
+
   }
 
   //Need to set background on every second to white to avoid the header to be transparent
@@ -116,4 +118,5 @@
       padding: 0 $a-spacing-3;
     }
   }
+
 }

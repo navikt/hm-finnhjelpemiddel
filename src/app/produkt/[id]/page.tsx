@@ -43,28 +43,26 @@ export default async function ProduktPage({ params }: Props) {
   const productsOnPosts: ProductsOnPost[] | undefined =
     agreements &&
     (await Promise.all(
-      product.agreements
-        ? product.agreements?.map(async (agreement) => {
-            const productsOnPost = mapProductsFromCollapse(await getProductsInPost(agreement.id, agreement.postNr))
-              .filter((postProduct) => postProduct.id !== product.id)
-              .sort((productA, productB) => {
-                const agreementA = productA.agreements
-                  ?.filter((ag) => ag.postNr === agreement.postNr)
-                  .map((agree) => agree.rank)
-                const agreementB = productB.agreements
-                  ?.filter((ag) => ag.postNr === agreement.postNr)
-                  .map((agree) => agree.rank)
-                return agreementA && agreementB ? sortWithNullValuesAtEnd(agreementA[0], agreementB[0]) : 0
-              })
-            return {
-              agreementId: agreement.id,
-              agreementTitle: agreement.title,
-              postTitle: agreement.postTitle,
-              postNr: agreement.postNr,
-              products: productsOnPost,
-            }
+      (product.agreements || []).map(async (agreement) => {
+        const productsOnPost = mapProductsFromCollapse(await getProductsInPost(agreement.id, agreement.postNr))
+          .filter((postProduct) => postProduct.id !== product.id)
+          .sort((productA, productB) => {
+            const agreementA = productA.agreements
+              ?.filter((ag) => ag.postNr === agreement.postNr)
+              .map((agree) => agree.rank)
+            const agreementB = productB.agreements
+              ?.filter((ag) => ag.postNr === agreement.postNr)
+              .map((agree) => agree.rank)
+            return agreementA && agreementB ? sortWithNullValuesAtEnd(agreementA[0], agreementB[0]) : 0
           })
-        : []
+        return {
+          agreementId: agreement.id,
+          agreementTitle: agreement.title,
+          postTitle: agreement.postTitle,
+          postNr: agreement.postNr,
+          products: productsOnPost,
+        }
+      })
     ))
 
   const isAccessoryOrSparePart = product.accessory || product.sparepart
