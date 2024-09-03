@@ -10,12 +10,13 @@
   }
 
   &__heading {
-    max-width: 530px;
+    max-width: 630px;
     color: $ny-nav-purple-dark;
+    margin-bottom: $a-spacing-5;
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;
-      margin: $a-spacing-12 0;
+      margin: $a-spacing-4 0;
       margin-bottom: $a-spacing-10;
     }
   }

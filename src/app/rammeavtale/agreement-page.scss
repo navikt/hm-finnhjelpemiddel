@@ -80,7 +80,10 @@
     .navds-alert ul {
       list-style-type: disc;
     }
-    .navds-alert .navds-link {
+  }
+
+  &__alert-info {
+    .navds-link {
       color: $a-blue-700;
     }
   }

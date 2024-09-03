@@ -1,5 +1,9 @@
 'use client'
 
+import NextLink from 'next/link'
+import { useMemo, useState } from 'react'
+import useSWR from 'swr'
+
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { logKlikk } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
@@ -21,10 +25,8 @@ import {
   Show,
   VStack,
 } from '@navikt/ds-react'
+
 import classNames from 'classnames'
-import NextLink from 'next/link'
-import { useMemo, useState } from 'react'
-import useSWR from 'swr'
 
 type SortColumns = {
   orderBy: string | null
@@ -169,10 +171,26 @@ const AgreementList = () => {
           </HStack>
         )}
       </VStack>
+
       <Alert variant="info">
-        Midlertidig finner du informasjon om avtalen for høreapparat, ørepropper og tinnitusmaskerere og hjelpemidler
-        for seksuallivet her:
+        Midlertidig finner du informasjon følgende andre avtaler her:
         <ul className="spacing-vertical--small">
+          <li>
+            <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr">
+              Bil
+            </Link>
+          </li>
+          <li>
+            <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr/spesialutstyr-og-tilpasning">
+              Bilombygg
+            </Link>
+          </li>
+          <li>
+            <Link href="https://www.nav.no/forerhund">Førerhund</Link>
+          </li>
+          <li>
+            <Link href="https://www.nav.no/servicehund">Servicehund</Link>
+          </li>
           <li>
             <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
               Høreapparat, ørepropper og tinnitusmaskerere
