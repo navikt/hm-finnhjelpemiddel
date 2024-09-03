@@ -33,6 +33,16 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const pagesWithoutHeaderAndFooter = [/^\/produkt\/[^\/]+\/variants$/];
+
+  if (pagesWithoutHeaderAndFooter.some(regex => regex.test(pathname))) {
+    return (
+      <div className="standalone-page-wrapper">
+        {children}
+      </div>
+    )
+  }
+
   return (
     <Suspense>
       {isMobileOverlayOpen && <div id="cover-main" />}
