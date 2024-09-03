@@ -48,9 +48,6 @@ function Home() {
             <Hide below="lg">
               <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel-logo" />
             </Hide>
-            <Show below="lg">
-              <Image src="/logo-med-rullestol.svg" width="80" height="80" alt="FinnHjelpemiddel-logo" />
-            </Show>
 
             <div>
               <Heading level="1" size="large" className="home-page__heading">
