@@ -8,8 +8,8 @@ import AutocompleteSearch from '@/components/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
 import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
-import { Buildings2Icon, Chat2Icon, LocationPinIcon } from '@navikt/aksel-icons'
-import { Bleed, BodyLong, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
+import { Chat2Icon, HatSchoolIcon, LocationPinIcon } from '@navikt/aksel-icons'
+import { Bleed, BodyLong, Box, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 
 import AgreementList from './rammeavtale/AgreementList'
 
@@ -54,9 +54,13 @@ function Home() {
 
             <div>
               <Heading level="1" size="large" className="home-page__heading">
-                Søk i Norges største samling av hjelpemidler på nett
+                FinnHjelpemiddel -
+                <br />
+                Norges største samling av hjelpemidler på nett
               </Heading>
-              <AutocompleteSearch onSearch={onSearch} />
+              <Box maxWidth={'530px'}>
+                <AutocompleteSearch onSearch={onSearch} />
+              </Box>
             </div>
           </HStack>
 
@@ -105,7 +109,7 @@ function Home() {
 
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
-                    <Buildings2Icon aria-hidden fontSize={'32px'} />
+                    <HatSchoolIcon aria-hidden fontSize={'32px'} />
                   </div>
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
@@ -165,7 +169,7 @@ const InformationNavLinks = () => {
             className="home-page__link"
             href="https://www.nav.no/om-hjelpemidler#hvordan"
             onClick={() => {
-              logKlikk('forsidelenke-kunnskapsbanken')
+              logKlikk('forsidelenke-slik-gar-du-frem-nar-du-soker-selv')
             }}
           >
             Slik går du frem når du søker selv
