@@ -61,7 +61,7 @@ const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
 
     <Link
       as={NextLink}
-      href={`/sok?sortering=Best_soketreff&leverandor=${supplier.name}`}
+      href={`/sok?sortering=Best_soketreff&leverandor=${encodeURIComponent(supplier.name)}`}
       onClick={() => logLeverandorprodukterKlikket()}
     >
       Se produkter fra {supplier.name}

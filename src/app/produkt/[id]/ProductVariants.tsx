@@ -131,9 +131,15 @@ const ProductVariants = ({ product }: { product: Product }) => {
     })
   }
 
-  const numberOfvariantsOnAgreement = product.variants.filter((variant) => variant.hasAgreement === true).length
+  const numberOfvariantsOnAgreement = product.variants.filter(
+    (variant) => variant.hasAgreement === true && variant.status === 'ACTIVE'
+  ).length
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
   const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
+
+  const moreThanOneStatus =
+    [numberOfvariantsExpired, numberOfvariantsOnAgreement, numberOfvariantsWithoutAgreement].filter((num) => num > 0)
+      .length > 1
 
   const statusFilter: Filter = {
     values: [
@@ -261,7 +267,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Loader size="xlarge" title="Laster bilde" />
               </HStack>
             )}
-            {relevantFilterKeys.length > 0 && <FilterViewProductPage filters={filters} />}
+            {(relevantFilterKeys.length > 0 || moreThanOneStatus) && <FilterViewProductPage filters={filters} />}
             <input type="submit" style={{ display: 'none' }} />
 
             {(searchTerm || filterChips.length > 0) && (
@@ -311,7 +317,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 <Table.HeaderCell></Table.HeaderCell>
                 {productVariantsToShow.map((variant) => (
                   <Table.HeaderCell key={'onagreement-' + variant.id}>
-                    {variant.hasAgreement ? (
+                    {variant.status === 'INACTIVE' ? (
+                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
+                        Utgått
+                      </Tag>
+                    ) : variant.hasAgreement ? (
                       <Tag
                         size="small"
                         variant="neutral-moderate"
@@ -319,10 +329,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         style={{ minWidth: '89px' }}
                       >
                         På avtale
-                      </Tag>
-                    ) : variant.status === 'INACTIVE' ? (
-                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
-                        Utgått
                       </Tag>
                     ) : (
                       <Tag size="small" variant="neutral-moderate">

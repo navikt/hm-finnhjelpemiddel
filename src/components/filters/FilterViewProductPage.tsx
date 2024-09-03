@@ -44,24 +44,29 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
           tilgjengelig for dette hjelpemiddelet per i dag.
         </HelpText>
       </HStack>
-
-      <HStack gap="2" className="filter-container__filters filter-container__horizontal spacing-bottom--medium">
-        {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
-          <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
-        )}
-        {availableAndSelectedFiltersMålOgVekt.length > 0 && (
-          <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
-        )}
-        {(filters?.beregnetBarn?.values?.length ?? 0) > 1 && (
-          <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
-        )}
-        {(filters?.fyllmateriale?.values?.length ?? 0) > 1 && (
-          <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
-        )}
-        {(filters?.materialeTrekk?.values?.length ?? 0) > 1 && (
-          <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
-        )}
-      </HStack>
+      {(availableAndSelectedFiltersSetedimensjoner.length > 0 ||
+        availableAndSelectedFiltersMålOgVekt.length > 0 ||
+        (filters?.beregnetBarn?.values?.length ?? 0) > 1 ||
+        (filters?.fyllmateriale?.values?.length ?? 0) > 1 ||
+        (filters?.materialeTrekk?.values?.length ?? 0) > 1) && (
+        <HStack gap="2" className="filter-container__filters filter-container__horizontal spacing-bottom--medium">
+          {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
+            <FilterMinMaxGroup groupTitle="Setedimensjoner" filters={availableAndSelectedFiltersSetedimensjoner} />
+          )}
+          {availableAndSelectedFiltersMålOgVekt.length > 0 && (
+            <FilterMinMaxGroup groupTitle="Mål og vekt" filters={availableAndSelectedFiltersMålOgVekt} />
+          )}
+          {(filters?.beregnetBarn?.values?.length ?? 0) > 1 && (
+            <CheckboxFilter filter={{ key: 'beregnetBarn', data: filters?.beregnetBarn }} />
+          )}
+          {(filters?.fyllmateriale?.values?.length ?? 0) > 1 && (
+            <CheckboxFilter filter={{ key: 'fyllmateriale', data: filters?.fyllmateriale }} showSearch={true} />
+          )}
+          {(filters?.materialeTrekk?.values?.length ?? 0) > 1 && (
+            <CheckboxFilter filter={{ key: 'materialeTrekk', data: filters?.materialeTrekk }} showSearch={true} />
+          )}
+        </HStack>
+      )}
 
       {filters?.status && <ChipsFilter filterKey="status" filter={filters?.status} />}
     </>
