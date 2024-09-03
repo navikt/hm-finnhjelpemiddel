@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -42,6 +42,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
   const searchData = mapSearchParams(searchParams)
   const searchTerm = searchParams.get('term')
 
+  const variantNameElementRef = useRef<HTMLTableCellElement>(null);
+
+  const [variantNameElementHeight, setVariantNameElementHeight] = useState(0);
+
+  useEffect(() => {
+    if (variantNameElementRef.current) {
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight);
+    }
+  }, []);
+
   const {
     data: dataAndFilter,
     isLoading: dataIsLoading,
@@ -70,8 +80,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
   // så vi filtrerer ut de som ikke er relevante
   const relevantFilterKeys = filtersFromData
     ? Object.entries(filtersFromData)
-        .filter(([_, filter]) => filter.values.length > 1)
-        .flatMap(([key]) => key)
+      .filter(([_, filter]) => filter.values.length > 1)
+      .flatMap(([key]) => key)
     : []
 
   useEffect(() => {
@@ -232,12 +242,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
     .concat(
       searchData.searchTerm
         ? [
-            {
-              key: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
-              values: searchData.searchTerm,
-              label: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
-            },
-          ]
+          {
+            key: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+            values: searchData.searchTerm,
+            label: searchTermIsHms ? 'HMS-nummer' : 'Lev-artnr',
+          },
+        ]
         : []
     )
 
@@ -337,7 +347,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 })}
               >
                 {product.variantCount > 1 ? (
-                  <Table.ColumnHeader className="sortable">
+                  <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
                     <Button
                       className="sort-button"
                       aria-label={
@@ -374,7 +384,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 )}
               >
                 {product.variantCount > 1 ? (
-                  <Table.HeaderCell className="sortable">
+                  <Table.HeaderCell className="sortable"
+                                    style={{
+                                      position: "sticky",
+                                      top: `${variantNameElementHeight}px`,
+                                      zIndex: "2 !important",
+                                      background: "rgb(242 243 245)"
+                                    }}
+                  >
                     <Button
                       className="sort-button"
                       aria-label={
@@ -397,7 +414,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
                   <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
-                  <Table.DataCell key={'hms-' + variant.id}>
+                  <Table.DataCell key={'hms-' + variant.id} style={{
+                    position: "sticky",
+                    top: `${variantNameElementHeight}px`,
+                    zIndex: "1 !important",
+                    background: "rgb(242 243 245)"
+                  }}>
                     {variant.hmsArtNr ? (
                       <CopyButton
                         size="small"
