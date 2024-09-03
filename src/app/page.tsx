@@ -75,9 +75,6 @@ function Home() {
 
           <Bleed marginInline="full" asChild reflectivePadding>
             <div className="home-page__kontakt-oss">
-              <Heading level="2" size="medium">
-                Kontakt oss
-              </Heading>
               <HGrid gap="8" columns={{ xs: 1, md: 3 }} className="home-page__kontakt-oss-container">
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
@@ -116,10 +113,10 @@ function Home() {
                         href="https://www.nav.no/samarbeidspartner/lege/hjelpemidler#kommunens-ansvar"
                         className="home-page__link"
                       >
-                        Kontakt din kommune
+                        Kunnskapsbanken
                       </Link>
                     </Heading>
-                    <BodyLong>Les om kommunens rolle i oppfølging av hjelpemidler.</BodyLong>
+                    <BodyLong>Fagstoff og kurs om hjelpemidler og tilrettelegging.</BodyLong>
                   </div>
                 </HGrid>
               </HGrid>
@@ -141,6 +138,7 @@ const InformationNavLinks = () => {
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
           <Link
+            className="home-page__link"
             href="https://www.nav.no/om-hjelpemidler"
             onClick={() => {
               logKlikk('forsidelenke-informasjon-om-hjelpemidler')
@@ -152,6 +150,7 @@ const InformationNavLinks = () => {
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
           <Link
+            className="home-page__link"
             href="https://www.nav.no/om-hjelpemidler#hvem"
             onClick={() => {
               logKlikk('forsidelenke-dette-ma-du-vite-for-du-soker-som-privatperson')
@@ -160,27 +159,28 @@ const InformationNavLinks = () => {
             Dette må du vite før du søker som privatperson
           </Link>
         </HGrid>
-
         <HGrid gap="6" columns={'57px auto'}>
           <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
           <Link
+            className="home-page__link"
+            href="https://www.nav.no/om-hjelpemidler#hvordan"
+            onClick={() => {
+              logKlikk('forsidelenke-kunnskapsbanken')
+            }}
+          >
+            Slik går du frem når du søker selv
+          </Link>
+        </HGrid>
+        <HGrid gap="6" columns={'57px auto'}>
+          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
+          <Link
+            className="home-page__link"
             href="https://www.nav.no/soknader"
             onClick={() => {
               logKlikk('forsidelenke-soknad-og-skjema-for-hjelpemidler')
             }}
           >
             Søknad og skjema for hjelpemidler
-          </Link>
-        </HGrid>
-        <HGrid gap="6" columns={'57px auto'}>
-          <Image src="/arrow.svg" width="57" height="57" alt="Illustrasjon" aria-hidden />
-          <Link
-            href="https://www.kunnskapsbanken.net/"
-            onClick={() => {
-              logKlikk('forsidelenke-kunnskapsbanken')
-            }}
-          >
-            Kunnskapsbanken
           </Link>
         </HGrid>
       </VStack>
