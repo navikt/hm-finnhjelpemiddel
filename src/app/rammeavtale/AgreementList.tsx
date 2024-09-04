@@ -173,7 +173,7 @@ const AgreementList = () => {
       </VStack>
 
       <Alert variant="info">
-        Midlertidig finner du informasjon følgende andre avtaler her:
+        Du finner informasjon om følgende andre avtaler her:
         <ul className="spacing-vertical--small">
           <li>
             <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr">

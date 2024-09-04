@@ -49,16 +49,12 @@ function Home() {
               <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel-logo" />
             </Hide>
 
-            <div>
+            <Box maxWidth={'530px'}>
               <Heading level="1" size="large" className="home-page__heading">
-                FinnHjelpemiddel -
-                <br />
-                Norges største samling av hjelpemidler på nett
+                Søk i Norges største samling av hjelpemidler på nett
               </Heading>
-              <Box maxWidth={'530px'}>
-                <AutocompleteSearch onSearch={onSearch} />
-              </Box>
-            </div>
+              <AutocompleteSearch onSearch={onSearch} />
+            </Box>
           </HStack>
 
           <HGrid gap={{ xs: '12', md: '14' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
