@@ -86,7 +86,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       </Heading>
       <VStack gap="2" className="filter-container__filters">
         <CheckboxFilter filter={{ key: 'vis', data: filters?.vis }} openByDefault={true}></CheckboxFilter>
-        <CheckboxFilter filter={{ key: 'categories', data: filters?.category }} openByDefault={true}></CheckboxFilter>
+        {/* <CheckboxFilter filter={{ key: 'categories', data: filters?.category }} openByDefault={true}></CheckboxFilter> */}
         <CheckboxFilter filter={{ key: 'produktkategori', data: filters?.produktkategori }} showSearch={true} />
         <CheckboxFilter filter={{ key: 'rammeavtale', data: filters?.rammeavtale }} showSearch={true} />
         {availableAndSelectedFiltersSetedimensjoner.length > 0 && (
