@@ -2,6 +2,7 @@
 
 @import 'src/styles/_variables';
 @import '@navikt/ds-tokens/dist/tokens';
+@import 'src/styles/local-fonts';
 
 .home-page {
   padding-top: $a-spacing-8;
@@ -21,6 +22,7 @@
   }
 
   &__finnhjelpemiddel {
+    font-family: 'Source Sans 3 Bold', sans-serif;
     font-weight: 700;
   }
 
