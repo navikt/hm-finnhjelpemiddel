@@ -5,19 +5,21 @@
 @import 'src/styles/local-fonts';
 
 .home-page {
-  padding-top: $a-spacing-8;
-  @include mixins.for-size(tablet-up) {
-    padding-top: $a-spacing-24;
-  }
-
   &__heading {
     color: $ny-nav-purple-dark;
-    margin-bottom: $a-spacing-5;
 
     @include mixins.for-size(tablet-up) {
       gap: $a-spacing-10;
-      margin: $a-spacing-4 0;
-      margin-bottom: $a-spacing-10;
+    }
+  }
+
+  &__heading-and-search-container {
+    padding-top: $a-spacing-8;
+    padding-bottom: $a-spacing-8;
+
+    @include mixins.for-size(tablet-up) {
+      padding-top: $a-spacing-24;
+      padding-bottom: $a-spacing-20;
     }
   }
 
@@ -69,10 +71,6 @@
     background-color: #f1f5f9;
     padding-bottom: 100px;
     padding-top: 100px;
-  }
-
-  &__kontakt-oss-container {
-    margin-top: $a-spacing-12;
   }
 
   &__kontakt-oss-icon {
