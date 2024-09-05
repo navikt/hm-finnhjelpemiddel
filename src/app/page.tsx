@@ -8,7 +8,15 @@ import AutocompleteSearch from '@/components/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
 import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
-import { Chat2Icon, HatSchoolIcon, LocationPinIcon } from '@navikt/aksel-icons'
+import {
+  BriefcaseIcon,
+  Chat2Icon,
+  EyeIcon,
+  HandShakeHeartIcon,
+  HatSchoolIcon,
+  HeadHeartIcon,
+  LocationPinIcon,
+} from '@navikt/aksel-icons'
 import { Bleed, BodyLong, Box, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 
 import AgreementList from './rammeavtale/AgreementList'
@@ -44,18 +52,27 @@ function Home() {
     <AnimateLayout>
       <div className="home-page">
         <VStack className="main-wrapper--large" gap={{ xs: '12', md: '32' }}>
-          <HStack gap={{ xs: '4', md: '20' }}>
-            <Hide below="lg">
-              <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel-logo" />
-            </Hide>
-
-            <Box maxWidth={'530px'}>
-              <Heading level="1" size="large" className="home-page__heading">
-                Søk i Norges største samling av hjelpemidler på nett
-              </Heading>
-              <AutocompleteSearch onSearch={onSearch} />
-            </Box>
-          </HStack>
+          <Box
+            paddingInline="10"
+            paddingBlock="4"
+            style={{ backgroundColor: '#FAD8E7' }}
+            width="fit-content"
+            className="home-page__icons-logo"
+          >
+            <HStack gap="4">
+              <HandShakeHeartIcon aria-hidden /> <BriefcaseIcon aria-hidden /> <EyeIcon aria-hidden />
+              <HeadHeartIcon aria-hidden />
+            </HStack>
+          </Box>
+          <Box maxWidth={'530px'}>
+            <Heading level="1" size="xlarge" className="home-page__heading home-page__finnhjelpemiddel">
+              FinnHjelpemiddel
+            </Heading>
+            <Heading level="1" size="xlarge" className="home-page__heading">
+              Søk i Norges største samling av hjelpemidler på nett
+            </Heading>
+            <AutocompleteSearch onSearch={onSearch} />
+          </Box>
 
           <HGrid gap={{ xs: '12', md: '14' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
             <Show below="md">

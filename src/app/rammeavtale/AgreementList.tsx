@@ -165,12 +165,12 @@ const AgreementList = () => {
             </Box>
           ))}
         {/* {error && <Alert variant="warning">Obs, her mangler det noe data :o</Alert>} */}
-        {!data && (
-          <HStack justify="center" style={{ marginTop: '18px' }}>
-            <Loader size="xlarge" title="Laster produkter" />
-          </HStack>
-        )}
       </VStack>
+      {!data && (
+        <HStack justify="center" style={{ marginTop: '18px' }}>
+          <Loader size="xlarge" title="Laster produkter" />
+        </HStack>
+      )}
 
       <Alert variant="info">
         Du finner informasjon om andre avtaler her:

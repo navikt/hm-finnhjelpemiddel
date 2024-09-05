@@ -20,6 +20,22 @@
     }
   }
 
+  &__finnhjelpemiddel {
+    font-weight: 700;
+  }
+
+  &__icons-logo {
+    border-radius: 30px;
+    svg {
+      color: #99185e;
+
+      @include mixins.for-size(tablet-up) {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+  }
+
   &__link {
     text-decoration-line: underline;
     text-underline-offset: 2px;

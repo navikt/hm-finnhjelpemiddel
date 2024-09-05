@@ -1,9 +1,15 @@
 import LayoutProvider from '@/app/layoutProvider'
-
 import { Metadata } from 'next'
+import { Source_Sans_3 } from 'next/font/google'
 
 import '@/styles/globals.scss'
-import { FlagProvider } from "@/toggles/context";
+
+const source = Source_Sans_3({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  display: 'swap',
+  preload: true,
+})
 
 export const metadata: Metadata = {
   title: 'FinnHjelpemiddel',
@@ -11,14 +17,10 @@ export const metadata: Metadata = {
 }
 
 async function RootLayout({ children }: { children: React.ReactNode }) {
-
-
   return (
-    <html lang="no">
+    <html lang="no" className={source.className}>
       <body>
-          <LayoutProvider>
-            {children}
-          </LayoutProvider>
+        <LayoutProvider>{children}</LayoutProvider>
       </body>
     </html>
   )

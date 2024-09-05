@@ -31,6 +31,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body,
+:host {
+  font-family: 'Source Sans 3', sans-serif !important;
+}
+
 #cover-main {
   background-color: rgba(50, 65, 79, 0.3);
   position: absolute;
@@ -50,19 +55,6 @@ main {
 
 * {
   scroll-behavior: smooth;
-}
-
-.main-header {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  background-color: $a-gray-50;
-
-  h1 {
-    text-align: center;
-    font-weight: 400;
-    margin: $a-spacing-5 0;
-  }
 }
 
 .nav-bunn {
