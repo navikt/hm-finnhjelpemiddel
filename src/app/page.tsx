@@ -9,13 +9,13 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
 import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
 import {
-  BriefcaseIcon,
+  BicycleIcon,
   Chat2Icon,
+  EarIcon,
   EyeIcon,
-  HandShakeHeartIcon,
   HatSchoolIcon,
-  HeadHeartIcon,
   LocationPinIcon,
+  WheelchairIcon,
 } from '@navikt/aksel-icons'
 import { Bleed, BodyLong, Box, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 
@@ -67,8 +67,8 @@ function Home() {
                 className="home-page__icons-logo"
               >
                 <HStack gap="4">
-                  <HandShakeHeartIcon aria-hidden /> <BriefcaseIcon aria-hidden /> <EyeIcon aria-hidden />
-                  <HeadHeartIcon aria-hidden />
+                  <WheelchairIcon aria-hidden /> <EyeIcon aria-hidden /> <BicycleIcon aria-hidden />
+                  <EarIcon aria-hidden />
                 </HStack>
               </Box>
               <VStack gap="2">
