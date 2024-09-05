@@ -7,10 +7,11 @@
 .home-page {
   &__heading {
     color: $ny-nav-purple-dark;
+  }
 
-    @include mixins.for-size(tablet-up) {
-      gap: $a-spacing-10;
-    }
+  &__finnhjelpemiddel {
+    font-family: 'Source Sans 3 Bold', sans-serif;
+    font-weight: 700;
   }
 
   &__heading-and-search-container {
@@ -18,14 +19,9 @@
     padding-bottom: $a-spacing-8;
 
     @include mixins.for-size(tablet-up) {
-      padding-top: $a-spacing-24;
+      padding-top: $a-spacing-20;
       padding-bottom: $a-spacing-20;
     }
-  }
-
-  &__finnhjelpemiddel {
-    font-family: 'Source Sans 3 Bold', sans-serif;
-    font-weight: 700;
   }
 
   &__icons-logo {

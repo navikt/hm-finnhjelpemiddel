@@ -58,7 +58,7 @@ function Home() {
             style={{ backgroundColor: '#FEF5EF' }}
             className="home-page__heading-and-search-container"
           >
-            <VStack gap="16">
+            <VStack gap={{ xs: '8', md: '14' }}>
               <Box
                 paddingInline="10"
                 paddingBlock="4"
@@ -71,7 +71,7 @@ function Home() {
                   <HeadHeartIcon aria-hidden />
                 </HStack>
               </Box>
-              <VStack gap="4">
+              <VStack gap="2">
                 <Heading level="1" size="xlarge" className="home-page__heading home-page__finnhjelpemiddel">
                   FinnHjelpemiddel
                 </Heading>
