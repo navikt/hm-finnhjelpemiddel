@@ -106,10 +106,7 @@ function Home() {
                   </div>
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
-                      <Link
-                        href="https://www.nav.no/samarbeidspartner/lege/hjelpemidler#kommunens-ansvar"
-                        className="home-page__link"
-                      >
+                      <Link href="https://www.kunnskapsbanken.net/" className="home-page__link">
                         Kunnskapsbanken
                       </Link>
                     </Heading>
