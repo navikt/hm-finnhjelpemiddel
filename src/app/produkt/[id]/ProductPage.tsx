@@ -15,7 +15,7 @@ import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
 import { ProductsOnPost } from './page'
 import { TabsIcon } from "@navikt/aksel-icons";
-import { ChevronRightIcon } from "@/components/aksel-client";
+import { logVariantSideVist } from "@/utils/amplitude";
 
 type ProductProps = {
   product: Product
@@ -76,9 +76,12 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               href={`/produkt/${product.id}/variants`}
               className="agreement-details__agreement-link"
               target={'_blank'}
+              onClick={() => {
+                logVariantSideVist()
+              }}
             >
               {`Åpne varianttabell i ny fane`}
-              <TabsIcon aria-hidden fontSize={'1.5rem'} style={{marginLeft: '0.5rem'}}/>
+              <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
             </NextLink>
           </div>
           <ProductVariants product={product} />
@@ -152,10 +155,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 }
 
 const ProductNavigationBar = ({
-                                isOnAgreement,
-                                hasAccessories,
-                                hasSpareParts,
-                              }: {
+  isOnAgreement,
+  hasAccessories,
+  hasSpareParts,
+}: {
   isOnAgreement: boolean
   hasAccessories: boolean
   hasSpareParts: boolean
