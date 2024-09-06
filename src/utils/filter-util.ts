@@ -1,4 +1,5 @@
 import { Filter, FilterCategoryKeyServer } from './api-util'
+import { categories, getIsoCategoryBasedOnProductCategory } from './category-util'
 
 export const initialFiltersFormState = {
   setebreddeMaksCM: '',
@@ -24,6 +25,7 @@ export const initialFiltersFormState = {
   delkontrakt: [] as string[],
   vis: [] as string[],
   status: [] as string[],
+  categories: [] as string[],
 }
 
 export const filtersFormStateLabel = {
@@ -50,6 +52,7 @@ export const filtersFormStateLabel = {
   delkontrakt: 'Delkontrakt',
   vis: 'Vis',
   status: 'Status',
+  categories: 'Kategori',
 }
 
 const visFilterLabels = [
@@ -117,6 +120,14 @@ export const visFilters: Filter = {
   })),
 }
 
+export const categoryFilters: Filter = {
+  values: categories.map((filterLabel) => ({
+    key: filterLabel.name,
+    doc_count: 1,
+    label: filterLabel.name,
+  })),
+}
+
 const mapRangeFilter = (key: FilterCategoryKeyServer, values: Array<any>) => {
   const [min, max] = values
 
@@ -172,7 +183,7 @@ export const filterLeverandor = (values: Array<string>) => ({
   },
 })
 
-export const filterProduktkategori = (values: Array<string>) => ({
+export const filterProduktkategoriISO = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({ term: { isoCategoryName: value } })),
   },
@@ -229,6 +240,24 @@ export const filterVis = (values: Array<string>) => {
 
 
   return filters
+}
+
+export const filterCategory = (values: Array<string>) => {
+  const shouldList = values.flatMap<any>((value) => {
+    if (value === 'Barn og unge') {
+      return [{ term: { 'filters.beregnetBarn': 'JA' } }]
+    } else {
+      return getIsoCategoryBasedOnProductCategory(value).map((prefix) => ({
+        prefix: { isoCategory: prefix },
+      }))
+    }
+  })
+
+  return {
+    bool: {
+      should: shouldList,
+    },
+  }
 }
 
 export const filterStatus = (values: Array<string>) => {
