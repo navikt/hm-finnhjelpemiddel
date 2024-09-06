@@ -17,6 +17,7 @@ export enum digihot_customevents {
   NAVIGERE = 'navigere',
   KLIKK = 'klikk på knapp',
   ERROR_URL = 'feil ved url',
+  VARIANTSIDE_VIST = 'visning av stor variantside',
 }
 
 const SKJEMANAVN = 'hm-oversikt'
@@ -73,11 +74,16 @@ export function logLeverandorprodukterKlikket() {
   logCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET_V2)
 }
 
+export function logVariantSideVist() {
+  logCustomEvent(digihot_customevents.VARIANTSIDE_VIST)
+}
+
 export function logKlikk(buttonName: string) {
   logCustomEvent(digihot_customevents.KLIKK, {
     buttonName: buttonName,
   })
 }
+
 export function logErrorOnUrl(url: string) {
   logCustomEvent(digihot_customevents.ERROR_URL, {
     url: url,
