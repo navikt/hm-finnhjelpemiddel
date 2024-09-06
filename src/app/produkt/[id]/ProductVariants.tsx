@@ -51,6 +51,16 @@ const ProductVariants = ({ product }: { product: Product }) => {
     }
   }, [])
 
+  const handleResize = () => {
+    if (variantNameElementRef.current) {
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+  }, []);
+
   const {
     data: dataAndFilter,
     isLoading: dataIsLoading,
@@ -187,6 +197,12 @@ const ProductVariants = ({ product }: { product: Product }) => {
           : productWithFilteredVariants[0].variants
       : []
     : product.variants
+
+  useEffect(() => {
+    if (variantNameElementRef.current) {
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight);
+    }
+  }, [productVariantsToShow]);
 
   let sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
   const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
@@ -419,7 +435,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     </Button>
                   </Table.HeaderCell>
                 ) : (
-                  <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                  <Table.HeaderCell style={{
+                    zIndex: "2 !important",
+                  }}>HMS-nummer</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
                   <Table.DataCell
