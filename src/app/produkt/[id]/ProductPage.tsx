@@ -1,4 +1,3 @@
-
 import { Document, Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 
@@ -6,7 +5,7 @@ import File from '@/components/File'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { titleCapitalized } from '@/utils/string-util'
 import { Bleed, BodyShort, Button, Heading, HGrid, HStack } from '@navikt/ds-react'
-import { default as Link } from 'next/link'
+import NextLink, { default as Link } from 'next/link'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
@@ -15,6 +14,8 @@ import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
 import { ProductsOnPost } from './page'
+import { TabsIcon } from "@navikt/aksel-icons";
+import { logVariantSideVist } from "@/utils/amplitude";
 
 type ProductProps = {
   product: Product
@@ -70,6 +71,19 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               Egenskaper
             </Link>
           </Heading>
+          <div className="spacing-top--small spacing-bottom--small">
+            <NextLink
+              href={`/produkt/${product.id}/variants`}
+              className="agreement-details__agreement-link"
+              target={'_blank'}
+              onClick={() => {
+                logVariantSideVist()
+              }}
+            >
+              {`Åpne varianttabell i ny fane`}
+              <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
+            </NextLink>
+          </div>
           <ProductVariants product={product} />
         </section>
 
@@ -141,10 +155,10 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
 }
 
 const ProductNavigationBar = ({
-                                isOnAgreement,
-                                hasAccessories,
-                                hasSpareParts,
-                              }: {
+  isOnAgreement,
+  hasAccessories,
+  hasSpareParts,
+}: {
   isOnAgreement: boolean
   hasAccessories: boolean
   hasSpareParts: boolean
