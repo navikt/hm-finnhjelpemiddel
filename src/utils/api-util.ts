@@ -10,7 +10,7 @@ import {
   filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
-  filterLeverandor,
+  filterLeverandor, filterMainProductsOnly,
   filterMaterialeTrekk,
   filterMinMax,
   filterProduktkategoriISO,
@@ -642,6 +642,7 @@ export const getProductsOnAgreement = ({
         },
       },
     },
+    filterMainProductsOnly()
   ]
 
   const searchTermQuery = makeSearchTermQuery({ searchTerm, agreementId })

@@ -201,6 +201,12 @@ export const filterDelkontrakt = (values: Array<string>) => ({
   },
 })
 
+export const filterMainProductsOnly= () => ({
+  bool: {
+    should: { term: { 'main': true } }
+  },
+})
+
 export const filterVis = (values: Array<string>) => {
   const filters: any[] = values
     .map((filterKey) => {
