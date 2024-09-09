@@ -80,7 +80,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
                 logVariantSideVist()
               }}
             >
-              {`Åpne varianttabell i ny fane`}
+              {`Åpne fullskjerm-varianttabell i ny fane`}
               <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
             </NextLink>
           </div>
