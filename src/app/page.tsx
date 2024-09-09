@@ -76,7 +76,7 @@ function Home() {
                   FinnHjelpemiddel
                 </Heading>
                 <Heading level="1" size="xlarge" className="home-page__heading">
-                  Søk i Norges største samling av hjelpemidler på nett
+                  Norges største samling av hjelpemidler på nett
                 </Heading>
               </VStack>
               <Box maxWidth={'530px'}>
