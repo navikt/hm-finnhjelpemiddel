@@ -15,7 +15,6 @@ import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
 import { ProductsOnPost } from './page'
 import { TabsIcon } from "@navikt/aksel-icons";
-import { logVariantSideVist } from "@/utils/amplitude";
 
 type ProductProps = {
   product: Product
@@ -76,9 +75,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               href={`/produkt/${product.id}/variants`}
               className="agreement-details__agreement-link"
               target={'_blank'}
-              onClick={() => {
-                logVariantSideVist()
-              }}
             >
               {`Åpne fullskjerm-varianttabell i ny fane`}
               <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
