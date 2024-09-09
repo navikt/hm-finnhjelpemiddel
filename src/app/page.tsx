@@ -8,7 +8,15 @@ import AutocompleteSearch from '@/components/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
 import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
-import { Chat2Icon, HatSchoolIcon, LocationPinIcon } from '@navikt/aksel-icons'
+import {
+  BicycleIcon,
+  Chat2Icon,
+  EarIcon,
+  EyeIcon,
+  HatSchoolIcon,
+  LocationPinIcon,
+  WheelchairIcon,
+} from '@navikt/aksel-icons'
 import { Bleed, BodyLong, Box, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 
 import AgreementList from './rammeavtale/AgreementList'
@@ -43,19 +51,39 @@ function Home() {
   return (
     <AnimateLayout>
       <div className="home-page">
-        <VStack className="main-wrapper--large" gap={{ xs: '12', md: '32' }}>
-          <HStack gap={{ xs: '4', md: '20' }}>
-            <Hide below="lg">
-              <Image src="/logo-med-rullestol.svg" width="180" height="180" alt="FinnHjelpemiddel-logo" />
-            </Hide>
-
-            <Box maxWidth={'530px'}>
-              <Heading level="1" size="large" className="home-page__heading">
-                Søk i Norges største samling av hjelpemidler på nett
-              </Heading>
-              <AutocompleteSearch onSearch={onSearch} />
-            </Box>
-          </HStack>
+        <VStack className="main-wrapper--large" gap={{ xs: '12', md: '24' }}>
+          <Bleed
+            marginInline="full"
+            reflectivePadding
+            style={{ backgroundColor: '#FEF5EF' }}
+            className="home-page__heading-and-search-container"
+          >
+            <VStack gap={{ xs: '8', md: '14' }}>
+              <Box
+                paddingInline="10"
+                paddingBlock="4"
+                style={{ backgroundColor: '#FAD8E7' }}
+                width="fit-content"
+                className="home-page__icons-logo"
+              >
+                <HStack gap="4">
+                  <WheelchairIcon aria-hidden /> <EyeIcon aria-hidden /> <BicycleIcon aria-hidden />
+                  <EarIcon aria-hidden />
+                </HStack>
+              </Box>
+              <VStack gap="2">
+                <Heading level="1" size="xlarge" className="home-page__heading home-page__finnhjelpemiddel">
+                  FinnHjelpemiddel
+                </Heading>
+                <Heading level="1" size="xlarge" className="home-page__heading">
+                  Norges største samling av hjelpemidler på nett
+                </Heading>
+              </VStack>
+              <Box maxWidth={'530px'}>
+                <AutocompleteSearch onSearch={onSearch} />
+              </Box>
+            </VStack>
+          </Bleed>
 
           <HGrid gap={{ xs: '12', md: '14' }} columns={{ xs: '1fr', md: '2fr 1fr' }}>
             <Show below="md">
@@ -72,7 +100,7 @@ function Home() {
 
           <Bleed marginInline="full" asChild reflectivePadding>
             <div className="home-page__kontakt-oss">
-              <HGrid gap="8" columns={{ xs: 1, md: 3 }} className="home-page__kontakt-oss-container">
+              <HGrid gap="8" columns={{ xs: 1, md: 3 }}>
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
                   <div className="home-page__kontakt-oss-icon">
                     <Chat2Icon aria-hidden fontSize={'32px'} />
@@ -106,10 +134,7 @@ function Home() {
                   </div>
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
-                      <Link
-                        href="https://www.nav.no/samarbeidspartner/lege/hjelpemidler#kommunens-ansvar"
-                        className="home-page__link"
-                      >
+                      <Link href="https://www.kunnskapsbanken.net/" className="home-page__link">
                         Kunnskapsbanken
                       </Link>
                     </Heading>

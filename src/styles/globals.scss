@@ -52,19 +52,6 @@ main {
   scroll-behavior: smooth;
 }
 
-.main-header {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  background-color: $a-gray-50;
-
-  h1 {
-    text-align: center;
-    font-weight: 400;
-    margin: $a-spacing-5 0;
-  }
-}
-
 .nav-bunn {
   background-color: $a-deepblue-800;
   padding-bottom: 100px;
