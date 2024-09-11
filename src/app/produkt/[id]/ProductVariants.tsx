@@ -408,13 +408,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
               >
                 {product.variantCount > 1 ? (
                   <Table.HeaderCell
-                    className="sortable"
-                    style={{
-                      position: 'sticky',
-                      top: `${variantNameElementHeight}px`,
-                      zIndex: '2 !important',
-                      background: 'rgb(242 243 245)',
-                    }}
+                    className="sortable hmsnr-header-cell"
+                    style={{top: `${variantNameElementHeight}px`,}}
                   >
                     <Button
                       className="sort-button"
