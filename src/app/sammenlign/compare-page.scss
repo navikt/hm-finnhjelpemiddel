@@ -6,7 +6,10 @@
   .compare-table-container {
     height: 90vh;
     overflow-x: scroll;
-
+    @media print {
+      height: 100%;
+      overflow-x: visible;
+    }
     @include mixins.for-size(tablet-up) {
       .navds-table {
         width: auto;
