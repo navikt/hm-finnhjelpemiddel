@@ -64,7 +64,7 @@ export default async function AgreementPage({ params }: Props) {
                 {!hide && (
                   <LinkToAgreement
                     hrefHurtigoversikt={hrefHurtigoversikt}
-                    agreementLabel={agreement.label}
+                    agreementLabel={agreement.title}
                   ></LinkToAgreement>
                 )}
                 <AgreementDescription agreement={agreement} />

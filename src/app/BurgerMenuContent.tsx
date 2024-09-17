@@ -45,7 +45,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                         href={agreementProductsLink(agreement.id)}
                         onClick={() => {
                           setMenuOpen(false)
-                          logNavigationEvent('meny', 'hurtigoversikt', agreement.label)
+                          logNavigationEvent('meny', 'hurtigoversikt', agreement.title)
                         }}
                       >
                         {agreement.title}
