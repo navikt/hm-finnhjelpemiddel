@@ -22,7 +22,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
     if (!agreements) return []
     const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
     // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => sortAlphabetically(a.label, b.label))
+    filteredData.sort((a, b) => sortAlphabetically(a.title, b.title))
 
     return filteredData
   }, [agreements])
@@ -48,7 +48,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                           logNavigationEvent('meny', 'hurtigoversikt', agreement.label)
                         }}
                       >
-                        {agreement.label}
+                        {agreement.title}
                       </Link>
                     </li>
                   ))}

@@ -56,7 +56,7 @@ const AgreementList = () => {
         sorted.sort((a, b) => b.expires.getTime() - a.expires.getTime())
       }
     } else {
-      sorted.sort((a, b) => sortAlphabetically(a.label, b.label, sortColumn.direction === 'descending'))
+      sorted.sort((a, b) => sortAlphabetically(a.title, b.title, sortColumn.direction === 'descending'))
     }
 
     return sorted
@@ -150,7 +150,7 @@ const AgreementList = () => {
               <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center">
                 {/*<Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>*/}
                 <Link as={NextLink} href={agreementProductsLink(label.id)}>
-                  {`${label.label} `}
+                  {`${label.title} `}
                 </Link>
                 <Hide below="lg" asChild>
                   <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
