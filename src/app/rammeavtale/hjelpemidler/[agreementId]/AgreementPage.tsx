@@ -16,11 +16,32 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
-import { FilesIcon, FilterIcon, PackageIcon, TrashIcon, WrenchIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Button, Heading, HGrid, HStack, Link, Loader, Popover, VStack } from '@navikt/ds-react'
+import {
+  FilesIcon,
+  FilterIcon,
+  ImageIcon,
+  PackageIcon,
+  PrinterSmallIcon,
+  TrashIcon,
+  WrenchIcon,
+} from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  BodyShort,
+  Button,
+  Heading,
+  HGrid,
+  HStack,
+  Link,
+  Loader,
+  Popover,
+  ToggleGroup,
+  VStack,
+} from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
-import AgreementResults from './AgreementResults'
 import FilterForm from './FilterForm'
+import PostsList from './PostsList'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -40,6 +61,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
 
+  const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
   // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
@@ -58,6 +80,11 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     //   scroll: false,
     // })
   }, [])
+
+  const handleSetToggle = (value: string) => {
+    formMethods.setValue('hidePictures', value)
+    searchFormRef.current?.requestSubmit()
+  }
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
     router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
@@ -139,49 +166,56 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
         <FormProvider {...formMethods}>
           <CompareMenu />
-          <HGrid columns={{ xs: 1, lg: '390px auto' }} gap={{ xs: '4', lg: '18' }}>
-            {showSidebar && (
-              <section className="filter-container">
-                <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
-                <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                  <Button
-                    ref={copyButtonDesktopRef}
-                    variant="secondary"
-                    size="small"
-                    icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                    onClick={() => {
-                      navigator.clipboard.writeText(location.href)
-                      setCopyPopupOpenState(true)
-                    }}
-                  >
-                    Kopiér søket
-                  </Button>
-                  <Popover
-                    open={copyPopupOpenState}
-                    onClose={() => setCopyPopupOpenState(false)}
-                    anchorEl={copyButtonDesktopRef.current}
-                    placement="right"
-                  >
-                    <Popover.Content>Søket er kopiert!</Popover.Content>
-                  </Popover>
 
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="small"
-                    icon={<TrashIcon title="Nullstill søket" />}
-                    onClick={onReset}
-                  >
-                    Tøm filtre
-                  </Button>
-                </HGrid>
-              </section>
-            )}
-            {!showSidebar && (
-              <div>
+          {false && (
+            <section className="filter-container">
+              <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
+              <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
                 <Button
+                  ref={copyButtonDesktopRef}
                   variant="secondary"
                   size="small"
+                  icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                  onClick={() => {
+                    navigator.clipboard.writeText(location.href)
+                    setCopyPopupOpenState(true)
+                  }}
+                >
+                  Kopiér søket
+                </Button>
+                <Popover
+                  open={copyPopupOpenState}
+                  onClose={() => setCopyPopupOpenState(false)}
+                  anchorEl={copyButtonDesktopRef.current}
+                  placement="right"
+                >
+                  <Popover.Content>Søket er kopiert!</Popover.Content>
+                </Popover>
+
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="small"
+                  icon={<TrashIcon title="Nullstill søket" />}
+                  onClick={onReset}
+                >
+                  Tøm filtre
+                </Button>
+              </HGrid>
+            </section>
+          )}
+          {true && <></>}
+
+          <VStack gap={{ xs: '4', md: '8' }}>
+            <Heading level="2" size="small">
+              Delkontrakter
+            </Heading>
+            <span style={{ width: '100%', borderTop: '1px solid #838C9A' }} />
+            <HStack justify="space-between">
+              <div>
+                <Button
+                  variant="secondary-neutral"
+                  className="button-with-thin-border"
                   onClick={() => setMobileOverlayOpen(true)}
                   icon={<FilterIcon aria-hidden />}
                 >
@@ -236,15 +270,45 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </MobileOverlay.Footer>
                 </MobileOverlay>
               </div>
+              <HStack gap="4" style={{ flexWrap: 'wrap-reverse' }}>
+                <ToggleGroup
+                  className="hurtigoversikt-toggle"
+                  defaultValue="show-pictures"
+                  onChange={handleSetToggle}
+                  value={pictureToggleValue}
+                  variant="neutral"
+                  style={{ minWidth: '222px' }}
+                >
+                  <ToggleGroup.Item value="show-pictures">
+                    <ImageIcon aria-hidden />
+                    Vis bilde
+                  </ToggleGroup.Item>
+                  <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
+                </ToggleGroup>
+                <Button
+                  variant="secondary-neutral"
+                  className="button-with-thin-border"
+                  onClick={() => {
+                    window.print()
+                  }}
+                  icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
+                >
+                  {`Hurtigoversikt (PDF)`}
+                </Button>
+              </HStack>
+            </HStack>
+
+            <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
+            {postError && (
+              <Alert variant="error" title="Error med lasting av produkter">
+                Det har skjedd en feil ved innhenting av produkter. Vennligst prøv igjen senere.
+              </Alert>
             )}
 
-            <AgreementResults
-              posts={posts}
-              formRef={searchFormRef}
-              postLoading={postsIsLoading}
-              postError={postError}
-            />
-          </HGrid>
+            {!postError && posts.length === 0 && (
+              <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
+            )}
+          </VStack>
         </FormProvider>
       </VStack>
     </>

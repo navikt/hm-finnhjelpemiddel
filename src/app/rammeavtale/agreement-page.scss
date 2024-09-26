@@ -124,3 +124,7 @@
     background-color: $a-surface-action-subtle;
   }
 }
+.button-with-thin-border,
+.hurtigoversikt-toggle > div {
+  box-shadow: inset 0 0 0 1px $a-border-strong;
+}
