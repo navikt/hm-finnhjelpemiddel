@@ -4,7 +4,7 @@ import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { FormSearchData } from '@/utils/search-state-util'
-import { Alert, HGrid, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
+import { Alert, HStack, Heading, Loader, ReadMore, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -34,7 +34,7 @@ const PostsList = ({
   return (
     <VStack
       as="ol"
-      gap={{ xs: '4', md: pictureToggleValue === 'hide-pictures' ? '4' : '6' }}
+      gap={{ xs: '8', md: pictureToggleValue === 'hide-pictures' ? '10' : '12' }}
       className="agreement-search-results"
       id="agreementSearchResults"
     >
@@ -42,21 +42,21 @@ const PostsList = ({
         <VStack
           as="li"
           key={post.nr}
-          gap={{ xs: '2', md: pictureToggleValue === 'hide-pictures' ? '2' : '4' }}
+          gap={{ xs: '4', md: pictureToggleValue === 'hide-pictures' ? '6' : '8' }}
           className={
             pictureToggleValue === 'hide-pictures'
               ? 'agreement-post spacing-top--xsmall'
               : 'agreement-post spacing-top--small'
           }
         >
-          <HGrid columns={'auto 30px'} align="start">
-            <Heading level="3" size="xsmall">
+          <VStack gap="4">
+            <Heading level="3" size="small" className="agreement-page__post-heading">
               {post.title}
             </Heading>
-            <HelpText placement="right" strategy="absolute" style={{ paddingBottom: '4px' }}>
+            <ReadMore header="Mer informasjon" style={{ paddingBottom: '4px' }}>
               {post.description}
-            </HelpText>
-          </HGrid>
+            </ReadMore>
+          </VStack>
           {post.products.length === 0 && postLoading && (
             <HStack justify="center" style={{ marginTop: '18px' }}>
               <Loader size="medium" title="Laster hjelpemidler" />
@@ -73,7 +73,7 @@ const PostsList = ({
                   product={productWithRank.product}
                   linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                   rank={productWithRank.rank}
-                  type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'checkbox'}
+                  type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'new'}
                   hmsNumbers={productWithRank.hmsNumbers}
                   variantCount={productWithRank.variantCount}
                   handleCompareClick={handleCompareClick}

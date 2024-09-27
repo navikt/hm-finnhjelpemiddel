@@ -6,8 +6,14 @@
   background-color: #faefee;
 
   &__heading {
-    max-width: 670px;
+    max-width: 790px;
     color: $ny-nav-purple-dark;
+  }
+
+  &__post-heading {
+    @include mixins.for-size(phone-up) {
+      font-size: 1.5rem;
+    }
   }
 
   &__content {

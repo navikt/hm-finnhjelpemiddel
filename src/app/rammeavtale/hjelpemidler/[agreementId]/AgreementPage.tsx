@@ -151,7 +151,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             </Link>
             <BodyShort textColor="subtle">/</BodyShort>
           </HStack>
-          <Heading level="1" size="large" className="agreement-page__heading">
+          <Heading level="1" size="xlarge" className="agreement-page__heading">
             {`${agreement.title}`}
           </Heading>
           <div>
@@ -207,11 +207,11 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           {true && <></>}
 
           <VStack gap={{ xs: '4', md: '8' }}>
-            <Heading level="2" size="small">
+            <Heading level="2" size="large">
               Delkontrakter
             </Heading>
             <span style={{ width: '100%', borderTop: '1px solid #838C9A' }} />
-            <HStack justify="space-between">
+            <HStack justify="space-between" className="spacing-bottom--medium">
               <div>
                 <Button
                   variant="secondary-neutral"
