@@ -209,7 +209,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
   // Spesifikk rekkefølge av bestemte rader for Terskeleliminatorer med ISO 18301505.
   // De radene som bør komme etter hverandre er: "Bredde",  "Terskelhøyde maks",  "Terskelhøyde min"
 
-  const customOrder = ['Bredde', 'Terskelhøyde maks', 'Terskelhøyde min']
+  const customOrder = ['Belastning maks', 'Bredde', 'Terskelhøyde maks', 'Terskelhøyde min']
 
   const customSort = (a: string, b: string) => {
     const indexA = customOrder.indexOf(a)
@@ -231,7 +231,9 @@ const ProductVariants = ({ product }: { product: Product }) => {
     product.isoCategory === '18301505' // ISO 18301505 er Terskeleliminatorer
       ? [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
       : [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
-  // const sortedKeys = allDataKeys.sort(customSort)
+
+  /*  const sortedKeys = allDataKeys.sort(customSort)
+    console.log(sortedKeys)*/
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
