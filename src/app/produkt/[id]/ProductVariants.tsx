@@ -53,13 +53,13 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   const handleResize = () => {
     if (variantNameElementRef.current) {
-      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight);
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
     }
   }
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-  }, []);
+    window.addEventListener('resize', handleResize, false)
+  }, [])
 
   const {
     data: dataAndFilter,
@@ -200,12 +200,38 @@ const ProductVariants = ({ product }: { product: Product }) => {
 
   useEffect(() => {
     if (variantNameElementRef.current) {
-      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight);
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
     }
-  }, [productVariantsToShow]);
+  }, [productVariantsToShow])
 
   let sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
-  const allDataKeys = [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
+
+  // Spesifikk rekkefølge av bestemte rader for Terskeleliminatorer med ISO 18301505.
+  // De radene som bør komme etter hverandre er: "Bredde",  "Terskelhøyde maks",  "Terskelhøyde min"
+
+  const customOrder = ['Bredde', 'Terskelhøyde maks', 'Terskelhøyde min']
+
+  const customSort = (a: string, b: string) => {
+    const indexA = customOrder.indexOf(a)
+    const indexB = customOrder.indexOf(b)
+
+    if (indexA === -1 && indexB === -1) {
+      return a.localeCompare(b)
+    }
+    if (indexA === -1) {
+      return 1
+    }
+    if (indexB === -1) {
+      return -1
+    }
+    return indexA - indexB
+  }
+
+  const allDataKeys =
+    product.isoCategory === '18301505' // ISO 18301505 er Terskeleliminatorer
+      ? [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
+      : [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
+  // const sortedKeys = allDataKeys.sort(customSort)
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
@@ -409,7 +435,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                 {product.variantCount > 1 ? (
                   <Table.HeaderCell
                     className="sortable hmsnr-header-cell"
-                    style={{top: `${variantNameElementHeight}px`,}}
+                    style={{ top: `${variantNameElementHeight}px` }}
                   >
                     <Button
                       className="sort-button"
@@ -430,9 +456,13 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     </Button>
                   </Table.HeaderCell>
                 ) : (
-                  <Table.HeaderCell style={{
-                    zIndex: "2 !important",
-                  }}>HMS-nummer</Table.HeaderCell>
+                  <Table.HeaderCell
+                    style={{
+                      zIndex: '2 !important',
+                    }}
+                  >
+                    HMS-nummer
+                  </Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
                   <Table.DataCell
