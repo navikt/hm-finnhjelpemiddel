@@ -19,7 +19,7 @@ function AboutUs() {
             <Heading level="2" size="small" spacing>
               Et nettsted fra NAV
             </Heading>
-            <BodyLong className="spacing-bottom--small">
+            <BodyLong spacing>
               {`FinnHjelpemiddel er et nettsted som utvikles og driftes av NAV Hjelpemidler og tilrettelegging. Strukturen
               er med fokus på hjelpemidelene som er på avtale med NAV og generell informasjon om avtalene. Hjelpemidler
               som ikke er på avtale presenteres på tilsvarende måte, men uten avtalemerking (se lengre ned).`}
@@ -36,44 +36,46 @@ function AboutUs() {
               Hjelpemidler på avtale med NAV
             </Heading>
             <BodyLong spacing>
-              NAV følger regelverket for offentlige anskaffelser og har inngått avtaler med leverandører av ulike
-              hjelpemidler som for eksempel varslingshjelpemidler og manuelle rullestoler. Hver avtale inneholder
-              delkontrakter som organiserer hjelpemidlene ut ifra funksjoner. Hver delkontrakt er igjen inndelt i
-              rangeringer. For eksempel “Rangering 1” som betyr at hjelpemiddelet må velges dersom det dekker brukerens
-              behov. Dersom hjelpemiddelet på rangering 1 ikke kan benyttes må rangering 2 vurderes osv. Dersom et
-              hjelpemiddel har mange varianter, som for eksempel flere størrelser, er hver variant som er på avtale
-              markert med “På avtale” i tabellvisningen. Det finnes noen få delkontrakter hvor man ikke forholder seg
-              til rangering på den nevnte måten. Informasjon om rutiner for disse finnes i de aktuelle
-              avtaledokumentene.
+              NAV følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
+              hjelpemiddelområder. Dette kan for eksempel være hjelpemidler for varsling, synstekniske hjelpemidler og
+              manuelle rullestoler.
+            </BodyLong>
+            <BodyLong spacing>
+              Avtalene deles inn i delkontrakter ut ifra hjelpemidlenes egenskaper. En delkontrakt kan omfatte flere
+              hjelpemidler som er inndelt i ulike rangeringer. Hjelpemidler som er rangert som nr. 1 skal velges først.
+              Dersom det er nødvendig med et hjelpemiddel som er rangert lavere må dette begrunnes. Det finnes noen få
+              delkontrakter hvor man ikke forholder seg til rangeringer. Informasjon om rutiner for disse finnes i de
+              aktuelle avtaledokumentene.
+            </BodyLong>
+            <BodyLong spacing>
+              {`Hjelpemidler som kommer i flere varianter (for eksempel størrelser og/eller farger), kan ha noen varianter
+              på avtale og noen som ikke er på avtale. Dette synliggjøres i tabellen under egenskaper.`}
             </BodyLong>
 
             <Heading level="2" size="small" spacing>
-              Målgruppe
+              Målgrupper
             </Heading>
             <BodyLong spacing>
-              FinnHjelpemiddel er i hovedsak laget for innbyggere, kommunalt ansatte, ansatte i helseforetak og ansatte
-              ved hjelpemiddelsentraler som trenger informasjon om hjelpemidler og avtalene med NAV.
+              FinnHjelpemiddel er laget for ansatte i kommuner, ansatte i helseforetakene, innbyggere, ansatte ved
+              hjelpemiddelsentralene og andre som trenger informasjon om hjelpemidler og om avtalene med NAV.
             </BodyLong>
             <Heading level="2" size="small" spacing>
               Spørsmål om et hjelpemiddel
             </Heading>
             <BodyLong spacing>
               Hvis du har spørsmål om et hjelpemiddel som du har fått fra NAV eller et du har sett på FinnHjelpemiddel
-              kontakter du kommunen du bor i.
-            </BodyLong>
-            <Heading level="2" size="small" spacing>
-              Tilbakemelding på nettstedet
-            </Heading>
-            <BodyLong className="spacing-bottom--small">
-              Tilbakemeldinger om tekniske feil og mangler på nettsiden sendes til{' '}
-              <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
-            </BodyLong>
-            <BodyLong spacing>
-              Hvis du leser dette på en PC, kan du gi oss tilbakemelding ved å klikke på
-              &quot;Tilbakemelding&quot;-knappen.
+              må du ta kontakt med kommunen din.
             </BodyLong>
             <BodyLong spacing>
               På nav.no/hjelpemidler finner du mer informasjon om regelverk og hvordan man søker om hjelpemidler.
+            </BodyLong>
+            <Heading level="2" size="small" spacing>
+              Innspill og tilbakemeldinger om FinnHjelpemiddel
+            </Heading>
+            <BodyLong className="spacing-bottom--small">
+              Tilbakemeldinger om tekniske feil og mangler på nettsiden sendes til{' '}
+              <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>. Hvis du leser dette på en PC,
+              kan du gi oss tilbakemelding ved å klikke på &quot;Tilbakemelding&quot;-knappen.
             </BodyLong>
           </article>
         </div>
