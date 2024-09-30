@@ -136,7 +136,6 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
           <Table.Body>
             {data &&
               data.products.map((item, i) => {
-                console.log({ item })
                 return (
                   <Table.Row key={i}>
                     <Table.DataCell> {item.variants[0].hmsArtNr}</Table.DataCell>
