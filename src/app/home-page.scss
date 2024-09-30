@@ -19,8 +19,12 @@
     padding-bottom: $a-spacing-8;
 
     @include mixins.for-size(tablet-up) {
-      padding-top: $a-spacing-20;
-      padding-bottom: $a-spacing-20;
+      padding-top: $a-spacing-18;
+      padding-bottom: $a-spacing-18;
+    }
+
+    .popover {
+      max-height: 250px !important;
     }
   }
 
