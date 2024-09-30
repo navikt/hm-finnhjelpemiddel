@@ -58,7 +58,7 @@ function Home() {
             style={{ backgroundColor: '#FEF5EF' }}
             className="home-page__heading-and-search-container"
           >
-            <VStack gap={{ xs: '8', md: '14' }}>
+            <VStack gap={{ xs: '8', md: '11' }}>
               <Box
                 paddingInline="10"
                 paddingBlock="4"

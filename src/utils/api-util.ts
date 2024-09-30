@@ -10,7 +10,8 @@ import {
   filterDelkontrakt,
   filterFyllmateriale,
   filterLengde,
-  filterLeverandor, filterMainProductsOnly,
+  filterLeverandor,
+  filterMainProductsOnly,
   filterMaterialeTrekk,
   filterMinMax,
   filterProduktkategoriISO,
@@ -642,7 +643,7 @@ export const getProductsOnAgreement = ({
         },
       },
     },
-    filterMainProductsOnly()
+    filterMainProductsOnly(),
   ]
 
   const searchTermQuery = makeSearchTermQuery({ searchTerm, agreementId })
@@ -1136,7 +1137,6 @@ export type Suggestions = Array<{ text: string; data: ProductVariant }>
 
 //TODO: Bør denne returnere Product? Vet ikke om vi trenger det
 export const fetchSuggestions = (term: string): Promise<Suggestions> => {
-  console.log({ term })
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
@@ -1166,7 +1166,6 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
       const suggestions: Suggestions = data.suggest.keywords_suggest
         .at(0)
         .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
-      console.log({ suggestions })
       return suggestions
     })
 }
