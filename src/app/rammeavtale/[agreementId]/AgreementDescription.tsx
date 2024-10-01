@@ -17,7 +17,7 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
   return (
     <div className="agreement-page__description">
       <Heading level="2" size="small" ref={headingRef}>
-        Om avtalen med NAV
+        Om avtalen med Nav
       </Heading>
       {agreementHasNoProducts(agreement.identifier) && (
         <div dangerouslySetInnerHTML={{ __html: agreement.descriptionHtml }} />

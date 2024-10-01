@@ -108,10 +108,10 @@ function Home() {
                   <div className="spacing-top--small">
                     <Heading level="4" size="small" className="spacing-bottom--medium">
                       <Link href="https://www.nav.no/kontaktoss" className="home-page__link">
-                        Kontakt NAV
+                        Kontakt Nav
                       </Link>
                     </Heading>
-                    <BodyLong>Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i NAV.</BodyLong>
+                    <BodyLong>Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i Nav.</BodyLong>
                   </div>
                 </HGrid>
                 <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>

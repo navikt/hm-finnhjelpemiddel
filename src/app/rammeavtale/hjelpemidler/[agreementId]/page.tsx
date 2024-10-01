@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   //TODO: må ha fornuftig tittel
   return {
     title: agreement.title,
-    description: `Produkter under avtale ${agreement.title} med NAV`,
+    description: `Produkter under avtale ${agreement.title} med Nav`,
   }
 }
 
