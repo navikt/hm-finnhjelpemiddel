@@ -76,7 +76,7 @@
   }
 
   &__photo-slider-container {
-    max-height: 580px;
+    height: 580px;
 
     @include mixins.for-size(desktop-up) {
       padding-left: $a-spacing-5;
@@ -142,7 +142,6 @@
   &__top-page-container {
     @include mixins.for-size(desktop-up) {
       justify-content: center;
-      height: 590px;
       max-width: 1258px;
     }
 
