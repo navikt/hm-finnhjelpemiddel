@@ -21,22 +21,22 @@ function RightsResponsibilities() {
               eller publiseres helt eller delvis uten samtykke fra NAV.
             </BodyLong>
             <BodyLong>
-              Varemerker, logoer og andre kjennetegn tilhører NAV eller tredjepart. Det er ikke tillatt å kopiere eller
+              Varemerker, logoer og andre kjennetegn tilhører Nav eller tredjepart. Det er ikke tillatt å kopiere eller
               bruke dem uten samtykke fra NAV.
             </BodyLong>
             <ul>
               <li>Opplysninger i FinnHjelpemiddel kan bli endret eller oppdatert uten varsel.</li>
               <li>Feil kan forekomme.</li>
-              <li>NAV påtar seg ikke ansvaret for innholdet i produktinformasjonen.</li>
+              <li>Nav påtar seg ikke ansvaret for innholdet i produktinformasjonen.</li>
               <li>Bruk av opplysningene skjer på eget ansvar.</li>
               <li>Informasjonen på FinnHjelpemiddel er basert på informasjon gitt av leverandører av hjelpemidler.</li>
               <li>
-                NAV fraskriver seg ansvar for direkte eller indirekte tap som er en følge av bruk av opplysningene gitt
+                Nav fraskriver seg ansvar for direkte eller indirekte tap som er en følge av bruk av opplysningene gitt
                 i FinnHjelpemiddel, uavhengig av om tapet skyldes feil, uklare opplysninger, virus eller har andre
                 årsaker.
               </li>
               <li>
-                NAV støtter ikke andre nettsteder som lenkes til fra FinnHjelpemiddel og påtar seg ikke ansvar for
+                Nav støtter ikke andre nettsteder som lenkes til fra FinnHjelpemiddel og påtar seg ikke ansvar for
                 innholdet på disse nettstedene.
               </li>
             </ul>

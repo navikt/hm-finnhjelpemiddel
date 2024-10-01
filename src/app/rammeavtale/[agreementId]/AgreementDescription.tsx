@@ -24,7 +24,7 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
       )}
       {!agreementHasNoProducts(agreement.identifier) && (
         <BodyLong>
-          {`NAV har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor området "${agreement.title}". På denne siden finner du informasjon om avtalen, dokumenter, tilbehør, eventuelle tjenester og reservedeler. Informasjon om leverandør finner man på siden til hjelpemiddelet.`}
+          {`Nav har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor området "${agreement.title}". På denne siden finner du informasjon om avtalen, dokumenter, tilbehør, eventuelle tjenester og reservedeler. Informasjon om leverandør finner man på siden til hjelpemiddelet.`}
         </BodyLong>
       )}
       {!agreementHasNoProducts(agreement.identifier) && (

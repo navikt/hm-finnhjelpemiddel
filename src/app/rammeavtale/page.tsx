@@ -26,7 +26,7 @@ export default async function AgreementsInfoPage() {
               <Image src="/nav-logo-red.svg" width="65" height="41" alt="" aria-hidden={true} />
             </div>
             <BodyShort spacing>
-              {`Nedenfor finner du alle aktive avtaler for NAV Hjelpemidler og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
+              {`Nedenfor finner du alle aktive avtaler for Nav Hjelpemidler og tilrettelegging. Under hver avtale finnes tilbehør, reservedeler, tjenester
         og behov- og kravspesifikasjon med mer.`}
             </BodyShort>
 
@@ -58,7 +58,7 @@ export default async function AgreementsInfoPage() {
                 <DefinitionList.Term>
                   <BodyShort textColor="subtle">På avtale med NAV</BodyShort>
                 </DefinitionList.Term>
-                <DefinitionList.Definition>Er på avtale med NAV uten rangering.</DefinitionList.Definition>
+                <DefinitionList.Definition>Er på avtale med Nav uten rangering.</DefinitionList.Definition>
               </DefinitionList>
             </div>
             <div>
@@ -67,7 +67,7 @@ export default async function AgreementsInfoPage() {
               </Heading>
               <BodyLong spacing>
                 Det betyr at hjelpemiddelet ikke er på avtale med NAV. Dersom du vil søke om dette hjelpemiddelet, må
-                behovet begrunnes godt. NAV Hjelpemiddelsentral vurderer om hjelpemiddelet kan innvilges eller ikke.
+                behovet begrunnes godt. Nav Hjelpemiddelsentral vurderer om hjelpemiddelet kan innvilges eller ikke.
               </BodyLong>
               <Heading level="3" size="small">
                 Hva om hjelpemiddelet er rangert som nummer 2,3 eller 4?

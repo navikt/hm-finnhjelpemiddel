@@ -20,8 +20,8 @@ function AboutUs() {
               Et nettsted fra NAV
             </Heading>
             <BodyLong spacing>
-              {`FinnHjelpemiddel er et nettsted som utvikles og driftes av NAV Hjelpemidler og tilrettelegging. Strukturen
-              er med fokus på hjelpemidelene som er på avtale med NAV og generell informasjon om avtalene. Hjelpemidler
+              {`FinnHjelpemiddel er et nettsted som utvikles og driftes av Nav Hjelpemidler og tilrettelegging. Strukturen
+              er med fokus på hjelpemidelene som er på avtale med Nav og generell informasjon om avtalene. Hjelpemidler
               som ikke er på avtale presenteres på tilsvarende måte, men uten avtalemerking (se lengre ned).`}
             </BodyLong>
             <BodyLong spacing>
@@ -36,7 +36,7 @@ function AboutUs() {
               Hjelpemidler på avtale med NAV
             </Heading>
             <BodyLong spacing>
-              NAV følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
+              Nav følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
               hjelpemiddelområder. Dette kan for eksempel være hjelpemidler for varsling, synstekniske hjelpemidler og
               manuelle rullestoler.
             </BodyLong>
@@ -63,7 +63,7 @@ function AboutUs() {
               Spørsmål om et hjelpemiddel
             </Heading>
             <BodyLong spacing>
-              Hvis du har spørsmål om et hjelpemiddel som du har fått fra NAV eller et du har sett på FinnHjelpemiddel
+              Hvis du har spørsmål om et hjelpemiddel som du har fått fra Nav eller et du har sett på FinnHjelpemiddel
               må du ta kontakt med kommunen din.
             </BodyLong>
             <BodyLong spacing>
