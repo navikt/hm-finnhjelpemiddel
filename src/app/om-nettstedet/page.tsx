@@ -17,7 +17,7 @@ function AboutUs() {
               Om FinnHjelpemiddel
             </Heading>
             <Heading level="2" size="small" spacing>
-              Et nettsted fra NAV
+              Et nettsted fra Nav
             </Heading>
             <BodyLong spacing>
               {`FinnHjelpemiddel er et nettsted som utvikles og driftes av Nav Hjelpemidler og tilrettelegging. Strukturen
@@ -33,7 +33,7 @@ function AboutUs() {
             </BodyLong>
 
             <Heading level="2" size="small" spacing>
-              Hjelpemidler på avtale med NAV
+              Hjelpemidler på avtale med Nav
             </Heading>
             <BodyLong spacing>
               Nav følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
@@ -57,7 +57,7 @@ function AboutUs() {
             </Heading>
             <BodyLong spacing>
               FinnHjelpemiddel er laget for ansatte i kommuner, ansatte i helseforetakene, innbyggere, ansatte ved
-              hjelpemiddelsentralene og andre som trenger informasjon om hjelpemidler og om avtalene med NAV.
+              hjelpemiddelsentralene og andre som trenger informasjon om hjelpemidler og om avtalene med Nav.
             </BodyLong>
             <Heading level="2" size="small" spacing>
               Spørsmål om et hjelpemiddel

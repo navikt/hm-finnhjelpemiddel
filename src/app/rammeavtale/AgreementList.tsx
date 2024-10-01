@@ -91,7 +91,7 @@ const AgreementList = () => {
     <VStack gap="4">
       <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center" className="agreement-page__list-header">
         <Heading level="2" size="medium">
-          På avtale med NAV
+          På avtale med Nav
         </Heading>
         <Hide below="lg" asChild>
           <Button

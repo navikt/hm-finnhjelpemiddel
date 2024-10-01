@@ -95,15 +95,15 @@ export const egenskaperText = (
 ): string => {
   const allVariantsOnAgreement = `${title} finnes i ${numberOfvariantsOnAgreement} ${
     numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
-  } på avtale med NAV.`
+  } på avtale med Nav.`
   const variantsWithAndWithoutAgreement =
     numberOfvariantsOnAgreement === 0
       ? `${title} finnes i ${numberOfvariantsWithoutAgreement} ${
           numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
         }.`
-      : `${title} finnes i ${numberOfvariantsOnAgreement} varianter på avtale med NAV, og ${numberOfvariantsWithoutAgreement} ${
+      : `${title} finnes i ${numberOfvariantsOnAgreement} varianter på avtale med Nav, og ${numberOfvariantsWithoutAgreement} ${
           numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        } som ikke er på avtale med NAV.`
+        } som ikke er på avtale med Nav.`
 
   const textMultipleVariants =
     'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'

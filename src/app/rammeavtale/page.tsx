@@ -34,7 +34,7 @@ export default async function AgreementsInfoPage() {
           </article>
           <article>
             <Heading level="2" size="medium" id="se-at-et-hjelpemiddel-er-på-avtale" spacing>
-              Slik kan du se at et hjelpemiddel er på avtale med NAV
+              Slik kan du se at et hjelpemiddel er på avtale med Nav
             </Heading>
 
             <div>
@@ -47,16 +47,16 @@ export default async function AgreementsInfoPage() {
                   <BodyShort textColor="subtle">Rangering 1</BodyShort>
                 </DefinitionList.Term>
                 <DefinitionList.Definition>
-                  Er på avtale med NAV, og er rangert som nr 1 på sin delkontrakt.
+                  Er på avtale med Nav, og er rangert som nr 1 på sin delkontrakt.
                 </DefinitionList.Definition>
                 <DefinitionList.Term>
                   <BodyShort textColor="subtle">Rangering 4</BodyShort>
                 </DefinitionList.Term>
                 <DefinitionList.Definition>
-                  Er på avtale med NAV, og er rangert som nr 4 på sin delkontrakt
+                  Er på avtale med Nav, og er rangert som nr 4 på sin delkontrakt
                 </DefinitionList.Definition>
                 <DefinitionList.Term>
-                  <BodyShort textColor="subtle">På avtale med NAV</BodyShort>
+                  <BodyShort textColor="subtle">På avtale med Nav</BodyShort>
                 </DefinitionList.Term>
                 <DefinitionList.Definition>Er på avtale med Nav uten rangering.</DefinitionList.Definition>
               </DefinitionList>
@@ -66,21 +66,21 @@ export default async function AgreementsInfoPage() {
                 Hva om hjelpemiddelet ikke har denne merkingen?
               </Heading>
               <BodyLong spacing>
-                Det betyr at hjelpemiddelet ikke er på avtale med NAV. Dersom du vil søke om dette hjelpemiddelet, må
+                Det betyr at hjelpemiddelet ikke er på avtale med Nav. Dersom du vil søke om dette hjelpemiddelet, må
                 behovet begrunnes godt. Nav Hjelpemiddelsentral vurderer om hjelpemiddelet kan innvilges eller ikke.
               </BodyLong>
               <Heading level="3" size="small">
                 Hva om hjelpemiddelet er rangert som nummer 2,3 eller 4?
               </Heading>
               <BodyLong spacing>
-                Det betyr at du kan søke om disse hjelpemidlene via NAV, men du må begrunne hvorfor rangeringen(e) foran
+                Det betyr at du kan søke om disse hjelpemidlene via Nav, men du må begrunne hvorfor rangeringen(e) foran
                 ikke dekker behovet.
               </BodyLong>
               <Heading level="3" size="small">
                 Hva vil det si at hjelpemiddelet ikke har rangering?
               </Heading>
               <BodyLong spacing>
-                Det betyr at produktet er på avtale med NAV. Dette kan for eksempel være understell til en sittemodul,
+                Det betyr at produktet er på avtale med Nav. Dette kan for eksempel være understell til en sittemodul,
                 der samme understell passer til sittemoduler i flere rangeringer.
               </BodyLong>
             </div>

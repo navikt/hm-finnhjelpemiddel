@@ -166,7 +166,7 @@ const ProductCard = ({
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">
-            {onAgreement ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med NAV') : ''}
+            {onAgreement ? (currentRank < 90 ? `Rangering ${currentRank}` : 'På avtale med Nav') : ''}
           </Detail>
 
           {viewHmsOrCount}

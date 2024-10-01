@@ -56,7 +56,7 @@ export const filtersFormStateLabel = {
 }
 
 const visFilterLabels = [
-  'På avtale med NAV',
+  'På avtale med Nav',
   'På bestillingsordning',
   'På digital behovsmelding',
   'Skjul utgåtte hjelpemidler',
@@ -220,7 +220,7 @@ export const filterVis = (values: Array<string>) => {
           term: { 'attributes.bestillingsordning': 'true' },
         }
       }
-      if (filterKey === 'På avtale med NAV') {
+      if (filterKey === 'På avtale med Nav') {
         return {
           match: { hasAgreement: 'true' },
         }

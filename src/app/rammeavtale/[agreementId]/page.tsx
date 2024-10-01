@@ -49,7 +49,7 @@ export default async function AgreementPage({ params }: Props) {
                 <div>
                   <HStack gap="3">
                     <Link as={NextLink} href="/rammeavtale" variant="subtle">
-                      Avtaler med NAV
+                      Avtaler med Nav
                     </Link>
                     <BodyShort textColor="subtle">/</BodyShort>
                   </HStack>

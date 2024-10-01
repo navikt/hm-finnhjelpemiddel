@@ -18,11 +18,11 @@ function RightsResponsibilities() {
             </Heading>
             <BodyLong spacing>
               Innholdet i FinnHjelpemiddel er opphavsrettslig beskyttet. Det må ikke reproduseres, endres, overføres
-              eller publiseres helt eller delvis uten samtykke fra NAV.
+              eller publiseres helt eller delvis uten samtykke fra Nav.
             </BodyLong>
             <BodyLong>
               Varemerker, logoer og andre kjennetegn tilhører Nav eller tredjepart. Det er ikke tillatt å kopiere eller
-              bruke dem uten samtykke fra NAV.
+              bruke dem uten samtykke fra Nav.
             </BodyLong>
             <ul>
               <li>Opplysninger i FinnHjelpemiddel kan bli endret eller oppdatert uten varsel.</li>

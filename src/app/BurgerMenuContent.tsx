@@ -64,7 +64,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                           href={category.link}
                           onClick={() => {
                             setMenuOpen(false)
-                            logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
+                            logNavigationEvent('meny', 'rammeavtale', 'Avtaler med Nav')
                           }}
                         >
                           {category.name}
@@ -86,10 +86,10 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       href="/rammeavtale"
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent('meny', 'rammeavtale', 'Avtaler med NAV')
+                        logNavigationEvent('meny', 'rammeavtale', 'Avtaler med Nav')
                       }}
                     >
-                      Avtaler med NAV
+                      Avtaler med Nav
                     </Link>
                   </li>
                   <li>
@@ -101,11 +101,11 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                         logNavigationEvent(
                           'meny',
                           'rammeavtale',
-                          'Slik kan du se at et hjelpemiddel er på avtale med NAV'
+                          'Slik kan du se at et hjelpemiddel er på avtale med Nav'
                         )
                       }}
                     >
-                      Slik kan du se at et hjelpemiddel er på avtale med NAV
+                      Slik kan du se at et hjelpemiddel er på avtale med Nav
                     </Link>
                   </li>
                   <li>
