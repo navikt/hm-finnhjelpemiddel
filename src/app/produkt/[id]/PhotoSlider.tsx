@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
 
 import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
@@ -98,107 +98,103 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         src={src}
         setActive={setActive}
       />
-      <VStack className="photo-slider-small" align="center" justify="space-between">
-        {isLoading && (
-          <HStack justify="center" style={{ marginTop: '18px', height: '100%' }}>
-            <Loader size="xlarge" title="Laster bilde" />
-          </HStack>
-        )}
+      <VStack className="photo-slider-small" align="center">
+        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <div className="photo-container">
+            {!hasImages && (
+              <CameraIcon
+                width={400}
+                height={300}
+                style={{ background: 'white' }}
+                aria-label="Ingen bilde tilgjengelig"
+              />
+            )}
+            {numberOfImages === 1 && (
+              <div>
+                <Image
+                  role="button"
+                  key={src}
+                  loader={largeImageLoader}
+                  src={src}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  onError={() => {
+                    setSrc('/assets/image-error.png')
+                    setIsLoading(false)
+                  }}
+                  alt={'Produktbilde'}
+                  sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
+                  onClick={() => setModalIsOpen(true)}
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      setModalIsOpen(true)
+                    }
+                  }}
+                  onLoad={() => setIsLoading(false)}
+                />
+              </div>
+            )}
 
-        <div className="photo-container">
-          {!hasImages && (
-            <CameraIcon
-              width={400}
-              height={300}
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
-          )}
-          {numberOfImages === 1 && (
-            <div>
-              <Image
-                role="button"
+            {numberOfImages > 1 && (
+              <motion.div
                 key={src}
-                loader={largeImageLoader}
-                src={src}
-                fill
-                style={{ objectFit: 'contain' }}
-                onError={() => {
-                  setSrc('/assets/image-error.png')
-                  setIsLoading(false)
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                whileHover={{ scale: 1.1 }}
+                // whileTap={{ scale: 0.9 }}
+                transition={{
+                  x: { type: 'spring', stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 },
                 }}
-                alt={'Produktbilde'}
-                sizes="(min-width: 66em) 33vw,
-                      (min-width: 44em) 40vw,
-                      100vw"
-                onClick={() => setModalIsOpen(true)}
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault()
-                    setModalIsOpen(true)
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = swipePower(offset.x, velocity.x)
+
+                  if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
+                    nextImage()
+                  } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
+                    prevImage()
                   }
                 }}
-                onLoad={() => setIsLoading(false)}
-              />
-            </div>
-          )}
-
-          {numberOfImages > 1 && (
-            <motion.div
-              key={src}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              whileHover={{ scale: 1.1 }}
-              // whileTap={{ scale: 0.9 }}
-              transition={{
-                x: { type: 'spring', stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
-              }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
-              onDragEnd={(e, { offset, velocity }) => {
-                const swipe = swipePower(offset.x, velocity.x)
-
-                if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
-                  nextImage()
-                } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
-                  prevImage()
-                }
-              }}
-            >
-              <Image
-                role="button"
-                aria-label="Forstørr bildet"
-                draggable="false"
-                loader={largeImageLoader}
-                src={src}
-                onError={() => {
-                  setSrc('/assets/image-error.png')
-                  setIsLoading(false)
-                }}
-                alt={`Produktbilde ${active + 1} av ${photos.length}`}
-                fill
-                style={{ objectFit: 'contain' }}
-                sizes="(min-width: 66em) 33vw,
+              >
+                <Image
+                  role="button"
+                  aria-label="Forstørr bildet"
+                  draggable="false"
+                  loader={largeImageLoader}
+                  src={src}
+                  onError={() => {
+                    setSrc('/assets/image-error.png')
+                    setIsLoading(false)
+                  }}
+                  alt={`Produktbilde ${active + 1} av ${photos.length}`}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                onClick={() => setModalIsOpen(true)}
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault()
-                    setModalIsOpen(true)
-                  }
-                }}
-                onLoad={() => setIsLoading(false)}
-              />
-            </motion.div>
-          )}
+                  onClick={() => setModalIsOpen(true)}
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      setModalIsOpen(true)
+                    }
+                  }}
+                  onLoad={() => setIsLoading(false)}
+                />
+              </motion.div>
+            )}
+          </div>
         </div>
         {numberOfImages > 1 && (
           <HStack justify="space-between" className="navigation-bar" align={'center'}>
