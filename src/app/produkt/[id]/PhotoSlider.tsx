@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
 
 import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, HStack, Loader, VStack } from '@navikt/ds-react'
 
 import { largeImageLoader } from '@/utils/image-util'
 import { Photo } from '@/utils/product-util'
@@ -54,8 +54,21 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [src, setSrc] = useState(photos[active]?.uri)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(hasImages)
+  const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (isLoading) {
+      timer = setTimeout(() => {
+        setShowLoader(true)
+      }, 1000) // 1 second delay
+    } else {
+      setShowLoader(false)
+    }
+
+    return () => clearTimeout(timer) //
+  }, [isLoading])
 
   useKeyboardShortcut({
     key: 'Escape',
@@ -101,6 +114,12 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
       <VStack className="photo-slider-small" align="center">
         <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           <div className="photo-container">
+            {isLoading && showLoader && (
+              <HStack justify="center" style={{ marginTop: '18px', height: '100%' }}>
+                <Loader size="xlarge" title="Laster bilde" />
+              </HStack>
+            )}
+
             {!hasImages && (
               <CameraIcon
                 width={400}
