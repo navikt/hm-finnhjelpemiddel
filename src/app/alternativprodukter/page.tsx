@@ -7,5 +7,5 @@ export default async function AlternativeProductsPage() {
 
   const storage = res.json()
 
-  return <AlternativeProducts storage={storage} />
+  return <AlternativeProducts storage={`${res.status} ${res.statusText} ${res.url}`} />
 }
