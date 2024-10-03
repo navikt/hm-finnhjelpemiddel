@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 import useSWR from 'swr'
 
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
-import { logKlikk } from '@/utils/amplitude'
+import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { sortAlphabetically } from '@/utils/sort-util'
@@ -149,7 +149,11 @@ const AgreementList = () => {
             <Box as="li" key={label.identifier} className="agreement-page__list-item">
               <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center">
                 {/*<Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>*/}
-                <Link as={NextLink} href={agreementProductsLink(label.id)}>
+                <Link
+                  as={NextLink}
+                  href={agreementProductsLink(label.id)}
+                  onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label.title)}
+                >
                   {`${label.title} `}
                 </Link>
                 <Hide below="lg" asChild>
