@@ -20,8 +20,8 @@ function AboutUs() {
               Et nettsted fra Nav
             </Heading>
             <BodyLong spacing>
-              {`FinnHjelpemiddel utvikles og driftes av NAV Hjelpemidler og tilrettelegging. Hjelpemidlene som presenteres er
-               både hjelpemidler på avtale med NAV og uten avtale. Generell informasjon om alle avtalene presenteres også.`}
+              {`FinnHjelpemiddel utvikles og driftes av Nav Hjelpemidler og tilrettelegging. Hjelpemidlene som presenteres er
+               både hjelpemidler på avtale med Nav og uten avtale. Generell informasjon om alle avtalene presenteres også.`}
             </BodyLong>
             <BodyLong spacing>
               Hjelpemidlene som presenteres er spesiallaget for personer med funksjonsnedsettelse og tilgjengelige på
@@ -35,7 +35,7 @@ function AboutUs() {
               Hjelpemidler på avtale med Nav
             </Heading>
             <BodyLong spacing>
-              NAV følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
+              Nav følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
               hjelpemiddelområder. Dette kan for eksempel være hjelpemidler for varsling, synstekniske hjelpemidler og
               manuelle rullestoler.
             </BodyLong>
