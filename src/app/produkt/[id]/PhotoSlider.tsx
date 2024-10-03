@@ -128,8 +128,9 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                 aria-label="Ingen bilde tilgjengelig"
               />
             )}
+
             {numberOfImages === 1 && (
-              <div>
+              <div style={{ display: showLoader ? 'none' : 'block' }}>
                 <Image
                   role="button"
                   key={src}
@@ -184,6 +185,7 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
                     prevImage()
                   }
                 }}
+                style={{ display: showLoader ? 'none' : 'block' }}
               >
                 <Image
                   role="button"
