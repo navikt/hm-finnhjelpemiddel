@@ -26,4 +26,7 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/server/app/no
-
+accessPolicy:
+  outbound:
+    external:
+      - host: hm-oebs-api-proxy.dev-fss-pub.nais.io

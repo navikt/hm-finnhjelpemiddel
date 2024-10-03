@@ -3,17 +3,22 @@
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
 import { BodyShort, Box, HGrid, HStack, Label, Link, Search, Tag, VStack } from '@navikt/ds-react'
-import { getProductFromHmsArtNr } from '@/utils/api-util'
+import { fetcherGET, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import { smallImageLoader } from '@/utils/image-util'
 import Image from 'next/image'
+import useSWRImmutable from 'swr/immutable'
 
 export default function AlternativeProductsPage() {
   const hmsNumber = '292483'
 
   const alternatives = ['242660', '242529', '147286', '149875']
+
+  const { data: storage } = useSWRImmutable<any>(`/lager/alle-sentraler/${hmsNumber}`, fetcherGET)
+
+  console.log(storage)
 
   const { data: alternativeProducts, isLoading } = useSWR<Product[]>('/product/_search', () =>
     getProductFromHmsArtNr(alternatives)

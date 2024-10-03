@@ -23,6 +23,10 @@ const nextConfig = {
         source: '/suppliers/_search:path*',
         destination: process.env.HM_SEARCH_URL + '/suppliers/_search:path*',
       },
+      {
+        source: '/lager/:path*',
+        destination: process.env.HM_OEBS_API_URL + '/lager/:path*',
+      },
     ]
   },
   images: {
