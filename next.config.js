@@ -45,6 +45,7 @@ const nextConfig = {
     CDN_URL: process.env.CDN_URL,
     RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     BUILD_ENV: process.env.BUILD_ENV,
+    HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
   },
 }
 

@@ -16,7 +16,10 @@ export default function AlternativeProductsPage() {
 
   const alternatives = ['242660', '242529', '147286', '149875']
 
-  const { data: storage } = useSWRImmutable<any>(`/lager/alle-sentraler/${hmsNumber}`, fetcherGET)
+  const { data: storage } = useSWRImmutable<any>(
+    `${process.env.HM_OEBS_API_URL}/lager/alle-sentraler/${hmsNumber}`,
+    fetcherGET
+  )
 
   console.log(storage)
 
