@@ -23,6 +23,19 @@ export default function AlternativeProductsPage() {
     return <></>
   }
 
+  alternativeProducts.sort((a, b) => {
+    if (a.variants[0].agreements.length === 0 && b.variants[0].agreements.length === 0) {
+      return 1
+    }
+    if (a.variants[0].agreements.length === 0) {
+      return 0
+    }
+    if (b.variants[0].agreements.length === 0) {
+      return -1
+    }
+    return b.variants[0].agreements[0].rank - a.variants[0].agreements[0].rank
+  })
+
   return (
     <div className={`${styles.container} main-wrapper--medium`}>
       <Heading level="1" size="large" className={styles.headerColor}>
@@ -41,43 +54,38 @@ export default function AlternativeProductsPage() {
 const AlternativeProduct = ({ product }: { product: Product }) => {
   const variant = product.variants[0]
   return (
-    <div>
-      <HStack justify="start" className={styles.productContainer}>
-        <VStack>
-          {variant.agreements.length === 0 ? (
-            <Label size="small" className={styles.notInAgreementColor}>
-              Ikke på avtale
-            </Label>
-          ) : (
-            <Label size="small" className={styles.headerColor}>
-              NAV - Rangering {variant.agreements[0].rank}
-            </Label>
-          )}
+    <HStack justify="space-between" padding={'5'} className={styles.productContainer}>
+      <VStack gap={'3'}>
+        {variant.agreements.length === 0 ? (
+          <Label size="small" className={styles.notInAgreementColor}>
+            Ikke på avtale
+          </Label>
+        ) : (
+          <Label size="small" className={styles.headerColor}>
+            NAV - Rangering {variant.agreements[0].rank}
+          </Label>
+        )}
 
-          <Link as={NextLink} href={`/produkt/${product.id}`} className={styles.link}>
-            {product.title}
-          </Link>
-          {variant.status === 'INACTIVE' && (
-            <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
-              Utgått
-            </Tag>
-          )}
-          <BodyShort size="small">{product.supplierName}</BodyShort>
-          <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
-
-          <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-            <Image
-              tabIndex={-1}
-              draggable="false"
-              loader={smallImageLoader}
-              src={product.photos[0].uri}
-              alt={`Produktbilde`}
-              fill
-              style={{ objectFit: 'contain' }}
-            />
-          </Box>
-        </VStack>
-      </HStack>
-    </div>
+        <Link as={NextLink} href={`/produkt/${product.id}`} className={styles.link}>
+          {product.title}
+        </Link>
+        {variant.status === 'INACTIVE' && (
+          <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
+            Utgått
+          </Tag>
+        )}
+        <BodyShort size="small">{product.supplierName}</BodyShort>
+        <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
+      </VStack>
+      <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
+        <Image
+          loader={smallImageLoader}
+          src={product.photos[0].uri}
+          alt={`Produktbilde`}
+          fill
+          style={{ objectFit: 'contain' }}
+        />
+      </Box>
+    </HStack>
   )
 }
