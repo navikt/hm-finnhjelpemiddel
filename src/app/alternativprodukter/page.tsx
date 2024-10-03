@@ -2,7 +2,7 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, Box, HStack, Label, Link, Search, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, HGrid, HStack, Label, Link, Search, Tag, VStack } from '@navikt/ds-react'
 import { getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
@@ -44,9 +44,11 @@ export default function AlternativeProductsPage() {
 
       <Search label={'HMS-nummer'} hideLabel={false} variant="secondary" className={styles.search}></Search>
 
-      {alternativeProducts.map((product) => (
-        <AlternativeProduct product={product} key={product.id} />
-      ))}
+      <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
+        {alternativeProducts.map((product) => (
+          <AlternativeProduct product={product} key={product.id} />
+        ))}
+      </HGrid>
     </div>
   )
 }
