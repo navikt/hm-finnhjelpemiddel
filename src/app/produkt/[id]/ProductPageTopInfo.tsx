@@ -34,6 +34,7 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             product.agreements?.length === 0 && (!allVariantsExpiredDates || !allVariantsExpired),
         })}
         gap={{ xs: '4', md: '10' }}
+        align="center"
       >
         <div className="product-page__photo-slider-container">
           {product.photos && <PhotoSlider photos={product.photos} />}

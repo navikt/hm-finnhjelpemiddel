@@ -188,7 +188,7 @@ const ProductNavigationBar = ({
 
       {isOnAgreement && (
         <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#agreement-info">
-          Avtale med NAV
+          Avtale med Nav
         </Button>
       )}
 

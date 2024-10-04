@@ -17,14 +17,14 @@ const AgreementDescription = ({ agreement }: { agreement: Agreement }) => {
   return (
     <div className="agreement-page__description">
       <Heading level="2" size="small" ref={headingRef}>
-        Om avtalen med NAV
+        Om avtalen med Nav
       </Heading>
       {agreementHasNoProducts(agreement.identifier) && (
         <div dangerouslySetInnerHTML={{ __html: agreement.descriptionHtml }} />
       )}
       {!agreementHasNoProducts(agreement.identifier) && (
         <BodyLong>
-          {`NAV har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor området "${agreement.title}". På denne siden finner du informasjon om avtalen, dokumenter, tilbehør, eventuelle tjenester og reservedeler. Informasjon om leverandør finner man på siden til hjelpemiddelet.`}
+          {`Nav har avtale med flere leverandører for å kunne tilby et bredt utvalg av hjelpemidler innenfor området "${agreement.title}". På denne siden finner du informasjon om avtalen, dokumenter, tilbehør, eventuelle tjenester og reservedeler. Informasjon om leverandør finner man på siden til hjelpemiddelet.`}
         </BodyLong>
       )}
       {!agreementHasNoProducts(agreement.identifier) && (

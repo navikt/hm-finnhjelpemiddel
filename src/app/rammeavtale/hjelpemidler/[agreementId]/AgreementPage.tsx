@@ -147,7 +147,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <VStack gap="5" className="spacing-vertical--xlarge">
           <HStack gap="3">
             <Link as={NextLink} href="/" variant="subtle">
-              Hjelpemidler på avtale med NAV
+              Hjelpemidler på avtale med Nav
             </Link>
             <BodyShort textColor="subtle">/</BodyShort>
           </HStack>
