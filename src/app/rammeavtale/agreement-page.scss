@@ -145,3 +145,11 @@
 .hurtigoversikt-toggle > div {
   box-shadow: inset 0 0 0 1px $a-border-strong;
 }
+
+.hurtigoversikt-toggle {
+  &__container {
+    @include mixins.for-size(phone-only) {
+      width: 100%;
+    }
+  }
+}

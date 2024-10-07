@@ -110,7 +110,7 @@ main {
 
   &--large {
     @extend .main-wrapper;
-    max-width: 1258px;
+    max-width: 1280px;
 
     @include mixins.for-size(desktop-large-up) {
       padding-left: 0;
@@ -250,7 +250,7 @@ main {
     }
 
     &--xlarge {
-      margin-bottom: $a-spacing-10;
+      margin-bottom: $a-spacing-16;
 
       @include mixins.for-size(desktop-up) {
         margin-bottom: $a-spacing-20;

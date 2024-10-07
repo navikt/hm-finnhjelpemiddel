@@ -53,7 +53,11 @@ const PostsList = ({
             <Heading level="3" size="small" className="agreement-page__post-heading">
               {post.title}
             </Heading>
-            <ReadMore header="Mer informasjon" style={{ paddingBottom: '4px' }}>
+            <ReadMore
+              header="Mer informasjon"
+              style={{ paddingBottom: '4px' }}
+              defaultOpen={post.products.length === 0 && !postLoading}
+            >
               {post.description}
             </ReadMore>
           </VStack>

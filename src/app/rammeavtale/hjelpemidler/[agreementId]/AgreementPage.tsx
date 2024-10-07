@@ -36,6 +36,7 @@ import {
   Link,
   Loader,
   Popover,
+  Show,
   ToggleGroup,
   VStack,
 } from '@navikt/ds-react'
@@ -143,7 +144,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   return (
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
-      <VStack className="main-wrapper--large spacing-bottom--large hide-print">
+      <VStack className="main-wrapper--large spacing-bottom--xlarge hide-print">
         <VStack gap="5" className="spacing-vertical--xlarge">
           <HStack gap="3">
             <Link as={NextLink} href="/" variant="subtle">
@@ -175,14 +176,28 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
               {showSidebar && <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />}
               {!showSidebar && (
-                <Button
-                  variant="secondary-neutral"
-                  className="button-with-thin-border"
-                  onClick={() => setMobileOverlayOpen(true)}
-                  icon={<FilterIcon aria-hidden />}
-                >
-                  Filter
-                </Button>
+                <HStack gap="2">
+                  <Button
+                    variant="secondary-neutral"
+                    className="button-with-thin-border"
+                    onClick={() => setMobileOverlayOpen(true)}
+                    icon={<FilterIcon aria-hidden />}
+                  >
+                    Filter
+                  </Button>
+                  <Show below="sm">
+                    <Button
+                      variant="secondary-neutral"
+                      className="button-with-thin-border"
+                      onClick={() => {
+                        window.print()
+                      }}
+                      icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
+                    >
+                      {`Hurtigoversikt (PDF)`}
+                    </Button>
+                  </Show>
+                </HStack>
               )}
 
               <MobileOverlay open={mobileOverlayOpen}>
@@ -233,7 +248,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </MobileOverlay.Footer>
               </MobileOverlay>
 
-              <HStack gap="4" style={{ flexWrap: 'wrap-reverse' }}>
+              <HStack gap="4" className="hurtigoversikt-toggle__container">
                 <ToggleGroup
                   className="hurtigoversikt-toggle"
                   defaultValue="show-pictures"
@@ -248,16 +263,18 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </ToggleGroup.Item>
                   <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
                 </ToggleGroup>
-                <Button
-                  variant="secondary-neutral"
-                  className="button-with-thin-border"
-                  onClick={() => {
-                    window.print()
-                  }}
-                  icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
-                >
-                  {`Hurtigoversikt (PDF)`}
-                </Button>
+                <Show above="sm">
+                  <Button
+                    variant="secondary-neutral"
+                    className="button-with-thin-border"
+                    onClick={() => {
+                      window.print()
+                    }}
+                    icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
+                  >
+                    {`Hurtigoversikt (PDF)`}
+                  </Button>
+                </Show>
               </HStack>
             </HStack>
 
