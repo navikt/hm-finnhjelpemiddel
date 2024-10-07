@@ -155,8 +155,8 @@ const ProductCard = ({
   if (type === 'new') {
     return (
       <Box padding={{ xs: '3', md: '5' }} className="product-card--new">
-        <HGrid columns={'4fr 3fr'} gap="5" maxWidth={'370px'}>
-          <VStack gap="3">
+        <HGrid columns={'minmax(0,5fr) minmax(0,3fr)'} gap="5" maxWidth={'370px'} width={'100%'}>
+          <VStack gap="3" width={'100%'}>
             <BodyShort
               size="small"
               weight="semibold"
@@ -183,7 +183,7 @@ const ProductCard = ({
             <BodyShort size="small">{product.supplierName}</BodyShort>
             <BodyShort size="small">{`${product.variantCount} ${product.variantCount > 1 ? 'varianter' : 'variant'}`}</BodyShort>
           </VStack>
-          <VStack align="center" justify="space-between" gap="2">
+          <VStack align="center" justify="space-between" gap="2" width={'100%'}>
             <ProductImage src={firstImageSrc} productTitle={product.title} />
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </VStack>

@@ -227,6 +227,10 @@ main {
   &-bottom {
     &--small {
       margin-bottom: $a-spacing-2;
+
+      @include mixins.for-size(desktop-up) {
+        margin-bottom: $a-spacing-4;
+      }
     }
 
     &--medium {

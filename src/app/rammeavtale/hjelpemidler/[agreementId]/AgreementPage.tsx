@@ -167,52 +167,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <FormProvider {...formMethods}>
           <CompareMenu />
 
-          {false && (
-            <section className="filter-container">
-              <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
-              <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                <Button
-                  ref={copyButtonDesktopRef}
-                  variant="secondary"
-                  size="small"
-                  icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                  onClick={() => {
-                    navigator.clipboard.writeText(location.href)
-                    setCopyPopupOpenState(true)
-                  }}
-                >
-                  Kopiér søket
-                </Button>
-                <Popover
-                  open={copyPopupOpenState}
-                  onClose={() => setCopyPopupOpenState(false)}
-                  anchorEl={copyButtonDesktopRef.current}
-                  placement="right"
-                >
-                  <Popover.Content>Søket er kopiert!</Popover.Content>
-                </Popover>
-
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="small"
-                  icon={<TrashIcon title="Nullstill søket" />}
-                  onClick={onReset}
-                >
-                  Tøm filtre
-                </Button>
-              </HGrid>
-            </section>
-          )}
-          {true && <></>}
-
           <VStack gap={{ xs: '4', md: '8' }}>
             <Heading level="2" size="large">
               Delkontrakter
             </Heading>
             <span style={{ width: '100%', borderTop: '1px solid #838C9A' }} />
-            <HStack justify="space-between" className="spacing-bottom--medium">
-              <div>
+            <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
+              {showSidebar && <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />}
+              {!showSidebar && (
                 <Button
                   variant="secondary-neutral"
                   className="button-with-thin-border"
@@ -221,55 +183,56 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 >
                   Filter
                 </Button>
+              )}
 
-                <MobileOverlay open={mobileOverlayOpen}>
-                  <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-                    <Heading level="1" size="medium">
-                      Filtrer søket
-                    </Heading>
-                  </MobileOverlay.Header>
-                  <MobileOverlay.Content>
-                    <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
-                  </MobileOverlay.Content>
-                  <MobileOverlay.Footer>
-                    <VStack gap="2">
-                      <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                        <Button
-                          ref={copyButtonMobileRef}
-                          variant="secondary"
-                          size="small"
-                          icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                          onClick={() => {
-                            navigator.clipboard.writeText(location.href)
-                            setCopyPopupOpenState(true)
-                          }}
-                        >
-                          Kopiér søket
-                        </Button>
-                        <Popover
-                          open={copyPopupOpenState}
-                          onClose={() => setCopyPopupOpenState(false)}
-                          anchorEl={copyButtonMobileRef.current}
-                          placement="right"
-                        >
-                          <Popover.Content>Søket er kopiert!</Popover.Content>
-                        </Popover>
+              <MobileOverlay open={mobileOverlayOpen}>
+                <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
+                  <Heading level="1" size="medium">
+                    Filtrer søket
+                  </Heading>
+                </MobileOverlay.Header>
+                <MobileOverlay.Content>
+                  <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
+                </MobileOverlay.Content>
+                <MobileOverlay.Footer>
+                  <VStack gap="2">
+                    <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
+                      <Button
+                        ref={copyButtonMobileRef}
+                        variant="secondary"
+                        size="small"
+                        icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
+                        onClick={() => {
+                          navigator.clipboard.writeText(location.href)
+                          setCopyPopupOpenState(true)
+                        }}
+                      >
+                        Kopiér søket
+                      </Button>
+                      <Popover
+                        open={copyPopupOpenState}
+                        onClose={() => setCopyPopupOpenState(false)}
+                        anchorEl={copyButtonMobileRef.current}
+                        placement="right"
+                      >
+                        <Popover.Content>Søket er kopiert!</Popover.Content>
+                      </Popover>
 
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          size="small"
-                          icon={<TrashIcon title="Nullstill søket" />}
-                          onClick={onReset}
-                        >
-                          Tøm filtre
-                        </Button>
-                      </HGrid>
-                      <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
-                    </VStack>
-                  </MobileOverlay.Footer>
-                </MobileOverlay>
-              </div>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="small"
+                        icon={<TrashIcon title="Nullstill søket" />}
+                        onClick={onReset}
+                      >
+                        Tøm filtre
+                      </Button>
+                    </HGrid>
+                    <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
+                  </VStack>
+                </MobileOverlay.Footer>
+              </MobileOverlay>
+
               <HStack gap="4" style={{ flexWrap: 'wrap-reverse' }}>
                 <ToggleGroup
                   className="hurtigoversikt-toggle"

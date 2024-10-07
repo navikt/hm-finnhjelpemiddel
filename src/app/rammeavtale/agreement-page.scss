@@ -129,6 +129,17 @@
   &__sort-selected {
     background-color: $a-surface-action-subtle;
   }
+
+  &__filter-form {
+    .filter-container__horizontal {
+      .checkbox-filter,
+      .input-filter {
+        @include mixins.for-size(desktop-up) {
+          width: 270px !important;
+        }
+      }
+    }
+  }
 }
 .button-with-thin-border,
 .hurtigoversikt-toggle > div {

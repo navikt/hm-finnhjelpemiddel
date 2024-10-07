@@ -84,7 +84,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
       <Heading size="small" level="2">
         Filter
       </Heading>
-      <VStack gap="2" className="filter-container__filters">
+      <VStack gap="2" className="filter-container__filters spacing-vertical--small">
         <CheckboxFilter filter={{ key: 'vis', data: filters?.vis }} openByDefault={true}></CheckboxFilter>
         {/* <CheckboxFilter filter={{ key: 'categories', data: filters?.category }} openByDefault={true}></CheckboxFilter> */}
         <CheckboxFilter filter={{ key: 'produktkategori', data: filters?.produktkategori }} showSearch={true} />

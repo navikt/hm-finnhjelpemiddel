@@ -320,4 +320,8 @@
     background-color: $a-surface-action-selected-hover;
     box-shadow: none;
   }
+
+  &:hover {
+    outline: 1px solid $a-border-action;
+  }
 }
