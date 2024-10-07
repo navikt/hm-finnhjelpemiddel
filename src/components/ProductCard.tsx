@@ -181,7 +181,17 @@ const ProductCard = ({
               </BodyShort>
             </Link>
             <BodyShort size="small">{product.supplierName}</BodyShort>
-            <BodyShort size="small">{`${product.variantCount} ${product.variantCount > 1 ? 'varianter' : 'variant'}`}</BodyShort>
+
+            <>
+              {hmsNumbers && hmsNumbers?.length === 1 && (
+                <BodyShort size="small" className="product-card__hms-numbers">
+                  {hmsNumbers.join(', ')}
+                </BodyShort>
+              )}
+              {((variantCount && hmsNumbers && hmsNumbers?.length > 1) || (variantCount && !hmsNumbers)) && (
+                <BodyShort size="small">{`${variantCount} ${variantCount > 1 ? 'varianter' : 'variant'}`} </BodyShort>
+              )}
+            </>
           </VStack>
           <VStack align="center" justify="space-between" gap="2" width={'100%'}>
             <ProductImage src={firstImageSrc} productTitle={product.title} />
