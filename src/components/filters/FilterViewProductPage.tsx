@@ -36,7 +36,7 @@ export const FilterViewProductPage = ({ filters }: { filters?: FilterData }) => 
   return (
     <>
       <HStack gap="2">
-        <Heading size="small" level="2">
+        <Heading size="small" level="2" spacing>
           Filtrer tabell
         </Heading>
         <HelpText placement="right" strategy="absolute">

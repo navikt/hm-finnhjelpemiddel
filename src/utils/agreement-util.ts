@@ -52,12 +52,14 @@ export interface PostWithProducts {
   nr: number
   title: string
   description: string
-  products: {
-    rank: number
-    hmsNumbers?: string[]
-    variantCount?: number
-    product: Product
-  }[]
+  products: ProductOnPostInfo[]
+}
+
+interface ProductOnPostInfo {
+  rank: number
+  hmsNumbers?: string[]
+  variantCount?: number
+  product: Product
 }
 
 /**
@@ -172,6 +174,14 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   }))
 }
 
+const customStort = (a: ProductOnPostInfo, b: ProductOnPostInfo): number => {
+  if (a.rank === b.rank) {
+    return a.product.title.localeCompare(b.product.title)
+  } else {
+    return a.rank - b.rank
+  }
+}
+
 export const mapAgreementProducts = (
   postBuckets: PostBucketResponse[],
   agreement: Agreement,
@@ -223,7 +233,7 @@ export const mapAgreementProducts = (
           variantCount: seen[product.id].count || 1,
           product: product,
         }))
-        .sort((a, b) => a.rank - b.rank),
+        .sort(customStort),
     }
   }
 

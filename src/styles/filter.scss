@@ -35,52 +35,23 @@
     border-bottom: 1px solid $a-border-divider;
   }
 
-  &__horizontal {
-    .checkbox-filter,
-    .input-filter {
-      min-width: 340px;
-      border: 1px solid $a-border-default !important;
-    }
-
-    .range-filter-input-group {
-      margin-left: $a-spacing-3;
-      input {
-        width: 100px;
-      }
-    }
-
-    details {
-      height: fit-content;
-      position: relative;
-    }
-
+  &__filters:not(.filter-container__horizontal) {
     details > div {
-      border-radius: 0 0 4px 4px;
-      position: absolute;
-      background-color: white;
-      width: 100%;
-      z-index: 100;
-      outline: 1px solid rgba(2, 20, 49, 0.49) !important;
-      padding-top: $a-spacing-4;
-      padding-bottom: $a-spacing-6;
+      margin-bottom: $a-spacing-4;
     }
 
     details[open] > summary {
-      margin-bottom: 0 !important;
-      border-radius: 4px 4px 0 0;
+      margin-bottom: $a-spacing-2;
     }
-  }
-
-  &__filters {
-    margin-top: $a-spacing-4;
-    margin-bottom: $a-spacing-6;
 
     .checkbox-filter,
     .input-filter {
       border: 1px solid $a-border-divider;
       border-radius: 4px;
     }
+  }
 
+  &__filters {
     .checkbox-filter.active,
     .input-filter.active {
       summary {
@@ -89,13 +60,10 @@
     }
 
     details > div {
-      margin-bottom: $a-spacing-4;
       box-sizing: border-box;
     }
 
     details[open] > summary {
-      margin-bottom: $a-spacing-2;
-
       .chevron-wrapper {
         svg {
           transform: rotate(180deg);
@@ -142,6 +110,54 @@
     }
   }
 
+  &__horizontal {
+    summary {
+      padding: $a-spacing-3;
+      border: 1px solid $a-border-divider;
+    }
+
+    .checkbox-filter,
+    .input-filter {
+      width: 100%;
+
+      @include mixins.for-size(desktop-up) {
+        width: 340px;
+      }
+    }
+
+    .range-filter-input-group {
+      margin-left: $a-spacing-1;
+      input {
+        width: 100px;
+      }
+    }
+
+    details {
+      height: fit-content;
+      position: relative;
+    }
+
+    details > div {
+      border: 1px solid $a-border-divider;
+      top: 48px;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      position: absolute;
+      left: 0;
+      background-color: white;
+      width: 100%;
+      z-index: 4;
+      padding: 10px;
+      padding-top: $a-spacing-4;
+      padding-bottom: $a-spacing-6;
+    }
+
+    details[open] > summary {
+      border-radius: 4px 4px 0 0;
+    }
+  }
+
   &__footer {
     button {
       padding: $a-spacing-2 $a-spacing-3;
@@ -157,6 +173,7 @@
 
 .range-filter-input-group {
   margin-left: $a-spacing-3;
+
   input {
     width: 115px;
   }

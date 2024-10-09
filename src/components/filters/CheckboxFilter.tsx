@@ -101,7 +101,7 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
                 {...field}
               >
                 {!showSearch && (
-                  <VStack gap="1" className="checkbox-filter__checkboxes">
+                  <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
                     {selectedUnavailableFilters?.map((f) => (
                       <Checkbox
                         value={f}
