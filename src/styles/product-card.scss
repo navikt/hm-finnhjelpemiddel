@@ -305,7 +305,7 @@
 
   .product-card__title {
     @extend .text-line-clamp;
-    z-index: 2;
+    z-index: 3;
   }
 
   .product-card__title:hover {
