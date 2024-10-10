@@ -170,16 +170,18 @@ const ProductCard = ({
                   : 'NAV - På avtale'
                 : 'Ikke på avtale'}
             </BodyShort>
+
             <Link
               className="product-card__link-2"
               href={linkToProduct}
               aria-label={`Gå til ${product.title}`}
               as={NextLink}
             >
-              <BodyShort weight="semibold" className="text-line-clamp">
+              <BodyShort weight="semibold" className="product-card__title">
                 {product.title}
               </BodyShort>
             </Link>
+
             <BodyShort size="small">{product.supplierName}</BodyShort>
 
             <>

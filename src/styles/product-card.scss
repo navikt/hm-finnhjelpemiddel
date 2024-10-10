@@ -297,6 +297,23 @@
     }
   }
 
+  .product-card__title {
+    @extend .text-line-clamp;
+    z-index: 2;
+  }
+
+  .product-card__title:hover {
+    -webkit-line-clamp: unset;
+    background: #fff;
+    overflow: visible;
+  }
+
+  .product-card__link-2:hover {
+    max-height: 48px;
+    display: flex;
+    align-items: flex-start;
+  }
+
   .product-card-image-container {
     display: flex;
     justify-content: center;
