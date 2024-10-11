@@ -74,11 +74,10 @@ export default function AlternativeProductsPage() {
 
   const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(
     `${process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL}/alternativ/${hmsNumber}`,
-    fetcherGET,
-    { fallbackData: [] }
+    fetcherGET
   )
 
-  const { data: products, isLoading } = useSWRImmutable<Product[]>('/product/_search', () =>
+  const { data: products, isLoading } = useSWR<Product[]>('/product/_search', () =>
     getProductFromHmsArtNr(alternatives!.map((alternative) => alternative.hmsArtNr))
   )
 
