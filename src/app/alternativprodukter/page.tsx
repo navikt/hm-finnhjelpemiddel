@@ -69,6 +69,8 @@ export default function AlternativeProductsPage() {
 
 const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
   const url = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
+  console.log(`Alt-url: ${process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL}`)
+  console.log(`image-url: ${process.env.HM_SEARCH_URL}`)
   const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(`${url}/alternativ/${hmsNumber}`, fetcherGET)
 
   const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
