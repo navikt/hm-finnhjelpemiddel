@@ -38,50 +38,18 @@ interface AlternativeProduct {
   warehouseStock: WarehouseStock[]
 }
 
-const alts: AlternativeProduct[] = [
-  {
-    hmsArtNr: '242529',
-    warehouseStock: [
-      {
-        erPåLager: true,
-        organisasjons_id: 243,
-        organisasjons_navn: '*03 Oslo',
-        artikkelnummer: '242529',
-        artikkelid: 4222043,
-        fysisk: 6,
-        tilgjengeligatt: 6,
-        tilgjengeligroo: 0,
-        tilgjengelig: 6,
-        behovsmeldt: 0,
-        reservert: 0,
-        restordre: 0,
-        bestillinger: 0,
-        anmodning: 0,
-        intanmodning: 0,
-        forsyning: 0,
-        sortiment: false,
-        lagervare: false,
-        minmax: false,
-      },
-    ],
-  },
-]
-
 export default function AlternativeProductsPage() {
   const hmsNumber = '292483'
 
-  //const alternatives = alts
+  const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(`/alternativ/${hmsNumber}`, fetcherGET)
 
-  const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(
-    `${process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL}/alternativ/${hmsNumber}`,
-    fetcherGET
+  const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
+
+  const { data: products, isLoading } = useSWR<Product[]>(alternatives ? '/product/_search' : null, () =>
+    getProductFromHmsArtNr(hmsArtNrs)
   )
 
-  const { data: products, isLoading } = useSWR<Product[]>('/product/_search', () =>
-    getProductFromHmsArtNr(alternatives!.map((alternative) => alternative.hmsArtNr))
-  )
-
-  if (isLoading || !products) {
+  if (isLoading || !products || !alternatives) {
     return <></>
   }
 
@@ -108,7 +76,7 @@ export default function AlternativeProductsPage() {
 
       <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
         {products.map((product) => {
-          const stocks = alts.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)!.warehouseStock
+          const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)!.warehouseStock
           return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
         })}
       </HGrid>

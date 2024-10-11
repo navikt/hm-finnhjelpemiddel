@@ -1221,7 +1221,6 @@ export async function getNews(): Promise<News[]> {
 export const fetcherGET: Fetcher<any, string> = (url) =>
   fetch(url, {
     method: 'GET',
-    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
