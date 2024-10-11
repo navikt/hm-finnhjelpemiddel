@@ -3,7 +3,7 @@
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
 import { BodyShort, Box, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
-import { fetcherGET, getProductFromHmsArtNr } from '@/utils/api-util'
+import { fetcherGET, getAlternativeProducts, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
@@ -12,7 +12,7 @@ import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
 import { useState } from 'react'
 
-interface WarehouseStock {
+export interface WarehouseStock {
   erPåLager: boolean
   organisasjons_id: number
   organisasjons_navn: string
@@ -34,7 +34,7 @@ interface WarehouseStock {
   minmax: boolean
 }
 
-interface AlternativeProduct {
+export interface AlternativeProduct {
   hmsArtNr: string
   warehouseStock: WarehouseStock[]
 }
@@ -68,10 +68,9 @@ export default function AlternativeProductsPage() {
 }
 
 const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
-  const url = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
-  console.log(`Alt-url: ${process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL}`)
-  console.log(`image-url: ${process.env.HM_SEARCH_URL}`)
-  const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(`${url}/alternativ/${hmsNumber}`, fetcherGET)
+  const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(`/alternativ/${hmsNumber}`, () =>
+    getAlternativeProducts(hmsNumber)
+  )
 
   const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
 
