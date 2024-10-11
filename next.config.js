@@ -24,8 +24,8 @@ const nextConfig = {
         destination: process.env.HM_SEARCH_URL + '/suppliers/_search:path*',
       },
       {
-        source: '/lager/:path*',
-        destination: process.env.HM_OEBS_API_URL + '/lager/:path*',
+        source: '/alternativ/:path*',
+        destination: process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + '/alternativ/:path*',
       },
     ]
   },
@@ -46,6 +46,7 @@ const nextConfig = {
     RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     BUILD_ENV: process.env.BUILD_ENV,
     HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL: process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL,
   },
 }
 
