@@ -24,7 +24,6 @@ jobs:
     env:
       BUILD_ENV: dev
       IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
-      HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL: https://hm-alternativprodukter.intern.dev.nav.no
       CDN_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +42,6 @@ jobs:
           build-args: |
             BUILD_ENV=${{ env.BUILD_ENV }}
             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
-            HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL=${{ env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL }}
             CDN_URL=${{ env.CDN_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
