@@ -17,6 +17,7 @@ spec:
         - host: hm-oebs-api-proxy.prod-fss-pub.nais.io
       rules:
         - application: hm-grunndata-search
+        - application: hm-grunndata-alternativprodukter
   env:
     - name: RUNTIME_ENVIRONMENT
       value: prod
