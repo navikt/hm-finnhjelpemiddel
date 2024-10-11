@@ -2,7 +2,7 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, Box, HGrid, HStack, Label, Link, Search, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
 import { fetcherGET, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
@@ -10,6 +10,7 @@ import NextLink from 'next/link'
 import { smallImageLoader } from '@/utils/image-util'
 import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
+import { useState } from 'react'
 
 interface WarehouseStock {
   erPåLager: boolean
@@ -39,8 +40,34 @@ interface AlternativeProduct {
 }
 
 export default function AlternativeProductsPage() {
-  const hmsNumber = '292483'
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined)
 
+  const handleSearch = (value: string) => {
+    setSearchTerm(value)
+  }
+
+  //const hmsNumber = '292483'
+
+  return (
+    <div className={`${styles.container} main-wrapper--medium`}>
+      <Heading level="1" size="large" className={styles.headerColor}>
+        Finn gjenbruksprodukt
+      </Heading>
+
+      <Search
+        label={'HMS-nummer'}
+        hideLabel={false}
+        variant="secondary"
+        className={styles.search}
+        onSearchClick={(value) => handleSearch(value)}
+      ></Search>
+
+      {searchTerm && <AlternativeProductList hmsNumber={searchTerm} />}
+    </div>
+  )
+}
+
+const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
   const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(`/alternativ/${hmsNumber}`, fetcherGET)
 
   const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
@@ -50,7 +77,11 @@ export default function AlternativeProductsPage() {
   )
 
   if (isLoading || !products || !alternatives) {
-    return <></>
+    return <Loader />
+  }
+
+  if (alternatives.length == 0) {
+    return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
   products.sort((a, b) => {
@@ -67,20 +98,12 @@ export default function AlternativeProductsPage() {
   })
 
   return (
-    <div className={`${styles.container} main-wrapper--medium`}>
-      <Heading level="1" size="large" className={styles.headerColor}>
-        Finn gjenbruksprodukt
-      </Heading>
-
-      <Search label={'HMS-nummer'} hideLabel={false} variant="secondary" className={styles.search}></Search>
-
-      <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-        {products.map((product) => {
-          const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)!.warehouseStock
-          return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
-        })}
-      </HGrid>
-    </div>
+    <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
+      {products.map((product) => {
+        const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)!.warehouseStock
+        return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
+      })}
+    </HGrid>
   )
 }
 
