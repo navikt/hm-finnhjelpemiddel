@@ -166,8 +166,8 @@ const ProductCard = ({
             >
               {onAgreement
                 ? currentRank < 90
-                  ? `NAV - Rangering ${currentRank}`
-                  : 'NAV - På avtale'
+                  ? `Nav - Rangering ${currentRank}`
+                  : 'Nav - På avtale'
                 : 'Ikke på avtale'}
             </BodyShort>
 
