@@ -10,11 +10,7 @@ import NextLink from 'next/link'
 import { smallImageLoader } from '@/utils/image-util'
 import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
-import { useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { SubmitHandler } from 'react-hook-form'
-import { FormSearchData } from '@/utils/search-state-util'
-import { toSearchQueryString } from '@/utils/mapSearchParams'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -87,8 +83,9 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
 
   const hmsArtNrs = (alternatives?.map((alternative) => alternative.hmsArtNr) ?? []).concat([hmsNumber])
 
-  const { data: products, isLoading } = useSWR<Product[]>(alternativeResponse ? '/product/_search' : null, () =>
-    getProductFromHmsArtNr(hmsArtNrs)
+  const { data: products, isLoading } = useSWR<Product[]>(
+    alternativeResponse ? `alternatives-${hmsNumber}` : null,
+    () => getProductFromHmsArtNr(hmsArtNrs)
   )
 
   if (isLoading || !products || !alternatives) {
