@@ -3,14 +3,18 @@
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
 import { BodyShort, Box, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
-import { getAlternativeProducts, getProductFromHmsArtNr } from '@/utils/api-util'
+import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import { smallImageLoader } from '@/utils/image-util'
 import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { SubmitHandler } from 'react-hook-form'
+import { FormSearchData } from '@/utils/search-state-util'
+import { toSearchQueryString } from '@/utils/mapSearchParams'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -45,13 +49,15 @@ export interface AlternativeProductResponse {
 }
 
 export default function AlternativeProductsPage() {
-  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const handleSearch = (value: string) => {
-    setSearchTerm(value)
+    router.replace(`${pathname}?hms=${value}`, {
+      scroll: false,
+    })
   }
-
-  //const hmsNumber = '292483'
 
   return (
     <div className={`${styles.container} main-wrapper--medium`}>
@@ -67,21 +73,21 @@ export default function AlternativeProductsPage() {
         onSearchClick={(value) => handleSearch(value)}
       ></Search>
 
-      {searchTerm && <AlternativeProductList hmsNumber={searchTerm} />}
+      {searchParams.has('hms') && <AlternativeProductList hmsNumber={searchParams.get('hms')!} />}
     </div>
   )
 }
 
 const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
   const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
-    getAlternativeProducts(hmsNumber)
+    getAlternativeProductsInventory(hmsNumber)
   )
 
   const alternatives = alternativeResponse?.alternatives
 
-  const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
+  const hmsArtNrs = (alternatives?.map((alternative) => alternative.hmsArtNr) ?? []).concat([hmsNumber])
 
-  const { data: products, isLoading } = useSWR<Product[]>(alternatives ? '/product/_search' : null, () =>
+  const { data: products, isLoading } = useSWR<Product[]>(alternativeResponse ? '/product/_search' : null, () =>
     getProductFromHmsArtNr(hmsArtNrs)
   )
 
@@ -107,21 +113,39 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
   })
 
   return (
-    <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-      {products.map((product) => {
-        const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)!.warehouseStock
-        return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
-      })}
-    </HGrid>
+    <>
+      <div>
+        <Heading size="medium" spacing>
+          Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>
+        </Heading>
+        <AlternativeProduct
+          product={products.find((product) => product.variants[0].hmsArtNr === hmsNumber)!}
+          stocks={alternativeResponse.original.warehouseStock}
+        />
+      </div>
+      <div>
+        <Heading size="medium" spacing>
+          Alternative produkter
+        </Heading>
+        <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
+          {products
+            .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
+            .map((product) => {
+              const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
+              return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
+            })}
+        </HGrid>
+      </div>
+    </>
   )
 }
 
-const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] }) => {
+const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] | undefined }) => {
   const variant = product.variants[0]
 
-  const osloStock = stocks.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
+  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
 
-  const numberInStock = Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0)
+  const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
 
   return (
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
@@ -159,7 +183,7 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
       </HStack>
       <HStack align={'center'} gap={'2'}>
         <b>Oslo:</b>
-        <StockTag amount={numberInStock} />
+        {numberInStock !== undefined && <StockTag amount={numberInStock} />}
       </HStack>
     </VStack>
   )

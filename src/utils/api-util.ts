@@ -973,7 +973,7 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
   return res.json()
 }
 
-export async function getAlternativeProducts(hmsArtNr: string): Promise<AlternativeProductResponse> {
+export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeProductResponse> {
   const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
     next: { revalidate: 900 },
     method: 'GET',
