@@ -3,7 +3,7 @@
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
 import { BodyShort, Box, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
-import { fetcherGET, getAlternativeProducts, getProductFromHmsArtNr } from '@/utils/api-util'
+import { getAlternativeProducts, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
@@ -34,9 +34,14 @@ export interface WarehouseStock {
   minmax: boolean
 }
 
-export interface AlternativeProduct {
+export interface ProductStock {
   hmsArtNr: string
   warehouseStock: WarehouseStock[]
+}
+
+export interface AlternativeProductResponse {
+  original: ProductStock
+  alternatives: ProductStock[]
 }
 
 export default function AlternativeProductsPage() {
@@ -68,9 +73,11 @@ export default function AlternativeProductsPage() {
 }
 
 const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
-  const { data: alternatives } = useSWRImmutable<AlternativeProduct[]>(`/alternativ/${hmsNumber}`, () =>
+  const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
     getAlternativeProducts(hmsNumber)
   )
+
+  const alternatives = alternativeResponse?.alternatives
 
   const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
 

@@ -34,8 +34,7 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
-import useSWRImmutable from 'swr/immutable'
-import { AlternativeProduct } from '@/app/alternativprodukter/page'
+import { AlternativeProductResponse } from '@/app/alternativprodukter/page'
 
 export const PAGE_SIZE = 24
 
@@ -974,7 +973,7 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
   return res.json()
 }
 
-export async function getAlternativeProducts(hmsArtNr: string): Promise<AlternativeProduct[]> {
+export async function getAlternativeProducts(hmsArtNr: string): Promise<AlternativeProductResponse> {
   const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
     next: { revalidate: 900 },
     method: 'GET',
