@@ -11,6 +11,7 @@ import { smallImageLoader } from '@/utils/image-util'
 import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import React from 'react'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -67,6 +68,11 @@ export default function AlternativeProductsPage() {
         variant="secondary"
         className={styles.search}
         onSearchClick={(value) => handleSearch(value)}
+        onKeyUp={(event: React.KeyboardEvent) => {
+          if (event.key === 'Enter') {
+            handleSearch((event.currentTarget as HTMLInputElement).value)
+          }
+        }}
       ></Search>
 
       {searchParams.has('hms') && <AlternativeProductList hmsNumber={searchParams.get('hms')!} />}
@@ -88,11 +94,11 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
     () => getProductFromHmsArtNr(hmsArtNrs)
   )
 
-  if (isLoading || !products || !alternatives) {
+  if (isLoading || !products) {
     return <Loader />
   }
 
-  if (alternatives.length == 0) {
+  if (!alternatives || alternatives.length == 0) {
     return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
