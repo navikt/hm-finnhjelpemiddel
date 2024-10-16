@@ -14,8 +14,6 @@ spec:
     - 'https://finnhjelpemiddel.ansatt.dev.nav.no'
   accessPolicy:
     outbound:
-      external:
-        - host: hm-oebs-api-proxy.dev-fss-pub.nais.io
       rules:
         - application: hm-grunndata-search
         - application: hm-grunndata-alternativprodukter
