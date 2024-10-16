@@ -11,6 +11,7 @@ import NavigationBar from '@/app/NavigationBar'
 import Footer from '@/components/layout/Footer'
 import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
 import { Link } from '@navikt/ds-react'
+import { initInstrumentation } from "@/faro/faro";
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -26,6 +27,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     // if browser initialize amplitude
     if (typeof window !== 'undefined') {
       initAmplitude()
+      initInstrumentation()
       logOversiktForsideVist()
       if (process.env.NODE_ENV == 'production') {
         hotjar.initialize({ id: 118350, sv: 6 })
