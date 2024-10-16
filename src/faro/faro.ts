@@ -8,7 +8,7 @@ export function initInstrumentation(): void {
 }
 
 export function getFaro(): Faro | null {
-    if (process.env.NEXT_PUBLIC_FARO_UR == null) return null
+    if (process.env.NEXT_PUBLIC_FARO_URL == null) return null
 
     if (faro != null) return faro
     faro = initializeFaro({
