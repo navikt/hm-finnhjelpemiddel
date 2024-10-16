@@ -418,7 +418,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     </Button>
                   </Table.ColumnHeader>
                 ) : (
-                  <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+                  <Table.HeaderCell ref={variantNameElementRef}>Navn på variant</Table.HeaderCell>
                 )}
                 {sortedByKey.map((variant) => (
                   <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
@@ -458,11 +458,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                     </Button>
                   </Table.HeaderCell>
                 ) : (
-                  <Table.HeaderCell
-                    style={{
-                      zIndex: '2 !important',
-                    }}
-                  >
+                  <Table.HeaderCell className="hmsnr-header-cell" style={{ top: `${variantNameElementHeight}px` }}>
                     HMS-nummer
                   </Table.HeaderCell>
                 )}

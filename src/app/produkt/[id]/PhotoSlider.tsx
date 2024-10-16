@@ -54,8 +54,21 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
   const [src, setSrc] = useState(photos[active]?.uri)
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(hasImages)
+  const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => setSrc(photos[active]?.uri), [active, photos, setSrc])
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (isLoading) {
+      timer = setTimeout(() => {
+        setShowLoader(true)
+      }, 1000) // 1 second delay
+    } else {
+      setShowLoader(false)
+    }
+
+    return () => clearTimeout(timer) //
+  }, [isLoading])
 
   useKeyboardShortcut({
     key: 'Escape',
@@ -98,107 +111,111 @@ const PhotoSlider = ({ photos }: ImageSliderProps) => {
         src={src}
         setActive={setActive}
       />
-      <VStack className="photo-slider-small" align="center" justify="space-between">
-        {isLoading && (
-          <HStack justify="center" style={{ marginTop: '18px', height: '100%' }}>
-            <Loader size="xlarge" title="Laster bilde" />
-          </HStack>
-        )}
+      <VStack className="photo-slider-small" align="center">
+        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <div className="photo-container">
+            {isLoading && showLoader && (
+              <HStack justify="center" style={{ marginTop: '18px', height: '100%' }}>
+                <Loader size="xlarge" title="Laster bilde" />
+              </HStack>
+            )}
 
-        <div className="photo-container">
-          {!hasImages && (
-            <CameraIcon
-              width={400}
-              height={300}
-              style={{ background: 'white' }}
-              aria-label="Ingen bilde tilgjengelig"
-            />
-          )}
-          {numberOfImages === 1 && (
-            <div>
-              <Image
-                role="button"
+            {!hasImages && (
+              <CameraIcon
+                width={400}
+                height={300}
+                style={{ background: 'white' }}
+                aria-label="Ingen bilde tilgjengelig"
+              />
+            )}
+
+            {numberOfImages === 1 && (
+              <div style={{ display: showLoader ? 'none' : 'block' }}>
+                <Image
+                  role="button"
+                  key={src}
+                  loader={largeImageLoader}
+                  src={src}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  onError={() => {
+                    setSrc('/assets/image-error.png')
+                    setIsLoading(false)
+                  }}
+                  alt={'Produktbilde'}
+                  sizes="(min-width: 66em) 33vw,
+                      (min-width: 44em) 40vw,
+                      100vw"
+                  onClick={() => setModalIsOpen(true)}
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      setModalIsOpen(true)
+                    }
+                  }}
+                  onLoad={() => setIsLoading(false)}
+                />
+              </div>
+            )}
+
+            {numberOfImages > 1 && (
+              <motion.div
                 key={src}
-                loader={largeImageLoader}
-                src={src}
-                fill
-                style={{ objectFit: 'contain' }}
-                onError={() => {
-                  setSrc('/assets/image-error.png')
-                  setIsLoading(false)
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                whileHover={{ scale: 1.1 }}
+                // whileTap={{ scale: 0.9 }}
+                transition={{
+                  x: { type: 'spring', stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 },
                 }}
-                alt={'Produktbilde'}
-                sizes="(min-width: 66em) 33vw,
-                      (min-width: 44em) 40vw,
-                      100vw"
-                onClick={() => setModalIsOpen(true)}
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault()
-                    setModalIsOpen(true)
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={1}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipe = swipePower(offset.x, velocity.x)
+
+                  if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
+                    nextImage()
+                  } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
+                    prevImage()
                   }
                 }}
-                onLoad={() => setIsLoading(false)}
-              />
-            </div>
-          )}
-
-          {numberOfImages > 1 && (
-            <motion.div
-              key={src}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              whileHover={{ scale: 1.1 }}
-              // whileTap={{ scale: 0.9 }}
-              transition={{
-                x: { type: 'spring', stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
-              }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
-              onDragEnd={(e, { offset, velocity }) => {
-                const swipe = swipePower(offset.x, velocity.x)
-
-                if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
-                  nextImage()
-                } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
-                  prevImage()
-                }
-              }}
-            >
-              <Image
-                role="button"
-                aria-label="Forstørr bildet"
-                draggable="false"
-                loader={largeImageLoader}
-                src={src}
-                onError={() => {
-                  setSrc('/assets/image-error.png')
-                  setIsLoading(false)
-                }}
-                alt={`Produktbilde ${active + 1} av ${photos.length}`}
-                fill
-                style={{ objectFit: 'contain' }}
-                sizes="(min-width: 66em) 33vw,
+                style={{ display: showLoader ? 'none' : 'block' }}
+              >
+                <Image
+                  role="button"
+                  aria-label="Forstørr bildet"
+                  draggable="false"
+                  loader={largeImageLoader}
+                  src={src}
+                  onError={() => {
+                    setSrc('/assets/image-error.png')
+                    setIsLoading(false)
+                  }}
+                  alt={`Produktbilde ${active + 1} av ${photos.length}`}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  sizes="(min-width: 66em) 33vw,
                       (min-width: 44em) 40vw,
                       100vw"
-                onClick={() => setModalIsOpen(true)}
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault()
-                    setModalIsOpen(true)
-                  }
-                }}
-                onLoad={() => setIsLoading(false)}
-              />
-            </motion.div>
-          )}
+                  onClick={() => setModalIsOpen(true)}
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      setModalIsOpen(true)
+                    }
+                  }}
+                  onLoad={() => setIsLoading(false)}
+                />
+              </motion.div>
+            )}
+          </div>
         </div>
         {numberOfImages > 1 && (
           <HStack justify="space-between" className="navigation-bar" align={'center'}>

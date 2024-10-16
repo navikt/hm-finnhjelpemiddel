@@ -213,7 +213,7 @@ const makeSearchTermQuery = ({
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.01,
+    negative_boost: 0.4,
   }
 
   const negativeBoostNonAgreementProducts = {
@@ -242,7 +242,7 @@ const makeSearchTermQuery = ({
               fields: [
                 'isoCategoryTitle^2',
                 'isoCategoryText^0.5',
-                'title^0.3',
+                'title^0.5',
                 'attributes.text^0.1',
                 'keywords_bag^0.1',
               ],
@@ -885,6 +885,13 @@ export const fetchAccessoriesAndSpareParts = ({
           must: must,
         },
       },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc', // Change to 'desc' for descending order
+          },
+        },
+      ],
       track_total_hits: true,
     }),
   })

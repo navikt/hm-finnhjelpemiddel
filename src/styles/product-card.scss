@@ -1,5 +1,6 @@
 @use './_mixins';
 
+@import 'src/styles/_variables';
 @import '@navikt/ds-tokens/dist/tokens';
 
 .product-card {
@@ -259,4 +260,85 @@
 
   box-shadow: $a-shadow-small;
   outline: none;
+}
+
+.product-card--new {
+  position: relative;
+  border: 1px solid $a-border-default;
+  border-radius: $a-border-radius-medium;
+
+  .product-card__nav-on-agreement-text {
+    color: $ny-nav-purple-dark;
+  }
+
+  .product-card__nav-not-on-agreement-text {
+    color: $a-gray-800;
+  }
+
+  .product-card__link-2 {
+    color: $a-text-default;
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+      color: $a-text-action;
+      background-color: white;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+    }
+  }
+
+  .product-card__link-2:hover {
+    max-height: 48px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .product-card__title {
+    @extend .text-line-clamp;
+    z-index: 3;
+  }
+
+  .product-card__title:hover {
+    -webkit-line-clamp: unset;
+    background: #fff;
+    overflow: visible;
+  }
+
+  .product-card-image-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+
+    .product-card-image {
+      width: 145px;
+      height: 145px;
+
+      position: relative;
+    }
+  }
+
+  .product-card__compare-button {
+    z-index: 2;
+  }
+
+  .product-card__compare-button--checked {
+    color: #fff;
+    background-color: $a-surface-action-selected-hover;
+    box-shadow: none;
+  }
+
+  &:hover {
+    outline: 1px solid $a-border-action;
+  }
 }

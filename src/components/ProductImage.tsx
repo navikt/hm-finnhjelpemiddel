@@ -30,7 +30,7 @@ const ProductImage = ({ src, productTitle }: { src: string | undefined; productT
         src={'/assets/image-error.png'}
         alt={'Produktbilde mangler for' + productTitle}
         fill
-        style={{ padding: '30px' }}
+        style={{ padding: '30px', objectFit: 'contain' }}
         sizes="50vw"
         priority
       />

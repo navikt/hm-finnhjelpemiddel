@@ -1,11 +1,11 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button } from '@navikt/ds-react'
+import { Button, HStack } from '@navikt/ds-react'
 
 import { FilterData } from '@/utils/api-util'
 
-import FilterView from '@/components/filters/FilterView'
+import { CheckboxFilter } from '@/components/filters/CheckboxFilter'
 import { FormSearchData } from '@/utils/search-state-util'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
@@ -32,8 +32,13 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
       role="search"
       onSubmit={formMethods.handleSubmit(onSubmit)}
       aria-controls="agreementSearchResults"
+      className="agreement-page__filter-form"
     >
-      <FilterView filters={filters} />
+      <HStack gap="4" className="filter-container__filters filter-container__horizontal">
+        <CheckboxFilter filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
+        <CheckboxFilter filter={{ key: 'leverandor', data: filters?.leverandor }} showSearch={true} />
+      </HStack>
+
       {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
       <input type="submit" style={{ display: 'none' }} />
     </form>

@@ -49,6 +49,7 @@ const AccessoriesSparePartsBody = ({ agreement, isSparepart }: { agreement: Agre
   const supplierNames = filtersFromData && filtersFromData.leverandor.values
 
   const onSearch = () => {
+    setPage(1)
     router.replace(`${pathname}?accessoriesTerm=${inputValue}`, {
       scroll: false,
     })

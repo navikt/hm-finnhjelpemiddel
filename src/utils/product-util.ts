@@ -351,8 +351,8 @@ export function validateHTML(input: string | undefined): boolean {
   if (!input) {
     return false
   }
-  const allowedTagsRegex = /<\/?(p|br|strong|italic|ul|li|ol)[^>]*>/gi
-  const allTagsRegex = /<\/?[^>]+(>|$)/g
+  const allowedTagsRegex = /<\/?(p|br|strong|italic|ul|li|ol|a)[^>]*>/gi
+  const allTagsRegex = /<\/?[^>]+(>|$)/g;
 
   const allowedTags = input.match(allowedTagsRegex) || []
   const allTags = input.match(allTagsRegex) || []
