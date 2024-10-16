@@ -56,6 +56,17 @@ export default function AlternativeProductsPage() {
     })
   }
 
+  if (
+    typeof window !== 'undefined' &&
+    !(
+      window.location.href.startsWith('https://finnhjelpemiddel.ansatt') ||
+      window.location.href.startsWith('http://localhost')
+    )
+  ) {
+    console.log(window.location.href)
+    return <div>ikke tilgang</div>
+  }
+
   return (
     <div className={`${styles.container} main-wrapper--medium`}>
       <Heading level="1" size="large" className={styles.headerColor}>
