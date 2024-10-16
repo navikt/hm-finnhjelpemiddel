@@ -238,8 +238,8 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     photos: mapPhotoInfo(firstVariant.media),
     videos: mapVideoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
-    supplierId: firstVariant.supplier?.id ?? "",
-    supplierName: firstVariant.supplier?.name ?? "",
+    supplierId: firstVariant.supplier?.id ?? '',
+    supplierName: firstVariant.supplier?.name ?? '',
     agreements: uniquesAgreementsPostAndRanks,
   }
 }
@@ -343,8 +343,8 @@ export function containsHTML(input: string | undefined): boolean {
   if (!input) {
     return false
   }
-  const htmlRegex = /<[^>]*>/;
-  return htmlRegex.test(input);
+  const htmlRegex = /<[^>]*>/
+  return htmlRegex.test(input)
 }
 
 export function validateHTML(input: string | undefined): boolean {
@@ -354,9 +354,8 @@ export function validateHTML(input: string | undefined): boolean {
   const allowedTagsRegex = /<\/?(p|br|strong|italic|ul|li|ol|a)[^>]*>/gi
   const allTagsRegex = /<\/?[^>]+(>|$)/g;
 
-  const allowedTags = input.match(allowedTagsRegex) || [];
-  const allTags = input.match(allTagsRegex) || [];
+  const allowedTags = input.match(allowedTagsRegex) || []
+  const allTags = input.match(allTagsRegex) || []
 
-  return allowedTags.length === allTags.length;
+  return allowedTags.length === allTags.length
 }
-

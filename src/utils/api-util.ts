@@ -34,11 +34,13 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
+import { AlternativeProductResponse } from '@/app/alternativprodukter/page'
 
 export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
+const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
 
 export type Bucket = {
   key: number | string
@@ -976,6 +978,41 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
   })
 
   return res.json()
+}
+
+export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeProductResponse> {
+  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
+    next: { revalidate: 900 },
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return res.json()
+}
+
+export async function getProductFromHmsArtNr(hmsArtNrs: string[]): Promise<Product[]> {
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+    next: { revalidate: 900 },
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            terms: {
+              hmsArtNr: hmsArtNrs,
+            },
+          },
+        },
+      },
+      size: 150,
+    }),
+  })
+
+  return res.json().then(mapProductsFromCollapse)
 }
 
 export async function getProductWithVariantsSuggestions(
