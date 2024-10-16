@@ -46,6 +46,7 @@ const nextConfig = {
     RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     BUILD_ENV: process.env.BUILD_ENV,
     HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
+    NEXT_PUBLIC_FARO_URL: process.env.FARO_URL,
   },
 }
 

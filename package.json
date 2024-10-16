@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.10.0",
+    "@grafana/faro-web-sdk": "^1.10.2",
+    "@grafana/faro-web-tracing": "^1.10.2",
     "@navikt/aksel-icons": "^7.1.2",
     "@navikt/ds-css": "^7.1.2",
     "@navikt/ds-react": "^7.1.2",
