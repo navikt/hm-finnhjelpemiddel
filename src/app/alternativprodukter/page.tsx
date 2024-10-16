@@ -63,7 +63,6 @@ export default function AlternativeProductsPage() {
       window.location.href.startsWith('http://localhost')
     )
   ) {
-    console.log(window.location.href)
     return <div>ikke tilgang</div>
   }
 
@@ -95,9 +94,7 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
   const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
     getAlternativeProductsInventory(hmsNumber)
   )
-
   const alternatives = alternativeResponse?.alternatives
-
   const hmsArtNrs = (alternatives?.map((alternative) => alternative.hmsArtNr) ?? []).concat([hmsNumber])
 
   const { data: products, isLoading } = useSWR<Product[]>(
