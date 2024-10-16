@@ -883,6 +883,13 @@ export const fetchAccessoriesAndSpareParts = ({
           must: must,
         },
       },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc', // Change to 'desc' for descending order
+          },
+        },
+      ],
       track_total_hits: true,
     }),
   })
