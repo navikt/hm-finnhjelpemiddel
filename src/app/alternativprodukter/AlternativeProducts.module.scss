@@ -1,0 +1,54 @@
+@use 'src/styles/mixins';
+
+@import 'src/styles/_variables';
+@import '@navikt/ds-tokens/dist/tokens';
+
+.headerColor {
+  color: $ny-nav-purple-dark;
+}
+
+.notInAgreementColor {
+  color: #525962;
+}
+
+.search {
+  max-width: 440px;
+}
+
+.link {
+  color: black;
+  font-weight: 600;
+}
+
+.expiredTag {
+  width: fit-content;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: $a-spacing-8;
+  padding-top: $a-spacing-4;
+  padding-bottom: $a-spacing-4;
+
+  @include mixins.for-size(tablet-up) {
+    padding-top: $a-spacing-8;
+    padding-bottom: $a-spacing-8;
+  }
+  @include mixins.for-size(desktop-up) {
+    padding: $a-spacing-14 0;
+  }
+}
+
+.productContainer {
+  border: 1px solid #909090;
+  border-radius: 4px;
+  width: 410px;
+  height: 225px;
+}
+
+.imageWrapper {
+  width: 145px;
+  height: 145px;
+  position: relative;
+}

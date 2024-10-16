@@ -5,7 +5,7 @@ const nextConfig = {
   assetPrefix: process.env.ASSET_PREFIX || undefined,
   reactStrictMode: true,
   swcMinify: true,
-  async rewrites () {
+  async rewrites() {
     return [
       {
         source: '/products/_search:path*',
@@ -22,6 +22,10 @@ const nextConfig = {
       {
         source: '/suppliers/_search:path*',
         destination: process.env.HM_SEARCH_URL + '/suppliers/_search:path*',
+      },
+      {
+        source: '/alternativ/:path*',
+        destination: process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + '/alternativ/:path*',
       },
     ]
   },
@@ -41,6 +45,7 @@ const nextConfig = {
     CDN_URL: process.env.CDN_URL,
     RUNTIME_ENVIRONMENT: process.env.RUNTIME_ENVIRONMENT,
     BUILD_ENV: process.env.BUILD_ENV,
+    HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
     NEXT_PUBLIC_FARO_URL: process.env.FARO_URL,
   },
 }

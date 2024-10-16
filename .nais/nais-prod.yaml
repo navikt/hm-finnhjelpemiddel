@@ -11,10 +11,12 @@ spec:
   port: 3000
   ingresses:
     - 'https://finnhjelpemiddel.nav.no'
+    - 'https://finnhjelpemiddel.ansatt.nav.no'
   accessPolicy:
     outbound:
       rules:
         - application: hm-grunndata-search
+        - application: hm-grunndata-alternativprodukter
   env:
     - name: RUNTIME_ENVIRONMENT
       value: prod
