@@ -20,6 +20,7 @@ jobs:
       BUILD_ENV: prod
       IMAGE_PROXY_URL: https://finnhjelpemiddel.nav.no/imageproxy
       CDN_URL: https://finnhjelpemiddel.nav.no/imageproxy/file/
+      FARO_URL: https://telemetry.nav.no/collect
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -55,6 +56,7 @@ jobs:
             BUILD_ENV=${{ env.BUILD_ENV }}
             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
             CDN_URL=${{ env.CDN_URL }}
+            FARO_URL=${{ env.FARO_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           secrets: |
