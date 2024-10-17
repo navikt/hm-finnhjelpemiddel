@@ -167,41 +167,52 @@ const ProductNavigationBar = ({
       columns={{ sm: 'repeat(1, minmax(0, 300px))', md: numberOfColumns }}
       gap={{ xs: '2', lg: '7' }}
     >
-      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#informasjon">
-        Generell informasjon
-      </Button>
-      {/* <Button variant="tertiary" className="product-page__nav-button" as={NextLink} href="#egenskaper">
-            Finn HMS-nummer
-          </Button> */}
+      <Link href={'#informasjon'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
+          Generell informasjon
+        </span>
+      </Link>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#egenskaper">
-        Egenskaper
-      </Button>
+      <Link href={'#egenskaper'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
+          Egenskaper
+        </span>
+      </Link>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#video">
-        Video
-      </Button>
+      <Link href={'#video'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
+          Video
+        </span>
+      </Link>
 
-      <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#dokumenter">
-        Dokumenter
-      </Button>
+      <Link href={'#dokumenter'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
+          Dokumenter
+        </span>
+      </Link>
 
       {isOnAgreement && (
-        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#agreement-info">
+        <Link href={'#agreement-info'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
           Avtale med Nav
-        </Button>
+        </span>
+        </Link>
       )}
 
       {hasAccessories && (
-        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#tilbehør">
+        <Link href={'#tilbehør'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
           Tilbehør
-        </Button>
+        </span>
+        </Link>
       )}
 
       {hasSpareParts && (
-        <Button variant="tertiary" className="product-page__nav-button" as={Link} href="#reservedeler">
+        <Link href={'#reservedeler'} className="product-page__nav-button">
+        <span className="product-page__header_anchorLink">
           Reservedeler
-        </Button>
+        </span>
+        </Link>
       )}
     </HGrid>
   )
