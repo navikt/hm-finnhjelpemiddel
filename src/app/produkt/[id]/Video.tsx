@@ -1,9 +1,9 @@
 'use client'
-
+import dynamic from "next/dynamic";
+const ReactPlayer = dynamic(() => import("react-player/lazy"), { ssr: false });
 import { Video } from '@/utils/product-util'
 import { BodyShort, HStack, VStack } from '@navikt/ds-react'
 import Link from 'next/link'
-import ReactPlayer from 'react-player'
 
 export const Videos = ({ videos }: { videos: Video[] }) => {
   if (!videos.length) {
