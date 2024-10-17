@@ -19,7 +19,12 @@
 
   &__header_anchorLink {
     color: inherit;
-    text-decoration: inherit;
+    text-decoration: none;
+    font-size: var(--a-font-size-large);
+    font-weight: var(--a-font-weight-bold);
+    letter-spacing: 0;
+    line-height: var(--a-font-line-height-large);
+    margin: 0;
   }
 
   @include mixins.for-size(tablet-up) {
@@ -157,9 +162,17 @@
   }
 
   &__nav-button {
+    display: inline-flex;
     background-color: #fff;
     justify-content: start;
     min-height: 60px;
+    text-decoration: none;
+    align-items: center;
+
+    &:hover {
+      color: var(--ac-button-tertiary-hover-text, var(--a-text-action-on-action-subtle));
+      background-color: var(--ac-button-tertiary-hover-bg, var(--a-surface-action-subtle-hover));
+    }
 
     @include mixins.for-size(tablet-up) {
       padding: $a-spacing-1 $a-spacing-5;

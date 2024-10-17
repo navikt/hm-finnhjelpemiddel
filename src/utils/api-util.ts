@@ -767,7 +767,6 @@ const mapFilters = (data: any): FilterData => {
 
 export async function getSupplier(id: string) {
   const res = await fetch(HM_SEARCH_URL + `/suppliers/_doc/${id}`, {
-    next: { revalidate: 900 },
     method: 'GET',
   })
 
@@ -776,7 +775,6 @@ export async function getSupplier(id: string) {
 
 export async function getAgreement(id: string): Promise<AgreementDocResponse> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_doc/${id}`, {
-    next: { revalidate: 900 },
     method: 'GET',
   })
   return res.json()
@@ -784,7 +782,6 @@ export async function getAgreement(id: string): Promise<AgreementDocResponse> {
 
 export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -872,7 +869,6 @@ export const fetchAccessoriesAndSpareParts = ({
   }
 
   return fetch(HM_SEARCH_URL + `/products/_search`, {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -905,7 +901,6 @@ export async function getSuppliers(letter: string): Promise<Supplier[]> {
   letter = formatNorwegianLetter(letter)
 
   const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -927,7 +922,6 @@ export async function getSuppliers(letter: string): Promise<Supplier[]> {
 
 export async function getAllSuppliers(): Promise<Supplier[]> {
   const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -958,7 +952,6 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
   const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -982,7 +975,6 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
 
 export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeProductResponse> {
   const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
-    next: { revalidate: 900 },
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -993,7 +985,6 @@ export async function getAlternativeProductsInventory(hmsArtNr: string): Promise
 
 export async function getProductFromHmsArtNr(hmsArtNrs: string[]): Promise<Product[]> {
   const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -1029,7 +1020,6 @@ export async function getProductWithVariantsSuggestions(
   const dybdeFilter = filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }, true)
 
   const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -1216,7 +1206,6 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
 
 export async function getNews(): Promise<News[]> {
   const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
-    next: { revalidate: 900 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
