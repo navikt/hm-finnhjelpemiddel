@@ -2,7 +2,8 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, Box, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
+import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
@@ -11,7 +12,7 @@ import { smallImageLoader } from '@/utils/image-util'
 import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -152,51 +153,99 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
 }
 
 const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] | undefined }) => {
+  const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const variant = product.variants[0]
-
   const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
-
   const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
 
   return (
-    <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
-      <HStack justify="space-between">
-        <VStack gap={'3'}>
-          {variant.agreements.length === 0 ? (
-            <Label size="small" className={styles.notInAgreementColor}>
-              Ikke på avtale
-            </Label>
-          ) : (
-            <Label size="small" className={styles.headerColor}>
-              NAV - Rangering {variant.agreements[0].rank}
-            </Label>
-          )}
-          <Link as={NextLink} href={`/produkt/${product.id}`} className={styles.link}>
-            {product.title}
-          </Link>
-          {variant.status === 'INACTIVE' && (
-            <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
-              Utgått
-            </Tag>
-          )}
-          <BodyShort size="small">{product.supplierName}</BodyShort>
-          <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
-        </VStack>
-        <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-          <Image
-            loader={smallImageLoader}
-            src={product.photos[0].uri}
-            alt={`Produktbilde`}
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </Box>
+    <HStack>
+      <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
+        <HStack justify="space-between">
+          <VStack gap={'3'}>
+            {variant.agreements.length === 0 ? (
+              <Label size="small" className={styles.notInAgreementColor}>
+                Ikke på avtale
+              </Label>
+            ) : (
+              <Label size="small" className={styles.headerColor}>
+                NAV - Rangering {variant.agreements[0].rank}
+              </Label>
+            )}
+            <Link as={NextLink} href={`/produkt/${product.id}`} className={styles.link}>
+              {product.title}
+            </Link>
+            {variant.status === 'INACTIVE' && (
+              <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
+                Utgått
+              </Tag>
+            )}
+            <BodyShort size="small">{product.supplierName}</BodyShort>
+            <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
+          </VStack>
+          <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
+            <Image
+              loader={smallImageLoader}
+              src={product.photos[0].uri}
+              alt={`Produktbilde`}
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </Box>
+        </HStack>
+        <HStack align={'center'} justify={'space-between'} gap={'2'}>
+          <>
+            <b>Oslo:</b>
+            {numberInStock !== undefined && <StockTag amount={numberInStock} />}
+          </>
+          <Button
+            variant={'secondary'}
+            size={'small'}
+            icon={<ChevronDownIcon />}
+            iconPosition={'right'}
+            onClick={() => setOpenWarehouseStock(!openWarehouseStock)}
+          >
+            Se lagerstatus
+          </Button>
+        </HStack>
+      </VStack>
+      {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
+    </HStack>
+  )
+}
+
+const WarehouseStatus = ({
+  stocks,
+  setOpenWarehouseStock,
+}: {
+  stocks: WarehouseStock[] | undefined
+  setOpenWarehouseStock: Dispatch<SetStateAction<boolean>>
+}) => {
+  return (
+    <Box className={styles.warehouseStatus}>
+      <HStack justify={'space-between'} align={'start'} style={{ alignSelf: 'stretch' }}>
+        <Label>Lagerstatus</Label>
+        <Button variant={'tertiary'} size={'small'} icon={<XMarkIcon />} onClick={() => setOpenWarehouseStock(false)} />
       </HStack>
-      <HStack align={'center'} gap={'2'}>
-        <b>Oslo:</b>
-        {numberInStock !== undefined && <StockTag amount={numberInStock} />}
-      </HStack>
-    </VStack>
+      <HGrid gap="2" columns={2} className={styles.centralInfoContainer}>
+        {stocks?.map((stock) => (
+          <li key={stock.organisasjons_id}>
+            <CentralInfo stock={stock} />
+          </li>
+        ))}
+      </HGrid>
+    </Box>
+  )
+}
+
+const CentralInfo = ({ stock }: { stock: WarehouseStock }) => {
+  const amount = stock ? Math.max(stock.tilgjengelig - stock.behovsmeldt, 0) : undefined
+  const warehouseName = stock.organisasjons_navn.substring(4)
+  return (
+    <HStack className={styles.centralInfo}>
+      <Label>{warehouseName}</Label>
+      {amount !== undefined && <StockTag amount={amount} />}
+    </HStack>
   )
 }
 
