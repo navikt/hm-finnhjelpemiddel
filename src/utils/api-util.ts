@@ -1147,6 +1147,10 @@ export async function getProductsInPost(agreementId: string, postNr: number): Pr
             },
           },
         },
+        {
+          term:
+            { main: true }
+        },
       ],
     },
   }
