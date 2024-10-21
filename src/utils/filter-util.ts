@@ -53,6 +53,7 @@ export const filtersFormStateLabel = {
   vis: 'Vis',
   status: 'Status',
   categories: 'Kategori',
+  reservedelerOgTilbehor: 'Reservedeler og tilbehør',
 }
 
 const visFilterLabels = [
@@ -60,6 +61,7 @@ const visFilterLabels = [
   'På bestillingsordning',
   'På digital behovsmelding',
   'Skjul utgåtte hjelpemidler',
+  'Vis reservedeler og tilbehør',
 ]
 
 export type FilterFormState = typeof initialFiltersFormState
@@ -201,7 +203,7 @@ export const filterDelkontrakt = (values: Array<string>) => ({
   },
 })
 
-export const filterMainProductsOnly= () => ({
+export const filterMainProductsOnly = () => ({
   bool: {
     should: { term: { 'main': true } }
   },
@@ -227,6 +229,13 @@ export const filterVis = (values: Array<string>) => {
       }
     })
     .filter(Boolean)
+
+  if (!values.includes('Vis reservedeler og tilbehør')) {
+    filters.push({
+      term:
+        { main: true }
+    })
+  }
 
   if (values.includes('Skjul utgåtte hjelpemidler')) {
     filters.push({
