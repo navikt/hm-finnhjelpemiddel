@@ -8,11 +8,10 @@ import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
-import { smallImageLoader } from '@/utils/image-util'
-import Image from 'next/image'
 import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { Dispatch, SetStateAction, useState } from 'react'
+import ProductImage from '@/components/ProductImage'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -184,13 +183,7 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
             <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
           </VStack>
           <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-            <Image
-              loader={smallImageLoader}
-              src={product.photos[0].uri}
-              alt={`Produktbilde`}
-              fill
-              style={{ objectFit: 'contain' }}
-            />
+            <ProductImage src={product.photos[0]?.uri} productTitle={'produktbilde'}></ProductImage>
           </Box>
         </HStack>
         <HStack align={'center'} justify={'space-between'} gap={'2'}>
