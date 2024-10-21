@@ -1,6 +1,5 @@
 import { Filter, FilterCategoryKeyServer } from './api-util'
 import { categories, getIsoCategoryBasedOnProductCategory } from './category-util'
-import * as console from "console";
 
 export const initialFiltersFormState = {
   setebreddeMaksCM: '',
