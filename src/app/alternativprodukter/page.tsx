@@ -141,6 +141,7 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {products
             .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
+            .filter((product) => product.title.length < 25)
             .map((product) => {
               const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
               return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
