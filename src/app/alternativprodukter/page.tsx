@@ -154,7 +154,7 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
 const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] | undefined }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const variant = product.variants[0]
-  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
+  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*04 Hedmark')!
   const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
 
   return (
@@ -188,7 +188,7 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
         </HStack>
         <HStack align={'center'} justify={'space-between'} gap={'2'}>
           <>
-            <b>Oslo:</b>
+            <b>Elverum:</b>
             {numberInStock !== undefined && <StockTag amount={numberInStock} />}
           </>
           <Button
