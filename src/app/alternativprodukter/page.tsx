@@ -141,7 +141,7 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {products
             .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
-            .filter((product) => product.title.length < 25)
+            .filter((product) => product.title.length < 25) //todo: fjern denne hacken
             .map((product) => {
               const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
               return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
@@ -155,7 +155,7 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
 const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] | undefined }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const variant = product.variants[0]
-  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*04 Hedmark')!
+  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
   const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
 
   return (
@@ -189,7 +189,7 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
         </HStack>
         <HStack align={'center'} justify={'space-between'} gap={'2'}>
           <>
-            <b>Elverum:</b>
+            <b>Oslo:</b>
             {numberInStock !== undefined && <StockTag amount={numberInStock} />}
           </>
           <Button
