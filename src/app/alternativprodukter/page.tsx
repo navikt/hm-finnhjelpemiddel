@@ -10,7 +10,7 @@ import useSWR from 'swr'
 import NextLink from 'next/link'
 import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 import ProductImage from '@/components/ProductImage'
 
 export interface WarehouseStock {
@@ -159,7 +159,7 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
   const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
 
   return (
-    <HStack>
+    <HStack align={'start'} className={styles.alternativeProductContainer}>
       <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
         <HStack justify="space-between">
           <VStack gap={'3'}>
@@ -203,23 +203,29 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
           </Button>
         </HStack>
       </VStack>
-      {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
+
+      {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
+
+      {openWarehouseStock && (
+        <Box padding={'2'}>
+          <Button
+            variant={'tertiary'}
+            size={'small'}
+            icon={<XMarkIcon />}
+            onClick={() => setOpenWarehouseStock(false)}
+            className={styles.closeButton}
+          />
+        </Box>
+      )}
     </HStack>
   )
 }
 
-const WarehouseStatus = ({
-  stocks,
-  setOpenWarehouseStock,
-}: {
-  stocks: WarehouseStock[] | undefined
-  setOpenWarehouseStock: Dispatch<SetStateAction<boolean>>
-}) => {
+const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
   return (
     <Box className={styles.warehouseStatus}>
       <HStack justify={'space-between'} align={'start'} style={{ alignSelf: 'stretch' }}>
         <Label>Lagerstatus</Label>
-        <Button variant={'tertiary'} size={'small'} icon={<XMarkIcon />} onClick={() => setOpenWarehouseStock(false)} />
       </HStack>
       <HGrid gap="2" columns={2} className={styles.centralInfoContainer}>
         {stocks?.map((stock) => (

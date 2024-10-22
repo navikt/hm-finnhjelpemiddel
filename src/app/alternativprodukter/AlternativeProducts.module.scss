@@ -40,9 +40,13 @@
   }
 }
 
-.productContainer {
+.alternativeProductContainer {
   border: 1px solid #909090;
   border-radius: 4px;
+  width: fit-content;
+}
+
+.productContainer {
   width: 410px;
   height: 225px;
 }
@@ -53,9 +57,13 @@
   position: relative;
 }
 
+.closeButton {
+  padding: 5rem;
+}
+
 .warehouseStatus {
   display: flex;
-  padding: 0rem 0rem 2rem 1.125rem;
+  padding: 1rem 0 2rem 1.125rem;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.25rem;
@@ -75,8 +83,4 @@
   align-items: flex-start;
   border-radius: 0.25rem;
   border: 1px solid $a-border-divider;
-
 }
-
-
-
