@@ -235,7 +235,7 @@ const AlternativeProduct = ({
     stockLocation.organisasjons_navn.includes(currentWarehouse!)
   )!
   const numberInStock = currentWarehouseStock
-    ? Math.max(currentWarehouseStock.tilgjengelig - currentW, arehouseStock.behovsmeldt, 0)
+    ? Math.max(currentWarehouseStock.tilgjengelig - currentWarehouseStock.behovsmeldt, 0)
     : undefined
 
   return (
