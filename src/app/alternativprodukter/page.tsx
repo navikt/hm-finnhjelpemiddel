@@ -62,81 +62,27 @@ export default function AlternativeProductsPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [currentWarehouse, setCurrentWarehouse] = useState<{ key: string; value: string } | undefined>(undefined)
+  const [currentWarehouse, setCurrentWarehouse] = useState<string | undefined>()
 
   const warehouseNames = [
-    {
-      key: 'Østfold',
-      value: '*01 Østfold',
-    },
-    {
-      key: 'Oslo',
-      value: '*03 Oslo',
-    },
-    {
-      key: 'Hedmark',
-      value: '*04 Hedmark',
-    },
-    {
-      key: 'Oppland',
-      value: '*05 Oppland',
-    },
-    {
-      key: 'Buskerud',
-      value: '*06 Buskerud',
-    },
-    {
-      key: 'Vestfold',
-      value: '*07 Vestfold',
-    },
-    {
-      key: 'Telemark',
-      value: '*08 Telemark',
-    },
-    {
-      key: 'Aust-Agder',
-      value: '*09 Aust-Agder',
-    },
-    {
-      key: 'Vest-Agder',
-      value: '*10 Vest-Agder',
-    },
-    {
-      key: 'Rogaland',
-      value: '*11 Rogaland',
-    },
-    {
-      key: 'Hordaland',
-      value: '*12 Hordaland',
-    },
-    {
-      key: 'Sogn og Fjordane',
-      value: '*14 Sogn og Fjordane',
-    },
-    {
-      key: 'Møre og Romsdal',
-      value: '*15 Møre og Romsdal',
-    },
-    {
-      key: 'Sør-Trøndelag',
-      value: '*16 Sør-Trøndelag',
-    },
-    {
-      key: 'Nord-Trøndelag',
-      value: '*17 Nord-Trøndelag',
-    },
-    {
-      key: 'Nordland',
-      value: '*18 Nordland',
-    },
-    {
-      key: 'Troms',
-      value: '*19 Troms',
-    },
-    {
-      key: 'Finnmark',
-      value: '*20 Finnmark',
-    },
+    'Østfold',
+    'Oslo',
+    'Hedmark',
+    'Oppland',
+    'Buskerud',
+    'Vestfold',
+    'Telemark',
+    'Aust-Agder',
+    'Vest-Agder',
+    'Rogaland',
+    'Hordaland',
+    'Sogn og Fjordane',
+    'Møre og Romsdal',
+    'Sør-Trøndelag',
+    'Nord-Trøndelag',
+    'Nordland',
+    'Troms',
+    'Finnmark',
   ]
 
   const handleSearch = (value: string) => {
@@ -178,28 +124,34 @@ export default function AlternativeProductsPage() {
           label={'Velg sentral'}
           hideLabel
           className={styles.selectWarehouse}
-          onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it.value === e.target.value))}
+          onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it === e.target.value))}
         >
           <option key={0} value={''}>
             Velg sentral
           </option>
           {warehouseNames &&
             warehouseNames.map((name, i) => (
-              <option key={i + 1} value={name.value}>
-                {name.key}
+              <option key={i + 1} value={name}>
+                {name}
               </option>
             ))}
         </Select>
       </HStack>
 
       {searchParams.has('hms') && (
-        <AlternativeProductList hmsNumber={searchParams.get('hms')!} warehouse={currentWarehouse?.value} />
+        <AlternativeProductList hmsNumber={searchParams.get('hms')!} currentWarehouse={currentWarehouse} />
       )}
     </div>
   )
 }
 
-const AlternativeProductList = ({ hmsNumber, warehouse }: { hmsNumber: string; warehouse?: string | undefined }) => {
+const AlternativeProductList = ({
+  hmsNumber,
+  currentWarehouse,
+}: {
+  hmsNumber: string
+  currentWarehouse?: string | undefined
+}) => {
   const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
     getAlternativeProductsInventory(hmsNumber)
   )
@@ -241,6 +193,7 @@ const AlternativeProductList = ({ hmsNumber, warehouse }: { hmsNumber: string; w
         <AlternativeProduct
           product={products.find((product) => product.variants[0].hmsArtNr === hmsNumber)!}
           stocks={alternativeResponse.original.warehouseStock}
+          currentWarehouse={currentWarehouse}
         />
       </div>
       <div>
@@ -252,7 +205,14 @@ const AlternativeProductList = ({ hmsNumber, warehouse }: { hmsNumber: string; w
             .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
             .map((product) => {
               const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
-              return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
+              return (
+                <AlternativeProduct
+                  product={product}
+                  stocks={stocks}
+                  key={product.id}
+                  currentWarehouse={currentWarehouse}
+                />
+              )
             })}
         </HGrid>
       </div>
@@ -260,11 +220,23 @@ const AlternativeProductList = ({ hmsNumber, warehouse }: { hmsNumber: string; w
   )
 }
 
-const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] | undefined }) => {
+const AlternativeProduct = ({
+  product,
+  stocks,
+  currentWarehouse,
+}: {
+  product: Product
+  stocks: WarehouseStock[] | undefined
+  currentWarehouse?: string | undefined
+}) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const variant = product.variants[0]
-  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
-  const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
+  const currentWarehouseStock = stocks?.find((stockLocation) =>
+    stockLocation.organisasjons_navn.includes(currentWarehouse!)
+  )!
+  const numberInStock = currentWarehouseStock
+    ? Math.max(currentWarehouseStock.tilgjengelig - currentW, arehouseStock.behovsmeldt, 0)
+    : undefined
 
   return (
     <HStack align={'start'} className={styles.alternativeProductContainer}>
@@ -296,10 +268,12 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
           </Box>
         </HStack>
         <HStack align={'center'} justify={'space-between'} gap={'2'}>
-          <>
-            <b>Oslo:</b>
-            {numberInStock !== undefined && <StockTag amount={numberInStock} />}
-          </>
+          {currentWarehouse && (
+            <>
+              <b>{currentWarehouse}:</b>
+              {numberInStock !== undefined && <StockTag amount={numberInStock} />}
+            </>
+          )}
           <Button
             variant={'secondary'}
             size={'small'}
