@@ -89,5 +89,9 @@
 }
 
 .selectWarehouse {
+  width: 27rem;
 
+  &option::before {
+    content: "hei"
+  }
 }

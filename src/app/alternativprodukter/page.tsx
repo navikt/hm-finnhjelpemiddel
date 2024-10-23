@@ -16,16 +16,15 @@ import {
   Tag,
   VStack,
 } from '@navikt/ds-react'
-import { ChevronDownIcon, LocationPinIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import ProductImage from '@/components/ProductImage'
-import { log } from 'next/dist/server/typescript/utils'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -161,44 +160,46 @@ export default function AlternativeProductsPage() {
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
-      <Label>{currentWarehouse ? `Valgt sentral: ${currentWarehouse.key}` : 'Alle sentraler'}</Label>
+      <HStack gap={'7'} justify={'space-between'} align={'end'}>
+        <Search
+          label={'HMS-nummer'}
+          hideLabel={false}
+          variant="secondary"
+          className={styles.search}
+          onSearchClick={(value) => handleSearch(value)}
+          onKeyUp={(event: React.KeyboardEvent) => {
+            if (event.key === 'Enter') {
+              handleSearch((event.currentTarget as HTMLInputElement).value)
+            }
+          }}
+        ></Search>
 
-      <Search
-        label={'HMS-nummer'}
-        hideLabel={false}
-        variant="secondary"
-        className={styles.search}
-        onSearchClick={(value) => handleSearch(value)}
-        onKeyUp={(event: React.KeyboardEvent) => {
-          if (event.key === 'Enter') {
-            handleSearch((event.currentTarget as HTMLInputElement).value)
-          }
-        }}
-      ></Search>
+        <Select
+          label={'Velg sentral'}
+          hideLabel
+          className={styles.selectWarehouse}
+          onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it.value === e.target.value))}
+        >
+          <option key={0} value={''}>
+            Velg sentral
+          </option>
+          {warehouseNames &&
+            warehouseNames.map((name, i) => (
+              <option key={i + 1} value={name.value}>
+                {name.key}
+              </option>
+            ))}
+        </Select>
+      </HStack>
 
-      <Select
-        label={'Velg sentral'}
-        hideLabel
-        className={styles.selectWarehouse}
-        onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it.value === e.target.value))}
-      >
-        <option key={0} value={''}>
-          Velg sentral
-        </option>
-        {warehouseNames &&
-          warehouseNames.map((name, i) => (
-            <option key={i + 1} value={name.value}>
-              {name.key}
-            </option>
-          ))}
-      </Select>
-
-      {searchParams.has('hms') && <AlternativeProductList hmsNumber={searchParams.get('hms')!} />}
+      {searchParams.has('hms') && (
+        <AlternativeProductList hmsNumber={searchParams.get('hms')!} warehouse={currentWarehouse?.value} />
+      )}
     </div>
   )
 }
 
-const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
+const AlternativeProductList = ({ hmsNumber, warehouse }: { hmsNumber: string; warehouse?: string | undefined }) => {
   const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
     getAlternativeProductsInventory(hmsNumber)
   )
