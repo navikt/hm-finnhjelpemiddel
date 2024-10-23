@@ -2,16 +2,30 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
-import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
+import {
+  BodyShort,
+  Box,
+  Button,
+  HGrid,
+  HStack,
+  Label,
+  Link,
+  Loader,
+  Search,
+  Select,
+  Tag,
+  VStack,
+} from '@navikt/ds-react'
+import { ChevronDownIcon, LocationPinIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ProductImage from '@/components/ProductImage'
+import { log } from 'next/dist/server/typescript/utils'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -49,6 +63,82 @@ export default function AlternativeProductsPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [currentWarehouse, setCurrentWarehouse] = useState<{ key: string; value: string } | undefined>(undefined)
+
+  const warehouseNames = [
+    {
+      key: 'Østfold',
+      value: '*01 Østfold',
+    },
+    {
+      key: 'Oslo',
+      value: '*03 Oslo',
+    },
+    {
+      key: 'Hedmark',
+      value: '*04 Hedmark',
+    },
+    {
+      key: 'Oppland',
+      value: '*05 Oppland',
+    },
+    {
+      key: 'Buskerud',
+      value: '*06 Buskerud',
+    },
+    {
+      key: 'Vestfold',
+      value: '*07 Vestfold',
+    },
+    {
+      key: 'Telemark',
+      value: '*08 Telemark',
+    },
+    {
+      key: 'Aust-Agder',
+      value: '*09 Aust-Agder',
+    },
+    {
+      key: 'Vest-Agder',
+      value: '*10 Vest-Agder',
+    },
+    {
+      key: 'Rogaland',
+      value: '*11 Rogaland',
+    },
+    {
+      key: 'Hordaland',
+      value: '*12 Hordaland',
+    },
+    {
+      key: 'Sogn og Fjordane',
+      value: '*14 Sogn og Fjordane',
+    },
+    {
+      key: 'Møre og Romsdal',
+      value: '*15 Møre og Romsdal',
+    },
+    {
+      key: 'Sør-Trøndelag',
+      value: '*16 Sør-Trøndelag',
+    },
+    {
+      key: 'Nord-Trøndelag',
+      value: '*17 Nord-Trøndelag',
+    },
+    {
+      key: 'Nordland',
+      value: '*18 Nordland',
+    },
+    {
+      key: 'Troms',
+      value: '*19 Troms',
+    },
+    {
+      key: 'Finnmark',
+      value: '*20 Finnmark',
+    },
+  ]
 
   const handleSearch = (value: string) => {
     router.replace(`${pathname}?hms=${value}`, {
@@ -71,6 +161,7 @@ export default function AlternativeProductsPage() {
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
+      <Label>{currentWarehouse ? `Valgt sentral: ${currentWarehouse.key}` : 'Alle sentraler'}</Label>
 
       <Search
         label={'HMS-nummer'}
@@ -84,6 +175,23 @@ export default function AlternativeProductsPage() {
           }
         }}
       ></Search>
+
+      <Select
+        label={'Velg sentral'}
+        hideLabel
+        className={styles.selectWarehouse}
+        onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it.value === e.target.value))}
+      >
+        <option key={0} value={''}>
+          Velg sentral
+        </option>
+        {warehouseNames &&
+          warehouseNames.map((name, i) => (
+            <option key={i + 1} value={name.value}>
+              {name.key}
+            </option>
+          ))}
+      </Select>
 
       {searchParams.has('hms') && <AlternativeProductList hmsNumber={searchParams.get('hms')!} />}
     </div>
