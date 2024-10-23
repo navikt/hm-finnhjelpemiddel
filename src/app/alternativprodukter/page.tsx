@@ -2,7 +2,20 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Loader, Search, Tag, VStack } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Box,
+  Button,
+  HGrid,
+  HStack,
+  Label,
+  Link,
+  Loader,
+  Search,
+  Select,
+  Tag,
+  VStack,
+} from '@navikt/ds-react'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
@@ -49,6 +62,28 @@ export default function AlternativeProductsPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [currentWarehouse, setCurrentWarehouse] = useState<string | undefined>()
+
+  const warehouseNames = [
+    'Østfold',
+    'Oslo',
+    'Hedmark',
+    'Oppland',
+    'Buskerud',
+    'Vestfold',
+    'Telemark',
+    'Aust-Agder',
+    'Vest-Agder',
+    'Rogaland',
+    'Hordaland',
+    'Sogn og Fjordane',
+    'Møre og Romsdal',
+    'Sør-Trøndelag',
+    'Nord-Trøndelag',
+    'Nordland',
+    'Troms',
+    'Finnmark',
+  ]
 
   const handleSearch = (value: string) => {
     router.replace(`${pathname}?hms=${value}`, {
@@ -71,26 +106,52 @@ export default function AlternativeProductsPage() {
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
+      <HStack gap={'7'} justify={'space-between'} align={'end'}>
+        <Search
+          label={'HMS-nummer'}
+          hideLabel={false}
+          variant="secondary"
+          className={styles.search}
+          onSearchClick={(value) => handleSearch(value)}
+          onKeyUp={(event: React.KeyboardEvent) => {
+            if (event.key === 'Enter') {
+              handleSearch((event.currentTarget as HTMLInputElement).value)
+            }
+          }}
+        ></Search>
 
-      <Search
-        label={'HMS-nummer'}
-        hideLabel={false}
-        variant="secondary"
-        className={styles.search}
-        onSearchClick={(value) => handleSearch(value)}
-        onKeyUp={(event: React.KeyboardEvent) => {
-          if (event.key === 'Enter') {
-            handleSearch((event.currentTarget as HTMLInputElement).value)
-          }
-        }}
-      ></Search>
+        <Select
+          label={'Velg sentral'}
+          hideLabel
+          className={styles.selectWarehouse}
+          onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it === e.target.value))}
+        >
+          <option key={0} value={''}>
+            Velg sentral
+          </option>
+          {warehouseNames &&
+            warehouseNames.map((name, i) => (
+              <option key={i + 1} value={name}>
+                {name}
+              </option>
+            ))}
+        </Select>
+      </HStack>
 
-      {searchParams.has('hms') && <AlternativeProductList hmsNumber={searchParams.get('hms')!} />}
+      {searchParams.has('hms') && (
+        <AlternativeProductList hmsNumber={searchParams.get('hms')!} currentWarehouse={currentWarehouse} />
+      )}
     </div>
   )
 }
 
-const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
+const AlternativeProductList = ({
+  hmsNumber,
+  currentWarehouse,
+}: {
+  hmsNumber: string
+  currentWarehouse?: string | undefined
+}) => {
   const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
     getAlternativeProductsInventory(hmsNumber)
   )
@@ -132,6 +193,7 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
         <AlternativeProduct
           product={products.find((product) => product.variants[0].hmsArtNr === hmsNumber)!}
           stocks={alternativeResponse.original.warehouseStock}
+          currentWarehouse={currentWarehouse}
         />
       </div>
       <div>
@@ -143,7 +205,14 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
             .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
             .map((product) => {
               const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
-              return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
+              return (
+                <AlternativeProduct
+                  product={product}
+                  stocks={stocks}
+                  key={product.id}
+                  currentWarehouse={currentWarehouse}
+                />
+              )
             })}
         </HGrid>
       </div>
@@ -151,11 +220,23 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
   )
 }
 
-const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: WarehouseStock[] | undefined }) => {
+const AlternativeProduct = ({
+  product,
+  stocks,
+  currentWarehouse,
+}: {
+  product: Product
+  stocks: WarehouseStock[] | undefined
+  currentWarehouse?: string | undefined
+}) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const variant = product.variants[0]
-  const osloStock = stocks?.find((stockLocation) => stockLocation.organisasjons_navn === '*03 Oslo')!
-  const numberInStock = osloStock ? Math.max(osloStock.tilgjengelig - osloStock.behovsmeldt, 0) : undefined
+  const currentWarehouseStock = stocks?.find((stockLocation) =>
+    stockLocation.organisasjons_navn.includes(currentWarehouse!)
+  )!
+  const numberInStock = currentWarehouseStock
+    ? Math.max(currentWarehouseStock.tilgjengelig - currentWarehouseStock.behovsmeldt, 0)
+    : undefined
 
   return (
     <HStack align={'start'} className={styles.alternativeProductContainer}>
@@ -187,10 +268,12 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
           </Box>
         </HStack>
         <HStack align={'center'} justify={'space-between'} gap={'2'}>
-          <>
-            <b>Oslo:</b>
-            {numberInStock !== undefined && <StockTag amount={numberInStock} />}
-          </>
+          {currentWarehouse && (
+            <>
+              <b>{currentWarehouse}:</b>
+              {numberInStock !== undefined && <StockTag amount={numberInStock} />}
+            </>
+          )}
           <Button
             variant={'secondary'}
             size={'small'}
