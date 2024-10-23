@@ -106,7 +106,7 @@ export default function AlternativeProductsPage() {
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
-      <HStack gap={'7'} justify={'space-between'} align={'end'}>
+      <HStack gap={'7'} align={'end'}>
         <Search
           label={'HMS-nummer'}
           hideLabel={false}
