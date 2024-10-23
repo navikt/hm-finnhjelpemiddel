@@ -67,7 +67,7 @@ export default function AlternativeProductsPage() {
   }
 
   return (
-    <div className={`${styles.container} main-wrapper--medium`}>
+    <div className={`${styles.container} main-wrapper--large`}>
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
@@ -223,13 +223,11 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
 const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
   return (
     <Box className={styles.warehouseStatus}>
-      <HStack justify={'space-between'} align={'start'} style={{ alignSelf: 'stretch' }}>
-        <Label>Lagerstatus</Label>
-      </HStack>
-      <HGrid gap="2" columns={2} className={styles.centralInfoContainer}>
+      <Label>Lagerstatus</Label>
+      <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
         {stocks?.map((stock) => (
           <li key={stock.organisasjons_id}>
-            <CentralInfo stock={stock} />
+            <LocationInfo stock={stock} />
           </li>
         ))}
       </HGrid>
@@ -237,11 +235,11 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
   )
 }
 
-const CentralInfo = ({ stock }: { stock: WarehouseStock }) => {
+const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   const amount = stock ? Math.max(stock.tilgjengelig - stock.behovsmeldt, 0) : undefined
   const warehouseName = stock.organisasjons_navn.substring(4)
   return (
-    <HStack className={styles.centralInfo}>
+    <HStack className={styles.locationInfo} gap={'2'}>
       <Label>{warehouseName}</Label>
       {amount !== undefined && <StockTag amount={amount} />}
     </HStack>
