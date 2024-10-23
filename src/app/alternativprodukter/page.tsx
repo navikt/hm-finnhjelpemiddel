@@ -141,7 +141,6 @@ const AlternativeProductList = ({ hmsNumber }: { hmsNumber: string }) => {
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {products
             .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
-            .filter((product) => product.title.length < 25) //todo: fjern denne hacken
             .map((product) => {
               const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
               return <AlternativeProduct product={product} stocks={stocks} key={product.id} />
@@ -162,7 +161,7 @@ const AlternativeProduct = ({ product, stocks }: { product: Product; stocks: War
     <HStack align={'start'} className={styles.alternativeProductContainer}>
       <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
         <HStack justify="space-between">
-          <VStack gap={'3'}>
+          <VStack gap={'3'} className={styles.productProperties}>
             {variant.agreements.length === 0 ? (
               <Label size="small" className={styles.notInAgreementColor}>
                 Ikke på avtale
