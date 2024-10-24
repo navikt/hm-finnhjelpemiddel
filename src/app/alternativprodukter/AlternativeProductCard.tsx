@@ -1,6 +1,6 @@
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/page'
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
@@ -18,7 +18,7 @@ export const AlternativeProductCard = ({
   const stocks = alternativeProduct.stocks
 
   return (
-    <HStack align={'start'} className={styles.alternativeProductContainer}>
+    <Stack align={'start'} direction={{ xs: 'column', lg: 'row' }} className={styles.alternativeProductContainer}>
       <ProductInfo
         alternativeProduct={alternativeProduct}
         setOpenWarehouseStock={setOpenWarehouseStock}
@@ -27,7 +27,7 @@ export const AlternativeProductCard = ({
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
-    </HStack>
+    </Stack>
   )
 }
 
