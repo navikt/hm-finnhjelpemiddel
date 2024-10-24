@@ -14,9 +14,10 @@ import {
   Search,
   Select,
   Tag,
+  UNSAFE_Combobox,
   VStack,
 } from '@navikt/ds-react'
-import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { ChevronDownIcon, LocationPinIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
@@ -63,6 +64,7 @@ export default function AlternativeProductsPage() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [currentWarehouse, setCurrentWarehouse] = useState<string | undefined>()
+  const [warehouseMenuOpen, setWarehouseMenuOpen] = useState(false)
 
   const warehouseNames = [
     'Østfold',
@@ -119,6 +121,25 @@ export default function AlternativeProductsPage() {
             }
           }}
         ></Search>
+
+        <div className={styles.selectWarehouseFancy}>
+          <div className={styles.selectWarehouseMenu}>
+            <LocationPinIcon fontSize={'1.5rem'} aria-hidden className={styles.selectIcon} />
+            <BodyShort>Velg sentral</BodyShort>
+            <Button
+              size={'xsmall'}
+              variant={'tertiary'}
+              icon={<ChevronDownIcon fontSize={'1.5rem'} />}
+              className={styles.selectIcon}
+              onClick={() => setWarehouseMenuOpen(!warehouseMenuOpen)}
+            />
+          </div>
+          {warehouseMenuOpen && (
+            <div className={styles.selectWarehouseList}>
+              <Label>Sentraler</Label>
+            </div>
+          )}
+        </div>
 
         <Select
           label={'Velg sentral'}

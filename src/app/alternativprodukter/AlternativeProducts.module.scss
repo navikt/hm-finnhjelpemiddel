@@ -84,6 +84,58 @@
   border: 1px solid $a-border-divider;
 }
 
+.selectWarehouseFancy {
+  box-shadow: $a-shadow-small;
+  border-radius: 0.5rem;
+  
+  width: 27rem;
+  
+}
+
+.selectWarehouseMenu {
+  background-color: $ny-nav-orange-light;
+
+  min-height: 3rem;
+  padding: 0.5rem;
+  
+  display: grid;
+  gap: $a-spacing-2;
+  justify-items: start;
+  align-items: center;
+  grid-template-columns: 0.5fr 5fr 0.5fr
+}
+
+.selectIcon {
+  color: $ny-nav-purple-dark;
+}
+
+.selectWarehouseList {
+  background-color: white;
+  padding: 0.5rem;
+  
+}
+
 .selectWarehouse {
   width: 27rem;
+
+  --ac-select-text: #99185e;
+  
+  select {
+    border: none;
+    background-color: $ny-nav-orange-light;
+    border-radius: 0.5rem;
+
+    /* Shadow/Small */
+    box-shadow: $a-shadow-small;
+    
+    color: black;
+
+    option {
+      appearance: textfield;
+      background-color: #99185e;
+    }
+  }
+  
+  
 }
+
