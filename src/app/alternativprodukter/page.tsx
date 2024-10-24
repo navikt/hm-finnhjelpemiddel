@@ -58,6 +58,12 @@ export interface AlternativeProductResponse {
   alternatives: ProductStock[]
 }
 
+export interface AlternativeProductData {
+  product: Product
+  stocks: WarehouseStock[]
+  currentWarehouseStock: WarehouseStock | undefined
+}
+
 export default function AlternativeProductsPage() {
   const router = useRouter()
   const pathname = usePathname()
@@ -156,14 +162,19 @@ const AlternativeProductList = ({
     getAlternativeProductsInventory(hmsNumber)
   )
   const alternatives = alternativeResponse?.alternatives
-  const hmsArtNrs = (alternatives?.map((alternative) => alternative.hmsArtNr) ?? []).concat([hmsNumber])
+  const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
 
   const { data: products, isLoading } = useSWR<Product[]>(
     alternativeResponse ? `alternatives-${hmsNumber}` : null,
     () => getProductFromHmsArtNr(hmsArtNrs)
   )
 
-  if (isLoading || !products) {
+  const { data: originalProductResponse, isLoading: isLoadingOriginal } = useSWR<Product[]>(
+    alternativeResponse ? hmsNumber : null,
+    () => getProductFromHmsArtNr([hmsNumber])
+  )
+
+  if (isLoading || isLoadingOriginal || !products || !originalProductResponse) {
     return <Loader />
   }
 
@@ -171,17 +182,41 @@ const AlternativeProductList = ({
     return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
-  products.sort((a, b) => {
-    if (a.variants[0].agreements.length === 0 && b.variants[0].agreements.length === 0) {
+  const mergeData = (product: Product, stocks: WarehouseStock[]): AlternativeProductData => {
+    return {
+      product: product,
+      stocks: stocks,
+      currentWarehouseStock: currentWarehouse
+        ? stocks.find((stockLocation) => stockLocation.organisasjons_navn.includes(currentWarehouse))
+        : undefined,
+    }
+  }
+
+  const originalProduct = mergeData(originalProductResponse[0], alternativeResponse.original.warehouseStock)
+
+  const alternativeProducts: AlternativeProductData[] = products.map((product) => {
+    const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
+    return mergeData(product, stocks)
+  })
+
+  alternativeProducts.sort((a, b) => {
+    if (a.product.variants[0].agreements.length === 0 && b.product.variants[0].agreements.length === 0) {
+      return (
+        (b.currentWarehouseStock ? getNumberInStock(b.currentWarehouseStock) : 0) -
+        (a.currentWarehouseStock ? getNumberInStock(a.currentWarehouseStock) : 0)
+      )
+    }
+    if (a.product.variants[0].agreements.length === 0) {
       return 1
     }
-    if (a.variants[0].agreements.length === 0) {
-      return 0
-    }
-    if (b.variants[0].agreements.length === 0) {
+    if (b.product.variants[0].agreements.length === 0) {
       return -1
     }
-    return b.variants[0].agreements[0].rank - a.variants[0].agreements[0].rank
+    return (
+      a.product.variants[0].agreements[0].rank - b.product.variants[0].agreements[0].rank ||
+      (b.currentWarehouseStock ? getNumberInStock(b.currentWarehouseStock) : 0) -
+        (a.currentWarehouseStock ? getNumberInStock(a.currentWarehouseStock) : 0)
+    )
   })
 
   return (
@@ -190,53 +225,45 @@ const AlternativeProductList = ({
         <Heading size="medium" spacing>
           Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>
         </Heading>
-        <AlternativeProduct
-          product={products.find((product) => product.variants[0].hmsArtNr === hmsNumber)!}
-          stocks={alternativeResponse.original.warehouseStock}
-          currentWarehouse={currentWarehouse}
-        />
+        <AlternativeProduct alternativeProductData={originalProduct} currentWarehouse={currentWarehouse} />
       </div>
       <div>
         <Heading size="medium" spacing>
           Alternative produkter
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-          {products
-            .filter((product) => product.variants[0].hmsArtNr !== hmsNumber)
-            .map((product) => {
-              const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock
-              return (
-                <AlternativeProduct
-                  product={product}
-                  stocks={stocks}
-                  key={product.id}
-                  currentWarehouse={currentWarehouse}
-                />
-              )
-            })}
+          {alternativeProducts.map((alternative) => {
+            return (
+              <AlternativeProduct
+                alternativeProductData={alternative}
+                currentWarehouse={currentWarehouse}
+                key={alternative.product.variants[0]!.id}
+              />
+            )
+          })}
         </HGrid>
       </div>
     </>
   )
 }
 
+const getNumberInStock = (warehouseStock: WarehouseStock) => {
+  return Math.max(warehouseStock.tilgjengelig - warehouseStock.behovsmeldt, 0)
+}
+
 const AlternativeProduct = ({
-  product,
-  stocks,
+  alternativeProductData,
   currentWarehouse,
 }: {
-  product: Product
-  stocks: WarehouseStock[] | undefined
+  alternativeProductData: AlternativeProductData
   currentWarehouse?: string | undefined
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
-  const variant = product.variants[0]
-  const currentWarehouseStock = stocks?.find((stockLocation) =>
-    stockLocation.organisasjons_navn.includes(currentWarehouse!)
-  )!
-  const numberInStock = currentWarehouseStock
-    ? Math.max(currentWarehouseStock.tilgjengelig - currentWarehouseStock.behovsmeldt, 0)
-    : undefined
+  const product = alternativeProductData.product
+  const stocks = alternativeProductData.stocks
+  const variant = alternativeProductData.product.variants[0]
+  const currentWarehouseStock = alternativeProductData.currentWarehouseStock
+  const numberInStock = currentWarehouseStock ? getNumberInStock(currentWarehouseStock) : undefined
 
   return (
     <HStack align={'start'} className={styles.alternativeProductContainer}>
