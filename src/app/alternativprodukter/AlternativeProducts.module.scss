@@ -36,7 +36,8 @@
     padding-bottom: $a-spacing-8;
   }
   @include mixins.for-size(desktop-up) {
-    padding: $a-spacing-14 0;
+    padding-top: $a-spacing-14;
+    padding-bottom: $a-spacing-14;
   }
 }
 
