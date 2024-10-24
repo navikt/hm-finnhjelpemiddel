@@ -62,6 +62,7 @@ export interface AlternativeProductData {
   product: Product
   stocks: WarehouseStock[]
   currentWarehouseStock: WarehouseStock | undefined
+  isInStock: boolean
 }
 
 export default function AlternativeProductsPage() {
@@ -189,6 +190,7 @@ const AlternativeProductList = ({
       currentWarehouseStock: currentWarehouse
         ? stocks.find((stockLocation) => stockLocation.organisasjons_navn.includes(currentWarehouse))
         : undefined,
+      isInStock: !!stocks.find((stock) => getNumberInStock(stock) > 0),
     }
   }
 
@@ -232,15 +234,17 @@ const AlternativeProductList = ({
           Alternative produkter
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-          {alternativeProducts.map((alternative) => {
-            return (
-              <AlternativeProduct
-                alternativeProductData={alternative}
-                currentWarehouse={currentWarehouse}
-                key={alternative.product.variants[0]!.id}
-              />
-            )
-          })}
+          {alternativeProducts
+            .filter((alternative) => alternative.isInStock)
+            .map((alternative) => {
+              return (
+                <AlternativeProduct
+                  alternativeProductData={alternative}
+                  currentWarehouse={currentWarehouse}
+                  key={alternative.product.variants[0]!.id}
+                />
+              )
+            })}
         </HGrid>
       </div>
     </>
