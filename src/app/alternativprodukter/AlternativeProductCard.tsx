@@ -1,5 +1,5 @@
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/page'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
@@ -26,19 +26,7 @@ export const AlternativeProductCard = ({
         currentWarehouse={currentWarehouse}
       />
 
-      {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
-
-      {openWarehouseStock && (
-        <Box padding={'2'}>
-          <Button
-            variant={'tertiary'}
-            size={'small'}
-            icon={<XMarkIcon />}
-            onClick={() => setOpenWarehouseStock(false)}
-            className={styles.closeButton}
-          />
-        </Box>
-      )}
+      {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
     </HStack>
   )
 }
@@ -108,10 +96,25 @@ const ProductInfo = ({
   )
 }
 
-const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
+const WarehouseStatus = ({
+  stocks,
+  setOpenWarehouseStock,
+}: {
+  stocks: WarehouseStock[] | undefined
+  setOpenWarehouseStock: Dispatch<SetStateAction<boolean>>
+}) => {
   return (
-    <Box className={styles.warehouseStatus}>
-      <Label>Lagerstatus</Label>
+    <VStack gap={'4'} className={styles.warehouseStatus}>
+      <HStack gap={'2'} justify={'space-between'} align={'center'}>
+        <Label>Lagerstatus</Label>
+        <Button
+          variant={'tertiary'}
+          size={'small'}
+          icon={<XMarkIcon fontSize={'1.5rem'} />}
+          onClick={() => setOpenWarehouseStock(false)}
+          className={styles.closeButton}
+        />
+      </HStack>
       <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
         {stocks?.map((stock) => (
           <li key={stock.organisasjons_id}>
@@ -119,7 +122,7 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
           </li>
         ))}
       </HGrid>
-    </Box>
+    </VStack>
   )
 }
 
