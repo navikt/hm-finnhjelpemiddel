@@ -34,7 +34,7 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
-import { AlternativeProductResponse } from '@/app/alternativprodukter/page'
+import { AlternativeStockResponse } from '@/app/alternativprodukter/page'
 
 export const PAGE_SIZE = 24
 
@@ -973,7 +973,7 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
   return res.json()
 }
 
-export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeProductResponse> {
+export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeStockResponse> {
   const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
     method: 'GET',
     headers: {
@@ -1148,8 +1148,7 @@ export async function getProductsInPost(agreementId: string, postNr: number): Pr
           },
         },
         {
-          term:
-            { main: true }
+          term: { main: true },
         },
       ],
     },
