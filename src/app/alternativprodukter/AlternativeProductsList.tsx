@@ -2,11 +2,10 @@ import useSWRImmutable from 'swr/immutable'
 import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
 import useSWR from 'swr'
 import { Product } from '@/utils/product-util'
-import { Box, HGrid, HStack, Label, Loader, Tag } from '@navikt/ds-react'
+import { HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React from 'react'
-import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
-import { AlternativeProduct, AlternativeProductResponse, WarehouseStock } from '@/app/alternativprodukter/page'
+import { AlternativeProduct, AlternativeStockResponse, WarehouseStock } from '@/app/alternativprodukter/page'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 
 export const AlternativeProductList = ({
@@ -16,21 +15,30 @@ export const AlternativeProductList = ({
   hmsNumber: string
   currentWarehouse?: string | undefined
 }) => {
-  const { data: alternativeResponse } = useSWRImmutable<AlternativeProductResponse>(`/alternativ/${hmsNumber}`, () =>
-    getAlternativeProductsInventory(hmsNumber)
+  const { data: alternativeResponse, error: alternativeError } = useSWRImmutable<AlternativeStockResponse>(
+    `/alternativ/${hmsNumber}`,
+    () => getAlternativeProductsInventory(hmsNumber)
   )
   const alternatives = alternativeResponse?.alternatives
   const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
 
-  const { data: products, isLoading } = useSWR<Product[]>(
-    alternativeResponse ? `alternatives-${hmsNumber}` : null,
-    () => getProductFromHmsArtNr(hmsArtNrs)
+  const {
+    data: products,
+    isLoading,
+    error: productsError,
+  } = useSWR<Product[]>(alternativeResponse ? `alternatives-${hmsNumber}` : null, () =>
+    getProductFromHmsArtNr(hmsArtNrs)
   )
 
-  const { data: originalProductResponse, isLoading: isLoadingOriginal } = useSWR<Product[]>(
-    alternativeResponse ? hmsNumber : null,
-    () => getProductFromHmsArtNr([hmsNumber])
-  )
+  const {
+    data: originalProductResponse,
+    isLoading: isLoadingOriginal,
+    error: originalProductError,
+  } = useSWR<Product[]>(alternativeResponse ? hmsNumber : null, () => getProductFromHmsArtNr([hmsNumber]))
+
+  if (alternativeError || productsError || originalProductError) {
+    return <>En feil har skjedd ved henting av data</>
+  }
 
   if (isLoading || isLoadingOriginal || !products || !originalProductResponse) {
     return <Loader />

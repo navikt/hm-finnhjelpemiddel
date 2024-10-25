@@ -2,29 +2,10 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import {
-  BodyShort,
-  Box,
-  Button,
-  HGrid,
-  HStack,
-  Label,
-  Link,
-  Loader,
-  Search,
-  Select,
-  Tag,
-  VStack,
-} from '@navikt/ds-react'
-import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
+import { HStack, Search, Select } from '@navikt/ds-react'
 import { Product } from '@/utils/product-util'
-import useSWR from 'swr'
-import NextLink from 'next/link'
-import useSWRImmutable from 'swr/immutable'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
-import ProductImage from '@/components/ProductImage'
 import { AlternativeProductList } from '@/app/alternativprodukter/AlternativeProductsList'
 
 export interface WarehouseStock {
@@ -54,7 +35,7 @@ export interface ProductStock {
   warehouseStock: WarehouseStock[]
 }
 
-export interface AlternativeProductResponse {
+export interface AlternativeStockResponse {
   original: ProductStock
   alternatives: ProductStock[]
 }
