@@ -17,7 +17,9 @@ const stringComparator = (a: string, b: string) => {
 }
 
 export const sortAlphabetically = (keyA: string, keyB: string, desc: boolean = false) => {
-  return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
+  const keyALower = keyA.toLowerCase()
+  const keyBLower = keyB.toLowerCase()
+  return desc ? stringComparator(keyBLower, keyALower) : stringComparator(keyALower, keyBLower)
 }
 
 export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: boolean = false) => {
