@@ -77,10 +77,10 @@ const ProductInfo = ({
       </HStack>
       <HStack align={'center'} justify={'space-between'} gap={'2'}>
         {currentWarehouse && (
-          <>
+          <HStack gap={'2'}>
             <b>{currentWarehouse}:</b>
             {numberInStock !== undefined && <StockTag amount={numberInStock} />}
-          </>
+          </HStack>
         )}
         <Button
           variant={'secondary'}
