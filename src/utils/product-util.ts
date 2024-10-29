@@ -100,9 +100,12 @@ export interface AgreementInfo {
 export interface AlternativeProducti {
   id: string
   title: string
-  variants: ProductVariant[]
-  photos: Photo[]
+  //variants: ProductVariant[]
+  status: 'INACTIVE' | 'ACTIVE'
+  hmsArtNr: string | null
+  imageUri: string | undefined
   supplierName: string
+  agreements: AgreementInfo[]
   warehouseStock: WarehouseStocki[]
 }
 
@@ -118,14 +121,14 @@ export const mapToAlternativeProducts = (data: SearchResponse): AlternativeProdu
 }
 
 export const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProducti => {
-  const variant = mapProductVariant(source)
-
   return {
     id: source.seriesId,
     title: source.title,
-    variants: [variant],
-    photos: mapPhotoInfo(source.media),
+    imageUri: mapPhotoInfo(source.media)[0]?.uri,
+    status: source.status,
+    hmsArtNr: source.hmsArtNr,
     supplierName: source.supplier?.name ?? '',
+    agreements: mapAgreementInfo(source.agreements),
     warehouseStock: source.wareHouseStock.map((stock) => {
       return {
         location: stock.location,

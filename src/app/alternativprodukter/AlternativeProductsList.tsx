@@ -35,7 +35,7 @@ export const AlternativeProductList = ({
 
   //sortAlternativeProducts(alternativeProducts)
 
-  const originalProduct = alts.find((alt) => alt.variants[0].hmsArtNr === hmsNumber)!
+  const originalProduct = alts.find((alt) => alt.hmsArtNr === hmsNumber)!
 
   return (
     <>
@@ -55,7 +55,7 @@ export const AlternativeProductList = ({
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {alts
-            .filter((alternative) => alternative.variants[0].hmsArtNr != hmsNumber)
+            .filter((alternative) => alternative.hmsArtNr != hmsNumber)
             .map((alternative) => {
               return (
                 <AlternativeProductCard
