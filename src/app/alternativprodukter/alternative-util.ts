@@ -22,11 +22,15 @@ export interface WarehouseStock {
   needNotified: number
 }
 
-export const mapToAlternativeProducts = (data: SearchResponse): AlternativeProduct[] => {
+const mapToAlternativeProducts = (data: SearchResponse): AlternativeProduct[] => {
   return data.hits.hits.map((hit: Hit) => mapToAlternativeProduct(hit._source as AlternativeProductSourceResponse))
 }
 
-export const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProduct => {
+const mapToAlternativeProductFromSource = (data: SearchResponse): AlternativeProduct => {
+  return data.hits.hits.map((hit: Hit) => mapToAlternativeProduct(hit._source as AlternativeProductSourceResponse))[0]
+}
+
+const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProduct => {
   return {
     id: source.id,
     title: source.title,
@@ -46,7 +50,25 @@ export const mapToAlternativeProduct = (source: AlternativeProductSourceResponse
   }
 }
 
-export async function getAlternativeProductFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct[]> {
+export async function getOriginalProductFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct> {
+  const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        match: {
+          hmsArtNr: hmsArtNr,
+        },
+      },
+    }),
+  })
+
+  return res.json().then(mapToAlternativeProductFromSource)
+}
+
+export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct[]> {
   const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
     method: 'POST',
     headers: {

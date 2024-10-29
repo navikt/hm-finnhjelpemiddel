@@ -5,7 +5,8 @@ import React from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
-  getAlternativeProductFromHmsArtNr,
+  getAlternativeProductsFromHmsArtNr,
+  getOriginalProductFromHmsArtNr,
   WarehouseStock,
 } from '@/app/alternativprodukter/alternative-util'
 
@@ -17,19 +18,30 @@ export const AlternativeProductList = ({
   currentWarehouse?: string | undefined
 }) => {
   const {
+    data: original,
+    isLoading: isLoadingOrig,
+    error: errorOrig,
+  } = useSWR<AlternativeProduct>(hmsNumber, getOriginalProductFromHmsArtNr)
+
+  const {
     data: alts,
     isLoading: isLoadingAlts,
     error: errorAlts,
-  } = useSWR<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductFromHmsArtNr(hmsNumber))
+  } = useSWR<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
+  console.log(original)
   console.log(alts)
 
-  if (errorAlts) {
+  if (errorAlts || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoadingAlts) {
+  if (isLoadingAlts || isLoadingOrig) {
     return <Loader />
+  }
+
+  if (!original) {
+    return <>Finner ikke produkt {hmsNumber}</>
   }
 
   if (!alts || alts.length == 0) {
@@ -38,8 +50,6 @@ export const AlternativeProductList = ({
 
   sortAlternativeProducts(alts, currentWarehouse)
 
-  const originalProduct = alts.find((alt) => alt.hmsArtNr === hmsNumber)!
-
   return (
     <>
       <div>
@@ -47,9 +57,9 @@ export const AlternativeProductList = ({
           Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>
         </Heading>
         <AlternativeProductCard
-          alternativeProduct={originalProduct}
+          alternativeProduct={original}
           currentWarehouse={currentWarehouse}
-          currentWarehouseStock={getWarehouseStock(currentWarehouse, originalProduct.warehouseStock)}
+          currentWarehouseStock={getWarehouseStock(currentWarehouse, original.warehouseStock)}
         />
       </div>
       <div>
@@ -57,18 +67,16 @@ export const AlternativeProductList = ({
           Alternative produkter
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-          {alts
-            .filter((alternative) => alternative.hmsArtNr != hmsNumber)
-            .map((alternative) => {
-              return (
-                <AlternativeProductCard
-                  alternativeProduct={alternative}
-                  currentWarehouse={currentWarehouse}
-                  currentWarehouseStock={getWarehouseStock(currentWarehouse, alternative.warehouseStock)}
-                  key={alternative.id}
-                />
-              )
-            })}
+          {alts.map((alternative) => {
+            return (
+              <AlternativeProductCard
+                alternativeProduct={alternative}
+                currentWarehouse={currentWarehouse}
+                currentWarehouseStock={getWarehouseStock(currentWarehouse, alternative.warehouseStock)}
+                key={alternative.id}
+              />
+            )
+          })}
         </HGrid>
       </div>
     </>
