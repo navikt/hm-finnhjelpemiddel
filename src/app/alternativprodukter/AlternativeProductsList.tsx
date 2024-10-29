@@ -1,10 +1,13 @@
-import { getAlternativeProductFromHmsArtNr } from '@/utils/api-util'
 import useSWR from 'swr'
-import { AlternativeProducti, WarehouseStocki } from '@/utils/product-util'
 import { HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
+import {
+  AlternativeProduct,
+  getAlternativeProductFromHmsArtNr,
+  WarehouseStock,
+} from '@/app/alternativprodukter/alternative-util'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -17,7 +20,7 @@ export const AlternativeProductList = ({
     data: alts,
     isLoading: isLoadingAlts,
     error: errorAlts,
-  } = useSWR<AlternativeProducti[]>(`alts-${hmsNumber}`, () => getAlternativeProductFromHmsArtNr(hmsNumber))
+  } = useSWR<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductFromHmsArtNr(hmsNumber))
 
   console.log(alts)
 
@@ -72,36 +75,35 @@ export const AlternativeProductList = ({
   )
 }
 
-export const getNumberInStock = (warehouseStock: WarehouseStocki) => {
+export const getNumberInStock = (warehouseStock: WarehouseStock) => {
   return Math.max(warehouseStock.available - warehouseStock.needNotified, 0)
 }
 
 const getWarehouseStock = (
   selectedWarehouse: string | undefined,
-  warehouseStocks: WarehouseStocki[]
-): WarehouseStocki | undefined => {
+  warehouseStocks: WarehouseStock[]
+): WarehouseStock | undefined => {
   return selectedWarehouse
     ? warehouseStocks.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
     : undefined
 }
 
-const sortAlternativeProducts = (alternativeProducts: AlternativeProducti[], currentWarehouse?: string | undefined) => {
+const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], currentWarehouse?: string | undefined) => {
   alternativeProducts.sort((a, b) => {
     const aStock = getWarehouseStock(currentWarehouse, a.warehouseStock)
     const bStock = getWarehouseStock(currentWarehouse, b.warehouseStock)
 
-    if (a.agreements.length === 0 && b.agreements.length === 0) {
+    if (a.highestRank === 0 && b.highestRank === 0) {
       return (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
     }
-    if (a.agreements.length === 0) {
+    if (a.highestRank === 0) {
       return 1
     }
-    if (b.agreements.length === 0) {
+    if (b.highestRank === 0) {
       return -1
     }
     return (
-      a.agreements[0].rank - b.agreements[0].rank ||
-      (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
+      a.highestRank - b.highestRank || (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
     )
   })
 }

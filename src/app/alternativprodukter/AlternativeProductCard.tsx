@@ -5,16 +5,16 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getNumberInStock } from '@/app/alternativprodukter/AlternativeProductsList'
-import { AlternativeProducti, WarehouseStocki } from '@/utils/product-util'
+import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
   currentWarehouse,
   currentWarehouseStock,
 }: {
-  alternativeProduct: AlternativeProducti
+  alternativeProduct: AlternativeProduct
   currentWarehouse?: string | undefined
-  currentWarehouseStock: WarehouseStocki | undefined
+  currentWarehouseStock: WarehouseStock | undefined
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -41,9 +41,9 @@ const ProductInfo = ({
   setOpenWarehouseStock,
   openWarehouseStock,
 }: {
-  alternativeProduct: AlternativeProducti
+  alternativeProduct: AlternativeProduct
   currentWarehouse?: string | undefined
-  currentWarehouseStock: WarehouseStocki | undefined
+  currentWarehouseStock: WarehouseStock | undefined
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
 }) => {
@@ -53,13 +53,13 @@ const ProductInfo = ({
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'3'} className={styles.productProperties}>
-          {alternativeProduct.agreements.length === 0 ? (
+          {alternativeProduct.highestRank === 0 ? (
             <Label size="small" className={styles.notInAgreementColor}>
               Ikke på avtale
             </Label>
           ) : (
             <Label size="small" className={styles.headerColor}>
-              NAV - Rangering {alternativeProduct.agreements[0].rank}
+              NAV - Rangering {alternativeProduct.highestRank}
             </Label>
           )}
           <Link as={NextLink} href={`/produkt/${alternativeProduct.id}`} className={styles.link}>
@@ -102,7 +102,7 @@ const WarehouseStatus = ({
   stocks,
   setOpenWarehouseStock,
 }: {
-  stocks: WarehouseStocki[] | undefined
+  stocks: WarehouseStock[] | undefined
   setOpenWarehouseStock: Dispatch<SetStateAction<boolean>>
 }) => {
   return (
@@ -128,7 +128,7 @@ const WarehouseStatus = ({
   )
 }
 
-const LocationInfo = ({ stock }: { stock: WarehouseStocki }) => {
+const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   const amount = stock ? Math.max(stock.available - stock.needNotified, 0) : undefined
   const warehouseName = stock.location.substring(4)
   return (

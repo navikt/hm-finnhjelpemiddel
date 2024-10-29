@@ -97,49 +97,6 @@ export interface AgreementInfo {
   expired: string
 }
 
-export interface AlternativeProducti {
-  id: string
-  title: string
-  //variants: ProductVariant[]
-  status: 'INACTIVE' | 'ACTIVE'
-  hmsArtNr: string | null
-  imageUri: string | undefined
-  supplierName: string
-  agreements: AgreementInfo[]
-  warehouseStock: WarehouseStocki[]
-}
-
-export interface WarehouseStocki {
-  location: string
-  available: number
-  reserved: number
-  needNotified: number
-}
-
-export const mapToAlternativeProducts = (data: SearchResponse): AlternativeProducti[] => {
-  return data.hits.hits.map((hit: Hit) => mapToAlternativeProduct(hit._source as AlternativeProductSourceResponse))
-}
-
-export const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProducti => {
-  return {
-    id: source.id,
-    title: source.title,
-    imageUri: mapPhotoInfo(source.media)[0]?.uri,
-    status: source.status,
-    hmsArtNr: source.hmsArtNr,
-    supplierName: source.supplier?.name ?? '',
-    agreements: mapAgreementInfo(source.agreements),
-    warehouseStock: source.wareHouseStock.map((stock) => {
-      return {
-        location: stock.location,
-        available: stock.available,
-        reserved: stock.reserved,
-        needNotified: stock.needNotified,
-      }
-    }),
-  }
-}
-
 export const wheelchairFilters = ['Setebredde min', 'Setebredde maks', 'Setedybde min', 'Setedybde maks'] as const
 
 export type WheelchairFilter = (typeof wheelchairFilters)[number]
