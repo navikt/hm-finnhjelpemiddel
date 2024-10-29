@@ -33,7 +33,7 @@ export const AlternativeProductList = ({
     return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
-  //sortAlternativeProducts(alternativeProducts)
+  sortAlternativeProducts(alts, currentWarehouse)
 
   const originalProduct = alts.find((alt) => alt.hmsArtNr === hmsNumber)!
 
@@ -85,28 +85,23 @@ const getWarehouseStock = (
     : undefined
 }
 
-/*
-const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[]) => {
+const sortAlternativeProducts = (alternativeProducts: AlternativeProducti[], currentWarehouse?: string | undefined) => {
   alternativeProducts.sort((a, b) => {
-    if (a.product.variants[0].agreements.length === 0 && b.product.variants[0].agreements.length === 0) {
-      return (
-        (b.currentWarehouseStock ? getNumberInStock(b.currentWarehouseStock) : 0) -
-        (a.currentWarehouseStock ? getNumberInStock(a.currentWarehouseStock) : 0)
-      )
+    const aStock = getWarehouseStock(currentWarehouse, a.warehouseStock)
+    const bStock = getWarehouseStock(currentWarehouse, b.warehouseStock)
+
+    if (a.agreements.length === 0 && b.agreements.length === 0) {
+      return (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
     }
-    if (a.product.variants[0].agreements.length === 0) {
+    if (a.agreements.length === 0) {
       return 1
     }
-    if (b.product.variants[0].agreements.length === 0) {
+    if (b.agreements.length === 0) {
       return -1
     }
     return (
-      a.product.variants[0].agreements[0].rank - b.product.variants[0].agreements[0].rank ||
-      (b.currentWarehouseStock ? getNumberInStock(b.currentWarehouseStock) : 0) -
-        (a.currentWarehouseStock ? getNumberInStock(a.currentWarehouseStock) : 0)
+      a.agreements[0].rank - b.agreements[0].rank ||
+      (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
     )
   })
 }
-
-
- */
