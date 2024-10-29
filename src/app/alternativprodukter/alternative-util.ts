@@ -35,7 +35,7 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
     seriesId: source.seriesId,
     id: source.id,
     title: source.title,
-    imageUri: source.media[0].uri,
+    imageUri: source.media.filter((media) => media.type === 'IMAGE').sort((a, b) => a.priority - b.priority)[0]?.uri,
     status: source.status,
     hmsArtNr: source.hmsArtNr,
     supplierName: source.supplier?.name ?? '',
