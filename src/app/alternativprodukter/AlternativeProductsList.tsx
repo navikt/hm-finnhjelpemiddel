@@ -9,6 +9,7 @@ import {
   getOriginalProductFromHmsArtNr,
   WarehouseStock,
 } from '@/app/alternativprodukter/alternative-util'
+import useSWRImmutable from 'swr/immutable'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -21,13 +22,13 @@ export const AlternativeProductList = ({
     data: original,
     isLoading: isLoadingOrig,
     error: errorOrig,
-  } = useSWR<AlternativeProduct>(hmsNumber, getOriginalProductFromHmsArtNr)
+  } = useSWRImmutable<AlternativeProduct>(hmsNumber, getOriginalProductFromHmsArtNr)
 
   const {
     data: alts,
     isLoading: isLoadingAlts,
     error: errorAlts,
-  } = useSWR<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
+  } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
   if (errorAlts || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
