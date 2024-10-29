@@ -87,11 +87,6 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
                       alternativeFor: hmsArtNr,
                     },
                   },
-                  {
-                    match: {
-                      hmsArtNr: hmsArtNr,
-                    },
-                  },
                 ],
               },
             },
