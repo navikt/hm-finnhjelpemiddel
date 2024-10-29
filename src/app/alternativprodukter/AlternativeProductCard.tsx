@@ -87,7 +87,7 @@ const ProductInfo = ({
         <Button
           variant={'secondary'}
           size={'small'}
-          icon={<ChevronDownIcon />}
+          icon={<ChevronDownIcon aria-hidden />}
           iconPosition={'right'}
           onClick={() => setOpenWarehouseStock(!openWarehouseStock)}
         >
@@ -111,18 +111,15 @@ const WarehouseStatus = ({
         <Label>Lagerstatus</Label>
         <Button
           variant={'tertiary'}
+          title={'Lukk'}
           size={'small'}
-          icon={<XMarkIcon fontSize={'1.5rem'} />}
+          icon={<XMarkIcon fontSize={'1.5rem'} aria-hidden />}
           onClick={() => setOpenWarehouseStock(false)}
           className={styles.closeButton}
         />
       </HStack>
       <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
-        {stocks?.map((stock) => (
-          <li key={stock.location}>
-            <LocationInfo stock={stock} />
-          </li>
-        ))}
+        {stocks?.map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
       </HGrid>
     </VStack>
   )
