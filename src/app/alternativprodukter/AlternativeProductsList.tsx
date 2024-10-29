@@ -4,7 +4,6 @@ import { AlternativeProducti, WarehouseStocki } from '@/utils/product-util'
 import { HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React from 'react'
-import { AlternativeProduct } from '@/app/alternativprodukter/page'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 
 export const AlternativeProductList = ({
@@ -14,24 +13,6 @@ export const AlternativeProductList = ({
   hmsNumber: string
   currentWarehouse?: string | undefined
 }) => {
-  /*
-  const { data: alternativeResponse, error: alternativeError } = useSWRImmutable<AlternativeStockResponse>(
-    `/alternativ/${hmsNumber}`,
-    () => getAlternativeProductsInventory(hmsNumber)
-  )
-  const alternatives = alternativeResponse?.alternatives
-  const hmsArtNrs = alternatives?.map((alternative) => alternative.hmsArtNr) ?? []
-
-  const {
-    data: products,
-    isLoading,
-    error: productsError,
-  } = useSWR<Product[]>(alternativeResponse ? `alternatives-${hmsNumber}` : null, () =>
-    getProductFromHmsArtNr(hmsArtNrs)
-  )
-
-
-   */
   const {
     data: alts,
     isLoading: isLoadingAlts,
@@ -52,13 +33,9 @@ export const AlternativeProductList = ({
     return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
-  const alternativeProducts: AlternativeProduct[] = alts.map((alt) => {
-    return mapToAlternativeProduct(currentWarehouse, alt)
-  })
-
   //sortAlternativeProducts(alternativeProducts)
 
-  const originalProduct = alternativeProducts.find((alt) => alt.alternativeProduct.variants[0].hmsArtNr === hmsNumber)!
+  const originalProduct = alts.find((alt) => alt.variants[0].hmsArtNr === hmsNumber)!
 
   return (
     <>
@@ -66,21 +43,26 @@ export const AlternativeProductList = ({
         <Heading size="medium" spacing>
           Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>
         </Heading>
-        <AlternativeProductCard alternativeProduct={originalProduct} currentWarehouse={currentWarehouse} />
+        <AlternativeProductCard
+          alternativeProduct={originalProduct}
+          currentWarehouse={currentWarehouse}
+          currentWarehouseStock={getWarehouseStock(currentWarehouse, originalProduct.warehouseStock)}
+        />
       </div>
       <div>
         <Heading size="medium" spacing>
           Alternative produkter
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-          {alternativeProducts
-            .filter((alternative) => alternative.alternativeProduct.variants[0].hmsArtNr != hmsNumber)
+          {alts
+            .filter((alternative) => alternative.variants[0].hmsArtNr != hmsNumber)
             .map((alternative) => {
               return (
                 <AlternativeProductCard
                   alternativeProduct={alternative}
                   currentWarehouse={currentWarehouse}
-                  key={alternative.alternativeProduct.id}
+                  currentWarehouseStock={getWarehouseStock(currentWarehouse, alternative.warehouseStock)}
+                  key={alternative.id}
                 />
               )
             })}
@@ -94,18 +76,13 @@ export const getNumberInStock = (warehouseStock: WarehouseStocki) => {
   return Math.max(warehouseStock.available - warehouseStock.needNotified, 0)
 }
 
-const mapToAlternativeProduct = (
-  currentWarehouse: string | undefined,
-  alternativeProduct: AlternativeProducti
-): AlternativeProduct => {
-  return {
-    alternativeProduct: alternativeProduct,
-    stocks: alternativeProduct.warehouseStock,
-    currentWarehouseStock: currentWarehouse
-      ? alternativeProduct.warehouseStock.find((stockLocation) => stockLocation.location.includes(currentWarehouse))
-      : undefined,
-    isInStock: !!alternativeProduct.warehouseStock.find((stock) => getNumberInStock(stock) > 0),
-  }
+const getWarehouseStock = (
+  selectedWarehouse: string | undefined,
+  warehouseStocks: WarehouseStocki[]
+): WarehouseStocki | undefined => {
+  return selectedWarehouse
+    ? warehouseStocks.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
+    : undefined
 }
 
 /*

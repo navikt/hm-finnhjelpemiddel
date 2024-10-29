@@ -1,4 +1,3 @@
-import { AlternativeProduct } from '@/app/alternativprodukter/page'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
@@ -6,17 +5,19 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getNumberInStock } from '@/app/alternativprodukter/AlternativeProductsList'
-import { WarehouseStocki } from '@/utils/product-util'
+import { AlternativeProducti, WarehouseStocki } from '@/utils/product-util'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
   currentWarehouse,
+  currentWarehouseStock,
 }: {
-  alternativeProduct: AlternativeProduct
+  alternativeProduct: AlternativeProducti
   currentWarehouse?: string | undefined
+  currentWarehouseStock: WarehouseStocki | undefined
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
-  const stocks = alternativeProduct.stocks
+  const stocks = alternativeProduct.warehouseStock
 
   return (
     <Stack align={'start'} direction={{ xs: 'column', lg: 'row' }} className={styles.alternativeProductContainer}>
@@ -25,6 +26,7 @@ export const AlternativeProductCard = ({
         setOpenWarehouseStock={setOpenWarehouseStock}
         openWarehouseStock={openWarehouseStock}
         currentWarehouse={currentWarehouse}
+        currentWarehouseStock={currentWarehouseStock}
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
@@ -35,17 +37,17 @@ export const AlternativeProductCard = ({
 const ProductInfo = ({
   alternativeProduct,
   currentWarehouse,
+  currentWarehouseStock,
   setOpenWarehouseStock,
   openWarehouseStock,
 }: {
-  alternativeProduct: AlternativeProduct
+  alternativeProduct: AlternativeProducti
   currentWarehouse?: string | undefined
+  currentWarehouseStock: WarehouseStocki | undefined
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
 }) => {
-  const product = alternativeProduct.alternativeProduct
-  const variant = alternativeProduct.alternativeProduct.variants[0]
-  const currentWarehouseStock = alternativeProduct.currentWarehouseStock
+  const variant = alternativeProduct.variants[0]
   const numberInStock = currentWarehouseStock ? getNumberInStock(currentWarehouseStock) : undefined
 
   return (
@@ -61,19 +63,19 @@ const ProductInfo = ({
               NAV - Rangering {variant.agreements[0].rank}
             </Label>
           )}
-          <Link as={NextLink} href={`/produkt/${product.id}`} className={styles.link}>
-            {product.title}
+          <Link as={NextLink} href={`/produkt/${alternativeProduct.id}`} className={styles.link}>
+            {alternativeProduct.title}
           </Link>
           {variant.status === 'INACTIVE' && (
             <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
               Utgått
             </Tag>
           )}
-          <BodyShort size="small">{product.supplierName}</BodyShort>
+          <BodyShort size="small">{alternativeProduct.supplierName}</BodyShort>
           <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
         </VStack>
         <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-          <ProductImage src={product.photos[0]?.uri} productTitle={'produktbilde'}></ProductImage>
+          <ProductImage src={alternativeProduct.photos[0]?.uri} productTitle={'produktbilde'}></ProductImage>
         </Box>
       </HStack>
       <HStack align={'center'} justify={'space-between'} gap={'2'}>

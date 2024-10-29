@@ -3,7 +3,6 @@
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
 import { HStack, Search, Select } from '@navikt/ds-react'
-import { AlternativeProducti, WarehouseStocki } from '@/utils/product-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { AlternativeProductList } from '@/app/alternativprodukter/AlternativeProductsList'
@@ -38,13 +37,6 @@ export interface ProductStock {
 export interface AlternativeStockResponse {
   original: ProductStock
   alternatives: ProductStock[]
-}
-
-export interface AlternativeProduct {
-  alternativeProduct: AlternativeProducti
-  stocks: WarehouseStocki[]
-  currentWarehouseStock: WarehouseStocki | undefined
-  isInStock: boolean
 }
 
 export default function AlternativeProductsPage() {
