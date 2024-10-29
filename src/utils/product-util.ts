@@ -122,7 +122,7 @@ export const mapToAlternativeProducts = (data: SearchResponse): AlternativeProdu
 
 export const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProducti => {
   return {
-    id: source.seriesId,
+    id: source.id,
     title: source.title,
     imageUri: mapPhotoInfo(source.media)[0]?.uri,
     status: source.status,
