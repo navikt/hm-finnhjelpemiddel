@@ -62,7 +62,7 @@ const ProductInfo = ({
               NAV - Rangering {alternativeProduct.highestRank}
             </Label>
           )}
-          <Link as={NextLink} href={`/produkt/${alternativeProduct.id}`} className={styles.link}>
+          <Link as={NextLink} href={`/produkt/${alternativeProduct.seriesId}`} className={styles.link}>
             {alternativeProduct.title}
           </Link>
           {alternativeProduct.status === 'INACTIVE' && (

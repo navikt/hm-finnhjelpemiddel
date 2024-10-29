@@ -4,9 +4,9 @@ import { AlternativeProductSourceResponse, Hit, SearchResponse } from '@/utils/r
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 
 export interface AlternativeProduct {
+  seriesId: string
   id: string
   title: string
-  //variants: ProductVariant[]
   status: 'INACTIVE' | 'ACTIVE'
   hmsArtNr: string | null
   imageUri: string | undefined
@@ -32,6 +32,7 @@ const mapToAlternativeProductFromSource = (data: SearchResponse): AlternativePro
 
 const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProduct => {
   return {
+    seriesId: source.seriesId,
     id: source.id,
     title: source.title,
     imageUri: source.media[0].uri,
