@@ -29,9 +29,6 @@ export const AlternativeProductList = ({
     error: errorAlts,
   } = useSWR<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
-  console.log(original)
-  console.log(alts)
-
   if (errorAlts || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
   }
