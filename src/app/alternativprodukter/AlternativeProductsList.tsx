@@ -1,11 +1,10 @@
-import useSWRImmutable from 'swr/immutable'
-import { getAlternativeProductsInventory, getProductFromHmsArtNr } from '@/utils/api-util'
+import { getAlternativeProductFromHmsArtNr } from '@/utils/api-util'
 import useSWR from 'swr'
-import { Product } from '@/utils/product-util'
+import { AlternativeProducti, WarehouseStocki } from '@/utils/product-util'
 import { HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React from 'react'
-import { AlternativeProduct, AlternativeStockResponse, WarehouseStock } from '@/app/alternativprodukter/page'
+import { AlternativeProduct } from '@/app/alternativprodukter/page'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 
 export const AlternativeProductList = ({
@@ -15,6 +14,7 @@ export const AlternativeProductList = ({
   hmsNumber: string
   currentWarehouse?: string | undefined
 }) => {
+  /*
   const { data: alternativeResponse, error: alternativeError } = useSWRImmutable<AlternativeStockResponse>(
     `/alternativ/${hmsNumber}`,
     () => getAlternativeProductsInventory(hmsNumber)
@@ -30,36 +30,35 @@ export const AlternativeProductList = ({
     getProductFromHmsArtNr(hmsArtNrs)
   )
 
-  const {
-    data: originalProductResponse,
-    isLoading: isLoadingOriginal,
-    error: originalProductError,
-  } = useSWR<Product[]>(alternativeResponse ? hmsNumber : null, () => getProductFromHmsArtNr([hmsNumber]))
 
-  if (alternativeError || productsError || originalProductError) {
+   */
+  const {
+    data: alts,
+    isLoading: isLoadingAlts,
+    error: errorAlts,
+  } = useSWR<AlternativeProducti[]>(`alts-${hmsNumber}`, () => getAlternativeProductFromHmsArtNr(hmsNumber))
+
+  console.log(alts)
+
+  if (errorAlts) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoading || isLoadingOriginal || !products || !originalProductResponse) {
+  if (isLoadingAlts) {
     return <Loader />
   }
 
-  if (!alternatives || alternatives.length == 0) {
+  if (!alts || alts.length == 0) {
     return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
-  const originalProduct = mapToAlternativeProduct(
-    currentWarehouse,
-    originalProductResponse[0],
-    alternativeResponse.original.warehouseStock
-  )
-
-  const alternativeProducts: AlternativeProduct[] = products.map((product) => {
-    const stocks = alternatives.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
-    return mapToAlternativeProduct(currentWarehouse, product, stocks)
+  const alternativeProducts: AlternativeProduct[] = alts.map((alt) => {
+    return mapToAlternativeProduct(currentWarehouse, alt)
   })
 
-  sortAlternativeProducts(alternativeProducts)
+  //sortAlternativeProducts(alternativeProducts)
+
+  const originalProduct = alternativeProducts.find((alt) => alt.alternativeProduct.variants[0].hmsArtNr === hmsNumber)!
 
   return (
     <>
@@ -75,13 +74,13 @@ export const AlternativeProductList = ({
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {alternativeProducts
-            .filter((alternative) => alternative.isInStock)
+            .filter((alternative) => alternative.alternativeProduct.variants[0].hmsArtNr != hmsNumber)
             .map((alternative) => {
               return (
                 <AlternativeProductCard
                   alternativeProduct={alternative}
                   currentWarehouse={currentWarehouse}
-                  key={alternative.product.variants[0]!.id}
+                  key={alternative.alternativeProduct.id}
                 />
               )
             })}
@@ -91,25 +90,25 @@ export const AlternativeProductList = ({
   )
 }
 
-export const getNumberInStock = (warehouseStock: WarehouseStock) => {
-  return Math.max(warehouseStock.tilgjengelig - warehouseStock.behovsmeldt, 0)
+export const getNumberInStock = (warehouseStock: WarehouseStocki) => {
+  return Math.max(warehouseStock.available - warehouseStock.needNotified, 0)
 }
 
 const mapToAlternativeProduct = (
   currentWarehouse: string | undefined,
-  product: Product,
-  stocks: WarehouseStock[]
+  alternativeProduct: AlternativeProducti
 ): AlternativeProduct => {
   return {
-    product: product,
-    stocks: stocks,
+    alternativeProduct: alternativeProduct,
+    stocks: alternativeProduct.warehouseStock,
     currentWarehouseStock: currentWarehouse
-      ? stocks.find((stockLocation) => stockLocation.organisasjons_navn.includes(currentWarehouse))
+      ? alternativeProduct.warehouseStock.find((stockLocation) => stockLocation.location.includes(currentWarehouse))
       : undefined,
-    isInStock: !!stocks.find((stock) => getNumberInStock(stock) > 0),
+    isInStock: !!alternativeProduct.warehouseStock.find((stock) => getNumberInStock(stock) > 0),
   }
 }
 
+/*
 const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[]) => {
   alternativeProducts.sort((a, b) => {
     if (a.product.variants[0].agreements.length === 0 && b.product.variants[0].agreements.length === 0) {
@@ -131,3 +130,6 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[]) => {
     )
   })
 }
+
+
+ */

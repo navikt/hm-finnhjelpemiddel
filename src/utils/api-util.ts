@@ -22,12 +22,14 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
+  AlternativeProducti,
   HMSSuggestionWheelChair,
   mapHMSSuggestionFromSearchResponse,
   mapProductFromSeriesId,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
   mapProductVariant,
+  mapToAlternativeProducts,
   Product,
   ProductVariant,
   wheelchairFilters,
@@ -1004,6 +1006,62 @@ export async function getProductFromHmsArtNr(hmsArtNrs: string[]): Promise<Produ
   })
 
   return res.json().then(mapProductsFromCollapse)
+}
+
+export async function getAlternativeProductFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProducti[]> {
+  const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: [
+            {
+              dis_max: {
+                tie_breaker: 0.7,
+                queries: [
+                  {
+                    match: {
+                      alternativeFor: hmsArtNr,
+                    },
+                  },
+                  {
+                    match: {
+                      hmsArtNr: hmsArtNr,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          filter: [
+            {
+              nested: {
+                path: 'wareHouseStock',
+                query: {
+                  bool: {
+                    must: [
+                      {
+                        range: {
+                          'wareHouseStock.available': {
+                            gte: 1,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    }),
+  })
+
+  return res.json().then(mapToAlternativeProducts)
 }
 
 export async function getProductWithVariantsSuggestions(

@@ -1,4 +1,4 @@
-import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/page'
+import { AlternativeProduct } from '@/app/alternativprodukter/page'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
@@ -6,6 +6,7 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getNumberInStock } from '@/app/alternativprodukter/AlternativeProductsList'
+import { WarehouseStocki } from '@/utils/product-util'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
@@ -42,8 +43,8 @@ const ProductInfo = ({
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
 }) => {
-  const product = alternativeProduct.product
-  const variant = alternativeProduct.product.variants[0]
+  const product = alternativeProduct.alternativeProduct
+  const variant = alternativeProduct.alternativeProduct.variants[0]
   const currentWarehouseStock = alternativeProduct.currentWarehouseStock
   const numberInStock = currentWarehouseStock ? getNumberInStock(currentWarehouseStock) : undefined
 
@@ -100,7 +101,7 @@ const WarehouseStatus = ({
   stocks,
   setOpenWarehouseStock,
 }: {
-  stocks: WarehouseStock[] | undefined
+  stocks: WarehouseStocki[] | undefined
   setOpenWarehouseStock: Dispatch<SetStateAction<boolean>>
 }) => {
   return (
@@ -117,7 +118,7 @@ const WarehouseStatus = ({
       </HStack>
       <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
         {stocks?.map((stock) => (
-          <li key={stock.organisasjons_id}>
+          <li key={stock.location}>
             <LocationInfo stock={stock} />
           </li>
         ))}
@@ -126,9 +127,9 @@ const WarehouseStatus = ({
   )
 }
 
-const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
-  const amount = stock ? Math.max(stock.tilgjengelig - stock.behovsmeldt, 0) : undefined
-  const warehouseName = stock.organisasjons_navn.substring(4)
+const LocationInfo = ({ stock }: { stock: WarehouseStocki }) => {
+  const amount = stock ? Math.max(stock.available - stock.needNotified, 0) : undefined
+  const warehouseName = stock.location.substring(4)
   return (
     <HStack className={styles.locationInfo} gap={'2'}>
       <Label>{warehouseName}</Label>

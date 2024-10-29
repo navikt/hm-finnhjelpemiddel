@@ -1,5 +1,6 @@
 import {
   AgreementInfoResponse,
+  AlternativeProductSourceResponse,
   Hit,
   MediaResponse,
   ProductDocResponse,
@@ -94,6 +95,46 @@ export interface AgreementInfo {
   postNr: number
   postTitle: string
   expired: string
+}
+
+export interface AlternativeProducti {
+  id: string
+  title: string
+  variants: ProductVariant[]
+  photos: Photo[]
+  supplierName: string
+  warehouseStock: WarehouseStocki[]
+}
+
+export interface WarehouseStocki {
+  location: string
+  available: number
+  reserved: number
+  needNotified: number
+}
+
+export const mapToAlternativeProducts = (data: SearchResponse): AlternativeProducti[] => {
+  return data.hits.hits.map((hit: Hit) => mapToAlternativeProduct(hit._source as AlternativeProductSourceResponse))
+}
+
+export const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProducti => {
+  const variant = mapProductVariant(source)
+
+  return {
+    id: source.seriesId,
+    title: source.title,
+    variants: [variant],
+    photos: mapPhotoInfo(source.media),
+    supplierName: source.supplier?.name ?? '',
+    warehouseStock: source.wareHouseStock.map((stock) => {
+      return {
+        location: stock.location,
+        available: stock.available,
+        reserved: stock.reserved,
+        needNotified: stock.needNotified,
+      }
+    }),
+  }
 }
 
 export const wheelchairFilters = ['Setebredde min', 'Setebredde maks', 'Setedybde min', 'Setedybde maks'] as const
@@ -352,7 +393,7 @@ export function validateHTML(input: string | undefined): boolean {
     return false
   }
   const allowedTagsRegex = /<\/?(p|br|strong|italic|ul|li|ol|a)[^>]*>/gi
-  const allTagsRegex = /<\/?[^>]+(>|$)/g;
+  const allTagsRegex = /<\/?[^>]+(>|$)/g
 
   const allowedTags = input.match(allowedTagsRegex) || []
   const allTags = input.match(allTagsRegex) || []
