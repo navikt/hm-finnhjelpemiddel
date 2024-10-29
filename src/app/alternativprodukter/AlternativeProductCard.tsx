@@ -1,4 +1,3 @@
-import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/page'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
@@ -6,16 +5,19 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { getNumberInStock } from '@/app/alternativprodukter/AlternativeProductsList'
+import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
   currentWarehouse,
+  currentWarehouseStock,
 }: {
   alternativeProduct: AlternativeProduct
   currentWarehouse?: string | undefined
+  currentWarehouseStock: WarehouseStock | undefined
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
-  const stocks = alternativeProduct.stocks
+  const stocks = alternativeProduct.warehouseStock
 
   return (
     <Stack align={'start'} direction={{ xs: 'column', lg: 'row' }} className={styles.alternativeProductContainer}>
@@ -24,6 +26,7 @@ export const AlternativeProductCard = ({
         setOpenWarehouseStock={setOpenWarehouseStock}
         openWarehouseStock={openWarehouseStock}
         currentWarehouse={currentWarehouse}
+        currentWarehouseStock={currentWarehouseStock}
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
@@ -34,45 +37,44 @@ export const AlternativeProductCard = ({
 const ProductInfo = ({
   alternativeProduct,
   currentWarehouse,
+  currentWarehouseStock,
   setOpenWarehouseStock,
   openWarehouseStock,
 }: {
   alternativeProduct: AlternativeProduct
   currentWarehouse?: string | undefined
+  currentWarehouseStock: WarehouseStock | undefined
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
 }) => {
-  const product = alternativeProduct.product
-  const variant = alternativeProduct.product.variants[0]
-  const currentWarehouseStock = alternativeProduct.currentWarehouseStock
   const numberInStock = currentWarehouseStock ? getNumberInStock(currentWarehouseStock) : undefined
 
   return (
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'3'} className={styles.productProperties}>
-          {variant.agreements.length === 0 ? (
+          {alternativeProduct.highestRank === 0 ? (
             <Label size="small" className={styles.notInAgreementColor}>
               Ikke på avtale
             </Label>
           ) : (
             <Label size="small" className={styles.headerColor}>
-              NAV - Rangering {variant.agreements[0].rank}
+              NAV - Rangering {alternativeProduct.highestRank}
             </Label>
           )}
-          <Link as={NextLink} href={`/produkt/${product.id}`} className={styles.link}>
-            {product.title}
+          <Link as={NextLink} href={`/produkt/${alternativeProduct.id}`} className={styles.link}>
+            {alternativeProduct.title}
           </Link>
-          {variant.status === 'INACTIVE' && (
+          {alternativeProduct.status === 'INACTIVE' && (
             <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
               Utgått
             </Tag>
           )}
-          <BodyShort size="small">{product.supplierName}</BodyShort>
-          <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
+          <BodyShort size="small">{alternativeProduct.supplierName}</BodyShort>
+          <BodyShort size="small">HMS: {alternativeProduct.hmsArtNr}</BodyShort>
         </VStack>
         <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-          <ProductImage src={product.photos[0]?.uri} productTitle={'produktbilde'}></ProductImage>
+          <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
         </Box>
       </HStack>
       <HStack align={'center'} justify={'space-between'} gap={'2'}>
@@ -85,7 +87,7 @@ const ProductInfo = ({
         <Button
           variant={'secondary'}
           size={'small'}
-          icon={<ChevronDownIcon />}
+          icon={<ChevronDownIcon aria-hidden />}
           iconPosition={'right'}
           onClick={() => setOpenWarehouseStock(!openWarehouseStock)}
         >
@@ -109,29 +111,25 @@ const WarehouseStatus = ({
         <Label>Lagerstatus</Label>
         <Button
           variant={'tertiary'}
+          title={'Lukk'}
           size={'small'}
-          icon={<XMarkIcon fontSize={'1.5rem'} />}
+          icon={<XMarkIcon fontSize={'1.5rem'} aria-hidden />}
           onClick={() => setOpenWarehouseStock(false)}
           className={styles.closeButton}
         />
       </HStack>
       <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
-        {stocks?.map((stock) => (
-          <li key={stock.organisasjons_id}>
-            <LocationInfo stock={stock} />
-          </li>
-        ))}
+        {stocks?.map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
       </HGrid>
     </VStack>
   )
 }
 
 const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
-  const amount = stock ? Math.max(stock.tilgjengelig - stock.behovsmeldt, 0) : undefined
-  const warehouseName = stock.organisasjons_navn.substring(4)
+  const amount = stock ? Math.max(stock.available - stock.needNotified, 0) : undefined
   return (
     <HStack className={styles.locationInfo} gap={'2'}>
-      <Label>{warehouseName}</Label>
+      <Label>{stock.location}</Label>
       {amount !== undefined && <StockTag amount={amount} />}
     </HStack>
   )
