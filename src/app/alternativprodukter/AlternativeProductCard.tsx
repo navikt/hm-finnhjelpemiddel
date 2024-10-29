@@ -130,10 +130,9 @@ const WarehouseStatus = ({
 
 const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   const amount = stock ? Math.max(stock.available - stock.needNotified, 0) : undefined
-  const warehouseName = stock.location.substring(4)
   return (
     <HStack className={styles.locationInfo} gap={'2'}>
-      <Label>{warehouseName}</Label>
+      <Label>{stock.location}</Label>
       {amount !== undefined && <StockTag amount={amount} />}
     </HStack>
   )
