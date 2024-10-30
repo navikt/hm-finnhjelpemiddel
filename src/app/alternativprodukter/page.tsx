@@ -43,7 +43,7 @@ export default function AlternativeProductsPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [currentWarehouse, setCurrentWarehouse] = useState<string | undefined>()
+  const [selectedWarehouse, setSelectedWarehouse] = useState<string | undefined>()
 
   const warehouseNames = [
     'Østfold',
@@ -105,7 +105,7 @@ export default function AlternativeProductsPage() {
           label={'Velg sentral'}
           hideLabel
           className={styles.selectWarehouse}
-          onChange={(e) => setCurrentWarehouse(warehouseNames.find((it) => it === e.target.value))}
+          onChange={(e) => setSelectedWarehouse(warehouseNames.find((it) => it === e.target.value))}
         >
           <option key={0} value={''}>
             Velg sentral
@@ -120,7 +120,7 @@ export default function AlternativeProductsPage() {
       </HStack>
 
       {searchParams.has('hms') && (
-        <AlternativeProductList hmsNumber={searchParams.get('hms')!} currentWarehouse={currentWarehouse} />
+        <AlternativeProductList hmsNumber={searchParams.get('hms')!} selectedWarehouse={selectedWarehouse} />
       )}
     </div>
   )

@@ -12,10 +12,10 @@ import useSWRImmutable from 'swr/immutable'
 
 export const AlternativeProductList = ({
   hmsNumber,
-  currentWarehouse,
+  selectedWarehouse,
 }: {
   hmsNumber: string
-  currentWarehouse?: string | undefined
+  selectedWarehouse?: string | undefined
 }) => {
   const {
     data: original,
@@ -24,16 +24,16 @@ export const AlternativeProductList = ({
   } = useSWRImmutable<AlternativeProduct>(hmsNumber, getOriginalProductFromHmsArtNr)
 
   const {
-    data: alts,
-    isLoading: isLoadingAlts,
-    error: errorAlts,
+    data: alternatives,
+    isLoading: isLoadingAlternatives,
+    error: errorAlternatives,
   } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
-  if (errorAlts || errorOrig) {
+  if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoadingAlts || isLoadingOrig) {
+  if (isLoadingAlternatives || isLoadingOrig) {
     return <Loader />
   }
 
@@ -41,11 +41,11 @@ export const AlternativeProductList = ({
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  if (!alts || alts.length == 0) {
+  if (!alternatives || alternatives.length == 0) {
     return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
   }
 
-  sortAlternativeProducts(alts, currentWarehouse)
+  sortAlternativeProducts(alternatives, selectedWarehouse)
 
   return (
     <>
@@ -55,9 +55,8 @@ export const AlternativeProductList = ({
         </Heading>
         <AlternativeProductCard
           alternativeProduct={original}
-          currentWarehouse={currentWarehouse}
-          currentWarehouseStock={
-            currentWarehouse ? getSelectedWarehouseStock(currentWarehouse, original.warehouseStock) : undefined
+          selectedWarehouseStock={
+            selectedWarehouse ? getSelectedWarehouseStock(selectedWarehouse, original.warehouseStock) : undefined
           }
         />
       </div>
@@ -66,13 +65,14 @@ export const AlternativeProductList = ({
           Alternative produkter
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-          {alts.map((alternative) => {
+          {alternatives.map((alternative) => {
             return (
               <AlternativeProductCard
                 alternativeProduct={alternative}
-                currentWarehouse={currentWarehouse}
-                currentWarehouseStock={
-                  currentWarehouse ? getSelectedWarehouseStock(currentWarehouse, alternative.warehouseStock) : undefined
+                selectedWarehouseStock={
+                  selectedWarehouse
+                    ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
+                    : undefined
                 }
                 key={alternative.id}
               />
@@ -92,11 +92,11 @@ const getSelectedWarehouseStock = (selectedWarehouse: string, warehouseStocks: W
   return stock
 }
 
-const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], currentWarehouse?: string | undefined) => {
+const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], selectedWarehouse?: string | undefined) => {
   alternativeProducts.sort((a, b) => {
-    const stockSort = currentWarehouse
-      ? (getSelectedWarehouseStock(currentWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
-        (getSelectedWarehouseStock(currentWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+    const stockSort = selectedWarehouse
+      ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
+        (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
     return a.highestRank - b.highestRank || stockSort

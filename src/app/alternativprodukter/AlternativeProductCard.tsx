@@ -8,12 +8,10 @@ import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/al
 
 export const AlternativeProductCard = ({
   alternativeProduct,
-  currentWarehouse,
-  currentWarehouseStock,
+  selectedWarehouseStock,
 }: {
   alternativeProduct: AlternativeProduct
-  currentWarehouse?: string | undefined
-  currentWarehouseStock: WarehouseStock | undefined
+  selectedWarehouseStock: WarehouseStock | undefined
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -24,8 +22,7 @@ export const AlternativeProductCard = ({
         alternativeProduct={alternativeProduct}
         setOpenWarehouseStock={setOpenWarehouseStock}
         openWarehouseStock={openWarehouseStock}
-        currentWarehouse={currentWarehouse}
-        currentWarehouseStock={currentWarehouseStock}
+        selectedWarehouseStock={selectedWarehouseStock}
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
@@ -35,18 +32,16 @@ export const AlternativeProductCard = ({
 
 const ProductInfo = ({
   alternativeProduct,
-  currentWarehouse,
-  currentWarehouseStock,
+  selectedWarehouseStock,
   setOpenWarehouseStock,
   openWarehouseStock,
 }: {
   alternativeProduct: AlternativeProduct
-  currentWarehouse?: string | undefined
-  currentWarehouseStock: WarehouseStock | undefined
+  selectedWarehouseStock: WarehouseStock | undefined
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
 }) => {
-  const numberInStock = currentWarehouseStock ? currentWarehouseStock.actualAvailable : undefined
+  const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
 
   return (
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
@@ -77,9 +72,9 @@ const ProductInfo = ({
         </Box>
       </HStack>
       <HStack align={'center'} justify={'space-between'} gap={'2'}>
-        {currentWarehouse && (
+        {selectedWarehouseStock && (
           <HStack gap={'2'}>
-            <b>{currentWarehouse}:</b>
+            <b>{selectedWarehouseStock.location}:</b>
             {numberInStock !== undefined && <StockTag amount={numberInStock} />}
           </HStack>
         )}
