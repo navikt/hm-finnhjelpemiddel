@@ -1,4 +1,3 @@
-import useSWR from 'swr'
 import { HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React from 'react'
@@ -57,7 +56,9 @@ export const AlternativeProductList = ({
         <AlternativeProductCard
           alternativeProduct={original}
           currentWarehouse={currentWarehouse}
-          currentWarehouseStock={getWarehouseStock(currentWarehouse, original.warehouseStock)}
+          currentWarehouseStock={
+            currentWarehouse ? getSelectedWarehouseStock(currentWarehouse, original.warehouseStock) : undefined
+          }
         />
       </div>
       <div>
@@ -70,7 +71,9 @@ export const AlternativeProductList = ({
               <AlternativeProductCard
                 alternativeProduct={alternative}
                 currentWarehouse={currentWarehouse}
-                currentWarehouseStock={getWarehouseStock(currentWarehouse, alternative.warehouseStock)}
+                currentWarehouseStock={
+                  currentWarehouse ? getSelectedWarehouseStock(currentWarehouse, alternative.warehouseStock) : undefined
+                }
                 key={alternative.id}
               />
             )
@@ -81,35 +84,21 @@ export const AlternativeProductList = ({
   )
 }
 
-export const getNumberInStock = (warehouseStock: WarehouseStock) => {
-  return Math.max(warehouseStock.available - warehouseStock.needNotified, 0)
-}
-
-const getWarehouseStock = (
-  selectedWarehouse: string | undefined,
-  warehouseStocks: WarehouseStock[]
-): WarehouseStock | undefined => {
-  return selectedWarehouse
-    ? warehouseStocks.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
-    : undefined
+const getSelectedWarehouseStock = (selectedWarehouse: string, warehouseStocks: WarehouseStock[]): WarehouseStock => {
+  const stock = warehouseStocks.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
+  if (!stock) {
+    throw new Error(`Finner ikke valgt lager: ${selectedWarehouse}`)
+  }
+  return stock
 }
 
 const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], currentWarehouse?: string | undefined) => {
   alternativeProducts.sort((a, b) => {
-    const aStock = getWarehouseStock(currentWarehouse, a.warehouseStock)
-    const bStock = getWarehouseStock(currentWarehouse, b.warehouseStock)
+    const stockSort = currentWarehouse
+      ? (getSelectedWarehouseStock(currentWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
+        (getSelectedWarehouseStock(currentWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+      : 0
 
-    if (a.highestRank === 0 && b.highestRank === 0) {
-      return (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
-    }
-    if (a.highestRank === 0) {
-      return 1
-    }
-    if (b.highestRank === 0) {
-      return -1
-    }
-    return (
-      a.highestRank - b.highestRank || (bStock ? getNumberInStock(bStock) : 0) - (aStock ? getNumberInStock(aStock) : 0)
-    )
+    return a.highestRank - b.highestRank || stockSort
   })
 }

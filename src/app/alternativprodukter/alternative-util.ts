@@ -12,6 +12,7 @@ export interface AlternativeProduct {
   imageUri: string | undefined
   supplierName: string
   highestRank: number
+  onAgreement: boolean
   warehouseStock: WarehouseStock[]
 }
 
@@ -20,6 +21,7 @@ export interface WarehouseStock {
   available: number
   reserved: number
   needNotified: number
+  actualAvailable: number
 }
 
 const mapToAlternativeProducts = (data: SearchResponse): AlternativeProduct[] => {
@@ -39,13 +41,15 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
     status: source.status,
     hmsArtNr: source.hmsArtNr,
     supplierName: source.supplier?.name ?? '',
-    highestRank: Math.max(...source.agreements.map((agreement) => agreement.rank), 0),
+    highestRank: source.agreements.length > 0 ? Math.max(...source.agreements.map((agreement) => agreement.rank)) : 99,
+    onAgreement: source.agreements.length > 0,
     warehouseStock: source.wareHouseStock.map((stock) => {
       return {
         location: stock.location,
         available: stock.available,
         reserved: stock.reserved,
         needNotified: stock.needNotified,
+        actualAvailable: stock.available - stock.needNotified,
       }
     }),
   }

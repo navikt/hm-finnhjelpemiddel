@@ -4,7 +4,6 @@ import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { getNumberInStock } from '@/app/alternativprodukter/AlternativeProductsList'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 
 export const AlternativeProductCard = ({
@@ -47,19 +46,19 @@ const ProductInfo = ({
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
 }) => {
-  const numberInStock = currentWarehouseStock ? getNumberInStock(currentWarehouseStock) : undefined
+  const numberInStock = currentWarehouseStock ? currentWarehouseStock.actualAvailable : undefined
 
   return (
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'3'} className={styles.productProperties}>
-          {alternativeProduct.highestRank === 0 ? (
-            <Label size="small" className={styles.notInAgreementColor}>
-              Ikke på avtale
-            </Label>
-          ) : (
+          {alternativeProduct.onAgreement ? (
             <Label size="small" className={styles.headerColor}>
               NAV - Rangering {alternativeProduct.highestRank}
+            </Label>
+          ) : (
+            <Label size="small" className={styles.notInAgreementColor}>
+              Ikke på avtale
             </Label>
           )}
           <Link as={NextLink} href={`/produkt/${alternativeProduct.seriesId}`} className={styles.link}>
