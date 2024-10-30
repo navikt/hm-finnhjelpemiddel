@@ -1,4 +1,4 @@
-import { HGrid, Loader } from '@navikt/ds-react'
+import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
@@ -41,11 +41,9 @@ export const AlternativeProductList = ({
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  if (!alternatives || alternatives.length == 0) {
-    return <>{hmsNumber} har ingen kjente alternativer for gjenbruk</>
+  if (alternatives) {
+    sortAlternativeProducts(alternatives, selectedWarehouse)
   }
-
-  sortAlternativeProducts(alternatives, selectedWarehouse)
 
   return (
     <>
@@ -65,19 +63,23 @@ export const AlternativeProductList = ({
           Alternative produkter
         </Heading>
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
-          {alternatives.map((alternative) => {
-            return (
-              <AlternativeProductCard
-                alternativeProduct={alternative}
-                selectedWarehouseStock={
-                  selectedWarehouse
-                    ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
-                    : undefined
-                }
-                key={alternative.id}
-              />
-            )
-          })}
+          {alternatives && alternatives.length > 0 ? (
+            alternatives?.map((alternative) => {
+              return (
+                <AlternativeProductCard
+                  alternativeProduct={alternative}
+                  selectedWarehouseStock={
+                    selectedWarehouse
+                      ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
+                      : undefined
+                  }
+                  key={alternative.id}
+                />
+              )
+            })
+          ) : (
+            <BodyShort>Ingen kjente alternativer for produktet på lager</BodyShort>
+          )}
         </HGrid>
       </div>
     </>
