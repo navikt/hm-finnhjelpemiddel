@@ -195,13 +195,14 @@
 }
 
 .photo-slider-small {
-  height: 100%;
+  height: auto;
 
   .navigation-bar {
     width: 100%;
     max-width: 400px;
 
     @include mixins.for-size(tablet-up) {
+      height: auto;
       width: 400px;
     }
   }
@@ -212,7 +213,7 @@
   }
 
   .photo-container {
-    height: 390px;
+    height: auto;
 
     @include mixins.for-size(desktop-up) {
       height: 480px;
@@ -226,6 +227,7 @@
     padding: $a-spacing-4 $a-spacing-2;
 
     @include mixins.for-size(tablet-up) {
+      height: auto;
       padding: $a-spacing-8 $a-spacing-4;
     }
 
