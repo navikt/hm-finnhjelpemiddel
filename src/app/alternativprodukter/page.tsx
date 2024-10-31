@@ -4,7 +4,7 @@ import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
 import { HStack, Search, Select } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/alternativprodukter/AlternativeProductsList'
 
 export interface WarehouseStock {
@@ -43,6 +43,7 @@ export default function AlternativeProductsPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const localStorageWarehouseKey = 'selectedWarehouse'
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | undefined>()
 
   const warehouseNames = [
@@ -70,6 +71,18 @@ export default function AlternativeProductsPage() {
     router.replace(`${pathname}?hms=${value}`, {
       scroll: false,
     })
+  }
+
+  useEffect(() => {
+    setSelectedWarehouse(localStorage.getItem(localStorageWarehouseKey) ?? undefined)
+  }, [])
+
+  const changeSelectedWarehouse = (value: string) => {
+    const name = warehouseNames.find((it) => it === value) ?? ''
+    setSelectedWarehouse(name)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(localStorageWarehouseKey, name)
+    }
   }
 
   if (
@@ -105,7 +118,8 @@ export default function AlternativeProductsPage() {
           label={'Velg sentral'}
           hideLabel
           className={styles.selectWarehouse}
-          onChange={(e) => setSelectedWarehouse(warehouseNames.find((it) => it === e.target.value))}
+          onChange={(e) => changeSelectedWarehouse(e.target.value)}
+          value={selectedWarehouse ?? ''}
         >
           <option key={0} value={''}>
             Velg sentral
