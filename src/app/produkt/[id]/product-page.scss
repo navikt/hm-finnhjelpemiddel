@@ -195,13 +195,14 @@
 }
 
 .photo-slider-small {
-  height: 100%;
+  height: auto;
 
   .navigation-bar {
     width: 100%;
     max-width: 400px;
 
     @include mixins.for-size(tablet-up) {
+      height: auto;
       width: 400px;
     }
   }
@@ -212,10 +213,22 @@
   }
 
   .photo-container {
-    height: 390px;
+    /*    height: 390px;*/
+    min-height: 390px;
+    max-height: 480px;
+    height: auto;
+
+    @include mixins.for-size(tablet-up) {
+      min-height: 350px;
+      max-height: 400px;
+      height: auto;
+      width: 400px;
+    }
 
     @include mixins.for-size(desktop-up) {
-      height: 480px;
+      min-height: 390px;
+      max-height: 480px;
+      height: auto;
     }
 
     overflow: hidden;
