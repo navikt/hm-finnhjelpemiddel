@@ -49,7 +49,7 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
         available: stock.available,
         reserved: stock.reserved,
         needNotified: stock.needNotified,
-        actualAvailable: stock.available - stock.needNotified,
+        actualAvailable: Math.max(stock.available - stock.needNotified, 0),
       }
     }),
   }
