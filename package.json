@@ -20,7 +20,7 @@
     "amplitude-js": "^8.21.9",
     "classnames": "^2.5.1",
     "framer-motion": "^11.11.1",
-    "next": "^14.2.14",
+    "next": "^15.0.2",
     "qrcode.react": "^4.1.0",
     "query-string": "^9.1.0",
     "react": "18.3.1",
