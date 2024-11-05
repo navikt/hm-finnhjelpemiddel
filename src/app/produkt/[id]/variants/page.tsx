@@ -6,10 +6,11 @@ import ProductVariants from "@/app/produkt/[id]/ProductVariants";
 import { BodyShort, Heading } from "@navikt/ds-react";
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
-export default async function LargeVariantsPage({ params }: Props) {
+export default async function LargeVariantsPage(props: Props) {
+  const params = await props.params;
 
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
 

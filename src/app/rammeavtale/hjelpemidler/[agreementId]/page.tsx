@@ -5,10 +5,11 @@ import { Suspense } from 'react'
 import AgreementPage from './AgreementPage'
 
 type Props = {
-  params: { agreementId: string }
+  params: Promise<{ agreementId: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const agreementId = params.agreementId
   const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
@@ -20,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function Page({ params }: Props) {
+export default async function Page(props: Props) {
+  const params = await props.params;
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
   return (
     <Suspense>

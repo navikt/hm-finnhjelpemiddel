@@ -18,10 +18,11 @@ export interface ProductsOnPost {
 }
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
 
   return {
@@ -30,7 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProduktPage({ params }: Props) {
+export default async function ProduktPage(props: Props) {
+  const params = await props.params;
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
 
