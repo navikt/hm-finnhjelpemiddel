@@ -46,7 +46,7 @@ ENV FARO_URL=${FARO_URL}
 # Build app
 RUN npm run build
 
-FROM gcr.io/distroless/nodejs:18 AS runtime
+FROM gcr.io/distroless/nodejs20-debian12 AS runtime
 
 WORKDIR /app
 

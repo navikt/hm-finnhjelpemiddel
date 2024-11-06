@@ -5,10 +5,11 @@ import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
 
 type Props = {
-  params: { agreementId: string }
+  params: Promise<{ agreementId: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const agreementId = params.agreementId
   const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
@@ -20,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function AccessoriesPage({ params }: Props) {
+export default async function AccessoriesPage(props: Props) {
+  const params = await props.params;
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
 
   return <Accessories agreement={agreement} />
