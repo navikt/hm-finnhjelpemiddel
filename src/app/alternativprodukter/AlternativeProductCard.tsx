@@ -56,7 +56,11 @@ const ProductInfo = ({
               Ikke på avtale
             </Label>
           )}
-          <Link as={NextLink} href={`/produkt/${alternativeProduct.seriesId}`} className={styles.link}>
+          <Link
+            as={NextLink}
+            href={`/produkt/${alternativeProduct.seriesId}?term=${alternativeProduct.hmsArtNr}`}
+            className={styles.link}
+          >
             {alternativeProduct.title}
           </Link>
           {alternativeProduct.status === 'INACTIVE' && (
