@@ -96,11 +96,26 @@ const getSelectedWarehouseStock = (selectedWarehouse: string, warehouseStocks: W
 
 const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], selectedWarehouse?: string | undefined) => {
   alternativeProducts.sort((a, b) => {
-    const stockSort = selectedWarehouse
+    const selectedWarehouseStockSort = selectedWarehouse
       ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
         (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
-    return a.highestRank - b.highestRank || stockSort
+    const stockA = selectedWarehouse
+      ? (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+      : 0
+    const stockB = selectedWarehouse
+      ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0)
+      : 0
+
+    if (stockA > 0 && stockB > 0) {
+      return a.highestRank - b.highestRank || selectedWarehouseStockSort
+    }
+
+    if (stockA > 0 || stockB > 0) {
+      return selectedWarehouseStockSort
+    }
+
+    return a.highestRank - b.highestRank
   })
 }

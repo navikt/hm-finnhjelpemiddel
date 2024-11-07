@@ -6,7 +6,8 @@ const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 export interface AlternativeProduct {
   seriesId: string
   id: string
-  title: string
+  seriesTitle: string
+  variantTitle: string
   status: 'INACTIVE' | 'ACTIVE'
   hmsArtNr: string | null
   imageUri: string | undefined
@@ -36,7 +37,8 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
   return {
     seriesId: source.seriesId,
     id: source.id,
-    title: source.title,
+    seriesTitle: source.title,
+    variantTitle: source.articleName,
     imageUri: source.media.filter((media) => media.type === 'IMAGE').sort((a, b) => a.priority - b.priority)[0]?.uri,
     status: source.status,
     hmsArtNr: source.hmsArtNr,

@@ -61,7 +61,7 @@ const ProductInfo = ({
             href={`/produkt/${alternativeProduct.seriesId}?term=${alternativeProduct.hmsArtNr}`}
             className={styles.link}
           >
-            {alternativeProduct.title}
+            {alternativeProduct.seriesTitle}
           </Link>
           {alternativeProduct.status === 'INACTIVE' && (
             <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
