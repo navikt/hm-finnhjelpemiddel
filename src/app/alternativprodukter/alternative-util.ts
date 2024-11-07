@@ -15,6 +15,7 @@ export interface AlternativeProduct {
   highestRank: number
   onAgreement: boolean
   warehouseStock: WarehouseStock[]
+  inStockAnyWarehouse: boolean
 }
 
 export interface WarehouseStock {
@@ -56,6 +57,7 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
           actualAvailable: Math.max(stock.available - stock.needNotified, 0),
         }
       }),
+    inStockAnyWarehouse: !!source.wareHouseStock.find((stock) => stock.available - stock.needNotified > 0),
   }
 }
 
@@ -100,28 +102,9 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
               },
             },
           ],
-          filter: [
-            {
-              nested: {
-                path: 'wareHouseStock',
-                query: {
-                  bool: {
-                    must: [
-                      {
-                        range: {
-                          'wareHouseStock.available': {
-                            gte: 1,
-                          },
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-          ],
         },
       },
+      size: 100,
     }),
   })
 

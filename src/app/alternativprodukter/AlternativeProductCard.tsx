@@ -76,21 +76,31 @@ const ProductInfo = ({
         </Box>
       </HStack>
       <HStack align={'center'} justify={'space-between'} gap={'2'}>
-        {selectedWarehouseStock && (
-          <HStack gap={'2'}>
-            <b>{selectedWarehouseStock.location}:</b>
-            {numberInStock !== undefined && <StockTag amount={numberInStock} />}
-          </HStack>
+        {!alternativeProduct.inStockAnyWarehouse && (
+          <Tag variant="neutral" size={'small'}>
+            Ikke på lager hos noen sentraler
+          </Tag>
         )}
-        <Button
-          variant={'secondary'}
-          size={'small'}
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition={'right'}
-          onClick={() => setOpenWarehouseStock(!openWarehouseStock)}
-        >
-          Se lagerstatus
-        </Button>
+
+        {alternativeProduct.inStockAnyWarehouse && (
+          <>
+            {selectedWarehouseStock && (
+              <HStack gap={'2'}>
+                <b>{selectedWarehouseStock.location}:</b>
+                {numberInStock !== undefined && <StockTag amount={numberInStock} />}
+              </HStack>
+            )}
+            <Button
+              variant={'secondary'}
+              size={'small'}
+              icon={<ChevronDownIcon aria-hidden />}
+              iconPosition={'right'}
+              onClick={() => setOpenWarehouseStock(!openWarehouseStock)}
+            >
+              Se lagerstatus
+            </Button>
+          </>
+        )}
       </HStack>
     </VStack>
   )

@@ -108,6 +108,10 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
       ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
+    if (!b.inStockAnyWarehouse) {
+      return -1
+    }
+
     if (stockA > 0 && stockB > 0) {
       return a.highestRank - b.highestRank || selectedWarehouseStockSort
     }
