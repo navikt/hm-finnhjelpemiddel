@@ -21,7 +21,7 @@ export const AlternativeProductList = ({
     data: original,
     isLoading: isLoadingOrig,
     error: errorOrig,
-  } = useSWRImmutable<AlternativeProduct>(hmsNumber, getOriginalProductFromHmsArtNr)
+  } = useSWRImmutable<AlternativeProduct>(`orig-${hmsNumber}`, () => getOriginalProductFromHmsArtNr(hmsNumber))
 
   const {
     data: alternatives,
