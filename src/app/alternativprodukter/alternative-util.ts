@@ -45,15 +45,17 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
     supplierName: source.supplier?.name ?? '',
     highestRank: source.agreements.length > 0 ? Math.max(...source.agreements.map((agreement) => agreement.rank)) : 99,
     onAgreement: source.agreements.length > 0,
-    warehouseStock: source.wareHouseStock.map((stock) => {
-      return {
-        location: stock.location,
-        available: stock.available,
-        reserved: stock.reserved,
-        needNotified: stock.needNotified,
-        actualAvailable: Math.max(stock.available - stock.needNotified, 0),
-      }
-    }),
+    warehouseStock: source.wareHouseStock
+      .filter((stock) => stock.location != 'Telemark')
+      .map((stock) => {
+        return {
+          location: stock.location,
+          available: stock.available,
+          reserved: stock.reserved,
+          needNotified: stock.needNotified,
+          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
+        }
+      }),
   }
 }
 

@@ -53,7 +53,6 @@ export default function AlternativeProductsPage() {
     'Oppland',
     'Buskerud',
     'Vestfold',
-    'Telemark',
     'Aust-Agder',
     'Vest-Agder',
     'Rogaland',
