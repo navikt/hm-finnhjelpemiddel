@@ -46,7 +46,7 @@ const ProductInfo = ({
   return (
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
-        <VStack gap={'3'} className={styles.productProperties}>
+        <VStack gap={'1'} className={styles.productProperties}>
           {alternativeProduct.onAgreement ? (
             <Label size="small" className={styles.headerColor}>
               NAV - Rangering {alternativeProduct.highestRank}
@@ -63,6 +63,9 @@ const ProductInfo = ({
           >
             {alternativeProduct.seriesTitle}
           </Link>
+          <BodyShort size="small" weight="semibold">
+            {alternativeProduct.variantTitle}
+          </BodyShort>
           {alternativeProduct.status === 'INACTIVE' && (
             <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
               Utgått
