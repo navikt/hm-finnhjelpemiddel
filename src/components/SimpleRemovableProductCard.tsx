@@ -9,7 +9,6 @@ import NextLink from 'next/link'
 import ProductImage from './ProductImage'
 import { useSearchParams } from "next/navigation";
 import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
-import { useState } from "react";
 
 const SimpleRemovableProductCard = ({
   product,
