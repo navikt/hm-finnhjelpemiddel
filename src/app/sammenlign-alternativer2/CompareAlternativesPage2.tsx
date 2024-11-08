@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
 
 import { fetchProductsWithVariant, FetchSeriesResponse } from '@/utils/api-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { formatAgreementPosts, formatAgreementRanks, toValueAndUnit, } from '@/utils/string-util'
 
@@ -16,14 +15,18 @@ import ProductCard from '@/components/ProductCard'
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
 import { useEffect, useState } from 'react'
 import { isAlternativeProduct } from "@/app/alternativprodukter/alternative-util";
+import {
+  CompareAlternativesMenuState,
+  useHydratedAlternativeProductsCompareStore
+} from "@/utils/compare-alternatives-state-util";
 
 export default function CompareAlternativesPage2() {
-  const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
+  const { alternativeProductsToCompare, setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const router = useRouter()
   const [shouldFetch, setShouldFetch] = useState(true)
 
-  const seriesIDsToCompare = productsToCompare.filter((product) => isAlternativeProduct(product)).map((product) => product.seriesId)
-  const variantIDsToCompare = productsToCompare.filter((product) => isAlternativeProduct(product)).map((product) => product.id)
+  const seriesIDsToCompare = alternativeProductsToCompare.map((product) => product.seriesId)
+  const variantIDsToCompare = alternativeProductsToCompare.map((product) => product.id)
 
   const { data, isLoading } = useSWR<FetchSeriesResponse>(
     shouldFetch ? variantIDsToCompare : null,
@@ -54,7 +57,7 @@ export default function CompareAlternativesPage2() {
 
   const handleClick = (event: any) => {
     event.preventDefault()
-    setCompareMenuState(CompareMenuState.Open)
+    setCompareAlternativesMenuState(CompareAlternativesMenuState.Open)
     router.back()
   }
 

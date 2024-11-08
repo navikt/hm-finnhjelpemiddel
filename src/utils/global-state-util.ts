@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-
-import { ComparableProduct } from './product-util'
+import { Product } from "@/utils/product-util";
 
 export enum CompareMenuState {
   Open = 'Open',
@@ -15,8 +14,8 @@ export enum CompareMenuState {
 type ProductCompareState = {
   compareMenuState: CompareMenuState
   setCompareMenuState: (state: CompareMenuState) => void
-  productsToCompare: (ComparableProduct)[]
-  setProductToCompare: (product: ComparableProduct) => void
+  productsToCompare: (Product)[]
+  setProductToCompare: (product: Product) => void
   removeProduct: (productId: string) => void
   resetProductToCompare: () => void
 }

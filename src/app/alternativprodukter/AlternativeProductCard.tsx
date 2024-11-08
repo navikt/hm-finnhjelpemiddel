@@ -6,7 +6,7 @@ import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 import { useHydratedCompareStore } from "@/utils/global-state-util";
-import { ComparableProduct, Product } from "@/utils/product-util";
+import { useHydratedAlternativeProductsCompareStore } from "@/utils/compare-alternatives-state-util";
 
 export const AlternativeProductCard = ({
   alternativeProduct,
@@ -171,21 +171,21 @@ const CompareCheckboxAP = ({
   product: AlternativeProduct
   handleCompareClick: (() => void) | undefined
 }) => {
-  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+  const { setAlternativeProductToCompare, removeAlternativeProduct, alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
 
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
 
 
-    const foundProductInCompareList = productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length === 1
+    const foundProductInCompareList = alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1
     if(foundProductInCompareList) {
-      removeProduct(product.id)
+      removeAlternativeProduct(product.id)
     } else {
-      setProductToCompare(product)
+      setAlternativeProductToCompare(product)
     }
   }
 
-  const isInProductsToCompare = productsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = alternativeProductsToCompare.filter((procom) => product.id === procom.id).length >= 1
   return (
     <Checkbox
       className="product-card__checkbox"
@@ -195,7 +195,7 @@ const CompareCheckboxAP = ({
       checked={isInProductsToCompare}
     >
       <div aria-label={`sammenlign ${product.title}`}>
-        <span aria-hidden>Sammenlign 2</span>
+        <span aria-hidden>Sammenlign</span>
       </div>
     </Checkbox>
   )

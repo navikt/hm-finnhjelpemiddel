@@ -1,7 +1,5 @@
 'use client'
 
-import { useHydratedCompareStore } from '@/utils/global-state-util'
-import { ComparableProduct, Product } from '@/utils/product-util'
 import { MultiplyIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Detail, Link, VStack, } from '@navikt/ds-react'
 import classNames from 'classnames'
@@ -9,31 +7,29 @@ import NextLink from 'next/link'
 import ProductImage from './ProductImage'
 import { useSearchParams } from "next/navigation";
 import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
+import {
+  useHydratedAlternativeProductsCompareStore
+} from "@/utils/compare-alternatives-state-util";
 
-const SimpleRemovableProductCard = ({
+const RemovableAlternativeProductCard = ({
   product,
 }: {
-  product: ComparableProduct
+  product: AlternativeProduct
   minRank?: number
   imageSrc?: string
   handleCompareClick?: () => void
 }) => {
-  const { productsToCompare } = useHydratedCompareStore()
-  const isInProductsToCompare = productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length >= 1
+  const { alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
+  const isInProductsToCompare = alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length >= 1
 
-  const imageSrc = isAlternativeProduct(product)
-    ? product.imageUri
-    : product.photos.at(0)?.uri || undefined;
-
-  const minRank = isAlternativeProduct(product) ? product.highestRank : Math.min(...product.agreements.map((agreement) => agreement.rank))
-
+  const imageSrc=  product.imageUri
+  const minRank = product.highestRank
   const currentRank = minRank
   const onAgreement = currentRank !== Infinity
 
-
   let cardClassName = 'product-card--removable'
   const searchParams = useSearchParams()
-  const linkToProduct = `/produkt/${product.id}?${searchParams}`
+  const linkToProduct = `/produkt/${product.seriesId}?${searchParams}`
   return (
     <Box
       padding="2"
@@ -67,20 +63,16 @@ const SimpleRemovableProductCard = ({
 }
 
 const RemoveButton = ({ productId }: { productId: string }) => {
-  const { removeProduct } = useHydratedCompareStore()
+  const { removeAlternativeProduct } = useHydratedAlternativeProductsCompareStore()
 
   return (
     <Button
       variant="tertiary-neutral"
       className="product-card__remove-button"
-      onClick={() => removeProduct(productId)}
+      onClick={() => removeAlternativeProduct(productId)}
       icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
     />
   )
 }
 
-function isAlternativeProduct(product: Product | AlternativeProduct): product is AlternativeProduct {
-  return (product as AlternativeProduct).warehouseStock !== undefined
-}
-
-export default SimpleRemovableProductCard
+export default RemovableAlternativeProductCard

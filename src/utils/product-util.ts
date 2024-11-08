@@ -33,8 +33,6 @@ export interface Product {
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
-export type  ComparableProduct = Product | AlternativeProduct
-
 export interface ComparingData {
   techDataRange: TechDataRange
   agreementRank: number | null
