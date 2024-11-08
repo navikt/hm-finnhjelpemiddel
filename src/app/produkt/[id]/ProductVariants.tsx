@@ -368,7 +368,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
           <Table zebraStripes>
             <Table.Header>
               <Table.Row className="variants-table__status-row">
-                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell aria-hidden></Table.HeaderCell>
                 {productVariantsToShow.map((variant) => (
                   <Table.HeaderCell key={'onagreement-' + variant.id}>
                     {variant.status === 'INACTIVE' ? (
