@@ -1158,40 +1158,6 @@ export const fetchProductsWithVariant = (variantIds: string[]): Promise<FetchSer
     })
 }
 
-
-
-
-export type FetchProductVariantsResponse = {
-  productVariants: ProductVariant[]
-}
-
-export const fetchProductVariants = (ids: string[]): Promise<ProductVariant[]> => {
-  const response = fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        bool: {
-          must: {
-            terms: {
-              id: ids,
-            },
-          },
-        },
-      },
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      return mapProductsVariants(data)
-    })
-
-  return response
-
-}
-
 export async function getProductsInPost(agreementId: string, postNr: number): Promise<SearchResponse> {
   const query = {
     bool: {
