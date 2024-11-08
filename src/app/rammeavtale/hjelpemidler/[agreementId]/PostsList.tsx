@@ -50,7 +50,7 @@ const PostsList = ({
           }
         >
           <VStack gap="4">
-            <Heading level="3" size="small" className="agreement-page__post-heading">
+            <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
             </Heading>
             <span style={{ maxWidth: '840px' }}>
