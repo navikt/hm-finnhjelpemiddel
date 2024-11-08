@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
-import { useHydratedAlternativeProductsCompareStore } from "@/utils/compare-alternatives-state-util";
+import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
@@ -50,19 +50,26 @@ const ProductInfo = ({
   const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
 
   return (
-    <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
+    <VStack justify="space-between" padding={'5'} gap={'2'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'1'} className={styles.productProperties}>
-          <CompareCheckboxAP product={alternativeProduct}  handleCompareClick={handleCompareClick}/>
-          {alternativeProduct.onAgreement ? (
-            <Label size="small" className={styles.headerColor}>
-              NAV - Rangering {alternativeProduct.highestRank}
-            </Label>
-          ) : (
-            <Label size="small" className={styles.notInAgreementColor}>
-              Ikke på avtale
-            </Label>
-          )}
+          <CompareCheckboxAP product={alternativeProduct} handleCompareClick={handleCompareClick} />
+          <HStack gap={'2'} align={'center'}>
+            {alternativeProduct.onAgreement ? (
+              <Label size="small" className={styles.headerColor}>
+                NAV - Rangering {alternativeProduct.highestRank}
+              </Label>
+            ) : (
+              <Label size="small" className={styles.notInAgreementColor}>
+                Ikke på avtale
+              </Label>
+            )}
+            {alternativeProduct.status === 'INACTIVE' && (
+              <Tag size="xsmall" variant="neutral-moderate" className={styles.expiredTag}>
+                Utgått
+              </Tag>
+            )}
+          </HStack>
           <Link
             as={NextLink}
             href={`/produkt/${alternativeProduct.seriesId}?term=${alternativeProduct.hmsArtNr}`}
@@ -73,11 +80,6 @@ const ProductInfo = ({
           <BodyShort size="small" weight="semibold">
             {alternativeProduct.variantTitle}
           </BodyShort>
-          {alternativeProduct.status === 'INACTIVE' && (
-            <Tag size="small" variant="neutral-moderate" className={styles.expiredTag}>
-              Utgått
-            </Tag>
-          )}
           <BodyShort size="small">{alternativeProduct.supplierName}</BodyShort>
           <BodyShort size="small">HMS: {alternativeProduct.hmsArtNr}</BodyShort>
         </VStack>
@@ -175,14 +177,15 @@ const CompareCheckboxAP = ({
   product: AlternativeProduct
   handleCompareClick: (() => void) | undefined
 }) => {
-  const { setAlternativeProductToCompare, removeAlternativeProduct, alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
+  const { setAlternativeProductToCompare, removeAlternativeProduct, alternativeProductsToCompare } =
+    useHydratedAlternativeProductsCompareStore()
 
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
 
-
-    const foundProductInCompareList = alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1
-    if(foundProductInCompareList) {
+    const foundProductInCompareList =
+      alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1
+    if (foundProductInCompareList) {
       removeAlternativeProduct(product.id)
     } else {
       setAlternativeProductToCompare(product)
