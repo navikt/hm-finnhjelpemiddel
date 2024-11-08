@@ -85,7 +85,7 @@ export const AgreementInfo = ({ product, productsOnPosts }: AgreementInfoProps) 
 
       {productsOnPosts.map((post) => (
         <VStack gap="4" key={post.postTitle} className="spacing-top--small">
-          <Heading level="4" size="small" spacing>
+          <Heading level="3" size="small" spacing>
             {`Andre produkter på delkontrakt ${post.postTitle}`}
           </Heading>
 

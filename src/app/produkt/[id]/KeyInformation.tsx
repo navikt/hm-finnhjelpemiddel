@@ -87,7 +87,7 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
           {product.attributes.url && (
             <DefinitionList.Definition>
               <Link href={product.attributes.url} target={'_blank'}>
-                Leverandørens produktside <ExternalLinkIcon />
+                Leverandørens produktside <ExternalLinkIcon aria-hidden />
               </Link>
             </DefinitionList.Definition>
           )}

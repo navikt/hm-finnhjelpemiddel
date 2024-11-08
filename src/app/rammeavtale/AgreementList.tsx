@@ -106,7 +106,7 @@ const AgreementList = () => {
                   })
                 : defaultAriaLabel + ' aktiv fra dato'
             }
-            aria-selected={sortColumn.orderBy === 'published'}
+            aria-pressed={sortColumn.orderBy === 'published'}
             size="xsmall"
             variant="tertiary"
             onClick={() => handleSortColumn('published')}
@@ -130,7 +130,7 @@ const AgreementList = () => {
                   })
                 : defaultAriaLabel + ' aktiv til dato'
             }
-            aria-selected={sortColumn.orderBy === 'expires'}
+            aria-pressed={sortColumn.orderBy === 'expires'}
             size="xsmall"
             variant="tertiary"
             onClick={() => handleSortColumn('expires')}
