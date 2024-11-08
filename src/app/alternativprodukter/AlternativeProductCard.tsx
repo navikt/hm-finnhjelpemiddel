@@ -5,15 +5,16 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
-import { useHydratedCompareStore } from "@/utils/global-state-util";
 import { useHydratedAlternativeProductsCompareStore } from "@/utils/compare-alternatives-state-util";
 
 export const AlternativeProductCard = ({
   alternativeProduct,
   selectedWarehouseStock,
+  handleCompareClick,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
+  handleCompareClick?: () => void
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -25,6 +26,7 @@ export const AlternativeProductCard = ({
         setOpenWarehouseStock={setOpenWarehouseStock}
         openWarehouseStock={openWarehouseStock}
         selectedWarehouseStock={selectedWarehouseStock}
+        handleCompareClick={handleCompareClick}
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
@@ -37,11 +39,13 @@ const ProductInfo = ({
   selectedWarehouseStock,
   setOpenWarehouseStock,
   openWarehouseStock,
+  handleCompareClick,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
+  handleCompareClick?: () => void
 }) => {
   const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
 
@@ -49,7 +53,7 @@ const ProductInfo = ({
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'1'} className={styles.productProperties}>
-          <CompareCheckboxAP product={alternativeProduct} handleCompareClick={() => {}} />
+          <CompareCheckboxAP product={alternativeProduct}  handleCompareClick={handleCompareClick}/>
           {alternativeProduct.onAgreement ? (
             <Label size="small" className={styles.headerColor}>
               NAV - Rangering {alternativeProduct.highestRank}

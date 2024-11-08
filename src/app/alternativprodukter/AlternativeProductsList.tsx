@@ -1,6 +1,6 @@
 import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
-import React from 'react'
+import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
@@ -10,6 +10,10 @@ import {
 } from '@/app/alternativprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from "@/components/layout/CompareAlternativeProductsMenu";
+import {
+  CompareAlternativesMenuState,
+  useHydratedAlternativeProductsCompareStore
+} from "@/utils/compare-alternatives-state-util";
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -30,6 +34,11 @@ export const AlternativeProductList = ({
     error: errorAlternatives,
   } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
+  const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
+
+  const [firstCompareClick, setFirstCompareClick] = useState(true)
+
+
   if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
   }
@@ -46,6 +55,13 @@ export const AlternativeProductList = ({
     sortAlternativeProducts(alternatives, selectedWarehouse)
   }
 
+  const handleCompareClick = () => {
+    if (firstCompareClick) {
+      setCompareAlternativesMenuState(CompareAlternativesMenuState.Open)
+    }
+    setFirstCompareClick(false)
+  }
+
   return (
     <>
       <CompareAlternativeProductsMenu />
@@ -58,6 +74,7 @@ export const AlternativeProductList = ({
           selectedWarehouseStock={
             selectedWarehouse ? getSelectedWarehouseStock(selectedWarehouse, original.warehouseStock) : undefined
           }
+          handleCompareClick={handleCompareClick}
         />
       </div>
       <div>
