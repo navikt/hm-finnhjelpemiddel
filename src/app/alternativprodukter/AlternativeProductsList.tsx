@@ -38,10 +38,9 @@ export const AlternativeProductList = ({
 
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
-
-  useEffect(() => {
-    alternatives && sortAlternativeProducts(alternatives, selectedWarehouse)
-  }, [alternatives, selectedWarehouse])
+  if(alternatives){
+    sortAlternativeProducts(alternatives, selectedWarehouse)
+  }
 
   if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
