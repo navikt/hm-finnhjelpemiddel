@@ -194,7 +194,7 @@ const CompareCheckboxAP = ({
       onChange={toggleCompareProduct}
       checked={isInProductsToCompare}
     >
-      <div aria-label={`sammenlign ${product.title}`}>
+      <div aria-label={`sammenlign ${product.variantTitle}`}>
         <span aria-hidden>Sammenlign</span>
       </div>
     </Checkbox>

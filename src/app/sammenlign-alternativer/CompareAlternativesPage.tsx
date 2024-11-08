@@ -12,7 +12,6 @@ import { formatAgreementPosts, formatAgreementRanks, toValueAndUnit, } from '@/u
 import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
-import { useEffect, useState } from 'react'
 import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore
@@ -157,14 +156,6 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
                     key={product.variants[0].id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
                 )
               })}
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">Artikkelnavn</Table.HeaderCell>
-              {productsToCompare.map((product) => (
-                <Table.DataCell key={product.variants[0].id}>
-                  {product.variants[0].articleName}
-                </Table.DataCell>
-              ))}
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell className="side_header">HMS-nummer</Table.HeaderCell>

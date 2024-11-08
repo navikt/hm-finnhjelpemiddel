@@ -45,17 +45,17 @@ const RemovableAlternativeProductCardMenu = ({
           <Link
             className="product-card__link"
             href={linkToProduct}
-            aria-label={`Gå til ${product.title}`}
+            aria-label={`Gå til ${product.variantTitle}`}
             as={NextLink}
           >
             <BodyShort size="small" className="text-line-clamp">
-              {product.title}
+              {product.variantTitle}
             </BodyShort>
           </Link>
 
         </VStack>
 
-        <ProductImage src={imageSrc} productTitle={product.title} />
+        <ProductImage src={imageSrc} productTitle={product.variantTitle} />
       </VStack>
     </Box>
   )
