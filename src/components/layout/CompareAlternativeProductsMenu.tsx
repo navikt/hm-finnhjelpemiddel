@@ -10,7 +10,7 @@ import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore
 } from "@/utils/compare-alternatives-state-util";
-import RemovableAlternativeProductCard from "@/components/RemovableAlternativeProductCard";
+import RemovableAlternativeProductCardMenu from "@/components/RemovableAlternativeProductCardMenu";
 
 const alternativeProductCardAnimations: Variants = {
   hidden: {
@@ -92,7 +92,7 @@ const CompareAlternativeProductsMenu = () => {
                       animate="visible"
                       exit="hidden"
                     >
-                      <RemovableAlternativeProductCard product={product} />
+                      <RemovableAlternativeProductCardMenu product={product} />
                     </motion.li>
                   ))}
                 </AnimatePresence>

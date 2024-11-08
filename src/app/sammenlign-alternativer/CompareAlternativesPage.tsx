@@ -11,39 +11,26 @@ import { formatAgreementPosts, formatAgreementRanks, toValueAndUnit, } from '@/u
 
 import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import ProductCard from '@/components/ProductCard'
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
 import { useEffect, useState } from 'react'
-import { isAlternativeProduct } from "@/app/alternativprodukter/alternative-util";
 import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore
 } from "@/utils/compare-alternatives-state-util";
+import RemovableAlternativeProductCard from "@/components/RemovableAlternativeProductCard";
 
 export default function CompareAlternativesPage() {
   const { alternativeProductsToCompare, setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const router = useRouter()
-  const [shouldFetch, setShouldFetch] = useState(true)
 
   const seriesIDsToCompare = alternativeProductsToCompare.map((product) => product.seriesId)
   const variantIDsToCompare = alternativeProductsToCompare.map((product) => product.id)
 
   const { data, isLoading } = useSWR<FetchSeriesResponse>(
-    shouldFetch ? variantIDsToCompare : null,
+  variantIDsToCompare,
     fetchProductsWithVariant,
     { keepPreviousData: true }
   )
-
-  useEffect(() => {
-    // Check if all products to compare are already fetched
-    const allProductsFetched = seriesIDsToCompare.every((serieId) =>
-      data?.products.some((product) => product.id === serieId)
-    )
-    setShouldFetch(!allProductsFetched)
-
-    console.log(variantIDsToCompare)
-    console.log(data)
-  }, [seriesIDsToCompare, data])
 
   // Filter out the products from SWR data that are not present in productsToCompare
   const filteredData = data && {
@@ -134,7 +121,6 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
   }, {} as Record<string, Record<string, string>>);
 
 
-
   return (
     <section>
       <Link as={NextLink} href="" onClick={() => router.back()}>
@@ -148,7 +134,7 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               <Table.ColumnHeader className="common_headercell"></Table.ColumnHeader>
               {productsToCompare.map((product) => (
                 <Table.ColumnHeader className="header" key={'id-' + product.variants[0].id}>
-                  <ProductCard product={product} type="removable" />
+                  <RemovableAlternativeProductCard product={product} />
                 </Table.ColumnHeader>
               ))}
             </Table.Row>
@@ -158,7 +144,8 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               <Table.HeaderCell className="side_header">Rangering</Table.HeaderCell>
               {productsToCompare.map((product) => {
                 return (
-                  <Table.DataCell key={product.variants[0].id}>{formatAgreementRanks(product.agreements || [])}</Table.DataCell>
+                  <Table.DataCell
+                    key={product.variants[0].id}>{formatAgreementRanks(product.agreements || [])}</Table.DataCell>
                 )
               })}
             </Table.Row>
@@ -166,7 +153,8 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               <Table.HeaderCell className="side_header">Delkontrakt</Table.HeaderCell>
               {productsToCompare.map((product) => {
                 return (
-                  <Table.DataCell key={product.variants[0].id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
+                  <Table.DataCell
+                    key={product.variants[0].id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
                 )
               })}
             </Table.Row>
