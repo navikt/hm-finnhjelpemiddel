@@ -406,7 +406,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                           ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Navn på variant ' })
                           : defaultAriaLabel + ' navn på variant'
                       }
-                      aria-selected={sortColumns.orderBy === 'artName'}
+                      aria-pressed={sortColumns.orderBy === 'artName'}
                       size="xsmall"
                       style={{ textAlign: 'left' }}
                       variant="tertiary"
@@ -446,7 +446,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                           ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'HMS-nummer ' })
                           : defaultAriaLabel + ' HMS-nummer'
                       }
-                      aria-selected={sortColumns.orderBy === 'HMS'}
+                      aria-pressed={sortColumns.orderBy === 'HMS'}
                       size="xsmall"
                       style={{ textAlign: 'left' }}
                       variant="tertiary"
@@ -506,7 +506,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                           ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Lev-artnr ' })
                           : defaultAriaLabel + ' lev-artnr'
                       }
-                      aria-selected={sortColumns.orderBy === 'levart'}
+                      aria-pressed={sortColumns.orderBy === 'levart'}
                       size="xsmall"
                       style={{ textAlign: 'left' }}
                       variant="tertiary"
@@ -557,7 +557,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                             ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Rangering ' })
                             : defaultAriaLabel + ' rangering'
                         }
-                        aria-selected={sortColumns.orderBy === 'rank'}
+                        aria-pressed={sortColumns.orderBy === 'rank'}
                         size="xsmall"
                         style={{ textAlign: 'left' }}
                         variant="tertiary"
@@ -593,7 +593,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                             ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Delkontrakt ' })
                             : defaultAriaLabel + ' delkontrakt'
                         }
-                        aria-selected={sortColumns.orderBy === 'postNr'}
+                        aria-pressed={sortColumns.orderBy === 'postNr'}
                         size="xsmall"
                         style={{ textAlign: 'left' }}
                         variant="tertiary"
@@ -651,7 +651,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                                 ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: key + ' ' })
                                 : defaultAriaLabel + ' ' + key.toLowerCase()
                             }
-                            aria-selected={sortColumns.orderBy === key}
+                            aria-pressed={sortColumns.orderBy === key}
                             size="xsmall"
                             style={{ textAlign: 'left' }}
                             variant="tertiary"
