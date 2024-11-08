@@ -20,6 +20,10 @@
 @import '../app/rammeavtale/agreement-page.scss';
 @import '../app/leverandorer/suppliers-page.scss';
 
+nextjs-portal {
+  display: none;
+}
+
 html,
 body {
   display: flex;
