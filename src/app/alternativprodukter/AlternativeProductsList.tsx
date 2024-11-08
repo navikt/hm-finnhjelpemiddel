@@ -1,6 +1,6 @@
 import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
@@ -39,6 +39,10 @@ export const AlternativeProductList = ({
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
 
+  useEffect(() => {
+    alternatives && sortAlternativeProducts(alternatives, selectedWarehouse)
+  }, [alternatives, selectedWarehouse])
+
   if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
   }
@@ -49,10 +53,6 @@ export const AlternativeProductList = ({
 
   if (!original) {
     return <>Finner ikke produkt {hmsNumber}</>
-  }
-
-  if (alternatives) {
-    sortAlternativeProducts(alternatives, selectedWarehouse)
   }
 
   const handleCompareClick = () => {
@@ -93,6 +93,7 @@ export const AlternativeProductList = ({
                       : undefined
                   }
                   key={alternative.id}
+                  handleCompareClick={handleCompareClick}
                 />
               )
             })
