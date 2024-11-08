@@ -267,7 +267,7 @@ const mapPhotoInfo = (media: MediaResponse[]): Photo[] => {
   const seen: { [uri: string]: boolean } = {}
   return media
     .filter((media: MediaResponse) => {
-      if (!(media.type === 'IMAGE' && media.priority && media.uri) || seen[media.uri]) {
+      if (!(media.type === 'IMAGE' && media.uri) || seen[media.uri]) {
         return false
       }
 
