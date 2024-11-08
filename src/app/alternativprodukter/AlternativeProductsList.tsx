@@ -9,6 +9,7 @@ import {
   WarehouseStock,
 } from '@/app/alternativprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
+import CompareMenu from "@/components/layout/CompareMenu";
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -47,6 +48,7 @@ export const AlternativeProductList = ({
 
   return (
     <>
+      <CompareMenu />
       <div>
         <Heading size="medium" spacing>
           Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>

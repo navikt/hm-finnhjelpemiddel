@@ -1,7 +1,7 @@
 'use client'
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
-import { Product } from '@/utils/product-util'
+import { ComparableProduct, Product } from '@/utils/product-util'
 import { ArrowsSquarepathIcon, MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -22,6 +22,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
+import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
 
 const ProductCard = ({
   type,
@@ -45,7 +46,7 @@ const ProductCard = ({
   const { productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length >= 1
 
   const searchParams = useSearchParams()
   const linkToProduct = linkOverwrite || `/produkt/${product.id}?${searchParams}`
@@ -266,12 +267,12 @@ const CompareButton = ({
 
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
-    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product)
+    productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length === 1
+      ? removeProduct(product.id)
       : setProductToCompare(product)
   }
 
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length >= 1
 
   return (
     <Button
@@ -305,12 +306,12 @@ const CompareCheckbox = ({
 
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
-    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product)
+    productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length === 1
+      ? removeProduct(product.id)
       : setProductToCompare(product)
   }
 
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
+  const isInProductsToCompare = productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length >= 1
   return (
     <Checkbox
       className="product-card__checkbox"
@@ -333,7 +334,7 @@ const RemoveButton = ({ product }: { product: Product }) => {
     <Button
       variant="tertiary-neutral"
       className="product-card__remove-button"
-      onClick={() => removeProduct(product)}
+      onClick={() => removeProduct(product.id)}
       icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
     />
   )

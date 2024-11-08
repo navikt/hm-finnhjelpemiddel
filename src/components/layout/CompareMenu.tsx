@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { AnimatePresence, Variants, motion } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button } from '@navikt/ds-react'
@@ -8,7 +8,7 @@ import { BodyShort, Button } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
 import classNames from 'classnames'
-import ProductCard from '../ProductCard'
+import SimpleRemovableProductCard from "@/components/SimpleRemovableProductCard";
 
 const productCardAnimations: Variants = {
   hidden: {
@@ -72,6 +72,7 @@ const CompareMenu = () => {
             </div>
           )}
           {productsToCompare.length !== 0 && (
+
             <>
               <ul className="compare-menu__chosen-products">
                 <AnimatePresence mode="popLayout">
@@ -84,7 +85,7 @@ const CompareMenu = () => {
                       animate="visible"
                       exit="hidden"
                     >
-                      <ProductCard product={product} type="removable" />
+                      <SimpleRemovableProductCard product={product} />
                     </motion.li>
                   ))}
                 </AnimatePresence>
@@ -92,7 +93,7 @@ const CompareMenu = () => {
 
               {productsToCompare.length > 1 && (
                 <div className="compare-menu__buttons">
-                  <Link href="/sammenlign" passHref legacyBehavior>
+                  <Link href="/sammenlign-alternativer" passHref legacyBehavior>
                     <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
                       Sammenlign
                     </Button>

@@ -1,10 +1,12 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Checkbox, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
+import { useHydratedCompareStore } from "@/utils/global-state-util";
+import { ComparableProduct, Product } from "@/utils/product-util";
 
 export const AlternativeProductCard = ({
   alternativeProduct,
@@ -47,6 +49,7 @@ const ProductInfo = ({
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'1'} className={styles.productProperties}>
+          <CompareCheckboxAP product={alternativeProduct} handleCompareClick={() => {}} />
           {alternativeProduct.onAgreement ? (
             <Label size="small" className={styles.headerColor}>
               NAV - Rangering {alternativeProduct.highestRank}
@@ -159,4 +162,41 @@ const StockTag = ({ amount }: { amount: number }) => {
         {amount} stk på lager
       </Tag>
     )
+}
+
+const CompareCheckboxAP = ({
+  product,
+  handleCompareClick,
+}: {
+  product: AlternativeProduct
+  handleCompareClick: (() => void) | undefined
+}) => {
+  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
+
+  const toggleCompareProduct = () => {
+    handleCompareClick && handleCompareClick()
+
+
+    const foundProductInCompareList = productsToCompare.filter((procom: ComparableProduct) => product.id === procom.id).length === 1
+    if(foundProductInCompareList) {
+      removeProduct(product.id)
+    } else {
+      setProductToCompare(product)
+    }
+  }
+
+  const isInProductsToCompare = productsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  return (
+    <Checkbox
+      className="product-card__checkbox"
+      size="small"
+      value="Legg produktet til sammenligning"
+      onChange={toggleCompareProduct}
+      checked={isInProductsToCompare}
+    >
+      <div aria-label={`sammenlign ${product.title}`}>
+        <span aria-hidden>Sammenlign 2</span>
+      </div>
+    </Checkbox>
+  )
 }

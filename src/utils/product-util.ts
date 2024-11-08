@@ -1,6 +1,5 @@
 import {
   AgreementInfoResponse,
-  AlternativeProductSourceResponse,
   Hit,
   MediaResponse,
   ProductDocResponse,
@@ -11,6 +10,7 @@ import {
   TechDataResponse,
 } from './response-types'
 import { capitalize } from './string-util'
+import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
 
 export interface Product {
   id: string
@@ -32,6 +32,8 @@ export interface Product {
   agreements: AgreementInfo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
+
+export type  ComparableProduct = Product | AlternativeProduct
 
 export interface ComparingData {
   techDataRange: TechDataRange
@@ -195,9 +197,20 @@ export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Pro
   const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
-
   return buckets
 }
+
+export const mapProductsVariants = (data: SearchResponse): ProductVariant[] => {
+
+  const sources = data.hits.hits.map((h) => h._source as ProductSourceResponse)
+
+  const variants = sources.map((source) => {
+    return mapProductVariant(source)
+  })
+
+  return variants
+}
+
 
 export const mapProductWithVariants = (sources: ProductSourceResponse[]): Product => {
   const variants = sources.map((source) => {

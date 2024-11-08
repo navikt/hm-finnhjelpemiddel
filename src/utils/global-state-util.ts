@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { Product } from './product-util'
+import { ComparableProduct } from './product-util'
 
 export enum CompareMenuState {
   Open = 'Open',
@@ -15,9 +15,9 @@ export enum CompareMenuState {
 type ProductCompareState = {
   compareMenuState: CompareMenuState
   setCompareMenuState: (state: CompareMenuState) => void
-  productsToCompare: Product[]
-  setProductToCompare: (product: Product) => void
-  removeProduct: (product: Product) => void
+  productsToCompare: (ComparableProduct)[]
+  setProductToCompare: (product: ComparableProduct) => void
+  removeProduct: (productId: string) => void
   resetProductToCompare: () => void
 }
 
@@ -27,10 +27,11 @@ export const useProductCompareStore = create<ProductCompareState>()(
       compareMenuState: CompareMenuState.Minimized,
       productsToCompare: [],
       setCompareMenuState: (menuState) => set(() => ({ compareMenuState: menuState })),
-      setProductToCompare: (product) =>
-        set((state) => ({ productsToCompare: state.productsToCompare.concat(product) })),
-      removeProduct: (product) =>
-        set((state) => ({ productsToCompare: state.productsToCompare.filter((prod) => prod.id !== product.id) })),
+      setProductToCompare: (product) =>{
+        set((state) => ({ productsToCompare: state.productsToCompare.concat(product) }))
+      },
+      removeProduct: (productId: string) =>
+        set((state) => ({ productsToCompare: state.productsToCompare.filter((prod) => prod.id !== productId) })),
       resetProductToCompare: () => {
         set({ productsToCompare: [] })
       },
@@ -53,13 +54,13 @@ export const useHydratedCompareStore = ((selector, compare) => {
   return hydrated
     ? store
     : {
-        compareMenuState: CompareMenuState.Minimized,
-        productsToCompare: [],
-        setCompareMenuState: () => undefined,
-        setProductToCompare: () => undefined,
-        removeProduct: () => undefined,
-        resetProductToCompare: () => undefined,
-      }
+      compareMenuState: CompareMenuState.Minimized,
+      productsToCompare: [],
+      setCompareMenuState: () => undefined,
+      setProductToCompare: () => undefined,
+      removeProduct: () => undefined,
+      resetProductToCompare: () => undefined,
+    }
 }) as typeof useProductCompareStore
 
 type MenuState = {
