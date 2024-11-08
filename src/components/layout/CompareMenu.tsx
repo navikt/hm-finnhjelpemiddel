@@ -93,7 +93,7 @@ const CompareMenu = () => {
 
               {productsToCompare.length > 1 && (
                 <div className="compare-menu__buttons">
-                  <Link href="/sammenlign-alternativer2" passHref legacyBehavior>
+                  <Link href="/sammenlign" passHref legacyBehavior>
                     <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
                       Sammenlign
                     </Button>

@@ -1,10 +1,10 @@
-import CompareAlternativesPage from './CompareAlternativesPage'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
+import CompareAlternativesPage from "@/app/sammenlign-alternativer/CompareAlternativesPage";
 
 export const metadata: Metadata = {
-  title: 'Sammenligner gjenbruksprodukter',
-  description: 'Sammenlign gjenbruksprodukter',
+  title: 'Sammenligner',
+  description: 'Sammenlign produkter',
 }
 
 export default function Page() {
