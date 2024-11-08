@@ -1,7 +1,7 @@
 'use client'
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
-import { Product } from '@/utils/product-util'
+import {  Product } from '@/utils/product-util'
 import { ArrowsSquarepathIcon, MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -22,6 +22,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
+import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
 
 const ProductCard = ({
   type,
@@ -267,7 +268,7 @@ const CompareButton = ({
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product)
+      ? removeProduct(product.id)
       : setProductToCompare(product)
   }
 
@@ -306,7 +307,7 @@ const CompareCheckbox = ({
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
     productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product)
+      ? removeProduct(product.id)
       : setProductToCompare(product)
   }
 
@@ -333,7 +334,7 @@ const RemoveButton = ({ product }: { product: Product }) => {
     <Button
       variant="tertiary-neutral"
       className="product-card__remove-button"
-      onClick={() => removeProduct(product)}
+      onClick={() => removeProduct(product.id)}
       icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
     />
   )

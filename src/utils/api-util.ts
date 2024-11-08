@@ -27,6 +27,7 @@ import {
   mapProductFromSeriesId,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
+  mapProductsVariants, mapProductsWithoutAggregationOnSeries,
   mapProductVariant,
   Product,
   ProductVariant,
@@ -1079,6 +1080,7 @@ export type FetchSeriesResponse = {
   products: Product[]
 }
 
+
 export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
@@ -1125,6 +1127,33 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
     .then((data) => {
       return {
         products: mapProductsFromAggregation(data),
+      }
+    })
+}
+
+
+export const fetchProductsWithVariant = (variantIds: string[]): Promise<FetchSeriesResponse> => {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            terms: {
+              id: variantIds,
+            },
+          },
+        },
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: mapProductsWithoutAggregationOnSeries(data),
       }
     })
 }

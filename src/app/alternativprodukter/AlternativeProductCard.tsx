@@ -1,17 +1,20 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Checkbox, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
+import { useHydratedAlternativeProductsCompareStore } from "@/utils/compare-alternatives-state-util";
 
 export const AlternativeProductCard = ({
   alternativeProduct,
   selectedWarehouseStock,
+  handleCompareClick,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
+  handleCompareClick?: () => void
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -23,6 +26,7 @@ export const AlternativeProductCard = ({
         setOpenWarehouseStock={setOpenWarehouseStock}
         openWarehouseStock={openWarehouseStock}
         selectedWarehouseStock={selectedWarehouseStock}
+        handleCompareClick={handleCompareClick}
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
@@ -35,11 +39,13 @@ const ProductInfo = ({
   selectedWarehouseStock,
   setOpenWarehouseStock,
   openWarehouseStock,
+  handleCompareClick,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
   setOpenWarehouseStock: (value: boolean) => any
   openWarehouseStock: boolean
+  handleCompareClick?: () => void
 }) => {
   const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
 
@@ -47,6 +53,7 @@ const ProductInfo = ({
     <VStack justify="space-between" padding={'5'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'1'} className={styles.productProperties}>
+          <CompareCheckboxAP product={alternativeProduct}  handleCompareClick={handleCompareClick}/>
           {alternativeProduct.onAgreement ? (
             <Label size="small" className={styles.headerColor}>
               NAV - Rangering {alternativeProduct.highestRank}
@@ -159,4 +166,41 @@ const StockTag = ({ amount }: { amount: number }) => {
         {amount} stk på lager
       </Tag>
     )
+}
+
+const CompareCheckboxAP = ({
+  product,
+  handleCompareClick,
+}: {
+  product: AlternativeProduct
+  handleCompareClick: (() => void) | undefined
+}) => {
+  const { setAlternativeProductToCompare, removeAlternativeProduct, alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
+
+  const toggleCompareProduct = () => {
+    handleCompareClick && handleCompareClick()
+
+
+    const foundProductInCompareList = alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1
+    if(foundProductInCompareList) {
+      removeAlternativeProduct(product.id)
+    } else {
+      setAlternativeProductToCompare(product)
+    }
+  }
+
+  const isInProductsToCompare = alternativeProductsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  return (
+    <Checkbox
+      className="product-card__checkbox"
+      size="small"
+      value="Legg produktet til sammenligning"
+      onChange={toggleCompareProduct}
+      checked={isInProductsToCompare}
+    >
+      <div aria-label={`sammenlign ${product.variantTitle}`}>
+        <span aria-hidden>Sammenlign</span>
+      </div>
+    </Checkbox>
+  )
 }
