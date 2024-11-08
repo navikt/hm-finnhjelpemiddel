@@ -38,9 +38,15 @@ export const AlternativeProductList = ({
 
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
-  if(alternatives){
+  if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
   }
+
+  useEffect(() => {
+    if (alternatives) {
+      sortAlternativeProducts(alternatives, selectedWarehouse)
+    }
+  }, [alternatives]);
 
   if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
@@ -117,7 +123,7 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
   alternativeProducts.sort((a, b) => {
     const selectedWarehouseStockSort = selectedWarehouse
       ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
-        (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+      (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
     const stockA = selectedWarehouse
