@@ -98,6 +98,7 @@ const NavigationBar = () => {
               <Button
                 className="nav-top-container__search-button"
                 icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
+                aria-label={searchOpen ? 'Fjern' : 'Søk'}
                 variant="tertiary"
                 onClick={() => {
                   if (searchOpen) {
