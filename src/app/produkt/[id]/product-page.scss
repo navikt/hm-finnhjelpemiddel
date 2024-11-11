@@ -214,9 +214,24 @@
 
   .photo-container {
     /*    height: 390px;*/
-    min-height: 390px;
+    min-height: 200px;
     max-height: 480px;
+    width: 100%;
     height: auto;
+
+    @include mixins.for-size(phone-only) {
+      min-height: 200px;
+      max-height: 220px;
+      min-width: 200px;
+      max-width: 220px;
+    }
+
+    @include mixins.for-size(phone-up) {
+      min-height: 300px;
+      max-height: 350px;
+      min-width: 300px;
+      max-width: 350px;
+    }
 
     @include mixins.for-size(tablet-up) {
       min-height: 350px;
@@ -235,7 +250,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
     padding: $a-spacing-4 $a-spacing-2;
 
     @include mixins.for-size(tablet-up) {
