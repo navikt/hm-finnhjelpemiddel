@@ -28,6 +28,12 @@ spec:
       value: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
     - name: FARO_URL
       value: https://telemetry.ekstern.dev.nav.no/collect
+    - name: HM_SEARCH_URL
+      value: http://hm-grunndata-search
+    - name: ASSET_PREFIX
+      value: https://cdn.nav.no/teamdigihot/hm-oversikt-frontend/prod
+    - name: HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL
+      value: http://hm-grunndata-alternativprodukter
   filesFrom:
     - emptyDir:
         medium: Memory

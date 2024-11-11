@@ -19,9 +19,6 @@ COPY package*.json ./
 # Copy all files
 COPY . .
 
-# Copy hidden files
-COPY .env.production .
-
 ARG ASSET_PREFIX
 ENV ASSET_PREFIX=${ASSET_PREFIX}
 
