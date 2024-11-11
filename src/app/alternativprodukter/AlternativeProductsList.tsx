@@ -1,6 +1,6 @@
 import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
@@ -9,11 +9,11 @@ import {
   WarehouseStock,
 } from '@/app/alternativprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
-import CompareAlternativeProductsMenu from "@/components/layout/CompareAlternativeProductsMenu";
+import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {
   CompareAlternativesMenuState,
-  useHydratedAlternativeProductsCompareStore
-} from "@/utils/compare-alternatives-state-util";
+  useHydratedAlternativeProductsCompareStore,
+} from '@/utils/compare-alternatives-state-util'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -41,12 +41,6 @@ export const AlternativeProductList = ({
   if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
   }
-
-  useEffect(() => {
-    if (alternatives) {
-      sortAlternativeProducts(alternatives, selectedWarehouse)
-    }
-  }, [alternatives]);
 
   if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
@@ -123,7 +117,7 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
   alternativeProducts.sort((a, b) => {
     const selectedWarehouseStockSort = selectedWarehouse
       ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
-      (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+        (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
     const stockA = selectedWarehouse
@@ -133,8 +127,11 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
       ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
-    if (!b.inStockAnyWarehouse) {
+    if (a.inStockAnyWarehouse && !b.inStockAnyWarehouse) {
       return -1
+    }
+    if (!a.inStockAnyWarehouse && b.inStockAnyWarehouse) {
+      return 1
     }
 
     if (stockA > 0 && stockB > 0) {

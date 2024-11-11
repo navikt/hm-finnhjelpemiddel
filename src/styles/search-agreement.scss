@@ -1,6 +1,6 @@
 @use './_mixins';
 
-@import '@navikt/ds-tokens/dist/tokens';
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .agreement-search-results,
 .agreement-search-results ol,

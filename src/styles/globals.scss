@@ -1,24 +1,24 @@
 @use './_mixins';
 
-@import '@navikt/ds-css';
-@import '@navikt/ds-tokens/dist/tokens';
-@import './compare-menu.scss';
-@import '../app/sammenlign/compare-page.scss';
-@import './variants-table.scss';
-@import './filter.scss';
-@import '../app/home-page.scss';
-@import './mobile-overlay';
-@import '../app/[...not-found]/not-found-page.scss';
-@import './product-card.scss';
-@import './search.scss';
-@import './hms-suggestion.scss';
-@import './search-agreement.scss';
-@import './pepperkake-dekorasjon.scss';
-@import './navigation-bar.scss';
-@import './burger-menu-content.scss';
-@import './z-index.scss';
-@import '../app/rammeavtale/agreement-page.scss';
-@import '../app/leverandorer/suppliers-page.scss';
+@use '@navikt/ds-css' as *;
+@use '@navikt/ds-tokens/dist/tokens' as *;
+@use './compare-menu.scss';
+@use '../app/sammenlign/compare-page.scss';
+@use './variants-table.scss';
+@use './filter.scss';
+@use '../app/home-page.scss';
+@use './mobile-overlay';
+@use '../app/[...not-found]/not-found-page.scss';
+@use './product-card.scss';
+@use './search.scss';
+@use './hms-suggestion.scss';
+@use './search-agreement.scss';
+@use './pepperkake-dekorasjon.scss';
+@use './navigation-bar.scss';
+@use './burger-menu-content.scss';
+@use './z-index.scss';
+@use '../app/rammeavtale/agreement-page.scss';
+@use '../app/leverandorer/suppliers-page.scss';
 
 nextjs-portal {
   display: none;

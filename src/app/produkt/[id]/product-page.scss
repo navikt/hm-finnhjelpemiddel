@@ -1,7 +1,7 @@
 @use 'src/styles/mixins';
 
-@import 'src/styles/z-index.scss';
-@import '@navikt/ds-tokens/dist/tokens';
+@use '@navikt/ds-tokens/dist/tokens' as *;
+@use 'src/styles/z-index.scss' as *;
 
 .product-page {
   p {
@@ -134,12 +134,12 @@
   }
 
   &__top-page-container {
+    margin-top: $a-spacing-9;
+    
     @include mixins.for-size(desktop-up) {
       justify-content: center;
       max-width: 1258px;
     }
-
-    margin-top: $a-spacing-9;
   }
 
   &__dd-supplier-ref {
@@ -219,6 +219,12 @@
     width: 100%;
     height: auto;
 
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $a-spacing-4 $a-spacing-2;
+
     @include mixins.for-size(phone-only) {
       min-height: 200px;
       max-height: 220px;
@@ -245,12 +251,6 @@
       max-height: 480px;
       height: auto;
     }
-
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: $a-spacing-4 $a-spacing-2;
 
     @include mixins.for-size(tablet-up) {
       padding: $a-spacing-8 $a-spacing-4;
@@ -387,23 +387,16 @@
   }
 
   &__number-of-total {
-    @include mixins.for-size(tablet-up) {
-      display: none;
-    }
-
     display: flex;
     justify-content: center;
     font-size: var(--a-font-size-large);
+    
+    @include mixins.for-size(tablet-up) {
+      display: none;
+    }
   }
 
   &__preview-container {
-    @include mixins.for-size(phone-only) {
-      display: none;
-    }
-
-    @media (max-height: 500px) {
-      display: none;
-    }
     display: flex;
     justify-content: center;
     align-items: center;
@@ -412,6 +405,14 @@
     border-top: rgba(0, 0, 0, 0.1);
     padding: 2rem 1rem;
     background-color: #edac9e;
+    
+    @include mixins.for-size(phone-only) {
+      display: none;
+    }
+
+    @media (max-height: 500px) {
+      display: none;
+    }
   }
 
   &__thumbnail-image-container {

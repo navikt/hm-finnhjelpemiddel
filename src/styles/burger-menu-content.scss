@@ -1,5 +1,6 @@
 @use './_mixins';
-@import './z-index.scss';
+@use './z-index.scss';
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .burgermenu-container {
   position: absolute;

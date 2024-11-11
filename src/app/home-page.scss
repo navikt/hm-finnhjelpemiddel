@@ -1,8 +1,8 @@
 @use 'src/styles/mixins';
 
-@import 'src/styles/_variables';
-@import '@navikt/ds-tokens/dist/tokens';
-@import 'src/styles/local-fonts';
+@use '@navikt/ds-tokens/dist/tokens' as *;
+@use 'src/styles/_variables' as *;
+@use 'src/styles/local-fonts' as *;
 
 .home-page {
   &__heading {
