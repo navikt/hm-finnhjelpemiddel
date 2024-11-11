@@ -14,8 +14,9 @@ jobs:
     name: Bygg
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      packages: 'write'
+      contents: "write"
+      id-token: "write"
+      packages: "write"
     timeout-minutes: 10
     outputs:
       docker_image: ${{ steps.docker-build-push.outputs.image }}
