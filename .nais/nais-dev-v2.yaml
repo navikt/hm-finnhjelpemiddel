@@ -1,0 +1,38 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: hm-oversikt-frontend
+  namespace: teamdigihot
+  labels:
+    app: hm-oversikt-frontend
+    team: teamdigihot
+spec:
+  image: {{image}}
+  port: 3000
+  ingresses:
+    - 'https://finnhjelpemiddel.intern.dev.nav.no'
+    - 'https://finnhjelpemiddel.ansatt.dev.nav.no'
+  accessPolicy:
+    outbound:
+      rules:
+        - application: hm-grunndata-search
+        - application: hm-grunndata-alternativprodukter
+  env:
+    - name: RUNTIME_ENVIRONMENT
+      value: dev
+    - name: BUILD_ENV
+      value: dev
+    - name: IMAGE_PROXY_URL
+      value: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
+    - name: CDN_URL
+      value: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
+    - name: FARO_URL
+      value: https://telemetry.ekstern.dev.nav.no/collect
+  filesFrom:
+    - emptyDir:
+        medium: Memory
+      mountPath: /app/.next/cache
+    - emptyDir:
+        medium: Memory
+      mountPath: /app/.next/server/app/no
+
