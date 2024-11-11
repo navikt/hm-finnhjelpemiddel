@@ -38,12 +38,12 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           tag: ${{ env.VERSION_TAG }}
-          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-          build-args: |
+          build_secrets: |
             BUILD_ENV=${{ env.BUILD_ENV }}
             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
             CDN_URL=${{ env.CDN_URL }}
             FARO_URL=${{ env.FARO_URL }}
+            NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Definer release tag
         id: version-tag
         run: echo "VERSION_TAG=${{env.VERSION_TAG}}" >> "$GITHUB_OUTPUT"
