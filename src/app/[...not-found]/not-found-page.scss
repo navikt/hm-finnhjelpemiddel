@@ -1,6 +1,6 @@
 @use 'src/styles/mixins';
 
-@import '@navikt/ds-tokens/dist/tokens';
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .not-found {
   width: 100%;

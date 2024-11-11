@@ -1,7 +1,7 @@
 @use 'src/styles/mixins';
 
-@import 'src/styles/z-index.scss';
-@import '@navikt/ds-tokens/dist/tokens';
+@use '@navikt/ds-tokens/dist/tokens' as *;
+@use 'src/styles/z-index.scss' as *;
 
 .product-page {
   p {

@@ -1,4 +1,5 @@
-@import '@navikt/ds-tokens/dist/tokens';
+@use './_mixins';
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .checkbox-filter {
   &__checkboxes {

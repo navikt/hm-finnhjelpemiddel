@@ -1,6 +1,7 @@
 @use 'src/styles/mixins';
 
-@import '@navikt/ds-tokens/dist/tokens';
+@use '@navikt/ds-tokens/dist/tokens' as *;
+@use 'src/styles/_variables' as *;
 
 .agreement-page {
   background-color: #faefee;
