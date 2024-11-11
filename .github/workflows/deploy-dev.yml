@@ -39,11 +39,11 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           tag: ${{ env.VERSION_TAG }}
-          build_args: | # optional, default empty
+          build_args: |
             BUILD_ENV=${{ env.BUILD_ENV }}
-             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
-             CDN_URL=${{ env.CDN_URL }}
-             FARO_URL=${{ env.FARO_URL }}
+            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
+            CDN_URL=${{ env.CDN_URL }}
+            FARO_URL=${{ env.FARO_URL }}
           build_secrets: |
             NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Definer release tag
