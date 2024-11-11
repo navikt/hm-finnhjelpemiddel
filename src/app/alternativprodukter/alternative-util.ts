@@ -1,4 +1,5 @@
 import { AlternativeProductSourceResponse, Hit, SearchResponse } from '@/utils/response-types'
+import { Product } from "@/utils/product-util";
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
@@ -16,6 +17,10 @@ export interface AlternativeProduct {
   onAgreement: boolean
   warehouseStock: WarehouseStock[]
   inStockAnyWarehouse: boolean
+}
+
+export function isAlternativeProduct(product: Product | AlternativeProduct): product is AlternativeProduct {
+  return (product as AlternativeProduct).warehouseStock !== undefined
 }
 
 export interface WarehouseStock {

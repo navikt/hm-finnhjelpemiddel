@@ -1,6 +1,6 @@
 import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
-import React from 'react'
+import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
@@ -9,6 +9,11 @@ import {
   WarehouseStock,
 } from '@/app/alternativprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
+import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
+import {
+  CompareAlternativesMenuState,
+  useHydratedAlternativeProductsCompareStore,
+} from '@/utils/compare-alternatives-state-util'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -29,6 +34,14 @@ export const AlternativeProductList = ({
     error: errorAlternatives,
   } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
+  const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
+
+  const [firstCompareClick, setFirstCompareClick] = useState(true)
+
+  if (alternatives) {
+    sortAlternativeProducts(alternatives, selectedWarehouse)
+  }
+
   if (errorAlternatives || errorOrig) {
     return <>En feil har skjedd ved henting av data</>
   }
@@ -41,12 +54,16 @@ export const AlternativeProductList = ({
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  if (alternatives) {
-    sortAlternativeProducts(alternatives, selectedWarehouse)
+  const handleCompareClick = () => {
+    if (firstCompareClick) {
+      setCompareAlternativesMenuState(CompareAlternativesMenuState.Open)
+    }
+    setFirstCompareClick(false)
   }
 
   return (
     <>
+      <CompareAlternativeProductsMenu />
       <div>
         <Heading size="medium" spacing>
           Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>
@@ -56,6 +73,7 @@ export const AlternativeProductList = ({
           selectedWarehouseStock={
             selectedWarehouse ? getSelectedWarehouseStock(selectedWarehouse, original.warehouseStock) : undefined
           }
+          handleCompareClick={handleCompareClick}
         />
       </div>
       <div>
@@ -74,6 +92,7 @@ export const AlternativeProductList = ({
                       : undefined
                   }
                   key={alternative.id}
+                  handleCompareClick={handleCompareClick}
                 />
               )
             })
@@ -108,8 +127,11 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
       ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0)
       : 0
 
-    if (!b.inStockAnyWarehouse) {
+    if (a.inStockAnyWarehouse && !b.inStockAnyWarehouse) {
       return -1
+    }
+    if (!a.inStockAnyWarehouse && b.inStockAnyWarehouse) {
+      return 1
     }
 
     if (stockA > 0 && stockB > 0) {
