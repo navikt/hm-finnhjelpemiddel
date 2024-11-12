@@ -61,7 +61,7 @@ jobs:
       - name: Deploy
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: dev-gcp
+          CLUSTER: prod-gcp
           RESOURCE: .nais/nais-prod.yaml
           IMAGE: ${{ needs.build.outputs.docker_image }}
       - name: Etter deploy
