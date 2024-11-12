@@ -12,10 +12,10 @@ type LogEvent = (params: { name: string; data?: any }) => void;
 let amplitudeLogger: LogEvent | undefined = undefined;
 
 function getApiKeyFromEnvironment() {
-  switch (process.env.NODE_ENV) {
-    case "production":
+  switch (process.env.BUILD_ENV) {
+    case "prod":
       return "10798841ebeba333b8ece6c046322d76";
-    case "development":
+    case "dev":
       return "c1c2553d689ba4716c7d7c4410b521f5";
     case "test":
       return "mock";
