@@ -54,7 +54,7 @@ jobs:
       id-token: write
     timeout-minutes: 10
     env:
-      VERSION_TAG: ${{ needs.build.outputs.version_tag }}
+      VERSION_TAG: ${{ needs.build-prod.outputs.version_tag }}
     steps:
       - name: Sjekk ut koden
         uses: actions/checkout@v4
@@ -63,7 +63,7 @@ jobs:
         env:
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais-prod.yaml
-          IMAGE: ${{ needs.build.outputs.docker_image }}
+          IMAGE: ${{ needs.build-prod.outputs.docker_image }}
       - name: Etter deploy
         if: github.ref == 'refs/heads/main'
         uses: navikt/digihot-deploy/actions/post-deploy@v3
