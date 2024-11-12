@@ -29,7 +29,8 @@ export const initAmplitude = () => {
   const apiKey = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY
   if (amplitude && apiKey) {
     amplitude.init(apiKey, undefined, {
-      serverUrl: process.env.NEXT_PUBLIC_AMPLITUDE_SERVER_URL,
+/*      serverUrl: process.env.NEXT_PUBLIC_AMPLITUDE_SERVER_URL,*/
+      serverUrl: 'https://amplitude.nav.no/collect-auto',
       ingestionMetadata: {
         sourceName: window.location.toString()
       }
