@@ -1,7 +1,11 @@
 'use client'
-import amplitude from 'amplitude-js'
+import * as amplitude from '@amplitude/analytics-browser';
+import { track } from '@amplitude/analytics-browser';
 
-export enum amplitude_taxonomy {
+const APP_NAME = 'hm-oversikt'
+const TEAM_NAME = 'teamdigihot'
+
+/*export enum amplitude_taxonomy {
   SKJEMA_START = 'skjema startet',
   SKJEMA_ÅPEN = 'skjema åpnet',
   SKJEMASTEG_FULLFØRT = 'skjemasteg fullført',
@@ -9,7 +13,7 @@ export enum amplitude_taxonomy {
   SKJEMAINNSENDING_FEILET = 'skjemainnsending feilet',
   SKJEMA_FULLFØRT = 'skjema fullført',
   NAVIGERE = 'navigere',
-}
+}*/
 
 export enum digihot_customevents {
   VISNING_OVERSIKT = 'visning av sider fra hm-oversikt-app',
@@ -20,30 +24,36 @@ export enum digihot_customevents {
   VARIANTSIDE_VIST = 'visning av stor variantside',
 }
 
-const SKJEMANAVN = 'hm-oversikt'
 
 export const initAmplitude = () => {
-  if (amplitude) {
-    amplitude.getInstance().init('default', '', {
+  const apiKey = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY
+  if (amplitude && apiKey) {
+    amplitude.init(apiKey, undefined, {
+      serverUrl: process.env.NEXT_PUBLIC_AMPLITUDE_SERVER_URL,
+      ingestionMetadata: {
+        sourceName: window.location.toString()
+      }
+    });
+/*    amplitude.getInstance().init('default', '', {
       apiEndpoint: 'amplitude.nav.no/collect-auto',
       saveEvents: false,
       includeUtm: true,
       includeReferrer: true,
       platform: window.location.toString(),
-    })
+    })*/
   }
 }
 
 export function logAmplitudeEvent(eventName: string, data?: any) {
   setTimeout(() => {
     data = {
-      app: SKJEMANAVN,
-      team: 'teamdigihot',
-      ...data,
+      app: APP_NAME ,
+      team: TEAM_NAME,
+      ...(data || {})
     }
     try {
-      if (amplitude) {
-        amplitude.getInstance().logEvent(eventName, data)
+      if (amplitude)  {
+        track(eventName, data)
       }
     } catch (error) {
       console.error(error)
@@ -53,7 +63,7 @@ export function logAmplitudeEvent(eventName: string, data?: any) {
 
 export function logCustomEvent(event: digihot_customevents, data?: any) {
   logAmplitudeEvent(event, {
-    skjemanavn: SKJEMANAVN,
+    TEAM_NAME: TEAM_NAME,
     ...data,
   })
 }
