@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_ENV: dev
+      IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
+      CDN_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
+      FARO_URL: https://telemetry.ekstern.dev.nav.no/collect
     permissions:
       contents: "write"
       id-token: "write"
@@ -43,6 +46,9 @@ jobs:
           tag: ${{ env.VERSION_TAG }}
           build_args: |
             BUILD_ENV=${{ env.BUILD_ENV }}
+            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
+            CDN_URL=${{ env.CDN_URL }}
+            FARO_URL=${{ env.FARO_URL }}
           build_secrets: |
             NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Definer release tag
@@ -68,7 +74,7 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais-dev-v2.yaml
+          RESOURCE: .nais/nais-dev.yaml
           IMAGE: ${{ needs.build.outputs.docker_image }}
 
       - name: Etter deploy
