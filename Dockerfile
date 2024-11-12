@@ -1,6 +1,8 @@
 # Base on offical Node.js Alpine image
 FROM node:20-alpine AS builder
-
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
+RUN npm config set @navikt:registry=https://npm.pkg.github.com
 
 RUN addgroup --system --gid 1069 nodejs
 RUN adduser --system --uid 1069 nextjs
@@ -13,11 +15,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Copy package.json and package-lock.json before other files
 # Utilise Docker cache to save re-installing dependencies if unchanged
 COPY package*.json ./
-
-# Install dependencies
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    echo '//npm.pkg.github.com/:_authToken='$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc
-RUN npm ci
 
 # Copy all files
 COPY . .
@@ -44,10 +41,10 @@ ARG FARO_URL
 ENV FARO_URL=${FARO_URL}
 
 # Build app
+RUN npm ci
 RUN npm run build
 
 FROM gcr.io/distroless/nodejs20-debian12 AS runtime
-
 WORKDIR /app
 
 # Copy only needed files for next app

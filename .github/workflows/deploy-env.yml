@@ -1,134 +1,81 @@
 name: Manually deploy to NAIS (ENV)
-
 on:
   workflow_dispatch:
     inputs:
       environment:
         type: choice
         description: Deploy to environment
+        default: 'dev'
         options:
-          - DEV
-          - PROD
-
-env:
-  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}-${{ github.event.inputs.environment }}
+          - dev
 
 jobs:
-  build-dev:
-    name: Build and push Dev Docker container
-    if: github.event.inputs.environment == 'DEV'
+  build:
+    name: Bygg
     runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      packages: 'write'
     env:
       BUILD_ENV: dev
       IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
       CDN_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
       FARO_URL: https://telemetry.ekstern.dev.nav.no/collect
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and publish Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ env.docker_image }}
-          build-args: |
-            BUILD_ENV=${{ env.BUILD_ENV }}
-            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
-            CDN_URL=${{ env.CDN_URL }}
-            FARO_URL=${{ env.FARO_URL }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          secrets: |
-            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
-
-  build-prod:
-    name: Build and push Prod Docker container
-    if: github.event.inputs.environment == 'PROD'
-    runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      packages: 'write'
-    env:
-      BUILD_ENV: prod
-      IMAGE_PROXY_URL: https://finnhjelpemiddel.nav.no/imageproxy
-      CDN_URL: https://finnhjelpemiddel.nav.no/imageproxy/file/
-      ASSET_PREFIX: https://cdn.nav.no/teamdigihot/hm-oversikt-frontend/prod
-      FARO_URL: https://telemetry.nav.no/collect
+      contents: "write"
+      id-token: "write"
+      packages: "write"
+    timeout-minutes: 10
+    outputs:
+      docker_image: ${{ steps.docker-build-push.outputs.image }}
+      version_tag: ${{ steps.version-tag.outputs.VERSION_TAG}}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-      - name: Install npm dependencies
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: pre-deploy
+        uses: navikt/digihot-deploy/actions/pre-deploy@v3
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-        run: npm install
-      - name: Build application
-        run: npm run build
-      - name: Upload static files to NAV CDN
-        uses: nais/deploy/actions/cdn-upload/v2@master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bygg og push Docker image
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
         with:
           team: teamdigihot
-          source: ./.next/static
-          destination: '/hm-oversikt-frontend/prod/_next'
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and publish Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ env.docker_image }}
-          build-args: |
+          tag: ${{ env.VERSION_TAG }}
+          build_args: |
             BUILD_ENV=${{ env.BUILD_ENV }}
             IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
             CDN_URL=${{ env.CDN_URL }}
             FARO_URL=${{ env.FARO_URL }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          secrets: |
-            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
+          build_secrets: |
+            NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
 
-  deploy-to-dev:
-    name: Deploy to NAIS (DEV)
-    needs: build-dev
-    if: github.event.inputs.environment == 'DEV'
+  deploy-dev:
+    name: Deploy til dev-gcp
     runs-on: ubuntu-latest
+    needs: [ build ]
+    permissions:
+      contents: write
+      id-token: write
+    timeout-minutes: 10
+    env:
+      VERSION_TAG: ${{ needs.build.outputs.version_tag }}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
+      - name: Sjekk ut koden
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-dev.yaml
-          VAR: image=${{ env.docker_image }}
+          IMAGE: ${{ needs.build.outputs.docker_image }}
 
-  deploy-to-prod:
-    name: Deploy to NAIS (PROD)
-    needs: build-prod
-    if: github.event.inputs.environment == 'PROD'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
+      - name: Etter deploy
+        if: github.ref == 'refs/heads/main'
+        uses: navikt/digihot-deploy/actions/post-deploy@v3
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-gcp
-          RESOURCE: .nais/nais-prod.yaml
-          VAR: image=${{ env.docker_image }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
