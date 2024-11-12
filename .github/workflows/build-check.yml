@@ -11,9 +11,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18.x
+      - name: Autentiser med GitHub NPM registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.READER_TOKEN }}" >> ~/.npmrc
+          echo "@navikt:registry=https://npm.pkg.github.com" >> ~/.npmrc
       - name: Install npm dependencies
-        env:
-          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         run: npm install
       - name: Build application
         run: npm run build
