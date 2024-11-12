@@ -4,6 +4,9 @@ const nextConfig = {
   output: 'standalone', // see: https://github.com/vercel/next.js/tree/canary/examples/with-docker
   assetPrefix: process.env.ASSET_PREFIX || undefined,
   reactStrictMode: true,
+  sassOptions: {
+    silenceDeprecations: ['legacy-js-api'], // TODO: next har ikke oppdatert internt enda
+  },
   async rewrites() {
     return [
       {
@@ -50,6 +53,9 @@ const nextConfig = {
     BUILD_ENV: process.env.BUILD_ENV,
     HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
     NEXT_PUBLIC_FARO_URL: process.env.FARO_URL,
+  },
+  experimental: {
+    optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
   },
 }
 

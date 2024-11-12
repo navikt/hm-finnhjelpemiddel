@@ -1,4 +1,5 @@
-@import '@navikt/ds-tokens/dist/tokens';
+@use 'src/styles/_mixins';
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .compare-page {
   width: 100%;
