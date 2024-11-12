@@ -1,13 +1,13 @@
-name: Bygg, deploy til dev-gcp og lag release
+name: Manually deploy to NAIS (ENV) v2
 on:
-  push:
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'LICENCE'
-      - 'CODEOWNERS'
-    branches:
-      - dockerBuildPush
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Deploy to environment
+        default: 'dev'
+        options:
+          - dev
 
 jobs:
   build:
@@ -62,7 +62,7 @@ jobs:
     permissions:
       contents: write
       id-token: write
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       VERSION_TAG: ${{ needs.build.outputs.version_tag }}
 
@@ -82,15 +82,3 @@ jobs:
         uses: navikt/digihot-deploy/actions/post-deploy@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Lag release
-        if: github.ref == 'refs/heads/main'
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.VERSION_TAG }}
-          release_name: ${{ env.APPLICATION }} ${{ env.VERSION_TAG }}
-          body: ${{ env.CHANGE_LOG }}
-          draft: true
-          prerelease: false
