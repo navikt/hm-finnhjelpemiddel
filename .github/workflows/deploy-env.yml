@@ -74,8 +74,3 @@ jobs:
           RESOURCE: .nais/nais-dev.yaml
           IMAGE: ${{ needs.build.outputs.docker_image }}
 
-      - name: Etter deploy
-        if: github.ref == 'refs/heads/main'
-        uses: navikt/digihot-deploy/actions/post-deploy@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
