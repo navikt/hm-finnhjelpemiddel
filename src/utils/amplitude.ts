@@ -1,15 +1,17 @@
 'use client'
-import amplitude from 'amplitude-js'
+import * as amplitude from '@amplitude/analytics-browser'
+import { track } from '@amplitude/analytics-browser'
 
-export enum amplitude_taxonomy {
-  SKJEMA_START = 'skjema startet',
-  SKJEMA_ÅPEN = 'skjema åpnet',
-  SKJEMASTEG_FULLFØRT = 'skjemasteg fullført',
-  SKJEMAVALIDERING_FEILET = 'skjemavalidering feilet',
-  SKJEMAINNSENDING_FEILET = 'skjemainnsending feilet',
-  SKJEMA_FULLFØRT = 'skjema fullført',
-  NAVIGERE = 'navigere',
-}
+const APP_NAME = 'hm-oversikt'
+const TEAM_NAME = 'teamdigihot'
+const AMP_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
+const AMP_PUBLIC_KEY_PROD = '10798841ebeba333b8ece6c046322d76'
+const AMP_PUBLIC_KEY_DEV = 'c1c2553d689ba4716c7d7c4410b521f5'
+
+
+type LogEvent = (params: { name: string; data?: any }) => void
+
+let amplitudeLogger: LogEvent | undefined = undefined
 
 export enum digihot_customevents {
   VISNING_OVERSIKT = 'visning av sider fra hm-oversikt-app',
@@ -20,30 +22,52 @@ export enum digihot_customevents {
   VARIANTSIDE_VIST = 'visning av stor variantside',
 }
 
-const SKJEMANAVN = 'hm-oversikt'
-
 export const initAmplitude = () => {
-  if (amplitude) {
-    amplitude.getInstance().init('default', '', {
-      apiEndpoint: 'amplitude.nav.no/collect-auto',
-      saveEvents: false,
-      includeUtm: true,
-      includeReferrer: true,
-      platform: window.location.toString(),
+  const apiKey =
+    process.env.BUILD_ENV === 'prod'
+      ? AMP_PUBLIC_KEY_PROD
+      : process.env.BUILD_ENV === 'dev'
+        ? AMP_PUBLIC_KEY_DEV
+        : 'mock'
+  if (apiKey === 'mock') {
+    amplitudeLogger = (params: { name: string; data?: any }) => {
+      console.log('[Mock Amplitude Event]', {
+        name: params.name,
+        data: {
+          ...('data' in params.data ? params.data.data : {}),
+          ...params.data,
+        },
+      })
+    }
+  } else {
+    amplitude.init(apiKey!, {
+      serverUrl: AMP_COLLECTION_URL,
+      serverZone: 'EU',
+      autocapture: {
+        attribution: true,
+        pageViews: true,
+        sessions: true,
+        formInteractions: true,
+        fileDownloads: true,
+        elementInteractions: true,
+      },
     })
+    amplitudeLogger = (params: { name: string; data?: any }) => {
+      amplitude.logEvent(params.name, params.data)
+    }
   }
 }
 
 export function logAmplitudeEvent(eventName: string, data?: any) {
   setTimeout(() => {
     data = {
-      app: SKJEMANAVN,
-      team: 'teamdigihot',
+      app: APP_NAME,
+      team: TEAM_NAME,
       ...data,
     }
     try {
       if (amplitude) {
-        amplitude.getInstance().logEvent(eventName, data)
+        track(eventName, data)
       }
     } catch (error) {
       console.error(error)
@@ -53,7 +77,7 @@ export function logAmplitudeEvent(eventName: string, data?: any) {
 
 export function logCustomEvent(event: digihot_customevents, data?: any) {
   logAmplitudeEvent(event, {
-    skjemanavn: SKJEMANAVN,
+    TEAM_NAME: TEAM_NAME,
     ...data,
   })
 }
