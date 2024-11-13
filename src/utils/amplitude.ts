@@ -4,7 +4,10 @@ import { track } from '@amplitude/analytics-browser'
 
 const APP_NAME = 'hm-oversikt'
 const TEAM_NAME = 'teamdigihot'
-const AMPLITUDE_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
+const AMP_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
+const AMP_PUBLIC_KEY_PROD = '10798841ebeba333b8ece6c046322d76'
+const AMP_PUBLIC_KEY_DEV = 'c1c2553d689ba4716c7d7c4410b521f5'
+
 
 type LogEvent = (params: { name: string; data?: any }) => void
 
@@ -22,13 +25,12 @@ export enum digihot_customevents {
 export const initAmplitude = () => {
   const apiKey =
     process.env.BUILD_ENV === 'prod'
-      ? '10798841ebeba333b8ece6c046322d76'
+      ? AMP_PUBLIC_KEY_PROD
       : process.env.BUILD_ENV === 'dev'
-        ? 'c1c2553d689ba4716c7d7c4410b521f5'
+        ? AMP_PUBLIC_KEY_DEV
         : 'mock'
   if (apiKey === 'mock') {
     amplitudeLogger = (params: { name: string; data?: any }) => {
-            // eslint-disable-next-line no-console
       console.log('[Mock Amplitude Event]', {
         name: params.name,
         data: {
@@ -39,7 +41,7 @@ export const initAmplitude = () => {
     }
   } else {
     amplitude.init(apiKey!, {
-      serverUrl: AMPLITUDE_COLLECTION_URL,
+      serverUrl: AMP_COLLECTION_URL,
       serverZone: 'EU',
       autocapture: {
         attribution: true,
