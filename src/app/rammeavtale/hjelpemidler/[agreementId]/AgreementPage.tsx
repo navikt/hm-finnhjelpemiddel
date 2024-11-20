@@ -311,9 +311,10 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
     agreementId === '034fccf7-c481-4c2b-9867-4d092f89c0fe' || agreementId === '22469a9d-0cc2-41c4-8564-085b0d836144'
 
   const isLofteplattformAvtale = agreementId === '4432dc25-88c1-429e-95f3-0ed55836335e' || agreementId === '039c71d2-d325-47c0-99ec-8ac85748d40d'
+  const isStaastativAvtale  = agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7'
 
   const showAccessoriesAndSparePartsList =
-    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && isLofteplattformAvtale
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && (isLofteplattformAvtale || isStaastativAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
