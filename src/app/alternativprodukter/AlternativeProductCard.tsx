@@ -6,6 +6,7 @@ import ProductImage from '@/components/ProductImage'
 import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
+import { logNavigationEvent } from '@/utils/amplitude'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
@@ -74,6 +75,9 @@ const ProductInfo = ({
             as={NextLink}
             href={`/produkt/${alternativeProduct.seriesId}?term=${alternativeProduct.hmsArtNr}`}
             className={styles.link}
+            onClick={() => {
+              logNavigationEvent('alternativprodukter', 'produktkort', alternativeProduct.seriesTitle)
+            }}
           >
             {alternativeProduct.seriesTitle}
           </Link>
@@ -107,7 +111,10 @@ const ProductInfo = ({
               size={'small'}
               icon={<ChevronDownIcon aria-hidden />}
               iconPosition={'right'}
-              onClick={() => setOpenWarehouseStock(!openWarehouseStock)}
+              onClick={() => {
+                setOpenWarehouseStock(!openWarehouseStock)
+                logNavigationEvent('alternativprodukter', 'lagerstatus', selectedWarehouseStock ? selectedWarehouseStock.location : '')
+              }}
             >
               Se lagerstatus
             </Button>
@@ -182,6 +189,7 @@ const CompareCheckboxAP = ({
 
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()
+    logNavigationEvent('alternativprodukter', 'sammenlign', product.variantTitle)
 
     const foundProductInCompareList =
       alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1

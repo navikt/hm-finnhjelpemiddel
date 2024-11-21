@@ -6,6 +6,7 @@ import { Alert, HStack, Search, Select } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/alternativprodukter/AlternativeProductsList'
+import { logNavigationEvent } from '@/utils/amplitude'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -67,6 +68,7 @@ export default function AlternativeProductsPage() {
   ]
 
   const handleSearch = (value: string) => {
+    logNavigationEvent('alternativprodukter', 'søk', 'Søk fra alternativprodukter')
     router.replace(`${pathname}?hms=${value}`, {
       scroll: false,
     })
