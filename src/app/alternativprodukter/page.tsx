@@ -99,12 +99,12 @@ export default function AlternativeProductsPage() {
   return (
     <div className={`${styles.container} main-wrapper--large`}>
       <Alert variant="info" size="small" contentMaxWidth={false} style={{ width: 'fit-content' }}>
-        Vi har foreløpig bare info om produkter på disse rammeavtalene:
+        Vi viser foreløpig hjelpemidler innen disse produktområdene:
         <ul>
           <li>Overflyttingsplattformer og personløftere</li>
           <li>Stoler med oppreisingsfunksjon</li>
         </ul>
-        Lagerstatusen oppdateres hver natt fra Oebs, og er regnet ut fra tilgjengelig minus behovsmeldt.
+        Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
       </Alert>
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
