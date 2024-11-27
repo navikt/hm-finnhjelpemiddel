@@ -101,6 +101,7 @@ export default function AlternativeProductsPage() {
       <Alert variant="info" size="small" contentMaxWidth={false} style={{ width: 'fit-content' }}>
         Vi viser foreløpig hjelpemidler innen disse produktområdene:
         <ul>
+          <li>Kalendere, dagsplanleggere og tidtakere</li>
           <li>Overflyttingsplattformer og personløftere</li>
           <li>Stoler med oppreisingsfunksjon</li>
         </ul>
