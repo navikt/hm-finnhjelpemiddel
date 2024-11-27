@@ -4,18 +4,25 @@ import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Button, HStack, Hide, Show } from '@navikt/ds-react'
+import { Button, Hide, HStack, Show } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
+import Pepperkakemann from "@/app/julepynt/Pepperkakemann";
+import { useFeatureFlags } from "@/hooks/useFeatureFlag";
+import { SnowfallComponent } from "@/components/Snowfall";
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
   const [searchOpen, setSearchOpen] = useState(searchParamValue !== '' && searchParamValue !== null)
+
+  const featureFlags = useFeatureFlags()
+  const juledekorasjonFlag = featureFlags.isEnabled('juledekorasjon')
+  const [visJulepynt, setVisJulepynt] = useState(false);
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -27,7 +34,6 @@ const NavigationBar = () => {
     setMenuOpen(false)
   })
 
-  //TODO: Bruke useSearchParems her?
   const onSearch = useCallback(
     (searchTerm: string) => {
       setMenuOpen(false)
@@ -77,6 +83,7 @@ const NavigationBar = () => {
 
   return (
     <nav className="nav" ref={outerContainerRef}>
+      {juledekorasjonFlag && visJulepynt && <SnowfallComponent />}
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <NextLink href="/" className="logo" onClick={() => setMenuOpen(false)}>
@@ -88,6 +95,29 @@ const NavigationBar = () => {
             </Hide>
           </NextLink>
 
+
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            alignContent: "flex-start",
+            marginRight: "auto",
+            paddingLeft: '1rem'
+          }}>
+            <Hide below="md">
+            <Button
+              size="medium"
+              variant="tertiary-neutral"
+              icon={<Pepperkakemann active={visJulepynt}/>}
+              onClick={() => setVisJulepynt(!visJulepynt)}></Button>
+              </Hide>
+            <Hide above="sm">
+              <Button
+                size="xsmall"
+                variant="tertiary-neutral"
+                icon={<Pepperkakemann active={visJulepynt}/>}
+                onClick={() => setVisJulepynt(!visJulepynt)}></Button>
+            </Hide>
+          </div>
           <div className="nav-top-container__menu-buttons-container">
             <HStack wrap={false}>
               {searchOpen && (

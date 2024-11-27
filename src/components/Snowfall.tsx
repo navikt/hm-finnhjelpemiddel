@@ -1,12 +1,13 @@
-const Snowfall = () => {
+import Snowfall from "react-snowfall";
+
+export const SnowfallComponent = () => {
   return (
-    <div
+    <Snowfall
       style={{
+        zIndex: 1,
         position: 'fixed',
         width: '100vw',
         height: '100vh',
-      }}>
-      <Snowfall />
-    </div>
+      }} />
   )
 }
