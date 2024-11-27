@@ -95,29 +95,31 @@ const NavigationBar = () => {
             </Hide>
           </NextLink>
 
-
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            alignContent: "flex-start",
-            marginRight: "auto",
-            paddingLeft: '1rem'
-          }}>
-            <Hide below="md">
-            <Button
-              size="medium"
-              variant="tertiary-neutral"
-              icon={<Pepperkakemann active={visJulepynt}/>}
-              onClick={() => setVisJulepynt(!visJulepynt)}></Button>
+          {juledekorasjonFlag && (
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              alignContent: "flex-start",
+              marginRight: "auto",
+              paddingLeft: '1rem'
+            }}>
+              <Hide below="md">
+                <Button
+                  size="medium"
+                  variant="tertiary-neutral"
+                  icon={<Pepperkakemann active={visJulepynt}/>}
+                  onClick={() => setVisJulepynt(!visJulepynt)}></Button>
               </Hide>
-            <Hide above="sm">
-              <Button
-                size="xsmall"
-                variant="tertiary-neutral"
-                icon={<Pepperkakemann active={visJulepynt}/>}
-                onClick={() => setVisJulepynt(!visJulepynt)}></Button>
-            </Hide>
-          </div>
+              <Hide above="sm">
+                <Button
+                  size="xsmall"
+                  variant="tertiary-neutral"
+                  icon={<Pepperkakemann active={visJulepynt}/>}
+                  onClick={() => setVisJulepynt(!visJulepynt)}></Button>
+              </Hide>
+            </div>
+          )}
+
           <div className="nav-top-container__menu-buttons-container">
             <HStack wrap={false}>
               {searchOpen && (
