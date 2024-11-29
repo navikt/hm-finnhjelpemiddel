@@ -104,6 +104,7 @@ export default function AlternativeProductsPage() {
           <li>Kalendere, dagsplanleggere og tidtakere</li>
           <li>Overflyttingsplattformer og personløftere</li>
           <li>Stoler med oppreisingsfunksjon</li>
+          <li>Varmehjelpemidler for hender og føtter</li>
         </ul>
         Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
       </Alert>
