@@ -50,8 +50,6 @@ const ProductInfo = ({
 }) => {
   const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
 
-  //const warehousesInStock = alternativeProduct.warehouseStock.filter((stock) => stock.actualAvailable > 0).length
-
   return (
     <VStack justify="space-between" padding={'5'} gap={'2'} className={styles.productContainer}>
       <HStack justify="space-between">
@@ -137,9 +135,6 @@ const ProductInfo = ({
 const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
   return (
     <VStack gap={'4'} className={styles.warehouseStatus}>
-      <HStack gap={'2'} justify={'space-between'} align={'center'}>
-        <Label>Lagerstatus</Label>
-      </HStack>
       <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
         {stocks
           ?.filter((stock) => stock.actualAvailable > 0)
@@ -151,10 +146,10 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
 
 const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   return (
-    <HStack className={styles.locationInfo} gap={'2'}>
+    <VStack className={styles.locationInfo} gap={'2'}>
       <Label>{stock.location}</Label>
       {<StockTag amount={stock.actualAvailable} />}
-    </HStack>
+    </VStack>
   )
 }
 
