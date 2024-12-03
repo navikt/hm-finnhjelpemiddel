@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { BodyShort, Box, Button, Checkbox, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
-import { ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { ArrowsSquarepathIcon, ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
@@ -54,7 +54,6 @@ const ProductInfo = ({
     <VStack justify="space-between" padding={'5'} gap={'2'} className={styles.productContainer}>
       <HStack justify="space-between">
         <VStack gap={'1'} className={styles.productProperties}>
-          <CompareCheckboxAP product={alternativeProduct} handleCompareClick={handleCompareClick} />
           <HStack gap={'2'} align={'center'}>
             {alternativeProduct.onAgreement ? (
               <Label size="small" className={styles.headerColor}>
@@ -107,19 +106,25 @@ const ProductInfo = ({
               </HStack>
             )}
             <Button
+              className={openWarehouseStock ? styles.toggledButton : ''}
               variant={'secondary'}
               size={'small'}
               icon={<ChevronDownIcon aria-hidden />}
               iconPosition={'right'}
               onClick={() => {
                 setOpenWarehouseStock(!openWarehouseStock)
-                logNavigationEvent('alternativprodukter', 'lagerstatus', selectedWarehouseStock ? selectedWarehouseStock.location : '')
+                logNavigationEvent(
+                  'alternativprodukter',
+                  'lagerstatus',
+                  selectedWarehouseStock ? selectedWarehouseStock.location : ''
+                )
               }}
             >
               Se lagerstatus
             </Button>
           </>
         )}
+        <CompareButton product={alternativeProduct} handleCompareClick={handleCompareClick} />
       </HStack>
     </VStack>
   )
@@ -177,7 +182,7 @@ const StockTag = ({ amount }: { amount: number }) => {
     )
 }
 
-const CompareCheckboxAP = ({
+const CompareButton = ({
   product,
   handleCompareClick,
 }: {
@@ -202,16 +207,19 @@ const CompareCheckboxAP = ({
 
   const isInProductsToCompare = alternativeProductsToCompare.filter((procom) => product.id === procom.id).length >= 1
   return (
-    <Checkbox
-      className="product-card__checkbox"
+    <Button
+      className={isInProductsToCompare ? styles.toggledButton : ''}
       size="small"
+      variant="secondary"
       value="Legg produktet til sammenligning"
-      onChange={toggleCompareProduct}
-      checked={isInProductsToCompare}
+      onClick={toggleCompareProduct}
+      icon={<ArrowsSquarepathIcon aria-hidden />}
+      iconPosition="left"
+      aria-pressed={isInProductsToCompare}
     >
       <div aria-label={`sammenlign ${product.variantTitle}`}>
         <span aria-hidden>Sammenlign</span>
       </div>
-    </Checkbox>
+    </Button>
   )
 }

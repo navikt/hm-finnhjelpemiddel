@@ -87,3 +87,15 @@
 .selectWarehouse {
   width: 27rem;
 }
+
+.toggledButton {
+  color: #fff;
+  background-color: $a-surface-action-selected-hover;
+  box-shadow: none;
+  z-index: 2;
+
+  &:hover {
+    color: white;
+    background-color: $a-surface-action-selected-hover;
+  }
+}
