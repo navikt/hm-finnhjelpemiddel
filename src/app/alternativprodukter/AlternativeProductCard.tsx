@@ -134,13 +134,11 @@ const ProductInfo = ({
 
 const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
   return (
-    <VStack gap={'4'} className={styles.warehouseStatus}>
-      <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
-        {stocks
-          ?.filter((stock) => stock.actualAvailable > 0)
-          .map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
-      </HGrid>
-    </VStack>
+    <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
+      {stocks
+        ?.filter((stock) => stock.actualAvailable > 0)
+        .map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
+    </HGrid>
   )
 }
 
