@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
-import { ArrowsSquarepathIcon, ChevronDownIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { ArrowsSquarepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
@@ -21,7 +21,7 @@ export const AlternativeProductCard = ({
   const stocks = alternativeProduct.warehouseStock
 
   return (
-    <Stack align={'start'} direction={{ xs: 'column', lg: 'row' }} className={styles.alternativeProductContainer}>
+    <Stack align={'start'} direction={'column'} className={styles.alternativeProductContainer}>
       <ProductInfo
         alternativeProduct={alternativeProduct}
         setOpenWarehouseStock={setOpenWarehouseStock}
@@ -30,7 +30,7 @@ export const AlternativeProductCard = ({
         handleCompareClick={handleCompareClick}
       />
 
-      {openWarehouseStock && <WarehouseStatus stocks={stocks} setOpenWarehouseStock={setOpenWarehouseStock} />}
+      {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
     </Stack>
   )
 }
@@ -49,6 +49,8 @@ const ProductInfo = ({
   handleCompareClick?: () => void
 }) => {
   const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
+
+  //const warehousesInStock = alternativeProduct.warehouseStock.filter((stock) => stock.actualAvailable > 0).length
 
   return (
     <VStack justify="space-between" padding={'5'} gap={'2'} className={styles.productContainer}>
@@ -90,38 +92,40 @@ const ProductInfo = ({
           <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
         </Box>
       </HStack>
-      <HStack align={'center'} justify={'space-between'} gap={'2'}>
+      <HStack align={'end'} justify={'space-between'} gap={'2'}>
         {!alternativeProduct.inStockAnyWarehouse && (
           <Tag variant="neutral" size={'small'}>
-            Ikke på lager hos noen sentraler
+            Ikke på noen lager
           </Tag>
         )}
 
         {alternativeProduct.inStockAnyWarehouse && (
           <>
-            {selectedWarehouseStock && (
-              <HStack gap={'2'}>
-                <b>{selectedWarehouseStock.location}:</b>
-                {numberInStock !== undefined && <StockTag amount={numberInStock} />}
-              </HStack>
-            )}
-            <Button
-              className={openWarehouseStock ? styles.toggledButton : ''}
-              variant={'secondary'}
-              size={'small'}
-              icon={<ChevronDownIcon aria-hidden />}
-              iconPosition={'right'}
-              onClick={() => {
-                setOpenWarehouseStock(!openWarehouseStock)
-                logNavigationEvent(
-                  'alternativprodukter',
-                  'lagerstatus',
-                  selectedWarehouseStock ? selectedWarehouseStock.location : ''
-                )
-              }}
-            >
-              Se lagerstatus
-            </Button>
+            <VStack gap={'2'}>
+              {selectedWarehouseStock && (
+                <HStack gap={'2'}>
+                  <b>{selectedWarehouseStock.location}:</b>
+                  {numberInStock !== undefined && <StockTag amount={numberInStock} />}
+                </HStack>
+              )}
+              <Button
+                className={openWarehouseStock ? styles.toggledButton : ''}
+                variant={'secondary'}
+                size={'small'}
+                icon={openWarehouseStock ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+                iconPosition={'right'}
+                onClick={() => {
+                  setOpenWarehouseStock(!openWarehouseStock)
+                  logNavigationEvent(
+                    'alternativprodukter',
+                    'lagerstatus',
+                    selectedWarehouseStock ? selectedWarehouseStock.location : ''
+                  )
+                }}
+              >
+                Se lagerstatus
+              </Button>
+            </VStack>
           </>
         )}
         <CompareButton product={alternativeProduct} handleCompareClick={handleCompareClick} />
@@ -130,39 +134,26 @@ const ProductInfo = ({
   )
 }
 
-const WarehouseStatus = ({
-  stocks,
-  setOpenWarehouseStock,
-}: {
-  stocks: WarehouseStock[] | undefined
-  setOpenWarehouseStock: Dispatch<SetStateAction<boolean>>
-}) => {
+const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
   return (
     <VStack gap={'4'} className={styles.warehouseStatus}>
       <HStack gap={'2'} justify={'space-between'} align={'center'}>
         <Label>Lagerstatus</Label>
-        <Button
-          variant={'tertiary'}
-          title={'Lukk'}
-          size={'small'}
-          icon={<XMarkIcon fontSize={'1.5rem'} aria-hidden />}
-          onClick={() => setOpenWarehouseStock(false)}
-          className={styles.closeButton}
-        />
       </HStack>
       <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
-        {stocks?.map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
+        {stocks
+          ?.filter((stock) => stock.actualAvailable > 0)
+          .map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
       </HGrid>
     </VStack>
   )
 }
 
 const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
-  const amount = stock ? Math.max(stock.available - stock.needNotified, 0) : undefined
   return (
     <HStack className={styles.locationInfo} gap={'2'}>
       <Label>{stock.location}</Label>
-      {amount !== undefined && <StockTag amount={amount} />}
+      {<StockTag amount={stock.actualAvailable} />}
     </HStack>
   )
 }
