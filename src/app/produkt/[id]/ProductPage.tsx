@@ -73,7 +73,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           <div className="spacing-top--small spacing-bottom--small">
             <NextLink
               href={`/produkt/${product.id}/variants`}
-              className="agreement-details__agreement-link"
+              className="variant-table_fullscreen-link"
               target={'_blank'}
             >
               {`Åpne fullskjerm-varianttabell i ny fane`}
