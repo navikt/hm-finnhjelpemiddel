@@ -1,7 +1,7 @@
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
-import { logNavigationEvent } from '@/utils/amplitude'
+import { digihot_customevents, logCustomEvent, logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, Hide, HStack, Show } from '@navikt/ds-react'
@@ -10,9 +10,9 @@ import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
-import Pepperkakemann from "@/app/julepynt/Pepperkakemann";
-import { useFeatureFlags } from "@/hooks/useFeatureFlag";
-import { SnowfallComponent } from "@/components/Snowfall";
+import Pepperkakemann from '@/app/julepynt/Pepperkakemann'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import { SnowfallComponent } from '@/components/Snowfall'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,7 +22,11 @@ const NavigationBar = () => {
 
   const featureFlags = useFeatureFlags()
   const juledekorasjonFlag = featureFlags.isEnabled('juledekorasjon')
-  const [visJulepynt, setVisJulepynt] = useState(false);
+  const [visJulepynt, setVisJulepynt] = useState(false)
+  const clickJulepynt = () => {
+    setVisJulepynt(!visJulepynt)
+    logCustomEvent(digihot_customevents.PEPPERKAKE)
+  }
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -96,26 +100,34 @@ const NavigationBar = () => {
           </NextLink>
 
           {juledekorasjonFlag && (
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              alignContent: "flex-start",
-              marginRight: "auto",
-              paddingLeft: '1rem'
-            }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                alignContent: 'flex-start',
+                marginRight: 'auto',
+                paddingLeft: '1rem',
+              }}
+            >
               <Hide below="md">
                 <Button
                   size="medium"
                   variant="tertiary-neutral"
-                  icon={<Pepperkakemann active={visJulepynt}/>}
-                  onClick={() => setVisJulepynt(!visJulepynt)}></Button>
+                  title="Julepynt"
+                  aria-description="Viser snø på skjermen"
+                  icon={<Pepperkakemann active={visJulepynt} aria-hidden />}
+                  onClick={() => clickJulepynt()}
+                />
               </Hide>
               <Hide above="sm">
                 <Button
                   size="xsmall"
                   variant="tertiary-neutral"
-                  icon={<Pepperkakemann active={visJulepynt}/>}
-                  onClick={() => setVisJulepynt(!visJulepynt)}></Button>
+                  title="Julepynt"
+                  aria-description="Viser snø på skjermen"
+                  icon={<Pepperkakemann active={visJulepynt} aria-hidden />}
+                  onClick={() => clickJulepynt()}
+                />
               </Hide>
             </div>
           )}

@@ -8,7 +8,6 @@ const AMP_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
 const AMP_PUBLIC_KEY_PROD = '10798841ebeba333b8ece6c046322d76'
 const AMP_PUBLIC_KEY_DEV = 'c1c2553d689ba4716c7d7c4410b521f5'
 
-
 type LogEvent = (params: { name: string; data?: any }) => void
 
 let amplitudeLogger: LogEvent | undefined = undefined
@@ -20,6 +19,7 @@ export enum digihot_customevents {
   KLIKK = 'klikk på knapp',
   ERROR_URL = 'feil ved url',
   VARIANTSIDE_VIST = 'visning av stor variantside',
+  PEPPERKAKE = 'klikk på pepperkake',
 }
 
 export const initAmplitude = () => {
