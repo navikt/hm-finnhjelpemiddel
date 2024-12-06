@@ -37,7 +37,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@next/eslint-plugin-next": "15.0.3",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.0.1",
     "@types/amplitude-js": "^8.16.5",
     "@types/deep-equal": "^1.0.4",
     "@types/node": "22.10.1",
