@@ -311,10 +311,11 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
     agreementId === '034fccf7-c481-4c2b-9867-4d092f89c0fe' || agreementId === '22469a9d-0cc2-41c4-8564-085b0d836144'
 
   const isLofteplattformAvtale = agreementId === '4432dc25-88c1-429e-95f3-0ed55836335e' || agreementId === '039c71d2-d325-47c0-99ec-8ac85748d40d'
-  const isStaastativAvtale  = agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7' || agreementId === '216b3d7b-ce74-4bf4-aeca-f06888f5c072'
+  const isStaastativAvtale = agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7' || agreementId === '216b3d7b-ce74-4bf4-aeca-f06888f5c072'
+  const isGanghjelpemidlerAvtale = agreementId === '35a25ae9-d307-42a6-8893-732de01e02ce' || agreementId === 'f1ddd971-17f1-4241-8593-edaf377f66f0'
 
   const showAccessoriesAndSparePartsList =
-    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && (isLofteplattformAvtale || isStaastativAvtale)
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && (isLofteplattformAvtale || isStaastativAvtale || isGanghjelpemidlerAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
