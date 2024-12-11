@@ -101,9 +101,13 @@ export default function AlternativeProductsPage() {
       <Alert variant="info" size="small" contentMaxWidth={false} style={{ width: 'fit-content' }}>
         Vi viser foreløpig hjelpemidler innen disse produktområdene:
         <ul>
+          <li>Arbeidsstoler</li>
+          <li>Ganghjelpemidler</li>
           <li>Kalendere, dagsplanleggere og tidtakere</li>
+          <li>Noen manuelle rullestoler</li>
           <li>Overflyttingsplattformer og personløftere</li>
           <li>Stoler med oppreisingsfunksjon</li>
+          <li>Synstekniske hjelpemidler</li>
           <li>Varmehjelpemidler for hender og føtter</li>
         </ul>
         Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
