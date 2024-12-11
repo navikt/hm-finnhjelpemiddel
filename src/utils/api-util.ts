@@ -27,7 +27,8 @@ import {
   mapProductFromSeriesId,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
-  mapProductsVariants, mapProductsWithoutAggregationOnSeries,
+  mapProductsVariants,
+  mapProductsWithoutAggregationOnSeries,
   mapProductVariant,
   Product,
   ProductVariant,
@@ -35,7 +36,7 @@ import {
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
-import { AlternativeStockResponse } from '@/app/alternativprodukter/page'
+import { AlternativeStockResponse } from '@/app/gjenbruksprodukter/page'
 
 export const PAGE_SIZE = 24
 
@@ -1080,7 +1081,6 @@ export type FetchSeriesResponse = {
   products: Product[]
 }
 
-
 export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
@@ -1130,7 +1130,6 @@ export const fetchProductsWithVariants = (seriesIds: string[]): Promise<FetchSer
       }
     })
 }
-
 
 export const fetchProductsWithVariant = (variantIds: string[]): Promise<FetchSeriesResponse> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {

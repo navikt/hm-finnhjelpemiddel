@@ -1,13 +1,13 @@
 'use client'
 
 import { MultiplyIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Detail, Link, VStack, } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import ProductImage from './ProductImage'
-import { useSearchParams } from "next/navigation";
-import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
-import { useHydratedAlternativeProductsCompareStore } from "@/utils/compare-alternatives-state-util";
+import { useSearchParams } from 'next/navigation'
+import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
+import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 
 const RemovableAlternativeProductCardMenu = ({
   product,
@@ -18,10 +18,10 @@ const RemovableAlternativeProductCardMenu = ({
   handleCompareClick?: () => void
 }) => {
   const { alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
-  const isInProductsToCompare = alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length >= 1
+  const isInProductsToCompare =
+    alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length >= 1
 
-
-  const imageSrc=  product.imageUri
+  const imageSrc = product.imageUri
   const minRank = product.highestRank
   const currentRank = minRank
   const onAgreement = currentRank !== Infinity
@@ -52,7 +52,6 @@ const RemovableAlternativeProductCardMenu = ({
               {product.variantTitle}
             </BodyShort>
           </Link>
-
         </VStack>
 
         <ProductImage src={imageSrc} productTitle={product.variantTitle} />

@@ -33,6 +33,10 @@ const nextConfig = {
         source: '/alternativ/:path*',
         destination: process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + '/alternativ/:path*',
       },
+      {
+        source: '/alternativprodukter',
+        destination: '/gjenbruksprodukter',
+      },
     ]
   },
   images: {

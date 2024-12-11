@@ -1,13 +1,13 @@
 import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React, { useState } from 'react'
-import { AlternativeProductCard } from '@/app/alternativprodukter/AlternativeProductCard'
+import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
   getAlternativeProductsFromHmsArtNr,
   getOriginalProductFromHmsArtNr,
   WarehouseStock,
-} from '@/app/alternativprodukter/alternative-util'
+} from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {

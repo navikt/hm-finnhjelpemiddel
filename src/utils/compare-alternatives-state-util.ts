@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
+import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 
 export enum CompareAlternativesMenuState {
   Open = 'Open',
@@ -15,7 +15,7 @@ export enum CompareAlternativesMenuState {
 type AlternativeProductCompareState = {
   compareAlternativesMenuState: CompareAlternativesMenuState
   setCompareAlternativesMenuState: (state: CompareAlternativesMenuState) => void
-  alternativeProductsToCompare: (AlternativeProduct)[]
+  alternativeProductsToCompare: AlternativeProduct[]
   setAlternativeProductToCompare: (product: AlternativeProduct) => void
   removeAlternativeProduct: (productId: string) => void
   resetAlternativeProductToCompare: () => void
@@ -27,11 +27,13 @@ export const useAlternativeProductCompareStore = create<AlternativeProductCompar
       compareAlternativesMenuState: CompareAlternativesMenuState.Minimized,
       alternativeProductsToCompare: [],
       setCompareAlternativesMenuState: (menuState) => set(() => ({ compareAlternativesMenuState: menuState })),
-      setAlternativeProductToCompare: (product) =>{
+      setAlternativeProductToCompare: (product) => {
         set((state) => ({ alternativeProductsToCompare: state.alternativeProductsToCompare.concat(product) }))
       },
       removeAlternativeProduct: (productId: string) =>
-        set((state) => ({ alternativeProductsToCompare: state.alternativeProductsToCompare.filter((prod) => prod.id !== productId) })),
+        set((state) => ({
+          alternativeProductsToCompare: state.alternativeProductsToCompare.filter((prod) => prod.id !== productId),
+        })),
       resetAlternativeProductToCompare: () => {
         set({ alternativeProductsToCompare: [] })
       },
@@ -54,12 +56,11 @@ export const useHydratedAlternativeProductsCompareStore = ((selector, compare) =
   return hydrated
     ? store
     : {
-      compareAlternativesMenuState: CompareAlternativesMenuState.Minimized,
-      alternativeProductsToCompare: [],
-      setCompareAlternativesMenuState: () => undefined,
-      setAlternativeProductToCompare: () => undefined,
-      removeAlternativeProduct: () => undefined,
-      resetAlternativeProductToCompare: () => undefined,
-    }
+        compareAlternativesMenuState: CompareAlternativesMenuState.Minimized,
+        alternativeProductsToCompare: [],
+        setCompareAlternativesMenuState: () => undefined,
+        setAlternativeProductToCompare: () => undefined,
+        removeAlternativeProduct: () => undefined,
+        resetAlternativeProductToCompare: () => undefined,
+      }
 }) as typeof useAlternativeProductCompareStore
-

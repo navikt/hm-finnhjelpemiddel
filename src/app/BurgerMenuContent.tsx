@@ -132,6 +132,18 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       Innlogging leverandør
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href="/gjenbruksprodukter"
+                      onClick={() => {
+                        setMenuOpen(false)
+                        logNavigationEvent('meny', 'adminregister', 'Innlogging leverandør')
+                      }}
+                    >
+                      For ansatte: Gjenbruk
+                    </Link>
+                  </li>
                 </VStack>
               </VStack>
             </HGrid>

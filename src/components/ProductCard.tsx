@@ -1,7 +1,7 @@
 'use client'
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
-import {  Product } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { ArrowsSquarepathIcon, MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -22,7 +22,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
-import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
+import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 
 const ProductCard = ({
   type,

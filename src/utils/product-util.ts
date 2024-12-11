@@ -10,7 +10,6 @@ import {
   TechDataResponse,
 } from './response-types'
 import { capitalize } from './string-util'
-import { AlternativeProduct } from "@/app/alternativprodukter/alternative-util";
 
 export interface Product {
   id: string
@@ -199,7 +198,6 @@ export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Pro
 }
 
 export const mapProductsVariants = (data: SearchResponse): ProductVariant[] => {
-
   const sources = data.hits.hits.map((h) => h._source as ProductSourceResponse)
 
   const variants = sources.map((source) => {
@@ -209,16 +207,12 @@ export const mapProductsVariants = (data: SearchResponse): ProductVariant[] => {
   return variants
 }
 
-
 export const mapProductsWithoutAggregationOnSeries = (data: SearchResponse): Product[] => {
   const sources = data.hits.hits.map((h) => h._source as ProductSourceResponse)
   return mapProductWithNoAggregation(sources)
-
 }
 
-
 export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): Product[] => {
-
   if (sources.length === 0) {
     throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
   }
@@ -257,7 +251,6 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
   })
 
   return unaggregatedSeries
-
 }
 
 export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: ProductSourceResponse[]): Product[] => {
@@ -272,7 +265,6 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
   const firstVariant = sources[0]
   const allAgreementsForAllVariants = variants.flatMap((variant) => variant.agreements)
   const uniquesAgreementsPostAndRanks = filterUniqueCombinationsOfPostAndRank(allAgreementsForAllVariants)
-
 
   const unaggregatedSeries = variants.map((variant) => {
     return {
@@ -309,7 +301,6 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
 
   return unaggregatedSeries
 }
-
 
 export const mapProductWithVariants = (sources: ProductSourceResponse[]): Product => {
   const variants = sources.map((source) => {

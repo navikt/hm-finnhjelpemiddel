@@ -5,7 +5,7 @@ import styles from './AlternativeProducts.module.scss'
 import { Alert, HStack, Search, Select } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { AlternativeProductList } from '@/app/alternativprodukter/AlternativeProductsList'
+import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 import { logNavigationEvent } from '@/utils/amplitude'
 
 export interface WarehouseStock {

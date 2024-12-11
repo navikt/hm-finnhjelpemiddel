@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
-import styles from '@/app/alternativprodukter/AlternativeProducts.module.scss'
+import styles from '@/app/gjenbruksprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { ArrowsSquarepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { AlternativeProduct, WarehouseStock } from '@/app/alternativprodukter/alternative-util'
+import { AlternativeProduct, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 
