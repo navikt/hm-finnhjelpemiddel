@@ -10,14 +10,18 @@ import reportAccessibility from '@/utils/reportAccessibility'
 import NavigationBar from '@/app/NavigationBar'
 import Footer from '@/components/layout/Footer'
 import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
-import { Link } from '@navikt/ds-react'
+import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from "@/faro/faro";
+import { useFeatureFlags } from "@/hooks/useFeatureFlag";
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-
+  const featureFlags = useFeatureFlags()
   const { isMenuOpen } = useMenuStore()
   const { isMobileOverlayOpen } = useMobileOverlayStore()
+
+  const visFeilbanner = featureFlags.isEnabled('finnhjelpemiddel.feilbanner')
+
 
   useEffect(() => {
     document.activeElement instanceof HTMLElement && document.activeElement.blur()
@@ -47,6 +51,11 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <Suspense>
+      {visFeilbanner && (
+        <HStack padding="4" gap="3" justify="center">
+          <Alert variant="error">Vi har dessverre tekniske problemer for tiden og siden kan være ustabil som følge av dette. Vi arbeider med å løse problemet.</Alert>
+        </HStack>
+      )}
       {isMobileOverlayOpen && <div id="cover-main" />}
       <div id="modal-container"></div>
       <header>
