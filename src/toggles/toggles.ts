@@ -9,5 +9,5 @@ export const LOCAL_TOGGLES = [{
   enabled: true,
 }, {
   name: 'finnhjelpemiddel.feilbanner',
-  enabled: true,
+  enabled: false,
 }]
