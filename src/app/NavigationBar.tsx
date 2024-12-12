@@ -85,12 +85,15 @@ const NavigationBar = () => {
     })
   }
 
+  //spesifiser prod-ingress for å ikke linke til ansatt-forside fra gjenbrukssiden
+  const homeUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no/' : '/'
+
   return (
     <nav className="nav" ref={outerContainerRef}>
       {juledekorasjonFlag && visJulepynt && <SnowfallComponent />}
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
-          <NextLink href="/" className="logo" onClick={() => setMenuOpen(false)}>
+          <NextLink href={homeUrl} className="logo" onClick={() => setMenuOpen(false)}>
             <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
             <Hide below="sm">
               <span className="logo__text">
