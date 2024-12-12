@@ -27,6 +27,9 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
     return filteredData
   }, [agreements])
 
+  //spesifiser prod-ingress for å ikke linke til ansatt-forside fra gjenbrukssiden
+  const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
+
   return (
     <>
       {menuOpen && (
@@ -42,7 +45,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                     <li key={agreement.id}>
                       <Link
                         as={NextLink}
-                        href={agreementProductsLink(agreement.id)}
+                        href={baseUrl + agreementProductsLink(agreement.id)}
                         onClick={() => {
                           setMenuOpen(false)
                           logNavigationEvent('meny', 'hurtigoversikt', agreement.title)
@@ -83,7 +86,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   <li>
                     <Link
                       as={NextLink}
-                      href="/rammeavtale"
+                      href={baseUrl + '/rammeavtale'}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'rammeavtale', 'Avtaler med Nav')
@@ -95,7 +98,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   <li>
                     <Link
                       as={NextLink}
-                      href="/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale"
+                      href={baseUrl + '/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale'}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent(
@@ -111,7 +114,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   <li>
                     <Link
                       as={NextLink}
-                      href="/leverandorer"
+                      href={baseUrl + '/leverandorer'}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'leverandorer', 'Leverandøroversikt')
@@ -123,7 +126,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   <li>
                     <Link
                       as={NextLink}
-                      href="/adminregister"
+                      href={baseUrl + '/adminregister'}
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'adminregister', 'Innlogging leverandør')
