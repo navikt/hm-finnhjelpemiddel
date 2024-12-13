@@ -90,7 +90,7 @@ const ProductInfo = ({
           <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
         </Box>
       </HStack>
-      <HStack align={'end'} justify={'space-between'} gap={'2'}>
+      <HStack align={'end'} justify={'space-between'} gap={'2'} wrap={false}>
         {!alternativeProduct.inStockAnyWarehouse && (
           <Tag variant="neutral" size={'small'}>
             Ikke på noen lager
