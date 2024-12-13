@@ -945,7 +945,7 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
         },
       ],
       _source: {
-        includes: ['id', 'identifier', 'postNr', 'postLocation', 'name', 'address', 'homepage', 'status'],
+        includes: ['id', 'identifier', 'postNr', 'postLocation', 'name', 'address', 'homepage', 'status', 'email', 'phone'],
       },
     }),
   })
