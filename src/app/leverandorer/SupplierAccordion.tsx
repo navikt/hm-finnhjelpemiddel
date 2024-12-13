@@ -2,7 +2,7 @@
 
 import { logLeverandorprodukterKlikket } from '@/utils/amplitude'
 import { Supplier } from '@/utils/supplier-util'
-import { Accordion, BodyShort, Heading, Link } from '@navikt/ds-react'
+import { Accordion, BodyShort, Heading, Label, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
@@ -42,15 +42,30 @@ export const SupplierAccordion = ({ supplier }: Props) => {
 }
 
 const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
-  <div>
-    {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
-    {supplier.postNr && supplier.postLocation && (
-      <BodyShort>
-        {supplier.postNr} {supplier.postLocation}
-      </BodyShort>
+  <VStack gap="1">
+    {supplier.address && (
+      <VStack gap="0">
+        <Label>Adresse</Label>
+        {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
+        {supplier.postNr && supplier.postLocation && (
+          <BodyShort>
+            {supplier.postNr} {supplier.postLocation}
+          </BodyShort>
+        )}
+      </VStack>
     )}
-    {supplier.email && <BodyShort>{supplier.email}</BodyShort>}
-    {supplier.phone && <BodyShort>{supplier.phone}</BodyShort>}
+    {supplier.email && (
+      <VStack>
+        <Label>E-post</Label>
+       <BodyShort> {supplier.email}</BodyShort>
+      </VStack>
+    )}
+    {supplier.phone && (
+      <VStack>
+        <Label>Telefon</Label>
+        <BodyShort> {supplier.phone}</BodyShort>
+      </VStack>
+    )}
     {supplier.homepageUrl && (
       <BodyShort>
         <Link href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
@@ -66,5 +81,5 @@ const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
     >
       Se produkter fra {supplier.name}
     </Link>
-  </div>
+  </VStack>
 )
