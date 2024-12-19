@@ -37,6 +37,10 @@ const nextConfig = {
         source: '/alternativprodukter',
         destination: '/gjenbruksprodukter',
       },
+      {
+        source: '/finngjenbruksprodukt',
+        destination: '/gjenbruksprodukter',
+      },
     ]
   },
   images: {
