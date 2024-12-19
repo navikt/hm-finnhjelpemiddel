@@ -143,6 +143,7 @@ export interface AlternativeProductSourceResponse {
   isoCategory: string
   isoCategoryTitle: string
   isoCategoryText: string
+  isoCategoryTitleInternational: string
   accessory: boolean
   sparepart: boolean
   seriesId: string
