@@ -1,7 +1,8 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, HelpText, Link } from '@navikt/ds-react'
+import { BodyLong, BodyShort, HelpText, HStack, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
+import { ArrowDownRightIcon, GlobeIcon } from "@navikt/aksel-icons";
 
 const ProductInformation = ({ product }: { product: Product }) => {
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
@@ -64,8 +65,20 @@ const ProductInformation = ({ product }: { product: Product }) => {
         <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
         <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
         <DefinitionList.Definition>
-          {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}
+          <HStack gap="1">
+            <BodyShort><i>Nivå 3: </i></BodyShort>
+            <BodyShort size="medium">{product.isoCategoryTitleInternational + ' (' + product.isoCategory.slice(0,6) + ')'}</BodyShort>
+          </HStack>
         </DefinitionList.Definition>
+        <DefinitionList.Definition className="product-page__iso-international-text">
+          <HStack gap="1">
+            <ArrowDownRightIcon title="a11y-title" fontSize="1.5rem" />
+            <BodyShort><i>Nivå 4: </i> </BodyShort>
+            <BodyShort size="medium">   {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}</BodyShort>
+          </HStack>
+
+        </DefinitionList.Definition>
+
       </DefinitionList>
     </>
   )

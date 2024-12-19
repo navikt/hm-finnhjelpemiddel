@@ -20,6 +20,7 @@ export interface Product {
   compareData: ComparingData
   isoCategory: string
   isoCategoryTitle: string
+  isoCategoryTitleInternational: string
   isoCategoryText: string
   accessory: boolean
   sparepart: boolean
@@ -238,6 +239,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
       },
       isoCategory: product.isoCategory,
       isoCategoryTitle: product.isoCategoryTitle,
+      isoCategoryTitleInternational: product.isoCategoryTitleInternational,
       isoCategoryText: product.isoCategoryText,
       accessory: product.accessory,
       sparepart: product.sparepart,
@@ -288,6 +290,7 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
       isoCategory: firstVariant.isoCategory,
       isoCategoryTitle: firstVariant.isoCategoryTitle,
       isoCategoryText: firstVariant.isoCategoryText,
+      isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
       accessory: firstVariant.accessory,
       sparepart: firstVariant.sparepart,
       photos: mapPhotoInfo(firstVariant.media),
@@ -337,6 +340,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     isoCategory: firstVariant.isoCategory,
     isoCategoryTitle: firstVariant.isoCategoryTitle,
     isoCategoryText: firstVariant.isoCategoryText,
+    isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
     accessory: firstVariant.accessory,
     sparepart: firstVariant.sparepart,
     photos: mapPhotoInfo(firstVariant.media),
