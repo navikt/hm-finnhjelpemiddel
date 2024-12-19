@@ -61,6 +61,7 @@ export const accessoriesMock: Product[] = [
     isoCategoryTitle: 'Teleslyngeforsterkere',
     isoCategoryText:
       'Hjelpemidler for å ta imot eller sende informasjon med elektromagnetiske bølger i teleslyngesystemer. Hørselshjelpemidler, se 22 06.',
+    isoCategoryTitleInternational: 'Induction loop amplifiers',
     accessory: false,
     sparepart: false,
     photos: [{ uri: 'orig/52674.jpg' }],

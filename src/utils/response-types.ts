@@ -100,6 +100,7 @@ export interface ProductSourceResponse {
   supplierRef: string
   isoCategory: string
   isoCategoryTitle: string
+  isoCategoryTitleInternational: string
   isoCategoryText: string
   accessory: boolean
   sparepart: boolean
@@ -142,6 +143,7 @@ export interface AlternativeProductSourceResponse {
   isoCategory: string
   isoCategoryTitle: string
   isoCategoryText: string
+  isoCategoryTitleInternational: string
   accessory: boolean
   sparepart: boolean
   seriesId: string
