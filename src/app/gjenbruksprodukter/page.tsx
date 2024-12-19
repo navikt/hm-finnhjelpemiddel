@@ -150,6 +150,9 @@ export default function AlternativeProductsPage() {
             <li>Synstekniske hjelpemidler</li>
             <li>Varmehjelpemidler for hender og føtter</li>
             <li>Elektriske rullestoler</li>
+            <li>Vogner og hjelpemidler til sport og aktivitet</li>
+            <li>Kjøreramper</li>
+            <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
           </ul>
           Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
         </Alert>
