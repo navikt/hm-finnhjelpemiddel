@@ -1,8 +1,8 @@
 import DefinitionList from '@/components/definition-list/DefinitionList'
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, HelpText, HStack, Link } from '@navikt/ds-react'
+import { BodyLong, BodyShort, HelpText, Hide, HStack, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { ArrowDownRightIcon, GlobeIcon } from "@navikt/aksel-icons";
+import { ArrowDownRightIcon } from "@navikt/aksel-icons";
 
 const ProductInformation = ({ product }: { product: Product }) => {
   const bo = new Set(product.variants.map((p) => p.bestillingsordning))
@@ -67,12 +67,15 @@ const ProductInformation = ({ product }: { product: Product }) => {
         <DefinitionList.Definition>
           <HStack gap="1">
             <BodyShort><i>Nivå 3: </i></BodyShort>
-            <BodyShort size="medium">{product.isoCategoryTitleInternational + ' (' + product.isoCategory.slice(0,6) + ')'}</BodyShort>
+            <BodyShort
+              size="medium">{product.isoCategoryTitleInternational + ' (' + product.isoCategory.slice(0, 6) + ')'}</BodyShort>
           </HStack>
         </DefinitionList.Definition>
         <DefinitionList.Definition className="product-page__iso-international-text">
           <HStack gap="1">
-            <ArrowDownRightIcon title="a11y-title" fontSize="1.5rem" />
+            <Hide below="sm">
+              <ArrowDownRightIcon title="a11y-title" fontSize="1.5rem" />
+            </Hide>
             <BodyShort><i>Nivå 4: </i> </BodyShort>
             <BodyShort size="medium">   {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}</BodyShort>
           </HStack>
