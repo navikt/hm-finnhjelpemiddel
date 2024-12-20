@@ -64,19 +64,19 @@ const ProductInformation = ({ product }: { product: Product }) => {
         </DefinitionList.Term>
         <DefinitionList.Definition>{digitalSoknad}</DefinitionList.Definition>
         <DefinitionList.Term>ISO-kategori (kode)</DefinitionList.Term>
-        {/*<DefinitionList.Definition>*/}
-        {/*  <HStack gap="1">*/}
-        {/*    <BodyShort><i>Nivå 3: </i></BodyShort>*/}
-        {/*    <BodyShort*/}
-        {/*      size="medium">{product.isoCategoryTitleInternational + ' (' + product.isoCategory.slice(0, 6) + ')'}</BodyShort>*/}
-        {/*  </HStack>*/}
-        {/*</DefinitionList.Definition>*/}
+        <DefinitionList.Definition>
+          <HStack gap="1">
+            <BodyShort><i>Nivå 3: </i></BodyShort>
+            <BodyShort
+              size="medium">{product.isoCategoryTitleInternational + ' (' + product.isoCategory.slice(0, 6) + ')'}</BodyShort>
+          </HStack>
+        </DefinitionList.Definition>
         <DefinitionList.Definition className="product-page__iso-international-text">
           <HStack gap="1">
-            {/*<Hide below="sm">*/}
-            {/*  <ArrowDownRightIcon title="a11y-title" fontSize="1.5rem" />*/}
-            {/*</Hide>*/}
-            {/*<BodyShort><i>Nivå 4: </i> </BodyShort>*/}
+            <Hide below="sm">
+              <ArrowDownRightIcon title="a11y-title" fontSize="1.5rem" />
+            </Hide>
+            <BodyShort><i>Nivå 4: </i> </BodyShort>
             <BodyShort size="medium">   {product.isoCategoryTitle + ' (' + product.isoCategory + ')'}</BodyShort>
           </HStack>
 
