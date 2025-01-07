@@ -313,9 +313,10 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isLofteplattformAvtale = agreementId === '4432dc25-88c1-429e-95f3-0ed55836335e' || agreementId === '039c71d2-d325-47c0-99ec-8ac85748d40d'
   const isStaastativAvtale = agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7' || agreementId === '216b3d7b-ce74-4bf4-aeca-f06888f5c072'
   const isGanghjelpemidlerAvtale = agreementId === '35a25ae9-d307-42a6-8893-732de01e02ce' || agreementId === 'f1ddd971-17f1-4241-8593-edaf377f66f0'
+  const isArbeidsstolAvtale = agreementId === 'b062ea46-9cec-4503-982c-943c1734120d' || agreementId === '26e60523-b4d8-4f82-a59e-2eadcc3829e3'
 
   const showAccessoriesAndSparePartsList =
-    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && (isLofteplattformAvtale || isStaastativAvtale || isGanghjelpemidlerAvtale)
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && (isLofteplattformAvtale || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
