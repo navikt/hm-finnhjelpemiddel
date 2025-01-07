@@ -153,6 +153,7 @@ export default function AlternativeProductsPage() {
             <li>Vogner og hjelpemidler til sport og aktivitet</li>
             <li>Kjøreramper</li>
             <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
+            <li>Kjøreposer og regncape</li>
           </ul>
           Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
         </Alert>
