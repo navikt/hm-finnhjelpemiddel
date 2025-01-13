@@ -44,6 +44,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   {sortedAgreements.map((agreement) => (
                     <li key={agreement.id}>
                       <Link
+                        data-umami-event={`'meny', 'hurtigoversikt', ${agreement.title}`}
                         as={NextLink}
                         href={baseUrl + agreementProductsLink(agreement.id)}
                         onClick={() => {
@@ -85,6 +86,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                 <VStack as={'ul'} gap={{ xs: '4', md: '6' }}>
                   <li>
                     <Link
+                      data-umami-event='meny - avtaler med Nav'
                       as={NextLink}
                       href={baseUrl + '/rammeavtale'}
                       onClick={() => {
@@ -97,6 +99,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   </li>
                   <li>
                     <Link
+                      data-umami-event='meny - avtaler med Nav - Slik kan du se at et hjelpemiddel er på avtale med Nav'
                       as={NextLink}
                       href={baseUrl + '/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale'}
                       onClick={() => {
@@ -113,6 +116,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   </li>
                   <li>
                     <Link
+                      data-umami-event='meny - Leverandøroversikt'
                       as={NextLink}
                       href={baseUrl + '/leverandorer'}
                       onClick={() => {
