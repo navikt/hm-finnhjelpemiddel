@@ -2,7 +2,7 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { Accordion, Alert, HStack, Search, Select } from '@navikt/ds-react'
+import { BodyShort, HStack, ReadMore, Search, Select } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
@@ -98,10 +98,35 @@ export default function AlternativeProductsPage() {
 
   return (
     <div className={`${styles.container} main-wrapper--large`}>
-
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
+
+      <div>
+        <BodyShort>
+          Vi legger fortløpende til flere produktområder. <br />
+          Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
+        </BodyShort>
+        <ReadMore header={'Disse produktområdene finner du her'}>
+          <ul>
+            <li>Arbeidsstoler</li>
+            <li>Elektriske rullestoler</li>
+            <li>Ganghjelpemidler</li>
+            <li>Kalendere, dagsplanleggere og tidtakere</li>
+            <li>Kjøreposer og regncape</li>
+            <li>Kjøreramper</li>
+            <li>Madrasser med trykksårforebyggende egenskaper</li>
+            <li>Noen manuelle rullestoler</li>
+            <li>Overflyttingsplattformer og personløftere</li>
+            <li>Stoler med oppreisingsfunksjon</li>
+            <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
+            <li>Synstekniske hjelpemidler</li>
+            <li>Varmehjelpemidler for hender og føtter</li>
+            <li>Vogner og hjelpemidler til sport og aktivitet</li>
+          </ul>
+        </ReadMore>
+      </div>
+
       <HStack gap={'7'} align={'end'}>
         <Search
           label={'HMS-nummer'}
@@ -138,26 +163,6 @@ export default function AlternativeProductsPage() {
       {searchParams.has('hms') && (
         <AlternativeProductList hmsNumber={searchParams.get('hms')!} selectedWarehouse={selectedWarehouse} />
       )}
-        <Alert variant="info" size="small" contentMaxWidth={false} style={{ width: 'fit-content' }}>
-          Vi viser foreløpig hjelpemidler innen disse produktområdene:
-          <ul>
-            <li>Arbeidsstoler</li>
-            <li>Ganghjelpemidler</li>
-            <li>Kalendere, dagsplanleggere og tidtakere</li>
-            <li>Noen manuelle rullestoler</li>
-            <li>Overflyttingsplattformer og personløftere</li>
-            <li>Stoler med oppreisingsfunksjon</li>
-            <li>Synstekniske hjelpemidler</li>
-            <li>Varmehjelpemidler for hender og føtter</li>
-            <li>Elektriske rullestoler</li>
-            <li>Vogner og hjelpemidler til sport og aktivitet</li>
-            <li>Kjøreramper</li>
-            <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
-            <li>Kjøreposer og regncape</li>
-            <li>Madrasser med trykksårforebyggende egenskaper</li>
-          </ul>
-          Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
-        </Alert>
     </div>
   )
 }
