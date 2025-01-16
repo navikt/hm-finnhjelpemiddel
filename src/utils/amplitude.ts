@@ -22,6 +22,10 @@ export enum digihot_customevents {
   PEPPERKAKE = 'klikk på pepperkake',
 }
 
+export enum nav_events {
+  BESØK = 'besøk',
+}
+
 export const initAmplitude = () => {
   const apiKey =
     process.env.BUILD_ENV === 'prod'
@@ -111,5 +115,12 @@ export function logKlikk(buttonName: string) {
 export function logErrorOnUrl(url: string) {
   logCustomEvent(digihot_customevents.ERROR_URL, {
     url: url,
+  })
+}
+
+export function logVisit(url: string, sidetittel: string) {
+  logAmplitudeEvent(nav_events.BESØK, {
+    url: url,
+    sidetittel: sidetittel,
   })
 }

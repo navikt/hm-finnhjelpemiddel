@@ -2,12 +2,12 @@
 
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
-import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
+import { logKlikk, logNavigationEvent, logVisit } from '@/utils/amplitude'
 import {
   BicycleIcon,
   Chat2Icon,
@@ -24,6 +24,10 @@ import AgreementList from './rammeavtale/AgreementList'
 function Home() {
   const path = usePathname()
   const router = useRouter()
+
+  useEffect(() => {
+    typeof window !== 'undefined' && logVisit(window.location.href, window.document.title)
+  }, [])
 
   const onSearch = useCallback(
     (searchTerm: string) => {
