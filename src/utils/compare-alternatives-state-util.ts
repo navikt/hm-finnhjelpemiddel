@@ -49,8 +49,8 @@ export const useAlternativeProductCompareStore = create<AlternativeProductCompar
 // otherwise it causes a mismatch between SSR and client render
 // see: https://github.com/pmndrs/zustand/issues/1145
 // https://github.com/TxnLab/use-wallet/pull/23/commits/f4c13aad62839500066d694a5b0f4a4c24c3c8d3
-export const useHydratedAlternativeProductsCompareStore = ((selector, compare) => {
-  const store = useAlternativeProductCompareStore(selector, compare)
+export const useHydratedAlternativeProductsCompareStore = (() => {
+  const store = useAlternativeProductCompareStore()
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
   return hydrated
