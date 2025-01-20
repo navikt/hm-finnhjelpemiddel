@@ -7,7 +7,7 @@ import { Product } from '@/utils/product-util'
 import ProductCard from '@/components/ProductCard'
 import { Alert, BodyLong, ChevronRightIcon, Heading } from '@/components/aksel-client'
 import { HStack, VStack } from '@navikt/ds-react'
-import { ProductsOnPost } from './page'
+import { ProductsOnPost } from "@/app/produkt/[id]/page";
 
 type AgreementInfoProps = {
   product: Product

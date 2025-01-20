@@ -13,8 +13,8 @@ import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
-import { ProductsOnPost } from './page'
 import { TabsIcon } from "@navikt/aksel-icons";
+import { ProductsOnPost } from "@/app/produkt/[id]/page";
 
 type ProductProps = {
   product: Product
