@@ -49,7 +49,7 @@ export const initAmplitude = () => {
       serverZone: 'EU',
       autocapture: {
         attribution: true,
-        pageViews: true,
+        pageViews: false,
         sessions: true,
         formInteractions: true,
         fileDownloads: true,
