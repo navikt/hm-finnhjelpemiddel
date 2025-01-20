@@ -483,7 +483,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         variant="action"
                         activeIcon={<ThumbUpIcon aria-hidden={true} />}
                         iconPosition="right"
-                        onClick={() => logActionEvent('kopier hmsnummer')}
+                        onClick={() => logActionEvent('kopier hmsnummer', 'kopier')}
                       />
                     ) : (
                       '-'
