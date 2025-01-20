@@ -19,6 +19,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
+import { logActionEvent } from '@/utils/amplitude'
 
 export type SortColumns = {
   orderBy: string | null
@@ -482,6 +483,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         variant="action"
                         activeIcon={<ThumbUpIcon aria-hidden={true} />}
                         iconPosition="right"
+                        onClick={() => logActionEvent('kopier hmsnummer')}
                       />
                     ) : (
                       '-'

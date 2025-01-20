@@ -13,9 +13,9 @@ type LogEvent = (params: { name: string; data?: any }) => void
 let amplitudeLogger: LogEvent | undefined = undefined
 
 export enum digihot_customevents {
-  VISNING_OVERSIKT = 'visning av sider fra hm-oversikt-app',
   LEVERANDORPRODUKTER_KLIKKET_V2 = 'klikket på vis leverandørprodukter',
   NAVIGERE = 'navigere',
+  ACTION = 'action',
   KLIKK = 'klikk på knapp',
   ERROR_URL = 'feil ved url',
   VARIANTSIDE_VIST = 'visning av stor variantside',
@@ -86,15 +86,17 @@ export function logCustomEvent(event: digihot_customevents, data?: any) {
   })
 }
 
-export function logOversiktForsideVist() {
-  logCustomEvent(digihot_customevents.VISNING_OVERSIKT)
-}
-
 export function logNavigationEvent(komponent: string, destinasjon: string, lenketekst: string) {
   logCustomEvent(digihot_customevents.NAVIGERE, {
     komponent: komponent,
     destinasjon: destinasjon,
     lenketekst: lenketekst,
+  })
+}
+
+export function logActionEvent(type: string) {
+  logCustomEvent(digihot_customevents.ACTION, {
+    type: type,
   })
 }
 
