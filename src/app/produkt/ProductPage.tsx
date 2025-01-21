@@ -22,9 +22,10 @@ type ProductProps = {
   accessories: Product[]
   spareParts: Product[]
   productsOnPosts?: ProductsOnPost[]
+  hmsArtNr?: string
 }
 
-const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts }: ProductProps) => {
+const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts, hmsArtNr }: ProductProps) => {
   const isOnAgreement = product.agreements?.length > 0
   const hasAccessories = accessories.length > 0
   const hasSpareParts = spareParts.length > 0
@@ -33,7 +34,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <ProductPageTopInfo product={product} supplier={supplier} />
+        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr}/>
         <ProductNavigationBar
           isOnAgreement={isOnAgreement}
           hasAccessories={hasAccessories}
@@ -70,17 +71,20 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
               Egenskaper
             </Link>
           </Heading>
-          <div className="spacing-top--small spacing-bottom--small">
-            <NextLink
-              href={`/produkt/${product.id}/variants`}
-              className="variant-table_fullscreen-link"
-              target={'_blank'}
-            >
-              {`Åpne fullskjerm-varianttabell i ny fane`}
-              <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
-            </NextLink>
-          </div>
-          <ProductVariants product={product} />
+          {!hmsArtNr && (
+            <div className="spacing-top--small spacing-bottom--small">
+              <NextLink
+                href={`/produkt/${product.id}/variants`}
+                className="variant-table_fullscreen-link"
+                target={'_blank'}
+              >
+                {`Åpne fullskjerm-varianttabell i ny fane`}
+                <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
+              </NextLink>
+            </div>
+          )}
+
+          <ProductVariants product={product} hmsArtNr={hmsArtNr} />
         </section>
 
         <section aria-label="Videolenker" className="spacing-vertical--xlarge">

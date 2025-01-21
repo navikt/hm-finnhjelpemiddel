@@ -10,9 +10,10 @@ import NextLink from 'next/link'
 type KeyInformationProps = {
   product: Product
   supplier: Supplier | null
+  hmsArtNr?: string
 }
 
-const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
+const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) => {
   const oa = new Set(product.variants.map((p) => p.hasAgreement))
   const hms = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
 
@@ -40,59 +41,75 @@ const KeyInformation = ({ product, supplier }: KeyInformationProps) => {
 
   return (
     <DefinitionList>
-      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
-      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
-      {product.agreements.length === 0 && (
+      {hmsArtNr && (
         <>
-          <DefinitionList.Term>
-            <OnAgreement_HelpText />
-          </DefinitionList.Term>
-          <DefinitionList.Definition>Nei</DefinitionList.Definition>
-        </>
-      )}
-
-      {product.agreements.length > 0 && (
-        <>
-          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
+          <DefinitionList.Term>Serie</DefinitionList.Term>
           <DefinitionList.Definition>
-            {product.agreements.length > 1 ? (
-              <BodyShort>
-                Hjelpemiddelet er på flere delkontrakter.{' '}
-                <Link as={NextLink} href="#agreement-info">
-                  Se avtale informasjon.
-                </Link>
-              </BodyShort>
-            ) : (
-              <BodyShort>
-                <Link as={NextLink} href="#agreement-info">
-                  {product.agreements[0].postTitle}
-                </Link>
-              </BodyShort>
-            )}
+            <Link as={NextLink} href={`/produkt/${product.id}`}>
+              {product.title}
+            </Link>
           </DefinitionList.Definition>
         </>
       )}
+      <DefinitionList.Term>Produktkategori</DefinitionList.Term>
+      <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
+      {
+        product.agreements.length === 0 && (
+          <>
+            <DefinitionList.Term>
+              <OnAgreement_HelpText />
+            </DefinitionList.Term>
+            <DefinitionList.Definition>Nei</DefinitionList.Definition>
+          </>
+        )
+      }
+
+      {
+        product.agreements.length > 0 && (
+          <>
+            <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
+            <DefinitionList.Definition>
+              {product.agreements.length > 1 ? (
+                <BodyShort>
+                  Hjelpemiddelet er på flere delkontrakter.{' '}
+                  <Link as={NextLink} href="#agreement-info">
+                    Se avtale informasjon.
+                  </Link>
+                </BodyShort>
+              ) : (
+                <BodyShort>
+                  <Link as={NextLink} href="#agreement-info">
+                    {product.agreements[0].postTitle}
+                  </Link>
+                </BodyShort>
+              )}
+            </DefinitionList.Definition>
+          </>
+        )
+      }
 
       <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
       <DefinitionList.Definition>{hmsNummer}</DefinitionList.Definition>
 
-      {supplier && (
-        <>
-          <DefinitionList.Term>Leverandør</DefinitionList.Term>
-          <DefinitionList.Definition>
-            <Link as={NextLink} href={`/leverandorer#${supplier.id}`}>
-              {supplier.name}
-            </Link>
-          </DefinitionList.Definition>
-          {product.attributes.url && (
+      {
+        supplier && (
+          <>
+            <DefinitionList.Term>Leverandør</DefinitionList.Term>
             <DefinitionList.Definition>
-              <Link href={product.attributes.url} target={'_blank'}>
-                Leverandørens produktside <ExternalLinkIcon aria-hidden />
+              <Link as={NextLink} href={`/leverandorer#${supplier.id}`}>
+                {supplier.name}
               </Link>
             </DefinitionList.Definition>
-          )}
-        </>
-      )}
+            {product.attributes.url && (
+              <DefinitionList.Definition>
+                <Link href={product.attributes.url} target={'_blank'}>
+                  Leverandørens produktside <ExternalLinkIcon aria-hidden />
+                </Link>
+              </DefinitionList.Definition>
+            )}
+          </>
+        )
+      }
     </DefinitionList>
   )
 }

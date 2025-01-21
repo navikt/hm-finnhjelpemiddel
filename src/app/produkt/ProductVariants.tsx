@@ -18,7 +18,7 @@ import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
+import { hasDifferentValues, sortColumnsByRowKey } from './utils'
 
 export type SortColumns = {
   orderBy: string | null
@@ -29,7 +29,7 @@ export type FilterFormStateProductPage = {
   filters: FilterFormState
 }
 
-const ProductVariants = ({ product }: { product: Product }) => {
+const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: string }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
     direction: 'ascending',
@@ -92,8 +92,8 @@ const ProductVariants = ({ product }: { product: Product }) => {
   // så vi filtrerer ut de som ikke er relevante
   const relevantFilterKeys = filtersFromData
     ? Object.entries(filtersFromData)
-        .filter(([_, filter]) => filter.values.length > 1)
-        .flatMap(([key]) => key)
+      .filter(([_, filter]) => filter.values.length > 1)
+      .flatMap(([key]) => key)
     : []
 
   useEffect(() => {
@@ -185,10 +185,11 @@ const ProductVariants = ({ product }: { product: Product }) => {
     .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
 
-  const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
+  var productWithFilteredVariants = dataAndFilter && dataAndFilter.products
   const filters = filtersFromData ? { ...filtersFromData, status: statusFilter } : filtersFromData
 
-  const productVariantsToShow = productWithFilteredVariants
+
+  let productVariantsToShow = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
       ? searchTermMatchesHms
         ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
@@ -197,6 +198,14 @@ const ProductVariants = ({ product }: { product: Product }) => {
           : productWithFilteredVariants[0].variants
       : []
     : product.variants
+
+
+  if (hmsArtNr) {
+    console.log('hmsArtNr', hmsArtNr)
+    productVariantsToShow = productVariantsToShow?.filter(variant => variant.hmsArtNr === hmsArtNr)
+  } else {
+    console.log('no hmsartnr')
+  }
 
   useEffect(() => {
     if (variantNameElementRef.current) {
@@ -231,9 +240,6 @@ const ProductVariants = ({ product }: { product: Product }) => {
     product.isoCategory === '18301505' // ISO 18301505 er Terskeleliminatorer
       ? [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
       : [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
-
-  /*  const sortedKeys = allDataKeys.sort(customSort)
-    console.log(sortedKeys)*/
 
   const rows: { [key: string]: string[] } = Object.assign(
     {},
@@ -293,26 +299,28 @@ const ProductVariants = ({ product }: { product: Product }) => {
     .concat(
       searchData.searchTerm && showTermTag
         ? [
-            {
-              key: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
-              values: searchData.searchTerm,
-              label: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
-            },
-          ]
+          {
+            key: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
+            values: searchData.searchTerm,
+            label: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
+          },
+        ]
         : []
     )
 
   return (
     <>
-      <BodyLong className="spacing-bottom--medium">
-        {egenskaperText(
+      {!hmsArtNr && (
+        <BodyLong className="spacing-bottom--medium">
+          egenskaperText(
           product.title,
           product.variantCount,
           numberOfvariantsOnAgreement,
           numberOfvariantsWithoutAgreement
-        )}
-      </BodyLong>
-
+          )
+        </BodyLong>
+      )
+      }
       {product.variantCount > 1 && (
         <FormProvider {...formMethods}>
           <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">

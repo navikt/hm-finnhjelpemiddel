@@ -13,9 +13,10 @@ import { QrCodeComponent } from './QrCode'
 type ProductPageTopInfoProps = {
   product: Product
   supplier: Supplier
+  hmsArtNr?: string
 }
 
-const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
+const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoProps) => {
   const minRank =
     product.agreements &&
     product.agreements?.length > 0 &&
@@ -42,7 +43,11 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
         <VStack gap="9" className="spacing-top--medium">
           <VStack gap="3">
             <Heading level="1" size="large">
-              {product.title}
+              {hmsArtNr ? (
+                product.variants[0].articleName
+              ) : (
+                product.title
+              )}
             </Heading>
             {rank && <AgreementIcon rank={rank} />}
             {(allVariantsExpiredDates || allVariantsExpired) && (
@@ -52,13 +57,14 @@ const ProductPageTopInfo = ({ product, supplier }: ProductPageTopInfoProps) => {
             )}
           </VStack>
 
-          <KeyInformation product={product} supplier={supplier ? supplier : null} />
+          <KeyInformation product={product} supplier={supplier ? supplier : null} hmsArtNr={hmsArtNr} />
           <HStack gap="3">
-            <QrCodeComponent value={product.id} />
+            <QrCodeComponent value={product.variants[0].id} />
             {/* <Button variant="secondary" icon={<ArrowsSquarepathIcon />}>
               Sammenlign
             </Button> */}
           </HStack>
+
         </VStack>
       </HGrid>
     </>

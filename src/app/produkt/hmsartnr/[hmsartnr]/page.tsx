@@ -4,7 +4,7 @@ import {
   getProductsInPost,
   getSupplier
 } from '@/utils/api-util'
-import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
+import { mapProductFromHmsArtNr, mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
@@ -28,7 +28,7 @@ type Props = {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
-  const product = mapProductFromSeriesId(await getProductByHmsartnrWithVariants(params.hmsartnr))
+  const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
 
   return {
     title: product.title,
@@ -39,7 +39,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ProduktPage(props: Props) {
   const params = await props.params;
 
-  const product = mapProductFromSeriesId(await getProductByHmsartnrWithVariants(params.hmsartnr))
+  const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
@@ -89,6 +89,7 @@ export default async function ProduktPage(props: Props) {
           productsOnPosts={productsOnPosts}
           accessories={accessories}
           spareParts={spareParts}
+          hmsArtNr={params.hmsartnr}
         />
       )}
     </div>
