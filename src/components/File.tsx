@@ -1,6 +1,7 @@
 import { dateToString } from '@/utils/string-util'
 
 import { FileIcon } from '@/components/aksel-client'
+import { logActionEvent } from '@/utils/amplitude'
 
 const File = ({ title, path, date }: { title: string; path: string; date?: Date }) => {
   const documentLoader = (path: string) => {
@@ -24,7 +25,12 @@ const File = ({ title, path, date }: { title: string; path: string; date?: Date 
       )}
 
       {title.length == 0 && (
-        <a href={documentLoader(path)} target="_blank" rel="noreferrer">
+        <a
+          href={documentLoader(path)}
+          target="_blank"
+          rel="noreferrer"
+          onClick={() => logActionEvent('dokumentnedlasting')}
+        >
           <FileIcon aria-hidden fontSize="1.55rem" />
           Dokument uten navn (PDF)
         </a>

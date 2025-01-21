@@ -94,9 +94,8 @@ export function logNavigationEvent(komponent: string, destinasjon: string, lenke
   })
 }
 
-export function logActionEvent(type: string, handling: string) {
+export function logActionEvent(handling: string) {
   logCustomEvent(digihot_customevents.ACTION, {
-    type: type,
     handling: handling,
   })
 }

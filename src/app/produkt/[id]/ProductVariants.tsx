@@ -483,7 +483,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         variant="action"
                         activeIcon={<ThumbUpIcon aria-hidden={true} />}
                         iconPosition="right"
-                        onClick={() => logActionEvent('kopier hmsnummer', 'kopier')}
+                        onClick={() => logActionEvent('kopier')}
                       />
                     ) : (
                       '-'
@@ -534,6 +534,7 @@ const ProductVariants = ({ product }: { product: Product }) => {
                         variant="action"
                         activeIcon={<ThumbUpIcon aria-hidden={true} />}
                         iconPosition="right"
+                        onClick={() => logActionEvent('kopier')}
                       />
                     ) : (
                       '-'
