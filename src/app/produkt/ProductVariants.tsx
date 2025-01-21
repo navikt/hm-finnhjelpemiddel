@@ -18,7 +18,7 @@ import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import { hasDifferentValues, sortColumnsByRowKey } from './utils'
+import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
 
 export type SortColumns = {
   orderBy: string | null
@@ -312,12 +312,12 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
     <>
       {!hmsArtNr && (
         <BodyLong className="spacing-bottom--medium">
-          egenskaperText(
+          {egenskaperText(
           product.title,
           product.variantCount,
           numberOfvariantsOnAgreement,
           numberOfvariantsWithoutAgreement
-          )
+          )}
         </BodyLong>
       )
       }
