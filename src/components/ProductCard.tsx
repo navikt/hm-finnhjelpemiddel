@@ -23,6 +23,7 @@ import { useState } from 'react'
 import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
+import { logNavigationEvent } from '@/utils/amplitude'
 
 const ProductCard = ({
   type,
@@ -116,6 +117,7 @@ const ProductCard = ({
             href={linkToProduct}
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
+            onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
           >
             <BodyShort size="small" className="text-line-clamp">
               {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
@@ -141,6 +143,7 @@ const ProductCard = ({
               href={linkToProduct}
               aria-label={`Gå til ${product.title}`}
               as={NextLink}
+              onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
             >
               <Heading size="xsmall">{product.title}</Heading>
             </Link>
@@ -177,6 +180,7 @@ const ProductCard = ({
               href={linkToProduct}
               aria-label={`Gå til ${product.title}`}
               as={NextLink}
+              onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
             >
               <BodyShort weight="semibold" className="product-card__title">
                 {product.title}
@@ -230,6 +234,7 @@ const ProductCard = ({
             href={linkToProduct}
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
+            onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
           >
             <BodyShort size="small" className="text-line-clamp">
               {product.title}

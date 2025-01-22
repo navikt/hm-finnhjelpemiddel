@@ -1,10 +1,7 @@
-import { Document, Product } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
-
-import File from '@/components/File'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import { titleCapitalized } from '@/utils/string-util'
-import { Bleed, BodyShort, Button, Heading, HGrid, HStack } from '@navikt/ds-react'
+import { Bleed, Heading, HGrid, HStack } from '@navikt/ds-react'
 import NextLink, { default as Link } from 'next/link'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
@@ -13,6 +10,7 @@ import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
+import { Documents } from '@/app/produkt/[id]/Documents'
 import { TabsIcon } from "@navikt/aksel-icons";
 import { ProductsOnPost } from "@/app/produkt/[id]/page";
 
@@ -172,69 +170,39 @@ const ProductNavigationBar = ({
       gap={{ xs: '2', lg: '7' }}
     >
       <Link href={'#informasjon'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Generell informasjon
-        </span>
+        <span className="product-page__header_anchorLink">Generell informasjon</span>
       </Link>
 
       <Link href={'#egenskaper'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Egenskaper
-        </span>
+        <span className="product-page__header_anchorLink">Egenskaper</span>
       </Link>
 
       <Link href={'#video'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Video
-        </span>
+        <span className="product-page__header_anchorLink">Video</span>
       </Link>
 
       <Link href={'#dokumenter'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Dokumenter
-        </span>
+        <span className="product-page__header_anchorLink">Dokumenter</span>
       </Link>
 
       {isOnAgreement && (
         <Link href={'#agreement-info'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Avtale med Nav
-        </span>
+          <span className="product-page__header_anchorLink">Avtale med Nav</span>
         </Link>
       )}
 
       {hasAccessories && (
         <Link href={'#tilbehør'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Tilbehør
-        </span>
+          <span className="product-page__header_anchorLink">Tilbehør</span>
         </Link>
       )}
 
       {hasSpareParts && (
         <Link href={'#reservedeler'} className="product-page__nav-button">
-        <span className="product-page__header_anchorLink">
-          Reservedeler
-        </span>
+          <span className="product-page__header_anchorLink">Reservedeler</span>
         </Link>
       )}
     </HGrid>
-  )
-}
-
-export const Documents = ({ documents }: { documents: Document[] }) => {
-  if (!documents.length) {
-    return <BodyShort>Ingen dokumenter er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
-  }
-
-  return (
-    <ul className="document-list">
-      {documents.map((doc, index) => (
-        <li key={index}>
-          <File title={titleCapitalized(doc.title)} path={doc.uri} />
-        </li>
-      ))}
-    </ul>
   )
 }
 
