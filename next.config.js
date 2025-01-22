@@ -10,10 +10,6 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/[:hmsartnr]',
-        destination: process.env.HM_SEARCH_URL + '/products/hmsartnr/:hmsartnr',
-      },
-      {
         source: '/products/_search:path*',
         destination: process.env.HM_SEARCH_URL + '/products/_search:path*',
       },
