@@ -1,3 +1,5 @@
+'use client'
+
 import { RefObject, useState } from 'react'
 
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
@@ -9,6 +11,7 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-
 import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
+import { logActionEvent } from '@/utils/amplitude'
 
 const SearchResults = ({
   products,
@@ -88,7 +91,14 @@ const SearchResults = ({
         ))}
       </HStack>
       {loadMore && (
-        <Button variant="secondary" onClick={loadMore} loading={isLoading}>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            loadMore()
+            logActionEvent('sokvisfleretreff')
+          }}
+          loading={isLoading}
+        >
           Vis flere treff
         </Button>
       )}
