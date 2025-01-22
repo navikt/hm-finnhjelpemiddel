@@ -59,7 +59,11 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoP
 
           <KeyInformation product={product} supplier={supplier ? supplier : null} hmsArtNr={hmsArtNr} />
           <HStack gap="3">
-            <QrCodeComponent value={product.variants[0].id} />
+            {hmsArtNr ? (
+              <QrCodeComponent value={hmsArtNr} isVariantPage />
+            ) : (
+              <QrCodeComponent value={product.id} />
+            )}
             {/* <Button variant="secondary" icon={<ArrowsSquarepathIcon />}>
               Sammenlign
             </Button> */}
