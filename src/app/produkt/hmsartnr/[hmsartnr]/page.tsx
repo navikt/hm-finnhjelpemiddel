@@ -1,13 +1,18 @@
-import { fetchProductsWithVariants, getProductsInPost, getProductWithVariants, getSupplier } from '@/utils/api-util'
-// import { accessoriesMock } from '@/utils/mock-data'
-import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
+import {
+  fetchProductsWithVariants,
+  getProductByHmsartnrWithVariants,
+  getProductsInPost,
+  getSupplier
+} from '@/utils/api-util'
+import { mapProductFromHmsArtNr, mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
 
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 import { Metadata } from 'next'
-import '../product-page.scss'
+import '../../product-page.scss'
 import AccessoryOrSparePartPage from "@/app/produkt/AccessoryOrSparePartPage";
 import ProductPage from "@/app/produkt/ProductPage";
+
 
 export interface ProductsOnPost {
   agreementId: string
@@ -18,12 +23,12 @@ export interface ProductsOnPost {
 }
 
 type Props = {
-  params: Promise<{ id: string }>
+  params: Promise<{ hmsartnr: string }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
-  const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+  const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
 
   return {
     title: product.title,
@@ -33,10 +38,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function ProduktPage(props: Props) {
   const params = await props.params;
-  // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
-  // const product = accessoriesMock[0]
 
-  const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+  const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
 
   const agreements = product.agreements?.filter((agreement) => new Date(agreement.expired) >= new Date())
@@ -73,8 +76,6 @@ export default async function ProduktPage(props: Props) {
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
 
   const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
-  // Kommenter ut den over og bruk den under for å se tilbehør på produktside (når man bruker mock)
-  // const accessories = (!isAccessoryOrSparePart && matchingProducts) || []
   const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
 
   return (
@@ -88,6 +89,7 @@ export default async function ProduktPage(props: Props) {
           productsOnPosts={productsOnPosts}
           accessories={accessories}
           spareParts={spareParts}
+          hmsArtNr={params.hmsartnr}
         />
       )}
     </div>

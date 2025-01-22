@@ -975,6 +975,29 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
   return res.json()
 }
 
+export async function getProductByHmsartnrWithVariants(hmsArtNr: string): Promise<SearchResponse> {
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            term: {
+              hmsArtNr: hmsArtNr,
+            },
+          },
+        },
+      },
+      size: 150,
+    }),
+  })
+
+  return res.json()
+}
+
 export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeStockResponse> {
   const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
     method: 'GET',

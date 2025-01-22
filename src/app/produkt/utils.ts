@@ -99,11 +99,11 @@ export const egenskaperText = (
   const variantsWithAndWithoutAgreement =
     numberOfvariantsOnAgreement === 0
       ? `${title} finnes i ${numberOfvariantsWithoutAgreement} ${
-          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        }.`
+        numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+      }.`
       : `${title} finnes i ${numberOfvariantsOnAgreement} varianter på avtale med Nav, og ${numberOfvariantsWithoutAgreement} ${
-          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        } som ikke er på avtale med Nav.`
+        numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
+      } som ikke er på avtale med Nav.`
 
   const textMultipleVariants =
     'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'

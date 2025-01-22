@@ -6,7 +6,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import { useEffect, useState } from 'react'
 import { logActionEvent } from '@/utils/amplitude'
 
-export const QrCodeComponent = ({ value }: { value: string }) => {
+export const QrCodeComponent = ({ value, isVariantPage }: { value: string, isVariantPage?: boolean }) => {
   const [qrUrl, setQrUrl] = useState('')
 
   useEffect(() => {
@@ -20,7 +20,13 @@ export const QrCodeComponent = ({ value }: { value: string }) => {
   }, [value])
 
   const valueToUrl = (value: string) => {
-    return `https://finnhjelpemiddel.nav.no/produkt/${value}`
+    if(isVariantPage) {
+      return `https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${value}`
+
+    } else {
+      return `https://finnhjelpemiddel.nav.no/produkt/${value}`
+    }
+
   }
 
   return (

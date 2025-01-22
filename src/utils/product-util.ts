@@ -152,6 +152,16 @@ export const mapProductFromSeriesId = (data: SearchResponse): Product => {
 }
 
 /**
+ * Maps results from search for hmsArtNr into one product with the specified variant
+ */
+export const mapProductFromHmsArtNr = (data: SearchResponse, hmsArtNr: String): Product => {
+  if (data.hits.hits.map((h) => h._source as ProductSourceResponse).length === 0) {
+    throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants ${JSON.stringify(data)}`)
+  }
+  return mapProductWithOneVariant(data.hits.hits.map((h) => h._source as ProductSourceResponse), hmsArtNr)
+}
+
+/**
  * Maps result from indexed _doc endpoint into one product with one variant (indexed on productvariants)
  */
 export const mapProductFromDoc = (data: ProductDocResponse): Product => {
@@ -304,6 +314,54 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
 
   return unaggregatedSeries
 }
+
+export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsArtNr: String): Product => {
+
+  const variant = sources.filter((source) => source.hmsArtNr === hmsArtNr).map((source) => {
+    return mapProductVariant(source)
+  })
+
+  if (sources.length === 0) {
+    throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
+  }
+
+  const firstVariant = sources[0]
+  const allAgreementsForAllVariants = variant.flatMap((variant) => variant.agreements)
+  const uniquesAgreementsPostAndRanks = filterUniqueCombinationsOfPostAndRank(allAgreementsForAllVariants)
+
+  return {
+    id: firstVariant.seriesId,
+    title: firstVariant.title,
+    attributes: {
+      manufacturer: firstVariant.attributes.manufacturer,
+      articlename: firstVariant.attributes.articlename,
+      series: firstVariant.attributes.series,
+      shortdescription: firstVariant.attributes.shortdescription,
+      text: firstVariant.attributes.text,
+      compatibleWith: firstVariant.attributes.compatible,
+      url: firstVariant.attributes.url,
+    },
+    variantCount: sources.length,
+    variants: variant,
+    compareData: {
+      techDataRange: {},
+      agreementRank: null,
+    },
+    isoCategory: firstVariant.isoCategory,
+    isoCategoryTitle: firstVariant.isoCategoryTitle,
+    isoCategoryText: firstVariant.isoCategoryText,
+    isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
+    accessory: firstVariant.accessory,
+    sparepart: firstVariant.sparepart,
+    photos: mapPhotoInfo(firstVariant.media),
+    videos: mapVideoInfo(firstVariant.media),
+    documents: mapDocuments(firstVariant.media),
+    supplierId: firstVariant.supplier?.id ?? '',
+    supplierName: firstVariant.supplier?.name ?? '',
+    agreements: uniquesAgreementsPostAndRanks,
+  }
+}
+
 
 export const mapProductWithVariants = (sources: ProductSourceResponse[]): Product => {
   const variants = sources.map((source) => {
