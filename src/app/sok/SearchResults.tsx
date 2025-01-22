@@ -95,7 +95,7 @@ const SearchResults = ({
           variant="secondary"
           onClick={() => {
             loadMore()
-            logActionEvent('sokvisfleretreff')
+            logActionEvent('vis flere treff søk')
           }}
           loading={isLoading}
         >
