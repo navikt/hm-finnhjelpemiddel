@@ -20,6 +20,7 @@ export enum digihot_customevents {
   ERROR_URL = 'feil ved url',
   VARIANTSIDE_VIST = 'visning av stor variantside',
   PEPPERKAKE = 'klikk på pepperkake',
+  VIS_FLERE_TREFF = 'vis-flere-treff',
 }
 
 export enum nav_events {
@@ -81,7 +82,6 @@ export function logAmplitudeEvent(eventName: string, data?: any) {
 
 export function logCustomEvent(event: digihot_customevents, data?: any) {
   logAmplitudeEvent(event, {
-    TEAM_NAME: TEAM_NAME,
     ...data,
   })
 }
@@ -98,6 +98,10 @@ export function logActionEvent(handling: string) {
   logCustomEvent(digihot_customevents.ACTION, {
     handling: handling,
   })
+}
+
+export function logVisFlereTreff() {
+  logCustomEvent(digihot_customevents.VIS_FLERE_TREFF)
 }
 
 export function logLeverandorprodukterKlikket() {

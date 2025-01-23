@@ -11,7 +11,7 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-
 import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
-import { logActionEvent } from '@/utils/amplitude'
+import { logVisFlereTreff } from '@/utils/amplitude'
 
 const SearchResults = ({
   products,
@@ -95,7 +95,7 @@ const SearchResults = ({
           variant="secondary"
           onClick={() => {
             loadMore()
-            logActionEvent('vis flere treff søk')
+            logVisFlereTreff()
           }}
           loading={isLoading}
         >
