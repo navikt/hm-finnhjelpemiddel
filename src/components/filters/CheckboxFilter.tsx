@@ -1,7 +1,7 @@
 import { Filter } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { FormSearchData } from '@/utils/search-state-util'
-import { sortAlphabetically } from '@/utils/sort-util'
+import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { Checkbox, CheckboxGroup, Search, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'
@@ -49,7 +49,7 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
     filterData?.values
       ?.filter((f) => !searchData.filters[filterKey].includes(f.key as string))
       .filter((bucket) => bucket.key.toString().toLowerCase().includes(searchFilterTerm.toLowerCase()))
-      .sort((a, b) => sortAlphabetically(a.key.toString(), b.key.toString())) || []
+      .sort((a, b) => sortIntWithStringFallback(a.key.toString(), b.key.toString())) || []
 
   const handleSearch = (value: string) => {
     setSearchFilterTerm(value)
@@ -122,8 +122,9 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
               >
                 {!showSearch && (
                   <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
+                    {selectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
                     {selectedUnavailableFilters?.map((f) => filterCheckbox(f, true))}
-                    {filterData?.values.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
+                    {notSelectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
                   </VStack>
                 )}
                 {showSearch && (
