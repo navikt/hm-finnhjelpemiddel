@@ -5,13 +5,12 @@ import { RefObject, useState } from 'react'
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 
 import useRestoreScroll from '@/hooks/useRestoreScroll'
-
-import ProductCard from '@/components/ProductCard'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
 import { logVisFlereTreff } from '@/utils/amplitude'
+import ProductCardSearch from '@/app/sok/ProductCardSearch'
 
 const SearchResults = ({
   products,
@@ -79,13 +78,13 @@ const SearchResults = ({
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
       >
-        {products.map((product) => (
+        {products.map((product, index) => (
           <li key={product.id}>
-            <ProductCard
+            <ProductCardSearch
               product={product}
               handleIsoButton={handleSetIsoFilter}
               handleCompareClick={handleCompareClick}
-              type="large-with-checkbox"
+              searchResultPlacement={index}
             />
           </li>
         ))}

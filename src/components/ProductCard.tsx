@@ -3,27 +3,15 @@
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { ArrowsSquarepathIcon, MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
-import {
-  BodyLong,
-  BodyShort,
-  Box,
-  Button,
-  Checkbox,
-  Detail,
-  Heading,
-  HGrid,
-  HStack,
-  Link,
-  VStack,
-} from '@navikt/ds-react'
+import { BodyLong, BodyShort, Box, Button, Detail, Heading, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
-import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 import { logNavigationEvent } from '@/utils/amplitude'
+import { CompareCheckbox } from '@/components/CompareCheckbox'
 
 const ProductCard = ({
   type,
@@ -297,38 +285,6 @@ const CompareButton = ({
         <span aria-hidden>Sammenlign</span>
       </div>
     </Button>
-  )
-}
-
-const CompareCheckbox = ({
-  product,
-  handleCompareClick,
-}: {
-  product: Product
-  handleCompareClick: (() => void) | undefined
-}) => {
-  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
-
-  const toggleCompareProduct = () => {
-    handleCompareClick && handleCompareClick()
-    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product.id)
-      : setProductToCompare(product)
-  }
-
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
-  return (
-    <Checkbox
-      className="product-card__checkbox"
-      size="small"
-      value="Legg produktet til sammenligning"
-      onChange={toggleCompareProduct}
-      checked={isInProductsToCompare}
-    >
-      <div aria-label={`sammenlign ${product.title}`}>
-        <span aria-hidden>Sammenlign</span>
-      </div>
-    </Checkbox>
   )
 }
 

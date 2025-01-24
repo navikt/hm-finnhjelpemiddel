@@ -94,6 +94,20 @@ export function logNavigationEvent(komponent: string, destinasjon: string, lenke
   })
 }
 
+export function logNavigationSearchEvent(
+  komponent: string,
+  destinasjon: string,
+  lenketekst: string,
+  søkeresultatplassering: number
+) {
+  logCustomEvent(digihot_customevents.NAVIGERE, {
+    komponent: komponent,
+    destinasjon: destinasjon,
+    lenketekst: lenketekst,
+    søkeresultatplassering: søkeresultatplassering,
+  })
+}
+
 export function logActionEvent(handling: string) {
   logCustomEvent(digihot_customevents.ACTION, {
     handling: handling,
