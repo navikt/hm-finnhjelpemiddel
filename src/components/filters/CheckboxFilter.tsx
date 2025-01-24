@@ -64,6 +64,26 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
       ? `${checkboxFilterCategoriesLabels[filterKey]} (${selectedFilters.length + selectedUnavailableFilters.length})`
       : checkboxFilterCategoriesLabels[filterKey]
 
+  const filterCheckbox = (filterName: string, unavailable?: boolean) => (
+    <Checkbox
+      name={filterName}
+      value={filterName}
+      key={`${filterKey}-${filterName}}`}
+      className={unavailable ? 'checkbox-filter__selected-unavailable' : ''}
+      onKeyDown={(event) => {
+        if (event.key === 'Space') {
+          event.preventDefault()
+          event.currentTarget?.form?.requestSubmit()
+        }
+      }}
+      onChange={(e) => {
+        e.currentTarget?.form?.requestSubmit()
+      }}
+    >
+      {unavailable ? `${filterName} (0)` : filterName}
+    </Checkbox>
+  )
+
   return (
     <ShowMore
       title={showMoreLabel}
@@ -102,84 +122,15 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
               >
                 {!showSearch && (
                   <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
-                    {selectedUnavailableFilters?.map((f) => (
-                      <Checkbox
-                        value={f}
-                        key={f}
-                        className="checkbox-filter__selected-unavailable"
-                        onKeyDown={(event) => {
-                          if (event.key === 'Space') {
-                            event.preventDefault()
-                            event.currentTarget?.form?.requestSubmit()
-                          }
-                        }}
-                        onChange={(e) => {
-                          e.currentTarget?.form?.requestSubmit()
-                        }}
-                      >
-                        {`${f} (0)`}
-                      </Checkbox>
-                    ))}
-                    {filterData?.values.map((f) => (
-                      <Checkbox
-                        name={f.key.toString()}
-                        value={f.key}
-                        key={`${filterKey}-${f.key}`}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Space') {
-                            event.preventDefault()
-                            event.currentTarget?.form?.requestSubmit()
-                          }
-                        }}
-                        onChange={(e) => {
-                          e.currentTarget?.form?.requestSubmit()
-                        }}
-                      >
-                        {f.label || f.key}
-                      </Checkbox>
-                    ))}
+                    {selectedUnavailableFilters?.map((f) => filterCheckbox(f, true))}
+                    {filterData?.values.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
                   </VStack>
                 )}
                 {showSearch && (
                   <>
                     <VStack gap="1" className="checkbox-filter__checkboxes" aria-label="Valgte filtre">
-                      {selectedFilters.map((f) => (
-                        <Checkbox
-                          name={f.key.toString()}
-                          value={f.key}
-                          key={`${filterKey}-${f.key}`}
-                          onKeyDown={(event) => {
-                            if (event.key === 'Space') {
-                              event.preventDefault()
-                              event.currentTarget?.form?.requestSubmit()
-                            }
-                          }}
-                          onChange={(e) => {
-                            e.currentTarget?.form?.requestSubmit()
-                          }}
-                        >
-                          {f.label || f.key}
-                        </Checkbox>
-                      ))}
-                      {selectedUnavailableFilters.map((f) => (
-                        <Checkbox
-                          name={f}
-                          value={f}
-                          key={`unavailable-${f}`}
-                          className="checkbox-filter__selected-unavailable"
-                          onKeyDown={(event) => {
-                            if (event.key === 'Space') {
-                              event.preventDefault()
-                              event.currentTarget?.form?.requestSubmit()
-                            }
-                          }}
-                          onChange={(e) => {
-                            e.currentTarget?.form?.requestSubmit()
-                          }}
-                        >
-                          {`${f} (0)`}
-                        </Checkbox>
-                      ))}
+                      {selectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
+                      {selectedUnavailableFilters.map((f) => filterCheckbox(f, true))}
                       <span className="filter-container__divider"></span>
                     </VStack>
                     <VStack
@@ -187,24 +138,7 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
                       className="checkbox-filter__checkboxes checkbox-filter__scroll-container"
                       aria-label="Ikke valgte filtre"
                     >
-                      {notSelectedFilters.map((f) => (
-                        <Checkbox
-                          name={f.key.toString()}
-                          value={f.key}
-                          key={`${filterKey}-${f.key}`}
-                          onKeyDown={(event) => {
-                            if (event.key === 'Space') {
-                              event.preventDefault()
-                              event.currentTarget?.form?.requestSubmit()
-                            }
-                          }}
-                          onChange={(e) => {
-                            e.currentTarget?.form?.requestSubmit()
-                          }}
-                        >
-                          {f.label || f.key}
-                        </Checkbox>
-                      ))}
+                      {notSelectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
                     </VStack>
                   </>
                 )}
