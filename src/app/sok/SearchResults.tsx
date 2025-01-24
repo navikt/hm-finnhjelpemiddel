@@ -84,7 +84,7 @@ const SearchResults = ({
               product={product}
               handleIsoButton={handleSetIsoFilter}
               handleCompareClick={handleCompareClick}
-              searchResultPlacement={index}
+              searchResultPlacement={index + 1}
             />
           </li>
         ))}
