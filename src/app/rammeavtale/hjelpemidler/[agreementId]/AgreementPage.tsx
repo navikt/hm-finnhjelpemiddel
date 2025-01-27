@@ -314,9 +314,17 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isStaastativAvtale = agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7' || agreementId === '216b3d7b-ce74-4bf4-aeca-f06888f5c072'
   const isGanghjelpemidlerAvtale = agreementId === '35a25ae9-d307-42a6-8893-732de01e02ce' || agreementId === 'f1ddd971-17f1-4241-8593-edaf377f66f0'
   const isArbeidsstolAvtale = agreementId === 'b062ea46-9cec-4503-982c-943c1734120d' || agreementId === '26e60523-b4d8-4f82-a59e-2eadcc3829e3'
+  const isOverflyttingAvtale = agreementId === 'a9f619de-1223-422f-828f-c6f380622a55' || agreementId === '02e30ace-82bc-426c-b2fc-5cc6b2c48a81'
+  const isKalendereAvtale = agreementId === 'de45889f-e4cd-45a2-9b36-5652594e1fba' || agreementId === 'f1596dac-3898-434f-8a39-902f5fb307ac'
+  const isKjoreramper = agreementId === '3ea91ddf-f8e1-4d2b-a4a7-e81fca132733' || agreementId === 'e86fd988-0381-4d0a-a027-7654e2d8dbab'
+  const isMadrasserTrykkforebyggendeAvtale = agreementId === 'ff48ef4c-d450-4c0e-b99e-244ddecbfc59' || agreementId === '5b3b139e-4eec-4461-bade-18e41115b56d'
+  const isSengerAvtale = agreementId === 'f38e94b6-ad85-4cf6-bc26-f14dff0f3e20' || agreementId === '61135e09-f6ba-44ba-8e0d-3994c2883f4c'
+  const isOppreisingsstolerAvtale = agreementId === '44e87ba7-6f1a-4d70-b5ff-28d6e8c54bd6' || agreementId === '547883d7-6459-44b9-9684-22192839336d'
+  const isVarmehjelpemidlerAvtale = agreementId === '38a0c948-fb9f-4cbb-a8d1-de22ac158ea2' || agreementId === 'fa455679-8674-4083-8c1a-5284847b8d41'
 
   const showAccessoriesAndSparePartsList =
-    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') && (isLofteplattformAvtale || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale)
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
+    && (isLofteplattformAvtale || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
