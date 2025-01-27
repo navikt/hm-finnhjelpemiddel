@@ -18,8 +18,9 @@ import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from './utils'
 import { logActionEvent } from '@/utils/amplitude'
+import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from "@/app/produkt/variants/variant-utils";
+import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
 
 export type SortColumns = {
   orderBy: string | null
@@ -308,6 +309,10 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
         ]
         : []
     )
+
+  if(hmsArtNr) {
+    return <SingleVariantTable variant={productVariantsToShow[0]} />
+  }
 
   return (
     <>

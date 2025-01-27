@@ -2,7 +2,7 @@ import { getProductWithVariants } from '@/utils/api-util'
 import { mapProductFromSeriesId } from '@/utils/product-util'
 import '../../product-page.scss'
 import { Heading } from "@navikt/ds-react";
-import ProductVariants from "@/app/produkt/ProductVariants";
+import ProductVariants from "@/app/produkt/variants/ProductVariants";
 
 type Props = {
   params: Promise<{ id: string }>

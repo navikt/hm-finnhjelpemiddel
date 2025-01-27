@@ -8,11 +8,11 @@ import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
 import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
-import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
 import { TabsIcon } from "@navikt/aksel-icons";
 import { ProductsOnPost } from "@/app/produkt/[id]/page";
+import ProductVariants from "@/app/produkt/variants/ProductVariants";
 
 type ProductProps = {
   product: Product
