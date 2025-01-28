@@ -1,6 +1,6 @@
 import { ProductVariant } from "@/utils/product-util";
 import { CopyButton, Table, Tag } from "@navikt/ds-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThumbUpIcon } from "@navikt/aksel-icons";
 import { logActionEvent } from "@/utils/amplitude";
 import { viewAgreementRanks } from "@/components/AgreementIcon";
@@ -12,8 +12,21 @@ export interface SingleVariantTableProps {
 }
 
 export const SingleVariantTable = ({ variant }: SingleVariantTableProps) => {
+
+  const variantNameElementRef = useRef<HTMLTableCellElement>(null)
   const [variantNameElementHeight, setVariantNameElementHeight] = useState(0)
 
+  useEffect(() => {
+    if (variantNameElementRef.current) {
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
+    }
+  }, [])
+
+  const handleResize = () => {
+    if (variantNameElementRef.current) {
+      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
+    }
+  }
 
   // Teknisk data
   const allDataKeys = Object.keys(variant.techData).sort();
@@ -52,7 +65,7 @@ export const SingleVariantTable = ({ variant }: SingleVariantTableProps) => {
             </Table.HeaderCell>
           </Table.Row>
           <Table.Row className="variants-table__sortable-row">
-            <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+            <Table.HeaderCell  ref={variantNameElementRef}>Navn på variant</Table.HeaderCell>
             <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
