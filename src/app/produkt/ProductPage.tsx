@@ -13,6 +13,7 @@ import { Documents } from '@/app/produkt/[id]/Documents'
 import { TabsIcon } from "@navikt/aksel-icons";
 import { ProductsOnPost } from "@/app/produkt/[id]/page";
 import ProductVariants from "@/app/produkt/variants/ProductVariants";
+import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
 
 type ProductProps = {
   product: Product
@@ -32,7 +33,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr}/>
+        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr} />
         <ProductNavigationBar
           isOnAgreement={isOnAgreement}
           hasAccessories={hasAccessories}
@@ -82,7 +83,12 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </div>
           )}
 
-          <ProductVariants product={product} hmsArtNr={hmsArtNr} />
+          {hmsArtNr && product.variants ? (
+            <SingleVariantTable variant={product.variants.find(variant => variant.hmsArtNr === hmsArtNr)!} />
+          ) : (
+            <ProductVariants product={product} hmsArtNr={hmsArtNr} />
+          )}
+
         </section>
 
         <section aria-label="Videolenker" className="spacing-vertical--xlarge">

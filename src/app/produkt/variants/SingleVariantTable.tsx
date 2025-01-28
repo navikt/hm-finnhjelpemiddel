@@ -1,3 +1,5 @@
+'use client'
+
 import { ProductVariant } from "@/utils/product-util";
 import { CopyButton, Table, Tag } from "@navikt/ds-react";
 import { useEffect, useRef, useState } from "react";
@@ -150,9 +152,7 @@ export const SingleVariantTable = ({ variant }: SingleVariantTableProps) => {
               <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
             </Table.Row>
           ))}
-
         </Table.Body>
-
       </Table>
     </div>
 
