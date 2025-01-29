@@ -1,5 +1,5 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
-import { initialFiltersFormState } from './filter-util'
+import { initialFiltersFormState, mapFilters } from './filter-util'
 import { FormSearchData, SearchData, initialSearchDataState, isValidSortOrder } from './search-state-util'
 import queryString from 'query-string'
 
@@ -35,14 +35,6 @@ export const toSearchQueryString = (searchData: FormSearchData, searchTerm: stri
     ...(searchData.hidePictures ? { hidePictures: searchData.hidePictures } : {}),
     ...{ term: searchTerm },
     ...(searchData.isoCode && { isoCode: searchData.isoCode }),
-    ...Object.entries(searchData.filters)
-      .filter(([_, value]) => value.length)
-      .reduce(
-        (acc, [key, value]) => {
-          acc[key] = value
-          return acc
-        },
-        {} as Record<string, string | string[]>
-      ),
+    ...mapFilters(searchData.filters),
   })
 }

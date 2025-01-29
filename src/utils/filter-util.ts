@@ -205,7 +205,7 @@ export const filterDelkontrakt = (values: Array<string>) => ({
 
 export const filterMainProductsOnly = () => ({
   bool: {
-    should: { term: { 'main': true } }
+    should: { term: { main: true } },
   },
 })
 
@@ -232,8 +232,7 @@ export const filterVis = (values: Array<string>) => {
 
   if (!values.includes('Vis reservedeler og tilbehør')) {
     filters.push({
-      term:
-        { main: true }
+      term: { main: true },
     })
   }
 
@@ -252,7 +251,6 @@ export const filterVis = (values: Array<string>) => {
       },
     })
   }
-
 
   return filters
 }
@@ -309,3 +307,14 @@ export const toMinMaxAggs = (filterKey: string) => ({
     },
   },
 })
+
+export const mapFilters = (filters: FilterFormState) =>
+  Object.entries(filters)
+    .filter(([_, value]) => value.length)
+    .reduce(
+      (acc, [key, value]) => {
+        acc[key] = value
+        return acc
+      },
+      {} as Record<string, string | string[]>
+    )
