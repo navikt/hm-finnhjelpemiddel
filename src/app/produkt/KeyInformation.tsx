@@ -20,6 +20,7 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
   const hms = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
 
   useEffect(() => {
+    //Stygt å ha dette her, men for nå en løsning på å tracke besøk til produktside fra client-komponent
     typeof window !== 'undefined' && logVisit(window.location.href, window.document.title, 'produkt')
   }, [])
 
