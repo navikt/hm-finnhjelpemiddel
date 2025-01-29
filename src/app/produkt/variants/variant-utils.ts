@@ -1,7 +1,7 @@
 import { ProductVariant } from "@/utils/product-util";
 import { sortAlphabetically, sortIntWithStringFallback } from "@/utils/sort-util";
 import { formatAgreementPosts, formatAgreementRanks } from "@/utils/string-util";
-import { SortColumns } from "@/app/produkt/variants/ProductVariants";
+import { SortColumns } from "@/app/produkt/variants/MultipleVariantsTable";
 
 
 // Spesifikk rekkefølge av bestemte rader for Terskeleliminatorer med ISO 18301505.

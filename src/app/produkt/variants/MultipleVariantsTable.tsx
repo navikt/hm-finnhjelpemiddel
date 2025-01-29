@@ -20,7 +20,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { logActionEvent } from '@/utils/amplitude'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from "@/app/produkt/variants/variant-utils";
-import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
 
 export type SortColumns = {
   orderBy: string | null
@@ -31,7 +30,7 @@ export type FilterFormStateProductPage = {
   filters: FilterFormState
 }
 
-const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: string }) => {
+const MultipleVariantsTable = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({
     orderBy: 'Expired',
     direction: 'ascending',
@@ -201,14 +200,6 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
       : []
     : product.variants
 
-
-  if (hmsArtNr) {
-    console.log('hmsArtNr', hmsArtNr)
-    productVariantsToShow = productVariantsToShow?.filter(variant => variant.hmsArtNr === hmsArtNr)
-  } else {
-    console.log('no hmsartnr')
-  }
-
   useEffect(() => {
     if (variantNameElementRef.current) {
       setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
@@ -310,66 +301,56 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
         : []
     )
 
-  if(hmsArtNr) {
-    return <SingleVariantTable variant={productVariantsToShow[0]} />
-  }
-
   return (
     <>
-      {!hmsArtNr && (
-        <BodyLong className="spacing-bottom--medium">
-          {egenskaperText(
+      <BodyLong className="spacing-bottom--medium">
+        {egenskaperText(
           product.title,
           product.variantCount,
           numberOfvariantsOnAgreement,
           numberOfvariantsWithoutAgreement
+        )}
+      </BodyLong>
+
+      <FormProvider {...formMethods}>
+        <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
+          {filterIsLoading && (
+            <HStack style={{ margin: '38px' }}>
+              <Loader size="xlarge" title="Laster bilde" />
+            </HStack>
           )}
-        </BodyLong>
-      )
-      }
-      {product.variantCount > 1 && (
-        <FormProvider {...formMethods}>
-          <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
-            {filterIsLoading && (
-              <HStack style={{ margin: '38px' }}>
-                <Loader size="xlarge" title="Laster bilde" />
-              </HStack>
-            )}
-            {(relevantFilterKeys.length > 0 || moreThanOneStatus) && <FilterViewProductPage filters={filters} />}
-            <input type="submit" style={{ display: 'none' }} />
+          {(relevantFilterKeys.length > 0 || moreThanOneStatus) && <FilterViewProductPage filters={filters} />}
+          <input type="submit" style={{ display: 'none' }} />
 
-            {(searchTerm || filterChips.length > 0) && (
-              <Chips className="spacing-bottom--medium">
-                {filterChips.map(({ key, label, values }, i) => {
-                  return (
-                    <Chips.Removable
-                      key={key + i}
-                      onClick={(event) => {
-                        if (key === 'HMS-nummer' || key === 'Lev-artnr') {
-                          onRemoveSearchTerm()
-                        } else {
-                          formMethods.setValue(`filters.${key}`, '')
-                          event.currentTarget?.form?.requestSubmit()
-                        }
-                      }}
-                    >
-                      {`${label}: ${values}`}
-                    </Chips.Removable>
-                  )
-                })}
-              </Chips>
-            )}
-          </form>
-        </FormProvider>
-      )}
+          {(searchTerm || filterChips.length > 0) && (
+            <Chips className="spacing-bottom--medium">
+              {filterChips.map(({ key, label, values }, i) => {
+                return (
+                  <Chips.Removable
+                    key={key + i}
+                    onClick={(event) => {
+                      if (key === 'HMS-nummer' || key === 'Lev-artnr') {
+                        onRemoveSearchTerm()
+                      } else {
+                        formMethods.setValue(`filters.${key}`, '')
+                        event.currentTarget?.form?.requestSubmit()
+                      }
+                    }}
+                  >
+                    {`${label}: ${values}`}
+                  </Chips.Removable>
+                )
+              })}
+            </Chips>
+          )}
+        </form>
+      </FormProvider>
 
-      {product.variantCount > 1 && (
-        <Heading
-          level="3"
-          size="small"
-          className="spacing-vertical--small"
-        >{`${productVariantsToShow.length} av ${product.variantCount} varianter:`}</Heading>
-      )}
+      <Heading
+        level="3"
+        size="small"
+        className="spacing-vertical--small"
+      >{`${productVariantsToShow.length} av ${product.variantCount} varianter:`}</Heading>
 
       {productVariantsToShow.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
@@ -411,29 +392,25 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
                   'variants-table__sorted-row': sortColumns.orderBy === 'artName',
                 })}
               >
-                {product.variantCount > 1 ? (
-                  <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
-                    <Button
-                      className="sort-button"
-                      aria-label={
-                        sortColumns.orderBy === 'artName'
-                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Navn på variant ' })
-                          : defaultAriaLabel + ' navn på variant'
-                      }
-                      aria-pressed={sortColumns.orderBy === 'artName'}
-                      size="xsmall"
-                      style={{ textAlign: 'left' }}
-                      variant="tertiary"
-                      onClick={() => handleSortRow('artName')}
-                      iconPosition="right"
-                      icon={iconBasedOnState('artName')}
-                    >
-                      Navn på variant
-                    </Button>
-                  </Table.ColumnHeader>
-                ) : (
-                  <Table.HeaderCell ref={variantNameElementRef}>Navn på variant</Table.HeaderCell>
-                )}
+                <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
+                  <Button
+                    className="sort-button"
+                    aria-label={
+                      sortColumns.orderBy === 'artName'
+                        ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Navn på variant ' })
+                        : defaultAriaLabel + ' navn på variant'
+                    }
+                    aria-pressed={sortColumns.orderBy === 'artName'}
+                    size="xsmall"
+                    style={{ textAlign: 'left' }}
+                    variant="tertiary"
+                    onClick={() => handleSortRow('artName')}
+                    iconPosition="right"
+                    icon={iconBasedOnState('artName')}
+                  >
+                    Navn på variant
+                  </Button>
+                </Table.ColumnHeader>
                 {sortedByKey.map((variant) => (
                   <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
                 ))}
@@ -442,13 +419,12 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
             <Table.Body>
               <Table.Row
                 className={classNames(
-                  { 'variants-table__sortable-row': product.variantCount > 1 },
+                  { 'variants-table__sortable-row': true },
                   {
                     'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
                   }
                 )}
               >
-                {product.variantCount > 1 ? (
                   <Table.HeaderCell
                     className="sortable hmsnr-header-cell"
                     style={{ top: `${variantNameElementHeight}px` }}
@@ -471,11 +447,6 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
                       HMS-nummer
                     </Button>
                   </Table.HeaderCell>
-                ) : (
-                  <Table.HeaderCell className="hmsnr-header-cell" style={{ top: `${variantNameElementHeight}px` }}>
-                    HMS-nummer
-                  </Table.HeaderCell>
-                )}
                 {sortedByKey.map((variant) => (
                   <Table.DataCell
                     key={'hms-' + variant.id}
@@ -512,7 +483,6 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
                   }
                 )}
               >
-                {product.variantCount > 1 ? (
                   <Table.HeaderCell className="sortable">
                     <Button
                       className="sort-button"
@@ -532,9 +502,7 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
                       Lev-artnr
                     </Button>
                   </Table.HeaderCell>
-                ) : (
-                  <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                )}
+
                 {sortedByKey.map((variant) => (
                   <Table.DataCell key={'supref-' + variant.id}>
                     {variant.supplierRef ? (
@@ -695,4 +663,4 @@ const ProductVariants = ({ product, hmsArtNr }: { product: Product, hmsArtNr?: s
   )
 }
 
-export default ProductVariants
+export default MultipleVariantsTable

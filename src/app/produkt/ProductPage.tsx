@@ -12,7 +12,7 @@ import { Videos } from './Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
 import { TabsIcon } from "@navikt/aksel-icons";
 import { ProductsOnPost } from "@/app/produkt/[id]/page";
-import ProductVariants from "@/app/produkt/variants/ProductVariants";
+import MultipleVariantsTable from "@/app/produkt/variants/MultipleVariantsTable";
 import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
 
 type ProductProps = {
@@ -83,10 +83,11 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </div>
           )}
 
-          {hmsArtNr && product.variants ? (
-            <SingleVariantTable variant={product.variants.find(variant => variant.hmsArtNr === hmsArtNr)!} />
+          {product.variants && (hmsArtNr || product.variants?.length === 1) ? (
+            <SingleVariantTable
+              variant={hmsArtNr ? product.variants.find(variant => variant.hmsArtNr === hmsArtNr)! : product.variants[0]} />
           ) : (
-            <ProductVariants product={product} hmsArtNr={hmsArtNr} />
+            <MultipleVariantsTable product={product} />
           )}
 
         </section>
