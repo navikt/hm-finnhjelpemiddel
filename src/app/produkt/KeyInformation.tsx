@@ -6,6 +6,8 @@ import { Supplier } from '@/utils/supplier-util'
 import { ExternalLinkIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, CopyButton, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
+import { logActionEvent, logVisit } from '@/utils/amplitude'
+import { useEffect } from 'react'
 
 type KeyInformationProps = {
   product: Product
@@ -16,6 +18,11 @@ type KeyInformationProps = {
 const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) => {
   const oa = new Set(product.variants.map((p) => p.hasAgreement))
   const hms = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
+
+  useEffect(() => {
+    //Stygt å ha dette her, men for nå en løsning på å tracke besøk til produktside fra client-komponent
+    typeof window !== 'undefined' && logVisit(window.location.href, window.document.title, 'produkt')
+  }, [])
 
   const hmsNummer =
     hms.size === 1 ? (
@@ -28,6 +35,7 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
         variant="action"
         activeIcon={<ThumbUpIcon aria-hidden />}
         iconPosition="right"
+        onClick={() => logActionEvent('kopier')}
       />
     ) : hms.size > 1 ? (
       <BodyShort>
@@ -53,63 +61,57 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
       )}
       <DefinitionList.Term>Produktkategori</DefinitionList.Term>
       <DefinitionList.Definition>{product.isoCategoryTitle}</DefinitionList.Definition>
-      {
-        product.agreements.length === 0 && (
-          <>
-            <DefinitionList.Term>
-              <OnAgreement_HelpText />
-            </DefinitionList.Term>
-            <DefinitionList.Definition>Nei</DefinitionList.Definition>
-          </>
-        )
-      }
+      {product.agreements.length === 0 && (
+        <>
+          <DefinitionList.Term>
+            <OnAgreement_HelpText />
+          </DefinitionList.Term>
+          <DefinitionList.Definition>Nei</DefinitionList.Definition>
+        </>
+      )}
 
-      {
-        product.agreements.length > 0 && (
-          <>
-            <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
-            <DefinitionList.Definition>
-              {product.agreements.length > 1 ? (
-                <BodyShort>
-                  Hjelpemiddelet er på flere delkontrakter.{' '}
-                  <Link as={NextLink} href="#agreement-info">
-                    Se avtale informasjon.
-                  </Link>
-                </BodyShort>
-              ) : (
-                <BodyShort>
-                  <Link as={NextLink} href="#agreement-info">
-                    {product.agreements[0].postTitle}
-                  </Link>
-                </BodyShort>
-              )}
-            </DefinitionList.Definition>
-          </>
-        )
-      }
+      {product.agreements.length > 0 && (
+        <>
+          <DefinitionList.Term>Delkontrakt</DefinitionList.Term>
+          <DefinitionList.Definition>
+            {product.agreements.length > 1 ? (
+              <BodyShort>
+                Hjelpemiddelet er på flere delkontrakter.{' '}
+                <Link as={NextLink} href="#agreement-info">
+                  Se avtale informasjon.
+                </Link>
+              </BodyShort>
+            ) : (
+              <BodyShort>
+                <Link as={NextLink} href="#agreement-info">
+                  {product.agreements[0].postTitle}
+                </Link>
+              </BodyShort>
+            )}
+          </DefinitionList.Definition>
+        </>
+      )}
 
       <DefinitionList.Term>HMS-nummer</DefinitionList.Term>
       <DefinitionList.Definition>{hmsNummer}</DefinitionList.Definition>
 
-      {
-        supplier && (
-          <>
-            <DefinitionList.Term>Leverandør</DefinitionList.Term>
+      {supplier && (
+        <>
+          <DefinitionList.Term>Leverandør</DefinitionList.Term>
+          <DefinitionList.Definition>
+            <Link as={NextLink} href={`/leverandorer#${supplier.id}`}>
+              {supplier.name}
+            </Link>
+          </DefinitionList.Definition>
+          {product.attributes.url && (
             <DefinitionList.Definition>
-              <Link as={NextLink} href={`/leverandorer#${supplier.id}`}>
-                {supplier.name}
+              <Link href={product.attributes.url} target={'_blank'}>
+                Leverandørens produktside <ExternalLinkIcon aria-hidden />
               </Link>
             </DefinitionList.Definition>
-            {product.attributes.url && (
-              <DefinitionList.Definition>
-                <Link href={product.attributes.url} target={'_blank'}>
-                  Leverandørens produktside <ExternalLinkIcon aria-hidden />
-                </Link>
-              </DefinitionList.Definition>
-            )}
-          </>
-        )
-      }
+          )}
+        </>
+      )}
     </DefinitionList>
   )
 }

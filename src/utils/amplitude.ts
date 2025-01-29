@@ -138,9 +138,10 @@ export function logErrorOnUrl(url: string) {
   })
 }
 
-export function logVisit(url: string, sidetittel: string) {
+export function logVisit(url: string, sidetittel: string, sidetype: string) {
   logAmplitudeEvent(nav_events.BESØK, {
     url: url,
     sidetittel: sidetittel,
+    sidetype: sidetype,
   })
 }

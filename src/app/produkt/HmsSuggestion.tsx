@@ -17,6 +17,7 @@ import {
 } from '@navikt/ds-react'
 import { useState } from 'react'
 import useSWR from 'swr'
+import { logActionEvent } from '@/utils/amplitude'
 
 interface Props {
   product: Product
@@ -159,6 +160,7 @@ const Suggestion = ({ suggestedVariants }: { suggestedVariants: HMSSuggestionWhe
                 iconPosition="right"
                 copyText={suggestedVariants[activeIndex].hmsNumber || ''}
                 text={suggestedVariants[activeIndex].hmsNumber || ''}
+                onClick={() => logActionEvent('kopier')}
               />
             </HStack>
             {wheelchairFilters

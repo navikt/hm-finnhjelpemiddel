@@ -144,7 +144,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                         logNavigationEvent('meny', 'adminregister', 'Innlogging leverandør')
                       }}
                     >
-                      For ansatte: Gjenbruk
+                      For Nav-ansatte: Gjenbruk
                     </Link>
                   </li>
                 </VStack>

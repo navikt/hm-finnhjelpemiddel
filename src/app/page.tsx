@@ -26,7 +26,7 @@ function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    typeof window !== 'undefined' && logVisit(window.location.href, window.document.title)
+    typeof window !== 'undefined' && logVisit(window.location.href, window.document.title, 'forside')
   }, [])
 
   const onSearch = useCallback(
