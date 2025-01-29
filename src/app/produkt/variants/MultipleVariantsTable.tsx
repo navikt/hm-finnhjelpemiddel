@@ -2,24 +2,25 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import classNames from 'classnames'
-
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Chips, CopyButton, Heading, HStack, Loader, Table, Tag } from '@navikt/ds-react'
-
-import { viewAgreementRanks } from '@/components/AgreementIcon'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, Chips, Heading, HStack, Loader, Table } from '@navikt/ds-react'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 import { fetchProducts, FetchProductsWithFilters, Filter, FilterData, getProductFilters } from '@/utils/api-util'
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { Product } from '@/utils/product-util'
-import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
+import { toValueAndUnit } from '@/utils/string-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-import { logActionEvent } from '@/utils/amplitude'
 import { egenskaperText, hasDifferentValues, sortColumnsByRowKey } from "@/app/produkt/variants/variant-utils";
+import { VariantStatusRow } from "@/app/produkt/variants/VariantStatusRow";
+import { VariantNameRow } from "@/app/produkt/variants/VariantNameRow";
+import VariantHmsNumberRow from "@/app/produkt/variants/VariantHmsNumberRow";
+import { VariantSupplierRefRow } from "@/app/produkt/variants/VariantSupplierRefRow";
+import { VariantRankRow } from "@/app/produkt/variants/VariantRankRowProps";
+import { VariantPostRow } from "@/app/produkt/variants/VariantPostRow";
+import { VariantTechnicalDataRow } from "@/app/produkt/variants/VariantTechnicalDataRow";
 
 export type SortColumns = {
   orderBy: string | null
@@ -64,8 +65,6 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
 
   const {
     data: dataAndFilter,
-    isLoading: dataIsLoading,
-    error: dataError,
   } = useSWR<FetchProductsWithFilters>(
     {
       from: 0,
@@ -362,241 +361,39 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
         <div className="variants-table" id="variants-table">
           <Table zebraStripes>
             <Table.Header>
-              <Table.Row className="variants-table__status-row">
-                <Table.HeaderCell aria-hidden></Table.HeaderCell>
-                {productVariantsToShow.map((variant) => (
-                  <Table.HeaderCell key={'onagreement-' + variant.id}>
-                    {variant.status === 'INACTIVE' ? (
-                      <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
-                        Utgått
-                      </Tag>
-                    ) : variant.hasAgreement ? (
-                      <Tag
-                        size="small"
-                        variant="neutral-moderate"
-                        className="filter-chip__green"
-                        style={{ minWidth: '89px' }}
-                      >
-                        På avtale
-                      </Tag>
-                    ) : (
-                      <Tag size="small" variant="neutral-moderate">
-                        Ikke på avtale
-                      </Tag>
-                    )}
-                  </Table.HeaderCell>
-                ))}
-              </Table.Row>
-              <Table.Row
-                className={classNames('variants-table__sortable-row', {
-                  'variants-table__sorted-row': sortColumns.orderBy === 'artName',
-                })}
-              >
-                <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
-                  <Button
-                    className="sort-button"
-                    aria-label={
-                      sortColumns.orderBy === 'artName'
-                        ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Navn på variant ' })
-                        : defaultAriaLabel + ' navn på variant'
-                    }
-                    aria-pressed={sortColumns.orderBy === 'artName'}
-                    size="xsmall"
-                    style={{ textAlign: 'left' }}
-                    variant="tertiary"
-                    onClick={() => handleSortRow('artName')}
-                    iconPosition="right"
-                    icon={iconBasedOnState('artName')}
-                  >
-                    Navn på variant
-                  </Button>
-                </Table.ColumnHeader>
-                {sortedByKey.map((variant) => (
-                  <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
-                ))}
-              </Table.Row>
+             <VariantStatusRow variants={sortedByKey} />
+              <VariantNameRow variants={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow} variantNameElementRef={variantNameElementRef} />
             </Table.Header>
             <Table.Body>
-              <Table.Row
-                className={classNames(
-                  { 'variants-table__sortable-row': true },
-                  {
-                    'variants-table__sorted-row': sortColumns.orderBy === 'HMS',
-                  }
-                )}
-              >
-                  <Table.HeaderCell
-                    className="sortable hmsnr-header-cell"
-                    style={{ top: `${variantNameElementHeight}px` }}
-                  >
-                    <Button
-                      className="sort-button"
-                      aria-label={
-                        sortColumns.orderBy === 'HMS'
-                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'HMS-nummer ' })
-                          : defaultAriaLabel + ' HMS-nummer'
-                      }
-                      aria-pressed={sortColumns.orderBy === 'HMS'}
-                      size="xsmall"
-                      style={{ textAlign: 'left' }}
-                      variant="tertiary"
-                      onClick={() => handleSortRow('HMS')}
-                      iconPosition="right"
-                      icon={iconBasedOnState('HMS')}
-                    >
-                      HMS-nummer
-                    </Button>
-                  </Table.HeaderCell>
-                {sortedByKey.map((variant) => (
-                  <Table.DataCell
-                    key={'hms-' + variant.id}
-                    style={{
-                      position: 'sticky',
-                      top: `${variantNameElementHeight}px`,
-                      zIndex: '1 !important',
-                      background: 'rgb(242 243 245)',
-                    }}
-                  >
-                    {variant.hmsArtNr ? (
-                      <CopyButton
-                        size="small"
-                        className="hms-copy-button"
-                        copyText={variant.hmsArtNr}
-                        text={variant.hmsArtNr}
-                        activeText="Kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden={true} />}
-                        iconPosition="right"
-                        onClick={() => logActionEvent('kopier')}
-                      />
-                    ) : (
-                      '-'
-                    )}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
-              <Table.Row
-                className={classNames(
-                  { 'variants-table__sortable-row': product.variantCount > 1 },
-                  {
-                    'variants-table__sorted-row': sortColumns.orderBy === 'levart',
-                  }
-                )}
-              >
-                  <Table.HeaderCell className="sortable">
-                    <Button
-                      className="sort-button"
-                      aria-label={
-                        sortColumns.orderBy === 'levart'
-                          ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Lev-artnr ' })
-                          : defaultAriaLabel + ' lev-artnr'
-                      }
-                      aria-pressed={sortColumns.orderBy === 'levart'}
-                      size="xsmall"
-                      style={{ textAlign: 'left' }}
-                      variant="tertiary"
-                      onClick={() => handleSortRow('levart')}
-                      iconPosition="right"
-                      icon={iconBasedOnState('levart')}
-                    >
-                      Lev-artnr
-                    </Button>
-                  </Table.HeaderCell>
-
-                {sortedByKey.map((variant) => (
-                  <Table.DataCell key={'supref-' + variant.id}>
-                    {variant.supplierRef ? (
-                      <CopyButton
-                        size="small"
-                        className="hms-copy-button"
-                        copyText={variant.supplierRef}
-                        text={variant.supplierRef}
-                        activeText="Kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden={true} />}
-                        iconPosition="right"
-                        onClick={() => logActionEvent('kopier')}
-                      />
-                    ) : (
-                      '-'
-                    )}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
+              <VariantHmsNumberRow
+                sortedByKey={sortedByKey}
+                sortColumns={sortColumns}
+                handleSortRow={handleSortRow}
+                variantNameElementHeight={variantNameElementHeight}
+              />
+              <VariantSupplierRefRow
+                sortedByKey={sortedByKey}
+                sortColumns={sortColumns}
+                handleSortRow={handleSortRow}
+              />
 
               {product.agreements && product.agreements.length > 0 && (
-                <Table.Row
-                  className={classNames(
-                    { 'variants-table__sortable-row': sortRank },
-                    { 'variants-table__sorted-row': sortColumns.orderBy === 'rank' },
-                    { 'variants-table__rank-row-on-agreement': hasAgreementSet.has(true) }
-                  )}
-                >
-                  {sortRank ? (
-                    <Table.HeaderCell className="sortable">
-                      <Button
-                        className="sort-button"
-                        aria-label={
-                          sortColumns.orderBy === 'rank'
-                            ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Rangering ' })
-                            : defaultAriaLabel + ' rangering'
-                        }
-                        aria-pressed={sortColumns.orderBy === 'rank'}
-                        size="xsmall"
-                        style={{ textAlign: 'left' }}
-                        variant="tertiary"
-                        onClick={() => handleSortRow('rank')}
-                        iconPosition="right"
-                        icon={iconBasedOnState('rank')}
-                      >
-                        Rangering
-                      </Button>
-                    </Table.HeaderCell>
-                  ) : (
-                    <Table.HeaderCell>Rangering</Table.HeaderCell>
-                  )}
-                  {sortedByKey.map((variant) => (
-                    <Table.DataCell key={'rank-' + variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
-                  ))}
-                </Table.Row>
-              )}
-
-              {product.agreements && product.agreements.length > 0 && (
-                <Table.Row
-                  className={classNames(
-                    { 'variants-table__sortable-row': postSet.size > 1 },
-                    { 'variants-table__sorted-row': sortColumns.orderBy === 'postNr' }
-                  )}
-                >
-                  {sortRank ? (
-                    <Table.HeaderCell className="sortable">
-                      <Button
-                        className="sort-button"
-                        aria-label={
-                          sortColumns.orderBy === 'postNr'
-                            ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: 'Delkontrakt ' })
-                            : defaultAriaLabel + ' delkontrakt'
-                        }
-                        aria-pressed={sortColumns.orderBy === 'postNr'}
-                        size="xsmall"
-                        style={{ textAlign: 'left' }}
-                        variant="tertiary"
-                        onClick={() => handleSortRow('postNr')}
-                        iconPosition="right"
-                        icon={iconBasedOnState('postNr')}
-                      >
-                        Delkontrakt
-                      </Button>
-                    </Table.HeaderCell>
-                  ) : (
-                    <Table.HeaderCell>Delkontrakt</Table.HeaderCell>
-                  )}
-                  {sortedByKey.map((variant) => (
-                    <Table.DataCell key={'post-' + variant.id}>
-                      {formatAgreementPosts(variant.agreements)}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
+               <>
+                 <VariantRankRow
+                   sortedByKey={sortedByKey}
+                   sortColumns={sortColumns}
+                   handleSortRow={handleSortRow}
+                   sortRank={sortRank}
+                   hasAgreementSet={hasAgreementSet}
+                 />
+                 <VariantPostRow
+                   sortedByKey={sortedByKey}
+                   sortColumns={sortColumns}
+                   handleSortRow={handleSortRow}
+                   postSet={postSet}
+                   sortRank={sortRank}
+                 />
+               </>
               )}
 
               <Table.Row>
@@ -617,43 +414,18 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
               </Table.Row>
               {Object.keys(rows).length > 0 &&
                 Object.entries(rows).map(([key, row], i) => {
-                  const isSortableRow = hasDifferentValues({ row })
+                  const isSortableRow = hasDifferentValues({ row });
                   return (
-                    <Table.Row
-                      key={key + 'row' + i}
-                      className={classNames(
-                        { 'variants-table__sorted-row': key === sortColumns.orderBy },
-                        { 'variants-table__sortable-row': isSortableRow }
-                      )}
-                    >
-                      {isSortableRow ? (
-                        <Table.HeaderCell className="sortable">
-                          <Button
-                            className="sort-button"
-                            aria-label={
-                              sortColumns.orderBy === key
-                                ? getAriaLabel({ sortColumns: sortColumns, ariaLabelKey: key + ' ' })
-                                : defaultAriaLabel + ' ' + key.toLowerCase()
-                            }
-                            aria-pressed={sortColumns.orderBy === key}
-                            size="xsmall"
-                            style={{ textAlign: 'left' }}
-                            variant="tertiary"
-                            onClick={() => handleSortRow(key)}
-                            iconPosition="right"
-                            icon={iconBasedOnState(key)}
-                          >
-                            {key}
-                          </Button>
-                        </Table.HeaderCell>
-                      ) : (
-                        <Table.HeaderCell>{key}</Table.HeaderCell>
-                      )}
-                      {row.map((value, i) => (
-                        <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
-                      ))}
-                    </Table.Row>
-                  )
+                    <VariantTechnicalDataRow
+                      key={key}
+                      technicalDataName={key}
+                      row={row}
+                      sortColumns={sortColumns}
+                      handleSortRow={handleSortRow}
+                      isSortableRow={isSortableRow}
+                      iconBasedOnState={iconBasedOnState}
+                    />
+                  );
                 })}
             </Table.Body>
           </Table>
