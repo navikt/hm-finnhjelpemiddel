@@ -1,6 +1,7 @@
 'use client'
 import * as amplitude from '@amplitude/analytics-browser'
 import { track } from '@amplitude/analytics-browser'
+import { FilterFormState } from '@/utils/filter-util'
 
 const APP_NAME = 'hm-oversikt-frontend'
 const TEAM_NAME = 'teamdigihot'
@@ -21,6 +22,7 @@ export enum digihot_customevents {
   VARIANTSIDE_VIST = 'visning av stor variantside',
   PEPPERKAKE = 'klikk på pepperkake',
   VIS_FLERE_TREFF = 'vis-flere-treff',
+  FILTRERING = 'filtrering',
 }
 
 export enum nav_events {
@@ -111,6 +113,13 @@ export function logNavigationSearchEvent(
 export function logActionEvent(handling: string) {
   logCustomEvent(digihot_customevents.ACTION, {
     handling: handling,
+  })
+}
+
+export function logFilterEvent(filter: Record<string, string | string[]>, komponent: string) {
+  logCustomEvent(digihot_customevents.FILTRERING, {
+    filter: filter,
+    komponent: komponent,
   })
 }
 
