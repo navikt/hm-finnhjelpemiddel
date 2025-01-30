@@ -8,11 +8,12 @@ import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
 import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
-import ProductVariants from './ProductVariants'
 import { Videos } from './Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
 import { TabsIcon } from "@navikt/aksel-icons";
 import { ProductsOnPost } from "@/app/produkt/[id]/page";
+import MultipleVariantsTable from "@/app/produkt/variants/MultipleVariantsTable";
+import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
 
 type ProductProps = {
   product: Product
@@ -32,7 +33,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr}/>
+        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr} />
         <ProductNavigationBar
           isOnAgreement={isOnAgreement}
           hasAccessories={hasAccessories}
@@ -82,7 +83,13 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </div>
           )}
 
-          <ProductVariants product={product} hmsArtNr={hmsArtNr} />
+          {product.variants && (hmsArtNr || product.variants?.length === 1) ? (
+            <SingleVariantTable
+              variant={hmsArtNr ? product.variants.find(variant => variant.hmsArtNr === hmsArtNr)! : product.variants[0]} />
+          ) : (
+            <MultipleVariantsTable product={product} />
+          )}
+
         </section>
 
         <section aria-label="Videolenker" className="spacing-vertical--xlarge">
