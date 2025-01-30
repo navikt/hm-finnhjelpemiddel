@@ -9,9 +9,12 @@ interface HmsNumberRowProps {
   sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' };
   handleSortRow: (key: string) => void;
   variantNameElementHeight: number;
+  handleColumnClick: (key: string) => void;
+  selectedColumn: string | null;
 }
 
-const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantNameElementHeight }: HmsNumberRowProps) => {
+const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantNameElementHeight, selectedColumn,
+  handleColumnClick }: HmsNumberRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
@@ -55,7 +58,7 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
           HMS-nummer
         </Button>
       </Table.HeaderCell>
-      {sortedByKey.map((variant) => (
+      {sortedByKey.map((variant, i) => (
         <Table.DataCell
           key={'hms-' + variant.id}
           style={{
@@ -64,7 +67,8 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
             zIndex: '1 !important',
             background: 'rgb(242 243 245)',
           }}
-        >
+          className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+          onClick={() => handleColumnClick('column-' + i)}>
           {variant.hmsArtNr ? (
             <CopyButton
               size="small"

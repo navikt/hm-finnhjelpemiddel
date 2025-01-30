@@ -1,7 +1,7 @@
-import { Table, Button } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { ProductVariant } from '@/utils/product-util';
-import { getAriaLabel, defaultAriaLabel } from '@/utils/ariaLabel-util';
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util';
 import { viewAgreementRanks } from '@/components/AgreementIcon';
 import classNames from 'classnames';
 import { SortColumns } from "@/app/produkt/variants/MultipleVariantsTable";
@@ -12,9 +12,14 @@ interface VariantRankRowProps {
   handleSortRow: (key: string) => void;
   sortRank: boolean;
   hasAgreementSet: Set<boolean>;
+  handleColumnClick: (key: string) => void;
+  selectedColumn: string | null;
 }
 
-export const VariantRankRow = ({ sortedByKey, sortColumns, handleSortRow, sortRank, hasAgreementSet }: VariantRankRowProps) => {
+export const VariantRankRow = ({
+  sortedByKey, sortColumns, handleSortRow, sortRank, hasAgreementSet, selectedColumn,
+  handleColumnClick
+}: VariantRankRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
@@ -58,8 +63,10 @@ export const VariantRankRow = ({ sortedByKey, sortColumns, handleSortRow, sortRa
       ) : (
         <Table.HeaderCell>Rangering</Table.HeaderCell>
       )}
-      {sortedByKey.map((variant) => (
-        <Table.DataCell key={'rank-' + variant.id}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
+      {sortedByKey.map((variant, i) => (
+        <Table.DataCell key={'rank-' + variant.id}
+                        className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+                        onClick={() => handleColumnClick('column-' + i)}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
       ))}
     </Table.Row>
   );

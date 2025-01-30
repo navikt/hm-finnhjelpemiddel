@@ -1,4 +1,4 @@
-import { Table, Button, CopyButton } from '@navikt/ds-react';
+import { Button, CopyButton, Table } from '@navikt/ds-react';
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons';
 import { ProductVariant } from '@/utils/product-util';
 import { logActionEvent } from '@/utils/amplitude';
@@ -8,9 +8,14 @@ interface VariantSupplierRefRowProps {
   sortedByKey: ProductVariant[];
   sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' };
   handleSortRow: (key: string) => void;
+  handleColumnClick: (key: string) => void;
+  selectedColumn: string | null;
 }
 
-export const VariantSupplierRefRow = ({ sortedByKey, sortColumns, handleSortRow }: VariantSupplierRefRowProps) => {
+export const VariantSupplierRefRow = ({
+  sortedByKey, sortColumns, handleSortRow, selectedColumn,
+  handleColumnClick
+}: VariantSupplierRefRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
@@ -50,8 +55,9 @@ export const VariantSupplierRefRow = ({ sortedByKey, sortColumns, handleSortRow 
         </Button>
       </Table.HeaderCell>
 
-      {sortedByKey.map((variant) => (
-        <Table.DataCell key={'supref-' + variant.id}>
+      {sortedByKey.map((variant, i) => (
+        <Table.DataCell key={'supref-' + variant.id} className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+                        onClick={() => handleColumnClick('column-' + i)}>
           {variant.supplierRef ? (
             <CopyButton
               size="small"

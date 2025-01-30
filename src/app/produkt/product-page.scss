@@ -70,6 +70,9 @@
     }
   }
 
+
+
+
   &__description {
     white-space: pre-wrap;
   }
@@ -449,4 +452,11 @@
       object-fit: contain;
     }
   }
+}
+
+.selected-column {
+  border-left: #0056b4 dashed 1px;
+  border-right: #0056b4 dashed 1px;;
+  background-color: #f1f5f9;
+  font-weight: 500
 }

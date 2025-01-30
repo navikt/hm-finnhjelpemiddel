@@ -1,7 +1,7 @@
-import { Table, Button } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
 import { ProductVariant } from '@/utils/product-util';
-import { getAriaLabel, defaultAriaLabel } from '@/utils/ariaLabel-util';
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util';
 import { formatAgreementPosts } from '@/utils/string-util';
 import classNames from 'classnames';
 
@@ -11,9 +11,14 @@ interface VariantPostRowProps {
   handleSortRow: (key: string) => void;
   postSet: Set<number>;
   sortRank: boolean;
+  handleColumnClick: (key: string) => void;
+  selectedColumn: string | null;
 }
 
-export const VariantPostRow = ({ sortedByKey, sortColumns, handleSortRow, postSet, sortRank }: VariantPostRowProps) => {
+export const VariantPostRow = ({
+  sortedByKey, sortColumns, handleSortRow, postSet, sortRank, selectedColumn,
+  handleColumnClick
+}: VariantPostRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
@@ -56,8 +61,10 @@ export const VariantPostRow = ({ sortedByKey, sortColumns, handleSortRow, postSe
       ) : (
         <Table.HeaderCell>Delkontrakt</Table.HeaderCell>
       )}
-      {sortedByKey.map((variant) => (
-        <Table.DataCell key={'post-' + variant.id}>
+      {sortedByKey.map((variant, i) => (
+        <Table.DataCell key={'post-' + variant.id}
+                        className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+                        onClick={() => handleColumnClick('column-' + i)}>
           {formatAgreementPosts(variant.agreements)}
         </Table.DataCell>
       ))}
