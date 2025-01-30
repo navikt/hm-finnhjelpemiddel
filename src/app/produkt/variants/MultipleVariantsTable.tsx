@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Chips, Heading, HStack, Loader, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, EyeIcon, FilterIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, Button, Chips, Heading, HStack, Loader, Table } from '@navikt/ds-react'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 import { fetchProducts, getProductFilters } from '@/utils/api-util'
-import { initialFiltersFormState, filtersFormStateLabel, FilterFormState } from '@/utils/filter-util'
+import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -26,7 +26,7 @@ export type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-const MultipleVariantsTable = ({ product }: {product: Product}) => {
+const MultipleVariantsTable = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: "ascending" })
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -35,7 +35,7 @@ const MultipleVariantsTable = ({ product }: {product: Product}) => {
   const searchTerm = searchParams.get('term')
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
   const [variantNameElementHeight, setVariantNameElementHeight] = useState(0)
-
+  const [showCommonTechnicalData, setShowCommonTechnicalData] = useState(true)
 
 
   useEffect(() => {
@@ -159,7 +159,7 @@ const MultipleVariantsTable = ({ product }: {product: Product}) => {
     : [...new Set(sortedByKey.flatMap(variant => Object.keys(variant.techData)))].sort()
 
 
-  const rows: { [key: string]: string[] }  = Object.assign(
+  const rows: { [key: string]: string[] } = Object.assign(
     {},
     ...allDataKeys.map(key => ({
       [key]: productVariantsToShow.map(variant =>
@@ -167,6 +167,7 @@ const MultipleVariantsTable = ({ product }: {product: Product}) => {
       ),
     }))
   )
+
 
   const hasAgreementSet = new Set(product.variants.map(p => p.hasAgreement))
   const hasAgreementVaries = hasAgreementSet.size > 1
@@ -206,7 +207,11 @@ const MultipleVariantsTable = ({ product }: {product: Product}) => {
     }))
     .concat(
       searchData.searchTerm && showTermTag
-        ? [{ key: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr', values: searchData.searchTerm, label: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr' }]
+        ? [{
+          key: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr',
+          values: searchData.searchTerm,
+          label: searchTermMatchesHms ? 'HMS-nummer' : 'Lev-artnr'
+        }]
         : []
     )
 
@@ -263,36 +268,109 @@ const MultipleVariantsTable = ({ product }: {product: Product}) => {
           <Table zebraStripes>
             <Table.Header>
               <VariantStatusRow variants={sortedByKey} />
-              <VariantNameRow variants={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow} variantNameElementRef={variantNameElementRef} />
+              <VariantNameRow variants={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                              variantNameElementRef={variantNameElementRef} />
             </Table.Header>
             <Table.Body>
-              <VariantHmsNumberRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow} variantNameElementHeight={variantNameElementHeight} />
-              <VariantSupplierRefRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow} />
+              <VariantHmsNumberRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                   variantNameElementHeight={variantNameElementHeight} />
+              <VariantSupplierRefRow sortedByKey={sortedByKey} sortColumns={sortColumns}
+                                     handleSortRow={handleSortRow} />
               {product.agreements && product.agreements.length > 0 && (
                 <>
-                  <VariantRankRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow} sortRank={sortRank} hasAgreementSet={hasAgreementSet} />
-                  <VariantPostRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow} postSet={postSet} sortRank={sortRank} />
+                  <VariantRankRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                  sortRank={sortRank} hasAgreementSet={hasAgreementSet} />
+                  <VariantPostRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                  postSet={postSet} sortRank={sortRank} />
                 </>
               )}
               <Table.Row>
                 <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
                 {sortedByKey.map(variant => (
-                  <Table.DataCell key={'bestillingsordning-' + variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
+                  <Table.DataCell
+                    key={'bestillingsordning-' + variant.id}>{variant.bestillingsordning ? 'Ja' : 'Nei'}</Table.DataCell>
                 ))}
               </Table.Row>
               <Table.Row>
                 <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
                 {sortedByKey.map(variant => (
-                  <Table.DataCell key={'behovsmelding-' + variant.id}>{variant.digitalSoknad ? 'Ja' : 'Nei'}</Table.DataCell>
+                  <Table.DataCell
+                    key={'behovsmelding-' + variant.id}>{variant.digitalSoknad ? 'Ja' : 'Nei'}</Table.DataCell>
                 ))}
               </Table.Row>
               {Object.keys(rows).length > 0 &&
-                Object.entries(rows).map(([key, row]) => {
-                  const isSortableRow = hasDifferentValues({ row })
-                  return (
-                    <VariantTechnicalDataRow key={key} technicalDataName={key} row={row} sortColumns={sortColumns} handleSortRow={handleSortRow} isSortableRow={isSortableRow} iconBasedOnState={iconBasedOnState} />
-                  )
-                })}
+                Object.entries(rows)
+                  .sort(([keyA, rowA], [keyB, rowB]) => {
+                    const isSortableRowA = hasDifferentValues({ row: rowA });
+                    const isSortableRowB = hasDifferentValues({ row: rowB });
+
+                    if (isSortableRowA && !isSortableRowB) return -1;
+                    if (!isSortableRowA && isSortableRowB) return 1;
+                    return 0;
+                  })
+                  .map(([key, row]) => {
+                    const isSortableRow = hasDifferentValues({ row });
+                    if (!isSortableRow) return null;
+                    return (
+                      <VariantTechnicalDataRow
+                        key={key}
+                        technicalDataName={key}
+                        row={row}
+                        sortColumns={sortColumns}
+                        handleSortRow={handleSortRow}
+                        isSortableRow={isSortableRow}
+                        iconBasedOnState={iconBasedOnState}
+                      />
+                    );
+                  })}
+
+
+
+              {Object.values(rows).some(row => !hasDifferentValues({ row })) && (
+                <Table.Row>
+                  <Table.HeaderCell>
+                    <Button
+                      size={'xsmall'}
+                      variant="primary"
+                      className="button-with-thin-border"
+                      onClick={() => {setShowCommonTechnicalData(!showCommonTechnicalData)}}
+                    >
+                      {!showCommonTechnicalData ?"Vis felles egenskaper" :"Skjul felles egenskaper"}
+                    </Button>
+                  </Table.HeaderCell>
+                  {sortedByKey.map(variant => (
+                    <Table.DataCell key={'felles-egenskaper-' + variant.id}>
+
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
+
+              {showCommonTechnicalData && Object.keys(rows).length > 0 &&
+                Object.entries(rows)
+                  .sort(([keyA, rowA], [keyB, rowB]) => {
+                    const isSortableRowA = hasDifferentValues({ row: rowA });
+                    const isSortableRowB = hasDifferentValues({ row: rowB });
+
+                    if (isSortableRowA && !isSortableRowB) return -1;
+                    if (!isSortableRowA && isSortableRowB) return 1;
+                    return 0;
+                  })
+                  .map(([key, row]) => {
+                    const isSortableRow = hasDifferentValues({ row });
+                    if (isSortableRow) return null;
+                    return (
+                      <VariantTechnicalDataRow
+                        key={key}
+                        technicalDataName={key}
+                        row={row}
+                        sortColumns={sortColumns}
+                        handleSortRow={handleSortRow}
+                        isSortableRow={isSortableRow}
+                        iconBasedOnState={iconBasedOnState}
+                      />
+                    );
+                  })}
             </Table.Body>
           </Table>
         </div>
