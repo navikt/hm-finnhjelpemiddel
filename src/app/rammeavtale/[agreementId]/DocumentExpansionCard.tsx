@@ -4,7 +4,7 @@ import { BodyShort, ExpansionCard, VStack } from '@navikt/ds-react'
 
 import { Attachment } from '@/utils/agreement-util'
 
-import File from '@/components/File'
+import File from '@/app/rammeavtale/[agreementId]/File'
 import { useEffect, useRef, useState } from 'react'
 
 export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }) => {

@@ -6,7 +6,7 @@ import { useCallback, useEffect } from 'react'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import AnimateLayout from '@/components/layout/AnimateLayout'
-import NewsList from '@/components/NewsList'
+import NewsList from '@/app/NewsList'
 import { logKlikk, logNavigationEvent, logVisit } from '@/utils/amplitude'
 import {
   BicycleIcon,
