@@ -4,10 +4,11 @@ import { ProductVariant } from '@/utils/product-util';
 import { getAriaLabel, defaultAriaLabel } from '@/utils/ariaLabel-util';
 import { viewAgreementRanks } from '@/components/AgreementIcon';
 import classNames from 'classnames';
+import { SortColumns } from "@/app/produkt/variants/MultipleVariantsTable";
 
 interface VariantRankRowProps {
   sortedByKey: ProductVariant[];
-  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' };
+  sortColumns: SortColumns
   handleSortRow: (key: string) => void;
   sortRank: boolean;
   hasAgreementSet: Set<boolean>;

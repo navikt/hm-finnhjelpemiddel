@@ -1,7 +1,7 @@
 import { Table, Button } from '@navikt/ds-react';
 import classNames from 'classnames';
 import { getAriaLabel, defaultAriaLabel } from '@/utils/ariaLabel-util';
-import { SortColumns } from '@/app/produkt/variants/MultipleVariantsTable';
+import { SortColumns } from "@/app/produkt/variants/MultipleVariantsTable";
 
 interface VariantDataRowProps {
   technicalDataName: string;
