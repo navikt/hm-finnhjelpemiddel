@@ -9,9 +9,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Button, HGrid, HStack, Heading, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading, HGrid, HStack, Loader, Popover, Show, VStack } from '@navikt/ds-react'
 
-import { FetchProductsWithFilters, FilterData, PAGE_SIZE, fetchProducts, initialFilters } from '@/utils/api-util'
+import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import AnimateLayout from '@/components/layout/AnimateLayout'
@@ -21,11 +21,11 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { categoryFilters, initialFiltersFormState, mapFilters, visFilters } from '@/utils/filter-util'
+import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
-import { logFilterEvent } from '@/utils/amplitude'
+import { logFilterEndretEvent } from '@/utils/amplitude'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -64,7 +64,7 @@ export default function SearchPage() {
   }, [])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
-    logFilterEvent(mapFilters(formMethods.getValues().filters), 'Søkeside')
+    logFilterEndretEvent('Søk')
 
     router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
       scroll: false,

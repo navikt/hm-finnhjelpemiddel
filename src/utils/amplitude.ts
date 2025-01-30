@@ -23,6 +23,7 @@ export enum digihot_customevents {
   PEPPERKAKE = 'klikk på pepperkake',
   VIS_FLERE_TREFF = 'vis-flere-treff',
   FILTRERING = 'filtrering',
+  FILTER_ENDRET = 'filter-endret',
 }
 
 export enum nav_events {
@@ -119,6 +120,12 @@ export function logActionEvent(handling: string) {
 export function logFilterEvent(filter: Record<string, string | string[]>, komponent: string) {
   logCustomEvent(digihot_customevents.FILTRERING, {
     filter: filter,
+    komponent: komponent,
+  })
+}
+
+export function logFilterEndretEvent(komponent: string) {
+  logCustomEvent(digihot_customevents.FILTER_ENDRET, {
     komponent: komponent,
   })
 }
