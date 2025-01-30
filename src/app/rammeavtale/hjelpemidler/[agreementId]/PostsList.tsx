@@ -1,13 +1,14 @@
 'use client'
 
-import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { FormSearchData } from '@/utils/search-state-util'
-import { Alert, HStack, Heading, Loader, ReadMore, VStack } from '@navikt/ds-react'
+import { Alert, Heading, HStack, Loader, ReadMore, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { ProductCardNew } from '@/components/ProductCardNew'
+import { ProductCardNoPicture } from '@/components/ProductCardNoPicture'
 
 const PostsList = ({
   posts,
@@ -74,16 +75,27 @@ const PostsList = ({
           <HStack as="ol" gap={'4'}>
             {post.products.map((productWithRank) => (
               <li key={productWithRank.product.id}>
-                <ProductCard
-                  key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                  product={productWithRank.product}
-                  linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
-                  rank={productWithRank.rank}
-                  type={pictureToggleValue === 'hide-pictures' ? 'no-picture' : 'new'}
-                  hmsNumbers={productWithRank.hmsNumbers}
-                  variantCount={productWithRank.variantCount}
-                  handleCompareClick={handleCompareClick}
-                />
+                {pictureToggleValue === 'hide-pictures' ? (
+                  <ProductCardNoPicture
+                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                    product={productWithRank.product}
+                    linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
+                    rank={productWithRank.rank}
+                    hmsNumbers={productWithRank.hmsNumbers}
+                    variantCount={productWithRank.variantCount}
+                    handleCompareClick={handleCompareClick}
+                  />
+                ) : (
+                  <ProductCardNew
+                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                    product={productWithRank.product}
+                    linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
+                    rank={productWithRank.rank}
+                    hmsNumbers={productWithRank.hmsNumbers}
+                    variantCount={productWithRank.variantCount}
+                    handleCompareClick={handleCompareClick}
+                  />
+                )}
               </li>
             ))}
           </HStack>
