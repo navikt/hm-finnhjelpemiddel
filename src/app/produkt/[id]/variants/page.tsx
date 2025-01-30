@@ -2,7 +2,7 @@ import { getProductWithVariants } from '@/utils/api-util'
 import { mapProductFromSeriesId } from '@/utils/product-util'
 import '../../product-page.scss'
 import { Heading } from "@navikt/ds-react";
-import ProductVariants from "@/app/produkt/ProductVariants";
+import MultipleVariantsTable from "@/app/produkt/variants/MultipleVariantsTable";
 
 type Props = {
   params: Promise<{ id: string }>
@@ -16,7 +16,7 @@ export default async function LargeVariantsPage(props: Props) {
   return (
     <div>
       <Heading level="1" size="medium">Varianter</Heading>
-      <ProductVariants product={product} />
+      <MultipleVariantsTable product={product} />
     </div>
   )
 }
