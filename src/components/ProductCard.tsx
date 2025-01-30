@@ -23,7 +23,7 @@ const ProductCard = ({
   handleIsoButton,
   handleCompareClick,
 }: {
-  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'print' | 'horizontal' | 'new'
+  type: 'removable' | 'checkbox' | 'plain' | 'no-picture' | 'large-with-checkbox' | 'horizontal' | 'new'
   product: Product
   linkOverwrite?: string
   rank?: number
@@ -54,8 +54,6 @@ const ProductCard = ({
     cardClassName = 'product-card--removable'
   } else if (type === 'no-picture') {
     cardClassName = 'product-card--no-picture'
-  } else if (type === 'print') {
-    cardClassName = 'product-card--print'
   } else if (type === 'horizontal') {
     cardClassName = 'product-card--horizontal'
   } else if (type === 'new') {
@@ -73,19 +71,6 @@ const ProductCard = ({
     </>
   )
 
-  if (type === 'print') {
-    return (
-      <Box paddingInline="2" paddingBlock="1" className="product-card--print">
-        <VStack gap="1">
-          <BodyShort size="small" className="text-line-clamp">
-            {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
-          </BodyShort>
-          {viewHmsOrCount}
-          <Detail textColor="subtle">{product.supplierName}</Detail>
-        </VStack>
-      </Box>
-    )
-  }
   if (type === 'no-picture') {
     return (
       <Box
