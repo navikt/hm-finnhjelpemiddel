@@ -70,6 +70,35 @@
     }
   }
 
+  .common-data-table {
+    thead tr > th:first-child {
+      width: 250px;
+    }
+
+    tbody th {
+      border-right: 1px solid $a-bg-subtle;
+    }
+
+    tbody .navds-table__row--shade-on-hover:hover th {
+      background-color: $a-bg-subtle;
+    }
+
+    tbody th {
+      background-color: inherit;
+    }
+
+    tr:nth-child(2n) th {
+      background-color: white;
+    }
+
+
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+  }
+
 
 
 
@@ -459,4 +488,8 @@
   border-right: #0056b4 dashed 1px;;
   background-color: #f1f5f9;
   font-weight: 500
+}
+
+.expi {
+  background-color: #99185e;
 }

@@ -123,7 +123,7 @@ export const egenskaperText = (
       } som ikke er på avtale med Nav.`
 
   const textMultipleVariants =
-    'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres.'
+    'Nedenfor finner man en oversikt over egenskapene til de forskjellige variantene. Radene der egenskapene har ulike verdier kan sorteres. Tabellen nedenfor viser egeneskapene som er like for alle varianter'
   const textOnlyOne = 'Nedenfor finner man en oversikt over egenskaper.'
 
   return `${

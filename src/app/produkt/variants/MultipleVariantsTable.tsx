@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Chips, Heading, HStack, Loader, Table } from '@navikt/ds-react'
+import { Alert, BodyLong, Chips, Heading, HStack, Loader, Table, VStack } from '@navikt/ds-react'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 import { fetchProducts, getProductFilters } from '@/utils/api-util'
 import { FilterFormState, filtersFormStateLabel, initialFiltersFormState } from '@/utils/filter-util'
@@ -173,6 +173,11 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
     }))
   )
 
+  const commonDataRows = Object.entries(rows).filter(([_, row]) => {
+    const commonDataRow = !hasDifferentValues({ row });
+    return commonDataRow;
+  }).map(([key, row]) => [key, row[0]]);
+
 
   const hasAgreementSet = new Set(product.variants.map(p => p.hasAgreement))
   const hasAgreementVaries = hasAgreementSet.size > 1
@@ -270,134 +275,107 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
       )}
 
       {productVariantsToShow.length > 0 && (
-        <div className="variants-table" id="variants-table">
-          <Table zebraStripes>
-            <Table.Header>
-              <VariantStatusRow variants={sortedByKey} />
-              <VariantNameRow variants={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
-                              variantNameElementRef={variantNameElementRef} />
-            </Table.Header>
-            <Table.Body>
-              <VariantHmsNumberRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
-                                   variantNameElementHeight={variantNameElementHeight} selectedColumn={selectedColumn}
-                                   handleColumnClick={handleColumnClick} />
-              <VariantSupplierRefRow sortedByKey={sortedByKey} sortColumns={sortColumns}
-                                     handleSortRow={handleSortRow} selectedColumn={selectedColumn}
+        <>
+          <div className="variants-table" id="variants-table">
+            <Table zebraStripes>
+              <Table.Header>
+                <VariantStatusRow variants={sortedByKey} />
+                <VariantNameRow variants={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                variantNameElementRef={variantNameElementRef} />
+              </Table.Header>
+              <Table.Body>
+                <VariantHmsNumberRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                     variantNameElementHeight={variantNameElementHeight} selectedColumn={selectedColumn}
                                      handleColumnClick={handleColumnClick} />
-              {product.agreements && product.agreements.length > 0 && (
-                <>
-                  <VariantRankRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
-                                  sortRank={sortRank} hasAgreementSet={hasAgreementSet} selectedColumn={selectedColumn}
-                                  handleColumnClick={handleColumnClick}/>
-                  <VariantPostRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
-                                  postSet={postSet} sortRank={sortRank} selectedColumn={selectedColumn}
-                                  handleColumnClick={handleColumnClick} />
-                </>
-              )}
-              <Table.Row>
-                <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                {sortedByKey.map((variant, i) => (
-                  <Table.DataCell
-                    key={'bestillingsordning-' + variant.id}
-                    className={selectedColumn ===  ('column-'+i) ? 'selected-column' : ''}
-                    onClick={() => handleColumnClick( 'column-'+i)}>
-                    {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
-              <Table.Row>
-                <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                {sortedByKey.map((variant, i) => (
-                  <Table.DataCell
-                    key={'behovsmelding-' + variant.id}
-                    className={selectedColumn ===  ('column-'+i) ? 'selected-column' : ''}
-                    onClick={() => handleColumnClick( 'column-'+i)}>
-                    {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
-              {Object.keys(rows).length > 0 &&
-                Object.entries(rows)
-                  .sort(([keyA, rowA], [keyB, rowB]) => {
-                    const isSortableRowA = hasDifferentValues({ row: rowA });
-                    const isSortableRowB = hasDifferentValues({ row: rowB });
-
-                    if (isSortableRowA && !isSortableRowB) return -1;
-                    if (!isSortableRowA && isSortableRowB) return 1;
-                    return 0;
-                  })
-                  .map(([key, row]) => {
-                    const isSortableRow = hasDifferentValues({ row });
-                    if (!isSortableRow) return null;
-                    return (
-                      <VariantTechnicalDataRow
-                        key={key}
-                        technicalDataName={key}
-                        row={row}
-                        sortColumns={sortColumns}
-                        handleSortRow={handleSortRow}
-                        isSortableRow={isSortableRow}
-                        iconBasedOnState={iconBasedOnState}
-                        selectedColumn={selectedColumn}
-                        handleColumnClick={handleColumnClick}
-                      />
-                    );
-                  })}
-
-
-              {Object.values(rows).some(row => !hasDifferentValues({ row })) && (
+                <VariantSupplierRefRow sortedByKey={sortedByKey} sortColumns={sortColumns}
+                                       handleSortRow={handleSortRow} selectedColumn={selectedColumn}
+                                       handleColumnClick={handleColumnClick} />
+                {product.agreements && product.agreements.length > 0 && (
+                  <>
+                    <VariantRankRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                    sortRank={sortRank} hasAgreementSet={hasAgreementSet}
+                                    selectedColumn={selectedColumn}
+                                    handleColumnClick={handleColumnClick} />
+                    <VariantPostRow sortedByKey={sortedByKey} sortColumns={sortColumns} handleSortRow={handleSortRow}
+                                    postSet={postSet} sortRank={sortRank} selectedColumn={selectedColumn}
+                                    handleColumnClick={handleColumnClick} />
+                  </>
+                )}
                 <Table.Row>
-                  <Table.HeaderCell>
-                    <Button
-                      size={'xsmall'}
-                      variant="primary"
-                      className="button-with-thin-border"
-                      onClick={() => {
-                        setShowCommonTechnicalData(!showCommonTechnicalData)
-                      }}
-                    >
-                      {!showCommonTechnicalData ? "Vis felles egenskaper" : "Skjul felles egenskaper"}
-                    </Button>
-                  </Table.HeaderCell>
+                  <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
                   {sortedByKey.map((variant, i) => (
-                    <Table.DataCell key={'felles-egenskaper-' + variant.id}
-                                    className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
-                                    onClick={() => handleColumnClick('column-' + i)}>
+                    <Table.DataCell
+                      key={'bestillingsordning-' + variant.id}
+                      className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+                      onClick={() => handleColumnClick('column-' + i)}>
+                      {variant.bestillingsordning ? 'Ja' : 'Nei'}
                     </Table.DataCell>
                   ))}
                 </Table.Row>
-              )}
+                <Table.Row>
+                  <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                  {sortedByKey.map((variant, i) => (
+                    <Table.DataCell
+                      key={'behovsmelding-' + variant.id}
+                      className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+                      onClick={() => handleColumnClick('column-' + i)}>
+                      {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+                {Object.keys(rows).length > 0 &&
+                  Object.entries(rows)
+                    .sort(([keyA, rowA], [keyB, rowB]) => {
+                      const isSortableRowA = hasDifferentValues({ row: rowA });
+                      const isSortableRowB = hasDifferentValues({ row: rowB });
 
-              {showCommonTechnicalData && Object.keys(rows).length > 0 &&
-                Object.entries(rows)
-                  .sort(([keyA, rowA], [keyB, rowB]) => {
-                    const isSortableRowA = hasDifferentValues({ row: rowA });
-                    const isSortableRowB = hasDifferentValues({ row: rowB });
+                      if (isSortableRowA && !isSortableRowB) return -1;
+                      if (!isSortableRowA && isSortableRowB) return 1;
+                      return 0;
+                    })
+                    .map(([key, row]) => {
+                      const isSortableRow = hasDifferentValues({ row });
+                      if (!isSortableRow) return null;
+                      return (
+                        <VariantTechnicalDataRow
+                          key={key}
+                          technicalDataName={key}
+                          row={row}
+                          sortColumns={sortColumns}
+                          handleSortRow={handleSortRow}
+                          isSortableRow={isSortableRow}
+                          iconBasedOnState={iconBasedOnState}
+                          selectedColumn={selectedColumn}
+                          handleColumnClick={handleColumnClick}
+                        />
+                      );
+                    })}
+              </Table.Body>
+            </Table>
 
-                    if (isSortableRowA && !isSortableRowB) return -1;
-                    if (!isSortableRowA && isSortableRowB) return 1;
-                    return 0;
-                  })
-                  .map(([key, row]) => {
-                    const isSortableRow = hasDifferentValues({ row });
-                    if (isSortableRow) return null;
-                    return (
-                      <VariantTechnicalDataRow
-                        key={key}
-                        technicalDataName={key}
-                        row={row}
-                        sortColumns={sortColumns}
-                        handleSortRow={handleSortRow}
-                        isSortableRow={isSortableRow}
-                        iconBasedOnState={iconBasedOnState}
-                        selectedColumn={selectedColumn}
-                        handleColumnClick={handleColumnClick}
-                      />
-                    );
-                  })}
-            </Table.Body>
-          </Table>
-        </div>
+          </div>
+          <VStack gap="4">
+            <Heading size="medium" level="2" className="spacing-top--large">
+              Felles tekniske data
+            </Heading>
+            {commonDataRows.length > 0 && (
+              <div className="variants-table">
+                <Table zebraStripes>
+                  <Table.Body>
+                    {commonDataRows.map(([key, row]) => {
+                      return (
+                        <Table.Row key={key}>
+                          <Table.HeaderCell>{key}</Table.HeaderCell>
+                          <Table.DataCell>{row}</Table.DataCell>
+                        </Table.Row>
+                      )
+                    })}
+                  </Table.Body>
+                </Table>
+              </div>
+            )}
+          </VStack>
+        </>
       )}
     </>
   )
