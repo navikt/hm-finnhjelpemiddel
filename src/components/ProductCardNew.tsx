@@ -26,7 +26,6 @@ export const ProductCardNew = ({
   variantCount?: number
   handleCompareClick?: () => void
 }) => {
-  const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   const searchParams = useSearchParams()
@@ -73,7 +72,7 @@ export const ProductCardNew = ({
           </>
         </VStack>
         <VStack align="center" justify="space-between" gap="2" width={'100%'}>
-          <ProductImage src={firstImageSrc} productTitle={product.title} />
+          <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           <CompareButton product={product} handleCompareClick={handleCompareClick} />
         </VStack>
       </HGrid>

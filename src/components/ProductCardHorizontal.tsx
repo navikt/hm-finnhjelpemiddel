@@ -22,7 +22,6 @@ export const ProductCardHorizontal = ({
   hmsNumbers?: string[]
   variantCount?: number
 }) => {
-  const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   const searchParams = useSearchParams()
@@ -47,7 +46,7 @@ export const ProductCardHorizontal = ({
       <HGrid gap="1" columns={{ xs: 1, md: 2 }} className="product-card__content">
         <HGrid columns={onAgreement ? '0.3fr 0.7fr' : '1fr'} className="picture-container">
           {onAgreement && <AgreementIcon rank={currentRank} size="xsmall" />}
-          <ProductImage src={firstImageSrc} productTitle={product.title} />
+          <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
         </HGrid>
         {viewHmsOrCount}
         <VStack>
