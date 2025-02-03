@@ -21,7 +21,7 @@ const ProductCard = ({
   variantCount,
   handleCompareClick,
 }: {
-  type: 'removable' | 'checkbox' | 'plain'
+  type: 'removable' | 'plain'
   product: Product
   linkOverwrite?: string
   rank?: number
@@ -43,8 +43,6 @@ const ProductCard = ({
 
   if (type === 'plain') {
     cardClassName = 'product-card'
-  } else if (type === 'checkbox') {
-    cardClassName = 'product-card--checkbox'
   } else if (type === 'removable') {
     cardClassName = 'product-card--removable'
   }
@@ -91,8 +89,6 @@ const ProductCard = ({
               {product.title}
             </BodyShort>
           </Link>
-
-          {type === 'checkbox' && <Detail>{product.supplierName}</Detail>}
         </VStack>
 
         <ProductImage src={firstImageSrc} productTitle={product.title} />
