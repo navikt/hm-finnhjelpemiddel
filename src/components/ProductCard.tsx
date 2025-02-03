@@ -2,7 +2,7 @@
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { MultiplyIcon, PackageIcon } from '@navikt/aksel-icons'
+import { MultiplyIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Box, Button, Detail, Heading, HGrid, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
@@ -20,16 +20,14 @@ const ProductCard = ({
   rank,
   hmsNumbers,
   variantCount,
-  handleIsoButton,
   handleCompareClick,
 }: {
-  type: 'removable' | 'checkbox' | 'plain' | 'large-with-checkbox' | 'horizontal'
+  type: 'removable' | 'checkbox' | 'plain' | 'horizontal'
   product: Product
   linkOverwrite?: string
   rank?: number
   hmsNumbers?: string[]
   variantCount?: number
-  handleIsoButton?: (value: string) => void
   handleCompareClick?: () => void
 }) => {
   const { productsToCompare } = useHydratedCompareStore()
@@ -46,8 +44,6 @@ const ProductCard = ({
 
   if (type === 'plain') {
     cardClassName = 'product-card'
-  } else if (type === 'large-with-checkbox') {
-    cardClassName = 'product-card--large'
   } else if (type === 'checkbox') {
     cardClassName = 'product-card--checkbox'
   } else if (type === 'removable') {
@@ -128,17 +124,6 @@ const ProductCard = ({
           </Link>
 
           {type === 'checkbox' && <Detail>{product.supplierName}</Detail>}
-
-          {type === 'large-with-checkbox' && handleIsoButton && (
-            <Button
-              className="product-card__iso-button"
-              variant="tertiary-neutral"
-              icon={<PackageIcon aria-hidden />}
-              onClick={() => handleIsoButton(product.isoCategoryTitle)}
-            >
-              {product.isoCategoryTitle}
-            </Button>
-          )}
         </VStack>
 
         <ProductImage src={firstImageSrc} productTitle={product.title} />
