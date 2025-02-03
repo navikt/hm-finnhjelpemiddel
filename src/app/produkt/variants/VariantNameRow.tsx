@@ -1,6 +1,6 @@
 import { Button, Table } from '@navikt/ds-react';
 import { ProductVariant } from '@/utils/product-util';
-import { SortColumns } from '@/app/produkt/variants/MultipleVariantsTable';
+import { SortColumns } from '@/app/produkt/variants/MultipleVariants';
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from "@navikt/aksel-icons";
 
 interface Props {

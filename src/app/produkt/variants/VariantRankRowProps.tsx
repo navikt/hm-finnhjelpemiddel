@@ -4,7 +4,7 @@ import { ProductVariant } from '@/utils/product-util';
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util';
 import { viewAgreementRanks } from '@/components/AgreementIcon';
 import classNames from 'classnames';
-import { SortColumns } from "@/app/produkt/variants/MultipleVariantsTable";
+import { SortColumns } from "@/app/produkt/variants/MultipleVariants";
 
 interface VariantRankRowProps {
   sortedByKey: ProductVariant[];
