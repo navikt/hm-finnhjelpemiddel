@@ -67,8 +67,8 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
             zIndex: '1 !important',
             background: 'rgb(242 243 245)',
           }}
-          className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
-          onClick={() => handleColumnClick('column-' + i)}>
+          className={selectedColumn === (variant.id) ? 'selected-column' : ''}
+          onClick={() => handleColumnClick(variant.id)}>
           {variant.hmsArtNr ? (
             <CopyButton
               size="small"

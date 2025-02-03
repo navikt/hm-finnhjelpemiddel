@@ -56,8 +56,8 @@ export const VariantSupplierRefRow = ({
       </Table.HeaderCell>
 
       {sortedByKey.map((variant, i) => (
-        <Table.DataCell key={'supref-' + variant.id} className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick('column-' + i)}>
+        <Table.DataCell key={'supref-' + variant.id} className={selectedColumn === (variant.id) ? 'selected-column' : ''}
+                        onClick={() => handleColumnClick(variant.id)}>
           {variant.supplierRef ? (
             <CopyButton
               size="small"

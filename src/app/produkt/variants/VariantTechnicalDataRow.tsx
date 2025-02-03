@@ -6,6 +6,7 @@ import { SortColumns } from "@/app/produkt/variants/MultipleVariantsTable";
 interface VariantDataRowProps {
   technicalDataName: string;
   row: string[];
+  variantIds: string[];
   sortColumns: SortColumns;
   handleSortRow: (key: string) => void;
   isSortableRow: boolean;
@@ -17,6 +18,7 @@ interface VariantDataRowProps {
 export const VariantTechnicalDataRow = ({
   technicalDataName,
   row,
+  variantIds,
   sortColumns,
   handleSortRow,
   isSortableRow,
@@ -56,8 +58,8 @@ export const VariantTechnicalDataRow = ({
     )}
     {row.map((value, i) => (
       <Table.DataCell key={technicalDataName + '-' + i}
-                      className={selectedColumn ===  ('column-'+i) ? 'selected-column' : ''}
-                      onClick={() => handleColumnClick( 'column-'+i)}>
+                      className={selectedColumn === (variantIds[i]) ? 'selected-column' : ''}
+                      onClick={() => handleColumnClick(variantIds[i])}>
         {value}
       </Table.DataCell>
     ))}

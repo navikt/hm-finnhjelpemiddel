@@ -186,7 +186,6 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
   const sortRank = rankSet.size !== 1 || hasAgreementVaries
 
   const handleSortRow = (sortKey: string) => {
-    setSelectedColumn(null)
     setSortColumns({
       orderBy: sortKey,
       direction: sortKey === sortColumns.orderBy ? (sortColumns.direction === 'ascending' ? 'descending' : 'ascending') : 'ascending',
@@ -231,6 +230,8 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
       <BodyLong className="spacing-bottom--medium">
         {egenskaperText(product.title, product.variantCount, numberOfvariantsOnAgreement, numberOfvariantsWithoutAgreement)}
       </BodyLong>
+
+
 
       <FormProvider {...formMethods}>
         <form onSubmit={formMethods.handleSubmit(onSubmit)} aria-controls="variants-table">
@@ -306,8 +307,8 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
                   {sortedByKey.map((variant, i) => (
                     <Table.DataCell
                       key={'bestillingsordning-' + variant.id}
-                      className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
-                      onClick={() => handleColumnClick('column-' + i)}>
+                      className={selectedColumn === (variant.id) ? 'selected-column' : ''}
+                      onClick={() => handleColumnClick(variant.id)}>
                       {variant.bestillingsordning ? 'Ja' : 'Nei'}
                     </Table.DataCell>
                   ))}
@@ -317,7 +318,7 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
                   {sortedByKey.map((variant, i) => (
                     <Table.DataCell
                       key={'behovsmelding-' + variant.id}
-                      className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
+                      className={selectedColumn === (variant.id) ? 'selected-column' : ''}
                       onClick={() => handleColumnClick('column-' + i)}>
                       {variant.digitalSoknad ? 'Ja' : 'Nei'}
                     </Table.DataCell>
@@ -341,6 +342,7 @@ const MultipleVariantsTable = ({ product }: { product: Product }) => {
                           key={key}
                           technicalDataName={key}
                           row={row}
+                          variantIds={sortedByKey.map(variant => variant.id)}
                           sortColumns={sortColumns}
                           handleSortRow={handleSortRow}
                           isSortableRow={isSortableRow}

@@ -63,8 +63,8 @@ export const VariantPostRow = ({
       )}
       {sortedByKey.map((variant, i) => (
         <Table.DataCell key={'post-' + variant.id}
-                        className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick('column-' + i)}>
+                        className={selectedColumn === (variant.id) ? 'selected-column' : ''}
+                        onClick={() => handleColumnClick(variant.id)}>
           {formatAgreementPosts(variant.agreements)}
         </Table.DataCell>
       ))}

@@ -65,8 +65,8 @@ export const VariantRankRow = ({
       )}
       {sortedByKey.map((variant, i) => (
         <Table.DataCell key={'rank-' + variant.id}
-                        className={selectedColumn === ('column-' + i) ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick('column-' + i)}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
+                        className={selectedColumn === (variant.id) ? 'selected-column' : ''}
+                        onClick={() => handleColumnClick(variant.id)}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
       ))}
     </Table.Row>
   );
