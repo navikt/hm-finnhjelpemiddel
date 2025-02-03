@@ -13,6 +13,7 @@ import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
 import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import CookieBanner from '@/app/CookieBanner'
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -43,8 +44,11 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     return <div className="standalone-page-wrapper">{children}</div>
   }
 
+  const showCookieBanner = true
+
   return (
     <Suspense>
+      {showCookieBanner && <CookieBanner />}
       {visFeilbanner && (
         <HStack padding="4" gap="3" justify="center">
           <Alert variant="error">
