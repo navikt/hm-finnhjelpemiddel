@@ -43,6 +43,7 @@ import {
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
+import PostsListIsoGroups from "@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups";
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -64,6 +65,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
+
+  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3']
 
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
@@ -275,7 +278,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               </HStack>
             </HStack>
 
-            <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
+            {avtalerMedIsoGruppering.includes(agreement.id) ? (
+              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
+            ): (
+              <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
+            ) }
+
             {postError && (
               <Alert variant="error" title="Error med lasting av produkter">
                 Det har skjedd en feil ved innhenting av produkter. Vennligst prøv igjen senere.
