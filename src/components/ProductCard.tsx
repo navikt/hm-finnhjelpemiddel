@@ -6,10 +6,12 @@ import { MultiplyIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import ProductImage from './ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 
 const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; product: Product; rank?: number }) => {
+  const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   const searchParams = useSearchParams()
@@ -47,7 +49,7 @@ const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; pro
           </Link>
         </VStack>
 
-        <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
+        <ProductImage src={firstImageSrc} productTitle={product.title} />
       </VStack>
     </Box>
   )
