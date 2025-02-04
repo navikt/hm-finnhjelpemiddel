@@ -65,7 +65,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
-  // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
       hidePictures: 'show-pictures',
@@ -77,9 +76,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-    // router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
-    //   scroll: false,
-    // })
   }, [])
 
   const handleSetToggle = (value: string) => {
