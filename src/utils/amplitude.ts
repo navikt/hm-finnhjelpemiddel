@@ -1,7 +1,6 @@
 'use client'
 import * as amplitude from '@amplitude/analytics-browser'
 import { track } from '@amplitude/analytics-browser'
-import { FilterFormState } from '@/utils/filter-util'
 
 const APP_NAME = 'hm-oversikt-frontend'
 const TEAM_NAME = 'teamdigihot'
@@ -64,6 +63,12 @@ export const initAmplitude = () => {
       amplitude.logEvent(params.name, params.data)
     }
   }
+}
+
+export const stopAmplitude = () => {
+  amplitude.reset()
+  amplitude.flush()
+  amplitude.setOptOut(true)
 }
 
 export function logAmplitudeEvent(eventName: string, data?: any) {

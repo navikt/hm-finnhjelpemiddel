@@ -1,10 +1,10 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
 
-import { initAmplitude } from '@/utils/amplitude'
+import { initAmplitude, stopAmplitude } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import NavigationBar from '@/app/NavigationBar'
@@ -15,11 +15,25 @@ import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? decodeURIComponent(match[2]) : null
+}
+
+function setCookie(name: string, value: string, days = 90): void {
+  const timeUntilExpiry = days * 24 * 60 * 60 * 1000
+  const expiry = new Date()
+  expiry.setTime(expiry.getTime() + timeUntilExpiry)
+  value = encodeURIComponent(value)
+  document.cookie = `${name}=${value}; expires=${expiry.toUTCString()}; path=/`
+}
+
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const featureFlags = useFeatureFlags()
   const { isMenuOpen } = useMenuStore()
   const { isMobileOverlayOpen } = useMobileOverlayStore()
+  const [consent, setConsent] = useState<string | null>(() => getCookie('finnhjelpemiddel-consent'))
 
   const visFeilbanner = featureFlags.isEnabled('finnhjelpemiddel.feilbanner')
 
@@ -30,13 +44,18 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // if browser initialize amplitude
     if (typeof window !== 'undefined') {
-      initAmplitude()
-      initInstrumentation()
+      if (consent === 'true') {
+        initAmplitude()
+      }
+      if (consent === 'false') {
+        stopAmplitude()
+      }
       if (process.env.NODE_ENV == 'production') {
         hotjar.initialize({ id: 118350, sv: 6 })
       }
+      initInstrumentation()
     }
-  }, [])
+  }, [consent])
 
   const pagesWithoutHeaderAndFooter = [/^\/produkt\/[^\/]+\/variants$/]
 
@@ -44,11 +63,22 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     return <div className="standalone-page-wrapper">{children}</div>
   }
 
-  const showCookieBanner = true
+  const showCookieBanner = consent == null
 
   return (
     <Suspense>
-      {showCookieBanner && <CookieBanner />}
+      {showCookieBanner && (
+        <CookieBanner
+          enableOptionalCookies={() => {
+            setCookie('finnhjelpemiddel-consent', 'true')
+            setConsent('true')
+          }}
+          disableOptionalCookies={() => {
+            setCookie('finnhjelpemiddel-consent', 'false')
+            setConsent('false')
+          }}
+        />
+      )}
       {visFeilbanner && (
         <HStack padding="4" gap="3" justify="center">
           <Alert variant="error">
@@ -71,7 +101,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      <Footer />
+      <Footer setCookieConsent={setConsent} />
     </Suspense>
   )
 }

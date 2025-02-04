@@ -3,7 +3,13 @@ import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Heading, Link } from '@navikt/ds-react'
 import React from 'react'
 
-export const CookieBanner = () => {
+export const CookieBanner = ({
+  enableOptionalCookies,
+  disableOptionalCookies,
+}: {
+  enableOptionalCookies: () => void
+  disableOptionalCookies: () => void
+}) => {
   return (
     <Box className={styles.cookieBanner}>
       <div className={styles.content}>
@@ -21,8 +27,12 @@ export const CookieBanner = () => {
             <Link>Mer om våre informasjonskapsler</Link>
           </div>
           <Box className={styles.buttonContainer}>
-            <Button className={styles.button}>Godkjenn alle</Button>
-            <Button className={styles.button}>Bare nødvendige</Button>
+            <Button className={styles.button} onClick={enableOptionalCookies}>
+              Godkjenn alle
+            </Button>
+            <Button className={styles.button} onClick={disableOptionalCookies}>
+              Bare nødvendige
+            </Button>
           </Box>
         </div>
       </div>
