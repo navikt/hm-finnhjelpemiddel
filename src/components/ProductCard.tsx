@@ -3,11 +3,12 @@
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { MultiplyIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Box, Button, Detail, Heading, HGrid, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import AgreementIcon from './AgreementIcon'
 import ProductImage from './ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { CompareCheckbox } from '@/components/CompareCheckbox'
@@ -21,7 +22,7 @@ const ProductCard = ({
   variantCount,
   handleCompareClick,
 }: {
-  type: 'removable' | 'checkbox' | 'plain'
+  type: 'removable' | 'checkbox' | 'plain' | 'horizontal'
   product: Product
   linkOverwrite?: string
   rank?: number
@@ -47,6 +48,8 @@ const ProductCard = ({
     cardClassName = 'product-card--checkbox'
   } else if (type === 'removable') {
     cardClassName = 'product-card--removable'
+  } else if (type === 'horizontal') {
+    cardClassName = 'product-card--horizontal'
   }
 
   const viewHmsOrCount = (
@@ -59,6 +62,34 @@ const ProductCard = ({
       )}
     </>
   )
+
+  if (type === 'horizontal') {
+    return (
+      <Box paddingInline="2" paddingBlock="2" className="product-card--horizontal">
+        <HGrid gap="1" columns={{ xs: 1, md: 2 }} className="product-card__content">
+          <HGrid columns={onAgreement ? '0.3fr 0.7fr' : '1fr'} className="picture-container">
+            {onAgreement && <AgreementIcon rank={currentRank} size="xsmall" />}
+            <ProductImage src={firstImageSrc} productTitle={product.title} />
+          </HGrid>
+          {viewHmsOrCount}
+          <VStack>
+            <Link
+              className="product-card__link"
+              href={linkToProduct}
+              aria-label={`Gå til ${product.title}`}
+              as={NextLink}
+              onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
+            >
+              <Heading size="xsmall">{product.title}</Heading>
+            </Link>
+            <BodyLong size="small" className="product-card__product-description">
+              {product.attributes.text}
+            </BodyLong>
+          </VStack>
+        </HGrid>
+      </Box>
+    )
+  }
 
   return (
     <Box
