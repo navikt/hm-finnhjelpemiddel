@@ -7,6 +7,7 @@ import { BodyShort, Box, Button, HGrid, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import ProductImage from './ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 
