@@ -10,6 +10,7 @@ import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import ProductImage from './ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
+import { CompareCheckbox } from '@/components/CompareCheckbox'
 
 const ProductCard = ({
   type,
@@ -18,6 +19,7 @@ const ProductCard = ({
   rank,
   hmsNumbers,
   variantCount,
+  handleCompareClick,
 }: {
   type: 'removable' | 'plain'
   product: Product
@@ -25,9 +27,12 @@ const ProductCard = ({
   rank?: number
   hmsNumbers?: string[]
   variantCount?: number
+  handleCompareClick?: () => void
 }) => {
+  const { productsToCompare } = useHydratedCompareStore()
   const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
 
   const searchParams = useSearchParams()
   const linkToProduct = linkOverwrite || `/produkt/${product.id}?${searchParams}`
@@ -57,10 +62,15 @@ const ProductCard = ({
     <Box
       padding="2"
       className={classNames(cardClassName, {
+        'product-card__checked': isInProductsToCompare && type !== 'plain' && type !== 'removable',
         'extra-info': variantCount || hmsNumbers,
       })}
     >
-      {type === 'removable' && <RemoveButton product={product} />}
+      {type === 'plain' ? null : type === 'removable' ? (
+        <RemoveButton product={product} />
+      ) : (
+        <CompareCheckbox product={product} handleCompareClick={handleCompareClick} />
+      )}
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">
