@@ -4,8 +4,8 @@ import { Product } from '@/utils/product-util'
 import { BodyLong, Box, Heading, HGrid, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import AgreementIcon from './AgreementIcon'
-import ProductImage from './ProductImage'
+import AgreementIcon from '@/components/AgreementIcon'
+import ProductImage from '@/components/ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 
 export const ProductCardHorizontal = ({ product }: { product: Product }) => {

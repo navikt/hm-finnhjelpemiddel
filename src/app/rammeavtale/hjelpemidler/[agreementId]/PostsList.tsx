@@ -7,8 +7,8 @@ import { Alert, Heading, HStack, Loader, ReadMore, VStack } from '@navikt/ds-rea
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { ProductCardNew } from '@/components/ProductCardNew'
-import { ProductCardNoPicture } from '@/components/ProductCardNoPicture'
+import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
+import { ProductCardNoPicture } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNoPicture'
 
 const PostsList = ({
   posts,
