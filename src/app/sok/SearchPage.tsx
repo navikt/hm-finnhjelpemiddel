@@ -19,7 +19,7 @@ import AnimateLayout from '@/components/layout/AnimateLayout'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 
 import MobileOverlay from '@/components/MobileOverlay'
-import SortSearchResults from '@/app/sok/SortSearchResults'
+import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
