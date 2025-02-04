@@ -2,8 +2,7 @@
 
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
-.variants-table {
-  max-height: 98vh;
+.variants-table-common {
   overflow: auto;
 
   @include mixins.for-size(phone-only) {

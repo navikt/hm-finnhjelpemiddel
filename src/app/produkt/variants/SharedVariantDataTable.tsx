@@ -38,7 +38,7 @@ export const SharedVariantDataTable = ({product}: SharedVariantDataTableProps) =
       </Heading>
       <Box paddingBlock="4">
         {commonDataRows.length > 0 && (
-          <div className="variants-table">
+          <div className="variants-table-common">
             <Table zebraStripes>
               <Table.Body>
                 {commonDataRows.map(([key, row]) => {
