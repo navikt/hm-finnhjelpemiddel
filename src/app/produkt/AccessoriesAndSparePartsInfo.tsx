@@ -8,7 +8,7 @@ import { BodyLong, HStack, Heading, VStack } from '@navikt/ds-react'
 import ReadMore from '@/components/ReadMore'
 import { Product } from '@/utils/product-util'
 import './product-page.scss'
-import { ProductCardHorizontal } from '@/app/produkt/ProductCardHorizontal'
+import { ProductCardHorizontal } from '@/components/ProductCardHorizontal'
 
 type Props = {
   products: Product[]
