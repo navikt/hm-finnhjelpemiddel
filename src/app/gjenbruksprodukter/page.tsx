@@ -115,6 +115,7 @@ export default function AlternativeProductsPage() {
             <li>Kalendere, dagsplanleggere og tidtakere</li>
             <li>Kjøreposer og regncape</li>
             <li>Kjøreramper</li>
+            <li>Løfteplattformer og hjelpemiddel i trapp</li>
             <li>Madrasser med trykksårforebyggende egenskaper</li>
             <li>Manuelle rullestoler DK6 og DK9</li>
             <li>Overflyttingsplattformer og personløftere</li>
