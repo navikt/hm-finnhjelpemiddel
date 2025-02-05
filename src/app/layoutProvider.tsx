@@ -33,7 +33,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   const featureFlags = useFeatureFlags()
   const { isMenuOpen } = useMenuStore()
   const { isMobileOverlayOpen } = useMobileOverlayStore()
-  const [consent, setConsent] = useState<string | null>(() => getCookie('finnhjelpemiddel-consent'))
+  const [consent, setConsent] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return getCookie('finnhjelpemiddel-consent')
+    } else {
+      return 'server'
+    }
+  })
 
   const visFeilbanner = featureFlags.isEnabled('finnhjelpemiddel.feilbanner')
 
