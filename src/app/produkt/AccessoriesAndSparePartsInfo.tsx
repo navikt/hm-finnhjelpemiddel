@@ -5,10 +5,10 @@ import { useRef } from 'react'
 
 import { BodyLong, HStack, Heading, VStack } from '@navikt/ds-react'
 
+import ProductCard from '@/components/ProductCard'
 import ReadMore from '@/components/ReadMore'
 import { Product } from '@/utils/product-util'
 import './product-page.scss'
-import { ProductCardHorizontal } from '@/app/produkt/ProductCardHorizontal'
 
 type Props = {
   products: Product[]
@@ -61,14 +61,14 @@ const AccessoriesAndSparePartsInfo = ({ products, type }: Props) => {
       </Heading>
       <HStack gap="4">
         {firstProducts.map((acc, i) => (
-          <ProductCardHorizontal key={i} product={acc} />
+          <ProductCard type="horizontal" key={i} product={acc} />
         ))}
         {lastProducts && (
           <ReadMore
             content={
               <HStack className="spacing-bottom--small">
                 {lastProducts.map((acc, i) => (
-                  <ProductCardHorizontal key={i} product={acc} />
+                  <ProductCard type="horizontal" key={i} product={acc} />
                 ))}
               </HStack>
             }
