@@ -1,3 +1,5 @@
+'use client'
+
 import { Product } from '@/utils/product-util'
 import { BodyShort, Box, Detail, VStack } from '@navikt/ds-react'
 
