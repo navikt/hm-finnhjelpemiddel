@@ -7,8 +7,7 @@ import { Alert, Heading, HStack, Loader, ReadMore, VStack } from '@navikt/ds-rea
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
-import { ProductCardNoPicture } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNoPicture'
+import ProductCard from '@/components/ProductCard'
 
 const PostsListIsoGroups = ({
   posts,
@@ -101,8 +100,9 @@ const PostsListIsoGroups = ({
                 {products.map((productWithRank) => (
                   <li key={productWithRank.product.id}>
                     {pictureToggleValue === 'hide-pictures' ? (
-                      <ProductCardNoPicture
+                      <ProductCard
                         key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                        type={'no-picture'}
                         product={productWithRank.product}
                         linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                         rank={productWithRank.rank}
@@ -111,8 +111,9 @@ const PostsListIsoGroups = ({
                         handleCompareClick={handleCompareClick}
                       />
                     ) : (
-                      <ProductCardNew
+                      <ProductCard
                         key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                        type={'new'}
                         product={productWithRank.product}
                         linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                         rank={productWithRank.rank}
