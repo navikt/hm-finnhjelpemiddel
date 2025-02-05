@@ -32,27 +32,24 @@ const PostsListIsoGroups = ({
   }
 
   const groupProductsByIsoCategory = (posts: PostWithProducts[]) => {
-    return posts.map((post) => {
-      const productsByIsoCategory = post.products.reduce(
-        (acc, productWithRank) => {
-          const isoCategory = productWithRank.product.isoCategoryTitle
-          if (!acc[isoCategory]) {
-            acc[isoCategory] = []
-          }
-          acc[isoCategory].push(productWithRank)
-          return acc
-        },
-        {} as { [key: string]: typeof post.products }
-      )
+    return posts.map(post => {
+      const productsByIsoCategory = post.products.reduce((acc, productWithRank) => {
+        const isoCategory = productWithRank.product.isoCategoryTitle;
+        if (!acc[isoCategory]) {
+          acc[isoCategory] = [];
+        }
+        acc[isoCategory].push(productWithRank);
+        return acc;
+      }, {} as { [key: string]: typeof post.products });
 
       return {
         ...post,
         productsByIsoCategory,
-      }
-    })
-  }
+      };
+    });
+  };
 
-  const groupedPosts = groupProductsByIsoCategory(posts)
+  const groupedPosts = groupProductsByIsoCategory(posts);
 
   return (
     <VStack
