@@ -4,7 +4,7 @@ import { Bleed, Link } from '@navikt/ds-react'
 
 import NextLink from 'next/link'
 
-const Footer = ({ setCookieConsent }: { setCookieConsent: (a: null) => void }) => (
+const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) => (
   <footer className="main-wrapper--xlarge" style={{ width: '100%' }}>
     <Bleed marginInline="full" asChild reflectivePadding>
       <div className="nav-bunn nav-bunn__info">

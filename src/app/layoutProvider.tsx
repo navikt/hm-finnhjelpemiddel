@@ -28,6 +28,17 @@ function setCookie(name: string, value: string, days = 90): void {
   document.cookie = `${name}=${value}; expires=${expiry.toUTCString()}; path=/`
 }
 
+export const stopHotjar = () => {
+  if (typeof window !== 'undefined') {
+    // Remove Hotjar script from the DOM
+    const hotjarScript = document.querySelector('script[src*="hotjar"]')
+
+    if (hotjarScript) {
+      hotjarScript.remove()
+    }
+  }
+}
+
 function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const featureFlags = useFeatureFlags()
@@ -37,7 +48,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       return getCookie('finnhjelpemiddel-consent')
     } else {
-      return 'server'
+      return 'pending'
     }
   })
 
@@ -52,12 +63,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
         initAmplitude()
+        if (process.env.NODE_ENV == 'production') {
+          hotjar.initialize({ id: 118350, sv: 6 })
+        }
       }
       if (consent === 'false') {
         stopAmplitude()
-      }
-      if (process.env.NODE_ENV == 'production') {
-        hotjar.initialize({ id: 118350, sv: 6 })
+        stopHotjar()
       }
       initInstrumentation()
     }
