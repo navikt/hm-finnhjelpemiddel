@@ -62,7 +62,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     // if browser initialize amplitude
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
-        initAmplitude()
+        initAmplitude(window.location.hostname)
         if (process.env.NODE_ENV == 'production') {
           hotjar.initialize({ id: 118350, sv: 6 })
         }

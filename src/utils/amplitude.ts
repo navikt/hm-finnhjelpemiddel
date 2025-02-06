@@ -29,7 +29,7 @@ export enum nav_events {
   BESØK = 'besøk',
 }
 
-export const initAmplitude = () => {
+export const initAmplitude = (hostname: string) => {
   const apiKey =
     process.env.BUILD_ENV === 'prod'
       ? AMP_PUBLIC_KEY_PROD
@@ -60,7 +60,7 @@ export const initAmplitude = () => {
       },
       cookieOptions: {
         sameSite: 'Strict',
-        domain: process.env.BUILD_ENV === 'prod' ? 'finnhjelpemiddel.nav.no' : 'finnhjelpemiddel.intern.dev.nav.no',
+        domain: hostname,
       },
     })
     amplitudeLogger = (params: { name: string; data?: any }) => {
