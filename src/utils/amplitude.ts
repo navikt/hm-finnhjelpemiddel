@@ -58,6 +58,9 @@ export const initAmplitude = () => {
         fileDownloads: true,
         elementInteractions: true,
       },
+      cookieOptions: {
+        sameSite: 'Strict',
+      },
     })
     amplitudeLogger = (params: { name: string; data?: any }) => {
       amplitude.logEvent(params.name, params.data)
