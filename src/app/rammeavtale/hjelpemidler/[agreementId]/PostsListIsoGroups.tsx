@@ -7,7 +7,8 @@ import { Alert, Heading, HStack, Loader, ReadMore, VStack } from '@navikt/ds-rea
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import ProductCard from '@/components/ProductCard'
+import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
+import { ProductCardNoPicture } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNoPicture'
 
 const PostsListIsoGroups = ({
   posts,
@@ -32,24 +33,27 @@ const PostsListIsoGroups = ({
   }
 
   const groupProductsByIsoCategory = (posts: PostWithProducts[]) => {
-    return posts.map(post => {
-      const productsByIsoCategory = post.products.reduce((acc, productWithRank) => {
-        const isoCategory = productWithRank.product.isoCategoryTitle;
-        if (!acc[isoCategory]) {
-          acc[isoCategory] = [];
-        }
-        acc[isoCategory].push(productWithRank);
-        return acc;
-      }, {} as { [key: string]: typeof post.products });
+    return posts.map((post) => {
+      const productsByIsoCategory = post.products.reduce(
+        (acc, productWithRank) => {
+          const isoCategory = productWithRank.product.isoCategoryTitle
+          if (!acc[isoCategory]) {
+            acc[isoCategory] = []
+          }
+          acc[isoCategory].push(productWithRank)
+          return acc
+        },
+        {} as { [key: string]: typeof post.products }
+      )
 
       return {
         ...post,
         productsByIsoCategory,
-      };
-    });
-  };
+      }
+    })
+  }
 
-  const groupedPosts = groupProductsByIsoCategory(posts);
+  const groupedPosts = groupProductsByIsoCategory(posts)
 
   return (
     <VStack
@@ -100,9 +104,8 @@ const PostsListIsoGroups = ({
                 {products.map((productWithRank) => (
                   <li key={productWithRank.product.id}>
                     {pictureToggleValue === 'hide-pictures' ? (
-                      <ProductCard
+                      <ProductCardNoPicture
                         key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                        type={'no-picture'}
                         product={productWithRank.product}
                         linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                         rank={productWithRank.rank}
@@ -111,9 +114,8 @@ const PostsListIsoGroups = ({
                         handleCompareClick={handleCompareClick}
                       />
                     ) : (
-                      <ProductCard
+                      <ProductCardNew
                         key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                        type={'new'}
                         product={productWithRank.product}
                         linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                         rank={productWithRank.rank}

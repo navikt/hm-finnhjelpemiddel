@@ -1,8 +1,8 @@
 'use client'
 
-import ProductCard from '@/components/ProductCard'
 import { PostWithProducts } from '@/utils/agreement-util'
 import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react'
+import { ProductCardPrint } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardPrint'
 
 interface Props {
   postWithProducts: PostWithProducts[]
@@ -35,10 +35,9 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
                       <>
                         {products.map((product, i) => {
                           return (
-                            <ProductCard
+                            <ProductCardPrint
                               product={product.product}
                               rank={product.rank}
-                              type={'print'}
                               key={i}
                               hmsNumbers={product.hmsNumbers}
                               variantCount={product.variantCount}
