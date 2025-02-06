@@ -60,7 +60,7 @@ export const initAmplitude = () => {
       },
       cookieOptions: {
         sameSite: 'Strict',
-        domain: 'finnhjelpemiddel.nav.no',
+        domain: process.env.BUILD_ENV === 'prod' ? 'finnhjelpemiddel.nav.no' : 'finnhjelpemiddel.intern.dev.nav.no',
       },
     })
     amplitudeLogger = (params: { name: string; data?: any }) => {
