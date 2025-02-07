@@ -48,7 +48,10 @@ export const removeOptionalCookies = () => {
 
   console.log('to delete ', cookiesToRemove)
   cookiesToRemove.forEach((cookie) => {
-    Cookies.remove(cookie)
+    Cookies.remove(cookie, {
+      domain: location.hostname,
+      path: '/',
+    })
   })
 }
 
