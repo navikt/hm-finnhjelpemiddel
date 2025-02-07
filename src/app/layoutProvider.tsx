@@ -41,13 +41,13 @@ export const stopHotjar = () => {
 }
 
 export const removeOptionalCookies = () => {
-  const storedCookies = Object.entries(Cookies.get()).map(([name, value]) => name)
+  const storedCookies = Object.entries(Cookies.get()).map(([name]) => name.trim())
 
-  const cookiesToDelete = storedCookies.filter((cookie) => {
+  const cookiesToRemove = storedCookies.filter((cookie) => {
     cookie.startsWith('AMP_')
   })
 
-  cookiesToDelete.forEach((cookie) => {
+  cookiesToRemove.forEach((cookie) => {
     Cookies.remove(cookie)
   })
 }
