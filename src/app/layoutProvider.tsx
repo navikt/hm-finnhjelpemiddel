@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import { hotjar } from 'react-hotjar'
+import Cookies from 'js-cookie'
 
 import { initAmplitude, stopAmplitude } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
@@ -37,6 +38,18 @@ export const stopHotjar = () => {
       hotjarScript.remove()
     }
   }
+}
+
+export const removeOptionalCookies = () => {
+  const storedCookies = Object.entries(Cookies.get()).map(([name, value]) => name)
+
+  const cookiesToDelete = storedCookies.filter((cookie) => {
+    cookie.startsWith('AMP_')
+  })
+
+  cookiesToDelete.forEach((cookie) => {
+    Cookies.remove(cookie)
+  })
 }
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
@@ -92,6 +105,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             setConsent('true')
           }}
           disableOptionalCookies={() => {
+            removeOptionalCookies()
             setCookie('finnhjelpemiddel-consent', 'false')
             setConsent('false')
           }}
