@@ -21,7 +21,7 @@ function getCookie(name: string): string | null {
   return match ? decodeURIComponent(match[2]) : null
 }
 
-function setCookie(name: string, value: string, days = 90): void {
+function setCookie(name: string, value: string, days = 180): void {
   const timeUntilExpiry = days * 24 * 60 * 60 * 1000
   const expiry = new Date()
   expiry.setTime(expiry.getTime() + timeUntilExpiry)
@@ -42,11 +42,8 @@ export const stopHotjar = () => {
 
 export const removeOptionalCookies = () => {
   const storedCookies = Object.entries(Cookies.get()).map(([name]) => name)
-  console.log('stored ', storedCookies)
-
   const cookiesToRemove = storedCookies.filter((cookie) => cookie.startsWith('AMP_'))
 
-  console.log('to delete ', cookiesToRemove)
   cookiesToRemove.forEach((cookie) => {
     Cookies.remove(cookie, {
       domain: location.hostname,
