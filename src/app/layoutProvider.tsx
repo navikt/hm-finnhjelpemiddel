@@ -50,6 +50,15 @@ export const removeOptionalCookies = () => {
       path: '/',
     })
   })
+
+  storedCookies
+    .filter((cookie) => cookie.startsWith('_hj'))
+    .forEach((hotjarCookie) => {
+      Cookies.remove(hotjarCookie, {
+        domain: '.nav.no',
+        path: '/',
+      })
+    })
 }
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
@@ -83,6 +92,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       if (consent === 'false') {
         stopAmplitude()
         stopHotjar()
+        removeOptionalCookies()
       }
       initInstrumentation()
     }
@@ -105,7 +115,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
             setConsent('true')
           }}
           disableOptionalCookies={() => {
-            removeOptionalCookies()
             setCookie('finnhjelpemiddel-consent', 'false')
             setConsent('false')
           }}
