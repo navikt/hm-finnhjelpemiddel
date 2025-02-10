@@ -2,7 +2,7 @@
 
 import { PostWithProducts } from '@/utils/agreement-util'
 import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react'
-import { ProductCardPrint } from '@/components/ProductCardPrint'
+import { ProductCardPrint } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardPrint'
 
 interface Props {
   postWithProducts: PostWithProducts[]

@@ -391,7 +391,8 @@ main {
 @media print {
   .nav,
   .nav-bunn,
-  .hide-print {
+  .hide-print,
+  ._hj-widget-container{
     display: none;
   }
 

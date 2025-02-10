@@ -78,7 +78,7 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
               <BodyShort>
                 Hjelpemiddelet er på flere delkontrakter.{' '}
                 <Link as={NextLink} href="#agreement-info">
-                  Se avtale informasjon.
+                  Se avtaleinformasjon.
                 </Link>
               </BodyShort>
             ) : (

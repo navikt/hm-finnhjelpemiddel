@@ -43,6 +43,7 @@ import {
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
+import PostsListIsoGroups from "@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups";
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -65,7 +66,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
-  // TODO: Lage en konkret type for dette formet (e.g. AgreementPageFormData)
+  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3']
+
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
       hidePictures: 'show-pictures',
@@ -77,9 +79,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-    // router.replace(`${pathname}?${toSearchQueryString({ filters: searchData.filters }, searchData.searchTerm)}`, {
-    //   scroll: false,
-    // })
   }, [])
 
   const handleSetToggle = (value: string) => {
@@ -94,7 +93,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   }
 
   const {
-    data: postBucktes,
+    data: postBuckets,
     isLoading: postsIsLoading,
     error: postError,
   } = useSWR<PostBucketResponse[]>({ agreementId: agreement.id, searchData: searchData }, getProductsOnAgreement, {
@@ -119,7 +118,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       })),
   }
 
-  if (!postBucktes || !filtersFromData) {
+  if (!postBuckets || !filtersFromData) {
     return (
       <HStack justify="center" style={{ marginTop: '48px' }}>
         <Loader size="3xlarge" title="Laster produkter" />
@@ -134,7 +133,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
-  const posts = mapAgreementProducts(postBucktes, agreement, searchData.filters)
+  const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters)
 
   const onReset = () => {
     formMethods.reset()
@@ -279,7 +278,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               </HStack>
             </HStack>
 
-            <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
+            {avtalerMedIsoGruppering.includes(agreement.id) ? (
+              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
+            ): (
+              <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
+            ) }
+
             {postError && (
               <Alert variant="error" title="Error med lasting av produkter">
                 Det har skjedd en feil ved innhenting av produkter. Vennligst prøv igjen senere.

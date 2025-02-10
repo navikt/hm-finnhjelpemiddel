@@ -953,23 +953,41 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
 }
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
-  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+
+  let body = JSON.stringify({
+    query: {
+      bool: {
+        must: {
+          term: {
+            seriesId: seriesId,
+          },
+        },
+      },
     },
-    body: JSON.stringify({
+    size: 150,
+  })
+
+  if(seriesId.startsWith('HMDB')) {
+    body = JSON.stringify({
       query: {
         bool: {
           must: {
             term: {
-              seriesId: seriesId,
+              identifier: seriesId,
             },
           },
         },
       },
       size: 150,
-    }),
+    })
+  }
+
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: body,
   })
 
   return res.json()

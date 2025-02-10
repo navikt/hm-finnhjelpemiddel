@@ -10,7 +10,7 @@ import { useFormContext } from 'react-hook-form'
 import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
 import { ProductCardNoPicture } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNoPicture'
 
-const PostsList = ({
+const PostsListIsoGroups = ({
   posts,
   postLoading,
   postError,
@@ -32,6 +32,29 @@ const PostsList = ({
     setFirstCompareClick(false)
   }
 
+  const groupProductsByIsoCategory = (posts: PostWithProducts[]) => {
+    return posts.map((post) => {
+      const productsByIsoCategory = post.products.reduce(
+        (acc, productWithRank) => {
+          const isoCategory = productWithRank.product.isoCategoryTitle
+          if (!acc[isoCategory]) {
+            acc[isoCategory] = []
+          }
+          acc[isoCategory].push(productWithRank)
+          return acc
+        },
+        {} as { [key: string]: typeof post.products }
+      )
+
+      return {
+        ...post,
+        productsByIsoCategory,
+      }
+    })
+  }
+
+  const groupedPosts = groupProductsByIsoCategory(posts)
+
   return (
     <VStack
       as="ol"
@@ -39,7 +62,7 @@ const PostsList = ({
       className="agreement-search-results"
       id="agreementSearchResults"
     >
-      {posts.map((post) => (
+      {groupedPosts.map((post) => (
         <VStack
           as="li"
           key={post.nr}
@@ -72,37 +95,44 @@ const PostsList = ({
           {post.products.length === 0 && !postLoading && (
             <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>
           )}
-          <HStack as="ol" gap={'4'}>
-            {post.products.map((productWithRank) => (
-              <li key={productWithRank.product.id}>
-                {pictureToggleValue === 'hide-pictures' ? (
-                  <ProductCardNoPicture
-                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                    product={productWithRank.product}
-                    linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
-                    rank={productWithRank.rank}
-                    hmsNumbers={productWithRank.hmsNumbers}
-                    variantCount={productWithRank.variantCount}
-                    handleCompareClick={handleCompareClick}
-                  />
-                ) : (
-                  <ProductCardNew
-                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                    product={productWithRank.product}
-                    linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
-                    rank={productWithRank.rank}
-                    hmsNumbers={productWithRank.hmsNumbers}
-                    variantCount={productWithRank.variantCount}
-                    handleCompareClick={handleCompareClick}
-                  />
-                )}
-              </li>
-            ))}
-          </HStack>
+          {Object.entries(post.productsByIsoCategory).map(([isoCategory, products]) => (
+            <VStack key={isoCategory} gap="4">
+              <Heading level="3" size="small">
+                {isoCategory}
+              </Heading>
+              <HStack as="ol" gap={'4'}>
+                {products.map((productWithRank) => (
+                  <li key={productWithRank.product.id}>
+                    {pictureToggleValue === 'hide-pictures' ? (
+                      <ProductCardNoPicture
+                        key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                        product={productWithRank.product}
+                        linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
+                        rank={productWithRank.rank}
+                        hmsNumbers={productWithRank.hmsNumbers}
+                        variantCount={productWithRank.variantCount}
+                        handleCompareClick={handleCompareClick}
+                      />
+                    ) : (
+                      <ProductCardNew
+                        key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                        product={productWithRank.product}
+                        linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
+                        rank={productWithRank.rank}
+                        hmsNumbers={productWithRank.hmsNumbers}
+                        variantCount={productWithRank.variantCount}
+                        handleCompareClick={handleCompareClick}
+                      />
+                    )}
+                  </li>
+                ))}
+              </HStack>
+            </VStack>
+          ))}
         </VStack>
       ))}
     </VStack>
   )
 }
 
-export default PostsList
+export default PostsListIsoGroups
