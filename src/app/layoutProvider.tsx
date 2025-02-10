@@ -76,9 +76,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
-        if (process.env.NODE_ENV == 'production') {
-          hotjar.initialize({ id: 118350, sv: 6 })
-        }
+        //if (process.env.NODE_ENV == 'production') {
+        hotjar.initialize({ id: 118350, sv: 6 })
+        //}
       }
       if (consent === 'false') {
         stopAmplitude()
