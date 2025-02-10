@@ -16,6 +16,7 @@ const disabledLetters = ['Z', 'Æ', 'Å']
 export default function SearchPage() {
   const { data: activeSuppliers, isLoading } = useSWR<Supplier[]>('/suppliers/_search', getAllSuppliers, {
     keepPreviousData: true,
+    revalidateOnFocus: false,
   })
 
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.9 })

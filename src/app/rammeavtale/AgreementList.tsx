@@ -37,6 +37,7 @@ const AgreementList = () => {
   const [sortColumn, setSortColumn] = useState<SortColumns>({ orderBy: 'title', direction: 'ascending' })
   const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
+    revalidateOnFocus: false,
   })
 
   const sortedData = useMemo(() => {

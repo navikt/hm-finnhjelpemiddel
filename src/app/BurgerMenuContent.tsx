@@ -16,6 +16,7 @@ interface Props {
 const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
+    revalidateOnFocus: false,
   })
 
   const sortedAgreements = useMemo(() => {
