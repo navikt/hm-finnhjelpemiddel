@@ -1,17 +1,12 @@
 'use client'
 import * as amplitude from '@amplitude/analytics-browser'
 import { track } from '@amplitude/analytics-browser'
-import { FilterFormState } from '@/utils/filter-util'
 
 const APP_NAME = 'hm-oversikt-frontend'
 const TEAM_NAME = 'teamdigihot'
 const AMP_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
 const AMP_PUBLIC_KEY_PROD = '10798841ebeba333b8ece6c046322d76'
 const AMP_PUBLIC_KEY_DEV = 'c1c2553d689ba4716c7d7c4410b521f5'
-
-type LogEvent = (params: { name: string; data?: any }) => void
-
-let amplitudeLogger: LogEvent | undefined = undefined
 
 export enum digihot_customevents {
   LEVERANDORPRODUKTER_KLIKKET_V2 = 'klikket på vis leverandørprodukter',
@@ -30,24 +25,15 @@ export enum nav_events {
   BESØK = 'besøk',
 }
 
-export const initAmplitude = () => {
+export const initAmplitude = (hostname: string) => {
   const apiKey =
     process.env.BUILD_ENV === 'prod'
       ? AMP_PUBLIC_KEY_PROD
       : process.env.BUILD_ENV === 'dev'
         ? AMP_PUBLIC_KEY_DEV
         : 'mock'
-  if (apiKey === 'mock') {
-    amplitudeLogger = (params: { name: string; data?: any }) => {
-      console.log('[Mock Amplitude Event]', {
-        name: params.name,
-        data: {
-          ...('data' in params.data ? params.data.data : {}),
-          ...params.data,
-        },
-      })
-    }
-  } else {
+
+  if (apiKey != 'mock') {
     amplitude.init(apiKey!, {
       serverUrl: AMP_COLLECTION_URL,
       serverZone: 'EU',
@@ -59,11 +45,18 @@ export const initAmplitude = () => {
         fileDownloads: true,
         elementInteractions: true,
       },
+      cookieOptions: {
+        sameSite: 'Strict',
+        domain: hostname,
+      },
     })
-    amplitudeLogger = (params: { name: string; data?: any }) => {
-      amplitude.logEvent(params.name, params.data)
-    }
   }
+}
+
+export const stopAmplitude = () => {
+  amplitude.reset()
+  amplitude.flush()
+  amplitude.setOptOut(true)
 }
 
 export function logAmplitudeEvent(eventName: string, data?: any) {

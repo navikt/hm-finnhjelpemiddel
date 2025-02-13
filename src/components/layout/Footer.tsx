@@ -4,7 +4,7 @@ import { Bleed, Link } from '@navikt/ds-react'
 
 import NextLink from 'next/link'
 
-const Footer = () => (
+const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) => (
   <footer className="main-wrapper--xlarge" style={{ width: '100%' }}>
     <Bleed marginInline="full" asChild reflectivePadding>
       <div className="nav-bunn nav-bunn__info">
@@ -27,6 +27,10 @@ const Footer = () => (
           >
             Tilgjengelighetserklæring
           </Link>
+          <Link as={NextLink} href={'/informasjonskapsler'}>
+            Om informasjonskapsler
+          </Link>
+          <Link onClick={() => setCookieConsent(null)}>Endre samtykke for informasjonskapsler</Link>
         </div>
       </div>
     </Bleed>
