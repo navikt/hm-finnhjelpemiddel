@@ -1,6 +1,7 @@
 import styles from '@/app/CookieBanner.module.scss'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Heading, Link } from '@navikt/ds-react'
+import NextLink from 'next/link'
 import React from 'react'
 
 export const CookieBanner = ({
@@ -24,7 +25,9 @@ export const CookieBanner = ({
               Andre brukes til statistikk og analyse. Godkjenner du alle, hjelper du oss å lage bedre nettsider og
               tjenester.
             </BodyShort>
-            <Link>Mer om våre informasjonskapsler</Link>
+            <Link as={NextLink} href={'/informasjonskapsler'}>
+              Mer om våre informasjonskapsler
+            </Link>
           </div>
           <Box className={styles.buttonContainer}>
             <Button className={styles.button} onClick={enableOptionalCookies}>
