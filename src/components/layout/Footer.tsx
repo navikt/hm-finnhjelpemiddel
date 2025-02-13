@@ -27,6 +27,9 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
           >
             Tilgjengelighetserklæring
           </Link>
+          <Link as={NextLink} href={'/informasjonskapsler'}>
+            Om informasjonskapsler
+          </Link>
           <Link onClick={() => setCookieConsent(null)}>Endre samtykke for informasjonskapsler</Link>
         </div>
       </div>
