@@ -14,10 +14,10 @@ export const CookieBanner = ({
   return (
     <Box className={styles.cookieBanner}>
       <div className={styles.content}>
-        <InformationSquareFillIcon className={styles.infoIcon} />
-        <div>
+        <InformationSquareFillIcon className={styles.infoIcon} aria-hidden />
+        <section id={'cookie-banner-dialog'} aria-labelledby={'cookie-banner-title'}>
           <div className={styles.textContainer}>
-            <Heading size="small" level="2" spacing>
+            <Heading size="small" level="2" spacing id={'cookie-banner-title'}>
               Velg hvilke informasjonskapsler FinnHjelpemiddel får bruke
             </Heading>
             <BodyShort>
@@ -37,7 +37,7 @@ export const CookieBanner = ({
               Bare nødvendige
             </Button>
           </Box>
-        </div>
+        </section>
       </div>
     </Box>
   )
