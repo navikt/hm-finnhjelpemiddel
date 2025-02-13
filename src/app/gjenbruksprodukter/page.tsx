@@ -121,6 +121,7 @@ export default function AlternativeProductsPage() {
             <li>Overflyttingsplattformer og personløftere</li>
             <li>Stoler med oppreisingsfunksjon</li>
             <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
+            <li>Sykler med og uten hjelpemotor og støttehjul til tohjulssykler</li>
             <li>Synstekniske hjelpemidler</li>
             <li>Varmehjelpemidler for hender og føtter</li>
             <li>Vogner og hjelpemidler til sport og aktivitet</li>
