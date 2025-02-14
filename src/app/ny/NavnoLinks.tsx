@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export const NavnoLinks = () => {
   return (
-    <VStack gap={'11'} width={'50rem'}>
+    <VStack gap={'11'} width={'50rem'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Informasjon på nav.no
       </Heading>
