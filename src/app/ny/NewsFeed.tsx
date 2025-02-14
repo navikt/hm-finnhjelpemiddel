@@ -3,7 +3,7 @@ import styles from './NewsFeed.module.scss'
 
 export const NewsFeed = () => {
   return (
-    <VStack gap={'11'}>
+    <VStack gap={'11'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Siste nytt
       </Heading>

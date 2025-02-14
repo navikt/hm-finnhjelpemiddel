@@ -1,5 +1,9 @@
 @use 'src/styles/_variables' as *;
 
+.container {
+  align-self: center;
+}
+
 .newsCard {
   background: $ny-nav-orange-light;
   display: flex;
