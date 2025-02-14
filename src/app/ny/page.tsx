@@ -10,8 +10,8 @@ import { Bleed, Box, Heading, HStack, VStack } from '@navikt/ds-react'
 
 import AgreementList from '../rammeavtale/AgreementList'
 import { KontaktOss } from '@/app/ny/KontaktOss'
-import { InformationNavLinks } from '@/app/InformationNavLinks'
 import { Logo } from '@/app/ny/Logo'
+import { NavnoLinks } from '@/app/ny/NavnoLinks'
 import { Innganger } from '@/app/ny/Innganger'
 import { Produktgrupper } from '@/app/ny/Produktgrupper'
 
@@ -76,7 +76,7 @@ function FrontPage() {
 
         <AgreementList />
         <NewsList />
-        <InformationNavLinks />
+        <NavnoLinks />
 
         <KontaktOss />
       </VStack>
