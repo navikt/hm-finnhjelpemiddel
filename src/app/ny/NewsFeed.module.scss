@@ -7,7 +7,7 @@
 .newsCard {
   background: $ny-nav-orange-light;
   display: flex;
-  width: 390px;
+  max-width: 390px;
   height: 245px;
   border-top: 6px solid $ny-nav-purple-dark;
   border-radius: 0 0 8px 8px;

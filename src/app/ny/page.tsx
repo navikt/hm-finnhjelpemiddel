@@ -6,7 +6,7 @@ import { useCallback, useEffect } from 'react'
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import NewsList from '@/components/NewsList'
 import { logNavigationEvent, logVisit } from '@/utils/amplitude'
-import { Bleed, Box, Heading, HStack, VStack } from '@navikt/ds-react'
+import { Bleed, Box, Heading, Hide, HStack, VStack } from '@navikt/ds-react'
 import KontaktOss from '@/app/ny/KontaktOss'
 import { NavnoLinks } from '@/app/ny/NavnoLinks'
 import Innganger from '@/app/ny/Innganger'
@@ -65,9 +65,11 @@ function FrontPage() {
               </Box>
             </VStack>
 
-            <Box>
-              <FinnHjelpemiddelLogo />
-            </Box>
+            <Hide below={'md'} asChild>
+              <Box>
+                <FinnHjelpemiddelLogo />
+              </Box>
+            </Hide>
           </HStack>
         </Bleed>
 

@@ -4,11 +4,11 @@ import Image from 'next/image'
 
 export const NavnoLinks = () => {
   return (
-    <VStack gap={'11'} width={'50rem'} className={styles.container}>
+    <VStack gap={'11'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Informasjon på nav.no
       </Heading>
-      <HGrid gap={'4'} columns={2} className={styles.cardContainer}>
+      <HGrid gap={'4'} columns={{ xs: 1, sm: 2 }} className={styles.cardContainer}>
         <InfoCard text={'Informasjon om hjelpemidler og tilrettelegging'} url={'https://www.nav.no/om-hjelpemidler'} />
         <InfoCard
           text={'Dette må du vite før du søker som privatperson'}
