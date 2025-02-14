@@ -2,7 +2,7 @@ import { Box, Heading, HStack, VStack } from '@navikt/ds-react'
 import styles from './Innganger.module.scss'
 import NextLink from 'next/link'
 
-export const Innganger = () => {
+const Innganger = () => {
   return (
     <Box>
       <Heading size={'large'} spacing>
@@ -43,3 +43,5 @@ const CircleHeart = () => {
     </svg>
   )
 }
+
+export default Innganger

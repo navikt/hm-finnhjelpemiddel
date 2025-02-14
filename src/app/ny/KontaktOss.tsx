@@ -1,7 +1,7 @@
 import { Bleed, BodyLong, Heading, HGrid, Link } from '@navikt/ds-react'
 import { Chat2Icon, HatSchoolIcon, LocationPinIcon } from '@navikt/aksel-icons'
 
-export const KontaktOss = () => {
+const KontaktOss = () => {
   return (
     <Bleed marginInline="full" asChild reflectivePadding>
       <div className="home-page__kontakt-oss">
@@ -51,3 +51,5 @@ export const KontaktOss = () => {
     </Bleed>
   )
 }
+
+export default KontaktOss

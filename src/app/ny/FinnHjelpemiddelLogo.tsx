@@ -1,4 +1,4 @@
-export const Logo = () => {
+const FinnHjelpemiddelLogo = () => {
   return (
     <svg width="350" height="235" viewBox="0 0 350 235" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="202.689" width="54.2721" height="179.43" fill="#A1C3DA" />
@@ -57,3 +57,5 @@ export const Logo = () => {
     </svg>
   )
 }
+
+export default FinnHjelpemiddelLogo

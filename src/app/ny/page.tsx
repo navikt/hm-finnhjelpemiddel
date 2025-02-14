@@ -7,13 +7,12 @@ import AutocompleteSearch from '@/components/AutocompleteSearch'
 import NewsList from '@/components/NewsList'
 import { logNavigationEvent, logVisit } from '@/utils/amplitude'
 import { Bleed, Box, Heading, HStack, VStack } from '@navikt/ds-react'
-
-import AgreementList from '../rammeavtale/AgreementList'
-import { KontaktOss } from '@/app/ny/KontaktOss'
-import { Logo } from '@/app/ny/Logo'
+import KontaktOss from '@/app/ny/KontaktOss'
 import { NavnoLinks } from '@/app/ny/NavnoLinks'
-import { Innganger } from '@/app/ny/Innganger'
-import { Produktgrupper } from '@/app/ny/Produktgrupper'
+import Innganger from '@/app/ny/Innganger'
+import Produktgrupper from '@/app/ny/Produktgrupper'
+import FinnHjelpemiddelLogo from '@/app/ny/FinnHjelpemiddelLogo'
+import Agreements from '@/app/ny/Agreements'
 
 function FrontPage() {
   const path = usePathname()
@@ -66,7 +65,7 @@ function FrontPage() {
             </VStack>
 
             <Box>
-              <Logo />
+              <FinnHjelpemiddelLogo />
             </Box>
           </HStack>
         </Bleed>
@@ -74,7 +73,7 @@ function FrontPage() {
         <Innganger />
         <Produktgrupper />
 
-        <AgreementList />
+        <Agreements />
         <NewsList />
         <NavnoLinks />
 

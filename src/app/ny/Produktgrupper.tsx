@@ -2,7 +2,7 @@ import { Box, Heading, HGrid, HStack } from '@navikt/ds-react'
 import styles from './Produktgrupper.module.scss'
 import NextLink from 'next/link'
 
-export const Produktgrupper = () => {
+const Produktgrupper = () => {
   return (
     <Box>
       <Heading size={'large'} spacing>
@@ -52,3 +52,5 @@ const CircleFolder = () => {
     </svg>
   )
 }
+
+export default Produktgrupper
