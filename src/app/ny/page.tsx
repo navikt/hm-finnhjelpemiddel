@@ -4,7 +4,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
-import AnimateLayout from '@/components/layout/AnimateLayout'
 import NewsList from '@/components/NewsList'
 import { logNavigationEvent, logVisit } from '@/utils/amplitude'
 import { Bleed, Box, Heading, HStack, VStack } from '@navikt/ds-react'
@@ -13,6 +12,7 @@ import AgreementList from '../rammeavtale/AgreementList'
 import { KontaktOss } from '@/app/ny/KontaktOss'
 import { InformationNavLinks } from '@/app/InformationNavLinks'
 import { Logo } from '@/app/ny/Logo'
+import { Innganger } from '@/app/ny/Innganger'
 
 function FrontPage() {
   const path = usePathname()
@@ -46,39 +46,39 @@ function FrontPage() {
   )
 
   return (
-    <AnimateLayout>
-      <div className="home-page">
-        <VStack className="main-wrapper--large" gap={{ xs: '12', md: '24' }}>
-          <Bleed
-            marginInline="full"
-            reflectivePadding
-            style={{ backgroundColor: '#FEF5EF' }}
-            className="home-page__heading-and-search-container"
-          >
-            <HStack wrap={false}>
-              <VStack gap={{ xs: '8', md: '11' }}>
-                <Heading level="1" size="large">
-                  Her kan du finne hjelpemidler, tilbehør og reservedeler
-                </Heading>
-                <Box maxWidth={'530px'}>
-                  <AutocompleteSearch onSearch={onSearch} />
-                </Box>
-              </VStack>
-
-              <Box>
-                <Logo />
+    <div className="home-page">
+      <VStack className="main-wrapper--large" gap={{ xs: '12', md: '24' }}>
+        <Bleed
+          marginInline="full"
+          reflectivePadding
+          style={{ backgroundColor: '#FEF5EF' }}
+          className="home-page__heading-and-search-container"
+        >
+          <HStack wrap={false}>
+            <VStack gap={{ xs: '8', md: '11' }}>
+              <Heading level="1" size="large">
+                Her kan du finne hjelpemidler, tilbehør og reservedeler
+              </Heading>
+              <Box maxWidth={'530px'}>
+                <AutocompleteSearch onSearch={onSearch} />
               </Box>
-            </HStack>
-          </Bleed>
+            </VStack>
 
-          <AgreementList />
-          <NewsList />
-          <InformationNavLinks />
+            <Box>
+              <Logo />
+            </Box>
+          </HStack>
+        </Bleed>
 
-          <KontaktOss />
-        </VStack>
-      </div>
-    </AnimateLayout>
+        <Innganger />
+
+        <AgreementList />
+        <NewsList />
+        <InformationNavLinks />
+
+        <KontaktOss />
+      </VStack>
+    </div>
   )
 }
 
