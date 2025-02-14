@@ -13,6 +13,7 @@ import { KontaktOss } from '@/app/ny/KontaktOss'
 import { InformationNavLinks } from '@/app/InformationNavLinks'
 import { Logo } from '@/app/ny/Logo'
 import { Innganger } from '@/app/ny/Innganger'
+import { Produktgrupper } from '@/app/ny/Produktgrupper'
 
 function FrontPage() {
   const path = usePathname()
@@ -47,7 +48,7 @@ function FrontPage() {
 
   return (
     <div className="home-page">
-      <VStack className="main-wrapper--large" gap={{ xs: '12', md: '24' }}>
+      <VStack className="main-wrapper--large" gap={{ xs: '12', md: '16' }}>
         <Bleed
           marginInline="full"
           reflectivePadding
@@ -71,6 +72,7 @@ function FrontPage() {
         </Bleed>
 
         <Innganger />
+        <Produktgrupper />
 
         <AgreementList />
         <NewsList />

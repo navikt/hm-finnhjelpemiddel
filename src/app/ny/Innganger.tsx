@@ -1,5 +1,6 @@
-import { Box, Heading, HStack, Link, VStack } from '@navikt/ds-react'
+import { Box, Heading, HStack, VStack } from '@navikt/ds-react'
 import styles from './Innganger.module.scss'
+import NextLink from 'next/link'
 
 export const Innganger = () => {
   return (
@@ -18,11 +19,11 @@ export const Innganger = () => {
 
 const Inngang = ({ title }: { title: string }) => {
   return (
-    <Box className={styles.inngang} padding={'8'}>
-      <VStack justify={'end'} gap={'4'}>
+    <Box as={NextLink} href="/ny" className={styles.inngang} padding={'8'}>
+      <VStack gap={'4'}>
         <CircleHeart />
         <Heading level="4" size="small">
-          <Link href="/ny">{title}</Link>
+          {title}
         </Heading>
       </VStack>
     </Box>
@@ -31,8 +32,8 @@ const Inngang = ({ title }: { title: string }) => {
 
 const CircleHeart = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="47" height="47" viewBox="0 0 47 47" fill="none">
-      <ellipse cx="12.9972" cy="28.9365" rx="12.759" ry="12.2074" fill="#CCE2F0" />
+    <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="13.9972" cy="28.9262" rx="12.759" ry="12.2074" fill="#CCE2F0" />
       <path
         fillRule="evenodd"
         clipRule="evenodd"

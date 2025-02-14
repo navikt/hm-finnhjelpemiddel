@@ -1,11 +1,13 @@
-.inngang {
-  width: 391px;
-
+.produktgruppe {
   border-radius: 8px;
   border: 1px solid #aab0ba;
   background: #fff;
 
   color: var(--a-text-default);
+
+  svg {
+    flex-shrink: 0;
+  }
 
   &:hover {
     text-decoration: none;
