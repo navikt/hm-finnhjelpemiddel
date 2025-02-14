@@ -1,0 +1,15 @@
+@use "@navikt/ds-tokens/dist/tokens" as *;
+@use "../../../styles/variables" as *;
+
+.page {
+  padding: $a-spacing-8 $a-spacing-4;
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.newsCard {
+  background: $ny-nav-orange-light;
+  max-width: 390px;
+  border-top: 6px solid $ny-nav-purple-dark;
+  border-radius: 0 0 8px 8px;
+}
