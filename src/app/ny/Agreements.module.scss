@@ -1,3 +1,15 @@
 .agreementsContainer {
   align-self: center;
 }
+
+.agreementRow {
+  position: relative;
+}
+
+.favouriteIcon {
+  display: flex;
+  position: absolute;
+  left: -3rem;
+  background-color: transparent;
+  border: none;
+}
