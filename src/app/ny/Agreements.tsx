@@ -59,7 +59,7 @@ const Agreements = () => {
   const sortedData = useMemo(() => {
     if (!data) return []
     const sorted = data.filter(
-      (agreement) => favouritedAgreements && !favouritedAgreements.some((fav) => fav === agreement.id)
+      (agreement) => !(favouritedAgreements && favouritedAgreements.some((fav) => fav === agreement.id))
     )
 
     if (sortColumn.orderBy === 'published') {
