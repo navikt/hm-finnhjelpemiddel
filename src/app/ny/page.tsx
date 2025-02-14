@@ -13,6 +13,7 @@ import Innganger from '@/app/ny/Innganger'
 import Produktgrupper from '@/app/ny/Produktgrupper'
 import FinnHjelpemiddelLogo from '@/app/ny/FinnHjelpemiddelLogo'
 import Agreements from '@/app/ny/Agreements'
+import { NewsFeed } from '@/app/ny/NewsFeed'
 
 function FrontPage() {
   const path = usePathname()
@@ -74,7 +75,7 @@ function FrontPage() {
         <Produktgrupper />
 
         <Agreements />
-        <NewsList />
+        <NewsFeed />
         <NavnoLinks />
 
         <KontaktOss />
