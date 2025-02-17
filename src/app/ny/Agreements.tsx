@@ -196,6 +196,19 @@ const AgreementRow = ({
   isFavourite: boolean
   changeFavourite: (agreementId: string) => void
 }) => {
+  const FavouriteButton = () => {
+    return (
+      <button
+        className={styles.favouriteIcon}
+        onClick={() => {
+          changeFavourite(label.id)
+        }}
+      >
+        {isFavourite ? <StarFillIcon fontSize={24} color={'gold'} /> : <StarIcon fontSize={24} />}
+      </button>
+    )
+  }
+
   return (
     <Box as="li" className="agreement-page__list-item">
       <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center" className={styles.agreementRow}>
@@ -207,14 +220,6 @@ const AgreementRow = ({
           >
             {`${label.title} `}
           </Link>
-          <button
-            className={styles.favouriteIcon}
-            onClick={() => {
-              changeFavourite(label.id)
-            }}
-          >
-            {isFavourite ? <StarFillIcon fontSize={24} color={'gold'} /> : <StarIcon fontSize={24} />}
-          </button>
         </HStack>
         <Hide below="lg" asChild>
           <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
