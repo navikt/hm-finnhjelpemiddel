@@ -8,7 +8,8 @@
   background: $ny-nav-orange-light;
   display: flex;
   max-width: 390px;
-  height: 245px;
+  min-height: 245px;
+  height: fit-content;
   border-top: 6px solid $ny-nav-purple-dark;
   border-radius: 0 0 8px 8px;
 }

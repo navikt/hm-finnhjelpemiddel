@@ -25,23 +25,23 @@ const newsIngress = (text: string) => {
   const removeHtmlExp = new RegExp(/(<([^>]+)>)/gi)
   const cleanText = text.replace(removeHtmlExp, '')
 
-  return cleanText.substring(0, 100)
+  const words = cleanText.match(/(\w.*?\.)(?:\s[A-Z]|$)/)
+
+  return words ? words[1] : ''
 }
 
 const NewsCard = ({ news }: { news: News }) => {
   return (
     <Box paddingInline={'8'} paddingBlock={'5'} className={styles.newsCard}>
-      <VStack gap={'2'}>
+      <VStack gap={'2'} justify={'space-around'}>
         <Detail>{dateToString(news.published)}</Detail>
         <Heading size={'small'} level={'3'}>
           {news.title}
         </Heading>
-        <BodyShort>
-          {newsIngress(news.text)}...{' '}
-          <Link as={NextLink} href={'/ny/nyheter'}>
-            Les mer
-          </Link>
-        </BodyShort>
+        <BodyShort>{newsIngress(news.text)}</BodyShort>
+        <Link as={NextLink} href={'/ny/nyheter'}>
+          Les mer
+        </Link>
       </VStack>
     </Box>
   )
