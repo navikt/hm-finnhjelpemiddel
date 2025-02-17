@@ -1,42 +1,47 @@
-import { BodyShort, Box, Heading, HGrid, HStack, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Detail, Heading, HStack, Link, VStack } from '@navikt/ds-react'
 import styles from './NewsFeed.module.scss'
+import useSWR from 'swr'
+import { News } from '@/utils/news-util'
+import { getNews } from '@/utils/api-util'
+import NextLink from 'next/link'
+import { dateToString } from '@/utils/string-util'
 
 export const NewsFeed = () => {
+  const { data, error } = useSWR<News[]>('/news/_search', () => getNews(3), {
+    keepPreviousData: true,
+  })
+
   return (
     <VStack gap={'11'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Siste nytt
       </Heading>
-      <HStack gap={'6'}>
-        <NewsCard
-          title={'NY AVTALE KOMMER'}
-          ingress={'Ståstativ og trenings- og aktiviseringshjelpemidler'}
-          text={'Avtalen trer i kraft 01.12.2024'}
-        />
-        <NewsCard
-          title={'Tilgjengelighet i Android for hørsel'}
-          ingress={'Android har integrert flere tilgjengelighets-funksjoner i operativsystemene til sine produkter.'}
-          text={'Les artikkel på Kunnskapsbanken'}
-        />
-        <NewsCard
-          title={'Finn gjenbruksprodukt'}
-          ingress={'Vi viser foreløpig hjelpemidler innen disse produktområdene'}
-          text={'Se gjenbruksproduktene'}
-        />
-      </HStack>
+      <HStack gap={'6'}>{data && data.map((news) => <NewsCard key={news.id} news={news} />)}</HStack>
     </VStack>
   )
 }
 
-const NewsCard = ({ title, ingress, text }: { title: string; ingress: string; text: string }) => {
+const newsIngress = (text: string) => {
+  const removeHtmlExp = new RegExp(/(<([^>]+)>)/gi)
+  const cleanText = text.replace(removeHtmlExp, '')
+
+  return cleanText.substring(0, 100)
+}
+
+const NewsCard = ({ news }: { news: News }) => {
   return (
-    <Box paddingInline={'8'} paddingBlock={'10'} className={styles.newsCard}>
-      <VStack gap={'2'} justify={'space-between'}>
+    <Box paddingInline={'8'} paddingBlock={'5'} className={styles.newsCard}>
+      <VStack gap={'2'}>
+        <Detail>{dateToString(news.published)}</Detail>
         <Heading size={'small'} level={'3'}>
-          {title}
+          {news.title}
         </Heading>
-        <BodyShort weight={'semibold'}>{ingress}</BodyShort>
-        <BodyShort>{text}</BodyShort>
+        <BodyShort>
+          {newsIngress(news.text)}...{' '}
+          <Link as={NextLink} href={'/ny/nyheter'}>
+            Les mer
+          </Link>
+        </BodyShort>
       </VStack>
     </Box>
   )
