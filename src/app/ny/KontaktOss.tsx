@@ -16,7 +16,7 @@ const KontaktOss = () => {
 
           <KontaktOssItem
             icon={<LocationPinIcon aria-hidden fontSize={'32px'} />}
-            title="Kunnskapsbanken"
+            title="Finn din hjelpemiddelsentral"
             href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral"
             description="Finn kontaktinformasjon og les om inn- og utlevering av hjelpemidler."
           />
