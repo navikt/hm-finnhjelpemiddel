@@ -14,6 +14,7 @@ import Produktgrupper from '@/app/ny/Produktgrupper'
 import FinnHjelpemiddelLogo from '@/app/ny/FinnHjelpemiddelLogo'
 import Agreements from '@/app/ny/Agreements'
 import { NewsFeed } from '@/app/ny/NewsFeed'
+import styles from './Ny.module.scss'
 
 function FrontPage() {
   const path = usePathname()
@@ -49,12 +50,7 @@ function FrontPage() {
   return (
     <div className="home-page">
       <VStack className="main-wrapper--large" gap={{ xs: '12', md: '16' }}>
-        <Bleed
-          marginInline="full"
-          reflectivePadding
-          style={{ backgroundColor: '#FEF5EF' }}
-          className="home-page__heading-and-search-container"
-        >
+        <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#FEF5EF' }} className={styles.banner}>
           <HStack wrap={false} style={{ justifySelf: 'center' }}>
             <VStack gap={{ xs: '8', md: '11' }}>
               <Heading level="1" size="large">
