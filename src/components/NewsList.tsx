@@ -2,23 +2,12 @@
 import { getNews } from '@/utils/api-util'
 import { News } from '@/utils/news-util'
 import { Heading, VStack } from '@navikt/ds-react'
-import { useMemo } from 'react'
 import useSWR from 'swr'
 
 const NewsList = () => {
-  const { data, error } = useSWR<News[]>('/news/_search', getNews, {
+  const { data } = useSWR<News[]>('/news/_search', () => getNews(), {
     keepPreviousData: true,
   })
-
-  const sortedData = useMemo(() => {
-    const newsMigrationDate = new Date('April 01, 2024')
-    if (!data) return []
-    const sorted = [...data] // Create a copy of data to avoid modifying it in place
-
-    return sorted
-      .sort((a, b) => b.published.getTime() - a.published.getTime())
-      .filter((news) => news.published.getTime() >= newsMigrationDate.getTime() && news.expired >= new Date(Date.now()))
-  }, [data])
 
   const type = (news: News): [string, string] | string => {
     const splitTitle = news.title.split(':')
@@ -32,8 +21,8 @@ const NewsList = () => {
       </Heading>
       <VStack gap="6" className="spacing-bottom--xlarge">
         {data &&
-          sortedData.map((news) => (
-            <div className="home-page__news" key={news.identifier}>
+          data.map((news) => (
+            <div className="home-page__news" key={news.id}>
               <VStack gap="1">
                 <Heading level="3" size="small" spacing>
                   {Array.isArray(type(news)) ? type(news)[0] : type(news)}

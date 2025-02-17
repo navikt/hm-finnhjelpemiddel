@@ -953,7 +953,6 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
 }
 
 export async function getProductWithVariants(seriesId: string): Promise<SearchResponse> {
-
   let body = JSON.stringify({
     query: {
       bool: {
@@ -967,7 +966,7 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
     size: 150,
   })
 
-  if(seriesId.startsWith('HMDB')) {
+  if (seriesId.startsWith('HMDB')) {
     body = JSON.stringify({
       query: {
         bool: {
@@ -1276,21 +1275,39 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
     })
 }
 
-export async function getNews(): Promise<News[]> {
+export async function getNews(size: number = 100): Promise<News[]> {
   const res = await fetch(HM_SEARCH_URL + `/news/_search`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      size: 100,
+      size: size,
       query: {
-        term: {
-          status: {
-            value: 'ACTIVE',
-          },
+        bool: {
+          filter: [
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+            {
+              range: {
+                expired: {
+                  gt: 'now',
+                },
+              },
+            },
+          ],
         },
       },
+      sort: [
+        {
+          published: {
+            order: 'desc',
+          },
+        },
+      ],
       _source: {
         includes: ['id', 'identifier', 'title', 'text', 'status', 'published', 'expired'],
       },
