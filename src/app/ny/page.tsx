@@ -70,7 +70,6 @@ function FrontPage() {
         </Bleed>
 
         <Innganger />
-        <Produktgrupper />
 
         <Agreements />
         <NewsFeed />
