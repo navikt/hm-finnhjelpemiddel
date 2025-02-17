@@ -55,7 +55,7 @@ function FrontPage() {
           style={{ backgroundColor: '#FEF5EF' }}
           className="home-page__heading-and-search-container"
         >
-          <HStack wrap={false}>
+          <HStack wrap={false} style={{ justifySelf: 'center' }}>
             <VStack gap={{ xs: '8', md: '11' }}>
               <Heading level="1" size="large">
                 Her kan du finne hjelpemidler, tilbehør og reservedeler
