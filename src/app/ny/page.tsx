@@ -51,18 +51,18 @@ function FrontPage() {
     <div className="home-page">
       <VStack className="main-wrapper--large" gap={{ xs: '12', md: '16' }}>
         <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#FEF5EF' }} className={styles.banner}>
-          <HStack wrap={false} style={{ justifySelf: 'center' }}>
-            <VStack gap={{ xs: '8', md: '11' }}>
+          <HStack wrap={false} style={{ justifySelf: 'center' }} justify={'space-evenly'}>
+            <VStack gap={{ xs: '8', md: '11' }} maxWidth={'530px'}>
               <Heading level="1" size="large">
                 Her kan du finne hjelpemidler, tilbehør og reservedeler
               </Heading>
-              <Box maxWidth={'530px'}>
-                <AutocompleteSearch onSearch={onSearch} />
+              <Box>
+                <AutocompleteSearch onSearch={onSearch} hideLabel={false} />
               </Box>
             </VStack>
 
             <Hide below={'md'} asChild>
-              <Box>
+              <Box className={styles.logoBox}>
                 <FinnHjelpemiddelLogo />
               </Box>
             </Hide>
