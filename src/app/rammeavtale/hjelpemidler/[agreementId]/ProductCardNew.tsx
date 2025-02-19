@@ -66,10 +66,6 @@ export const ProductCardNew = ({
             </Link>
 
             <BodyShort size="small">{product.supplierName}</BodyShort>
-
-            {((variantCount && hmsNumbers && hmsNumbers?.length > 1) || (variantCount && !hmsNumbers)) && (
-              <BodyShort size="small">{`${variantCount} ${variantCount > 1 ? 'varianter' : 'variant'}`} </BodyShort>
-            )}
           </VStack>
           {hmsNumbers && hmsNumbers?.length === 1 && (
             <VStack align={'start'} gap="1">
@@ -88,6 +84,9 @@ export const ProductCardNew = ({
                 onClick={() => logActionEvent('kopier')}
               />
             </VStack>
+          )}
+          {((variantCount && hmsNumbers && hmsNumbers?.length > 1) || (variantCount && !hmsNumbers)) && (
+            <BodyShort size="small">{`${variantCount} ${variantCount > 1 ? 'varianter' : 'variant'}`} </BodyShort>
           )}
         </VStack>
 
