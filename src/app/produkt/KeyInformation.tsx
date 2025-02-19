@@ -31,7 +31,7 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
         className="hms-copy-button"
         copyText={[...hms.values()][0] || ''}
         text={[...hms.values()][0] || ''}
-        activeText="HMS-nummer er kopiert"
+        activeText="kopiert"
         variant="action"
         activeIcon={<ThumbUpIcon aria-hidden />}
         iconPosition="right"
