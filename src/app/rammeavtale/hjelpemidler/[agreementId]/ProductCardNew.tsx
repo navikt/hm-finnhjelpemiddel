@@ -62,7 +62,7 @@ export const ProductCardNew = ({
           <>
             {hmsNumbers && hmsNumbers?.length === 1 && (
               <BodyShort size="small" className="product-card__hms-numbers">
-                {hmsNumbers.join(', ')}
+                HMS-nr: {hmsNumbers.join(', ')}
               </BodyShort>
             )}
             {((variantCount && hmsNumbers && hmsNumbers?.length > 1) || (variantCount && !hmsNumbers)) && (
