@@ -280,9 +280,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
             {avtalerMedIsoGruppering.includes(agreement.id) ? (
               <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
-            ): (
+            ) : (
               <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
-            ) }
+            )}
 
             {postError && (
               <Alert variant="error" title="Error med lasting av produkter">
@@ -325,10 +325,16 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isSengerAvtale = agreementId === 'f38e94b6-ad85-4cf6-bc26-f14dff0f3e20' || agreementId === '61135e09-f6ba-44ba-8e0d-3994c2883f4c'
   const isOppreisingsstolerAvtale = agreementId === '44e87ba7-6f1a-4d70-b5ff-28d6e8c54bd6' || agreementId === '547883d7-6459-44b9-9684-22192839336d'
   const isVarmehjelpemidlerAvtale = agreementId === '38a0c948-fb9f-4cbb-a8d1-de22ac158ea2' || agreementId === 'fa455679-8674-4083-8c1a-5284847b8d41'
+  const isSitteputerAvtale = agreementId === '26542d09-61c1-49e6-80e8-eef6a9ea7faf'
+  const isKommunikasjonsHjelpemidlerAvtale = agreementId === '1f74afc7-9740-41cc-8648-cd942c392d42'
+  const isMRSAvtale = agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7' || agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7'
 
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-    && (isLofteplattformAvtale || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale)
+    && (isLofteplattformAvtale
+      || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale
+      || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale
+      || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale || isSitteputerAvtale || isKommunikasjonsHjelpemidlerAvtale || isMRSAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
