@@ -58,13 +58,10 @@ main {
 
 .nav-bunn {
   background-color: $a-deepblue-800;
-  padding-bottom: 100px;
-  padding-top: 100px;
+  padding-bottom: 48px;
+  padding-top: 40px;
 
   &__info {
-    display: flex;
-    flex-direction: column;
-    gap: $a-spacing-10;
     color: $a-white;
 
     a {
@@ -73,12 +70,6 @@ main {
       --ac-link-active-bg: transparent;
       --ac-link-focus-text: #cce1ff;
       --ac-link-focus-bg: transparent;
-    }
-
-    div {
-      display: flex;
-      flex-direction: column;
-      gap: $a-spacing-4;
     }
   }
 }
@@ -392,7 +383,7 @@ main {
   .nav,
   .nav-bunn,
   .hide-print,
-  ._hj-widget-container{
+  ._hj-widget-container {
     display: none;
   }
 

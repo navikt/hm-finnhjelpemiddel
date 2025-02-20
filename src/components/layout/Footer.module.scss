@@ -1,0 +1,16 @@
+.heading {
+  color: var(--a-deepblue-200);
+  margin-block: 0 var(--a-spacing-2);
+}
+
+.footerLinks {
+  columns: 22rem 3;
+}
+
+.footerLinkGroup {
+  break-inside: avoid;
+}
+
+.footerLinkGroup:not(:last-child) {
+  margin-bottom: var(--a-spacing-8);
+}
