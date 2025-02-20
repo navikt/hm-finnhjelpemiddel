@@ -220,6 +220,7 @@ const AgreementRow = ({
           >
             {`${label.title} `}
           </Link>
+          <FavouriteButton />
         </HStack>
         <Hide below="lg" asChild>
           <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
