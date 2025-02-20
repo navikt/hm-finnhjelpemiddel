@@ -80,7 +80,7 @@ function Home() {
                   FinnHjelpemiddel
                 </Heading>
                 <Heading level="1" size="large" className="home-page__heading">
-                  Her kan du finne hjelpemidler, tilbehør og reservedeler
+                  Her kan du finne hjelpemidler på det norske markedet
                 </Heading>
               </VStack>
               <Box maxWidth={'530px'}>
