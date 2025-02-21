@@ -9,6 +9,7 @@ import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
 import PhotoSlider from './PhotoSlider'
 import { QrCodeComponent } from './QrCode'
+import ImageCarousel from '@/app/produkt/ImageCarousel'
 
 type ProductPageTopInfoProps = {
   product: Product
@@ -38,16 +39,12 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoP
         align="center"
       >
         <div className="product-page__photo-slider-container">
-          {product.photos && <PhotoSlider photos={product.photos} />}
+          {product.photos && <ImageCarousel images={product.photos} />}
         </div>
         <VStack gap="9" className="spacing-top--medium">
           <VStack gap="3">
             <Heading level="1" size="large">
-              {hmsArtNr ? (
-                product.variants[0].articleName
-              ) : (
-                product.title
-              )}
+              {hmsArtNr ? product.variants[0].articleName : product.title}
             </Heading>
             {rank && <AgreementIcon rank={rank} />}
             {(allVariantsExpiredDates || allVariantsExpired) && (
@@ -59,16 +56,11 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoP
 
           <KeyInformation product={product} supplier={supplier ? supplier : null} hmsArtNr={hmsArtNr} />
           <HStack gap="3">
-            {hmsArtNr ? (
-              <QrCodeComponent value={hmsArtNr} isVariantPage />
-            ) : (
-              <QrCodeComponent value={product.id} />
-            )}
+            {hmsArtNr ? <QrCodeComponent value={hmsArtNr} isVariantPage /> : <QrCodeComponent value={product.id} />}
             {/* <Button variant="secondary" icon={<ArrowsSquarepathIcon />}>
               Sammenlign
             </Button> */}
           </HStack>
-
         </VStack>
       </HGrid>
     </>
