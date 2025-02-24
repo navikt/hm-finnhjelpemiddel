@@ -1,18 +1,18 @@
-import { Button, Table } from '@navikt/ds-react';
-import classNames from 'classnames';
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util';
-import { SortColumns } from "@/app/produkt/variants/MultipleVariants";
+import { Button, Table } from '@navikt/ds-react'
+import classNames from 'classnames'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
+import { SortColumns } from '@/app/produkt/variants/MultipleVariants'
 
 interface VariantDataRowProps {
-  technicalDataName: string;
-  row: string[];
-  variantIds: string[];
-  sortColumns: SortColumns;
-  handleSortRow: (key: string) => void;
-  isSortableRow: boolean;
-  iconBasedOnState: (key: string) => JSX.Element;
-  handleColumnClick: (key: string) => void;
-  selectedColumn: string | null;
+  technicalDataName: string
+  row: string[]
+  variantIds: string[]
+  sortColumns: SortColumns
+  handleSortRow: (key: string) => void
+  isSortableRow: boolean
+  iconBasedOnState: (key: string) => JSX.Element
+  handleColumnClick: (key: string) => void
+  selectedColumn: string | null
 }
 
 export const VariantTechnicalDataRow = ({
@@ -24,7 +24,7 @@ export const VariantTechnicalDataRow = ({
   isSortableRow,
   iconBasedOnState,
   selectedColumn,
-  handleColumnClick
+  handleColumnClick,
 }: VariantDataRowProps) => (
   <Table.Row
     key={technicalDataName + 'row'}
@@ -57,11 +57,13 @@ export const VariantTechnicalDataRow = ({
       <Table.HeaderCell>{technicalDataName}</Table.HeaderCell>
     )}
     {row.map((value, i) => (
-      <Table.DataCell key={technicalDataName + '-' + i}
-                      className={selectedColumn === (variantIds[i]) ? 'selected-column' : ''}
-                      onClick={() => handleColumnClick(variantIds[i])}>
+      <Table.DataCell
+        key={technicalDataName + '-' + i}
+        className={selectedColumn === variantIds[i] ? 'selected-column' : ''}
+        onClick={() => handleColumnClick(variantIds[i])}
+      >
         {value}
       </Table.DataCell>
     ))}
   </Table.Row>
-);
+)

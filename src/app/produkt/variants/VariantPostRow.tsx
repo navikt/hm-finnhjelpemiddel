@@ -1,23 +1,28 @@
-import { Button, Table } from '@navikt/ds-react';
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { ProductVariant } from '@/utils/product-util';
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util';
-import { formatAgreementPosts } from '@/utils/string-util';
-import classNames from 'classnames';
+import { Button, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { ProductVariant } from '@/utils/product-util'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
+import { formatAgreementPosts } from '@/utils/string-util'
+import classNames from 'classnames'
 
 interface VariantPostRowProps {
-  sortedByKey: ProductVariant[];
-  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' };
-  handleSortRow: (key: string) => void;
-  postSet: Set<number>;
-  sortRank: boolean;
-  handleColumnClick: (key: string) => void;
-  selectedColumn: string | null;
+  sortedByKey: ProductVariant[]
+  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' }
+  handleSortRow: (key: string) => void
+  postSet: Set<number>
+  sortRank: boolean
+  handleColumnClick: (key: string) => void
+  selectedColumn: string | null
 }
 
 export const VariantPostRow = ({
-  sortedByKey, sortColumns, handleSortRow, postSet, sortRank, selectedColumn,
-  handleColumnClick
+  sortedByKey,
+  sortColumns,
+  handleSortRow,
+  postSet,
+  sortRank,
+  selectedColumn,
+  handleColumnClick,
 }: VariantPostRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
@@ -28,8 +33,8 @@ export const VariantPostRow = ({
       )
     ) : (
       <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    );
-  };
+    )
+  }
 
   return (
     <Table.Row
@@ -62,12 +67,14 @@ export const VariantPostRow = ({
         <Table.HeaderCell>Delkontrakt</Table.HeaderCell>
       )}
       {sortedByKey.map((variant, i) => (
-        <Table.DataCell key={'post-' + variant.id}
-                        className={selectedColumn === (variant.id) ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick(variant.id)}>
+        <Table.DataCell
+          key={'post-' + variant.id}
+          className={selectedColumn === variant.id ? 'selected-column' : ''}
+          onClick={() => handleColumnClick(variant.id)}
+        >
           {formatAgreementPosts(variant.agreements)}
         </Table.DataCell>
       ))}
     </Table.Row>
-  );
-};
+  )
+}

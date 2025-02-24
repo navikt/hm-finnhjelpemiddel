@@ -1,20 +1,26 @@
-import { Table, Button, CopyButton } from '@navikt/ds-react';
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons';
-import { ProductVariant } from '@/utils/product-util';
-import { logActionEvent } from '@/utils/amplitude';
-import classNames from 'classnames';
+import { Table, Button, CopyButton } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ProductVariant } from '@/utils/product-util'
+import { logActionEvent } from '@/utils/amplitude'
+import classNames from 'classnames'
 
 interface HmsNumberRowProps {
-  sortedByKey: ProductVariant[];
-  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' };
-  handleSortRow: (key: string) => void;
-  variantNameElementHeight: number;
-  handleColumnClick: (key: string) => void;
-  selectedColumn: string | null;
+  sortedByKey: ProductVariant[]
+  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' }
+  handleSortRow: (key: string) => void
+  variantNameElementHeight: number
+  handleColumnClick: (key: string) => void
+  selectedColumn: string | null
 }
 
-const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantNameElementHeight, selectedColumn,
-  handleColumnClick }: HmsNumberRowProps) => {
+const VariantHmsNumberRow = ({
+  sortedByKey,
+  sortColumns,
+  handleSortRow,
+  variantNameElementHeight,
+  selectedColumn,
+  handleColumnClick,
+}: HmsNumberRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
@@ -24,8 +30,8 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
       )
     ) : (
       <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    );
-  };
+    )
+  }
 
   return (
     <Table.Row
@@ -36,10 +42,7 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
         }
       )}
     >
-      <Table.HeaderCell
-        className="sortable hmsnr-header-cell"
-        style={{ top: `${variantNameElementHeight}px` }}
-      >
+      <Table.HeaderCell className="sortable hmsnr-header-cell" style={{ top: `${variantNameElementHeight}px` }}>
         <Button
           className="sort-button"
           aria-label={
@@ -67,8 +70,9 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
             zIndex: '1 !important',
             background: 'rgb(242 243 245)',
           }}
-          className={selectedColumn === (variant.id) ? 'selected-column' : ''}
-          onClick={() => handleColumnClick(variant.id)}>
+          className={selectedColumn === variant.id ? 'selected-column' : ''}
+          onClick={() => handleColumnClick(variant.id)}
+        >
           {variant.hmsArtNr ? (
             <CopyButton
               size="small"
@@ -87,7 +91,7 @@ const VariantHmsNumberRow = ({ sortedByKey, sortColumns, handleSortRow, variantN
         </Table.DataCell>
       ))}
     </Table.Row>
-  );
-};
+  )
+}
 
-export default VariantHmsNumberRow;
+export default VariantHmsNumberRow

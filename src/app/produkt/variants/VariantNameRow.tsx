@@ -1,7 +1,7 @@
-import { Button, Table } from '@navikt/ds-react';
-import { ProductVariant } from '@/utils/product-util';
-import { SortColumns } from '@/app/produkt/variants/MultipleVariants';
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from "@navikt/aksel-icons";
+import { Button, Table } from '@navikt/ds-react'
+import { ProductVariant } from '@/utils/product-util'
+import { SortColumns } from '@/app/produkt/variants/MultipleVariants'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
 
 interface Props {
   variants: ProductVariant[]
@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const VariantNameRow = ({ variants, sortColumns, handleSortRow, variantNameElementRef }: Props) => {
-
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
       sortColumns.direction === 'ascending' ? (
@@ -45,4 +44,4 @@ export const VariantNameRow = ({ variants, sortColumns, handleSortRow, variantNa
       ))}
     </Table.Row>
   )
-};
+}

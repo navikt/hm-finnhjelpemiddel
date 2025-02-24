@@ -1,20 +1,23 @@
-import { Button, CopyButton, Table } from '@navikt/ds-react';
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons';
-import { ProductVariant } from '@/utils/product-util';
-import { logActionEvent } from '@/utils/amplitude';
-import classNames from 'classnames';
+import { Button, CopyButton, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ProductVariant } from '@/utils/product-util'
+import { logActionEvent } from '@/utils/amplitude'
+import classNames from 'classnames'
 
 interface VariantSupplierRefRowProps {
-  sortedByKey: ProductVariant[];
-  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' };
-  handleSortRow: (key: string) => void;
-  handleColumnClick: (key: string) => void;
-  selectedColumn: string | null;
+  sortedByKey: ProductVariant[]
+  sortColumns: { orderBy: string | null; direction: 'ascending' | 'descending' }
+  handleSortRow: (key: string) => void
+  handleColumnClick: (key: string) => void
+  selectedColumn: string | null
 }
 
 export const VariantSupplierRefRow = ({
-  sortedByKey, sortColumns, handleSortRow, selectedColumn,
-  handleColumnClick
+  sortedByKey,
+  sortColumns,
+  handleSortRow,
+  selectedColumn,
+  handleColumnClick,
 }: VariantSupplierRefRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
@@ -25,8 +28,8 @@ export const VariantSupplierRefRow = ({
       )
     ) : (
       <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    );
-  };
+    )
+  }
 
   return (
     <Table.Row
@@ -56,8 +59,11 @@ export const VariantSupplierRefRow = ({
       </Table.HeaderCell>
 
       {sortedByKey.map((variant, i) => (
-        <Table.DataCell key={'supref-' + variant.id} className={selectedColumn === (variant.id) ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick(variant.id)}>
+        <Table.DataCell
+          key={'supref-' + variant.id}
+          className={selectedColumn === variant.id ? 'selected-column' : ''}
+          onClick={() => handleColumnClick(variant.id)}
+        >
           {variant.supplierRef ? (
             <CopyButton
               size="small"
@@ -76,5 +82,5 @@ export const VariantSupplierRefRow = ({
         </Table.DataCell>
       ))}
     </Table.Row>
-  );
-};
+  )
+}

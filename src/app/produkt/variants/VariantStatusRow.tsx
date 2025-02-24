@@ -1,5 +1,5 @@
-import { Table, Tag } from '@navikt/ds-react';
-import { ProductVariant } from '@/utils/product-util';
+import { Table, Tag } from '@navikt/ds-react'
+import { ProductVariant } from '@/utils/product-util'
 
 export const VariantStatusRow = ({ variants }: { variants: ProductVariant[] }) => (
   <Table.Row className="variants-table__status-row">
@@ -22,5 +22,4 @@ export const VariantStatusRow = ({ variants }: { variants: ProductVariant[] }) =
       </Table.HeaderCell>
     ))}
   </Table.Row>
-);
-
+)

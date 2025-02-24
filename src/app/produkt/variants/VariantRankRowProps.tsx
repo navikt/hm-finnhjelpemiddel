@@ -1,24 +1,29 @@
-import { Button, Table } from '@navikt/ds-react';
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons';
-import { ProductVariant } from '@/utils/product-util';
-import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util';
-import { viewAgreementRanks } from '@/components/AgreementIcon';
-import classNames from 'classnames';
-import { SortColumns } from "@/app/produkt/variants/MultipleVariants";
+import { Button, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { ProductVariant } from '@/utils/product-util'
+import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
+import { viewAgreementRanks } from '@/components/AgreementIcon'
+import classNames from 'classnames'
+import { SortColumns } from '@/app/produkt/variants/MultipleVariants'
 
 interface VariantRankRowProps {
-  sortedByKey: ProductVariant[];
+  sortedByKey: ProductVariant[]
   sortColumns: SortColumns
-  handleSortRow: (key: string) => void;
-  sortRank: boolean;
-  hasAgreementSet: Set<boolean>;
-  handleColumnClick: (key: string) => void;
-  selectedColumn: string | null;
+  handleSortRow: (key: string) => void
+  sortRank: boolean
+  hasAgreementSet: Set<boolean>
+  handleColumnClick: (key: string) => void
+  selectedColumn: string | null
 }
 
 export const VariantRankRow = ({
-  sortedByKey, sortColumns, handleSortRow, sortRank, hasAgreementSet, selectedColumn,
-  handleColumnClick
+  sortedByKey,
+  sortColumns,
+  handleSortRow,
+  sortRank,
+  hasAgreementSet,
+  selectedColumn,
+  handleColumnClick,
 }: VariantRankRowProps) => {
   const iconBasedOnState = (key: string) => {
     return sortColumns.orderBy === key ? (
@@ -29,8 +34,8 @@ export const VariantRankRow = ({
       )
     ) : (
       <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    );
-  };
+    )
+  }
 
   return (
     <Table.Row
@@ -64,10 +69,14 @@ export const VariantRankRow = ({
         <Table.HeaderCell>Rangering</Table.HeaderCell>
       )}
       {sortedByKey.map((variant, i) => (
-        <Table.DataCell key={'rank-' + variant.id}
-                        className={selectedColumn === (variant.id) ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick(variant.id)}>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
+        <Table.DataCell
+          key={'rank-' + variant.id}
+          className={selectedColumn === variant.id ? 'selected-column' : ''}
+          onClick={() => handleColumnClick(variant.id)}
+        >
+          {viewAgreementRanks(variant.agreements)}
+        </Table.DataCell>
       ))}
     </Table.Row>
-  );
-};
+  )
+}
