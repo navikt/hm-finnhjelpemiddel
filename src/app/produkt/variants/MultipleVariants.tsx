@@ -3,6 +3,7 @@
 import { Product } from '@/utils/product-util'
 import { SharedVariantDataTable } from '@/app/produkt/variants/SharedVariantDataTable'
 import MultipleVariantsTable from '@/app/produkt/variants/MultipleVariantsTable'
+import { VariantView } from '@/app/produkt/variants/VariantView'
 
 export type SortColumns = {
   orderBy: string | null
@@ -13,7 +14,7 @@ const MultipleVariants = ({ product }: { product: Product }) => {
   return (
     <>
       <SharedVariantDataTable product={product} />
-      <MultipleVariantsTable product={product} />
+      <VariantView product={product} />
     </>
   )
 }
