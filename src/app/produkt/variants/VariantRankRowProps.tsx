@@ -1,10 +1,10 @@
 import { Button, Table } from '@navikt/ds-react'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
 import { ProductVariant } from '@/utils/product-util'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 import classNames from 'classnames'
 import { SortColumns } from '@/app/produkt/variants/MultipleVariants'
+import { ReactNode } from 'react'
 
 interface VariantRankRowProps {
   sortedByKey: ProductVariant[]
@@ -14,6 +14,7 @@ interface VariantRankRowProps {
   hasAgreementSet: Set<boolean>
   handleColumnClick: (key: string) => void
   selectedColumn: string | null
+  iconBasedOnState: (key: string) => ReactNode
 }
 
 export const VariantRankRow = ({
@@ -24,19 +25,8 @@ export const VariantRankRow = ({
   hasAgreementSet,
   selectedColumn,
   handleColumnClick,
+  iconBasedOnState,
 }: VariantRankRowProps) => {
-  const iconBasedOnState = (key: string) => {
-    return sortColumns.orderBy === key ? (
-      sortColumns.direction === 'ascending' ? (
-        <ArrowUpIcon title="Sort ascending" height={30} width={30} aria-hidden={true} />
-      ) : (
-        <ArrowDownIcon title="Sort descending" height={30} width={30} aria-hidden={true} />
-      )
-    ) : (
-      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    )
-  }
-
   return (
     <Table.Row
       className={classNames(

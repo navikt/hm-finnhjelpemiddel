@@ -175,6 +175,7 @@ export const VariantView = ({ product }: { product: Product }) => {
                     sortColumns={sortColumns}
                     handleSortRow={handleSortRow}
                     variantNameElementRef={variantNameElementRef}
+                    iconBasedOnState={iconBasedOnState}
                   />
                 </Table.Header>
                 <Table.Body>
@@ -185,6 +186,7 @@ export const VariantView = ({ product }: { product: Product }) => {
                     variantNameElementHeight={variantNameElementHeight}
                     selectedColumn={selectedColumn}
                     handleColumnClick={handleColumnClick}
+                    iconBasedOnState={iconBasedOnState}
                   />
                   <VariantSupplierRefRow
                     sortedByKey={sortedByKey}
@@ -192,6 +194,7 @@ export const VariantView = ({ product }: { product: Product }) => {
                     handleSortRow={handleSortRow}
                     selectedColumn={selectedColumn}
                     handleColumnClick={handleColumnClick}
+                    iconBasedOnState={iconBasedOnState}
                   />
                   {product.agreements && product.agreements.length > 0 && (
                     <>
@@ -203,6 +206,7 @@ export const VariantView = ({ product }: { product: Product }) => {
                         hasAgreementSet={hasAgreementSet}
                         selectedColumn={selectedColumn}
                         handleColumnClick={handleColumnClick}
+                        iconBasedOnState={iconBasedOnState}
                       />
                       <VariantPostRow
                         sortedByKey={sortedByKey}
@@ -212,6 +216,7 @@ export const VariantView = ({ product }: { product: Product }) => {
                         sortRank={sortRank}
                         selectedColumn={selectedColumn}
                         handleColumnClick={handleColumnClick}
+                        iconBasedOnState={iconBasedOnState}
                       />
                     </>
                   )}

@@ -1,8 +1,9 @@
-import { Table, Button, CopyButton } from '@navikt/ds-react'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Button, CopyButton, Table } from '@navikt/ds-react'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { ProductVariant } from '@/utils/product-util'
 import { logActionEvent } from '@/utils/amplitude'
 import classNames from 'classnames'
+import { ReactNode } from 'react'
 
 interface HmsNumberRowProps {
   sortedByKey: ProductVariant[]
@@ -11,6 +12,7 @@ interface HmsNumberRowProps {
   variantNameElementHeight: number
   handleColumnClick: (key: string) => void
   selectedColumn: string | null
+  iconBasedOnState: (key: string) => ReactNode
 }
 
 const VariantHmsNumberRow = ({
@@ -20,19 +22,8 @@ const VariantHmsNumberRow = ({
   variantNameElementHeight,
   selectedColumn,
   handleColumnClick,
+  iconBasedOnState,
 }: HmsNumberRowProps) => {
-  const iconBasedOnState = (key: string) => {
-    return sortColumns.orderBy === key ? (
-      sortColumns.direction === 'ascending' ? (
-        <ArrowUpIcon title="Sort ascending" height={30} width={30} aria-hidden={true} />
-      ) : (
-        <ArrowDownIcon title="Sort descending" height={30} width={30} aria-hidden={true} />
-      )
-    ) : (
-      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    )
-  }
-
   return (
     <Table.Row
       className={classNames(

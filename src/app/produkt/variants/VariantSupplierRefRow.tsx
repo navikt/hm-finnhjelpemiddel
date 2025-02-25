@@ -1,8 +1,9 @@
 import { Button, CopyButton, Table } from '@navikt/ds-react'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { ProductVariant } from '@/utils/product-util'
 import { logActionEvent } from '@/utils/amplitude'
 import classNames from 'classnames'
+import { ReactNode } from 'react'
 
 interface VariantSupplierRefRowProps {
   sortedByKey: ProductVariant[]
@@ -10,6 +11,7 @@ interface VariantSupplierRefRowProps {
   handleSortRow: (key: string) => void
   handleColumnClick: (key: string) => void
   selectedColumn: string | null
+  iconBasedOnState: (key: string) => ReactNode
 }
 
 export const VariantSupplierRefRow = ({
@@ -18,19 +20,8 @@ export const VariantSupplierRefRow = ({
   handleSortRow,
   selectedColumn,
   handleColumnClick,
+  iconBasedOnState,
 }: VariantSupplierRefRowProps) => {
-  const iconBasedOnState = (key: string) => {
-    return sortColumns.orderBy === key ? (
-      sortColumns.direction === 'ascending' ? (
-        <ArrowUpIcon title="Sort ascending" height={30} width={30} aria-hidden={true} />
-      ) : (
-        <ArrowDownIcon title="Sort descending" height={30} width={30} aria-hidden={true} />
-      )
-    ) : (
-      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    )
-  }
-
   return (
     <Table.Row
       className={classNames(
