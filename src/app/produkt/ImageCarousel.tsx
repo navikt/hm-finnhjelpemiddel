@@ -6,7 +6,7 @@ import styles from './ImageCarousel.module.scss'
 import React, { ComponentPropsWithRef, useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { largeImageLoader, smallImageLoader } from '@/utils/image-util'
-import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import { HStack, VStack } from '@navikt/ds-react'
 import { EmblaCarouselType } from 'embla-carousel'
 import classNames from 'classnames'
 
@@ -61,7 +61,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           ))}
         </div>
       </div>
-      <HGrid columns={'1fr 9fr 1fr'}>
+      <HStack gap={'2'}>
         <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
         <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
           <HStack wrap={false} gap={'2'}>
@@ -77,7 +77,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           </HStack>
         </div>
         <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-      </HGrid>
+      </HStack>
     </VStack>
   )
 }

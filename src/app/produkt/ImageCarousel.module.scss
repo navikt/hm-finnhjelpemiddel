@@ -1,8 +1,9 @@
 .embla {
-  max-width: 30rem;
+  max-width: 35rem;
   --slide-height: 26rem;
   --slide-spacing: 1rem;
   --slide-size: 100%;
+  padding-top: 0.5rem;
 }
 
 @media (max-width: 767px) {
@@ -30,6 +31,7 @@
 
 .emblaThumbs__viewport {
   overflow: hidden;
+  max-width: 25rem;
 }
 .emblaThumbsContainer {
   display: flex;

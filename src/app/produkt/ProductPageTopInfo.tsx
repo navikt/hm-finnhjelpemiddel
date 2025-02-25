@@ -4,10 +4,9 @@ import { Supplier } from '@/utils/supplier-util'
 import AgreementIcon from '@/components/AgreementIcon'
 import { Alert, Heading } from '@/components/aksel-client'
 
-import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import { HStack, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
-import PhotoSlider from './PhotoSlider'
 import { QrCodeComponent } from './QrCode'
 import ImageCarousel from '@/app/produkt/ImageCarousel'
 
@@ -28,20 +27,16 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoP
 
   return (
     <>
-      <HGrid
-        columns={{ xs: '1fr', md: '500px  390px' }}
+      <HStack
         aria-label="Bilder og nøkkelinformasjon"
         className={classNames('product-page__top-page-container', {
           'not-on-agreement-or-expired':
             product.agreements?.length === 0 && (!allVariantsExpiredDates || !allVariantsExpired),
         })}
         gap={{ xs: '4', md: '10' }}
-        align="center"
       >
-        <div className="product-page__photo-slider-container">
-          {product.photos && <ImageCarousel images={product.photos} />}
-        </div>
-        <VStack gap="9" className="spacing-top--medium">
+        {product.photos && <ImageCarousel images={product.photos} />}
+        <VStack gap="9" maxWidth={'390px'} flexBasis={'60%'}>
           <VStack gap="3">
             <Heading level="1" size="large">
               {hmsArtNr ? product.variants[0].articleName : product.title}
@@ -62,7 +57,7 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoP
             </Button> */}
           </HStack>
         </VStack>
-      </HGrid>
+      </HStack>
     </>
   )
 }
