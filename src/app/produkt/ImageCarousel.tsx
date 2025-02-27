@@ -9,7 +9,7 @@ import { largeImageLoader, smallImageLoader } from '@/utils/image-util'
 import { BodyShort, Button, Hide, HStack, VStack } from '@navikt/ds-react'
 import { EmblaCarouselType } from 'embla-carousel'
 import classNames from 'classnames'
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 
 const ImageCarousel = ({ images }: { images: Photo[] }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -41,6 +41,10 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
   }, [emblaMainApi, onSelect])
 
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaMainApi)
+
+  if (images.length === 0) {
+    return <CameraIcon width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
+  }
 
   return (
     <VStack gap={'4'} className={styles.embla}>
