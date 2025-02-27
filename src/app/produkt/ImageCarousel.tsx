@@ -62,44 +62,47 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           ))}
         </div>
       </div>
-      <HStack gap={'2'} align={'center'}>
-        <Button
-          aria-label="Forrige bilde"
-          variant="tertiary"
-          className="arrow"
-          onClick={onPrevButtonClick}
-          icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
-          disabled={prevBtnDisabled}
-        />
-        <Hide below={'md'}>
-          <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
-            <HStack wrap={false} gap={'2'}>
-              {images.map((image, index) => (
-                <Thumb
-                  imageUri={image.uri}
-                  key={index}
-                  onClick={() => onThumbClick(index)}
-                  selected={index === selectedIndex}
-                  index={index}
-                />
-              ))}
-            </HStack>
-          </div>
-        </Hide>
-        <Hide above={'md'}>
-          <BodyShort size="large">
-            {selectedIndex + 1} / {images.length}
-          </BodyShort>
-        </Hide>
-        <Button
-          aria-label="Neste bilde"
-          variant="tertiary"
-          className="arrow"
-          onClick={onNextButtonClick}
-          icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
-          disabled={nextBtnDisabled}
-        />
-      </HStack>
+
+      {images.length > 1 && (
+        <HStack gap={'2'} align={'center'} justify={'center'}>
+          <Button
+            aria-label="Forrige bilde"
+            variant="tertiary"
+            className="arrow"
+            onClick={onPrevButtonClick}
+            icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
+            disabled={prevBtnDisabled}
+          />
+          <Hide below={'md'}>
+            <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
+              <HStack wrap={false} gap={'2'}>
+                {images.map((image, index) => (
+                  <Thumb
+                    imageUri={image.uri}
+                    key={index}
+                    onClick={() => onThumbClick(index)}
+                    selected={index === selectedIndex}
+                    index={index}
+                  />
+                ))}
+              </HStack>
+            </div>
+          </Hide>
+          <Hide above={'md'}>
+            <BodyShort size="large">
+              {selectedIndex + 1} / {images.length}
+            </BodyShort>
+          </Hide>
+          <Button
+            aria-label="Neste bilde"
+            variant="tertiary"
+            className="arrow"
+            onClick={onNextButtonClick}
+            icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
+            disabled={nextBtnDisabled}
+          />
+        </HStack>
+      )}
     </VStack>
   )
 }
