@@ -100,7 +100,9 @@ export const VariantView = ({ product }: { product: Product }) => {
     {},
     ...allDataKeys
       .filter((key) =>
-        product.variants.every((variant) => variant.techData[key].value === product.variants[0].techData[key].value)
+        product.variants.every(
+          (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
+        )
       )
       .map((key) => ({
         [key]: toValueAndUnit(product.variants[0].techData[key].value, product.variants[0].techData[key].unit),
