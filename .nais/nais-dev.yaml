@@ -10,6 +10,7 @@ spec:
   image: {{image}}
   port: 3000
   ingresses:
+    - 'https://finnhjelpemiddel.ekstern.dev.nav.no'
     - 'https://finnhjelpemiddel.intern.dev.nav.no'
     - 'https://finnhjelpemiddel.ansatt.dev.nav.no'
   accessPolicy:
