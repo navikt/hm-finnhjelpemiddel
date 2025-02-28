@@ -36,7 +36,7 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoP
         gap={{ xs: '4', md: '10' }}
       >
         {product.photos && <ImageCarousel images={product.photos} />}
-        <VStack gap="9" maxWidth={'390px'} flexBasis={'60%'}>
+        <VStack gap="9" maxWidth={'390px'}>
           <VStack gap="3">
             <Heading level="1" size="large">
               {hmsArtNr ? product.variants[0].articleName : product.title}
