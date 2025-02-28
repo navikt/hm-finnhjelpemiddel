@@ -10,10 +10,11 @@ import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import { Videos } from './Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
-import { TabsIcon } from "@navikt/aksel-icons";
-import { ProductsOnPost } from "@/app/produkt/[id]/page";
-import MultipleVariants from "@/app/produkt/variants/MultipleVariants";
-import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
+import { TabsIcon } from '@navikt/aksel-icons'
+import { ProductsOnPost } from '@/app/produkt/[id]/page'
+import MultipleVariants from '@/app/produkt/variants/MultipleVariants'
+import { SingleVariantTable } from '@/app/produkt/variants/SingleVariantTable'
+import { VariantView } from '@/app/produkt/variants/VariantView'
 
 type ProductProps = {
   product: Product
@@ -65,14 +66,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           aria-label="Tabell med egenskaper på tvers av varianter som finnes"
         >
           <div className="product-page__header_anchorOffset" id="egenskaper" tabIndex={-1}></div>
-
-          {product.variants && (hmsArtNr || product.variants?.length === 1) ? (
-            <SingleVariantTable
-              variant={hmsArtNr ? product.variants.find(variant => variant.hmsArtNr === hmsArtNr)! : product.variants[0]} />
-          ) : (
-            <MultipleVariants product={product} />
-          )}
-
+          <VariantView product={product} />
         </section>
 
         <section aria-label="Videolenker" className="spacing-vertical--xlarge">

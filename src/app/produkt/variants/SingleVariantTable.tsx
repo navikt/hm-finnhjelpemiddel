@@ -2,19 +2,20 @@
 
 import { ProductVariant } from '@/utils/product-util'
 import { CopyButton, Heading, Table, Tag } from '@navikt/ds-react'
-import { useEffect, useRef, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { viewAgreementRanks } from '@/components/AgreementIcon'
-import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
+import { formatAgreementPosts } from '@/utils/string-util'
 import { default as Link } from 'next/link'
 
 export interface SingleVariantTableProps {
   variant: ProductVariant
+  rows: { [p: string]: string[] }
+  variantNameElementRef: RefObject<HTMLTableCellElement>
 }
 
-export const SingleVariantTable = ({ variant }: SingleVariantTableProps) => {
-  const variantNameElementRef = useRef<HTMLTableCellElement>(null)
+export const SingleVariantTable = ({ variant, rows, variantNameElementRef }: SingleVariantTableProps) => {
   const [variantNameElementHeight, setVariantNameElementHeight] = useState(0)
 
   useEffect(() => {
@@ -22,16 +23,6 @@ export const SingleVariantTable = ({ variant }: SingleVariantTableProps) => {
       setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
     }
   }, [])
-
-  // Teknisk data
-  const allDataKeys = Object.keys(variant.techData).sort()
-  const rows: { [key: string]: string } = allDataKeys.reduce<{ [key: string]: string }>((acc, key) => {
-    acc[key] =
-      variant.techData[key] !== undefined
-        ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
-        : '-'
-    return acc
-  }, {})
 
   return (
     <>

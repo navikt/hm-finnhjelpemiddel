@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, TabsIcon } from '@navikt/aksel-icons'
 import { Alert, Box, Heading, Table } from '@navikt/ds-react'
 import { fetchProducts } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
@@ -16,9 +16,11 @@ import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { VariantTechnicalDataRow } from '@/app/produkt/variants/VariantTechnicalDataRow'
 import { Product } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
-import { default as Link } from 'next/link'
+import NextLink, { default as Link } from 'next/link'
 import useSWR from 'swr'
 import { VariantFilters } from '@/app/produkt/variants/VariantFilters'
+import { SharedVariantDataTable } from '@/app/produkt/variants/SharedVariantDataTable'
+import { SingleVariantTable } from '@/app/produkt/variants/SingleVariantTable'
 
 export type SortColumns = {
   orderBy: string | null
@@ -38,12 +40,6 @@ export const VariantView = ({ product }: { product: Product }) => {
   }
 
   useEffect(() => {
-    if (variantNameElementRef.current) {
-      setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
-    }
-  }, [])
-
-  useEffect(() => {
     const handleResize = () => {
       if (variantNameElementRef.current) {
         setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
@@ -52,18 +48,18 @@ export const VariantView = ({ product }: { product: Product }) => {
     window.addEventListener('resize', handleResize, false)
   }, [])
 
-  const { data: dataAndFilter } = useSWR(
-    { from: 0, size: 150, searchData: { ...searchData, searchTerm: '' }, dontCollapse: true, seriesId: product.id },
-    fetchProducts,
-    { keepPreviousData: true }
-  )
-
   const searchTermMatchesHms = product.variants
     .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
   const searchTermMatchesSupplierRef = product.variants
     .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
+
+  const { data: dataAndFilter } = useSWR(
+    { from: 0, size: 150, searchData: { ...searchData, searchTerm: '' }, dontCollapse: true, seriesId: product.id },
+    fetchProducts,
+    { keepPreviousData: true }
+  )
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
 
@@ -100,20 +96,16 @@ export const VariantView = ({ product }: { product: Product }) => {
     }))
   )
 
-  const commonRows: { [key: string]: string[] } = Object.assign(
+  const commonDataRows: { [key: string]: string } = Object.assign(
     {},
-    ...allDataKeys.map((key) => ({
-      [key]: product.variants.map((variant) =>
-        variant.techData[key] !== undefined
-          ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
-          : '-'
-      ),
-    }))
+    ...allDataKeys
+      .filter((key) =>
+        product.variants.every((variant) => variant.techData[key].value === product.variants[0].techData[key].value)
+      )
+      .map((key) => ({
+        [key]: toValueAndUnit(product.variants[0].techData[key].value, product.variants[0].techData[key].unit),
+      }))
   )
-
-  const commonDataRows = Object.entries(commonRows)
-    .filter(([_, row]) => !hasDifferentValues({ row }))
-    .map(([key, row]) => [key, row[0]])
 
   const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
   const hasAgreementVaries = hasAgreementSet.size > 1
@@ -145,130 +137,157 @@ export const VariantView = ({ product }: { product: Product }) => {
     )
   }
 
+  const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
+  const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
+  const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
+
   return (
     <>
-      <Heading level="2" size="large" spacing>
-        <Link href={'#variants-table'} className="product-page__header_anchorLink">
-          Egenskaper som varierer mellom varianter i denne serien
-        </Link>
-      </Heading>
-      <Box paddingBlock="4">
-        <VariantFilters product={product} />
-        <Heading level="3" size="small" className="spacing-vertical--small">
-          {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
-        </Heading>
+      {product.variants.length === 1 ? (
+        <SingleVariantTable variant={product.variants[0]} rows={rows} variantNameElementRef={variantNameElementRef} />
+      ) : (
+        <>
+          <SharedVariantDataTable commonDataRows={commonDataRows} />
+          <Heading level="2" size="large" spacing>
+            <Link href={'#variants-table'} className="product-page__header_anchorLink">
+              Egenskaper som varierer mellom varianter i denne serien
+            </Link>
+          </Heading>
+          <Box paddingBlock="4">
+            <div className="spacing-top--small spacing-bottom--small">
+              <NextLink
+                href={`/produkt/${product.id}/variants`}
+                className="variant-table_fullscreen-link"
+                target={'_blank'}
+              >
+                {`Åpne fullskjerm-varianttabell i ny fane`}
+                <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
+              </NextLink>
+            </div>
+            <VariantFilters product={product} />
+            <Heading level="3" size="small" className="spacing-vertical--small">
+              {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
+            </Heading>
 
-        {productVariantsToShow.length === 0 && (
-          <Alert variant="warning" className="spacing-top--small">
-            Ingen av variantene passer med filteret ditt
-          </Alert>
-        )}
+            {productVariantsToShow.length === 0 && (
+              <Alert variant="warning" className="spacing-top--small">
+                Ingen av variantene passer med filteret ditt
+              </Alert>
+            )}
 
-        {productVariantsToShow.length > 0 && (
-          <>
-            <div className="variants-table" id="variants-table">
-              <Table zebraStripes>
-                <Table.Header>
-                  <VariantStatusRow variants={sortedByKey} />
-                  <VariantNameRow
-                    variants={sortedByKey}
-                    sortColumns={sortColumns}
-                    handleSortRow={handleSortRow}
-                    variantNameElementRef={variantNameElementRef}
-                    iconBasedOnState={iconBasedOnState}
-                  />
-                </Table.Header>
-                <Table.Body>
-                  <VariantHmsNumberRow
-                    sortedByKey={sortedByKey}
-                    sortColumns={sortColumns}
-                    handleSortRow={handleSortRow}
-                    variantNameElementHeight={variantNameElementHeight}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
-                    iconBasedOnState={iconBasedOnState}
-                  />
-                  <VariantSupplierRefRow
-                    sortedByKey={sortedByKey}
-                    sortColumns={sortColumns}
-                    handleSortRow={handleSortRow}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
-                    iconBasedOnState={iconBasedOnState}
-                  />
-                  {product.agreements && product.agreements.length > 0 && (
-                    <>
-                      <VariantRankRow
-                        sortedByKey={sortedByKey}
+            {productVariantsToShow.length > 0 && (
+              <>
+                <div className="variants-table" id="variants-table">
+                  <Table zebraStripes>
+                    <Table.Header>
+                      <VariantStatusRow variants={sortedByKey} />
+                      <VariantNameRow
+                        variants={sortedByKey}
                         sortColumns={sortColumns}
                         handleSortRow={handleSortRow}
-                        sortRank={sortRank}
-                        hasAgreementSet={hasAgreementSet}
-                        selectedColumn={selectedColumn}
-                        handleColumnClick={handleColumnClick}
+                        variantNameElementRef={variantNameElementRef}
                         iconBasedOnState={iconBasedOnState}
                       />
-                      <VariantPostRow
-                        sortedByKey={sortedByKey}
-                        sortColumns={sortColumns}
-                        handleSortRow={handleSortRow}
-                        postSet={postSet}
-                        sortRank={sortRank}
-                        selectedColumn={selectedColumn}
-                        handleColumnClick={handleColumnClick}
-                        iconBasedOnState={iconBasedOnState}
-                      />
-                    </>
-                  )}
-                  <Table.Row>
-                    <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                    {sortedByKey.map((variant, i) => (
-                      <Table.DataCell
-                        key={'bestillingsordning-' + variant.id}
-                        className={selectedColumn === variant.id ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick(variant.id)}
-                      >
-                        {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                    {sortedByKey.map((variant, i) => (
-                      <Table.DataCell
-                        key={'behovsmelding-' + variant.id}
-                        className={selectedColumn === variant.id ? 'selected-column' : ''}
-                        onClick={() => handleColumnClick('column-' + i)}
-                      >
-                        {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                  {Object.keys(rows).length > 0 &&
-                    Object.entries(rows).map(([key, row]) => {
-                      const isSortableRow = hasDifferentValues({ row })
-                      if (commonDataRows.some(([commonKey]) => commonKey === key)) return null
-                      return (
-                        <VariantTechnicalDataRow
-                          key={key}
-                          technicalDataName={key}
-                          row={row}
-                          variantIds={sortedByKey.map((variant) => variant.id)}
+                    </Table.Header>
+                    <Table.Body>
+                      {hasHmsNumber && (
+                        <VariantHmsNumberRow
+                          sortedByKey={sortedByKey}
                           sortColumns={sortColumns}
                           handleSortRow={handleSortRow}
-                          isSortableRow={isSortableRow}
-                          iconBasedOnState={iconBasedOnState}
+                          variantNameElementHeight={variantNameElementHeight}
                           selectedColumn={selectedColumn}
                           handleColumnClick={handleColumnClick}
+                          iconBasedOnState={iconBasedOnState}
                         />
-                      )
-                    })}
-                </Table.Body>
-              </Table>
-            </div>
-          </>
-        )}
-      </Box>
+                      )}
+                      <VariantSupplierRefRow
+                        sortedByKey={sortedByKey}
+                        sortColumns={sortColumns}
+                        handleSortRow={handleSortRow}
+                        selectedColumn={selectedColumn}
+                        handleColumnClick={handleColumnClick}
+                        iconBasedOnState={iconBasedOnState}
+                      />
+                      {hasAgreementVaries && (
+                        <>
+                          <VariantRankRow
+                            sortedByKey={sortedByKey}
+                            sortColumns={sortColumns}
+                            handleSortRow={handleSortRow}
+                            sortRank={sortRank}
+                            hasAgreementSet={hasAgreementSet}
+                            selectedColumn={selectedColumn}
+                            handleColumnClick={handleColumnClick}
+                            iconBasedOnState={iconBasedOnState}
+                          />
+                          <VariantPostRow
+                            sortedByKey={sortedByKey}
+                            sortColumns={sortColumns}
+                            handleSortRow={handleSortRow}
+                            postSet={postSet}
+                            sortRank={sortRank}
+                            selectedColumn={selectedColumn}
+                            handleColumnClick={handleColumnClick}
+                            iconBasedOnState={iconBasedOnState}
+                          />
+                        </>
+                      )}
+                      {bestillingsordningVaries && (
+                        <Table.Row>
+                          <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+                          {sortedByKey.map((variant, i) => (
+                            <Table.DataCell
+                              key={'bestillingsordning-' + variant.id}
+                              className={selectedColumn === variant.id ? 'selected-column' : ''}
+                              onClick={() => handleColumnClick(variant.id)}
+                            >
+                              {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                            </Table.DataCell>
+                          ))}
+                        </Table.Row>
+                      )}
+                      {digitalSoknadVaries && (
+                        <Table.Row>
+                          <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                          {sortedByKey.map((variant, i) => (
+                            <Table.DataCell
+                              key={'behovsmelding-' + variant.id}
+                              className={selectedColumn === variant.id ? 'selected-column' : ''}
+                              onClick={() => handleColumnClick('column-' + i)}
+                            >
+                              {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                            </Table.DataCell>
+                          ))}
+                        </Table.Row>
+                      )}
+                      {Object.keys(rows).length > 0 &&
+                        Object.entries(rows).map(([key, row]) => {
+                          const isSortableRow = hasDifferentValues({ row })
+                          if (Object.keys(commonDataRows).some((commonKey) => commonKey === key)) return null
+                          return (
+                            <VariantTechnicalDataRow
+                              key={key}
+                              technicalDataName={key}
+                              row={row}
+                              variantIds={sortedByKey.map((variant) => variant.id)}
+                              sortColumns={sortColumns}
+                              handleSortRow={handleSortRow}
+                              isSortableRow={isSortableRow}
+                              iconBasedOnState={iconBasedOnState}
+                              selectedColumn={selectedColumn}
+                              handleColumnClick={handleColumnClick}
+                            />
+                          )
+                        })}
+                    </Table.Body>
+                  </Table>
+                </div>
+              </>
+            )}
+          </Box>
+        </>
+      )}
     </>
   )
 }

@@ -29,13 +29,6 @@ export const VariantFilters = ({ product }: { product: Product }) => {
   const numberOfvariantsWithoutAgreement = product.variantCount - numberOfvariantsOnAgreement
   const numberOfvariantsExpired = product.variants.filter((variant) => variant.status === 'INACTIVE').length
 
-  const searchTermMatchesHms = product.variants
-    .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
-    .includes(searchData.searchTerm?.toLowerCase())
-  const searchTermMatchesSupplierRef = product.variants
-    .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
-    .includes(searchData.searchTerm?.toLowerCase())
-
   const { data: filtersFromData, isLoading: filterIsLoading } = useSWR({ seriesId: product.id }, getProductFilters, {
     keepPreviousData: true,
   })
@@ -93,6 +86,13 @@ export const VariantFilters = ({ product }: { product: Product }) => {
       { key: 'Utgått', doc_count: numberOfvariantsExpired },
     ],
   }
+
+  const searchTermMatchesHms = product.variants
+    .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+  const searchTermMatchesSupplierRef = product.variants
+    .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
 
   const showTermTag = searchTermMatchesHms || searchTermMatchesSupplierRef
   const filters = filtersFromData ? { ...filtersFromData, status: statusFilter } : filtersFromData
