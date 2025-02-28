@@ -150,22 +150,22 @@ export const VariantView = ({ product }: { product: Product }) => {
       ) : (
         <>
           <SharedVariantDataTable commonDataRows={commonDataRows} />
+          <div className="spacing-top--small spacing-bottom--small">
+            <NextLink
+              href={`/produkt/${product.id}/variants`}
+              className="variant-table_fullscreen-link"
+              target={'_blank'}
+            >
+              {`Åpne fullskjerm-varianttabell i ny fane`}
+              <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
+            </NextLink>
+          </div>
           <Heading level="2" size="large" spacing>
             <Link href={'#variants-table'} className="product-page__header_anchorLink">
               Egenskaper som varierer mellom varianter i denne serien
             </Link>
           </Heading>
           <Box paddingBlock="4">
-            <div className="spacing-top--small spacing-bottom--small">
-              <NextLink
-                href={`/produkt/${product.id}/variants`}
-                className="variant-table_fullscreen-link"
-                target={'_blank'}
-              >
-                {`Åpne fullskjerm-varianttabell i ny fane`}
-                <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
-              </NextLink>
-            </div>
             <VariantFilters product={product} />
             <Heading level="3" size="small" className="spacing-vertical--small">
               {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
