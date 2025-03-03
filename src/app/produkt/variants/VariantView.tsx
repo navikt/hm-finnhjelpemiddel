@@ -211,29 +211,29 @@ export const VariantView = ({ product }: { product: Product }) => {
                         handleColumnClick={handleColumnClick}
                         iconBasedOnState={iconBasedOnState}
                       />
-                      {hasAgreementVaries && (
-                        <>
-                          <VariantRankRow
-                            sortedByKey={sortedByKey}
-                            sortColumns={sortColumns}
-                            handleSortRow={handleSortRow}
-                            sortRank={sortRank}
-                            hasAgreementSet={hasAgreementSet}
-                            selectedColumn={selectedColumn}
-                            handleColumnClick={handleColumnClick}
-                            iconBasedOnState={iconBasedOnState}
-                          />
-                          <VariantPostRow
-                            sortedByKey={sortedByKey}
-                            sortColumns={sortColumns}
-                            handleSortRow={handleSortRow}
-                            postSet={postSet}
-                            sortRank={sortRank}
-                            selectedColumn={selectedColumn}
-                            handleColumnClick={handleColumnClick}
-                            iconBasedOnState={iconBasedOnState}
-                          />
-                        </>
+                      {rankSet.size > 1 && (
+                        <VariantRankRow
+                          sortedByKey={sortedByKey}
+                          sortColumns={sortColumns}
+                          handleSortRow={handleSortRow}
+                          sortRank={sortRank}
+                          hasAgreementSet={hasAgreementSet}
+                          selectedColumn={selectedColumn}
+                          handleColumnClick={handleColumnClick}
+                          iconBasedOnState={iconBasedOnState}
+                        />
+                      )}
+                      {postSet.size > 1 && (
+                        <VariantPostRow
+                          sortedByKey={sortedByKey}
+                          sortColumns={sortColumns}
+                          handleSortRow={handleSortRow}
+                          postSet={postSet}
+                          sortRank={sortRank}
+                          selectedColumn={selectedColumn}
+                          handleColumnClick={handleColumnClick}
+                          iconBasedOnState={iconBasedOnState}
+                        />
                       )}
                       {bestillingsordningVaries && (
                         <Table.Row>
