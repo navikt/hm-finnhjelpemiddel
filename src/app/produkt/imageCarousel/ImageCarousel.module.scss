@@ -33,6 +33,7 @@
   overflow: hidden;
   max-width: 25rem;
 }
+
 .emblaThumbsContainer {
   display: flex;
   flex-direction: row;
@@ -67,4 +68,12 @@
   height: 4rem;
   width: 80px;
   position: relative;
+}
+
+.modal {
+  width: 100vw;
+  height: 100vh;
+
+  max-height: 90%;
+  max-width: 90%;
 }

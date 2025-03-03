@@ -8,7 +8,7 @@ import { HStack, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
 import { QrCodeComponent } from './QrCode'
-import ImageCarousel from '@/app/produkt/ImageCarousel'
+import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 
 type ProductPageTopInfoProps = {
   product: Product
