@@ -66,7 +66,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
-  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3']
+  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
 
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
