@@ -25,7 +25,7 @@ export const CookieBanner = ({
               Andre brukes til statistikk og analyse. Godkjenner du alle, hjelper du oss å lage bedre nettsider og
               tjenester.
             </BodyShort>
-            <Link as={NextLink} href={'/informasjonskapsler'}>
+            <Link as={NextLink} href={'/personvern'}>
               Mer om våre informasjonskapsler
             </Link>
           </div>

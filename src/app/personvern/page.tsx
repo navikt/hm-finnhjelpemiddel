@@ -1,9 +1,10 @@
 import { BodyLong, Heading } from '@/components/aksel-client'
 import { Metadata } from 'next'
+import { Link } from '@navikt/ds-react'
 
 export const metadata: Metadata = {
-  title: 'Informasjonskapsler',
-  description: 'Informasjonskapsler på FinnHjelpemiddel',
+  title: 'Personvern',
+  description: 'Personvern på FinnHjelpemiddel',
 }
 
 function CookieInfo() {
@@ -12,7 +13,18 @@ function CookieInfo() {
       <div className="about-us-page__container">
         <article>
           <Heading level="1" size="large" spacing>
-            Informasjonskapsler på FinnHjelpemiddel
+            Personvernerklæring for FinnHjelpemiddel
+          </Heading>
+          <BodyLong spacing>
+            FinnHjelpemiddel er en nettside NAV Arbeids- og velferdsdirektoratet har behandlingsansvaret for.
+          </BodyLong>
+          <BodyLong spacing>
+            Denne personvernerklæringen er knyttet til behandlingen av personopplysninger på dette nettstedet. For
+            utfyllende informasjon om hvordan NAV behandler dine personopplysninger, kan du lese mer i
+            <Link href={'https://www.nav.no/personvern'}> NAVs generelle personvernerklæring</Link>.
+          </BodyLong>
+          <Heading level="2" size="medium" spacing>
+            Informasjonskapsler
           </Heading>
           <BodyLong spacing>
             Her finner du en oversikt over FinnHjelpemiddels bruk av informasjonskapsler (cookies). Informasjonskapsler
@@ -35,9 +47,6 @@ function CookieInfo() {
             Bruk av informasjonskapsler reguleres i{' '}
             <a href={'https://lovdata.no/dokument/NL/lov/2024-12-13-76/KAPITTEL_3#KAPITTEL_3'}>ekomloven § 3-15</a>.
           </BodyLong>
-          <Heading level={'2'} size={'medium'} spacing>
-            Mer informasjon om hver informasjonskapsel
-          </Heading>
           <Heading level={'3'} size={'small'}>
             Nødvendige informasjonskapsler
           </Heading>
