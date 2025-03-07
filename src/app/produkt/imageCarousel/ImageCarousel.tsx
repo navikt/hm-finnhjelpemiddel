@@ -20,7 +20,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
     dragFree: true,
   })
 
-  const [modalIsOpen, setModalIsOpen] = useState(true)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const onThumbClick = useCallback(
     (index: number) => {
@@ -59,6 +59,8 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               <div className={styles.emblaSlide} key={index}>
                 {
                   <Image
+                    role="button"
+                    onClick={() => setModalIsOpen(true)}
                     aria-selected={true}
                     loader={largeImageLoader}
                     src={image.uri}
