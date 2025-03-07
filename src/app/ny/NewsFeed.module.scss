@@ -1,6 +1,6 @@
 @use 'src/styles/_variables' as *;
 
-.container {
+.modalContainer {
   align-self: center;
 }
 
@@ -13,4 +13,3 @@
   border-top: 6px solid $ny-nav-purple-dark;
   border-radius: 0 0 8px 8px;
 }
-

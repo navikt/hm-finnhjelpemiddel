@@ -64,8 +64,15 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
 
   if (modalIsOpen) {
     return (
-      <dialog className={styles.modalDialog} ref={dialogRef}>
-        <VStack gap={'4'} className={styles.embla}>
+      <VStack as={'dialog'} className={styles.modalDialog} ref={dialogRef}>
+        <Button
+          aria-label="Lukk"
+          variant="tertiary-neutral"
+          onClick={() => setModalIsOpen(false)}
+          icon={<XMarkIcon aria-hidden height={30} width={30} />}
+          style={{ alignSelf: 'end' }}
+        />
+        <VStack gap={'4'} className={styles.modalContainer}>
           <div className={styles.embla__viewport} ref={emblaMainRef}>
             <div className={styles.embla__container}>
               {images.map((image, index) => (
@@ -90,7 +97,6 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               <Button
                 aria-label="Forrige bilde"
                 variant="tertiary"
-                className="arrow"
                 onClick={onPrevButtonClick}
                 icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
                 disabled={prevBtnDisabled}
@@ -118,21 +124,14 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               <Button
                 aria-label="Neste bilde"
                 variant="tertiary"
-                className="arrow"
                 onClick={onNextButtonClick}
                 icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
                 disabled={nextBtnDisabled}
               />
             </HStack>
           )}
-          <Button
-            aria-label="Lukk"
-            variant="tertiary-neutral"
-            onClick={() => setModalIsOpen(false)}
-            icon={<XMarkIcon aria-hidden />}
-          />
         </VStack>
-      </dialog>
+      </VStack>
     )
   } else {
     return (
@@ -164,7 +163,6 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               <Button
                 aria-label="Forrige bilde"
                 variant="tertiary"
-                className="arrow"
                 onClick={onPrevButtonClick}
                 icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
                 disabled={prevBtnDisabled}
@@ -192,7 +190,6 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               <Button
                 aria-label="Neste bilde"
                 variant="tertiary"
-                className="arrow"
                 onClick={onNextButtonClick}
                 icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
                 disabled={nextBtnDisabled}
