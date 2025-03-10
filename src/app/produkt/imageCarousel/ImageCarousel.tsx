@@ -165,7 +165,6 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
                     <Image
                       role="button"
                       onClick={() => setModalIsOpen(true)}
-                      aria-selected={true}
                       loader={largeImageLoader}
                       src={image.uri}
                       alt={`Produktbilde ${index + 1} av ${images.length}`}
