@@ -58,6 +58,26 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
 
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaMainApi)
 
+  useEffect(() => {
+    const handleArrowKeys = (event: KeyboardEvent) => {
+      if (modalIsOpen && (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Escape')) {
+        event.preventDefault()
+        if (event.key === 'ArrowLeft') {
+          onPrevButtonClick()
+        } else if (event.key === 'ArrowRight') {
+          onNextButtonClick()
+        } else if (event.key === 'Escape') {
+          setModalIsOpen(false)
+        }
+      }
+    }
+    window.addEventListener('keydown', handleArrowKeys)
+
+    return () => {
+      window.removeEventListener('keydown', handleArrowKeys)
+    }
+  }, [modalIsOpen, onPrevButtonClick, onNextButtonClick])
+
   if (images.length === 0) {
     return <CameraIcon width={400} height={300} style={{ background: 'white' }} aria-label="Ingen bilde tilgjengelig" />
   }
