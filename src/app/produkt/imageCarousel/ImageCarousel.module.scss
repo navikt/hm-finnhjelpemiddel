@@ -78,15 +78,15 @@
   padding: 0;
 
   width: 100vw;
-  height: 100svh;
+  height: 100dvh;
   max-width: 100vw;
-  max-height: 100svh;
+  max-height: 100dvh;
 
   background-color: white;
 }
 
 .modalContainer {
-  --slide-height: 75vh;
+  --slide-height: 75dvh;
   --slide-spacing: 1rem;
   --slide-size: 100%;
   padding-top: 0;
