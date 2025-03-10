@@ -66,7 +66,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
-  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3']
+  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
 
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
@@ -328,13 +328,16 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isSitteputerAvtale = agreementId === '26542d09-61c1-49e6-80e8-eef6a9ea7faf'
   const isKommunikasjonsHjelpemidlerAvtale = agreementId === '1f74afc7-9740-41cc-8648-cd942c392d42'
   const isMRSAvtale = agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7' || agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7'
+  const isHorselNyAvtale = agreementId === '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96'
+  const isERSAvtlale = agreementId === 'eba4bfad-9f35-44c8-872a-d9f8583fa95f'
 
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
     && (isLofteplattformAvtale
       || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale
       || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale
-      || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale || isSitteputerAvtale || isKommunikasjonsHjelpemidlerAvtale || isMRSAvtale)
+      || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale || isSitteputerAvtale || isKommunikasjonsHjelpemidlerAvtale || isMRSAvtale
+      || isHorselNyAvtale || isERSAvtlale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">

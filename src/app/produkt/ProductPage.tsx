@@ -10,10 +10,11 @@ import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import { Videos } from './Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
-import { TabsIcon } from "@navikt/aksel-icons";
-import { ProductsOnPost } from "@/app/produkt/[id]/page";
-import MultipleVariantsTable from "@/app/produkt/variants/MultipleVariantsTable";
-import { SingleVariantTable } from "@/app/produkt/variants/SingleVariantTable";
+import { TabsIcon } from '@navikt/aksel-icons'
+import { ProductsOnPost } from '@/app/produkt/[id]/page'
+import MultipleVariants from '@/app/produkt/variants/MultipleVariants'
+import { SingleVariantTable } from '@/app/produkt/variants/SingleVariantTable'
+import { VariantView } from '@/app/produkt/variants/VariantView'
 
 type ProductProps = {
   product: Product
@@ -65,31 +66,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           aria-label="Tabell med egenskaper på tvers av varianter som finnes"
         >
           <div className="product-page__header_anchorOffset" id="egenskaper" tabIndex={-1}></div>
-          <Heading level="2" size="large" spacing>
-            <Link href={'#egenskaper'} className="product-page__header_anchorLink">
-              Egenskaper
-            </Link>
-          </Heading>
-          {!hmsArtNr && (
-            <div className="spacing-top--small spacing-bottom--small">
-              <NextLink
-                href={`/produkt/${product.id}/variants`}
-                className="variant-table_fullscreen-link"
-                target={'_blank'}
-              >
-                {`Åpne fullskjerm-varianttabell i ny fane`}
-                <TabsIcon aria-hidden fontSize={'1.5rem'} style={{ marginLeft: '0.5rem' }} />
-              </NextLink>
-            </div>
-          )}
-
-          {product.variants && (hmsArtNr || product.variants?.length === 1) ? (
-            <SingleVariantTable
-              variant={hmsArtNr ? product.variants.find(variant => variant.hmsArtNr === hmsArtNr)! : product.variants[0]} />
-          ) : (
-            <MultipleVariantsTable product={product} />
-          )}
-
+          <VariantView product={product} />
         </section>
 
         <section aria-label="Videolenker" className="spacing-vertical--xlarge">
@@ -131,7 +108,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
           </Bleed>
         )}
 
-        {/* TODO: Fjerne accessories && accessories.length > 0 slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
         {hasAccessories && (
           <Bleed marginInline="full" asChild reflectivePadding>
             <section
@@ -142,7 +118,6 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
             </section>
           </Bleed>
         )}
-        {/* TODO: Fjerne spareParts && spareParts.length > 0 &&  slik at section med overskrift og forklaring på at det ikke finnes noen tilbehør rendres fra komponenten */}
 
         {hasSpareParts && (
           <Bleed marginInline="full" asChild reflectivePadding>
