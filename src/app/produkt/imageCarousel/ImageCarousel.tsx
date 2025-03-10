@@ -64,7 +64,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
 
   if (modalIsOpen) {
     return (
-      <VStack as={'dialog'} className={styles.modalDialog} ref={dialogRef}>
+      <VStack as={'dialog'} className={styles.modalDialog} ref={dialogRef} align={'center'}>
         <Button
           aria-label="Lukk"
           variant="tertiary-neutral"
