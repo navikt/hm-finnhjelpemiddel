@@ -157,28 +157,35 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
     return (
       <>
         <VStack gap={'4'} className={styles.embla}>
-          <div className={styles.embla__viewport} ref={emblaMainRef}>
-            <div className={styles.embla__container}>
-              {images.map((image, index) => (
-                <div className={styles.emblaSlide} key={index}>
-                  {
-                    <Image
-                      role="button"
-                      onClick={() => setModalIsOpen(true)}
-                      loader={largeImageLoader}
-                      src={image.uri}
-                      alt={`Produktbilde ${index + 1} av ${images.length}`}
-                      fill
-                      className={styles.image}
-                    />
-                  }
-                </div>
-              ))}
+          <div style={{ position: 'relative' }}>
+            <button
+              aria-label="Gå til fullskjermmodus"
+              onClick={() => setModalIsOpen(true)}
+              className={styles.fullscreenButtonKeyboard}
+            />
+            <div className={styles.embla__viewport} ref={emblaMainRef}>
+              <div className={styles.embla__container}>
+                {images.map((image, index) => (
+                  <div className={styles.emblaSlide} key={index}>
+                    {
+                      <Image
+                        aria-label="Gå til fullskjermmodus"
+                        onClick={() => setModalIsOpen(true)}
+                        loader={largeImageLoader}
+                        src={image.uri}
+                        alt={`Produktbilde ${index + 1} av ${images.length}`}
+                        fill
+                        className={styles.image}
+                      />
+                    }
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {images.length > 1 && (
-            <HStack gap={'2'} align={'center'} justify={'center'}>
+            <HStack gap={'2'} align={'center'} justify={'center'} style={{ position: 'relative', zIndex: '100' }}>
               <Button
                 aria-label="Forrige bilde"
                 variant="tertiary"
