@@ -1,5 +1,6 @@
 import {
   AgreementInfoResponse,
+  CompatibleWithResponse,
   Hit,
   MediaResponse,
   ProductDocResponse,
@@ -47,6 +48,7 @@ export interface ProductVariant {
   status: 'INACTIVE' | 'ACTIVE'
   hmsArtNr: string | null
   supplierRef: string
+  supplierName: string | null
   articleName: string
   techData: TechData
   hasAgreement: boolean
@@ -83,9 +85,14 @@ interface Attributes {
   series?: string
   shortdescription?: string
   text?: string
-  compatibleWith?: string[]
+  compatibleWith?: CompatibleWith
   url?: string
 }
+
+interface CompatibleWith {
+  seriesIds: string[];
+  productIds: string[];
+};
 
 export interface AgreementInfo {
   id: string
@@ -238,7 +245,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
         series: product.attributes.series,
         shortdescription: product.attributes.shortdescription,
         text: product.attributes.text,
-        compatibleWith: product.attributes.compatible,
+        compatibleWith: product.attributes.compatibleWith ? mapCompatibleWith(product.attributes.compatibleWith) : undefined,
         url: product.attributes.url,
       },
       variantCount: 1,
@@ -288,7 +295,7 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
         series: firstVariant.attributes.series,
         shortdescription: firstVariant.attributes.shortdescription,
         text: firstVariant.attributes.text,
-        compatibleWith: firstVariant.attributes.compatible,
+        compatibleWith: firstVariant.attributes.compatibleWith ? mapCompatibleWith(firstVariant.attributes.compatibleWith) : undefined,
         url: firstVariant.attributes.url,
       },
       variantCount: 1,
@@ -338,7 +345,7 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
       series: firstVariant.attributes.series,
       shortdescription: firstVariant.attributes.shortdescription,
       text: firstVariant.attributes.text,
-      compatibleWith: firstVariant.attributes.compatible,
+      compatibleWith: firstVariant.attributes.compatibleWith ? mapCompatibleWith(firstVariant.attributes.compatibleWith) : undefined,
       url: firstVariant.attributes.url,
     },
     variantCount: sources.length,
@@ -386,7 +393,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
       series: firstVariant.attributes.series,
       shortdescription: firstVariant.attributes.shortdescription,
       text: firstVariant.attributes.text,
-      compatibleWith: firstVariant.attributes.compatible,
+      compatibleWith: firstVariant.attributes.compatibleWith ? mapCompatibleWith(firstVariant.attributes.compatibleWith) : undefined,
       url: firstVariant.attributes.url,
     },
     variantCount: sources.length,
@@ -416,6 +423,7 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     status: source.status,
     hmsArtNr: source.hmsArtNr,
     supplierRef: source.supplierRef,
+    supplierName: source.supplier.name || '',
     articleName: source.articleName,
     techData: mapTechDataDict(source.data),
     hasAgreement: source.hasAgreement,
@@ -461,6 +469,13 @@ const mapVideoInfo = (media: MediaResponse[]): Video[] => {
       uri: video.uri,
       text: video.text || '',
     }))
+}
+
+export const mapCompatibleWith = (compatibleWith: CompatibleWithResponse): CompatibleWith => {
+  return {
+    seriesIds: compatibleWith.seriesIds,
+    productIds: compatibleWith.productIds,
+  }
 }
 
 export const mapDocuments = (media: MediaResponse[]): Document[] => {
