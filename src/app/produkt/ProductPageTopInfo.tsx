@@ -4,11 +4,11 @@ import { Supplier } from '@/utils/supplier-util'
 import AgreementIcon from '@/components/AgreementIcon'
 import { Alert, Heading } from '@/components/aksel-client'
 
-import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import { HStack, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import KeyInformation from './KeyInformation'
-import PhotoSlider from './PhotoSlider'
 import { QrCodeComponent } from './QrCode'
+import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 
 type ProductPageTopInfoProps = {
   product: Product
@@ -28,27 +28,19 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr, hasCompatibleProducts
 
   return (
     <>
-      <HGrid
-        columns={{ xs: '1fr', md: '500px  390px' }}
+      <HStack
         aria-label="Bilder og nøkkelinformasjon"
         className={classNames('product-page__top-page-container', {
           'not-on-agreement-or-expired':
             product.agreements?.length === 0 && (!allVariantsExpiredDates || !allVariantsExpired),
         })}
         gap={{ xs: '4', md: '10' }}
-        align="center"
       >
-        <div className="product-page__photo-slider-container">
-          {product.photos && <PhotoSlider photos={product.photos} />}
-        </div>
-        <VStack gap="9" className="spacing-top--medium">
+        {product.photos && <ImageCarousel images={product.photos} />}
+        <VStack gap="9" maxWidth={'390px'}>
           <VStack gap="3">
             <Heading level="1" size="large">
-              {hmsArtNr ? (
-                product.variants[0].articleName
-              ) : (
-                product.title
-              )}
+              {hmsArtNr ? product.variants[0].articleName : product.title}
             </Heading>
             {rank && <AgreementIcon rank={rank} />}
             {(allVariantsExpiredDates || allVariantsExpired) && (
@@ -60,17 +52,13 @@ const ProductPageTopInfo = ({ product, supplier, hmsArtNr, hasCompatibleProducts
 
           <KeyInformation product={product} supplier={supplier ? supplier : null} hmsArtNr={hmsArtNr} />
           <HStack gap="3">
-            {hmsArtNr ? (
-              <QrCodeComponent value={hmsArtNr} isVariantPage />
-            ) : (
-              <QrCodeComponent value={product.id} />
-            )}
+            {hmsArtNr ? <QrCodeComponent value={hmsArtNr} isVariantPage /> : <QrCodeComponent value={product.id} />}
             {/* <Button variant="secondary" icon={<ArrowsSquarepathIcon />}>
               Sammenlign
             </Button> */}
           </HStack>
         </VStack>
-      </HGrid>
+      </HStack>
     </>
   )
 }
