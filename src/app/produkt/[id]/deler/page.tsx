@@ -19,7 +19,7 @@ export default async function PartsPage(props: Props) {
           <BodyShort textColor="subtle">/</BodyShort>
         </HStack>
       <Heading level="1" size="medium" >
-        Deler
+        Tilbehør og reservedeler
       </Heading>
       <div>
         {params.id && (
