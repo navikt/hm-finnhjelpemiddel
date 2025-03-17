@@ -8,6 +8,8 @@ import { BodyShort, CopyButton, HelpText, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { logActionEvent, logVisit } from '@/utils/amplitude'
 import { useEffect } from 'react'
+import { fetchCompatibleProducts } from "@/utils/api-util";
+import useSWR from "swr";
 
 type KeyInformationProps = {
   product: Product
@@ -23,6 +25,12 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
     //Stygt å ha dette her, men for nå en løsning på å tracke besøk til produktside fra client-komponent
     typeof window !== 'undefined' && logVisit(window.location.href, window.document.title, 'produkt')
   }, [])
+
+  const { data: compatibleWithProducts, isLoading } = useSWR(
+    product.id,
+    fetchCompatibleProducts,
+    { keepPreviousData: true }
+  )
 
   const hmsNummer =
     hms.size === 1 ? (
@@ -110,6 +118,17 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
               </Link>
             </DefinitionList.Definition>
           )}
+        </>
+      )}
+
+      {compatibleWithProducts && compatibleWithProducts.length > 0 && (
+        <>
+          <DefinitionList.Term>Deler</DefinitionList.Term>
+          <DefinitionList.Definition>
+            <Link as={NextLink} href={`${product.id}/deler`}>
+              Vis deler som passer til dette hjelpemiddelet
+            </Link>
+          </DefinitionList.Definition>
         </>
       )}
     </DefinitionList>

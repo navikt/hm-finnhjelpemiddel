@@ -2,7 +2,7 @@ import { Product } from '@/utils/product-util'
 import { Supplier } from '@/utils/supplier-util'
 import AnimateLayout from '@/components/layout/AnimateLayout'
 import { Bleed, Heading, HGrid, HStack } from '@navikt/ds-react'
-import NextLink, { default as Link } from 'next/link'
+import { default as Link } from 'next/link'
 import AccessoriesAndSparePartsInfo from './AccessoriesAndSparePartsInfo'
 import { AgreementInfo } from './AgreementInfo'
 import HmsSuggestion from './HmsSuggestion'
@@ -10,10 +10,7 @@ import ProductInformation from './ProductInformation'
 import ProductPageTopInfo from './ProductPageTopInfo'
 import { Videos } from './Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
-import { TabsIcon } from '@navikt/aksel-icons'
 import { ProductsOnPost } from '@/app/produkt/[id]/page'
-import MultipleVariants from '@/app/produkt/variants/MultipleVariants'
-import { SingleVariantTable } from '@/app/produkt/variants/SingleVariantTable'
 import { VariantView } from '@/app/produkt/variants/VariantView'
 
 type ProductProps = {
@@ -25,6 +22,7 @@ type ProductProps = {
   hmsArtNr?: string
 }
 
+
 const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts, hmsArtNr }: ProductProps) => {
   const isOnAgreement = product.agreements?.length > 0
   const hasAccessories = accessories.length > 0
@@ -34,7 +32,11 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr} />
+        <ProductPageTopInfo
+          product={product}
+          supplier={supplier}
+          hmsArtNr={hmsArtNr}
+          />
         <ProductNavigationBar
           isOnAgreement={isOnAgreement}
           hasAccessories={hasAccessories}
@@ -52,8 +54,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
                 Beskrivelse
               </Link>
             </Heading>
-            <ProductInformation product={product} />
-          </section>
+            <ProductInformation product={product} /></section>
 
           {showHMSSuggestion && (
             <aside className="spacing-top--large">

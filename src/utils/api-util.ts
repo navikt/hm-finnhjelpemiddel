@@ -1341,3 +1341,28 @@ export class CustomError extends Error {
     this.status = statusCode
   }
 }
+
+export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVariant[]> => {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            term: {
+              'attributes.compatibleWith.seriesIds': seriesId,
+            },
+          },
+        },
+      },
+      size: 100,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => mapProductsVariants(data));
+};
+
+
