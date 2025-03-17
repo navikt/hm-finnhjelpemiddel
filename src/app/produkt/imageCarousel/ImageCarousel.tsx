@@ -169,9 +169,10 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
                   <div className={styles.emblaSlide} key={index}>
                     {
                       <Image
+                        aria-label="Gå til fullskjermmodus"
                         onClick={() => setModalIsOpen(true)}
                         loader={largeImageLoader}
-                        src={'/assets/image-error.png'}
+                        src={image.uri}
                         alt={`Produktbilde ${index + 1} av ${images.length}`}
                         fill
                         className={styles.image}
