@@ -71,7 +71,7 @@ export default async function ProduktPage(props: Props) {
     ))
 
   const isAccessoryOrSparePart = product.accessory || product.sparepart
-  const matchingSeriesIds = product.attributes.compatibleWith
+  const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
 

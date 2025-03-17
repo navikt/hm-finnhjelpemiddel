@@ -14,9 +14,10 @@ type ProductPageTopInfoProps = {
   product: Product
   supplier: Supplier
   hmsArtNr?: string
+  hasCompatibleProducts?: boolean
 }
 
-const ProductPageTopInfo = ({ product, supplier, hmsArtNr }: ProductPageTopInfoProps) => {
+const ProductPageTopInfo = ({ product, supplier, hmsArtNr, hasCompatibleProducts }: ProductPageTopInfoProps) => {
   const minRank =
     product.agreements &&
     product.agreements?.length > 0 &&

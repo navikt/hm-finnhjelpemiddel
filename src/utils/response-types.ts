@@ -164,7 +164,7 @@ export interface AlternativeProductSourceResponse {
 interface AttributeResponse {
   manufacturer?: string
   articlename?: string
-  compatible?: string[]
+  compatibleWith?: CompatibleWithResponse
   series?: string
   keywords?: string[]
   shortdescription?: string
@@ -173,6 +173,11 @@ interface AttributeResponse {
   tags?: string[]
   bestillingsordning?: boolean
   digitalSoknad?: boolean
+}
+
+export interface CompatibleWithResponse {
+  seriesIds: string[]
+  productIds: string[]
 }
 
 export interface TechDataResponse {
@@ -218,6 +223,7 @@ export interface SupplierInfoResponse {
 export type MediaSourceType = 'HMDB' | 'REGISTER' | 'EXTERNALURL' | 'IMPORT' | 'UNKNOWN'
 
 export type MediaType = 'PDF' | 'IMAGE' | 'VIDEO' | 'OTHER'
+
 export interface AgreementsSourceResponse {
   id: string
   identifier: string

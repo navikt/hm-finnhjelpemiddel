@@ -1,0 +1,38 @@
+@use 'src/styles/mixins';
+
+@use '@navikt/ds-tokens/dist/tokens' as *;
+@use 'src/styles/z-index.scss' as *;
+
+.parts-page {
+
+  .parts-table {
+    thead tr > th:first-child {
+      width: 250px;
+    }
+
+    tbody th {
+      border-right: 1px solid $a-bg-subtle;
+    }
+
+    tbody .navds-table__row--shade-on-hover:hover th {
+      background-color: $a-bg-subtle;
+    }
+
+    tbody th {
+      background-color: inherit;
+    }
+
+    tr:nth-child(2n) th {
+      background-color: white;
+    }
+
+
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+  }
+
+}
+

@@ -19,7 +19,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
   return (
     <>
       <AnimateLayout>
-        <article className="spacing-top--large">
+        <article className="spacing-top--large spacing-bottom--large">
           <ProductPageTopInfo product={product} supplier={supplier} />
           <Bleed marginInline="full" asChild>
             <section className="product-page-section__container product-page-section__blue-background">
@@ -37,7 +37,7 @@ const AccessoryOrSparePartPage = ({ product, supplier, matchingProducts }: Props
                 ) : (
                   <BodyLong>
                     Det er ikke oppgitt hvilke produkter som passer til
-                    {product.accessory ? 'tilbehøret' : 'reservedelen'}
+                    {product.accessory ? ' tilbehøret' : ' reservedelen'}
                   </BodyLong>
                 )}
               </div>
