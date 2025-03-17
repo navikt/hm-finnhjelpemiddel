@@ -22,6 +22,7 @@ type ProductProps = {
   hmsArtNr?: string
 }
 
+
 const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPosts, hmsArtNr }: ProductProps) => {
   const isOnAgreement = product.agreements?.length > 0
   const hasAccessories = accessories.length > 0
@@ -31,7 +32,11 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
   return (
     <AnimateLayout>
       <div>
-        <ProductPageTopInfo product={product} supplier={supplier} hmsArtNr={hmsArtNr} />
+        <ProductPageTopInfo
+          product={product}
+          supplier={supplier}
+          hmsArtNr={hmsArtNr}
+          />
         <ProductNavigationBar
           isOnAgreement={isOnAgreement}
           hasAccessories={hasAccessories}
@@ -49,8 +54,7 @@ const ProductPage = ({ product, supplier, accessories, spareParts, productsOnPos
                 Beskrivelse
               </Link>
             </Heading>
-            <ProductInformation product={product} />
-          </section>
+            <ProductInformation product={product} /></section>
 
           {showHMSSuggestion && (
             <aside className="spacing-top--large">

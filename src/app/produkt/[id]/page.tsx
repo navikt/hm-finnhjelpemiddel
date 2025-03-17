@@ -1,4 +1,10 @@
-import { fetchProductsWithVariants, getProductsInPost, getProductWithVariants, getSupplier } from '@/utils/api-util'
+import {
+  fetchCompatibleProducts,
+  fetchProductsWithVariants,
+  getProductsInPost,
+  getProductWithVariants,
+  getSupplier
+} from '@/utils/api-util'
 // import { accessoriesMock } from '@/utils/mock-data'
 import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
@@ -8,6 +14,7 @@ import { Metadata } from 'next'
 import '../product-page.scss'
 import AccessoryOrSparePartPage from "@/app/produkt/AccessoryOrSparePartPage";
 import ProductPage from "@/app/produkt/ProductPage";
+import useSWR from "swr";
 
 export interface ProductsOnPost {
   agreementId: string
@@ -24,6 +31,7 @@ type Props = {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+
 
   return {
     title: product.title,
