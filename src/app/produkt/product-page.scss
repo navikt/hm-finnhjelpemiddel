@@ -115,6 +115,7 @@
     @include mixins.for-size(desktop-up) {
       padding-left: 10px;
     }
+
   }
 
   &__agreement-rank {
@@ -218,6 +219,16 @@
 
     .navds-label {
       text-align: left;
+    }
+  }
+
+  &__photo-slider-container {
+    height: 100%;
+
+    @include mixins.for-size(desktop-up) {
+      padding-left: $a-spacing-5;
+      padding-right: $a-spacing-5;
+      margin-top: $a-spacing-1;
     }
   }
 }

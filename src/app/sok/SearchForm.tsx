@@ -29,7 +29,7 @@ const SearchForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
   return (
     <form
       ref={formRef}
-      className="modalContainer"
+      className="container"
       role="search"
       onSubmit={formMethods.handleSubmit(onSubmit)}
       aria-controls="searchResults"
