@@ -1,0 +1,111 @@
+.embla {
+  max-width: 35rem;
+  --slide-height: 26rem;
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+  padding-top: 0.5rem;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .embla {
+    --slide-height: 16rem;
+  }
+}
+
+.embla__viewport {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
+.emblaSlide {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+  height: var(--slide-height);
+  user-select: none;
+}
+
+.emblaThumbs__viewport {
+  overflow: hidden;
+  max-width: 25rem;
+}
+
+.emblaThumbsContainer {
+  display: flex;
+  flex-direction: row;
+  margin-left: calc(-0.8rem);
+}
+
+.emblaThumbs__slide__number {
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid #aab0ba;
+  border-radius: var(--a-border-radius-medium);
+  padding: 0;
+  margin: 0;
+  display: flex;
+  cursor: pointer;
+}
+.emblaThumbs__slideSelected {
+  border: 2px solid black;
+}
+
+.image {
+  display: block;
+  object-fit: contain;
+}
+
+.thumbImage {
+  display: block;
+  object-fit: contain;
+}
+
+.thumbImageWrapper {
+  height: 4rem;
+  width: 80px;
+  position: relative;
+}
+
+.modalDialog {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  padding: 0;
+
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
+
+  background-color: white;
+}
+
+.modalContainer {
+  --slide-height: 75dvh;
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+  padding-top: 0;
+  width: 100%;
+  max-width: 1150px;
+}
+
+.closeButton {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+}
+
+.fullscreenButtonKeyboard {
+  position: absolute;
+  pointer-events: none;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  border: 0;
+}
