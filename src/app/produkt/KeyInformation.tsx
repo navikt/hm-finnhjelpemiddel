@@ -123,10 +123,10 @@ const KeyInformation = ({ product, supplier, hmsArtNr }: KeyInformationProps) =>
 
       {compatibleWithProducts && compatibleWithProducts.length > 0 && (
         <>
-          <DefinitionList.Term>Tilbehør og reservedeler</DefinitionList.Term>
+          <DefinitionList.Term>Passer sammen med</DefinitionList.Term>
           <DefinitionList.Definition>
             <Link as={NextLink} href={`${product.id}/deler`}>
-              Vis tilbehør og reservedeler som passer til dette hjelpemiddelet
+             Tilbehør og reservedeler
             </Link>
           </DefinitionList.Definition>
         </>
