@@ -57,6 +57,8 @@ export interface ProductVariant {
   agreements: AgreementInfo[]
   bestillingsordning: boolean
   digitalSoknad: Boolean
+  accessory: boolean
+  sparepart: boolean
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -432,6 +434,8 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     expired: source.expired,
     bestillingsordning: source.attributes.bestillingsordning || false,
     digitalSoknad: source.attributes.digitalSoknad || false,
+    accessory: source.accessory,
+    sparepart: source.sparepart,
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
   }
 }
