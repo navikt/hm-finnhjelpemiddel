@@ -2,7 +2,7 @@
 
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { BodyLong, BodyShort, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Box, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
@@ -12,7 +12,7 @@ import { QrCodeButton } from '@/app/ny/produkt/[id]/QrCodeButton'
 
 const ProductTop = ({ product }: { product: Product }) => {
   return (
-    <HGrid columns={2}>
+    <HGrid columns={2} className={styles.container}>
       {product.photos && <ImageCarousel images={product.photos} />}
       <ProductSummary product={product} />
     </HGrid>
@@ -30,30 +30,29 @@ const ProductSummary = ({ product }: { product: Product }) => {
   return (
     <VStack gap={'4'}>
       <HStack justify={'space-between'}>
-        {topRank && (
-          <Tag variant={'success-moderate'} style={{ width: '36px' }}>
-            R{topRank}
-          </Tag>
-        )}
+        {topRank && <Tag variant={'success-moderate'}>R{topRank}</Tag>}
         <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
           {product.supplierName}
         </Link>
       </HStack>
+
       {product.agreements.length > 1 && <BodyShort>Hjelpemiddelet er på flere delkontrakter. </BodyShort>}
       {product.agreements.length === 1 && <BodyShort>Delkontrakt {product.agreements[0].postNr}</BodyShort>}
-      <Heading level="1" size="large">
-        {product.title}
-      </Heading>
-      {product.attributes.text && htmlDescription && (
-        <div dangerouslySetInnerHTML={{ __html: product.attributes.text }} />
-      )}
-      {product.attributes.text && !htmlDescription && (
-        <BodyLong spacing className="product-page__description">
-          {product.attributes.text}
-        </BodyLong>
-      )}
+
+      <VStack gap={'2'}>
+        <Heading level="1" size="large">
+          {product.title}
+        </Heading>
+        {product.attributes.text && htmlDescription && (
+          <div dangerouslySetInnerHTML={{ __html: product.attributes.text }} />
+        )}
+        {product.attributes.text && !htmlDescription && <BodyLong>{product.attributes.text}</BodyLong>}
+      </VStack>
+
       <CopyHms product={product} />
-      <QrCodeButton id={product.id} />
+      <Box paddingBlock={'2 0'}>
+        <QrCodeButton id={product.id} />
+      </Box>
     </VStack>
   )
 }
