@@ -8,6 +8,8 @@ import { Metadata } from 'next'
 import ProductTop from '@/app/ny/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/ny/produkt/[id]/ProductMiddle'
 import { VStack } from '@navikt/ds-react'
+import { VariantView } from '@/app/produkt/variants/VariantView'
+import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
 
 export interface ProductsOnPost {
   agreementId: string
@@ -83,6 +85,7 @@ export default async function ProduktPage(props: Props) {
         <BackButton />
         <ProductTop product={product} />
         <ProductMiddle product={product} />
+        <VariantTable product={product} />
       </VStack>
     </div>
   )
