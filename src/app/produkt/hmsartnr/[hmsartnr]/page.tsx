@@ -70,13 +70,13 @@ export default async function ProduktPage(props: Props) {
       })
     ))
 
-  const isAccessoryOrSparePart = product.accessory || product.sparepart
+  const isAccessoryOrSparePart = product.accessory || product.sparePart
   const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
 
   const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
-  const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
+  const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparePart)) || []
 
   return (
     <div className="main-wrapper--large product-page">

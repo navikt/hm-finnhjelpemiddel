@@ -75,7 +75,7 @@ export default async function ProduktPage(props: Props) {
       })
     ))
 
-  const isAccessoryOrSparePart = product.accessory || product.sparepart
+  const isAccessoryOrSparePart = product.accessory || product.sparePart
   const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
@@ -83,7 +83,7 @@ export default async function ProduktPage(props: Props) {
   const accessories = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.accessory)) || []
   // Kommenter ut den over og bruk den under for å se tilbehør på produktside (når man bruker mock)
   // const accessories = (!isAccessoryOrSparePart && matchingProducts) || []
-  const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparepart)) || []
+  const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparePart)) || []
 
   return (
     <div className="main-wrapper--large product-page">

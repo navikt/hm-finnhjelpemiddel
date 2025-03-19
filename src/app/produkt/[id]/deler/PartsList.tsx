@@ -70,7 +70,7 @@ export const PartsList = ({ seriesId }: Props) => {
     if (selectedFilterOption === ProductFilterOption.ACCESSORIES) {
       return product.accessory
     } else if (selectedFilterOption === ProductFilterOption.SPAREPART) {
-      return product.sparepart
+      return product.sparePart
     }
     return true
   })
@@ -125,7 +125,7 @@ export const PartsList = ({ seriesId }: Props) => {
                   <Table.DataCell>{product.articleName}</Table.DataCell>
                   <Table.DataCell>{product.supplierName}</Table.DataCell>
                   <Table.DataCell>{product.supplierRef}</Table.DataCell>
-                  <Table.DataCell>{product.sparepart ?
+                  <Table.DataCell>{product.sparePart ?
                     <WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} /> :
                     <PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}</Table.DataCell>
                 </Table.Row>

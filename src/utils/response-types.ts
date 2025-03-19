@@ -103,7 +103,7 @@ export interface ProductSourceResponse {
   isoCategoryTitleInternational: string
   isoCategoryText: string
   accessory: boolean
-  sparepart: boolean
+  sparePart: boolean
   seriesId: string
   data: Array<TechDataResponse>
   media: MediaResponse[]
@@ -145,7 +145,7 @@ export interface AlternativeProductSourceResponse {
   isoCategoryText: string
   isoCategoryTitleInternational: string
   accessory: boolean
-  sparepart: boolean
+  sparePart: boolean
   seriesId: string
   data: Array<TechDataResponse>
   media: MediaResponse[]
