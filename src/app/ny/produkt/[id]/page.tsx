@@ -82,7 +82,7 @@ export default async function ProduktPage(props: Props) {
       <VStack gap={'2'}>
         <BackButton />
         <ProductTop product={product} />
-        <ProductMiddle />
+        <ProductMiddle product={product} />
       </VStack>
     </div>
   )
