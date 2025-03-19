@@ -1,11 +1,9 @@
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, Heading, HelpText, HStack, Link, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, HelpText, Hide, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
+import { ArrowDownRightIcon } from '@navikt/aksel-icons'
 
-type GeneralProductInformationProps = {
-  product: Product
-}
-export const GeneralProductInformation = ({ product }: GeneralProductInformationProps) => {
+export const GeneralProductInformation = ({ product }: { product: Product }) => {
   const description = product.attributes.text
   const bestillingsordning = new Set(product.variants.map((p) => p.bestillingsordning))
   const digitalsoknad = new Set(product.variants.map((p) => p.digitalSoknad))
@@ -29,17 +27,16 @@ export const GeneralProductInformation = ({ product }: GeneralProductInformation
         helpText={helpTextSoknad}
         sett={digitalsoknad}
       />
-
-      <Heading size={'xsmall'} level={'4'}>
-        ISO-kategori (kode)
-      </Heading>
+      <ISOCategory
+        isoCategory={product.isoCategory}
+        isoCategoryTitle={product.isoCategoryTitle}
+        isoCategoryTitleInternational={product.isoCategoryTitleInternational}
+      />
     </VStack>
   )
 }
-type DescriptionProps = {
-  description: string | undefined
-}
-const Description = ({ description }: DescriptionProps) => {
+
+const Description = ({ description }: { description: string | undefined }) => {
   const htmlDescription = description && containsHTML(description) && validateHTML(description)
   return (
     <>
@@ -56,6 +53,7 @@ const Description = ({ description }: DescriptionProps) => {
     </>
   )
 }
+
 type BestillingsordningBehovsmeldingProps = {
   heading: string
   helpText: string
@@ -84,6 +82,36 @@ const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bestilling
         <HelpText placement="right">{helpText}</HelpText>
       </HStack>
       {bestillingsordning}
+    </>
+  )
+}
+
+type ISOCategoryProps = {
+  isoCategory: string
+  isoCategoryTitle: string
+  isoCategoryTitleInternational: string
+}
+const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInternational }: ISOCategoryProps) => {
+  return (
+    <>
+      <Heading size={'xsmall'} level={'4'}>
+        ISO-kategori (kode)
+      </Heading>
+      <HStack gap={'1'}>
+        <BodyShort>
+          <i>Nivå 3: </i>
+        </BodyShort>
+        <BodyShort size="medium">{isoCategoryTitleInternational + ' (' + isoCategory.slice(0, 6) + ')'}</BodyShort>
+      </HStack>
+      <HStack gap="1">
+        <Hide below="sm">
+          <ArrowDownRightIcon fontSize="1.5rem" aria-hidden />
+        </Hide>
+        <BodyShort>
+          <i>Nivå 4: </i>{' '}
+        </BodyShort>
+        <BodyShort size="medium"> {isoCategoryTitle + ' (' + isoCategory + ')'}</BodyShort>
+      </HStack>
     </>
   )
 }
