@@ -10,7 +10,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
     <Bleed marginInline="full" asChild reflectivePadding>
       <VStack gap={'14'} className="nav-bunn nav-bunn__info">
         <HStack as={Link} href="#" gap={'2'}>
-          <ArrowUpIcon fontSize={24} /> <BodyShort size="large">Til toppen</BodyShort>
+          <ArrowUpIcon fontSize={24} aria-hidden /> <BodyShort size="large">Til toppen</BodyShort>
         </HStack>
         <div className={styles.footerLinks}>
           <VStack gap={'4'} className={styles.footerLinkGroup}>
