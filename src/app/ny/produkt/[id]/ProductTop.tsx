@@ -1,10 +1,14 @@
+'use client'
+
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { BodyLong, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
-import AgreementIcon from '@/components/AgreementIcon'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
+import { logActionEvent } from '@/utils/amplitude'
+import { QrCodeButton } from '@/app/ny/produkt/[id]/QrCodeButton'
 
 const ProductTop = ({ product }: { product: Product }) => {
   return (
@@ -35,6 +39,8 @@ const ProductSummary = ({ product }: { product: Product }) => {
           {product.supplierName}
         </Link>
       </HStack>
+      {product.agreements.length > 1 && <BodyShort>Hjelpemiddelet er på flere delkontrakter. </BodyShort>}
+      {product.agreements.length === 1 && <BodyShort>Delkontrakt {product.agreements[0].postNr}</BodyShort>}
       <Heading level="1" size="large">
         {product.title}
       </Heading>
@@ -45,6 +51,44 @@ const ProductSummary = ({ product }: { product: Product }) => {
         <BodyLong spacing className="product-page__description">
           {product.attributes.text}
         </BodyLong>
+      )}
+      <CopyHms product={product} />
+      <QrCodeButton id={product.id} />
+    </VStack>
+  )
+}
+
+const CopyHms = ({ product }: { product: Product }) => {
+  const hmsArtNumbers = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
+
+  if (hmsArtNumbers.size === 0) {
+    return <></>
+  }
+
+  return (
+    <VStack gap={'2'} align={'start'}>
+      <Heading level="3" size="small">
+        Kopier HMS-nummer
+      </Heading>
+      {hmsArtNumbers.size === 1 && (
+        <CopyButton
+          size="medium"
+          className={styles.copyButton}
+          copyText={[...hmsArtNumbers.values()][0] || ''}
+          text={[...hmsArtNumbers.values()][0] || ''}
+          activeText="kopiert"
+          variant="action"
+          activeIcon={<ThumbUpIcon aria-hidden />}
+          iconPosition="right"
+          onClick={() => logActionEvent('kopier')}
+        />
+      )}
+      {hmsArtNumbers.size > 1 && (
+        <BodyShort>
+          <Link as={NextLink} href="#variants-table">
+            Se tabell med varianter
+          </Link>
+        </BodyShort>
       )}
     </VStack>
   )
