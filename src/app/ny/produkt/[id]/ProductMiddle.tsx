@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Bleed, BodyShort, Box, Button, Heading, HGrid, Table, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyShort, Box, Button, Heading, HGrid, HStack, Table, VStack } from '@navikt/ds-react'
 import { ChevronRightIcon, LayersPlusIcon } from '@navikt/aksel-icons'
 import styles from './productmiddle.module.scss'
 import { Product } from '@/utils/product-util'
@@ -16,10 +16,14 @@ const ProductMiddle = ({ product }: Props) => {
   return (
     <Bleed reflectivePadding marginInline="full" className={styles.middleContainer}>
       <HGrid gap={'8'} columns={2}>
-        <ProductInformation product={product} />
-        <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
-        <SharedVariantDataTable2 commonDataRows={commonDataRows} />
-        <OtherProductsOnPost postName={post} postLink={'testpost'} />
+        <VStack gap={'4'}>
+          <ProductInformation product={product} />
+          <SharedVariantDataTable2 commonDataRows={commonDataRows} />
+        </VStack>
+        <VStack gap={'4'}>
+          <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
+          <OtherProductsOnPost postName={post} postLink={'testpost'} />
+        </VStack>
       </HGrid>
     </Bleed>
   )
