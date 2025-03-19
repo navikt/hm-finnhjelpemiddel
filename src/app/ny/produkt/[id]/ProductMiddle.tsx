@@ -12,7 +12,6 @@ type Props = {
 
 const ProductMiddle = ({ product }: Props) => {
   const commonDataRows = { ['key']: 'value', ['key2']: 'value', ['key3']: 'value', ['key4']: 'value' }
-  const post = product.agreements[0].postTitle
   return (
     <Bleed reflectivePadding marginInline="full" className={styles.middleContainer}>
       <HGrid gap={'8'} columns={2}>
@@ -22,7 +21,9 @@ const ProductMiddle = ({ product }: Props) => {
         </VStack>
         <VStack gap={'4'}>
           <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
-          <OtherProductsOnPost postName={post} postLink={'testpost'} />
+          {product.agreements.length > 0 && (
+            <OtherProductsOnPost postName={product.agreements[0].postTitle} postLink={'testpost'} />
+          )}
         </VStack>
       </HGrid>
     </Bleed>
