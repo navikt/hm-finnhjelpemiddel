@@ -1,23 +1,23 @@
 'use client'
 
-import { Alert, Bleed, BodyShort, Box, Button, Heading, HGrid, HStack, Table, VStack } from '@navikt/ds-react'
+import { Bleed, BodyShort, Button, Heading, HGrid, VStack } from '@navikt/ds-react'
 import { ChevronRightIcon, LayersPlusIcon } from '@navikt/aksel-icons'
 import styles from './productmiddle.module.scss'
 import { Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/ny/produkt/[id]/ProductInformation'
+import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataTable'
 
 type Props = {
   product: Product
 }
 
 const ProductMiddle = ({ product }: Props) => {
-  const commonDataRows = { ['key']: 'value', ['key2']: 'value', ['key3']: 'value', ['key4']: 'value' }
   return (
     <Bleed reflectivePadding marginInline="full" className={styles.middleContainer}>
       <HGrid gap={'8'} columns={2}>
         <VStack gap={'4'}>
           <ProductInformation product={product} />
-          <SharedVariantDataTable2 commonDataRows={commonDataRows} />
+          <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
         </VStack>
         <VStack gap={'4'}>
           <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
@@ -44,40 +44,6 @@ const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPar
       <Button variant={'secondary'} icon={<LayersPlusIcon />} style={{ width: 'fit-content' }}>
         Tilbehør og reservedeler
       </Button>
-    </VStack>
-  )
-}
-
-interface SharedVariantDataTableProps {
-  commonDataRows: { [key: string]: string }
-}
-
-const SharedVariantDataTable2 = ({ commonDataRows }: SharedVariantDataTableProps) => {
-  return (
-    <VStack>
-      <Heading level="3" size="small">
-        Felles egenskaper for denne serien
-      </Heading>
-      <Box paddingBlock="4">
-        {Object.keys(commonDataRows).length === 0 ? (
-          <Alert variant={'info'} inline>
-            Ingen felles egenskaper
-          </Alert>
-        ) : (
-          <Table className={styles.commonAttributes}>
-            <Table.Body>
-              {Object.entries(commonDataRows).map(([key, row]) => {
-                return (
-                  <Table.Row key={key}>
-                    <Table.HeaderCell>{key}</Table.HeaderCell>
-                    <Table.DataCell>{row}</Table.DataCell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
-        )}
-      </Box>
     </VStack>
   )
 }
