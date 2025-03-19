@@ -24,7 +24,7 @@ export interface Product {
   isoCategoryTitleInternational: string
   isoCategoryText: string
   accessory: boolean
-  sparepart: boolean
+  sparePart: boolean
   photos: Photo[]
   videos: Video[]
   documents: Document[]
@@ -58,7 +58,7 @@ export interface ProductVariant {
   bestillingsordning: boolean
   digitalSoknad: Boolean
   accessory: boolean
-  sparepart: boolean
+  sparePart: boolean
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -261,7 +261,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
       isoCategoryTitleInternational: product.isoCategoryTitleInternational,
       isoCategoryText: product.isoCategoryText,
       accessory: product.accessory,
-      sparepart: product.sparepart,
+      sparePart: product.sparePart,
       photos: mapPhotoInfo(product.media),
       videos: mapVideoInfo(product.media),
       documents: mapDocuments(product.media),
@@ -311,7 +311,7 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
       isoCategoryText: firstVariant.isoCategoryText,
       isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
       accessory: firstVariant.accessory,
-      sparepart: firstVariant.sparepart,
+      sparePart: firstVariant.sparePart,
       photos: mapPhotoInfo(firstVariant.media),
       videos: mapVideoInfo(firstVariant.media),
       documents: mapDocuments(firstVariant.media),
@@ -361,7 +361,7 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
     isoCategoryText: firstVariant.isoCategoryText,
     isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
     accessory: firstVariant.accessory,
-    sparepart: firstVariant.sparepart,
+    sparePart: firstVariant.sparePart,
     photos: mapPhotoInfo(firstVariant.media),
     videos: mapVideoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
@@ -409,7 +409,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     isoCategoryText: firstVariant.isoCategoryText,
     isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
     accessory: firstVariant.accessory,
-    sparepart: firstVariant.sparepart,
+    sparePart: firstVariant.sparePart,
     photos: mapPhotoInfo(firstVariant.media),
     videos: mapVideoInfo(firstVariant.media),
     documents: mapDocuments(firstVariant.media),
@@ -435,7 +435,7 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     bestillingsordning: source.attributes.bestillingsordning || false,
     digitalSoknad: source.attributes.digitalSoknad || false,
     accessory: source.accessory,
-    sparepart: source.sparepart,
+    sparePart: source.sparePart,
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
   }
 }

@@ -58,7 +58,7 @@ export const accessoriesMock: Product[] = [
         bestillingsordning: false,
         digitalSoknad: false,
         supplierName: 'Levereandør AS',
-        sparepart: false,
+        sparePart: false,
         accessory: false,
       },
     ],
@@ -69,7 +69,7 @@ export const accessoriesMock: Product[] = [
       'Hjelpemidler for å ta imot eller sende informasjon med elektromagnetiske bølger i teleslyngesystemer. Hørselshjelpemidler, se 22 06.',
     isoCategoryTitleInternational: 'Induction loop amplifiers',
     accessory: false,
-    sparepart: false,
+    sparePart: false,
     photos: [{ uri: 'orig/52674.jpg' }],
     videos: [
       {
