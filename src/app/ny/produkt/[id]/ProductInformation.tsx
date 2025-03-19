@@ -1,6 +1,8 @@
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
 import { Product } from '@/utils/product-util'
 import { GeneralProductInformation } from '@/app/ny/produkt/[id]/GeneralProductInformation'
+import { Videos } from '@/app/produkt/Video'
+import { Documents } from '@/app/produkt/[id]/Documents'
 
 type ProductInformationProps = {
   product: Product
@@ -22,13 +24,17 @@ export const ProductInformation = ({ product }: ProductInformationProps) => {
       <Accordion>
         <Accordion.Item>
           <Accordion.Header>Video</Accordion.Header>
-          <Accordion.Content>Hei</Accordion.Content>
+          <Accordion.Content>
+            <Videos videos={product.videos} />
+          </Accordion.Content>
         </Accordion.Item>
       </Accordion>
       <Accordion>
         <Accordion.Item>
           <Accordion.Header>Dokumenter</Accordion.Header>
-          <Accordion.Content>png</Accordion.Content>
+          <Accordion.Content>
+            <Documents documents={product.documents} />
+          </Accordion.Content>
         </Accordion.Item>
       </Accordion>
     </VStack>
