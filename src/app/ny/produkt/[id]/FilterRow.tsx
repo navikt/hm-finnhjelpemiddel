@@ -8,7 +8,7 @@ type Props = {
   filterNames: string[]
 }
 
-export const FilterTull = ({ rows, filterNames }: Props) => {
+export const FilterRow = ({ rows, filterNames }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()

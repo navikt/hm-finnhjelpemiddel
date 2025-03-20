@@ -19,7 +19,7 @@ import { VariantSupplierRefRow } from '@/app/produkt/variants/VariantSupplierRef
 import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { VariantTechnicalDataRow } from '@/app/produkt/variants/VariantTechnicalDataRow'
-import { FilterTull } from '@/app/ny/produkt/[id]/FilterTull'
+import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
 
 export type SortColumns = {
   orderBy: string | null
@@ -178,7 +178,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
         <>
           <Box paddingBlock="4">
             <VariantFilters product={product} />
-            <FilterTull rows={rows} filterNames={filterNames} />
+            <FilterRow rows={rows} filterNames={filterNames} />
             <Heading level="3" size="small" className="spacing-vertical--small">
               {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
             </Heading>
