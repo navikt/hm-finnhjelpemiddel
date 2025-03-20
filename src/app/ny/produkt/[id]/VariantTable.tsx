@@ -19,6 +19,7 @@ import { VariantSupplierRefRow } from '@/app/produkt/variants/VariantSupplierRef
 import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { VariantTechnicalDataRow } from '@/app/produkt/variants/VariantTechnicalDataRow'
+import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
 
 export type SortColumns = {
   orderBy: string | null
@@ -61,7 +62,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
 
-  const productVariantsToShow = productWithFilteredVariants
+  const productVariantsToShowPre = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
       ? searchTermMatchesHms
         ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
@@ -70,6 +71,29 @@ export const VariantTable = ({ product }: { product: Product }) => {
           : productWithFilteredVariants[0].variants
       : []
     : product.variants
+
+  const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
+    let filterResults: boolean[] = []
+
+    if (searchParams.get('Setedybde')) {
+      const seteDybdeMin = parseInt(variant.techData['Setedybde min'].value)
+      const seteDybdeMax = parseInt(variant.techData['Setedybde maks'].value)
+
+      const searchTarget = parseInt(searchParams.get('Setedybde')!.split(' ')[0])
+
+      filterResults.push(seteDybdeMin <= searchTarget && searchTarget <= seteDybdeMax)
+    }
+
+    if (searchParams.get('Setebredde')) {
+      const seteBredde = parseInt(variant.techData['Setebredde'].value)
+
+      const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
+
+      filterResults.push(searchTarget === seteBredde)
+    }
+
+    return filterResults.every((result) => result)
+  })
 
   useEffect(() => {
     if (variantNameElementRef.current) {
@@ -141,6 +165,11 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
   const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
+  const setedybde = 'Setedybde'
+  const setebredde = 'Setebredde'
+  const setehoyde = 'Setehøyde'
+  const filterNames = [setedybde, setebredde, setehoyde]
+
   return (
     <>
       {product.variants.length === 1 ? (
@@ -149,6 +178,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
         <>
           <Box paddingBlock="4">
             <VariantFilters product={product} />
+            <FilterRow rows={rows} filterNames={filterNames} />
             <Heading level="3" size="small" className="spacing-vertical--small">
               {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
             </Heading>
