@@ -19,6 +19,7 @@ import { VariantSupplierRefRow } from '@/app/produkt/variants/VariantSupplierRef
 import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { VariantTechnicalDataRow } from '@/app/produkt/variants/VariantTechnicalDataRow'
+import { FilterTull } from '@/app/ny/produkt/[id]/FilterTull'
 
 export type SortColumns = {
   orderBy: string | null
@@ -141,6 +142,11 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
   const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
+  const setedybde = 'Setedybde'
+  const setebredde = 'Setebredde'
+  const setehoyde = 'Setehøyde'
+  const filterNames = [setedybde, setebredde, setehoyde]
+
   return (
     <>
       {product.variants.length === 1 ? (
@@ -149,6 +155,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
         <>
           <Box paddingBlock="4">
             <VariantFilters product={product} />
+            <FilterTull rows={rows} filterNames={filterNames} />
             <Heading level="3" size="small" className="spacing-vertical--small">
               {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
             </Heading>
