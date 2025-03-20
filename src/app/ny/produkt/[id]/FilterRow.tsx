@@ -15,15 +15,33 @@ export const FilterRow = ({ rows, filterNames }: Props) => {
 
   const filters: { [key: string]: string[] } = Object.assign(
     {},
-    ...filterNames.map((name) => ({
-      [name]: Array.from(
-        new Set(
-          Object.entries(rows)
-            .filter(([key, _]) => key.startsWith(name))
-            .flatMap(([_, value]) => value)
-        )
-      ).sort(),
-    }))
+    ...filterNames.map((name) => {
+      if (Object.entries(rows).filter(([key, _]) => key.startsWith(name)).length > 1) {
+        //Størrelsefelt har min og maks
+
+        const allValues = Object.entries(rows)
+          .filter(([key, _]) => key.startsWith(name))
+          .flatMap(([_, value]) => value)
+          .map((value) => parseInt(value))
+
+        const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
+        const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
+
+        return {
+          [name]: valueIntervals.map((value) => `${value} cm`),
+        }
+      }
+
+      return {
+        [name]: Array.from(
+          new Set(
+            Object.entries(rows)
+              .filter(([key, _]) => key === name)
+              .flatMap(([_, value]) => value)
+          )
+        ).sort(),
+      }
+    })
   )
 
   const createQueryString = useCallback(

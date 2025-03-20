@@ -1,7 +1,7 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import useSWR from 'swr'
@@ -62,15 +62,24 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
 
-  const productVariantsToShowPre = productWithFilteredVariants
-    ? productWithFilteredVariants.length > 0
-      ? searchTermMatchesHms
-        ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
-        : searchTermMatchesSupplierRef
-          ? productWithFilteredVariants[0].variants.filter((variant) => variant.supplierRef === searchData.searchTerm)
-          : productWithFilteredVariants[0].variants
-      : []
-    : product.variants
+  const productVariantsToShowPre = useMemo(
+    () =>
+      product.variants.length > 1
+        ? productWithFilteredVariants
+          ? productWithFilteredVariants.length > 0
+            ? searchTermMatchesHms
+              ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
+              : searchTermMatchesSupplierRef
+                ? productWithFilteredVariants[0].variants.filter(
+                    (variant) => variant.supplierRef === searchData.searchTerm
+                  )
+                : productWithFilteredVariants[0].variants
+            : []
+          : product.variants
+        : product.variants,
+
+    [product.variants, productWithFilteredVariants]
+  )
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
     let filterResults: boolean[] = []
@@ -168,7 +177,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const setedybde = 'Setedybde'
   const setebredde = 'Setebredde'
   const setehoyde = 'Setehøyde'
-  const filterNames = [setedybde, setebredde, setehoyde]
+  const filterNames = [setebredde, setedybde, setehoyde]
 
   return (
     <>
