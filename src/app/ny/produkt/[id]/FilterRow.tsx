@@ -1,7 +1,7 @@
 import { Button, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import styles from './FilterTull.module.scss'
+import styles from './FilterRow.module.scss'
 
 type Props = {
   rows: { [key: string]: string[] }
