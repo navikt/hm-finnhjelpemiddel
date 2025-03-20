@@ -16,8 +16,8 @@ export const FilterRow = ({ rows, filterNames }: Props) => {
   const filters: { [key: string]: string[] } = Object.assign(
     {},
     ...filterNames.map((name) => {
-      if (Object.entries(rows).filter(([key, _]) => key.startsWith(name)).length > 1) {
-        //Størrelsefelt har min og maks
+      if (Object.entries(rows).filter(([key, _]) => key === `${name} maks` || key === `${name} min`).length === 2) {
+        //Størrelsefelt har min og maks, vises som intervaller på 1 cm
 
         const allValues = Object.entries(rows)
           .filter(([key, _]) => key.startsWith(name))
