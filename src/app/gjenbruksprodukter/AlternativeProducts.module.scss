@@ -3,6 +3,10 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 @use 'src/styles/_variables' as *;
 
+.container {
+  padding-bottom: 32px;
+}
+
 .headerColor {
   color: $ny-nav-purple-dark;
 }

@@ -2,7 +2,7 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, HStack, ReadMore, Search, Select } from '@navikt/ds-react'
+import { BodyShort, HStack, ReadMore, Search, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
@@ -97,7 +97,7 @@ export default function AlternativeProductsPage() {
   }
 
   return (
-    <div className={`${styles.container} main-wrapper--large`}>
+    <VStack gap={'4'} className={`${styles.container} main-wrapper--large`}>
       <Heading level="1" size="large" className={styles.headerColor}>
         Finn gjenbruksprodukt
       </Heading>
@@ -165,6 +165,6 @@ export default function AlternativeProductsPage() {
       {searchParams.has('hms') && (
         <AlternativeProductList hmsNumber={searchParams.get('hms')!} selectedWarehouse={selectedWarehouse} />
       )}
-    </div>
+    </VStack>
   )
 }
