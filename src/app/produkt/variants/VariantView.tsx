@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, TabsIcon } from '@navikt/aksel-icons'
 import { Alert, Box, Heading, Table } from '@navikt/ds-react'
 import { fetchProducts } from '@/utils/api-util'
@@ -63,15 +63,23 @@ export const VariantView = ({ product }: { product: Product }) => {
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
 
-  const productVariantsToShow = productWithFilteredVariants
-    ? productWithFilteredVariants.length > 0
-      ? searchTermMatchesHms
-        ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
-        : searchTermMatchesSupplierRef
-          ? productWithFilteredVariants[0].variants.filter((variant) => variant.supplierRef === searchData.searchTerm)
-          : productWithFilteredVariants[0].variants
-      : []
-    : product.variants
+  const productVariantsToShow = useMemo(
+    () =>
+      product.variants.length > 1
+        ? productWithFilteredVariants
+          ? productWithFilteredVariants.length > 0
+            ? searchTermMatchesHms
+              ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
+              : searchTermMatchesSupplierRef
+                ? productWithFilteredVariants[0].variants.filter(
+                    (variant) => variant.supplierRef === searchData.searchTerm
+                  )
+                : productWithFilteredVariants[0].variants
+            : []
+          : product.variants
+        : product.variants,
+    [product.variants, productWithFilteredVariants]
+  )
 
   useEffect(() => {
     if (variantNameElementRef.current) {
