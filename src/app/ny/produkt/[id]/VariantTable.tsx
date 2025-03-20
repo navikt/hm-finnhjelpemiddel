@@ -62,7 +62,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
   const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
 
-  const productVariantsToShow = productWithFilteredVariants
+  const productVariantsToShowPre = productWithFilteredVariants
     ? productWithFilteredVariants.length > 0
       ? searchTermMatchesHms
         ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
@@ -71,6 +71,29 @@ export const VariantTable = ({ product }: { product: Product }) => {
           : productWithFilteredVariants[0].variants
       : []
     : product.variants
+
+  const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
+    let filterResults: boolean[] = []
+
+    if (searchParams.get('Setedybde')) {
+      const seteDybdeMin = parseInt(variant.techData['Setedybde min'].value)
+      const seteDybdeMax = parseInt(variant.techData['Setedybde maks'].value)
+
+      const searchTarget = parseInt(searchParams.get('Setedybde')!.split(' ')[0])
+
+      filterResults.push(seteDybdeMin <= searchTarget && searchTarget <= seteDybdeMax)
+    }
+
+    if (searchParams.get('Setebredde')) {
+      const seteBredde = parseInt(variant.techData['Setebredde'].value)
+
+      const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
+
+      filterResults.push(searchTarget === seteBredde)
+    }
+
+    return filterResults.every((result) => result)
+  })
 
   useEffect(() => {
     if (variantNameElementRef.current) {
