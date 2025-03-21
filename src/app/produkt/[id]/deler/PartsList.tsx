@@ -31,6 +31,9 @@ export const PartsList = ({ seriesId }: Props) => {
 
   const [filteredProducts, setFilteredProducts] = useState<ProductVariant[]>([])
 
+  const [spareParts, setSpareParts] = useState<ProductVariant[]>([])
+  const [accessories, setAccessories] = useState<ProductVariant[]>([])
+
   const onSearch = () => {
     router.replace(`${pathname}?searchTerm=${inputValue}`, { scroll: false })
     setFilteredProducts(data?.filter(product =>
@@ -45,14 +48,18 @@ export const PartsList = ({ seriesId }: Props) => {
 
   const { data, isLoading } = useSWR(seriesId, fetchCompatibleProducts, { keepPreviousData: true })
 
+
+  useEffect(() => {
+    if (data) {
+      setSpareParts(data.filter(product => product.sparePart))
+      setAccessories(data.filter(product => product.accessory))
+    }
+  }, [data]);
+
   useEffect(() => {
     if (data) setFilteredProducts(data);
   }, [data]);
 
-  const filteredData = filteredProducts.filter(product =>
-    selectedFilterOption === ProductFilterOption.ACCESSORIES ? product.accessory :
-      selectedFilterOption === ProductFilterOption.SPAREPART ? product.sparePart : true
-  )
 
   if (isLoading) return <Loader />
 
@@ -84,19 +91,23 @@ export const PartsList = ({ seriesId }: Props) => {
         <Box paddingBlock="4">
           <Tabs value={selectedFilterOption} onChange={value => handleFilterChange(value as ProductFilterOption)}>
             <Tabs.List>
-              <Tabs.Tab value="ACCESSORIES" label="Tilbehør"
-                        icon={<PackageIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
-              <Tabs.Tab value="SPAREPART" label="Reservedeler"
-                        icon={<WrenchIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+              <Tabs.Tab
+                value={ProductFilterOption.ACCESSORIES}
+                label={`Tilbehør (${accessories.length}) `}
+                icon={<PackageIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+              <Tabs.Tab
+                value={ProductFilterOption.SPAREPART}
+                label={`Reservedeler (${spareParts.length}) `}
+                icon={<WrenchIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
             </Tabs.List>
-            <Tabs.Panel value="ACCESSORIES" className="h-24 w-full bg-gray-50 p-4">
+            <Tabs.Panel value={ProductFilterOption.ACCESSORIES} className="h-24 w-full bg-gray-50 p-4">
               <Box paddingBlock="4">
-                <PartsAccessoriesList products={filteredData} />
+                <PartsAccessoriesList products={accessories} />
               </Box>
             </Tabs.Panel>
-            <Tabs.Panel value="SPAREPART" className="h-24 w-full bg-gray-50 p-4">
+            <Tabs.Panel value={ProductFilterOption.SPAREPART} className="h-24 w-full bg-gray-50 p-4">
               <Box paddingBlock="4">
-                <PartsAccessoriesList products={filteredData} />
+                <PartsAccessoriesList products={spareParts} />
               </Box>
             </Tabs.Panel>
           </Tabs>
