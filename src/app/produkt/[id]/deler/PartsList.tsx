@@ -2,11 +2,12 @@
 
 import useSWR from "swr";
 import { fetchCompatibleProducts } from "@/utils/api-util";
-import { HGrid, Loader, Search, Table, ToggleGroup } from "@navikt/ds-react";
+import { Box, HGrid, Loader, Search, Tabs } from "@navikt/ds-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ProductVariant } from "@/utils/product-util";
 import { PackageIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { PartsAccessoriesList } from "@/app/produkt/[id]/deler/PartsAccessoriesList";
 
 interface Props {
   seriesId: string
@@ -20,8 +21,9 @@ export const PartsList = ({ seriesId }: Props) => {
   const pathname = usePathname()
 
   const [selectedFilterOption, setSelectedFilterOption] = useState<ProductFilterOption>(
-    searchParams.get("filter") ? (searchParams.get("filter") as ProductFilterOption) : ProductFilterOption.ALL,
+    searchParams.get("filter") ? (searchParams.get("filter") as ProductFilterOption) : ProductFilterOption.SPAREPART,
   );
+
 
   const handeFilterChange = (filter: ProductFilterOption) => {
     setSelectedFilterOption(filter);
@@ -50,7 +52,7 @@ export const PartsList = ({ seriesId }: Props) => {
       scroll: false,
     })
 
-      setFilteredProducts(data ?? [])
+    setFilteredProducts(data ?? [])
 
   }
 
@@ -81,6 +83,8 @@ export const PartsList = ({ seriesId }: Props) => {
 
   return (
     <div>
+
+
       <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: '600px' }} marginBlock="7 3"
              align="end">
         <Search
@@ -97,70 +101,37 @@ export const PartsList = ({ seriesId }: Props) => {
             onClear()
           }}
         />
-        <ToggleGroup
-          value={selectedFilterOption}
-          onChange={(value) => handeFilterChange(value as ProductFilterOption)}
-          fill>
-          <ToggleGroup.Item value={ProductFilterOption.ALL} label="Alle" />
-          <ToggleGroup.Item value={ProductFilterOption.ACCESSORIES} label="Tilbehør" />
-          <ToggleGroup.Item value={ProductFilterOption.SPAREPART} label="Reservedeler" />
-        </ToggleGroup>
       </HGrid>
 
-      {(!inputValue || inputValue.length === 0) && data && data.length > 0 ? (
-        <Table zebraStripes>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Leverandørnavn</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Lev-artnr</Table.HeaderCell>
-              <Table.HeaderCell scope="col"></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {filteredData.map((product) => (
-                <Table.Row key={product.id}>
-                  <Table.DataCell>{product.hmsArtNr}</Table.DataCell>
-                  <Table.DataCell>{product.articleName}</Table.DataCell>
-                  <Table.DataCell>{product.supplierName}</Table.DataCell>
-                  <Table.DataCell>{product.supplierRef}</Table.DataCell>
-                  <Table.DataCell>{product.sparePart ?
-                    <WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} /> :
-                    <PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}</Table.DataCell>
-                </Table.Row>
-              )
-            )}
-          </Table.Body>
-        </Table>
-      ) : inputValue && inputValue.length > 0 && filteredData.length > 0 ? (
-        <Table zebraStripes>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Leverandørnavn</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Lev-artnr</Table.HeaderCell>
-              <Table.HeaderCell scope="col"></Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {filteredData.map((product) => (
-                <Table.Row key={product.id}>
-                  <Table.DataCell>{product.hmsArtNr}</Table.DataCell>
-                  <Table.DataCell>{product.articleName}</Table.DataCell>
-                  <Table.DataCell>{product.supplierName}</Table.DataCell>
-                  <Table.DataCell>{product.supplierRef}</Table.DataCell>
-                  <Table.DataCell>{product.sparePart ?
-                    <WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} /> :
-                    <PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}</Table.DataCell>
-                </Table.Row>
-              )
-            )}
-          </Table.Body>
-        </Table>
-      ) : (
+      {inputValue && inputValue.length > 0 && filteredProducts.length > 0 ? (
+        <Box paddingBlock="4">
+          <PartsAccessoriesList products={filteredProducts} />
+        </Box>
+      ) : inputValue && inputValue.length > 0 && filteredProducts.length === 0 ? (
         <p>Ingen treff</p>
+      ) : (
+        <Box paddingBlock="4">
+          <Tabs value={selectedFilterOption} onChange={(value) => handeFilterChange(value as ProductFilterOption)}>
+            <Tabs.List>
+              <Tabs.Tab
+                value="SPAREPART"
+                label="Reservedeler"
+                icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+              />
+              <Tabs.Tab
+                value="ACCESSORIES"
+                label="Tilbehør"
+                icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+              />
+            </Tabs.List>
+            <Tabs.Panel value="SPAREPART" className="h-24 w-full bg-gray-50 p-4">
+              <PartsAccessoriesList products={filteredData} />
+            </Tabs.Panel>
+            <Tabs.Panel value="ACCESSORIES" className="h-24 w-full bg-gray-50 p-4">
+              <PartsAccessoriesList products={filteredData} />
+            </Tabs.Panel>
+          </Tabs>
+        </Box>
       )}
     </div>
   )
@@ -171,3 +142,5 @@ export enum ProductFilterOption {
   ACCESSORIES = "ACCESSORIES",
   SPAREPART = "SPAREPART",
 }
+
+
