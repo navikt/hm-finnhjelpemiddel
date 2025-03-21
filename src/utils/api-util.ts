@@ -1358,6 +1358,13 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
           },
         },
       },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc',
+          },
+        },
+      ],
       size: 100,
     }),
   })
