@@ -16,7 +16,9 @@ const ProductMiddle = ({ product }: Props) => {
     <HGrid gap={'8'} columns={2}>
       <VStack gap={'4'}>
         <ProductInformation product={product} />
-        <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
+        {product.variants.length > 1 && (
+          <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
+        )}
       </VStack>
       <VStack gap={'4'}>
         <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
