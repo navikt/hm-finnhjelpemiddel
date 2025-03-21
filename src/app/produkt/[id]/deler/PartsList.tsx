@@ -16,75 +16,48 @@ interface Props {
 export const PartsList = ({ seriesId }: Props) => {
   const searchParams = useSearchParams()
   const searchTermValue = searchParams.get('searchTerm') || ''
-  const [inputValue, setInputValue] = useState(searchTermValue ?? '')
+  const [inputValue, setInputValue] = useState(searchTermValue)
   const router = useRouter()
   const pathname = usePathname()
 
   const [selectedFilterOption, setSelectedFilterOption] = useState<ProductFilterOption>(
-    searchParams.get("filter") ? (searchParams.get("filter") as ProductFilterOption) : ProductFilterOption.SPAREPART,
+    searchParams.get("filter") as ProductFilterOption || ProductFilterOption.ACCESSORIES,
   );
 
-
-  const handeFilterChange = (filter: ProductFilterOption) => {
+  const handleFilterChange = (filter: ProductFilterOption) => {
     setSelectedFilterOption(filter);
-    router.replace(`${pathname}?filter=${filter}`, {
-      scroll: false,
-    })
+    router.replace(`${pathname}?filter=${filter}`, { scroll: false })
   };
 
   const [filteredProducts, setFilteredProducts] = useState<ProductVariant[]>([])
 
   const onSearch = () => {
-    router.replace(`${pathname}?searchTerm=${inputValue}`, {
-      scroll: false,
-    })
-    if (inputValue.length > 0 && data) {
-      setFilteredProducts(data.filter((product) => {
-        return product.articleName.toLowerCase().includes(inputValue.toLowerCase())
-      }))
-    } else {
-      setFilteredProducts(data ?? [])
-    }
+    router.replace(`${pathname}?searchTerm=${inputValue}`, { scroll: false })
+    setFilteredProducts(data?.filter(product =>
+      product.articleName.toLowerCase().includes(inputValue.toLowerCase())
+    ) ?? [])
   }
 
   const onClear = () => {
-    router.replace(`${pathname}`, {
-      scroll: false,
-    })
-
+    router.replace(`${pathname}`, { scroll: false })
     setFilteredProducts(data ?? [])
-
   }
 
-  const { data, isLoading } = useSWR(
-    seriesId,
-    fetchCompatibleProducts,
-    { keepPreviousData: true }
-  )
+  const { data, isLoading } = useSWR(seriesId, fetchCompatibleProducts, { keepPreviousData: true })
 
   useEffect(() => {
-    if (data) {
-      setFilteredProducts(data);
-    }
+    if (data) setFilteredProducts(data);
   }, [data]);
 
-  const filteredData = filteredProducts.filter((product) => {
-    if (selectedFilterOption === ProductFilterOption.ACCESSORIES) {
-      return product.accessory
-    } else if (selectedFilterOption === ProductFilterOption.SPAREPART) {
-      return product.sparePart
-    }
-    return true
-  })
+  const filteredData = filteredProducts.filter(product =>
+    selectedFilterOption === ProductFilterOption.ACCESSORIES ? product.accessory :
+      selectedFilterOption === ProductFilterOption.SPAREPART ? product.sparePart : true
+  )
 
-  if (isLoading) {
-    return (<div><Loader /></div>)
-  }
+  if (isLoading) return <Loader />
 
   return (
     <div>
-
-
       <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: '600px' }} marginBlock="7 3"
              align="end">
         <Search
@@ -92,9 +65,7 @@ export const PartsList = ({ seriesId }: Props) => {
           label="Søk"
           hideLabel={false}
           variant="simple"
-          onChange={(value) => {
-            setInputValue(value)
-          }}
+          onChange={setInputValue}
           onKeyUp={onSearch}
           onClear={() => {
             setInputValue('')
@@ -103,32 +74,30 @@ export const PartsList = ({ seriesId }: Props) => {
         />
       </HGrid>
 
-      {inputValue && inputValue.length > 0 && filteredProducts.length > 0 ? (
+      {inputValue && filteredProducts.length > 0 ? (
         <Box paddingBlock="4">
           <PartsAccessoriesList products={filteredProducts} />
         </Box>
-      ) : inputValue && inputValue.length > 0 && filteredProducts.length === 0 ? (
+      ) : inputValue && filteredProducts.length === 0 ? (
         <p>Ingen treff</p>
       ) : (
         <Box paddingBlock="4">
-          <Tabs value={selectedFilterOption} onChange={(value) => handeFilterChange(value as ProductFilterOption)}>
+          <Tabs value={selectedFilterOption} onChange={value => handleFilterChange(value as ProductFilterOption)}>
             <Tabs.List>
-              <Tabs.Tab
-                value="SPAREPART"
-                label="Reservedeler"
-                icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              />
-              <Tabs.Tab
-                value="ACCESSORIES"
-                label="Tilbehør"
-                icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-              />
+              <Tabs.Tab value="ACCESSORIES" label="Tilbehør"
+                        icon={<PackageIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+              <Tabs.Tab value="SPAREPART" label="Reservedeler"
+                        icon={<WrenchIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
             </Tabs.List>
-            <Tabs.Panel value="SPAREPART" className="h-24 w-full bg-gray-50 p-4">
-              <PartsAccessoriesList products={filteredData} />
-            </Tabs.Panel>
             <Tabs.Panel value="ACCESSORIES" className="h-24 w-full bg-gray-50 p-4">
-              <PartsAccessoriesList products={filteredData} />
+              <Box paddingBlock="4">
+                <PartsAccessoriesList products={filteredData} />
+              </Box>
+            </Tabs.Panel>
+            <Tabs.Panel value="SPAREPART" className="h-24 w-full bg-gray-50 p-4">
+              <Box paddingBlock="4">
+                <PartsAccessoriesList products={filteredData} />
+              </Box>
             </Tabs.Panel>
           </Tabs>
         </Box>
@@ -142,5 +111,3 @@ export enum ProductFilterOption {
   ACCESSORIES = "ACCESSORIES",
   SPAREPART = "SPAREPART",
 }
-
-
