@@ -38,6 +38,8 @@ export const PartsList = ({ seriesId }: Props) => {
     router.replace(`${pathname}?searchTerm=${inputValue}`, { scroll: false })
     setFilteredProducts(data?.filter(product =>
       product.articleName.toLowerCase().includes(inputValue.toLowerCase())
+      || product.hmsArtNr?.toLowerCase().includes(inputValue.toLowerCase())
+      || product.supplierRef?.toLowerCase().includes(inputValue.toLowerCase())
     ) ?? [])
   }
 
