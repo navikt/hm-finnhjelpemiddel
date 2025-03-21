@@ -13,20 +13,18 @@ type Props = {
 
 const ProductMiddle = ({ product }: Props) => {
   return (
-    <Bleed reflectivePadding marginInline="full" className={styles.middleContainer}>
-      <HGrid gap={'8'} columns={2}>
-        <VStack gap={'4'}>
-          <ProductInformation product={product} />
-          <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
-        </VStack>
-        <VStack gap={'4'}>
-          <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
-          {product.agreements.length > 0 && (
-            <OtherProductsOnPost postName={product.agreements[0].postTitle} postLink={'testpost'} />
-          )}
-        </VStack>
-      </HGrid>
-    </Bleed>
+    <HGrid gap={'8'} columns={2}>
+      <VStack gap={'4'}>
+        <ProductInformation product={product} />
+        <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
+      </VStack>
+      <VStack gap={'4'}>
+        <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
+        {product.agreements.length > 0 && (
+          <OtherProductsOnPost postName={product.agreements[0].postTitle} postLink={'testpost'} />
+        )}
+      </VStack>
+    </HGrid>
   )
 }
 
