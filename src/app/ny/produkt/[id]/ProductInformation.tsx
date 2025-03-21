@@ -20,16 +20,12 @@ export const ProductInformation = ({ product }: ProductInformationProps) => {
             <GeneralProductInformation product={product} />
           </Accordion.Content>
         </Accordion.Item>
-      </Accordion>
-      <Accordion>
         <Accordion.Item>
           <Accordion.Header>Video</Accordion.Header>
           <Accordion.Content>
             <Videos videos={product.videos} />
           </Accordion.Content>
         </Accordion.Item>
-      </Accordion>
-      <Accordion>
         <Accordion.Item>
           <Accordion.Header>Dokumenter</Accordion.Header>
           <Accordion.Content>
