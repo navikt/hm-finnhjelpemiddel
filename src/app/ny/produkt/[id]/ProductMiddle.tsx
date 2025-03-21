@@ -1,11 +1,11 @@
 'use client'
 
-import { Bleed, BodyShort, Button, Heading, HGrid, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, HGrid, VStack } from '@navikt/ds-react'
 import { ChevronRightIcon, LayersPlusIcon } from '@navikt/aksel-icons'
-import styles from './productmiddle.module.scss'
 import { Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/ny/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataTable'
+import NextLink from 'next/link'
 
 type Props = {
   product: Product
@@ -21,9 +21,12 @@ const ProductMiddle = ({ product }: Props) => {
         )}
       </VStack>
       <VStack gap={'4'}>
-        <AccessoriesAndParts productName={product.title} accessoriesLink={'testaccessories'} />
+        <AccessoriesAndParts productName={product.title} accessoriesLink={`/produkt/${product.id}/deler`} />
         {product.agreements.length > 0 && (
-          <OtherProductsOnPost postName={product.agreements[0].postTitle} postLink={'testpost'} />
+          <OtherProductsOnPost
+            postName={product.agreements[0].postTitle}
+            postLink={`/rammeavtale/hjelpemidler/${product.agreements[0].id}?delkontrakt=${product.agreements[0].postTitle}`}
+          />
         )}
       </VStack>
     </HGrid>
@@ -41,13 +44,18 @@ const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPar
         Passer sammen med
       </Heading>
       <BodyShort>Har finner du en liste over tilbehører og reserverveler som passer til {productName}.</BodyShort>
-      <Button variant={'secondary'} icon={<LayersPlusIcon />} style={{ width: 'fit-content' }}>
+      <Button
+        as={NextLink}
+        variant={'secondary'}
+        icon={<LayersPlusIcon />}
+        style={{ width: 'fit-content' }}
+        href={accessoriesLink}
+      >
         Tilbehør og reservedeler
       </Button>
     </VStack>
   )
 }
-
 type OtherProductsOnPostProps = {
   postName: string
   postLink: string
@@ -58,7 +66,13 @@ const OtherProductsOnPost = ({ postName, postLink }: OtherProductsOnPostProps) =
       <Heading size={'small'} level={'3'}>
         Andre manuelle rullestoler på delkontrakt {postName}
       </Heading>
-      <Button variant={'secondary'} icon={<ChevronRightIcon />} style={{ width: 'fit-content' }}>
+      <Button
+        as={NextLink}
+        variant={'secondary'}
+        icon={<ChevronRightIcon />}
+        style={{ width: 'fit-content' }}
+        href={postLink}
+      >
         Flere produkter på delkontrakt
       </Button>
     </VStack>
