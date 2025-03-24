@@ -25,6 +25,17 @@ export type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
+export enum VariantFilterType {
+  MIN_MAX,
+  SINGLE,
+}
+
+export type VariantFilter = {
+  name: string
+  type: VariantFilterType
+  filterFunction: (variant: ProductVariant) => boolean
+}
+
 export const VariantTable = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
   const searchParams = useSearchParams()
@@ -115,14 +126,14 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return true
   }
 
-  const filterFunctions: { [key: string]: (variant: ProductVariant) => boolean } = {
-    Setebredde: seteBreddeFilter,
-    Setedybde: seteDybdeFilter,
-    Setehøyde: seteHøydeFilter,
-  }
+  const variantFilters: VariantFilter[] = [
+    { name: 'Setebredde', type: VariantFilterType.SINGLE, filterFunction: seteBreddeFilter },
+    { name: 'Setedybde', type: VariantFilterType.MIN_MAX, filterFunction: seteDybdeFilter },
+    { name: 'Setehøyde', type: VariantFilterType.MIN_MAX, filterFunction: seteHøydeFilter },
+  ]
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
-    return Object.values(filterFunctions).every((filterFunction) => filterFunction(variant))
+    return Object.values(variantFilters).every((variantFilter) => variantFilter.filterFunction(variant))
   })
 
   useEffect(() => {
@@ -195,16 +206,11 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
   const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
-  const setedybde = 'Setedybde'
-  const setebredde = 'Setebredde'
-  const setehoyde = 'Setehøyde'
-  const filterNames = [setebredde, setedybde, setehoyde]
-
   return product.variants.length === 1 ? (
     <SingleVariantTable variant={product.variants[0]} rows={rows} variantNameElementRef={variantNameElementRef} />
   ) : (
     <Box>
-      <FilterRow filterNames={filterNames} variants={product.variants} filterFunctions={filterFunctions} />
+      <FilterRow variants={product.variants} variantFilters={variantFilters} />
       <Heading level="3" size="small" className="spacing-vertical--small">
         {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
       </Heading>

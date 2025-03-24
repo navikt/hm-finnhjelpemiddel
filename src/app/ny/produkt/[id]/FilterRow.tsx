@@ -5,19 +5,14 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import styles from './FilterRow.module.scss'
 import { ProductVariant } from '@/utils/product-util'
+import { VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantTable'
 
 type Props = {
-  filterNames: string[]
   variants: ProductVariant[]
-  filterFunctions: { [key: string]: (variant: ProductVariant) => boolean }
+  variantFilters: VariantFilter[]
 }
 
-enum VariantFilterType {
-  MIN_MAX,
-  SINGLE,
-}
-
-export const FilterRow = ({ filterNames, variants, filterFunctions }: Props) => {
+export const FilterRow = ({ variants, variantFilters }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -30,12 +25,12 @@ export const FilterRow = ({ filterNames, variants, filterFunctions }: Props) => 
 
   const filters: { [key: string]: string[] } = Object.assign(
     {},
-    ...filterNames.map((name) => {
+    ...variantFilters.map(({ name }) => {
       const values = variants
         .map((variant) => {
-          const otherFilters = Object.entries(filterFunctions).filter(([key, _]) => key !== name)
+          const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
 
-          if (otherFilters.every(([_, filterFunction]) => filterFunction(variant))) {
+          if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
             return Object.entries(variant.techData)
               .filter(([key]) => key.startsWith(name))
               .map(([_, techDataField]) => techDataField.value)
