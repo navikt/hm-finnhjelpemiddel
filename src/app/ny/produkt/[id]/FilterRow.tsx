@@ -13,6 +13,16 @@ export const FilterRow = ({ rows, filterNames }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
 
+  /*
+  filterNames må ha visningsnavn, hvilke felter vi skal basere oss på, og type(min-max)
+
+  ta inn product.variants
+
+  for hvert filter:
+    bruk filterne fra urlen, utendom deg selv, på variantene
+
+ */
+
   const filters: { [key: string]: string[] } = Object.assign(
     {},
     ...filterNames.map((name) => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
+import { Product, ProductVariant } from '@/utils/product-util'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
@@ -81,27 +81,36 @@ export const VariantTable = ({ product }: { product: Product }) => {
     [product.variants, productWithFilteredVariants]
   )
 
-  const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
-    let filterResults: boolean[] = []
-
+  const seteDybdeFilter = (variant: ProductVariant) => {
     if (searchParams.get('Setedybde')) {
       const seteDybdeMin = parseInt(variant.techData['Setedybde min'].value)
       const seteDybdeMax = parseInt(variant.techData['Setedybde maks'].value)
 
       const searchTarget = parseInt(searchParams.get('Setedybde')!.split(' ')[0])
 
-      filterResults.push(seteDybdeMin <= searchTarget && searchTarget <= seteDybdeMax)
+      return seteDybdeMin <= searchTarget && searchTarget <= seteDybdeMax
     }
+    return true
+  }
 
+  const seteBreddeFilter = (variant: ProductVariant) => {
     if (searchParams.get('Setebredde')) {
       const seteBredde = parseInt(variant.techData['Setebredde'].value)
 
       const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
 
-      filterResults.push(searchTarget === seteBredde)
+      return searchTarget === seteBredde
     }
+    return true
+  }
 
-    return filterResults.every((result) => result)
+  const filterFunctions: { [key: string]: (variant: ProductVariant) => boolean } = {
+    Setebredde: seteBreddeFilter,
+    Setedybde: seteDybdeFilter,
+  }
+
+  const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
+    return Object.values(filterFunctions).every((filterFunction) => filterFunction(variant))
   })
 
   useEffect(() => {
