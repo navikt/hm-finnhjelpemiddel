@@ -17,15 +17,9 @@ export const FilterRow = ({ variants, variantFilters }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
 
-  const filterTypes: { [key: string]: VariantFilterType } = {
-    Setebredde: VariantFilterType.SINGLE,
-    Setedybde: VariantFilterType.MIN_MAX,
-    Setehøyde: VariantFilterType.MIN_MAX,
-  }
-
   const filters: { [key: string]: string[] } = Object.assign(
     {},
-    ...variantFilters.map(({ name }) => {
+    ...variantFilters.map(({ name, type }) => {
       const values = variants
         .map((variant) => {
           const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
@@ -40,7 +34,7 @@ export const FilterRow = ({ variants, variantFilters }: Props) => {
         })
         .flat()
 
-      if (filterTypes[name] === VariantFilterType.MIN_MAX) {
+      if (type === VariantFilterType.MIN_MAX && values.length > 0) {
         const allValues = values.map((value) => parseInt(value))
 
         const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
@@ -52,7 +46,7 @@ export const FilterRow = ({ variants, variantFilters }: Props) => {
       }
 
       return {
-        [name]: Array.from(new Set(values)).sort(),
+        [name]: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
       }
     })
   )
@@ -104,19 +98,21 @@ const SeteSelect = ({
     <>
       {Object.entries(filters).map(([key, row], index) => {
         return (
-          <Select
-            key={index + 1}
-            label={key}
-            onChange={(event) => selectFilter(key, event.target.value)}
-            value={searchParams.get(key) ?? ''}
-          >
-            <option key="" value="">
-              Velg
-            </option>
-            {row.map((value, i) => (
-              <option key={i + 1}>{value}</option>
-            ))}
-          </Select>
+          row.length > 0 && (
+            <Select
+              key={index + 1}
+              label={key}
+              onChange={(event) => selectFilter(key, event.target.value)}
+              value={searchParams.get(key) ?? ''}
+            >
+              <option key="" value="">
+                Velg
+              </option>
+              {row.map((value, i) => (
+                <option key={i + 1}>{value}</option>
+              ))}
+            </Select>
+          )
         )
       })}
     </>
