@@ -6,6 +6,7 @@ import { Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/ny/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataTable'
 import NextLink from 'next/link'
+import styles from './productmiddle.module.scss'
 
 type Props = {
   product: Product
@@ -14,13 +15,13 @@ type Props = {
 const ProductMiddle = ({ product }: Props) => {
   return (
     <HGrid gap={'8'} columns={2}>
-      <VStack gap={'4'}>
+      <VStack gap={'20'} paddingInline={'8'} paddingBlock={'6'}>
         <ProductInformation product={product} />
         {product.variants.length > 1 && (
           <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
         )}
       </VStack>
-      <VStack gap={'4'}>
+      <VStack gap={'14'} paddingInline={'8'} paddingBlock={'6'} className={styles.boks}>
         <AccessoriesAndParts productName={product.title} accessoriesLink={`/produkt/${product.id}/deler`} />
         {product.agreements.length > 0 && (
           <OtherProductsOnPost

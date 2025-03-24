@@ -1,3 +1,4 @@
+@use "@navikt/ds-tokens/dist/tokens" as *;
 
 .middleContainer {
   
@@ -8,4 +9,9 @@
 
 .commonAttributes {
 
+}
+
+.boks {
+  background: $a-surface-action-subtle;
+  height: fit-content;
 }
