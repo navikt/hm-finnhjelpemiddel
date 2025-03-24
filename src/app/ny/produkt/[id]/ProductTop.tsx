@@ -2,7 +2,7 @@
 
 import { Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { BodyShort, Box, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, CopyButton, Button,HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
@@ -96,9 +96,16 @@ const CopyHms = ({ product }: { product: Product }) => {
   if (hmsArtNumbers.size > 1) {
     return (
       <BodyShort>
-        <Link as={NextLink} href="#variants-table">
-          Se tabell med varianter <ArrowDownIcon aria-hidden />
-        </Link>
+        <Button
+          className={styles.linkButton}
+          as={NextLink}
+          href="#variants-table"
+          variant={'tertiary'}
+          icon={<ArrowDownIcon aria-hidden />}
+          iconPosition={'right'}
+        >
+          Se tabell med varianter
+        </Button>
       </BodyShort>
     )
   }

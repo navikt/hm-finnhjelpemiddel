@@ -1,3 +1,5 @@
+@use "@navikt/ds-tokens/dist/tokens" as *;
+
 .container {
   max-width: 1200px;
 }
@@ -12,4 +14,9 @@
 
 .copyButton {
   border: 1px dashed #0056b4;
+}
+
+.linkButton {
+  --__ac-button-padding: $a-spacing-05 $a-spacing-2;
+  text-decoration: underline;
 }
