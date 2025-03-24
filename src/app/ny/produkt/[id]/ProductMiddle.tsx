@@ -2,7 +2,7 @@
 
 import { BodyShort, Button, Heading, HGrid, VStack } from '@navikt/ds-react'
 import { ChevronRightIcon, LayersPlusIcon } from '@navikt/aksel-icons'
-import { Product } from '@/utils/product-util'
+import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/ny/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataTable'
 import NextLink from 'next/link'
@@ -23,12 +23,7 @@ const ProductMiddle = ({ product }: Props) => {
       </VStack>
       <VStack gap={'14'} paddingInline={'8'} paddingBlock={'6'} className={styles.boks}>
         <AccessoriesAndParts productName={product.title} accessoriesLink={`/produkt/${product.id}/deler`} />
-        {product.agreements.length > 0 && (
-          <OtherProductsOnPost
-            postName={product.agreements[0].postTitle}
-            postLink={`/rammeavtale/hjelpemidler/${product.agreements[0].id}?delkontrakt=${product.agreements[0].postTitle}`}
-          />
-        )}
+        {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
       </VStack>
     </HGrid>
   )
@@ -58,21 +53,21 @@ const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPar
   )
 }
 type OtherProductsOnPostProps = {
-  postName: string
-  postLink: string
+  agreement: AgreementInfo
 }
-const OtherProductsOnPost = ({ postName, postLink }: OtherProductsOnPostProps) => {
+const OtherProductsOnPost = ({ agreement }: OtherProductsOnPostProps) => {
   return (
     <VStack gap={'2'}>
       <Heading size={'medium'} level={'2'}>
-        Andre manuelle rullestoler på delkontrakt {postName}
+        Andre produkter på delkontrakt {agreement.postNr}
       </Heading>
+      <BodyShort>{agreement.postTitle}</BodyShort>
       <Button
         as={NextLink}
         variant={'secondary'}
         icon={<ChevronRightIcon />}
         style={{ width: 'fit-content' }}
-        href={postLink}
+        href={`/rammeavtale/hjelpemidler/${agreement.id}?delkontrakt=${agreement.postTitle}`}
       >
         Flere produkter på delkontrakt
       </Button>
