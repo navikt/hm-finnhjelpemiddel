@@ -6,19 +6,16 @@ import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import useSWR from 'swr'
 import { fetchProducts } from '@/utils/api-util'
-import { customSort, hasDifferentValues, sortColumnsByRowKey } from '@/app/produkt/variants/variant-utils'
+import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
-import { SingleVariantTable } from '@/app/produkt/variants/SingleVariantTable'
-import { Alert, Box, Heading, Table } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Alert, Box, CopyButton, Heading, Table } from '@navikt/ds-react'
 import { VariantStatusRow } from '@/app/produkt/variants/VariantStatusRow'
-import { VariantNameRow } from '@/app/produkt/variants/VariantNameRow'
-import VariantHmsNumberRow from '@/app/produkt/variants/VariantHmsNumberRow'
-import { VariantSupplierRefRow } from '@/app/produkt/variants/VariantSupplierRefRow'
 import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
-import { VariantTechnicalDataRow } from '@/app/produkt/variants/VariantTechnicalDataRow'
 import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
+import styles from '@/app/ny/produkt/[id]/ProductTop.module.scss'
+import { logActionEvent } from '@/utils/amplitude'
 
 export type SortColumns = {
   orderBy: string | null
@@ -206,14 +203,16 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
   const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
-  return product.variants.length === 1 ? (
-    <SingleVariantTable variant={product.variants[0]} rows={rows} variantNameElementRef={variantNameElementRef} />
-  ) : (
+  return (
     <Box>
-      <FilterRow variants={product.variants} variantFilters={variantFilters} />
-      <Heading level="3" size="small" className="spacing-vertical--small">
-        {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
-      </Heading>
+      {product.variants.length > 1 && (
+        <>
+          <FilterRow variants={product.variants} variantFilters={variantFilters} />
+          <Heading level="3" size="small" className="spacing-vertical--small">
+            {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
+          </Heading>
+        </>
+      )}
 
       {productVariantsToShow.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
@@ -227,34 +226,54 @@ export const VariantTable = ({ product }: { product: Product }) => {
             <Table zebraStripes>
               <Table.Header>
                 <VariantStatusRow variants={sortedByKey} />
-                <VariantNameRow
-                  variants={sortedByKey}
-                  sortColumns={sortColumns}
-                  handleSortRow={handleSortRow}
-                  variantNameElementRef={variantNameElementRef}
-                  iconBasedOnState={iconBasedOnState}
-                />
+                <Table.Row className="variants-table__sortable-row">
+                  <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
+                    Navn på variant
+                  </Table.ColumnHeader>
+                  {sortedByKey.map((variant) => (
+                    <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
+                  ))}
+                </Table.Row>
               </Table.Header>
               <Table.Body>
                 {hasHmsNumber && (
-                  <VariantHmsNumberRow
-                    sortedByKey={sortedByKey}
-                    sortColumns={sortColumns}
-                    handleSortRow={handleSortRow}
-                    variantNameElementHeight={variantNameElementHeight}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
-                    iconBasedOnState={iconBasedOnState}
-                  />
+                  <Table.Row>
+                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                    {sortedByKey.map((variant) => (
+                      <Table.DataCell key={'hms-' + variant.id}>
+                        <CopyButton
+                          size="small"
+                          className={styles.copyButton}
+                          copyText={variant.hmsArtNr ?? ''}
+                          text={variant.hmsArtNr ?? ''}
+                          activeText="kopiert"
+                          variant="action"
+                          activeIcon={<ThumbUpIcon aria-hidden />}
+                          iconPosition="right"
+                          onClick={() => logActionEvent('kopier')}
+                        />
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
                 )}
-                <VariantSupplierRefRow
-                  sortedByKey={sortedByKey}
-                  sortColumns={sortColumns}
-                  handleSortRow={handleSortRow}
-                  selectedColumn={selectedColumn}
-                  handleColumnClick={handleColumnClick}
-                  iconBasedOnState={iconBasedOnState}
-                />
+                <Table.Row>
+                  <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+                  {sortedByKey.map((variant) => (
+                    <Table.DataCell key={'levart-' + variant.id}>
+                      <CopyButton
+                        size="small"
+                        className={styles.copyButton}
+                        copyText={variant.supplierRef}
+                        text={variant.supplierRef}
+                        activeText="kopiert"
+                        variant="action"
+                        activeIcon={<ThumbUpIcon aria-hidden />}
+                        iconPosition="right"
+                        onClick={() => logActionEvent('kopier')}
+                      />
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
                 {rankSet.size > 1 && (
                   <VariantRankRow
                     sortedByKey={sortedByKey}
@@ -309,21 +328,14 @@ export const VariantTable = ({ product }: { product: Product }) => {
                 )}
                 {Object.keys(rows).length > 0 &&
                   Object.entries(rows).map(([key, row]) => {
-                    const isSortableRow = hasDifferentValues({ row })
                     if (Object.keys(commonDataRows).some((commonKey) => commonKey === key)) return null
                     return (
-                      <VariantTechnicalDataRow
-                        key={key}
-                        technicalDataName={key}
-                        row={row}
-                        variantIds={sortedByKey.map((variant) => variant.id)}
-                        sortColumns={sortColumns}
-                        handleSortRow={handleSortRow}
-                        isSortableRow={isSortableRow}
-                        iconBasedOnState={iconBasedOnState}
-                        selectedColumn={selectedColumn}
-                        handleColumnClick={handleColumnClick}
-                      />
+                      <Table.Row key={key + 'row'}>
+                        <Table.HeaderCell>{key}</Table.HeaderCell>
+                        {row.map((value, i) => (
+                          <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
+                        ))}
+                      </Table.Row>
                     )
                   })}
               </Table.Body>
