@@ -87,7 +87,7 @@ export const FilterRow = ({ filterNames, variants, filterFunctions }: Props) => 
 
   return (
     <VStack gap={'4'}>
-      <HStack gap={'4'} width={'fit-content'} maxWidth={'40%'}>
+      <HStack gap={'4'} width={'fit-content'}>
         <SeteSelect filters={filters} selectFilter={onSelectFilter} />
       </HStack>
       <Button size={'small'} onClick={resetFilterAll} className={styles.fjernButton}>

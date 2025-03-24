@@ -11,7 +11,6 @@ import { toValueAndUnit } from '@/utils/string-util'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon } from '@navikt/aksel-icons'
 import { SingleVariantTable } from '@/app/produkt/variants/SingleVariantTable'
 import { Alert, Box, Heading, Table } from '@navikt/ds-react'
-import { VariantFilters } from '@/app/produkt/variants/VariantFilters'
 import { VariantStatusRow } from '@/app/produkt/variants/VariantStatusRow'
 import { VariantNameRow } from '@/app/produkt/variants/VariantNameRow'
 import VariantHmsNumberRow from '@/app/produkt/variants/VariantHmsNumberRow'
@@ -208,7 +207,6 @@ export const VariantTable = ({ product }: { product: Product }) => {
       ) : (
         <>
           <Box paddingBlock="4">
-            <VariantFilters product={product} />
             <FilterRow filterNames={filterNames} variants={product.variants} filterFunctions={filterFunctions} />
             <Heading level="3" size="small" className="spacing-vertical--small">
               {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
