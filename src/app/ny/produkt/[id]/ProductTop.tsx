@@ -25,7 +25,17 @@ const ProductSummary = ({ product }: { product: Product }) => {
     product.agreements?.length > 0 &&
     Math.min(...product.agreements.map((agreement) => agreement.rank))
 
-  const htmlDescription = containsHTML(product.attributes.text) && validateHTML(product.attributes.text)
+  const ingressifier = (text: string) => {
+    const removeHtmlExp = new RegExp(/(<([^>]+)>)/gi)
+    const cleanText = text.replace(removeHtmlExp, '')
+
+    const words = cleanText.match(/(\w.*?\.)(?:\s[A-Z]|$)/)
+    console.log(text)
+
+    return words ? words[1] : ''
+  }
+
+  const descriptionIngress = product.attributes.text ? ingressifier(product.attributes.text) : ''
 
   return (
     <VStack gap={'4'}>
@@ -43,10 +53,7 @@ const ProductSummary = ({ product }: { product: Product }) => {
         <Heading level="1" size="large">
           {product.title}
         </Heading>
-        {product.attributes.text && htmlDescription && (
-          <div dangerouslySetInnerHTML={{ __html: product.attributes.text }} />
-        )}
-        {product.attributes.text && !htmlDescription && <BodyLong>{product.attributes.text}</BodyLong>}
+        {descriptionIngress}
       </VStack>
 
       <CopyHms product={product} />
