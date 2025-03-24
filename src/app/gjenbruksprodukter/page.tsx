@@ -125,6 +125,7 @@ export default function AlternativeProductsPage() {
             <li>Synstekniske hjelpemidler</li>
             <li>Varmehjelpemidler for hender og føtter</li>
             <li>Vogner og hjelpemidler til sport og aktivitet</li>
+            <li>Senger, sengebunner, skummadrasser, hjertebrett og sengebord</li>
           </ul>
         </ReadMore>
       </div>
