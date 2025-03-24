@@ -81,25 +81,37 @@ export const VariantTable = ({ product }: { product: Product }) => {
     [product.variants, productWithFilteredVariants]
   )
 
-  const seteDybdeFilter = (variant: ProductVariant) => {
-    if (searchParams.get('Setedybde')) {
-      const seteDybdeMin = parseInt(variant.techData['Setedybde min'].value)
-      const seteDybdeMax = parseInt(variant.techData['Setedybde maks'].value)
+  const seteBreddeFilter = (variant: ProductVariant) => {
+    if (searchParams.get('Setebredde')) {
+      const value = parseInt(variant.techData['Setebredde'].value)
 
-      const searchTarget = parseInt(searchParams.get('Setedybde')!.split(' ')[0])
+      const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
 
-      return seteDybdeMin <= searchTarget && searchTarget <= seteDybdeMax
+      return searchTarget === value
     }
     return true
   }
 
-  const seteBreddeFilter = (variant: ProductVariant) => {
-    if (searchParams.get('Setebredde')) {
-      const seteBredde = parseInt(variant.techData['Setebredde'].value)
+  const seteDybdeFilter = (variant: ProductVariant) => {
+    if (searchParams.get('Setedybde')) {
+      const min = parseInt(variant.techData['Setedybde min'].value)
+      const max = parseInt(variant.techData['Setedybde maks'].value)
 
-      const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
+      const searchTarget = parseInt(searchParams.get('Setedybde')!.split(' ')[0])
 
-      return searchTarget === seteBredde
+      return min <= searchTarget && searchTarget <= max
+    }
+    return true
+  }
+
+  const seteHøydeFilter = (variant: ProductVariant) => {
+    if (searchParams.get('Setehøyde')) {
+      const min = parseInt(variant.techData['Setehøyde min'].value)
+      const max = parseInt(variant.techData['Setehøyde maks'].value)
+
+      const searchTarget = parseInt(searchParams.get('Setehøyde')!.split(' ')[0])
+
+      return min <= searchTarget && searchTarget <= max
     }
     return true
   }
@@ -107,6 +119,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const filterFunctions: { [key: string]: (variant: ProductVariant) => boolean } = {
     Setebredde: seteBreddeFilter,
     Setedybde: seteDybdeFilter,
+    Setehøyde: seteHøydeFilter,
   }
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
@@ -196,7 +209,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
         <>
           <Box paddingBlock="4">
             <VariantFilters product={product} />
-            <FilterRow rows={rows} filterNames={filterNames} />
+            <FilterRow filterNames={filterNames} variants={product.variants} filterFunctions={filterFunctions} />
             <Heading level="3" size="small" className="spacing-vertical--small">
               {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
             </Heading>

@@ -1,38 +1,52 @@
+'use client'
+
 import { Button, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import styles from './FilterRow.module.scss'
+import { ProductVariant } from '@/utils/product-util'
 
 type Props = {
-  rows: { [key: string]: string[] }
   filterNames: string[]
+  variants: ProductVariant[]
+  filterFunctions: { [key: string]: (variant: ProductVariant) => boolean }
 }
 
-export const FilterRow = ({ rows, filterNames }: Props) => {
+enum VariantFilterType {
+  MIN_MAX,
+  SINGLE,
+}
+
+export const FilterRow = ({ filterNames, variants, filterFunctions }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  /*
-  filterNames må ha visningsnavn, hvilke felter vi skal basere oss på, og type(min-max)
-
-  ta inn product.variants
-
-  for hvert filter:
-    bruk filterne fra urlen, utendom deg selv, på variantene
-
- */
+  const filterTypes: { [key: string]: VariantFilterType } = {
+    Setebredde: VariantFilterType.SINGLE,
+    Setedybde: VariantFilterType.MIN_MAX,
+    Setehøyde: VariantFilterType.MIN_MAX,
+  }
 
   const filters: { [key: string]: string[] } = Object.assign(
     {},
     ...filterNames.map((name) => {
-      if (Object.entries(rows).filter(([key, _]) => key === `${name} maks` || key === `${name} min`).length === 2) {
-        //Størrelsefelt har min og maks, vises som intervaller på 1 cm
+      const values = variants
+        .map((variant) => {
+          const otherFilters = Object.entries(filterFunctions).filter(([key, _]) => key !== name)
 
-        const allValues = Object.entries(rows)
-          .filter(([key, _]) => key.startsWith(name))
-          .flatMap(([_, value]) => value)
-          .map((value) => parseInt(value))
+          if (otherFilters.every(([_, filterFunction]) => filterFunction(variant))) {
+            return Object.entries(variant.techData)
+              .filter(([key]) => key.startsWith(name))
+              .map(([_, techDataField]) => techDataField.value)
+          }
+
+          return []
+        })
+        .flat()
+
+      if (filterTypes[name] === VariantFilterType.MIN_MAX) {
+        const allValues = values.map((value) => parseInt(value))
 
         const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
         const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
@@ -43,13 +57,7 @@ export const FilterRow = ({ rows, filterNames }: Props) => {
       }
 
       return {
-        [name]: Array.from(
-          new Set(
-            Object.entries(rows)
-              .filter(([key, _]) => key === name)
-              .flatMap(([_, value]) => value)
-          )
-        ).sort(),
+        [name]: Array.from(new Set(values)).sort(),
       }
     })
   )
