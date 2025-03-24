@@ -41,7 +41,7 @@ type AccessoriesAndPartsProps = {
 const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPartsProps) => {
   return (
     <VStack gap={'2'}>
-      <Heading size={'small'} level={'3'}>
+      <Heading size={'medium'} level={'2'}>
         Passer sammen med
       </Heading>
       <BodyShort>Har finner du en liste over tilbehører og reserverveler som passer til {productName}.</BodyShort>
@@ -64,7 +64,7 @@ type OtherProductsOnPostProps = {
 const OtherProductsOnPost = ({ postName, postLink }: OtherProductsOnPostProps) => {
   return (
     <VStack gap={'2'}>
-      <Heading size={'small'} level={'3'}>
+      <Heading size={'medium'} level={'2'}>
         Andre manuelle rullestoler på delkontrakt {postName}
       </Heading>
       <Button

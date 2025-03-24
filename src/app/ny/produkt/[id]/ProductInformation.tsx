@@ -10,10 +10,10 @@ type ProductInformationProps = {
 export const ProductInformation = ({ product }: ProductInformationProps) => {
   return (
     <VStack gap={'2'}>
-      <Heading size={'small'} level={'3'}>
+      <Heading size={'medium'} level={'2'}>
         Produktinformasjon
       </Heading>
-      <Accordion>
+      <Accordion headingSize={'small'}>
         <Accordion.Item>
           <Accordion.Header>Generell informasjon</Accordion.Header>
           <Accordion.Content>

@@ -29,7 +29,7 @@ export const SharedVariantDataTable = ({ isoCategory, variants }: SharedVariantD
 
   return (
     <VStack>
-      <Heading level="3" size="small">
+      <Heading level="2" size="medium">
         Felles egenskaper for denne serien
       </Heading>
       <Box paddingBlock="4">
