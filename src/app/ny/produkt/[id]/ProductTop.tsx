@@ -1,12 +1,12 @@
 'use client'
 
-import { containsHTML, Product, validateHTML } from '@/utils/product-util'
+import { Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { BodyLong, BodyShort, Box, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
-import { ThumbUpIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/ny/produkt/[id]/QrCodeButton'
 
@@ -71,12 +71,13 @@ const CopyHms = ({ product }: { product: Product }) => {
     return <></>
   }
 
-  return (
-    <VStack gap={'2'} align={'start'}>
-      <Heading level="3" size="small">
-        Kopier HMS-nummer
-      </Heading>
-      {hmsArtNumbers.size === 1 && (
+  if (hmsArtNumbers.size === 1) {
+    return (
+      <VStack gap={'2'} align={'start'}>
+        <Heading level="3" size="small">
+          Kopier HMS-nummer
+        </Heading>
+
         <CopyButton
           size="medium"
           className={styles.copyButton}
@@ -88,16 +89,19 @@ const CopyHms = ({ product }: { product: Product }) => {
           iconPosition="right"
           onClick={() => logActionEvent('kopier')}
         />
-      )}
-      {hmsArtNumbers.size > 1 && (
-        <BodyShort>
-          <Link as={NextLink} href="#variants-table">
-            Se tabell med varianter
-          </Link>
-        </BodyShort>
-      )}
-    </VStack>
-  )
+      </VStack>
+    )
+  }
+
+  if (hmsArtNumbers.size > 1) {
+    return (
+      <BodyShort>
+        <Link as={NextLink} href="#variants-table">
+          Se tabell med varianter <ArrowDownIcon aria-hidden />
+        </Link>
+      </BodyShort>
+    )
+  }
 }
 
 export default ProductTop
