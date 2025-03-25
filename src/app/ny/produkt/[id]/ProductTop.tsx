@@ -60,7 +60,7 @@ const ProductSummary = ({ product }: { product: Product }) => {
         {descriptionIngress}
       </VStack>
 
-      <VStack gap={'6'} className={styles.buttonContainer}>
+      <VStack gap={'6'} paddingBlock={'8'}>
         <CopyHms product={product} />
         <QrCodeButton id={product.id} />
       </VStack>
