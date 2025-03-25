@@ -10,46 +10,54 @@ import { VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantT
 type Props = {
   variants: ProductVariant[]
   variantFilters: VariantFilter[]
+  dataFieldCommonality: { [key: string]: boolean }
 }
 
-export const FilterRow = ({ variants, variantFilters }: Props) => {
+export const FilterRow = ({ variants, variantFilters, dataFieldCommonality }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
+  console.log(dataFieldCommonality)
   const filters: { [key: string]: string[] } = Object.assign(
     {},
-    ...variantFilters.map(({ name, type }) => {
-      const values = variants
-        .map((variant) => {
-          const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
+    ...variantFilters
+      .filter(({ name }) =>
+        Object.entries(dataFieldCommonality).some(([key, isCommon]) => key.startsWith(name) && !isCommon)
+      )
+      .map(({ name, type }) => {
+        const values = variants
+          .map((variant) => {
+            const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
 
-          if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
-            return Object.entries(variant.techData)
-              .filter(([key]) => key.startsWith(name))
-              .map(([_, techDataField]) => techDataField.value)
+            if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
+              return Object.entries(variant.techData)
+                .filter(([key]) => key.startsWith(name))
+                .map(([_, techDataField]) => techDataField.value)
+            }
+
+            return []
+          })
+          .flat()
+
+        if (type === VariantFilterType.MIN_MAX && values.length > 0) {
+          const allValues = values.map((value) => parseInt(value))
+
+          const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
+          const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
+
+          return {
+            [name]: valueIntervals.map((value) => `${value} cm`),
           }
-
-          return []
-        })
-        .flat()
-
-      if (type === VariantFilterType.MIN_MAX && values.length > 0) {
-        const allValues = values.map((value) => parseInt(value))
-
-        const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
-        const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
+        }
 
         return {
-          [name]: valueIntervals.map((value) => `${value} cm`),
+          [name]: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
         }
-      }
-
-      return {
-        [name]: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
-      }
-    })
+      })
   )
+
+  console.log('filters', filters)
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
