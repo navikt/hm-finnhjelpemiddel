@@ -1,9 +1,8 @@
 'use client'
 
-import { Button, HStack, Select, VStack } from '@navikt/ds-react'
+import { HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import styles from './FilterRow.module.scss'
 import { ProductVariant } from '@/utils/product-util'
 import { VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantTable'
 
@@ -84,12 +83,9 @@ export const FilterRow = ({ variants, variantFilters, dataFieldCommonality }: Pr
 
   return (
     <VStack gap={'4'}>
-      <HStack gap={'4'} width={'fit-content'}>
+      <HStack gap={'8'} width={'fit-content'}>
         <SeteSelect filters={filters} selectFilter={onSelectFilter} />
       </HStack>
-      <Button size={'small'} onClick={resetFilterAll} className={styles.fjernButton}>
-        Fjern alle filtre
-      </Button>
     </VStack>
   )
 }

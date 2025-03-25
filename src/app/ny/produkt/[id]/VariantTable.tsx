@@ -1,7 +1,7 @@
 'use client'
 
 import { Product, ProductVariant } from '@/utils/product-util'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import useSWR from 'swr'
@@ -9,7 +9,7 @@ import { fetchProducts } from '@/utils/api-util'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, Box, CopyButton, Heading, Table } from '@navikt/ds-react'
+import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
 import { VariantStatusRow } from '@/app/produkt/variants/VariantStatusRow'
 import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
@@ -188,16 +188,19 @@ export const VariantTable = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <>
+        <VStack gap={'4'}>
+          <Heading size={'medium'} spacing>
+            Andre egenskaper
+          </Heading>
           <FilterRow
             variants={product.variants}
             variantFilters={variantFilters}
             dataFieldCommonality={dataFieldCommonality}
           />
-          <Heading level="3" size="small" className="spacing-vertical--small">
-            {`${productVariantsToShow.length} av ${product.variantCount} varianter:`}
+          <Heading level="3" size="small">
+            {`${productVariantsToShow.length} av ${product.variantCount} varianter`}
           </Heading>
-        </>
+        </VStack>
       )}
 
       {productVariantsToShow.length === 0 && (
