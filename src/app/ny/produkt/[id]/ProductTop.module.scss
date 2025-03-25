@@ -1,8 +1,4 @@
-@use "@navikt/ds-tokens/dist/tokens" as *;
-
-.container {
-  max-width: 1200px;
-}
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .supplierLink {
   text-decoration: none;
