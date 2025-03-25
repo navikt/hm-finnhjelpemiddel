@@ -8,8 +8,8 @@ import { Metadata } from 'next'
 import ProductTop from '@/app/ny/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/ny/produkt/[id]/ProductMiddle'
 import { VStack } from '@navikt/ds-react'
-import { VariantView } from '@/app/produkt/variants/VariantView'
 import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
+import styles from './ProductPage.module.scss'
 
 export interface ProductsOnPost {
   agreementId: string
@@ -80,7 +80,7 @@ export default async function ProduktPage(props: Props) {
   const spareParts = (!isAccessoryOrSparePart && matchingProducts?.filter((product) => product.sparePart)) || []
 
   return (
-    <div className="main-wrapper--large">
+    <div className={styles.container}>
       <VStack gap={'20'} paddingBlock={'16'} maxWidth={'1200px'}>
         <ProductTop product={product} />
         <ProductMiddle product={product} />
