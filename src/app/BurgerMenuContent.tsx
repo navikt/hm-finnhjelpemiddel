@@ -16,7 +16,12 @@ interface Props {
 
 const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
   const pathname = usePathname()
-  const productPage = pathname.startsWith('/produkt')
+
+  const productPage =
+    pathname.startsWith('/produkt') &&
+    !pathname.startsWith('/produkt/hmsartnr') &&
+    !pathname.endsWith('/deler') &&
+    !pathname.endsWith('/variants')
   const newProductPage = pathname.startsWith('/ny/produkt')
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
