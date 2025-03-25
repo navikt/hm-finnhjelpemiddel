@@ -40,7 +40,11 @@ const ProductSummary = ({ product }: { product: Product }) => {
   return (
     <VStack gap={'4'}>
       <HStack justify={'space-between'}>
-        {topRank && <Tag variant={'success-moderate'}>R{topRank}</Tag>}
+        {topRank && (
+          <Tag variant={'success-moderate'} className={styles.agreementTag}>
+            R{topRank}
+          </Tag>
+        )}
         <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
           {product.supplierName}
         </Link>

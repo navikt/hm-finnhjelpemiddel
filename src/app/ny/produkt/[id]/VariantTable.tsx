@@ -10,12 +10,12 @@ import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-
 import { toValueAndUnit } from '@/utils/string-util'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
-import { VariantStatusRow } from '@/app/produkt/variants/VariantStatusRow'
 import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
 import styles from '@/app/ny/produkt/[id]/ProductTop.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
+import { VariantStatusRowNew } from '@/app/ny/produkt/[id]/VariantStatusRowNew'
 
 export type SortColumns = {
   orderBy: string | null
@@ -214,7 +214,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
           <div className="variants-table" id="variants-table">
             <Table zebraStripes>
               <Table.Header>
-                <VariantStatusRow variants={sortedByKey} />
+                <VariantStatusRowNew variants={sortedByKey} />
                 <Table.Row className="variants-table__sortable-row">
                   <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
                     Navn på variant
