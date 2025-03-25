@@ -81,7 +81,7 @@ export default async function ProduktPage(props: Props) {
 
   return (
     <div className="main-wrapper--large">
-      <VStack gap={'20'} padding={'16'}>
+      <VStack gap={'20'} paddingBlock={'16'}>
         <ProductTop product={product} />
         <ProductMiddle product={product} />
         <VariantTable product={product} />
