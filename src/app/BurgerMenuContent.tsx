@@ -7,6 +7,7 @@ import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
 
 interface Props {
   menuOpen: boolean
@@ -14,6 +15,9 @@ interface Props {
 }
 
 const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
+  const pathname = usePathname()
+  const productPage = pathname.startsWith('/produkt')
+  const newProductPage = pathname.startsWith('/ny/produkt')
   const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
     revalidateOnFocus: false,
@@ -148,6 +152,20 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       For Nav-ansatte: Gjenbruk
                     </Link>
                   </li>
+                  {productPage && (
+                    <li>
+                      <Link as={NextLink} href={`/ny${pathname}`} onClick={() => setMenuOpen(false)}>
+                        Se denne siden i ny visning
+                      </Link>
+                    </li>
+                  )}
+                  {newProductPage && (
+                    <li>
+                      <Link as={NextLink} href={pathname.substring(3)} onClick={() => setMenuOpen(false)}>
+                        Se denne siden i gammel visning
+                      </Link>
+                    </li>
+                  )}
                 </VStack>
               </VStack>
             </HGrid>
