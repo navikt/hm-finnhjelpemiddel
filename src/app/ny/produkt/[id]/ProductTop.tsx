@@ -2,7 +2,7 @@
 
 import { Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { BodyShort, Box, CopyButton, Button,HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
@@ -56,10 +56,10 @@ const ProductSummary = ({ product }: { product: Product }) => {
         {descriptionIngress}
       </VStack>
 
-      <CopyHms product={product} />
-      <Box paddingBlock={'2 0'}>
+      <VStack gap={'6'} className={styles.buttonContainer}>
+        <CopyHms product={product} />
         <QrCodeButton id={product.id} />
-      </Box>
+      </VStack>
     </VStack>
   )
 }
