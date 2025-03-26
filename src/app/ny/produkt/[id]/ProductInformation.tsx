@@ -1,8 +1,8 @@
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
 import { Product } from '@/utils/product-util'
 import { GeneralProductInformation } from '@/app/ny/produkt/[id]/GeneralProductInformation'
-import { Videos } from '@/app/produkt/Video'
 import { Documents } from '@/app/produkt/[id]/Documents'
+import { Videos } from '@/app/ny/produkt/[id]/Videos'
 
 type ProductInformationProps = {
   product: Product

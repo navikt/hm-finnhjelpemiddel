@@ -1,0 +1,23 @@
+@use "@navikt/ds-tokens/dist/tokens" as *;
+
+.videoList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  iframe {
+    border-radius: 1rem;
+  }
+}
+
+// responsive player https://github.com/cookpete/react-player?tab=readme-ov-file#responsive-player
+.playerWrapper {
+  position: relative;
+  padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+}
+
+.reactPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
