@@ -39,7 +39,7 @@ const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPar
       <Heading size={'medium'} level={'2'}>
         Passer sammen med
       </Heading>
-      <BodyShort>Har finner du en liste over tilbehører og reserverveler som passer til {productName}.</BodyShort>
+      <BodyShort>Her finner du en liste over tilbehør og reservedeler som passer til {productName}.</BodyShort>
       <Button
         as={NextLink}
         variant={'secondary'}
