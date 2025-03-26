@@ -13,46 +13,47 @@ type Props = {
   techDataRows: TechDataRow[]
 }
 
+type Filter = { name: string; values: string[] }
+
 export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  const filters: { [key: string]: string[] } = Object.assign(
-    {},
-    ...variantFilters
-      .filter(({ name }) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
-      .map(({ name, type }) => {
-        const values = variants
-          .map((variant) => {
-            const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
+  const filters: Filter[] = variantFilters
+    .filter(({ name }) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
+    .map(({ name, type }) => {
+      const values = variants
+        .map((variant) => {
+          const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
 
-            if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
-              return Object.entries(variant.techData)
-                .filter(([key]) => key.startsWith(name))
-                .map(([_, techDataField]) => techDataField.value)
-            }
-
-            return []
-          })
-          .flat()
-
-        if (type === VariantFilterType.MIN_MAX && values.length > 0) {
-          const allValues = values.map((value) => parseInt(value))
-
-          const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
-          const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
-
-          return {
-            [name]: valueIntervals.map((value) => `${value} cm`),
+          if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
+            return Object.entries(variant.techData)
+              .filter(([key]) => key.startsWith(name))
+              .map(([_, techDataField]) => techDataField.value)
           }
-        }
+
+          return []
+        })
+        .flat()
+
+      if (type === VariantFilterType.MIN_MAX && values.length > 0) {
+        const allValues = values.map((value) => parseInt(value))
+
+        const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
+        const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
 
         return {
-          [name]: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
+          name: name,
+          values: valueIntervals.map((value) => `${value} cm`),
         }
-      })
-  )
+      }
+
+      return {
+        name: name,
+        values: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
+      }
+    })
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -105,25 +106,25 @@ const SeteSelect = ({
   filters,
   selectFilter,
 }: {
-  filters: { [_: string]: string[] }
+  filters: Filter[]
   selectFilter: (name: string, value: string) => void
 }) => {
   const searchParams = useSearchParams()
   return (
     <>
-      {Object.entries(filters).map(([key, row], index) => {
+      {filters.map(({ name, values }, index) => {
         return (
-          row.length > 0 && (
+          values.length > 0 && (
             <Select
               key={index + 1}
-              label={key}
-              onChange={(event) => selectFilter(key, event.target.value)}
-              value={searchParams.get(key) ?? ''}
+              label={name}
+              onChange={(event) => selectFilter(name, event.target.value)}
+              value={searchParams.get(name) ?? ''}
             >
               <option key="" value="">
                 Velg
               </option>
-              {row.map((value, i) => (
+              {values.map((value, i) => (
                 <option key={i + 1}>{value}</option>
               ))}
             </Select>
