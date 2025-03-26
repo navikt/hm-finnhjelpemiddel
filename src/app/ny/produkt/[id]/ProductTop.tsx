@@ -12,7 +12,7 @@ import { QrCodeButton } from '@/app/ny/produkt/[id]/QrCodeButton'
 
 const ProductTop = ({ product }: { product: Product }) => {
   return (
-    <HGrid columns={2} gap={'8'}>
+    <HGrid columns={{ sm: 1, md: 2 }} gap={'8'}>
       {product.photos && <ImageCarousel images={product.photos} />}
       <ProductSummary product={product} />
     </HGrid>

@@ -15,7 +15,7 @@ type Props = {
 
 const ProductMiddle = ({ product }: Props) => {
   return (
-    <HGrid gap={'8'} columns={2}>
+    <HGrid gap={'8'} columns={{ sm: 1, md: 2 }}>
       <VStack gap={'20'} paddingBlock={'6 0'}>
         <ProductInformation product={product} />
         {product.variants.length > 1 && (
