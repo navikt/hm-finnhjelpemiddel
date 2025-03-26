@@ -29,7 +29,7 @@ export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => 
 
           if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
             return Object.entries(variant.techData)
-              .filter(([key]) => key.startsWith(name))
+              .filter(([key]) => key === name || key === `${name} min` || key === `${name} maks`)
               .map(([_, techDataField]) => techDataField.value)
           }
 
