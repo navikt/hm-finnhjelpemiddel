@@ -14,6 +14,7 @@ import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
 import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
 import styles from '@/app/ny/produkt/[id]/ProductTop.module.scss'
+import variantTable from './VariantTable.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
 import { VariantStatusRowNew } from '@/app/ny/produkt/[id]/VariantStatusRowNew'
 
@@ -216,14 +217,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
       {productVariantsToShow.length > 0 && (
         <>
-          <div className="variants-table" id="variants-table">
+          <div className={variantTable.variantsTable} id="variants-table">
             <Table zebraStripes>
               <Table.Header>
                 <VariantStatusRowNew variants={sortedByKey} />
-                <Table.Row className="variants-table__sortable-row">
-                  <Table.ColumnHeader className="sortable" ref={variantNameElementRef}>
-                    Navn på variant
-                  </Table.ColumnHeader>
+                <Table.Row>
+                  <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
                   {sortedByKey.map((variant) => (
                     <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
                   ))}
@@ -298,7 +297,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'bestillingsordning-' + variant.id}
-                        className={selectedColumn === variant.id ? 'selected-column' : ''}
+                        className={selectedColumn === variant.id ? variantTable.selectedColumn : ''}
                         onClick={() => handleColumnClick(variant.id)}
                       >
                         {variant.bestillingsordning ? 'Ja' : 'Nei'}
@@ -312,7 +311,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'behovsmelding-' + variant.id}
-                        className={selectedColumn === variant.id ? 'selected-column' : ''}
+                        className={selectedColumn === variant.id ? variantTable.selectedColumn : ''}
                         onClick={() => handleColumnClick('column-' + i)}
                       >
                         {variant.digitalSoknad ? 'Ja' : 'Nei'}
