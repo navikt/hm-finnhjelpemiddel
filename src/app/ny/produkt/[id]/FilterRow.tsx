@@ -4,26 +4,23 @@ import { HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantTable'
+import { TechDataRow, VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantTable'
 
 type Props = {
   variants: ProductVariant[]
   variantFilters: VariantFilter[]
-  dataFieldCommonality: { [key: string]: boolean }
+  techDataRows: TechDataRow[]
 }
 
-export const FilterRow = ({ variants, variantFilters, dataFieldCommonality }: Props) => {
+export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  console.log(dataFieldCommonality)
   const filters: { [key: string]: string[] } = Object.assign(
     {},
     ...variantFilters
-      .filter(({ name }) =>
-        Object.entries(dataFieldCommonality).some(([key, isCommon]) => key.startsWith(name) && !isCommon)
-      )
+      .filter(({ name }) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
       .map(({ name, type }) => {
         const values = variants
           .map((variant) => {
@@ -55,8 +52,6 @@ export const FilterRow = ({ variants, variantFilters, dataFieldCommonality }: Pr
         }
       })
   )
-
-  console.log('filters', filters)
 
   const createQueryString = useCallback(
     (name: string, value: string) => {

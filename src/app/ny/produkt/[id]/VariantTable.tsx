@@ -34,6 +34,8 @@ export type VariantFilter = {
   filterFunction: (variant: ProductVariant) => boolean
 }
 
+export type TechDataRow = { key: string; values: string[]; isCommonField: boolean }
+
 export const VariantTable = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
   const searchParams = useSearchParams()
@@ -126,7 +128,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
   ]
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
-    return Object.values(variantFilters).every((variantFilter) => variantFilter.filterFunction(variant))
+    return variantFilters.every((variantFilter) => variantFilter.filterFunction(variant))
   })
 
   const sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
@@ -135,27 +137,19 @@ export const VariantTable = ({ product }: { product: Product }) => {
       ? [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
       : [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
-  const rows: { [key: string]: string[] } = Object.assign(
-    {},
-    ...allDataKeys.map((key) => ({
-      [key]: productVariantsToShow.map((variant) =>
+  const techDataRows: TechDataRow[] = allDataKeys.map((key) => {
+    return {
+      key: key,
+      values: productVariantsToShow.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
       ),
-    }))
-  )
-
-  const dataFieldCommonality: { [key: string]: boolean } = Object.assign(
-    {},
-    ...allDataKeys.map((key) => {
-      return {
-        [key]: product.variants.every(
-          (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
-        ),
-      }
-    })
-  )
+      isCommonField: product.variants.every(
+        (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
+      ),
+    }
+  })
 
   const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
   const hasAgreementVaries = hasAgreementSet.size > 1
@@ -198,11 +192,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
           <Heading size={'medium'} spacing>
             Andre egenskaper
           </Heading>
-          <FilterRow
-            variants={product.variants}
-            variantFilters={variantFilters}
-            dataFieldCommonality={dataFieldCommonality}
-          />
+          <FilterRow variants={product.variants} variantFilters={variantFilters} techDataRows={techDataRows} />
           <Heading level="3" size="small">
             {`${productVariantsToShow.length} av ${product.variantCount} varianter`}
           </Heading>
@@ -319,13 +309,13 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     ))}
                   </Table.Row>
                 )}
-                {Object.keys(rows).length > 0 &&
-                  Object.entries(rows).map(([key, row]) => {
-                    if (dataFieldCommonality[key]) return null
+                {techDataRows.length > 0 &&
+                  techDataRows.map(({ key, values, isCommonField }) => {
+                    if (isCommonField) return null
                     return (
                       <Table.Row key={key + 'row'}>
                         <Table.HeaderCell>{key}</Table.HeaderCell>
-                        {row.map((value, i) => (
+                        {values.map((value, i) => (
                           <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
                         ))}
                       </Table.Row>
