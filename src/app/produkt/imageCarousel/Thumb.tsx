@@ -23,7 +23,6 @@ export const Thumb = ({
     >
       <div className={styles.thumbImageWrapper}>
         <Image
-          aria-selected={true}
           loader={smallImageLoader}
           src={imageUri}
           alt={`Produktbilde ${index + 1}`}

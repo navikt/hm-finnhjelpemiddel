@@ -163,7 +163,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
     <Box>
       {product.variants.length > 1 && (
         <VStack gap={'4'}>
-          <Heading size={'medium'} spacing>
+          <Heading size={'medium'} level={'2'} spacing>
             Andre egenskaper
           </Heading>
           <FilterRow variants={product.variants} variantFilters={variantFilters} techDataRows={techDataRows} />
