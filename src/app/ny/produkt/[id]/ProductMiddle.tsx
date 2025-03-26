@@ -41,10 +41,10 @@ const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPar
       </Heading>
       <BodyShort>Her finner du en liste over tilbehør og reservedeler som passer til {productName}.</BodyShort>
       <Button
+        className={styles.button}
         as={NextLink}
         variant={'secondary'}
-        icon={<LayersPlusIcon />}
-        style={{ width: 'fit-content' }}
+        icon={<LayersPlusIcon aria-hidden />}
         href={accessoriesLink}
       >
         Tilbehør og reservedeler
@@ -63,10 +63,10 @@ const OtherProductsOnPost = ({ agreement }: OtherProductsOnPostProps) => {
       </Heading>
       <BodyShort>{agreement.postTitle}</BodyShort>
       <Button
+        className={styles.button}
         as={NextLink}
         variant={'secondary'}
-        icon={<ChevronRightIcon />}
-        style={{ width: 'fit-content' }}
+        icon={<ChevronRightIcon aria-hidden />}
         href={`/rammeavtale/hjelpemidler/${agreement.id}?delkontrakt=${agreement.postTitle}`}
       >
         Flere produkter på delkontrakt

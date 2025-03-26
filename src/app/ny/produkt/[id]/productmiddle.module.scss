@@ -15,3 +15,8 @@
   background: $a-surface-action-subtle;
   height: fit-content;
 }
+
+.button {
+  --ac-button-secondary-bg: white;
+  width: fit-content;
+}
