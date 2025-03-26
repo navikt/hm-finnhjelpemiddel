@@ -80,7 +80,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
   const seteBreddeFilter = (variant: ProductVariant) => {
     if (searchParams.get('Setebredde')) {
-      const value = parseInt(variant.techData['Setebredde'].value)
+      let value: number
+      if (variant.techData['Setebredde']) {
+        value = parseInt(variant.techData['Setebredde'].value)
+      } else {
+        value = parseInt(variant.techData['Setebredde min'].value)
+      }
 
       const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
 
