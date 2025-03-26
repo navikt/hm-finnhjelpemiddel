@@ -4,10 +4,7 @@ import { GeneralProductInformation } from '@/app/ny/produkt/[id]/GeneralProductI
 import { Documents } from '@/app/produkt/[id]/Documents'
 import { Videos } from '@/app/ny/produkt/[id]/Videos'
 
-type ProductInformationProps = {
-  product: Product
-}
-export const ProductInformation = ({ product }: ProductInformationProps) => {
+export const ProductInformation = ({ product }: { product: Product }) => {
   return (
     <VStack gap={'2'}>
       <Heading size={'medium'} level={'2'}>

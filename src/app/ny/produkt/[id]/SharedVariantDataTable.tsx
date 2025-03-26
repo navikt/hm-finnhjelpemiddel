@@ -4,12 +4,13 @@ import { toValueAndUnit } from '@/utils/string-util'
 import { Alert, Box, Heading, Table, VStack } from '@navikt/ds-react'
 import styles from '@/app/ny/produkt/[id]/productmiddle.module.scss'
 
-type SharedVariantDataTableProps = {
+export const SharedVariantDataTable = ({
+  isoCategory,
+  variants,
+}: {
   isoCategory: string
   variants: ProductVariant[]
-}
-
-export const SharedVariantDataTable = ({ isoCategory, variants }: SharedVariantDataTableProps) => {
+}) => {
   const allDataKeys =
     isoCategory === '18301505'
       ? [...new Set(variants.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)

@@ -9,11 +9,7 @@ import NextLink from 'next/link'
 import styles from './productmiddle.module.scss'
 import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
 
-type Props = {
-  product: Product
-}
-
-const ProductMiddle = ({ product }: Props) => {
+const ProductMiddle = ({ product }: { product: Product }) => {
   return (
     <HGrid gap={'8'} columns={{ sm: 1, md: 2 }}>
       <VStack gap={'20'} paddingBlock={'6 0'}>
@@ -31,18 +27,14 @@ const ProductMiddle = ({ product }: Props) => {
         )}
       </VStack>
       <VStack gap={'14'} paddingInline={'8'} paddingBlock={'6'} className={styles.boks}>
-        <AccessoriesAndParts productName={product.title} accessoriesLink={`/produkt/${product.id}/deler`} />
+        <AccessoriesAndParts productName={product.title} productId={product.id} />
         {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
       </VStack>
     </HGrid>
   )
 }
 
-type AccessoriesAndPartsProps = {
-  productName: string
-  accessoriesLink: string
-}
-const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPartsProps) => {
+const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
   return (
     <VStack gap={'2'}>
       <Heading size={'medium'} level={'2'}>
@@ -54,17 +46,15 @@ const AccessoriesAndParts = ({ productName, accessoriesLink }: AccessoriesAndPar
         as={NextLink}
         variant={'secondary'}
         icon={<LayersPlusIcon aria-hidden />}
-        href={accessoriesLink}
+        href={`/produkt/${productId}/deler`}
       >
         Tilbehør og reservedeler
       </Button>
     </VStack>
   )
 }
-type OtherProductsOnPostProps = {
-  agreement: AgreementInfo
-}
-const OtherProductsOnPost = ({ agreement }: OtherProductsOnPostProps) => {
+
+const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'}>
       <Heading size={'medium'} level={'2'}>
