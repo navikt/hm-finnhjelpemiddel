@@ -7,6 +7,7 @@ import { ProductInformation } from '@/app/ny/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataTable'
 import NextLink from 'next/link'
 import styles from './productmiddle.module.scss'
+import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
 
 type Props = {
   product: Product
@@ -19,6 +20,14 @@ const ProductMiddle = ({ product }: Props) => {
         <ProductInformation product={product} />
         {product.variants.length > 1 && (
           <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
+        )}
+        {product.variants.length === 1 && (
+          <div>
+            <Heading level="2" size="medium">
+              Egenskaper
+            </Heading>
+            <VariantTable product={product} />{' '}
+          </div>
         )}
       </VStack>
       <VStack gap={'14'} paddingInline={'8'} paddingBlock={'6'} className={styles.boks}>
