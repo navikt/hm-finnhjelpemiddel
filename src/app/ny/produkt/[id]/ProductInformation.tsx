@@ -1,8 +1,8 @@
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
 import { Product } from '@/utils/product-util'
 import { GeneralProductInformation } from '@/app/ny/produkt/[id]/GeneralProductInformation'
-import { Documents } from '@/app/produkt/[id]/Documents'
 import { Videos } from '@/app/ny/produkt/[id]/Videos'
+import { Documents } from '@/app/ny/produkt/[id]/Documents'
 
 export const ProductInformation = ({ product }: { product: Product }) => {
   return (
