@@ -1,10 +1,11 @@
 'use client'
 
-import { HStack, Select, VStack } from '@navikt/ds-react'
+import { Chips, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { ProductVariant } from '@/utils/product-util'
 import { TechDataRow, VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantTable'
+import styles from './FilterRow.module.scss'
 
 type Props = {
   variants: ProductVariant[]
@@ -76,10 +77,25 @@ export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => 
     router.replace(`${pathname}`, { scroll: false })
   }
 
+  const filterIsSet = useMemo(
+    () => searchParams.entries().some(([param, _]) => variantFilters.some((filter) => filter.name === param)),
+    [searchParams, variantFilters]
+  )
+
   return (
     <VStack gap={'4'}>
-      <HStack gap={'8'} width={'fit-content'}>
+      <HStack gap={'8'} width={'fit-content'} align={'end'}>
         <SeteSelect filters={filters} selectFilter={onSelectFilter} />
+
+        {filterIsSet && (
+          <Chips className={styles.resetFiltersButton}>
+            {
+              <Chips.Removable variant="neutral" onClick={resetFilterAll}>
+                Nullstill
+              </Chips.Removable>
+            }
+          </Chips>
+        )}
       </HStack>
     </VStack>
   )
