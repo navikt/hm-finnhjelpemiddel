@@ -8,15 +8,15 @@ import useSWR from 'swr'
 import { fetchProducts } from '@/utils/api-util'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
-import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
-import { VariantRankRow } from '@/app/produkt/variants/VariantRankRowProps'
-import { VariantPostRow } from '@/app/produkt/variants/VariantPostRow'
 import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
 import styles from '@/app/ny/produkt/[id]/ProductTop.module.scss'
 import variantTable from './VariantTable.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
 import { VariantStatusRowNew } from '@/app/ny/produkt/[id]/VariantStatusRowNew'
+import { VariantRankRow } from '@/app/ny/produkt/[id]/VariantRankRow'
+import { VariantPostRow } from '@/app/ny/produkt/[id]/VariantPostRow'
 
 export type SortColumns = {
   orderBy: string | null
@@ -152,34 +152,8 @@ export const VariantTable = ({ product }: { product: Product }) => {
   })
 
   const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
-  const hasAgreementVaries = hasAgreementSet.size > 1
   const rankSet = new Set(product.agreements.map((agr) => agr.rank))
   const postSet = new Set(product.agreements.map((agr) => agr.postNr))
-  const sortRank = rankSet.size !== 1 || hasAgreementVaries
-
-  const handleSortRow = (sortKey: string) => {
-    setSortColumns({
-      orderBy: sortKey,
-      direction:
-        sortKey === sortColumns.orderBy
-          ? sortColumns.direction === 'ascending'
-            ? 'descending'
-            : 'ascending'
-          : 'ascending',
-    })
-  }
-
-  const iconBasedOnState = (key: string) => {
-    return sortColumns.orderBy === key ? (
-      sortColumns.direction === 'ascending' ? (
-        <ArrowUpIcon title="Sort ascending" height={30} width={30} aria-hidden={true} />
-      ) : (
-        <ArrowDownIcon title="Sort descending" height={30} width={30} aria-hidden={true} />
-      )
-    ) : (
-      <ArrowsUpDownIcon title="Sort direction not set" height={30} width={30} aria-hidden={true} />
-    )
-  }
 
   const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
@@ -260,25 +234,16 @@ export const VariantTable = ({ product }: { product: Product }) => {
                 {rankSet.size > 1 && (
                   <VariantRankRow
                     sortedByKey={sortedByKey}
-                    sortColumns={sortColumns}
-                    handleSortRow={handleSortRow}
-                    sortRank={sortRank}
                     hasAgreementSet={hasAgreementSet}
                     selectedColumn={selectedColumn}
                     handleColumnClick={handleColumnClick}
-                    iconBasedOnState={iconBasedOnState}
                   />
                 )}
                 {postSet.size > 1 && (
                   <VariantPostRow
                     sortedByKey={sortedByKey}
-                    sortColumns={sortColumns}
-                    handleSortRow={handleSortRow}
-                    postSet={postSet}
-                    sortRank={sortRank}
                     selectedColumn={selectedColumn}
                     handleColumnClick={handleColumnClick}
-                    iconBasedOnState={iconBasedOnState}
                   />
                 )}
                 {bestillingsordningVaries && (
