@@ -23,14 +23,8 @@ export type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-export enum VariantFilterType {
-  MIN_MAX,
-  SINGLE,
-}
-
 export type VariantFilter = {
   name: string
-  type: VariantFilterType
   filterFunction: (variant: ProductVariant) => boolean
 }
 
@@ -122,9 +116,9 @@ export const VariantTable = ({ product }: { product: Product }) => {
   }
 
   const variantFilters: VariantFilter[] = [
-    { name: 'Setebredde', type: VariantFilterType.SINGLE, filterFunction: seteBreddeFilter },
-    { name: 'Setedybde', type: VariantFilterType.MIN_MAX, filterFunction: seteDybdeFilter },
-    { name: 'Setehøyde', type: VariantFilterType.MIN_MAX, filterFunction: seteHøydeFilter },
+    { name: 'Setebredde', filterFunction: seteBreddeFilter },
+    { name: 'Setedybde', filterFunction: seteDybdeFilter },
+    { name: 'Setehøyde', filterFunction: seteHøydeFilter },
   ]
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {

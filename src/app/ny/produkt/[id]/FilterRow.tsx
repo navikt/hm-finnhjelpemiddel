@@ -4,7 +4,7 @@ import { Chips, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { TechDataRow, VariantFilter, VariantFilterType } from '@/app/ny/produkt/[id]/VariantTable'
+import { TechDataRow, VariantFilter } from '@/app/ny/produkt/[id]/VariantTable'
 import styles from './FilterRow.module.scss'
 
 type Props = {
@@ -22,32 +22,41 @@ export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => 
 
   const filters: Filter[] = variantFilters
     .filter(({ name }) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
-    .map(({ name, type }) => {
+    .map(({ name }) => {
       const values = variants
         .map((variant) => {
           const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
 
           if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
+            const isMinMax =
+              Object.keys(variant.techData).filter((key) => key === `${name} min` || key === `${name} maks`).length ===
+              2
+
+            if (isMinMax) {
+              const minValue = parseInt(variant.techData[`${name} min`].value)
+              const maxValue = parseInt(variant.techData[`${name} maks`].value)
+              const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
+
+              if (minValue === maxValue || minValue > maxValue) {
+                return [minValue]
+              }
+
+              const valueIntervals = rangeOfNumbers(
+                parseInt(variant.techData[`${name} min`].value),
+                parseInt(variant.techData[`${name} maks`].value)
+              )
+
+              return valueIntervals.map((number) => number.toString())
+            }
+
             return Object.entries(variant.techData)
-              .filter(([key]) => key === name || key === `${name} min` || key === `${name} maks`)
+              .filter(([key]) => key === name)
               .map(([_, techDataField]) => techDataField.value)
           }
 
           return []
         })
         .flat()
-
-      if (type === VariantFilterType.MIN_MAX && values.length > 0) {
-        const allValues = values.map((value) => parseInt(value))
-
-        const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
-        const valueIntervals = rangeOfNumbers(Math.min(...allValues), Math.max(...allValues))
-
-        return {
-          name: name,
-          values: valueIntervals.map((value) => `${value} cm`),
-        }
-      }
 
       return {
         name: name,
