@@ -31,31 +31,23 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
           )
 
           if (otherFilters.every((otherFilterFieldName) => filterFunction(variant, otherFilterFieldName))) {
-            const isMinMax =
-              Object.keys(variant.techData).filter(
-                (key) => key === `${filterFieldName} min` || key === `${filterFieldName} maks`
-              ).length === 2
+            const isMinMax = variant.techData[`${filterFieldName} min`] && variant.techData[`${filterFieldName} maks`]
 
             if (isMinMax) {
               const minValue = parseInt(variant.techData[`${filterFieldName} min`].value)
               const maxValue = parseInt(variant.techData[`${filterFieldName} maks`].value)
 
-              if (minValue === maxValue || minValue > maxValue) {
+              if (minValue >= maxValue) {
                 return [minValue]
               }
 
               const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
-              const valueIntervals = rangeOfNumbers(
-                parseInt(variant.techData[`${filterFieldName} min`].value),
-                parseInt(variant.techData[`${filterFieldName} maks`].value)
-              )
+              const valueIntervals = rangeOfNumbers(minValue, maxValue)
 
               return valueIntervals.map((number) => number.toString())
             }
 
-            return Object.entries(variant.techData)
-              .filter(([key]) => key === filterFieldName)
-              .map(([_, techDataField]) => techDataField.value)
+            return variant.techData[filterFieldName].value
           }
 
           return []

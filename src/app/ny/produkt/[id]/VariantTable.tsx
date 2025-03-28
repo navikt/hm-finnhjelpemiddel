@@ -72,10 +72,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
   const filterFunction = (variant: ProductVariant, filterFieldName: string) => {
     if (searchParams.get(filterFieldName)) {
-      const isMinMax =
-        Object.keys(variant.techData).filter(
-          (key) => key === `${filterFieldName} min` || key === `${filterFieldName} maks`
-        ).length === 2
+      const isMinMax = variant.techData[`${filterFieldName} min`] && variant.techData[`${filterFieldName} maks`]
 
       if (isMinMax) {
         const min = parseInt(variant.techData[`${filterFieldName} min`].value)
@@ -88,7 +85,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
       if (variant.techData[filterFieldName]) {
         const value = parseInt(variant.techData[filterFieldName].value)
-        const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
+        const searchTarget = parseInt(searchParams.get(filterFieldName)!.split(' ')[0])
 
         return searchTarget === value
       }
