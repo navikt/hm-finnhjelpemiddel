@@ -30,8 +30,6 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
             (otherFilterFieldName) => otherFilterFieldName !== filterFieldName
           )
 
-          console.log(otherFilters)
-
           if (otherFilters.every((otherFilterFieldName) => filterFunction(variant, otherFilterFieldName))) {
             const isMinMax =
               Object.keys(variant.techData).filter(
