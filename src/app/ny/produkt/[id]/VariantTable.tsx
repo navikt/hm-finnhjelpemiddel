@@ -23,11 +23,6 @@ export type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-export type VariantFilter = {
-  name: string
-  filterFunction: (variant: ProductVariant) => boolean
-}
-
 export type TechDataRow = { key: string; values: string[]; isCommonField: boolean }
 
 export const VariantTable = ({ product }: { product: Product }) => {
@@ -75,54 +70,36 @@ export const VariantTable = ({ product }: { product: Product }) => {
     [product.variants, productWithFilteredVariants]
   )
 
-  const seteBreddeFilter = (variant: ProductVariant) => {
-    if (searchParams.get('Setebredde')) {
-      let value: number
-      if (variant.techData['Setebredde']) {
-        value = parseInt(variant.techData['Setebredde'].value)
-      } else {
-        value = parseInt(variant.techData['Setebredde min'].value)
+  const filterFunction = (variant: ProductVariant, filterFieldName: string) => {
+    if (searchParams.get(filterFieldName)) {
+      const isMinMax =
+        Object.keys(variant.techData).filter(
+          (key) => key === `${filterFieldName} min` || key === `${filterFieldName} maks`
+        ).length === 2
+
+      if (isMinMax) {
+        const min = parseInt(variant.techData[`${filterFieldName} min`].value)
+        const max = parseInt(variant.techData[`${filterFieldName} maks`].value)
+
+        const searchTarget = parseInt(searchParams.get(filterFieldName)!.split(' ')[0])
+
+        return min <= searchTarget && searchTarget <= max
       }
 
-      const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
+      if (variant.techData[filterFieldName]) {
+        const value = parseInt(variant.techData[filterFieldName].value)
+        const searchTarget = parseInt(searchParams.get('Setebredde')!.split(' ')[0])
 
-      return searchTarget === value
+        return searchTarget === value
+      }
     }
     return true
   }
 
-  const seteDybdeFilter = (variant: ProductVariant) => {
-    if (searchParams.get('Setedybde')) {
-      const min = parseInt(variant.techData['Setedybde min'].value)
-      const max = parseInt(variant.techData['Setedybde maks'].value)
-
-      const searchTarget = parseInt(searchParams.get('Setedybde')!.split(' ')[0])
-
-      return min <= searchTarget && searchTarget <= max
-    }
-    return true
-  }
-
-  const seteHøydeFilter = (variant: ProductVariant) => {
-    if (searchParams.get('Setehøyde')) {
-      const min = parseInt(variant.techData['Setehøyde min'].value)
-      const max = parseInt(variant.techData['Setehøyde maks'].value)
-
-      const searchTarget = parseInt(searchParams.get('Setehøyde')!.split(' ')[0])
-
-      return min <= searchTarget && searchTarget <= max
-    }
-    return true
-  }
-
-  const variantFilters: VariantFilter[] = [
-    { name: 'Setebredde', filterFunction: seteBreddeFilter },
-    { name: 'Setedybde', filterFunction: seteDybdeFilter },
-    { name: 'Setehøyde', filterFunction: seteHøydeFilter },
-  ]
+  const filterFieldNames = ['Setebredde', 'Setedybde', 'Setehøyde']
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
-    return variantFilters.every((variantFilter) => variantFilter.filterFunction(variant))
+    return filterFieldNames.every((filterFieldName) => filterFunction(variant, filterFieldName))
   })
 
   const sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
@@ -160,7 +137,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
           <Heading size={'medium'} level={'2'} spacing>
             Andre egenskaper
           </Heading>
-          <FilterRow variants={product.variants} variantFilters={variantFilters} techDataRows={techDataRows} />
+          <FilterRow
+            variants={product.variants}
+            filterFieldNames={filterFieldNames}
+            filterFunction={filterFunction}
+            techDataRows={techDataRows}
+          />
           <Heading level="3" size="small">
             {`${productVariantsToShow.length} av ${product.variantCount} varianter`}
           </Heading>

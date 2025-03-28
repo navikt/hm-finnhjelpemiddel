@@ -4,53 +4,59 @@ import { Chips, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { TechDataRow, VariantFilter } from '@/app/ny/produkt/[id]/VariantTable'
+import { TechDataRow } from '@/app/ny/produkt/[id]/VariantTable'
 import styles from './FilterRow.module.scss'
 
 type Props = {
   variants: ProductVariant[]
-  variantFilters: VariantFilter[]
+  filterFieldNames: string[]
+  filterFunction: (variant: ProductVariant, filterFieldName: string) => boolean
   techDataRows: TechDataRow[]
 }
 
 type Filter = { name: string; values: string[] }
 
-export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => {
+export const FilterRow = ({ variants, filterFieldNames, filterFunction, techDataRows }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  const filters: Filter[] = variantFilters
-    .filter(({ name }) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
-    .map(({ name }) => {
+  const filters: Filter[] = filterFieldNames
+    .filter((name) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
+    .map((filterFieldName) => {
       const values = variants
         .map((variant) => {
-          const otherFilters = variantFilters.filter((variantFilter) => variantFilter.name !== name)
+          const otherFilters = filterFieldNames.filter(
+            (otherFilterFieldName) => otherFilterFieldName !== filterFieldName
+          )
 
-          if (otherFilters.every((variantFilter) => variantFilter.filterFunction(variant))) {
+          console.log(otherFilters)
+
+          if (otherFilters.every((otherFilterFieldName) => filterFunction(variant, otherFilterFieldName))) {
             const isMinMax =
-              Object.keys(variant.techData).filter((key) => key === `${name} min` || key === `${name} maks`).length ===
-              2
+              Object.keys(variant.techData).filter(
+                (key) => key === `${filterFieldName} min` || key === `${filterFieldName} maks`
+              ).length === 2
 
             if (isMinMax) {
-              const minValue = parseInt(variant.techData[`${name} min`].value)
-              const maxValue = parseInt(variant.techData[`${name} maks`].value)
-              const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
+              const minValue = parseInt(variant.techData[`${filterFieldName} min`].value)
+              const maxValue = parseInt(variant.techData[`${filterFieldName} maks`].value)
 
               if (minValue === maxValue || minValue > maxValue) {
                 return [minValue]
               }
 
+              const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
               const valueIntervals = rangeOfNumbers(
-                parseInt(variant.techData[`${name} min`].value),
-                parseInt(variant.techData[`${name} maks`].value)
+                parseInt(variant.techData[`${filterFieldName} min`].value),
+                parseInt(variant.techData[`${filterFieldName} maks`].value)
               )
 
               return valueIntervals.map((number) => number.toString())
             }
 
             return Object.entries(variant.techData)
-              .filter(([key]) => key === name)
+              .filter(([key]) => key === filterFieldName)
               .map(([_, techDataField]) => techDataField.value)
           }
 
@@ -59,7 +65,7 @@ export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => 
         .flat()
 
       return {
-        name: name,
+        name: filterFieldName,
         values: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
       }
     })
@@ -88,8 +94,11 @@ export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => 
   }
 
   const filterIsSet = useMemo(
-    () => Array.from(searchParams).some(([param, _]) => variantFilters.some((filter) => filter.name === param)),
-    [searchParams, variantFilters]
+    () =>
+      Array.from(searchParams).some(([param, _]) =>
+        filterFieldNames.some((filterFieldName) => filterFieldName === param)
+      ),
+    [searchParams, filterFieldNames]
   )
 
   return (
