@@ -88,7 +88,7 @@ export const FilterRow = ({ variants, variantFilters, techDataRows }: Props) => 
   }
 
   const filterIsSet = useMemo(
-    () => searchParams.entries().some(([param, _]) => variantFilters.some((filter) => filter.name === param)),
+    () => Array.from(searchParams).some(([param, _]) => variantFilters.some((filter) => filter.name === param)),
     [searchParams, variantFilters]
   )
 

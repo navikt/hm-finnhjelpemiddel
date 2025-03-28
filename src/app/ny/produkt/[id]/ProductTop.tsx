@@ -30,7 +30,6 @@ const ProductSummary = ({ product }: { product: Product }) => {
     const cleanText = text.replace(removeHtmlExp, '')
 
     const words = cleanText.match(/(\w.*?\.)(?:\s[A-Z]|$)/)
-    console.log(text)
 
     return words ? words[1] : ''
   }
