@@ -47,7 +47,9 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
               return valueIntervals.map((number) => number.toString())
             }
 
-            return variant.techData[filterFieldName].value
+            if (variant.techData[filterFieldName]) {
+              return variant.techData[filterFieldName].value
+            }
           }
 
           return []
