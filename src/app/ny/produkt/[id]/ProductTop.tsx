@@ -25,17 +25,6 @@ const ProductSummary = ({ product }: { product: Product }) => {
     product.agreements?.length > 0 &&
     Math.min(...product.agreements.map((agreement) => agreement.rank))
 
-  const ingressifier = (text: string) => {
-    const removeHtmlExp = new RegExp(/(<([^>]+)>)/gi)
-    const cleanText = text.replace(removeHtmlExp, '')
-
-    const words = cleanText.match(/(\w.*?\.)(?:\s[A-Z]|$)/)
-
-    return words ? words[1] : ''
-  }
-
-  const descriptionIngress = product.attributes.text ? ingressifier(product.attributes.text) : ''
-
   return (
     <VStack gap={'4'}>
       <HStack justify={'space-between'}>
@@ -56,7 +45,10 @@ const ProductSummary = ({ product }: { product: Product }) => {
         <Heading level="1" size="large">
           {product.title}
         </Heading>
-        {descriptionIngress}
+        <Heading size={'xsmall'} level={'3'}>
+          Produktkategori
+        </Heading>
+        {product.isoCategoryTitle}
       </VStack>
 
       <VStack gap={'6'} paddingBlock={'8'}>
@@ -77,7 +69,7 @@ const CopyHms = ({ product }: { product: Product }) => {
   if (hmsArtNumbers.size === 1) {
     return (
       <VStack gap={'2'} align={'start'}>
-        <Heading level="3" size="small">
+        <Heading level="3" size="xsmall">
           Kopier HMS-nummer
         </Heading>
 
