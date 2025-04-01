@@ -126,6 +126,7 @@ export default function AlternativeProductsPage() {
             <li>Varmehjelpemidler for hender og føtter</li>
             <li>Vogner og hjelpemidler til sport og aktivitet</li>
             <li>Senger, sengebunner, skummadrasser, hjertebrett og sengebord</li>
+            <li>Hørselshjelpemidler</li>
           </ul>
         </ReadMore>
       </div>
