@@ -93,7 +93,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return true
   }
 
-  const filterFieldNames = ['Setebredde', 'Setedybde', 'Setehøyde', 'Materiale i trekk', 'Trekk']
+  const filterFieldNames = ['Setebredde', 'Setedybde', 'Setehøyde', 'Lengde', 'Bredde', 'Materiale i trekk', 'Trekk']
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
     return filterFieldNames.every((filterFieldName) => filterFunction(variant, filterFieldName))

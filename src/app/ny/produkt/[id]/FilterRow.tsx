@@ -56,10 +56,19 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
         })
         .flat()
 
+      const unit = techDataRows.find(({ key }) => key.startsWith(filterFieldName))?.unit
+
+      const sortedUniqueValues = Array.from(new Set(values.map((value) => `${value}`))).sort((a, b) => {
+        if (parseInt(a) && parseInt(b)) {
+          return parseInt(a) - parseInt(b)
+        }
+        return a.localeCompare(b)
+      })
+
       return {
         name: filterFieldName,
-        values: Array.from(new Set(values.map((value) => `${value}`))).sort(),
-        unit: techDataRows.find(({ key }) => key.startsWith(filterFieldName))?.unit,
+        values: sortedUniqueValues,
+        unit: unit,
       }
     })
     .filter(({ values }) => values.length > 1)
