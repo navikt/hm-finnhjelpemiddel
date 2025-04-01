@@ -30,9 +30,9 @@ export const VariantTable = ({ product }: { product: Product }) => {
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
-  const [selectedColumn, setSelectedColumn] = useState<string | null>(null)
+  const [selectedColumn, setSelectedColumn] = useState<number | null>(null)
 
-  const handleColumnClick = (columnKey: string) => {
+  const handleColumnClick = (columnKey: number) => {
     setSelectedColumn(columnKey)
   }
 
@@ -169,8 +169,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
                 {hasHmsNumber && (
                   <Table.Row>
                     <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                    {sortedByKey.map((variant) => (
-                      <Table.DataCell key={'hms-' + variant.id}>
+                    {sortedByKey.map((variant, i) => (
+                      <Table.DataCell
+                        key={'hms-' + variant.id}
+                        className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                        onClick={() => handleColumnClick(i)}
+                      >
                         <CopyButton
                           size="small"
                           className={styles.copyButton}
@@ -188,8 +192,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
                 )}
                 <Table.Row>
                   <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                  {sortedByKey.map((variant) => (
-                    <Table.DataCell key={'levart-' + variant.id}>
+                  {sortedByKey.map((variant, i) => (
+                    <Table.DataCell
+                      key={'levart-' + variant.id}
+                      className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                      onClick={() => handleColumnClick(i)}
+                    >
                       <CopyButton
                         size="small"
                         className={styles.copyButton}
@@ -225,8 +233,8 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'bestillingsordning-' + variant.id}
-                        className={selectedColumn === variant.id ? variantTable.selectedColumn : ''}
-                        onClick={() => handleColumnClick(variant.id)}
+                        className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                        onClick={() => handleColumnClick(i)}
                       >
                         {variant.bestillingsordning ? 'Ja' : 'Nei'}
                       </Table.DataCell>
@@ -239,8 +247,8 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'behovsmelding-' + variant.id}
-                        className={selectedColumn === variant.id ? variantTable.selectedColumn : ''}
-                        onClick={() => handleColumnClick('column-' + i)}
+                        className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                        onClick={() => handleColumnClick(i)}
                       >
                         {variant.digitalSoknad ? 'Ja' : 'Nei'}
                       </Table.DataCell>
@@ -254,7 +262,13 @@ export const VariantTable = ({ product }: { product: Product }) => {
                       <Table.Row key={key + 'row'}>
                         <Table.HeaderCell>{key}</Table.HeaderCell>
                         {values.map((value, i) => (
-                          <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
+                          <Table.DataCell
+                            key={key + '-' + i}
+                            className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                            onClick={() => handleColumnClick(i)}
+                          >
+                            {value}
+                          </Table.DataCell>
                         ))}
                       </Table.Row>
                     )
