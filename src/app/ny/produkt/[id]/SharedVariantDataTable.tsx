@@ -31,7 +31,7 @@ export const SharedVariantDataTable = ({
   return (
     <VStack>
       <Heading level="2" size="medium">
-        Felles egenskaper for denne serien
+        Felles egenskaper
       </Heading>
       <Box paddingBlock="4">
         {Object.keys(commonDataRows).length === 0 ? (
