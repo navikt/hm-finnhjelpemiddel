@@ -23,7 +23,7 @@ export type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-export type TechDataRow = { key: string; values: string[]; isCommonField: boolean }
+export type TechDataRow = { key: string; values: string[]; isCommonField: boolean; unit: string | undefined }
 
 export const VariantTable = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
@@ -78,14 +78,14 @@ export const VariantTable = ({ product }: { product: Product }) => {
         const min = parseInt(variant.techData[`${filterFieldName} min`].value)
         const max = parseInt(variant.techData[`${filterFieldName} maks`].value)
 
-        const searchTarget = parseInt(searchParams.get(filterFieldName)!.split(' ')[0])
+        const searchTarget = parseInt(searchParams.get(filterFieldName)!)
 
         return min <= searchTarget && searchTarget <= max
       }
 
       if (variant.techData[filterFieldName]) {
-        const value = parseInt(variant.techData[filterFieldName].value)
-        const searchTarget = parseInt(searchParams.get(filterFieldName)!.split(' ')[0])
+        const value = variant.techData[filterFieldName].value
+        const searchTarget = searchParams.get(filterFieldName)!
 
         return searchTarget === value
       }
@@ -116,6 +116,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
       isCommonField: product.variants.every(
         (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
       ),
+      unit: productVariantsToShow.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
     }
   })
 

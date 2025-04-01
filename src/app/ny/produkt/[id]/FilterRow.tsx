@@ -14,7 +14,7 @@ type Props = {
   techDataRows: TechDataRow[]
 }
 
-type Filter = { name: string; values: string[] }
+type Filter = { name: string; values: string[]; unit: string | undefined }
 
 export const FilterRow = ({ variants, filterFieldNames, filterFunction, techDataRows }: Props) => {
   const searchParams = useSearchParams()
@@ -58,7 +58,8 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
 
       return {
         name: filterFieldName,
-        values: Array.from(new Set(values.map((value) => `${value} cm`))).sort(),
+        values: Array.from(new Set(values.map((value) => `${value}`))).sort(),
+        unit: techDataRows.find(({ key }) => key.startsWith(filterFieldName))?.unit,
       }
     })
 
@@ -122,7 +123,7 @@ const SeteSelect = ({
   const searchParams = useSearchParams()
   return (
     <>
-      {filters.map(({ name, values }, index) => {
+      {filters.map(({ name, values, unit }, index) => {
         return (
           values.length > 0 && (
             <Select
@@ -135,7 +136,9 @@ const SeteSelect = ({
                 Velg
               </option>
               {values.map((value, i) => (
-                <option key={i + 1}>{value}</option>
+                <option key={i + 1} label={value + (unit ? ` ${unit}` : '')}>
+                  {value}
+                </option>
               ))}
             </Select>
           )
