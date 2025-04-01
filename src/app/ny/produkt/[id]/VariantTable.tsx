@@ -84,7 +84,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
       }
 
       if (variant.techData[filterFieldName]) {
-        const value = variant.techData[filterFieldName].value
+        const value = variant.techData[filterFieldName].value.trim()
         const searchTarget = searchParams.get(filterFieldName)!
 
         return searchTarget === value
@@ -93,7 +93,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return true
   }
 
-  const filterFieldNames = ['Setebredde', 'Setedybde', 'Setehøyde']
+  const filterFieldNames = ['Setebredde', 'Setedybde', 'Setehøyde', 'Materiale i trekk', 'Trekk']
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
     return filterFieldNames.every((filterFieldName) => filterFunction(variant, filterFieldName))

@@ -48,7 +48,7 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
             }
 
             if (variant.techData[filterFieldName]) {
-              return variant.techData[filterFieldName].value
+              return variant.techData[filterFieldName].value.trim()
             }
           }
 
@@ -62,6 +62,7 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
         unit: techDataRows.find(({ key }) => key.startsWith(filterFieldName))?.unit,
       }
     })
+    .filter(({ values }) => values.length > 1)
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
