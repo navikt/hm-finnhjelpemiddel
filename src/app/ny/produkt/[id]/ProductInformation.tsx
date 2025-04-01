@@ -11,7 +11,7 @@ export const ProductInformation = ({ product }: { product: Product }) => {
         Produktinformasjon
       </Heading>
       <Accordion headingSize={'small'}>
-        <Accordion.Item>
+        <Accordion.Item defaultOpen>
           <Accordion.Header>Generell informasjon</Accordion.Header>
           <Accordion.Content>
             <GeneralProductInformation product={product} />
