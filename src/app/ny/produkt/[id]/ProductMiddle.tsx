@@ -11,9 +11,15 @@ import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
 
 const ProductMiddle = ({ product }: { product: Product }) => {
   return (
-    <HGrid gap={'8'} columns={{ sm: 1, md: 2 }}>
-      <VStack gap={'20'} paddingBlock={'6 0'}>
+    <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
+      <div style={{ gridArea: 'box1' }}>
         <ProductInformation product={product} />
+      </div>
+      <VStack gap={'14'} paddingInline={'8'} paddingBlock={'6'} className={styles.boks} style={{ gridArea: 'box2' }}>
+        <AccessoriesAndParts productName={product.title} productId={product.id} />
+        {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
+      </VStack>
+      <div style={{ gridArea: 'box3' }}>
         {product.variants.length > 1 && (
           <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
         )}
@@ -25,11 +31,7 @@ const ProductMiddle = ({ product }: { product: Product }) => {
             <VariantTable product={product} />{' '}
           </div>
         )}
-      </VStack>
-      <VStack gap={'14'} paddingInline={'8'} paddingBlock={'6'} className={styles.boks}>
-        <AccessoriesAndParts productName={product.title} productId={product.id} />
-        {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
-      </VStack>
+      </div>
     </HGrid>
   )
 }

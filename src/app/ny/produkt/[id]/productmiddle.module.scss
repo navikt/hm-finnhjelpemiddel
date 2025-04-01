@@ -1,10 +1,18 @@
 @use "@navikt/ds-tokens/dist/tokens" as *;
 
 .middleContainer {
+  grid-template-areas: 
+    "box1 box2"
+    "box3 box2"
+    "box3 .";
   
-  background: #F1F5F9;
+  @media (max-width: $a-breakpoint-md) {
+    grid-template-areas: 
+    "box1"
+    "box2"
+    "box3";
+  }
 }
-
 
 
 .commonAttributes {
