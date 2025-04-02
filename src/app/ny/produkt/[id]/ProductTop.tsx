@@ -26,11 +26,11 @@ const ProductSummary = ({ product }: { product: Product }) => {
     Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={'6'}>
       <HStack justify={'space-between'}>
         {topRank && (
           <Tag variant={'success-moderate'} className={styles.agreementTag}>
-            R{topRank}
+            Rangering {topRank}
           </Tag>
         )}
         <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
@@ -42,7 +42,7 @@ const ProductSummary = ({ product }: { product: Product }) => {
       {product.agreements.length === 1 && <BodyShort>Delkontrakt {product.agreements[0].postNr}</BodyShort>}
 
       <VStack gap={'2'}>
-        <Heading level="1" size="large">
+        <Heading level="1" size="large" spacing>
           {product.title}
         </Heading>
         <Heading size={'xsmall'} level={'3'}>
@@ -51,7 +51,7 @@ const ProductSummary = ({ product }: { product: Product }) => {
         {product.isoCategoryTitle}
       </VStack>
 
-      <VStack gap={'6'} paddingBlock={'8'}>
+      <VStack gap={'8'}>
         <CopyHms product={product} />
         <QrCodeButton id={product.id} />
       </VStack>
@@ -66,44 +66,41 @@ const CopyHms = ({ product }: { product: Product }) => {
     return <></>
   }
 
-  if (hmsArtNumbers.size === 1) {
-    return (
+  return (
+    <>
       <VStack gap={'2'} align={'start'}>
         <Heading level="3" size="xsmall">
-          Kopier HMS-nummer
+          HMS-nummer
         </Heading>
-
-        <CopyButton
-          size="medium"
-          className={styles.copyButton}
-          copyText={[...hmsArtNumbers.values()][0] || ''}
-          text={[...hmsArtNumbers.values()][0] || ''}
-          activeText="kopiert"
-          variant="action"
-          activeIcon={<ThumbUpIcon aria-hidden />}
-          iconPosition="right"
-          onClick={() => logActionEvent('kopier')}
-        />
+        {hmsArtNumbers.size === 1 ? (
+          <CopyButton
+            size="medium"
+            className={styles.copyButton}
+            copyText={[...hmsArtNumbers.values()][0] || ''}
+            text={[...hmsArtNumbers.values()][0] || ''}
+            activeText="kopiert"
+            variant="action"
+            activeIcon={<ThumbUpIcon aria-hidden />}
+            iconPosition="right"
+            onClick={() => logActionEvent('kopier')}
+          />
+        ) : (
+          <BodyShort>
+            <Button
+              className={styles.linkButton}
+              as={NextLink}
+              href="#variants-table"
+              variant={'tertiary'}
+              icon={<ArrowDownIcon aria-hidden />}
+              iconPosition={'right'}
+            >
+              Se tabell med varianter
+            </Button>
+          </BodyShort>
+        )}
       </VStack>
-    )
-  }
-
-  if (hmsArtNumbers.size > 1) {
-    return (
-      <BodyShort>
-        <Button
-          className={styles.linkButton}
-          as={NextLink}
-          href="#variants-table"
-          variant={'tertiary'}
-          icon={<ArrowDownIcon aria-hidden />}
-          iconPosition={'right'}
-        >
-          Se tabell med varianter
-        </Button>
-      </BodyShort>
-    )
-  }
+    </>
+  )
 }
 
 export default ProductTop

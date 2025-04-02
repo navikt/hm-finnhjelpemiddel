@@ -46,7 +46,7 @@ const AccessoriesAndParts = ({ productName, productId }: { productName: string; 
       <Button
         className={styles.button}
         as={NextLink}
-        variant={'secondary'}
+        variant={'primary'}
         icon={<LayersPlusIcon aria-hidden />}
         href={`/produkt/${productId}/deler`}
       >

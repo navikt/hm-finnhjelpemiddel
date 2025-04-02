@@ -29,13 +29,11 @@ export const QrCodeButton = ({ id, isVariantPage }: { id: string; isVariantPage?
 
   return (
     <Button
-      variant="primary"
+      variant="secondary"
       as="a"
       style={{ alignSelf: 'start' }}
       href={qrUrl}
       download={id + '-qr.png'}
-      icon={<DownloadIcon aria-hidden fontSize="1.5rem" />}
-      iconPosition={'right'}
       onClick={() => logActionEvent('qr-kode')}
     >
       Last ned QR-kode
