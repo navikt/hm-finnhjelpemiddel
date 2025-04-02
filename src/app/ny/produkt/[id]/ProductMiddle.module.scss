@@ -20,10 +20,13 @@
 }
 
 .boks {
-  background: $a-surface-action-subtle;
+  background: #F5F9FF;
   height: fit-content;
+  border-radius: $a-border-radius-large;
+  border: 1px solid $a-bg-subtle; 
 }
 
 .button {
   width: fit-content;
+  --ac-button-secondary-bg: white;
 }

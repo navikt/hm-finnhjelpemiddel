@@ -2,7 +2,7 @@ import { ProductVariant } from '@/utils/product-util'
 import { customSort } from '@/app/produkt/variants/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Alert, Box, Heading, Table, VStack } from '@navikt/ds-react'
-import styles from '@/app/ny/produkt/[id]/productmiddle.module.scss'
+import styles from '@/app/ny/produkt/[id]/ProductMiddle.module.scss'
 
 export const SharedVariantDataTable = ({
   isoCategory,
