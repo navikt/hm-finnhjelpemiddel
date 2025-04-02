@@ -1,0 +1,10 @@
+@use "@navikt/ds-tokens/dist/tokens" as *;
+
+.accordion {
+  box-shadow: inset 0 1px 0 0 $a-bg-subtle !important;
+}
+
+.accordionLast {
+  box-shadow: inset 0 -1px 0 0 $a-bg-subtle, inset 0 1px 0 0 $a-bg-subtle !important;
+}
+
