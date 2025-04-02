@@ -28,7 +28,7 @@ export default async function ProduktPage(props: Props) {
 
   return (
     <div className={styles.container}>
-      <VStack gap={'20'} paddingBlock={'16'} maxWidth={'1200px'}>
+      <VStack gap={'14'} paddingBlock={'16'} maxWidth={'1200px'}>
         <ProductTop product={product} />
         <ProductMiddle product={product} />
         {product.variants.length > 1 && <VariantTable product={product} />}
