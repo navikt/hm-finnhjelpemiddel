@@ -112,21 +112,22 @@ export default function AlternativeProductsPage() {
             <li>Arbeidsstoler</li>
             <li>Elektriske rullestoler</li>
             <li>Ganghjelpemidler</li>
+            <li>Hørselshjelpemidler</li>
             <li>Kalendere, dagsplanleggere og tidtakere</li>
             <li>Kjøreposer og regncape</li>
             <li>Kjøreramper</li>
+            <li>Kommunikasjonshjelpemidler</li>
             <li>Løfteplattformer og hjelpemiddel i trapp</li>
             <li>Madrasser med trykksårforebyggende egenskaper</li>
             <li>Manuelle rullestoler DK6 og DK9</li>
             <li>Overflyttingsplattformer og personløftere</li>
+            <li>Senger, sengebunner, skummadrasser, hjertebrett og sengebord</li>
             <li>Stoler med oppreisingsfunksjon</li>
             <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
             <li>Sykler med og uten hjelpemotor og støttehjul til tohjulssykler</li>
             <li>Synstekniske hjelpemidler</li>
             <li>Varmehjelpemidler for hender og føtter</li>
             <li>Vogner og hjelpemidler til sport og aktivitet</li>
-            <li>Senger, sengebunner, skummadrasser, hjertebrett og sengebord</li>
-            <li>Hørselshjelpemidler</li>
           </ul>
         </ReadMore>
       </div>
