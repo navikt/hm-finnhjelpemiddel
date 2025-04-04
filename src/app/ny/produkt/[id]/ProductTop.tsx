@@ -24,6 +24,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
     product.agreements &&
     product.agreements?.length > 0 &&
     Math.min(...product.agreements.map((agreement) => agreement.rank))
+  const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
 
   return (
     <VStack gap={'8'}>
@@ -65,7 +66,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
       <VStack gap={'6'}>
         <CopyHms product={product} />
-        <QrCodeButton id={product.id} />
+        <QrCodeButton id={qrId} />
       </VStack>
     </VStack>
   )

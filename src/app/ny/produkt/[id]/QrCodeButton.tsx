@@ -1,13 +1,15 @@
 'use client'
 
-import { DownloadIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useEffect, useState } from 'react'
 import { logActionEvent } from '@/utils/amplitude'
+import { usePathname } from 'next/navigation'
 
-export const QrCodeButton = ({ id, isVariantPage }: { id: string; isVariantPage?: boolean }) => {
+export const QrCodeButton = ({ id }: { id: string }) => {
   const [qrUrl, setQrUrl] = useState('')
+  const pathname = usePathname()
+  const url = `https://finnhjelpemiddel.nav.no${pathname}`
 
   useEffect(() => {
     const canvas = document.getElementById('qr-canvas') as HTMLCanvasElement
@@ -18,14 +20,6 @@ export const QrCodeButton = ({ id, isVariantPage }: { id: string; isVariantPage?
     const qrUrl = canvas.toDataURL('image/png')
     setQrUrl(qrUrl)
   }, [id])
-
-  const valueToUrl = (value: string) => {
-    if (isVariantPage) {
-      return `https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${value}`
-    } else {
-      return `https://finnhjelpemiddel.nav.no/produkt/${value}`
-    }
-  }
 
   return (
     <Button
@@ -38,7 +32,7 @@ export const QrCodeButton = ({ id, isVariantPage }: { id: string; isVariantPage?
     >
       Last ned QR-kode
       <div style={{ display: 'none' }}>
-        <QRCodeCanvas includeMargin={true} value={valueToUrl(id)} id="qr-canvas" />
+        <QRCodeCanvas includeMargin={true} value={url} id="qr-canvas" />
       </div>
     </Button>
   )
