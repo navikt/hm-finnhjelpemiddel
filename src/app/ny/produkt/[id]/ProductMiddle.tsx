@@ -15,7 +15,7 @@ const ProductMiddle = ({ product }: { product: Product }) => {
       <div style={{ gridArea: 'box1' }}>
         <ProductInformation product={product} />
       </div>
-      <VStack gap={'14'} style={{ gridArea: 'box2' }}>
+      <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         <AccessoriesAndParts productName={product.title} productId={product.id} />
         {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
       </VStack>
