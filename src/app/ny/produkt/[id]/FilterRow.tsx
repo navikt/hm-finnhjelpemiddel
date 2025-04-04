@@ -71,7 +71,6 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
         unit: unit,
       }
     })
-    .filter(({ values }) => values.length > 1)
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
