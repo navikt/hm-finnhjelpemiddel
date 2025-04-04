@@ -15,42 +15,37 @@ export const GeneralProductInformation = ({ product }: { product: Product }) => 
     '        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.'
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={'11'}>
       <Description description={description} />
-      <BestillingsordningBehovsmelding
-        heading={'Bestillingsordning'}
-        helpText={helpTextBestilling}
-        sett={bestillingsordning}
-      />
-      <BestillingsordningBehovsmelding
-        heading={'Digital behovsmelding'}
-        helpText={helpTextSoknad}
-        sett={digitalsoknad}
-      />
-      <ISOCategory
-        isoCategory={product.isoCategory}
-        isoCategoryTitle={product.isoCategoryTitle}
-        isoCategoryTitleInternational={product.isoCategoryTitleInternational}
-      />
+      <VStack gap={'6'}>
+        <BestillingsordningBehovsmelding
+          heading={'Bestillingsordning'}
+          helpText={helpTextBestilling}
+          sett={bestillingsordning}
+        />
+        <BestillingsordningBehovsmelding
+          heading={'Digital behovsmelding'}
+          helpText={helpTextSoknad}
+          sett={digitalsoknad}
+        />
+        <ISOCategory
+          isoCategory={product.isoCategory}
+          isoCategoryTitle={product.isoCategoryTitle}
+          isoCategoryTitleInternational={product.isoCategoryTitleInternational}
+        />
+      </VStack>
     </VStack>
   )
 }
 
 const Description = ({ description }: { description: string | undefined }) => {
   const htmlDescription = description && containsHTML(description) && validateHTML(description)
-  return (
-    <>
-      <Heading size={'xsmall'} level={'4'}>
-        Beskrivelse
-      </Heading>
-      {!description ? (
-        <BodyLong>Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.</BodyLong>
-      ) : htmlDescription ? (
-        <div dangerouslySetInnerHTML={{ __html: description }} />
-      ) : (
-        <BodyLong>{description}</BodyLong>
-      )}
-    </>
+  return !description ? (
+    <BodyLong>Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.</BodyLong>
+  ) : htmlDescription ? (
+    <div dangerouslySetInnerHTML={{ __html: description }} />
+  ) : (
+    <BodyLong>{description}</BodyLong>
   )
 }
 
@@ -62,19 +57,19 @@ type BestillingsordningBehovsmeldingProps = {
 const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: BestillingsordningBehovsmeldingProps) => {
   const bestillingsordning =
     sett.size > 1 ? (
-      <BodyShort>
-        Noen varianter.{' '}
+      <div>
+        <BodyShort>Noen varianter.</BodyShort>
         <Link as={NextLink} href="#egenskaper">
           Se tabell nedenfor.
         </Link>
-      </BodyShort>
+      </div>
     ) : sett.has(true) ? (
       <BodyShort>Ja</BodyShort>
     ) : (
       <BodyShort>Nei</BodyShort>
     )
   return (
-    <>
+    <div>
       <HStack gap={'2'}>
         <Heading size={'xsmall'} level={'4'}>
           {heading}
@@ -82,7 +77,7 @@ const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bestilling
         <HelpText placement="right">{helpText}</HelpText>
       </HStack>
       {bestillingsordning}
-    </>
+    </div>
   )
 }
 
@@ -93,25 +88,18 @@ type ISOCategoryProps = {
 }
 const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInternational }: ISOCategoryProps) => {
   return (
-    <>
+    <div>
       <Heading size={'xsmall'} level={'4'}>
         ISO-kategori (kode)
       </Heading>
       <HStack gap={'1'}>
-        <BodyShort>
-          <i>Nivå 3: </i>
-        </BodyShort>
+        <BodyShort>Nivå 3:</BodyShort>
         <BodyShort size="medium">{isoCategoryTitleInternational + ' (' + isoCategory.slice(0, 6) + ')'}</BodyShort>
       </HStack>
       <HStack gap="1">
-        <Hide below="sm">
-          <ArrowDownRightIcon fontSize="1.5rem" aria-hidden />
-        </Hide>
-        <BodyShort>
-          <i>Nivå 4: </i>{' '}
-        </BodyShort>
+        <BodyShort>Nivå 4:</BodyShort>
         <BodyShort size="medium"> {isoCategoryTitle + ' (' + isoCategory + ')'}</BodyShort>
       </HStack>
-    </>
+    </div>
   )
 }
