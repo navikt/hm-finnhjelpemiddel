@@ -8,29 +8,28 @@ import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataT
 import NextLink from 'next/link'
 import styles from './ProductMiddle.module.scss'
 import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
+import { VariantTableSingle } from '@/app/ny/produkt/[id]/VariantTableSingle'
 
-const ProductMiddle = ({ product }: { product: Product }) => {
+const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
       <div style={{ gridArea: 'box1' }}>
         <ProductInformation product={product} />
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
-        <AccessoriesAndParts productName={product.title} productId={product.id} />
+        <AccessoriesAndParts
+          productName={hmsartnr ? `serien ${product.title}` : product.title}
+          productId={product.id}
+        />
         {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
-        {product.variants.length > 1 && (
-          <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
-        )}
-        {product.variants.length === 1 && (
-          <div>
-            <Heading level="2" size="medium">
-              Egenskaper
-            </Heading>
-            <VariantTable product={product} />{' '}
-          </div>
-        )}
+        <>
+          {product.variants.length > 1 && (
+            <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
+          )}
+          {product.variants.length === 1 && <VariantTableSingle product={product} />}
+        </>
       </div>
     </HGrid>
   )

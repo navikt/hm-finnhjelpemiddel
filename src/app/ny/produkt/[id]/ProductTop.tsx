@@ -10,23 +10,23 @@ import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/ny/produkt/[id]/QrCodeButton'
 
-const ProductTop = ({ product }: { product: Product }) => {
+const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
     <HGrid columns={{ sm: 1, md: 2 }} gap={'8'}>
       {product.photos && <ImageCarousel images={product.photos} />}
-      <ProductSummary product={product} />
+      <ProductSummary product={product} hmsartnr={hmsartnr} />
     </HGrid>
   )
 }
 
-const ProductSummary = ({ product }: { product: Product }) => {
+const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const topRank =
     product.agreements &&
     product.agreements?.length > 0 &&
     Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   return (
-    <VStack gap={'6'}>
+    <VStack gap={'8'}>
       <HStack justify={'space-between'}>
         {topRank && (
           <Tag variant={'success-moderate'} className={styles.agreementTag}>
@@ -43,15 +43,27 @@ const ProductSummary = ({ product }: { product: Product }) => {
 
       <VStack gap={'2'}>
         <Heading level="1" size="large" spacing>
-          {product.title}
+          {hmsartnr ? product.variants[0].articleName : product.title}
         </Heading>
-        <Heading size={'xsmall'} level={'3'}>
-          Produktkategori
-        </Heading>
-        {product.isoCategoryTitle}
+        <VStack gap={'4'}>
+          {hmsartnr && (
+            <div>
+              <Heading size={'xsmall'} level={'3'}>
+                Serie
+              </Heading>
+              {product.title}
+            </div>
+          )}
+          <div>
+            <Heading size={'xsmall'} level={'3'}>
+              Produktkategori
+            </Heading>
+            {product.isoCategoryTitle}
+          </div>
+        </VStack>
       </VStack>
 
-      <VStack gap={'8'}>
+      <VStack gap={'6'}>
         <CopyHms product={product} />
         <QrCodeButton id={product.id} />
       </VStack>
