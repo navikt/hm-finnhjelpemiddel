@@ -5,7 +5,7 @@ import { customSort } from '@/app/produkt/variants/variant-utils'
 import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Box, CopyButton, Heading, Table } from '@navikt/ds-react'
-import styles from '@/app/ny/produkt/[id]/ProductTop.module.scss'
+import productTop from '@/app/ny/produkt/[id]/ProductTop.module.scss'
 import variantTable from './VariantTable.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
 import classNames from 'classnames'
@@ -54,7 +54,7 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
               <Table.DataCell>
                 <CopyButton
                   size="small"
-                  className={styles.copyButton}
+                  className={productTop.copyButton}
                   copyText={variant.hmsArtNr ?? ''}
                   text={variant.hmsArtNr ?? ''}
                   activeText="kopiert"
@@ -70,7 +70,7 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
               <Table.DataCell>
                 <CopyButton
                   size="small"
-                  className={styles.copyButton}
+                  className={productTop.copyButton}
                   copyText={variant.supplierRef}
                   text={variant.supplierRef}
                   activeText="kopiert"

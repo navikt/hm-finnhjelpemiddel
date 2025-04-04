@@ -5,7 +5,6 @@ import styles from '@/app/ny/produkt/[id]/ProductPage.module.scss'
 import { VStack } from '@navikt/ds-react'
 import ProductTop from '@/app/ny/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/ny/produkt/[id]/ProductMiddle'
-import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
 import AccessoryOrSparePartPage from '@/app/ny/produkt/AccessoryOrSparePartPage'
 
 type Props = {
