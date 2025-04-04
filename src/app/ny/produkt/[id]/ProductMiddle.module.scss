@@ -18,7 +18,9 @@
 
 
 .commonAttributes {
-
+  th, td {
+    border-bottom: 1px solid $a-bg-subtle !important;
+  }
 }
 
 .boks {
