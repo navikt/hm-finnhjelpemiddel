@@ -28,20 +28,21 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
   return (
     <VStack gap={'8'}>
-      <HStack justify={'space-between'}>
-        {topRank && (
-          <Tag variant={'success-moderate'} className={styles.agreementTag}>
-            Rangering {topRank}
-          </Tag>
-        )}
-        <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
-          {product.supplierName}
-        </Link>
-      </HStack>
+      <VStack gap={'4'}>
+        <HStack justify={'space-between'}>
+          {topRank && (
+            <Tag variant={'success-moderate'} className={styles.agreementTag}>
+              Rangering {topRank}
+            </Tag>
+          )}
+          <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
+            {product.supplierName}
+          </Link>
+        </HStack>
 
-      {product.agreements.length > 1 && <BodyShort>Hjelpemiddelet er på flere delkontrakter. </BodyShort>}
-      {product.agreements.length === 1 && <BodyShort>Delkontrakt {product.agreements[0].postNr}</BodyShort>}
-
+        {product.agreements.length > 1 && <BodyShort>Hjelpemiddelet er på flere delkontrakter. </BodyShort>}
+        {product.agreements.length === 1 && <BodyShort>Delkontrakt {product.agreements[0].postNr}</BodyShort>}
+      </VStack>
       <VStack gap={'2'}>
         <Heading level="1" size="large" spacing>
           {hmsartnr ? product.variants[0].articleName : product.title}
