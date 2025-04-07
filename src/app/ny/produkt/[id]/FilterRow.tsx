@@ -14,14 +14,14 @@ type Props = {
   techDataRows: TechDataRow[]
 }
 
-type Filter = { name: string; values: string[]; unit: string | undefined }
+type SelectFilterContents = { name: string; values: string[]; unit: string | undefined }
 
 export const FilterRow = ({ variants, filterFieldNames, filterFunction, techDataRows }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
 
-  const filters: Filter[] = filterFieldNames
+  const filters: SelectFilterContents[] = filterFieldNames
     .filter((name) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
     .map((filterFieldName) => {
       const values = variants
@@ -86,7 +86,7 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
     [searchParams]
   )
 
-  const onSelectFilter = (name: string, value: string) => {
+  const onFilterChange = (name: string, value: string) => {
     const newSearchParams = createQueryString(name, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
@@ -95,20 +95,26 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
     router.replace(`${pathname}`, { scroll: false })
   }
 
-  const filterIsSet = useMemo(
+  /*
+  const hasActiveFilter = useMemo(
     () =>
       Array.from(searchParams).some(([param, _]) =>
         filterFieldNames.some((filterFieldName) => filterFieldName === param)
       ),
     [searchParams, filterFieldNames]
   )
+   */
+  const hasActiveFilter = false
+
+  const showOnAgreementFilter = new Set(variants.map((variant) => variant.hasAgreement)).size > 1
 
   return (
     <VStack gap={'4'}>
-      <HStack gap={'8'} width={'fit-content'} align={'end'}>
-        <SeteSelect filters={filters} selectFilter={onSelectFilter} />
+      <HStack gap={'20'} width={'fit-content'} align={'end'}>
+        <SelectFilters filters={filters} onFilterChange={onFilterChange} />
+        {showOnAgreementFilter && <ChipFilters filterNames={['status']} onFilterChange={onFilterChange} />}
 
-        {filterIsSet && (
+        {hasActiveFilter && (
           <Chips className={styles.resetFiltersButton}>
             {
               <Chips.Removable variant="neutral" onClick={resetFilterAll}>
@@ -122,23 +128,48 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
   )
 }
 
-const SeteSelect = ({
-  filters,
-  selectFilter,
+const ChipFilters = ({
+  filterNames,
+  onFilterChange,
 }: {
-  filters: Filter[]
-  selectFilter: (name: string, value: string) => void
+  filterNames: string[]
+  onFilterChange: (name: string, value: string) => void
+}) => {
+  const searchParams = useSearchParams()
+
+  return (
+    <Chips className={styles.chipsRow}>
+      {filterNames.map((filterName) => (
+        <Chips.Toggle
+          selected={searchParams.has(filterName)}
+          checkmark={true}
+          key={filterName}
+          onClick={() => onFilterChange(filterName, searchParams.has(filterName) ? '' : 'På avtale')}
+        >
+          På avtale med nav
+        </Chips.Toggle>
+      ))}
+    </Chips>
+  )
+}
+
+const SelectFilters = ({
+  filters,
+  onFilterChange,
+}: {
+  filters: SelectFilterContents[]
+  onFilterChange: (name: string, value: string) => void
 }) => {
   const searchParams = useSearchParams()
   return (
-    <>
+    <HStack gap={'8'}>
       {filters.map(({ name, values, unit }, index) => {
         return (
           values.length > 0 && (
             <Select
               key={index + 1}
               label={name}
-              onChange={(event) => selectFilter(name, event.target.value)}
+              onChange={(event) => onFilterChange(name, event.target.value)}
               value={searchParams.get(name) ?? ''}
             >
               <option key="" value="">
@@ -153,6 +184,6 @@ const SeteSelect = ({
           )
         )
       })}
-    </>
+    </HStack>
   )
 }
