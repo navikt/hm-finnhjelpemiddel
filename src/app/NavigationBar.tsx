@@ -28,10 +28,18 @@ const NavigationBar = () => {
     setVisJulepynt(!visJulepynt)
     logCustomEvent(digihot_customevents.PEPPERKAKE)
   }
+
+  const pynteTimer = () => {
+    setTimeout(() => {
+      setVisPaaskepynt(false)
+    }, 10000)
+  }
+
   const paaskepyntFlag = featureFlags.isEnabled('paaskepynt')
   const [visPaaskepynt, setVisPaaskepynt] = useState(false)
   const clickPaaskepynt = () => {
     setVisPaaskepynt(!visPaaskepynt)
+    if (!visPaaskepynt) pynteTimer()
     logCustomEvent(digihot_customevents.PAASKE)
   }
 
