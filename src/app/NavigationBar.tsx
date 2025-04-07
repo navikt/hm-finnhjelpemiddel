@@ -32,7 +32,7 @@ const NavigationBar = () => {
   const pynteTimer = () => {
     setTimeout(() => {
       setVisPaaskepynt(false)
-    }, 10000)
+    }, 7000)
   }
 
   const paaskepyntFlag = featureFlags.isEnabled('paaskepynt')

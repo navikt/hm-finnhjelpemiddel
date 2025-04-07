@@ -21,6 +21,7 @@ export const KyllingHareFall = () => {
       }}
       radius={[30, 30]}
       images={images}
+      snowflakeCount={100}
     />
   )
 }
