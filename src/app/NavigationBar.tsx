@@ -10,9 +10,10 @@ import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
-import Pepperkakemann from '@/app/julepynt/Pepperkakemann'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { SnowfallComponent } from '@/components/Snowfall'
+import { KyllingHareFall } from '@/app/pynt/KyllingHareFall'
+import { Pynt } from '@/app/pynt/Pynt'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -26,6 +27,12 @@ const NavigationBar = () => {
   const clickJulepynt = () => {
     setVisJulepynt(!visJulepynt)
     logCustomEvent(digihot_customevents.PEPPERKAKE)
+  }
+  const paaskepyntFlag = featureFlags.isEnabled('paaskepynt')
+  const [visPaaskepynt, setVisPaaskepynt] = useState(false)
+  const clickPaaskepynt = () => {
+    setVisPaaskepynt(!visPaaskepynt)
+    logCustomEvent(digihot_customevents.PAASKE)
   }
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
@@ -91,6 +98,7 @@ const NavigationBar = () => {
   return (
     <nav className="nav" ref={outerContainerRef}>
       {juledekorasjonFlag && visJulepynt && <SnowfallComponent />}
+      {paaskepyntFlag && visPaaskepynt && <KyllingHareFall />}
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <NextLink href={homeUrl} className="logo" onClick={() => setMenuOpen(false)}>
@@ -102,39 +110,8 @@ const NavigationBar = () => {
             </Hide>
           </NextLink>
 
-          {juledekorasjonFlag && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                alignContent: 'flex-start',
-                marginRight: 'auto',
-                paddingLeft: '1rem',
-              }}
-            >
-              <Hide below="md">
-                <Button
-                  size="medium"
-                  variant="tertiary-neutral"
-                  title="Julepynt"
-                  aria-description="Viser snø på skjermen"
-                  icon={<Pepperkakemann active={visJulepynt} aria-hidden />}
-                  onClick={() => clickJulepynt()}
-                />
-              </Hide>
-              <Hide above="sm">
-                <Button
-                  size="xsmall"
-                  variant="tertiary-neutral"
-                  title="Julepynt"
-                  aria-description="Viser snø på skjermen"
-                  icon={<Pepperkakemann active={visJulepynt} aria-hidden />}
-                  onClick={() => clickJulepynt()}
-                />
-              </Hide>
-            </div>
-          )}
-
+          {juledekorasjonFlag && <Pynt vis={visJulepynt} clickPynt={clickJulepynt} pyntType={'jul'} />}
+          {paaskepyntFlag && <Pynt vis={visPaaskepynt} clickPynt={clickPaaskepynt} pyntType={'paaske'} />}
           <div className="nav-top-container__menu-buttons-container">
             <HStack wrap={false}>
               {searchOpen && (

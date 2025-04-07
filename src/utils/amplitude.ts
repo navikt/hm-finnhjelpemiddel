@@ -19,6 +19,7 @@ export enum digihot_customevents {
   VIS_FLERE_TREFF = 'vis-flere-treff',
   FILTRERING = 'filtrering',
   FILTER_ENDRET = 'filter-endret',
+  PAASKE = 'klikk på paaskepynt',
 }
 
 export enum nav_events {
