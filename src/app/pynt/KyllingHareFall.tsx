@@ -4,9 +4,9 @@ export const KyllingHareFall = () => {
   let images
   if (typeof window !== 'undefined') {
     const kylling = document.createElement('img')
-    kylling.src = './assets/chicken-svgrepo-com.svg'
+    kylling.src = '/assets/chicken-svgrepo-com.svg'
     const hare = document.createElement('img')
-    hare.src = './assets/easter-bunny-rabbit-svgrepo-com.svg'
+    hare.src = '/assets/easter-bunny-rabbit-svgrepo-com.svg'
 
     images = [kylling, hare]
   }
