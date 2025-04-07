@@ -146,15 +146,16 @@ export const VariantTable = ({ product }: { product: Product }) => {
           <Heading size={'medium'} level={'2'} spacing>
             Andre egenskaper
           </Heading>
-          <FilterRow
-            variants={product.variants}
-            filterFieldNames={filterFieldNames}
-            filterFunction={filterFunction}
-            techDataRows={techDataRows}
-          />
-          <Heading level="3" size="small">
-            {`${productVariantsToShow.length} av ${product.variantCount} varianter`}
-          </Heading>
+
+          <VStack gap={'4'}>
+            <FilterRow
+              variants={product.variants}
+              filterFieldNames={filterFieldNames}
+              filterFunction={filterFunction}
+              techDataRows={techDataRows}
+              numberOfVariantsToShow={productVariantsToShow.length}
+            />
+          </VStack>
         </VStack>
       )}
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { Chips, HStack, Select, VStack } from '@navikt/ds-react'
+import { Box, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 import { ProductVariant } from '@/utils/product-util'
@@ -12,11 +12,18 @@ type Props = {
   filterFieldNames: string[]
   filterFunction: (variant: ProductVariant, filterFieldName: string) => boolean
   techDataRows: TechDataRow[]
+  numberOfVariantsToShow: number
 }
 
 type SelectFilterContents = { name: string; values: string[]; unit: string | undefined }
 
-export const FilterRow = ({ variants, filterFieldNames, filterFunction, techDataRows }: Props) => {
+export const FilterRow = ({
+  variants,
+  filterFieldNames,
+  filterFunction,
+  techDataRows,
+  numberOfVariantsToShow,
+}: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -108,23 +115,32 @@ export const FilterRow = ({ variants, filterFieldNames, filterFunction, techData
 
   const showOnAgreementFilter = new Set(variants.map((variant) => variant.hasAgreement)).size > 1
 
-  return (
-    <VStack gap={'4'}>
-      <HStack gap={'20'} width={'fit-content'} align={'end'}>
-        <SelectFilters filters={filters} onFilterChange={onFilterChange} />
-        {showOnAgreementFilter && <ChipFilters filterNames={['status']} onFilterChange={onFilterChange} />}
+  if (filters.length === 0 && !showOnAgreementFilter) {
+    return <></>
+  }
 
-        {hasActiveFilter && (
-          <Chips className={styles.resetFiltersButton}>
-            {
-              <Chips.Removable variant="neutral" onClick={resetFilterAll}>
-                Nullstill
-              </Chips.Removable>
-            }
-          </Chips>
-        )}
-      </HStack>
-    </VStack>
+  return (
+    <Box asChild background={'surface-selected'} paddingBlock={'8 6'} paddingInline={'8'}>
+      <VStack gap={'4'}>
+        <HStack gap={'20'} width={'fit-content'} align={'end'}>
+          <SelectFilters filters={filters} onFilterChange={onFilterChange} />
+          {showOnAgreementFilter && <ChipFilters filterNames={['status']} onFilterChange={onFilterChange} />}
+
+          {hasActiveFilter && (
+            <Chips className={styles.resetFiltersButton}>
+              {
+                <Chips.Removable variant="neutral" onClick={resetFilterAll}>
+                  Nullstill
+                </Chips.Removable>
+              }
+            </Chips>
+          )}
+        </HStack>
+        <Heading level="3" size="small">
+          {`${numberOfVariantsToShow} av ${variants.length} varianter`}
+        </Heading>
+      </VStack>
+    </Box>
   )
 }
 
