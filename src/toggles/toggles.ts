@@ -4,6 +4,7 @@ export const EXPECTED_TOGGLES = [
   'juledekorasjon',
   'finnhjelpemiddel.vis-tilbehor-og-reservedel-lister',
   'finnhjelpemiddel.feilbanner',
+  'paaskepynt',
 ] as const
 
 export const LOCAL_TOGGLES = [
@@ -18,5 +19,9 @@ export const LOCAL_TOGGLES = [
   {
     name: 'finnhjelpemiddel.feilbanner',
     enabled: false,
+  },
+  {
+    name: 'paaskepynt',
+    enabled: true,
   },
 ]
