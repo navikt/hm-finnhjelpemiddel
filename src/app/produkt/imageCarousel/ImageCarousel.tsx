@@ -121,7 +121,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
                 icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
                 disabled={prevBtnDisabled}
               />
-              <Hide below={'md'}>
+              <Hide below={'lg'}>
                 <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
                   <HStack wrap={false} gap={'2'}>
                     {images.map((image, index) => (
@@ -136,7 +136,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
                   </HStack>
                 </div>
               </Hide>
-              <Hide above={'md'}>
+              <Hide above={'lg'}>
                 <BodyShort size="large">
                   {selectedIndex + 1} / {images.length}
                 </BodyShort>
@@ -193,7 +193,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
                 icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
                 disabled={prevBtnDisabled}
               />
-              <Hide below={'md'}>
+              <Hide below={'lg'}>
                 <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
                   <HStack wrap={false} gap={'2'}>
                     {images.map((image, index) => (
@@ -208,7 +208,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
                   </HStack>
                 </div>
               </Hide>
-              <Hide above={'md'}>
+              <Hide above={'lg'}>
                 <BodyShort size="large">
                   {selectedIndex + 1} / {images.length}
                 </BodyShort>
