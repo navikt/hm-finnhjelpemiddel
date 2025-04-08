@@ -330,6 +330,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isMRSAvtale = agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7' || agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7'
   const isHorselNyAvtale = agreementId === '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96'
   const isERSAvtlale = agreementId === 'eba4bfad-9f35-44c8-872a-d9f8583fa95f'
+  const isModuloppbygdeSittesystemer = agreementId === '89c83362-13eb-43ab-80f0-99673f9b7a71'
 
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
@@ -337,7 +338,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
       || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale
       || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale
       || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale || isSitteputerAvtale || isKommunikasjonsHjelpemidlerAvtale || isMRSAvtale
-      || isHorselNyAvtale || isERSAvtlale)
+      || isHorselNyAvtale || isERSAvtlale || isModuloppbygdeSittesystemer)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
