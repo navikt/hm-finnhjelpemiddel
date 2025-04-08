@@ -28,8 +28,14 @@ export const FilterRow = ({
   const router = useRouter()
   const pathname = usePathname()
 
+  const isRelevantFilter = (name: string) => {
+    return techDataRows.some(
+      ({ key, isCommonField }) => [name, `${name} min`, `${name} maks`].some((field) => field === key) && !isCommonField
+    )
+  }
+
   const filters: SelectFilterContents[] = filterFieldNames
-    .filter((name) => techDataRows.some(({ key, isCommonField }) => key.startsWith(name) && !isCommonField))
+    .filter((name) => isRelevantFilter(name))
     .map((filterFieldName) => {
       const values = variants
         .map((variant) => {
@@ -118,6 +124,8 @@ export const FilterRow = ({
   if (filters.length === 0 && !showOnAgreementFilter) {
     return <></>
   }
+
+  console.log(filters, showOnAgreementFilter)
 
   return (
     <Box asChild paddingBlock={'8 6'} paddingInline={'8'} className={styles.wrapper}>
