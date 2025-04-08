@@ -120,7 +120,7 @@ export const FilterRow = ({
   }
 
   return (
-    <Box asChild background={'surface-selected'} paddingBlock={'8 6'} paddingInline={'8'}>
+    <Box asChild paddingBlock={'8 6'} paddingInline={'8'} className={styles.wrapper}>
       <VStack gap={'4'}>
         <HStack gap={'20'} width={'fit-content'} align={'end'}>
           <SelectFilters filters={filters} onFilterChange={onFilterChange} />
