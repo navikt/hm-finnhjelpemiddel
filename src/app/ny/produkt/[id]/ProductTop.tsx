@@ -65,10 +65,8 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </VStack>
       </VStack>
 
-      <VStack gap={'6'}>
-        <CopyHms product={product} />
-        <QrCodeButton id={qrId} />
-      </VStack>
+      <CopyHms product={product} />
+      <QrCodeButton id={qrId} />
     </VStack>
   )
 }
