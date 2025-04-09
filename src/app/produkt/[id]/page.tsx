@@ -3,7 +3,7 @@ import {
   fetchProductsWithVariants,
   getProductsInPost,
   getProductWithVariants,
-  getSupplier
+  getSupplier,
 } from '@/utils/api-util'
 // import { accessoriesMock } from '@/utils/mock-data'
 import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
@@ -12,9 +12,9 @@ import { mapSupplier } from '@/utils/supplier-util'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 import { Metadata } from 'next'
 import '../product-page.scss'
-import AccessoryOrSparePartPage from "@/app/produkt/AccessoryOrSparePartPage";
-import ProductPage from "@/app/produkt/ProductPage";
-import useSWR from "swr";
+import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
+import ProductPage from '@/app/produkt/ProductPage'
+import useSWR from 'swr'
 
 export interface ProductsOnPost {
   agreementId: string
@@ -29,9 +29,8 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
-
 
   return {
     title: product.title,
@@ -40,7 +39,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ProduktPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   // Bruk denne som product dersom man ønsker å se tilbehørsside/reservedelside og tilhørende produkter
   // const product = accessoriesMock[0]
 
@@ -75,7 +74,7 @@ export default async function ProduktPage(props: Props) {
       })
     ))
 
-  const isAccessoryOrSparePart = product.accessory || product.sparePart
+  const isAccessoryOrSparePart = !product.main
   const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []

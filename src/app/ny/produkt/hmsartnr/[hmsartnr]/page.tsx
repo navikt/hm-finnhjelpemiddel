@@ -25,7 +25,7 @@ export default async function ProduktPage(props: Props) {
   const params = await props.params
 
   const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
-  const isAccessoryOrSparePart = product.accessory || product.sparePart
+  const isAccessoryOrSparePart = !product.main
   const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []

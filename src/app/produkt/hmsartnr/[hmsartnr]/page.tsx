@@ -2,7 +2,7 @@ import {
   fetchProductsWithVariants,
   getProductByHmsartnrWithVariants,
   getProductsInPost,
-  getSupplier
+  getSupplier,
 } from '@/utils/api-util'
 import { mapProductFromHmsArtNr, mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { mapSupplier } from '@/utils/supplier-util'
@@ -10,9 +10,8 @@ import { mapSupplier } from '@/utils/supplier-util'
 import { sortWithNullValuesAtEnd } from '@/utils/sort-util'
 import { Metadata } from 'next'
 import '../../product-page.scss'
-import AccessoryOrSparePartPage from "@/app/produkt/AccessoryOrSparePartPage";
-import ProductPage from "@/app/produkt/ProductPage";
-
+import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
+import ProductPage from '@/app/produkt/ProductPage'
 
 export interface ProductsOnPost {
   agreementId: string
@@ -27,7 +26,7 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
 
   return {
@@ -37,7 +36,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ProduktPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
 
   const product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
   const supplier = mapSupplier((await getSupplier(product.supplierId))._source)
@@ -70,7 +69,7 @@ export default async function ProduktPage(props: Props) {
       })
     ))
 
-  const isAccessoryOrSparePart = product.accessory || product.sparePart
+  const isAccessoryOrSparePart = !product.main
   const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
   const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
