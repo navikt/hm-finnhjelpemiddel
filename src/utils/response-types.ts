@@ -106,6 +106,7 @@ export interface ProductSourceResponse {
   sparePart: boolean
   seriesId: string
   data: Array<TechDataResponse>
+  main: boolean
   media: MediaResponse[]
   created: string
   updated: string

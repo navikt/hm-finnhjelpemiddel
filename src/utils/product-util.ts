@@ -31,6 +31,7 @@ export interface Product {
   supplierId: string
   supplierName: string
   agreements: AgreementInfo[]
+  main: boolean
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -92,9 +93,9 @@ interface Attributes {
 }
 
 interface CompatibleWith {
-  seriesIds: string[];
-  productIds: string[];
-};
+  seriesIds: string[]
+  productIds: string[]
+}
 
 export interface AgreementInfo {
   id: string
@@ -167,7 +168,10 @@ export const mapProductFromHmsArtNr = (data: SearchResponse, hmsArtNr: String): 
   if (data.hits.hits.map((h) => h._source as ProductSourceResponse).length === 0) {
     throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants ${JSON.stringify(data)}`)
   }
-  return mapProductWithOneVariant(data.hits.hits.map((h) => h._source as ProductSourceResponse), hmsArtNr)
+  return mapProductWithOneVariant(
+    data.hits.hits.map((h) => h._source as ProductSourceResponse),
+    hmsArtNr
+  )
 }
 
 /**
@@ -247,7 +251,9 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
         series: product.attributes.series,
         shortdescription: product.attributes.shortdescription,
         text: product.attributes.text,
-        compatibleWith: product.attributes.compatibleWith ? mapCompatibleWith(product.attributes.compatibleWith) : undefined,
+        compatibleWith: product.attributes.compatibleWith
+          ? mapCompatibleWith(product.attributes.compatibleWith)
+          : undefined,
         url: product.attributes.url,
       },
       variantCount: 1,
@@ -268,6 +274,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
       supplierId: product.supplier?.id ?? '',
       supplierName: product.supplier?.name ?? '',
       agreements: product.agreements,
+      main: product.main,
     }
   })
 
@@ -297,7 +304,9 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
         series: firstVariant.attributes.series,
         shortdescription: firstVariant.attributes.shortdescription,
         text: firstVariant.attributes.text,
-        compatibleWith: firstVariant.attributes.compatibleWith ? mapCompatibleWith(firstVariant.attributes.compatibleWith) : undefined,
+        compatibleWith: firstVariant.attributes.compatibleWith
+          ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
+          : undefined,
         url: firstVariant.attributes.url,
       },
       variantCount: 1,
@@ -318,6 +327,7 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
       supplierId: firstVariant.supplier?.id ?? '',
       supplierName: firstVariant.supplier?.name ?? '',
       agreements: uniquesAgreementsPostAndRanks,
+      main: firstVariant.main,
     }
   })
 
@@ -325,10 +335,11 @@ export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: Produc
 }
 
 export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsArtNr: String): Product => {
-
-  const variant = sources.filter((source) => source.hmsArtNr === hmsArtNr).map((source) => {
-    return mapProductVariant(source)
-  })
+  const variant = sources
+    .filter((source) => source.hmsArtNr === hmsArtNr)
+    .map((source) => {
+      return mapProductVariant(source)
+    })
 
   if (sources.length === 0) {
     throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
@@ -347,7 +358,9 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
       series: firstVariant.attributes.series,
       shortdescription: firstVariant.attributes.shortdescription,
       text: firstVariant.attributes.text,
-      compatibleWith: firstVariant.attributes.compatibleWith ? mapCompatibleWith(firstVariant.attributes.compatibleWith) : undefined,
+      compatibleWith: firstVariant.attributes.compatibleWith
+        ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
+        : undefined,
       url: firstVariant.attributes.url,
     },
     variantCount: sources.length,
@@ -368,9 +381,9 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
     supplierId: firstVariant.supplier?.id ?? '',
     supplierName: firstVariant.supplier?.name ?? '',
     agreements: uniquesAgreementsPostAndRanks,
+    main: firstVariant.main,
   }
 }
-
 
 export const mapProductWithVariants = (sources: ProductSourceResponse[]): Product => {
   const variants = sources.map((source) => {
@@ -395,7 +408,9 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
       series: firstVariant.attributes.series,
       shortdescription: firstVariant.attributes.shortdescription,
       text: firstVariant.attributes.text,
-      compatibleWith: firstVariant.attributes.compatibleWith ? mapCompatibleWith(firstVariant.attributes.compatibleWith) : undefined,
+      compatibleWith: firstVariant.attributes.compatibleWith
+        ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
+        : undefined,
       url: firstVariant.attributes.url,
     },
     variantCount: sources.length,
@@ -416,6 +431,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
     supplierId: firstVariant.supplier?.id ?? '',
     supplierName: firstVariant.supplier?.name ?? '',
     agreements: uniquesAgreementsPostAndRanks,
+    main: firstVariant.main,
   }
 }
 
