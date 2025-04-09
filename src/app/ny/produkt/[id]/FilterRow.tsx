@@ -2,28 +2,27 @@
 
 import { Box, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { TechDataRow } from '@/app/ny/produkt/[id]/VariantTable'
+import { Filter, FilterType, TechDataRow } from '@/app/ny/produkt/[id]/VariantTable'
 import styles from './FilterRow.module.scss'
 
 type Props = {
   variants: ProductVariant[]
-  filterFieldNames: string[]
-  filterFunction: (variant: ProductVariant, filterFieldName: string) => boolean
+  filterConfigs: Filter[]
   techDataRows: TechDataRow[]
   numberOfVariantsToShow: number
 }
 
-type SelectFilterContents = { name: string; values: string[]; unit: string | undefined }
+type SelectFilterContents = {
+  name: string
+  label: string
+  type: FilterType
+  values: string[]
+  unit: string | undefined
+}
 
-export const FilterRow = ({
-  variants,
-  filterFieldNames,
-  filterFunction,
-  techDataRows,
-  numberOfVariantsToShow,
-}: Props) => {
+export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVariantsToShow }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -34,34 +33,48 @@ export const FilterRow = ({
     )
   }
 
-  const filters: SelectFilterContents[] = filterFieldNames
-    .filter((name) => isRelevantFilter(name))
-    .map((filterFieldName) => {
+  const getDropdownFilterValues = (variant: ProductVariant, fieldName: string): string[] => {
+    const isMinMax = variant.techData[`${fieldName} min`] && variant.techData[`${fieldName} maks`]
+
+    if (isMinMax) {
+      const minValue = parseInt(variant.techData[`${fieldName} min`].value)
+      const maxValue = parseInt(variant.techData[`${fieldName} maks`].value)
+
+      if (minValue >= maxValue) {
+        return [minValue.toString()]
+      }
+
+      const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
+      const valueIntervals = rangeOfNumbers(minValue, maxValue)
+
+      return valueIntervals.map((number) => number.toString())
+    }
+
+    if (variant.techData[fieldName]) {
+      return [variant.techData[fieldName].value.trim()]
+    }
+
+    return []
+  }
+
+  const filters: SelectFilterContents[] = filterConfigs
+    .filter(
+      ({ fieldName, type }) =>
+        isRelevantFilter(fieldName) ||
+        (type === FilterType.TOGGLE && new Set(variants.map((v) => v.hasAgreement)).size > 1)
+    )
+    .map(({ fieldName, label, type }) => {
       const values = variants
         .map((variant) => {
-          const otherFilters = filterFieldNames.filter(
-            (otherFilterFieldName) => otherFilterFieldName !== filterFieldName
-          )
+          const otherFilters = filterConfigs.filter((otherFilter) => otherFilter.fieldName !== fieldName)
 
-          if (otherFilters.every((otherFilterFieldName) => filterFunction(variant, otherFilterFieldName))) {
-            const isMinMax = variant.techData[`${filterFieldName} min`] && variant.techData[`${filterFieldName} maks`]
-
-            if (isMinMax) {
-              const minValue = parseInt(variant.techData[`${filterFieldName} min`].value)
-              const maxValue = parseInt(variant.techData[`${filterFieldName} maks`].value)
-
-              if (minValue >= maxValue) {
-                return [minValue]
-              }
-
-              const rangeOfNumbers = (a: number, b: number) => [...Array(b - a + 1)].map((_, i) => i + a)
-              const valueIntervals = rangeOfNumbers(minValue, maxValue)
-
-              return valueIntervals.map((number) => number.toString())
+          //hvis varianten passerer alle aktive filtere utenom gjeldene filter, legg til verdiene fra varianten
+          if (otherFilters.every((otherFilter) => otherFilter.predicate(variant, otherFilter.fieldName))) {
+            if (type === FilterType.DROPDOWN) {
+              return getDropdownFilterValues(variant, fieldName)
             }
-
-            if (variant.techData[filterFieldName]) {
-              return variant.techData[filterFieldName].value.trim()
+            if (type === FilterType.TOGGLE) {
+              return variant.hasAgreement
             }
           }
 
@@ -69,7 +82,7 @@ export const FilterRow = ({
         })
         .flat()
 
-      const unit = techDataRows.find(({ key }) => key.startsWith(filterFieldName))?.unit
+      const unit = techDataRows.find(({ key }) => key.startsWith(fieldName))?.unit
 
       const sortedUniqueValues = Array.from(new Set(values.map((value) => `${value}`))).sort((a, b) => {
         if (parseInt(a) && parseInt(b)) {
@@ -79,7 +92,9 @@ export const FilterRow = ({
       })
 
       return {
-        name: filterFieldName,
+        name: fieldName,
+        label: label,
+        type: type,
         values: sortedUniqueValues,
         unit: unit,
       }
@@ -104,45 +119,19 @@ export const FilterRow = ({
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
-  const resetFilterAll = () => {
-    router.replace(`${pathname}`, { scroll: false })
-  }
-
-  /*
-  const hasActiveFilter = useMemo(
-    () =>
-      Array.from(searchParams).some(([param, _]) =>
-        filterFieldNames.some((filterFieldName) => filterFieldName === param)
-      ),
-    [searchParams, filterFieldNames]
-  )
-   */
-  const hasActiveFilter = false
-
-  const showOnAgreementFilter = new Set(variants.map((variant) => variant.hasAgreement)).size > 1
-
-  if (filters.length === 0 && !showOnAgreementFilter) {
+  if (filters.length === 0) {
     return <></>
   }
 
-  console.log(filters, showOnAgreementFilter)
+  const dropdownFilters = filters.filter((filter) => filter.type === FilterType.DROPDOWN)
+  const toggleFilters = filters.filter((filter) => filter.type === FilterType.TOGGLE)
 
   return (
     <Box asChild paddingBlock={'8 6'} paddingInline={'8'} className={styles.wrapper}>
       <VStack gap={'4'}>
         <HStack gap={'20'} width={'fit-content'} align={'end'}>
-          <SelectFilters filters={filters} onFilterChange={onFilterChange} />
-          {showOnAgreementFilter && <ChipFilters filterNames={['status']} onFilterChange={onFilterChange} />}
-
-          {hasActiveFilter && (
-            <Chips className={styles.resetFiltersButton}>
-              {
-                <Chips.Removable variant="neutral" onClick={resetFilterAll}>
-                  Nullstill
-                </Chips.Removable>
-              }
-            </Chips>
-          )}
+          <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
+          <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
         </HStack>
         <Heading level="3" size="small">
           {`${numberOfVariantsToShow} av ${variants.length} varianter`}
@@ -153,24 +142,25 @@ export const FilterRow = ({
 }
 
 const ChipFilters = ({
-  filterNames,
+  filters,
   onFilterChange,
 }: {
-  filterNames: string[]
+  filters: SelectFilterContents[]
   onFilterChange: (name: string, value: string) => void
 }) => {
   const searchParams = useSearchParams()
 
   return (
     <Chips className={styles.chipsRow}>
-      {filterNames.map((filterName) => (
+      {filters.map(({ name, label, values }) => (
         <Chips.Toggle
-          selected={searchParams.has(filterName)}
+          selected={searchParams.has(name)}
           checkmark={true}
-          key={filterName}
-          onClick={() => onFilterChange(filterName, searchParams.has(filterName) ? '' : 'På avtale')}
+          key={name}
+          onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
+          disabled={values.length < 2}
         >
-          På avtale med nav
+          {label}
         </Chips.Toggle>
       ))}
     </Chips>
@@ -187,12 +177,12 @@ const SelectFilters = ({
   const searchParams = useSearchParams()
   return (
     <HStack gap={'8'}>
-      {filters.map(({ name, values, unit }, index) => {
+      {filters.map(({ name, label, values, unit }, index) => {
         return (
           values.length > 0 && (
             <Select
               key={index + 1}
-              label={name}
+              label={label}
               onChange={(event) => onFilterChange(name, event.target.value)}
               value={searchParams.get(name) ?? ''}
             >

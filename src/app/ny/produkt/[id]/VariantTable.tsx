@@ -25,6 +25,17 @@ export type SortColumns = {
 
 export type TechDataRow = { key: string; values: string[]; isCommonField: boolean; unit: string | undefined }
 
+export enum FilterType {
+  DROPDOWN,
+  TOGGLE,
+}
+export type Filter = {
+  fieldName: string
+  label: string
+  type: FilterType
+  predicate: (variant: ProductVariant, filterFieldName: string) => boolean
+}
+
 export const VariantTable = ({ product }: { product: Product }) => {
   const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
   const searchParams = useSearchParams()
@@ -93,21 +104,31 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return true
   }
 
-  const filterFieldNames = [
-    'Setebredde',
-    'Setedybde',
-    'Setehøyde',
-    'Bredde',
-    'Lengde',
-    'Håndtak hreg',
-    'Livvidde',
-    'Materiale i trekk',
-    'Trekk',
-    'Størrelse',
+  const onAgreementFilter = (variant: ProductVariant, filterFieldName: string) => {
+    return searchParams.get(filterFieldName) ? variant.hasAgreement : true
+  }
+
+  const filters: Filter[] = [
+    { fieldName: 'Setebredde', label: 'Setebredde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Setehøyde', label: 'Setehøyde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Bredde', label: 'Bredde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Lengde', label: 'Lengde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Håndtak hreg', label: 'Håndtak hreg', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Livvidde', label: 'Livvidde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    {
+      fieldName: 'Materiale i trekk',
+      label: 'Materiale i trekk',
+      type: FilterType.DROPDOWN,
+      predicate: filterFunction,
+    },
+    { fieldName: 'Trekk', label: 'Trekk', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Størrelse', label: 'Størrelse', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'agreement', label: 'På avtale med Nav', type: FilterType.TOGGLE, predicate: onAgreementFilter },
   ]
 
   const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
-    return filterFieldNames.every((filterFieldName) => filterFunction(variant, filterFieldName))
+    return filters.every((filter) => filter.predicate(variant, filter.fieldName))
   })
 
   const sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
@@ -150,8 +171,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
           <VStack gap={'4'}>
             <FilterRow
               variants={product.variants}
-              filterFieldNames={filterFieldNames}
-              filterFunction={filterFunction}
+              filterConfigs={filters}
               techDataRows={techDataRows}
               numberOfVariantsToShow={productVariantsToShow.length}
             />
