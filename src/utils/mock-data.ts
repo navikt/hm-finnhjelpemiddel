@@ -32,9 +32,9 @@ export const accessoriesMock: Product[] = [
     id: 'HMDB-60027',
     title: 'Vicair AdjusterO2 10',
     attributes: {
-      compatibleWith:{
-        seriesIds:  ['HMDB-64818', 'HMDB-54382', 'HMDB-50757'],
-        productIds: ['']
+      compatibleWith: {
+        seriesIds: ['HMDB-64818', 'HMDB-54382', 'HMDB-50757'],
+        productIds: [''],
       },
       series: 'Univox CLS-5',
       shortdescription:
@@ -84,5 +84,6 @@ export const accessoriesMock: Product[] = [
     documents: [],
     supplierId: 'e9e27708-16be-4995-83a7-f857b77d0913',
     supplierName: 'Levereandør AS',
+    main: true,
   },
 ]
