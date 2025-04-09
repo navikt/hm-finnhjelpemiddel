@@ -65,9 +65,6 @@ const TagRow = ({ productAgreements }: { productAgreements: AgreementInfo[] | un
       {topRank ? (
         <>
           <Tag variant={'success-moderate'} className={styles.agreementTag}>
-            På avtale
-          </Tag>
-          <Tag variant={'success-moderate'} className={styles.agreementTag}>
             Rangering {topRank}
           </Tag>
           {productAgreements.length > 1 ? (
