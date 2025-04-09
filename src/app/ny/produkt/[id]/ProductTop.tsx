@@ -1,6 +1,6 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
+import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 import { BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
@@ -20,54 +20,74 @@ const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string
 }
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
-  const topRank =
-    product.agreements &&
-    product.agreements?.length > 0 &&
-    Math.min(...product.agreements.map((agreement) => agreement.rank))
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
 
   return (
     <VStack gap={'8'}>
+      <TagRow productAgreements={product.agreements} />
+      <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
+        {product.supplierName}
+      </Link>
+      <Heading level="1" size="large">
+        {hmsartnr ? product.variants[0].articleName : product.title}
+      </Heading>
       <VStack gap={'4'}>
-        <HStack justify={'space-between'}>
-          {topRank && (
-            <Tag variant={'success-moderate'} className={styles.agreementTag}>
-              Rangering {topRank}
-            </Tag>
-          )}
-          <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
-            {product.supplierName}
-          </Link>
-        </HStack>
-
-        {product.agreements.length > 1 && <BodyShort>Hjelpemiddelet er på flere delkontrakter. </BodyShort>}
-        {product.agreements.length === 1 && <BodyShort>Delkontrakt {product.agreements[0].postNr}</BodyShort>}
-      </VStack>
-      <VStack gap={'2'}>
-        <Heading level="1" size="large" spacing>
-          {hmsartnr ? product.variants[0].articleName : product.title}
-        </Heading>
-        <VStack gap={'4'}>
-          {hmsartnr && (
-            <div>
-              <Heading size={'xsmall'} level={'3'}>
-                Serie
-              </Heading>
-              {product.title}
-            </div>
-          )}
+        {hmsartnr && (
           <div>
             <Heading size={'xsmall'} level={'3'}>
-              Produktkategori
+              Serie
             </Heading>
-            {product.isoCategoryTitle}
+            {product.title}
           </div>
-        </VStack>
+        )}
+        <div>
+          <Heading size={'xsmall'} level={'3'}>
+            Produktkategori
+          </Heading>
+          {product.isoCategoryTitle}
+        </div>
       </VStack>
 
       <CopyHms product={product} />
       <QrCodeButton id={qrId} />
     </VStack>
+  )
+}
+
+const TagRow = ({ productAgreements }: { productAgreements: AgreementInfo[] | undefined }) => {
+  const topRank =
+    productAgreements &&
+    productAgreements?.length > 0 &&
+    Math.min(...productAgreements.map((agreement) => agreement.rank))
+
+  return (
+    <HStack justify={'start'} gap={'3'}>
+      {topRank ? (
+        <>
+          <Tag variant={'success-moderate'} className={styles.agreementTag}>
+            På avtale
+          </Tag>
+          <Tag variant={'success-moderate'} className={styles.agreementTag}>
+            Rangering {topRank}
+          </Tag>
+          {productAgreements.length > 1 ? (
+            <Tag variant={'success-moderate'} className={styles.agreementTag}>
+              Flere delkontrakter
+            </Tag>
+          ) : (
+            productAgreements.length === 1 && (
+              <Tag variant={'success-moderate'} className={styles.agreementTag}>
+                Delkontrakt {productAgreements[0].postNr}
+              </Tag>
+            )
+          )}
+        </>
+      ) : (
+        <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+          Ikke på avtale
+        </Tag>
+      )}
+    </HStack>
   )
 }
 
