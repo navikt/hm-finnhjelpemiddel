@@ -1,7 +1,7 @@
 import { Table } from '@navikt/ds-react'
 import { ProductVariant } from '@/utils/product-util'
 import { formatAgreementPosts } from '@/utils/string-util'
-import styles from '@/app/ny/produkt/[id]/VariantTable.module.scss'
+import styles from '@/app/produkt/[id]/VariantTable.module.scss'
 
 interface VariantPostRowProps {
   sortedByKey: ProductVariant[]

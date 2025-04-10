@@ -1,10 +1,12 @@
 'use client'
 
 import { Document } from '@/utils/product-util'
-import { BodyShort } from '@navikt/ds-react'
+import { BodyShort, Link } from '@navikt/ds-react'
 import { titleCapitalized } from '@/utils/string-util'
 import { FileIcon } from '@/components/aksel-client'
 import { logActionEvent } from '@/utils/amplitude'
+import styles from './Documents.module.scss'
+import NextLink from 'next/link'
 
 export const Documents = ({ documents }: { documents: Document[] }) => {
   if (!documents.length) {
@@ -16,20 +18,19 @@ export const Documents = ({ documents }: { documents: Document[] }) => {
   }
 
   return (
-    <ul className="document-list">
+    <ul className={styles.documentList}>
       {documents.map((doc, index) => (
-        <li key={index}>
-          <div className="file-container">
+        <li key={index} className={styles.fileContainer}>
+          <Link
+            as={NextLink}
+            href={documentLoader(doc.uri)}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => logActionEvent('dokumentnedlasting')}
+          >
+            {titleCapitalized(doc.title)} (PDF)
             <FileIcon aria-hidden fontSize="1.5rem" />
-            <a
-              href={documentLoader(doc.uri)}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => logActionEvent('dokumentnedlasting')}
-            >
-              <span>{titleCapitalized(doc.title)} (PDF) </span>
-            </a>
-          </div>
+          </Link>
         </li>
       ))}
     </ul>

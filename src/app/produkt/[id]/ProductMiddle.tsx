@@ -3,12 +3,11 @@
 import { BodyShort, Button, Heading, HGrid, VStack } from '@navikt/ds-react'
 import { ChevronRightIcon, LayersPlusIcon } from '@navikt/aksel-icons'
 import { AgreementInfo, Product } from '@/utils/product-util'
-import { ProductInformation } from '@/app/ny/produkt/[id]/ProductInformation'
-import { SharedVariantDataTable } from '@/app/ny/produkt/[id]/SharedVariantDataTable'
+import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
+import { SharedVariantDataTable } from '@/app/produkt/[id]/SharedVariantDataTable'
 import NextLink from 'next/link'
 import styles from './ProductMiddle.module.scss'
-import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
-import { VariantTableSingle } from '@/app/ny/produkt/[id]/VariantTableSingle'
+import { VariantTableSingle } from '@/app/produkt/[id]/VariantTableSingle'
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (

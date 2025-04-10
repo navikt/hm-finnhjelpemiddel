@@ -1,8 +1,8 @@
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
 import { Product } from '@/utils/product-util'
-import { GeneralProductInformation } from '@/app/ny/produkt/[id]/GeneralProductInformation'
-import { Videos } from '@/app/ny/produkt/[id]/Videos'
-import { Documents } from '@/app/ny/produkt/[id]/Documents'
+import { GeneralProductInformation } from '@/app/produkt/[id]/GeneralProductInformation'
+import { Videos } from '@/app/produkt/[id]/Videos'
+import { Documents } from '@/app/produkt/[id]/Documents'
 import styles from './ProductInformation.module.scss'
 import { useState } from 'react'
 

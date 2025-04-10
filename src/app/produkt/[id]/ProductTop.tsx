@@ -8,7 +8,7 @@ import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
 import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
-import { QrCodeButton } from '@/app/ny/produkt/[id]/QrCodeButton'
+import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (

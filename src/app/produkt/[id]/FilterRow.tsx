@@ -4,7 +4,7 @@ import { Box, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { Filter, FilterType, TechDataRow } from '@/app/ny/produkt/[id]/VariantTable'
+import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/VariantTable'
 import styles from './FilterRow.module.scss'
 
 type Props = {

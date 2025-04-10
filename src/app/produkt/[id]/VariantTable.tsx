@@ -8,13 +8,13 @@ import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
-import { FilterRow } from '@/app/ny/produkt/[id]/FilterRow'
-import styles from '@/app/ny/produkt/[id]/ProductTop.module.scss'
+import { FilterRow } from '@/app/produkt/[id]/FilterRow'
+import styles from '@/app/produkt/[id]/ProductTop.module.scss'
 import variantTable from './VariantTable.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
-import { VariantStatusRowNew } from '@/app/ny/produkt/[id]/VariantStatusRowNew'
-import { VariantRankRow } from '@/app/ny/produkt/[id]/VariantRankRow'
-import { VariantPostRow } from '@/app/ny/produkt/[id]/VariantPostRow'
+import { VariantStatusRowNew } from '@/app/produkt/[id]/VariantStatusRowNew'
+import { VariantRankRow } from '@/app/produkt/[id]/VariantRankRow'
+import { VariantPostRow } from '@/app/produkt/[id]/VariantPostRow'
 
 export type SortColumns = {
   orderBy: string | null
