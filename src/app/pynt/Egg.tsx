@@ -15,8 +15,8 @@ const Egg = forwardRef(
     titleId = title ? (_titleId ? _titleId : 'title-' + titleId) : undefined
     return (
       <svg
-        height="2em"
-        width="2em"
+        height="1.5em"
+        width="1.5em"
         version="1.1"
         id="Layer_1"
         xmlns="http://www.w3.org/2000/svg"
