@@ -1,4 +1,4 @@
-import { getProductWithVariants } from '@/utils/api-util'
+import { fetchProductsWithVariants, getProductWithVariants } from '@/utils/api-util'
 import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import ProductTop from '@/app/ny/produkt/[id]/ProductTop'
@@ -6,6 +6,7 @@ import ProductMiddle from '@/app/ny/produkt/[id]/ProductMiddle'
 import { VStack } from '@navikt/ds-react'
 import { VariantTable } from '@/app/ny/produkt/[id]/VariantTable'
 import styles from './ProductPage.module.scss'
+import AccessoryOrSparePartPage from '@/app/ny/produkt/AccessoryOrSparePartPage'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -25,8 +26,14 @@ export default async function ProduktPage(props: Props) {
   const params = await props.params
 
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
+  const isAccessoryOrSparePart = !product.main
+  const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
-  return (
+  const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
+
+  return isAccessoryOrSparePart ? (
+    <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
+  ) : (
     <div className={styles.container}>
       <VStack gap={'14'} paddingBlock={'16'} maxWidth={'1200px'}>
         <ProductTop product={product} />
