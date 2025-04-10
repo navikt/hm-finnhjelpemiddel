@@ -27,6 +27,17 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
   const router = useRouter()
   const pathname = usePathname()
 
+  const searchTermMatchesHms =
+    searchParams.get('term') &&
+    variants
+      .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+      .includes(searchParams.get('term')!.toLowerCase())
+  const searchTermMatchesSupplierRef =
+    searchParams.get('term') &&
+    variants
+      .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+      .includes(searchParams.get('term')!.toLowerCase())
+
   const isRelevantDropdownFilter = (name: string) => {
     return techDataRows.some(
       ({ key, isCommonField }) => [name, `${name} min`, `${name} maks`].some((field) => field === key) && !isCommonField
@@ -35,7 +46,7 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
 
   const isRelevantToggleFilter = (name: string) => {
     if (name === 'agreement') return new Set(variants.map((v) => v.hasAgreement)).size > 1
-    if (name === 'term') return searchParams.get('term')
+    if (name === 'term') return searchParams.get('term') && (searchTermMatchesHms || searchTermMatchesSupplierRef)
     return false
   }
 
