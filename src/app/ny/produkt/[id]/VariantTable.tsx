@@ -90,6 +90,10 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return true
   }
 
+  const termFilterLabel = searchParams.get('term')
+    ? `${searchTermMatchesHms ? 'HMS-nummer' : searchTermMatchesSupplierRef ? 'Lev-artnr' : 'search'}: ${searchParams.get('term')}`
+    : 'search'
+
   const filters: Filter[] = [
     { fieldName: 'Setebredde', label: 'Setebredde', type: FilterType.DROPDOWN, predicate: filterFunction },
     { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: filterFunction },
@@ -109,7 +113,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
     { fieldName: 'agreement', label: 'På avtale med Nav', type: FilterType.TOGGLE, predicate: onAgreementFilter },
     {
       fieldName: 'term',
-      label: searchParams.get('term') ? `variant: ${searchParams.get('term')}` : 'search',
+      label: termFilterLabel,
       type: FilterType.TOGGLE,
       predicate: variantIdSearch,
     },
