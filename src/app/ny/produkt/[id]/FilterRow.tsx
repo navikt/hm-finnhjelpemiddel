@@ -129,7 +129,7 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
   return (
     <Box asChild paddingBlock={'8 6'} paddingInline={'8'} className={styles.wrapper}>
       <VStack gap={'4'}>
-        <HStack gap={'20'} width={'fit-content'} align={'end'}>
+        <HStack gap={{ xs: '8', md: '20' }} width={'fit-content'} align={'end'}>
           <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
           <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
         </HStack>
