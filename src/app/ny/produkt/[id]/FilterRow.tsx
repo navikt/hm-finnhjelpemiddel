@@ -159,6 +159,7 @@ const ChipFilters = ({
           key={name}
           onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
           disabled={values.length < 2}
+          className={values.length < 2 ? styles.disabledChip : ''}
         >
           {label}
         </Chips.Toggle>
