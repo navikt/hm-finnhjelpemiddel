@@ -27,10 +27,16 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
   const router = useRouter()
   const pathname = usePathname()
 
-  const isRelevantFilter = (name: string) => {
+  const isRelevantDropdownFilter = (name: string) => {
     return techDataRows.some(
       ({ key, isCommonField }) => [name, `${name} min`, `${name} maks`].some((field) => field === key) && !isCommonField
     )
+  }
+
+  const isRelevantToggleFilter = (name: string) => {
+    if (name === 'agreement') return new Set(variants.map((v) => v.hasAgreement)).size > 1
+    if (name === 'term') return searchParams.get('term')
+    return false
   }
 
   const getDropdownFilterValues = (variant: ProductVariant, fieldName: string): string[] => {
@@ -57,11 +63,27 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
     return []
   }
 
+  const getToggleFilterValue = (variant: ProductVariant, fieldName: string): boolean[] => {
+    if (fieldName === 'agreement') {
+      return [variant.hasAgreement]
+    }
+    if (fieldName === 'term') {
+      const searchTerm = searchParams.get('term')?.toLocaleLowerCase()
+      return searchTerm
+        ? [
+            variant.hmsArtNr?.toLocaleLowerCase() === searchTerm ||
+              variant.supplierRef?.toLocaleLowerCase() === searchTerm,
+          ]
+        : []
+    }
+    return []
+  }
+
   const filters: SelectFilterContents[] = filterConfigs
     .filter(
       ({ fieldName, type }) =>
-        isRelevantFilter(fieldName) ||
-        (type === FilterType.TOGGLE && new Set(variants.map((v) => v.hasAgreement)).size > 1)
+        (type === FilterType.DROPDOWN && isRelevantDropdownFilter(fieldName)) ||
+        (type === FilterType.TOGGLE && isRelevantToggleFilter(fieldName))
     )
     .map(({ fieldName, label, type }) => {
       const values = variants
@@ -74,7 +96,7 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
               return getDropdownFilterValues(variant, fieldName)
             }
             if (type === FilterType.TOGGLE) {
-              return variant.hasAgreement
+              return getToggleFilterValue(variant, fieldName)
             }
           }
 
@@ -152,18 +174,20 @@ const ChipFilters = ({
 
   return (
     <Chips className={styles.chipsRow}>
-      {filters.map(({ name, label, values }) => (
-        <Chips.Toggle
-          selected={searchParams.has(name)}
-          checkmark={true}
-          key={name}
-          onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
-          disabled={values.length < 2}
-          className={values.length < 2 ? styles.disabledChip : ''}
-        >
-          {label}
-        </Chips.Toggle>
-      ))}
+      {filters.map(({ name, label, values }) => {
+        return (
+          <Chips.Toggle
+            selected={searchParams.has(name)}
+            checkmark={true}
+            key={name}
+            onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
+            disabled={values.length < 2}
+            className={values.length < 2 ? styles.disabledChip : ''}
+          >
+            {label}
+          </Chips.Toggle>
+        )
+      })}
     </Chips>
   )
 }

@@ -1,11 +1,9 @@
 'use client'
 
 import { Product, ProductVariant } from '@/utils/product-util'
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import useSWR from 'swr'
-import { fetchProducts } from '@/utils/api-util'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
@@ -54,33 +52,6 @@ export const VariantTable = ({ product }: { product: Product }) => {
     .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
 
-  const { data: dataAndFilter } = useSWR(
-    { from: 0, size: 150, searchData: { ...searchData, searchTerm: '' }, dontCollapse: true, seriesId: product.id },
-    fetchProducts,
-    { keepPreviousData: true }
-  )
-
-  const productWithFilteredVariants = dataAndFilter && dataAndFilter.products
-
-  const productVariantsToShowPre = useMemo(
-    () =>
-      product.variants.length > 1
-        ? productWithFilteredVariants
-          ? productWithFilteredVariants.length > 0
-            ? searchTermMatchesHms
-              ? productWithFilteredVariants[0].variants.filter((variant) => variant.hmsArtNr === searchData.searchTerm)
-              : searchTermMatchesSupplierRef
-                ? productWithFilteredVariants[0].variants.filter(
-                    (variant) => variant.supplierRef === searchData.searchTerm
-                  )
-                : productWithFilteredVariants[0].variants
-            : []
-          : product.variants
-        : product.variants,
-
-    [product.variants, productWithFilteredVariants]
-  )
-
   const filterFunction = (variant: ProductVariant, filterFieldName: string) => {
     if (searchParams.get(filterFieldName)) {
       const isMinMax = variant.techData[`${filterFieldName} min`] && variant.techData[`${filterFieldName} maks`]
@@ -108,6 +79,17 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return searchParams.get(filterFieldName) ? variant.hasAgreement : true
   }
 
+  const variantIdSearch = (variant: ProductVariant, filterFieldName: string) => {
+    const searchTerm = searchParams.get(filterFieldName)?.toLocaleLowerCase()
+
+    if (searchTerm && (searchTermMatchesHms || searchTermMatchesSupplierRef)) {
+      return (
+        variant.hmsArtNr?.toLocaleLowerCase() === searchTerm || variant.supplierRef?.toLocaleLowerCase() === searchTerm
+      )
+    }
+    return true
+  }
+
   const filters: Filter[] = [
     { fieldName: 'Setebredde', label: 'Setebredde', type: FilterType.DROPDOWN, predicate: filterFunction },
     { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: filterFunction },
@@ -125,9 +107,15 @@ export const VariantTable = ({ product }: { product: Product }) => {
     { fieldName: 'Trekk', label: 'Trekk', type: FilterType.DROPDOWN, predicate: filterFunction },
     { fieldName: 'Størrelse', label: 'Størrelse', type: FilterType.DROPDOWN, predicate: filterFunction },
     { fieldName: 'agreement', label: 'På avtale med Nav', type: FilterType.TOGGLE, predicate: onAgreementFilter },
+    {
+      fieldName: 'term',
+      label: searchParams.get('term') ? `variant: ${searchParams.get('term')}` : 'search',
+      type: FilterType.TOGGLE,
+      predicate: variantIdSearch,
+    },
   ]
 
-  const productVariantsToShow = productVariantsToShowPre.filter((variant) => {
+  const productVariantsToShow = product.variants.filter((variant) => {
     return filters.every((filter) => filter.predicate(variant, filter.fieldName))
   })
 
