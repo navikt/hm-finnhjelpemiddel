@@ -1,7 +1,6 @@
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, Heading, HelpText, Hide, HStack, Link, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, HelpText, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { ArrowDownRightIcon } from '@navikt/aksel-icons'
 
 export const GeneralProductInformation = ({ product }: { product: Product }) => {
   const description = product.attributes.text
