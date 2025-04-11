@@ -3,7 +3,7 @@
 import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 import { BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
-import { Alert, Heading } from '@/components/aksel-client'
+import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
 import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
@@ -21,23 +21,18 @@ const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
-  const allVariantsExpired = product.variants.every((variant) => variant.status === 'INACTIVE')
-  const allVariantsExpiredDates = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
+  const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
   return (
     <VStack gap={'8'}>
-      <TagRow productAgreements={product.agreements} />
+      <TagRow productAgreements={product.agreements} isExpired={isExpired} />
       <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
       </Link>
       <Heading level="1" size="large">
         {hmsartnr ? product.variants[0].articleName : product.title}
       </Heading>
-      {(allVariantsExpiredDates || allVariantsExpired) && (
-        <div style={{ width: 'fit-content' }}>
-          <Alert variant="warning">Dette produktet er utgått</Alert>
-        </div>
-      )}
+
       <VStack gap={'4'}>
         {hmsartnr && (
           <div>
@@ -61,7 +56,13 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   )
 }
 
-const TagRow = ({ productAgreements }: { productAgreements: AgreementInfo[] | undefined }) => {
+const TagRow = ({
+  productAgreements,
+  isExpired,
+}: {
+  productAgreements: AgreementInfo[] | undefined
+  isExpired: boolean
+}) => {
   const topRank =
     productAgreements &&
     productAgreements?.length > 0 &&
@@ -89,6 +90,11 @@ const TagRow = ({ productAgreements }: { productAgreements: AgreementInfo[] | un
       ) : (
         <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
           Ikke på avtale
+        </Tag>
+      )}
+      {isExpired && (
+        <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+          Utgått
         </Tag>
       )}
     </HStack>

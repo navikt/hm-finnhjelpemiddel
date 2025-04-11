@@ -12,15 +12,15 @@
 .agreementTag {
   background-color: var(--a-surface-success-subtle);
   border-radius: 0.25rem;
-  border: 1px solid var(--surface-success-subtle-hover, #99DEAD);
+  border: 1px solid #99dead;
   font-size: var(--a-font-size-medium);
   padding: $a-spacing-1-alt $a-spacing-4;
 }
 
 .nonAgreementTag {
   @extend .agreementTag;
-  background: var(--surface-alt-1-subtle, #E0D8E9);
-  border: 1px solid var(--a-border-subtle-hover, #ECEEF0);
+  background-color: #f0ecf4;
+  border: 1px solid #e0d8e9;
 }
 
 .supplierLink {
