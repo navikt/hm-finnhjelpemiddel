@@ -3,7 +3,7 @@
 import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 import { BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
-import { Heading } from '@/components/aksel-client'
+import { Alert, Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
 import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
@@ -21,6 +21,8 @@ const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
+  const allVariantsExpired = product.variants.every((variant) => variant.status === 'INACTIVE')
+  const allVariantsExpiredDates = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
   return (
     <VStack gap={'8'}>
@@ -31,6 +33,11 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
       <Heading level="1" size="large">
         {hmsartnr ? product.variants[0].articleName : product.title}
       </Heading>
+      {(allVariantsExpiredDates || allVariantsExpired) && (
+        <div style={{ width: 'fit-content' }}>
+          <Alert variant="warning">Dette produktet er utgått</Alert>
+        </div>
+      )}
       <VStack gap={'4'}>
         {hmsartnr && (
           <div>
