@@ -8,13 +8,13 @@ import { customSort, sortColumnsByRowKey } from '@/app/produkt/variants/variant-
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
-import { FilterRow } from '@/app/produkt/[id]/FilterRow'
-import styles from '@/app/produkt/[id]/ProductTop.module.scss'
-import variantTable from './VariantTable.module.scss'
+import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
+import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
+import styles from './VariantTable.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
-import { VariantStatusRowNew } from '@/app/produkt/[id]/VariantStatusRowNew'
-import { VariantRankRow } from '@/app/produkt/[id]/VariantRankRow'
-import { VariantPostRow } from '@/app/produkt/[id]/VariantPostRow'
+import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStatusRowNew'
+import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
+import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 
 export type SortColumns = {
   orderBy: string | null
@@ -27,6 +27,7 @@ export enum FilterType {
   DROPDOWN,
   TOGGLE,
 }
+
 export type Filter = {
   fieldName: string
   label: string
@@ -35,7 +36,7 @@ export type Filter = {
 }
 
 export const VariantTable = ({ product }: { product: Product }) => {
-  const [sortColumns, setSortColumns] = useState<SortColumns>({ orderBy: 'Expired', direction: 'ascending' })
+  const sortColumns: SortColumns = { orderBy: 'Expired', direction: 'ascending' }
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
@@ -144,7 +145,6 @@ export const VariantTable = ({ product }: { product: Product }) => {
     }
   })
 
-  const hasAgreementSet = new Set(product.variants.map((p) => p.hasAgreement))
   const rankSet = new Set(product.agreements.map((agr) => agr.rank))
   const postSet = new Set(product.agreements.map((agr) => agr.postNr))
 
@@ -179,7 +179,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
 
       {productVariantsToShow.length > 0 && (
         <>
-          <div className={variantTable.variantsTable} id="variants-table">
+          <div className={styles.variantsTable} id="variants-table">
             <Table zebraStripes>
               <Table.Header>
                 <VariantStatusRowNew variants={sortedByKey} />
@@ -197,12 +197,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'hms-' + variant.id}
-                        className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                        className={selectedColumn === i ? styles.selectedColumn : ''}
                         onClick={() => handleColumnClick(i)}
                       >
                         <CopyButton
                           size="small"
-                          className={styles.copyButton}
+                          className={productTop.copyButton}
                           copyText={variant.hmsArtNr ?? ''}
                           text={variant.hmsArtNr ?? ''}
                           activeText="kopiert"
@@ -220,12 +220,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
                   {sortedByKey.map((variant, i) => (
                     <Table.DataCell
                       key={'levart-' + variant.id}
-                      className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                      className={selectedColumn === i ? styles.selectedColumn : ''}
                       onClick={() => handleColumnClick(i)}
                     >
                       <CopyButton
                         size="small"
-                        className={styles.copyButton}
+                        className={productTop.copyButton}
                         copyText={variant.supplierRef}
                         text={variant.supplierRef}
                         activeText="kopiert"
@@ -239,15 +239,14 @@ export const VariantTable = ({ product }: { product: Product }) => {
                 </Table.Row>
                 {rankSet.size > 1 && (
                   <VariantRankRow
-                    sortedByKey={sortedByKey}
-                    hasAgreementSet={hasAgreementSet}
+                    variants={sortedByKey}
                     selectedColumn={selectedColumn}
                     handleColumnClick={handleColumnClick}
                   />
                 )}
                 {postSet.size > 1 && (
                   <VariantPostRow
-                    sortedByKey={sortedByKey}
+                    variants={sortedByKey}
                     selectedColumn={selectedColumn}
                     handleColumnClick={handleColumnClick}
                   />
@@ -258,7 +257,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'bestillingsordning-' + variant.id}
-                        className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                        className={selectedColumn === i ? styles.selectedColumn : ''}
                         onClick={() => handleColumnClick(i)}
                       >
                         {variant.bestillingsordning ? 'Ja' : 'Nei'}
@@ -272,7 +271,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     {sortedByKey.map((variant, i) => (
                       <Table.DataCell
                         key={'behovsmelding-' + variant.id}
-                        className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                        className={selectedColumn === i ? styles.selectedColumn : ''}
                         onClick={() => handleColumnClick(i)}
                       >
                         {variant.digitalSoknad ? 'Ja' : 'Nei'}
@@ -289,7 +288,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
                         {values.map((value, i) => (
                           <Table.DataCell
                             key={key + '-' + i}
-                            className={selectedColumn === i ? variantTable.selectedColumn : ''}
+                            className={selectedColumn === i ? styles.selectedColumn : ''}
                             onClick={() => handleColumnClick(i)}
                           >
                             {value}

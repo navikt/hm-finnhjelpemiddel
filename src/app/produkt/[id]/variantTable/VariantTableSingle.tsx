@@ -6,9 +6,8 @@ import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Box, CopyButton, Heading, Table } from '@navikt/ds-react'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
-import variantTable from './VariantTable.module.scss'
+import styles from './VariantTable.module.scss'
 import { logActionEvent } from '@/utils/amplitude'
-import classNames from 'classnames'
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 
 export type TechDataRow = { key: string; value: string; unit: string | undefined }
@@ -40,7 +39,7 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
       <Heading size={'medium'} level={'2'} spacing>
         Egenskaper
       </Heading>
-      <div className={variantTable.variantsTable} id="variants-table">
+      <div className={styles.variantsTable} id="variants-table">
         <Table zebraStripes>
           <Table.Header>
             <Table.Row>
@@ -82,7 +81,7 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
               </Table.DataCell>
             </Table.Row>
             {rankSet.size > 1 && (
-              <Table.Row className={classNames({ 'variants-table__rank-row-on-agreement': !variant.hasAgreement })}>
+              <Table.Row>
                 <Table.HeaderCell>Rangering</Table.HeaderCell>
                 <Table.DataCell>{viewAgreementRanks(variant.agreements)}</Table.DataCell>
               </Table.Row>

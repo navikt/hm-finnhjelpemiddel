@@ -3,7 +3,7 @@ import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
-import { VariantTable } from '@/app/produkt/[id]/VariantTable'
+import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 
