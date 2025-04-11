@@ -3,10 +3,9 @@ import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
-import { VStack } from '@navikt/ds-react'
 import { VariantTable } from '@/app/produkt/[id]/VariantTable'
-import styles from './ProductPage.module.scss'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
+import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -34,12 +33,10 @@ export default async function ProduktPage(props: Props) {
   return isAccessoryOrSparePart ? (
     <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
   ) : (
-    <div className={styles.container}>
-      <VStack gap={'14'} paddingBlock={'16'} maxWidth={'1200px'}>
-        <ProductTop product={product} />
-        <ProductMiddle product={product} />
-        {product.variants.length > 1 && <VariantTable product={product} />}
-      </VStack>
-    </div>
+    <ProductPageLayout>
+      <ProductTop product={product} />
+      <ProductMiddle product={product} />
+      {product.variants.length > 1 && <VariantTable product={product} />}
+    </ProductPageLayout>
   )
 }

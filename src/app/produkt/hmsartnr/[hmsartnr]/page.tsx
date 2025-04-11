@@ -1,11 +1,10 @@
 import { fetchProductsWithVariants, getProductByHmsartnrWithVariants } from '@/utils/api-util'
 import { mapProductFromHmsArtNr } from '@/utils/product-util'
 import { Metadata } from 'next'
-import styles from '@/app/produkt/[id]/ProductPage.module.scss'
-import { VStack } from '@navikt/ds-react'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
+import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 
 type Props = {
   params: Promise<{ hmsartnr: string }>
@@ -33,11 +32,9 @@ export default async function ProduktPage(props: Props) {
   return isAccessoryOrSparePart ? (
     <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
   ) : (
-    <div className={styles.container}>
-      <VStack gap={'14'} paddingBlock={'16'} maxWidth={'1200px'}>
-        <ProductTop product={product} hmsartnr={params.hmsartnr} />
-        <ProductMiddle product={product} hmsartnr={params.hmsartnr} />
-      </VStack>
-    </div>
+    <ProductPageLayout>
+      <ProductTop product={product} hmsartnr={params.hmsartnr} />
+      <ProductMiddle product={product} hmsartnr={params.hmsartnr} />
+    </ProductPageLayout>
   )
 }
