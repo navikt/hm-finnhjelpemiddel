@@ -86,13 +86,6 @@
   thead tr > th:first-child {
     vertical-align: bottom;
   }
-
-  &__status-row {
-    th.navds-table__header-cell {
-      border-bottom: none;
-      padding: 0.75rem 0.75rem 0.15rem;
-    }
-  }
 }
 
 .selectedColumn {
@@ -102,6 +95,3 @@
   font-weight: 500
 }
 
-.hmsnr-header-cell {
-  z-index: 2 !important;
-}
