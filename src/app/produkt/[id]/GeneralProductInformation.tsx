@@ -58,7 +58,7 @@ const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bestilling
     sett.size > 1 ? (
       <div>
         <BodyShort>Noen varianter.</BodyShort>
-        <Link as={NextLink} href="#egenskaper">
+        <Link as={NextLink} href="#variants-table">
           Se tabell nedenfor.
         </Link>
       </div>
