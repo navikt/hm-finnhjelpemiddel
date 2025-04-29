@@ -124,11 +124,11 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return filters.every((filter) => filter.predicate(variant, filter.fieldName))
   })
 
-  const sortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
+  const columnsSortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
   const allDataKeys =
     product.isoCategory === '18301505'
-      ? [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
-      : [...new Set(sortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
+      ? [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
+      : [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
   const techDataRows: TechDataRow[] = allDataKeys.map((key) => {
     return {
@@ -178,56 +178,32 @@ export const VariantTable = ({ product }: { product: Product }) => {
       )}
 
       {productVariantsToShow.length > 0 && (
-        <>
-          <div className={styles.variantsTable} id="variants-table">
-            <Table zebraStripes>
-              <Table.Header>
-                <VariantStatusRowNew variants={sortedByKey} />
+        <div className={styles.variantsTable} id="variants-table">
+          <Table zebraStripes>
+            <Table.Header>
+              <VariantStatusRowNew variants={columnsSortedByKey} />
+              <Table.Row>
+                <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
+                {columnsSortedByKey.map((variant) => (
+                  <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
+                ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {hasHmsNumber && (
                 <Table.Row>
-                  <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
-                  {sortedByKey.map((variant) => (
-                    <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
-                  ))}
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {hasHmsNumber && (
-                  <Table.Row>
-                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                    {sortedByKey.map((variant, i) => (
-                      <Table.DataCell
-                        key={'hms-' + variant.id}
-                        className={selectedColumn === i ? styles.selectedColumn : ''}
-                        onClick={() => handleColumnClick(i)}
-                      >
-                        <CopyButton
-                          size="small"
-                          className={productTop.copyButton}
-                          copyText={variant.hmsArtNr ?? ''}
-                          text={variant.hmsArtNr ?? ''}
-                          activeText="kopiert"
-                          variant="action"
-                          activeIcon={<ThumbUpIcon aria-hidden />}
-                          iconPosition="right"
-                          onClick={() => logActionEvent('kopier')}
-                        />
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )}
-                <Table.Row>
-                  <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                  {sortedByKey.map((variant, i) => (
+                  <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                  {columnsSortedByKey.map((variant, i) => (
                     <Table.DataCell
-                      key={'levart-' + variant.id}
+                      key={'hms-' + variant.id}
                       className={selectedColumn === i ? styles.selectedColumn : ''}
                       onClick={() => handleColumnClick(i)}
                     >
                       <CopyButton
                         size="small"
                         className={productTop.copyButton}
-                        copyText={variant.supplierRef}
-                        text={variant.supplierRef}
+                        copyText={variant.hmsArtNr ?? ''}
+                        text={variant.hmsArtNr ?? ''}
                         activeText="kopiert"
                         variant="action"
                         activeIcon={<ThumbUpIcon aria-hidden />}
@@ -237,70 +213,92 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     </Table.DataCell>
                   ))}
                 </Table.Row>
-                {rankSet.size > 1 && (
-                  <VariantRankRow
-                    variants={sortedByKey}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
-                  />
-                )}
-                {postSet.size > 1 && (
-                  <VariantPostRow
-                    variants={sortedByKey}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
-                  />
-                )}
-                {bestillingsordningVaries && (
-                  <Table.Row>
-                    <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                    {sortedByKey.map((variant, i) => (
-                      <Table.DataCell
-                        key={'bestillingsordning-' + variant.id}
-                        className={selectedColumn === i ? styles.selectedColumn : ''}
-                        onClick={() => handleColumnClick(i)}
-                      >
-                        {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )}
-                {digitalSoknadVaries && (
-                  <Table.Row>
-                    <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                    {sortedByKey.map((variant, i) => (
-                      <Table.DataCell
-                        key={'behovsmelding-' + variant.id}
-                        className={selectedColumn === i ? styles.selectedColumn : ''}
-                        onClick={() => handleColumnClick(i)}
-                      >
-                        {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )}
-                {techDataRows.length > 0 &&
-                  techDataRows.map(({ key, values, isCommonField }) => {
-                    if (isCommonField) return null
-                    return (
-                      <Table.Row key={key + 'row'}>
-                        <Table.HeaderCell>{key}</Table.HeaderCell>
-                        {values.map((value, i) => (
-                          <Table.DataCell
-                            key={key + '-' + i}
-                            className={selectedColumn === i ? styles.selectedColumn : ''}
-                            onClick={() => handleColumnClick(i)}
-                          >
-                            {value}
-                          </Table.DataCell>
-                        ))}
-                      </Table.Row>
-                    )
-                  })}
-              </Table.Body>
-            </Table>
-          </div>
-        </>
+              )}
+              <Table.Row>
+                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+                {columnsSortedByKey.map((variant, i) => (
+                  <Table.DataCell
+                    key={'levart-' + variant.id}
+                    className={selectedColumn === i ? styles.selectedColumn : ''}
+                    onClick={() => handleColumnClick(i)}
+                  >
+                    <CopyButton
+                      size="small"
+                      className={productTop.copyButton}
+                      copyText={variant.supplierRef}
+                      text={variant.supplierRef}
+                      activeText="kopiert"
+                      variant="action"
+                      activeIcon={<ThumbUpIcon aria-hidden />}
+                      iconPosition="right"
+                      onClick={() => logActionEvent('kopier')}
+                    />
+                  </Table.DataCell>
+                ))}
+              </Table.Row>
+              {rankSet.size > 1 && (
+                <VariantRankRow
+                  variants={columnsSortedByKey}
+                  selectedColumn={selectedColumn}
+                  handleColumnClick={handleColumnClick}
+                />
+              )}
+              {postSet.size > 1 && (
+                <VariantPostRow
+                  variants={columnsSortedByKey}
+                  selectedColumn={selectedColumn}
+                  handleColumnClick={handleColumnClick}
+                />
+              )}
+              {bestillingsordningVaries && (
+                <Table.Row>
+                  <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+                  {columnsSortedByKey.map((variant, i) => (
+                    <Table.DataCell
+                      key={'bestillingsordning-' + variant.id}
+                      className={selectedColumn === i ? styles.selectedColumn : ''}
+                      onClick={() => handleColumnClick(i)}
+                    >
+                      {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
+              {digitalSoknadVaries && (
+                <Table.Row>
+                  <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                  {columnsSortedByKey.map((variant, i) => (
+                    <Table.DataCell
+                      key={'behovsmelding-' + variant.id}
+                      className={selectedColumn === i ? styles.selectedColumn : ''}
+                      onClick={() => handleColumnClick(i)}
+                    >
+                      {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
+              {techDataRows.length > 0 &&
+                techDataRows.map(({ key, values, isCommonField }) => {
+                  if (isCommonField) return null
+                  return (
+                    <Table.Row key={key + 'row'}>
+                      <Table.HeaderCell>{key}</Table.HeaderCell>
+                      {values.map((value, i) => (
+                        <Table.DataCell
+                          key={key + '-' + i}
+                          className={selectedColumn === i ? styles.selectedColumn : ''}
+                          onClick={() => handleColumnClick(i)}
+                        >
+                          {value}
+                        </Table.DataCell>
+                      ))}
+                    </Table.Row>
+                  )
+                })}
+            </Table.Body>
+          </Table>
+        </div>
       )}
     </Box>
   )
