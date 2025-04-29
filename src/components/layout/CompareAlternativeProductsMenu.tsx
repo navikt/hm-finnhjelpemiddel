@@ -1,41 +1,21 @@
 import Link from 'next/link'
 
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button } from '@navikt/ds-react'
 
 import classNames from 'classnames'
 import {
   CompareAlternativesMenuState,
-  useHydratedAlternativeProductsCompareStore
-} from "@/utils/compare-alternatives-state-util";
-import RemovableAlternativeProductCardMenu from "@/components/RemovableAlternativeProductCardMenu";
-
-const alternativeProductCardAnimations: Variants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.3,
-    transition: {
-      duration: 0.1,
-    },
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.1,
-      type: 'ease',
-    },
-  },
-}
+  useHydratedAlternativeProductsCompareStore,
+} from '@/utils/compare-alternatives-state-util'
+import RemovableAlternativeProductCardMenu from '@/components/RemovableAlternativeProductCardMenu'
 
 const CompareAlternativeProductsMenu = () => {
   const {
     compareAlternativesMenuState,
     alternativeProductsToCompare,
     setCompareAlternativesMenuState,
-    resetAlternativeProductToCompare
+    resetAlternativeProductToCompare,
   } = useHydratedAlternativeProductsCompareStore()
 
   const toggleButtonText = `Produkter til sammenligning (${alternativeProductsToCompare.length})`
@@ -79,23 +59,13 @@ const CompareAlternativeProductsMenu = () => {
             </div>
           )}
           {alternativeProductsToCompare.length !== 0 && (
-
             <>
               <ul className="compare-menu__chosen-products">
-                <AnimatePresence mode="popLayout">
-                  {reversedAlternativeProductsToCompare.map((product) => (
-                    <motion.li
-                      layout
-                      key={'compare-' + product.id}
-                      variants={alternativeProductCardAnimations}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      <RemovableAlternativeProductCardMenu product={product} />
-                    </motion.li>
-                  ))}
-                </AnimatePresence>
+                {reversedAlternativeProductsToCompare.map((product) => (
+                  <li key={'compare-' + product.id}>
+                    <RemovableAlternativeProductCardMenu product={product} />
+                  </li>
+                ))}
               </ul>
 
               {alternativeProductsToCompare.length > 1 && (
@@ -109,7 +79,8 @@ const CompareAlternativeProductsMenu = () => {
                     variant="tertiary"
                     icon={<TrashIcon aria-hidden />}
                     onClick={() => {
-                      resetAlternativeProductToCompare(), setCompareAlternativesMenuState(CompareAlternativesMenuState.Minimized)
+                      resetAlternativeProductToCompare(),
+                        setCompareAlternativesMenuState(CompareAlternativesMenuState.Minimized)
                     }}
                   >
                     Nullstill
