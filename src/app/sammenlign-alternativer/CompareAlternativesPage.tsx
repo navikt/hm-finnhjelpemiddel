@@ -7,16 +7,15 @@ import useSWR from 'swr'
 
 import { fetchProductsWithVariant, FetchSeriesResponse } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
-import { formatAgreementPosts, formatAgreementRanks, toValueAndUnit, } from '@/utils/string-util'
+import { formatAgreementPosts, formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 
 import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
-import AnimateLayout from '@/components/layout/AnimateLayout'
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
 import {
   CompareAlternativesMenuState,
-  useHydratedAlternativeProductsCompareStore
-} from "@/utils/compare-alternatives-state-util";
-import RemovableAlternativeProductCard from "@/components/RemovableAlternativeProductCard";
+  useHydratedAlternativeProductsCompareStore,
+} from '@/utils/compare-alternatives-state-util'
+import RemovableAlternativeProductCard from '@/components/RemovableAlternativeProductCard'
 
 export default function CompareAlternativesPage() {
   const { alternativeProductsToCompare, setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
@@ -25,11 +24,9 @@ export default function CompareAlternativesPage() {
   const seriesIDsToCompare = alternativeProductsToCompare.map((product) => product.seriesId)
   const variantIDsToCompare = alternativeProductsToCompare.map((product) => product.id)
 
-  const { data, isLoading } = useSWR<FetchSeriesResponse>(
-  variantIDsToCompare,
-    fetchProductsWithVariant,
-    { keepPreviousData: true }
-  )
+  const { data, isLoading } = useSWR<FetchSeriesResponse>(variantIDsToCompare, fetchProductsWithVariant, {
+    keepPreviousData: true,
+  })
 
   // Filter out the products from SWR data that are not present in productsToCompare
   const filteredData = data && {
@@ -62,34 +59,32 @@ export default function CompareAlternativesPage() {
   }
 
   return (
-    <AnimateLayout>
-      <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
-        <Heading level="1" size="large" spacing>
-          Sammenlign produkter
-        </Heading>
+    <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
+      <Heading level="1" size="large" spacing>
+        Sammenlign produkter
+      </Heading>
 
-        {sortedProductsToCompare && sortedProductsToCompare.length === 0 ? (
-          <section>
-            <NextLink
-              className="navds-panel navds-link-panel navds-panel--border"
-              style={{ maxWidth: '750px' }}
-              href={'/sok'}
-              onClick={handleClick}
-            >
-              <div className="navds-link-panel__content">
-                <div className="navds-link-panel__title navds-heading navds-heading--medium">
-                  Legg til produkter for sammenligning
-                </div>
-                <BodyLong>For å kunne sammenligne produkter må de velges til sammenligning på søkesiden</BodyLong>
+      {sortedProductsToCompare && sortedProductsToCompare.length === 0 ? (
+        <section>
+          <NextLink
+            className="navds-panel navds-link-panel navds-panel--border"
+            style={{ maxWidth: '750px' }}
+            href={'/sok'}
+            onClick={handleClick}
+          >
+            <div className="navds-link-panel__content">
+              <div className="navds-link-panel__title navds-heading navds-heading--medium">
+                Legg til produkter for sammenligning
               </div>
-              <ChevronRightIcon aria-hidden />
-            </NextLink>
-          </section>
-        ) : (
-          <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
-        )}
-      </div>
-    </AnimateLayout>
+              <BodyLong>For å kunne sammenligne produkter må de velges til sammenligning på søkesiden</BodyLong>
+            </div>
+            <ChevronRightIcon aria-hidden />
+          </NextLink>
+        </section>
+      ) : (
+        <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
+      )}
+    </div>
   )
 }
 
@@ -102,23 +97,28 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
     ),
   ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 
-  const productRowKeyValue = productsToCompare.reduce((rowKeyValue, product) => {
-    const variant = product.variants[0];
-    rowKeyValue[variant.id] = Object.keys(variant.techData).reduce((keysVariants, key) => {
-      let value = variant.techData[key].value;
-      let unit = variant.techData[key].unit || '';
+  const productRowKeyValue = productsToCompare.reduce(
+    (rowKeyValue, product) => {
+      const variant = product.variants[0]
+      rowKeyValue[variant.id] = Object.keys(variant.techData).reduce(
+        (keysVariants, key) => {
+          let value = variant.techData[key].value
+          let unit = variant.techData[key].unit || ''
 
-      if (key.includes('intervall') && value === '0') {
-        value = '-';
-        unit = '';
-      }
+          if (key.includes('intervall') && value === '0') {
+            value = '-'
+            unit = ''
+          }
 
-      keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-';
-      return keysVariants;
-    }, {} as Record<string, string>);
-    return rowKeyValue;
-  }, {} as Record<string, Record<string, string>>);
-
+          keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
+          return keysVariants
+        },
+        {} as Record<string, string>
+      )
+      return rowKeyValue
+    },
+    {} as Record<string, Record<string, string>>
+  )
 
   return (
     <section>
@@ -143,8 +143,9 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               <Table.HeaderCell className="side_header">Rangering</Table.HeaderCell>
               {productsToCompare.map((product) => {
                 return (
-                  <Table.DataCell
-                    key={product.variants[0].id}>{formatAgreementRanks(product.agreements || [])}</Table.DataCell>
+                  <Table.DataCell key={product.variants[0].id}>
+                    {formatAgreementRanks(product.agreements || [])}
+                  </Table.DataCell>
                 )
               })}
             </Table.Row>
@@ -152,17 +153,16 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               <Table.HeaderCell className="side_header">Delkontrakt</Table.HeaderCell>
               {productsToCompare.map((product) => {
                 return (
-                  <Table.DataCell
-                    key={product.variants[0].id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
+                  <Table.DataCell key={product.variants[0].id}>
+                    {formatAgreementPosts(product.agreements || [])}
+                  </Table.DataCell>
                 )
               })}
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell className="side_header">HMS-nummer</Table.HeaderCell>
               {productsToCompare.map((product) => (
-                <Table.DataCell key={product.variants[0].id}>
-                  {product.variants[0].hmsArtNr}
-                </Table.DataCell>
+                <Table.DataCell key={product.variants[0].id}>{product.variants[0].hmsArtNr}</Table.DataCell>
               ))}
             </Table.Row>
             <Table.Row>
@@ -184,8 +184,9 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               <Table.Row key={i}>
                 <Table.HeaderCell className="side_header">{key}</Table.HeaderCell>
                 {productsToCompare.map((product) => (
-                  <Table.DataCell
-                    key={key + product.variants[0].id}>{productRowKeyValue[product.variants[0].id][key]}</Table.DataCell>
+                  <Table.DataCell key={key + product.variants[0].id}>
+                    {productRowKeyValue[product.variants[0].id][key]}
+                  </Table.DataCell>
                 ))}
               </Table.Row>
             ))}

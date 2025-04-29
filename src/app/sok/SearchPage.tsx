@@ -14,8 +14,6 @@ import { Alert, BodyShort, Button, Heading, HGrid, HStack, Loader, Popover, Show
 import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
-import AnimateLayout from '@/components/layout/AnimateLayout'
-
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 
 import MobileOverlay from '@/components/MobileOverlay'
@@ -271,9 +269,7 @@ export default function SearchPage() {
 
               <SortSearchResults formRef={searchFormRef} />
             </HStack>
-            <AnimateLayout>
-              <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} formRef={searchFormRef} />
-            </AnimateLayout>
+            <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} formRef={searchFormRef} />
             {!isAtPageTop && (
               <Button
                 type="button"

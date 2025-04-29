@@ -5,7 +5,6 @@ import { getAgreement } from '@/utils/api-util'
 import { dateToString } from '@/utils/string-util'
 
 import { BodyLong, BodyShort, Heading, Link } from '@/components/aksel-client'
-import AnimateLayout from '@/components/layout/AnimateLayout'
 
 import { HStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
@@ -18,7 +17,7 @@ type Props = {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const agreementId = params.agreementId
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
   const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
@@ -30,7 +29,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function AgreementPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
   const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.agreementId}`
   // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
@@ -45,42 +44,40 @@ export default async function AgreementPage(props: Props) {
     <>
       {agreement && (
         <div className="agreement-page">
-          <AnimateLayout>
-            <div className="agreement-page__content main-wrapper--small">
-              <article>
-                <div>
-                  <HStack gap="3">
-                    <Link as={NextLink} href="/rammeavtale" variant="subtle">
-                      Avtaler med Nav
-                    </Link>
-                    <BodyShort textColor="subtle">/</BodyShort>
-                  </HStack>
-                  <Heading level="1" size="large" className="spacing-top--small spacing-bottom--small">
-                    {agreement.title}
-                  </Heading>
-                  <BodyLong size="small">
-                    {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
-                  </BodyLong>
-                  <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
-                </div>
-                {!hide && (
-                  <LinkToAgreement
-                    hrefHurtigoversikt={hrefHurtigoversikt}
-                    agreementLabel={agreement.title}
-                  ></LinkToAgreement>
-                )}
-                <AgreementDescription agreement={agreement} />
-              </article>
-              <article>
-                <Heading level="1" size="medium" id="dokumenter">
-                  Dokumenter
+          <div className="agreement-page__content main-wrapper--small">
+            <article>
+              <div>
+                <HStack gap="3">
+                  <Link as={NextLink} href="/rammeavtale" variant="subtle">
+                    Avtaler med Nav
+                  </Link>
+                  <BodyShort textColor="subtle">/</BodyShort>
+                </HStack>
+                <Heading level="1" size="large" className="spacing-top--small spacing-bottom--small">
+                  {agreement.title}
                 </Heading>
-                {agreement.attachments.map((attachment, i) => (
-                  <DocumentExpansionCard key={i} attachment={attachment} />
-                ))}
-              </article>
-            </div>
-          </AnimateLayout>
+                <BodyLong size="small">
+                  {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
+                </BodyLong>
+                <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
+              </div>
+              {!hide && (
+                <LinkToAgreement
+                  hrefHurtigoversikt={hrefHurtigoversikt}
+                  agreementLabel={agreement.title}
+                ></LinkToAgreement>
+              )}
+              <AgreementDescription agreement={agreement} />
+            </article>
+            <article>
+              <Heading level="1" size="medium" id="dokumenter">
+                Dokumenter
+              </Heading>
+              {agreement.attachments.map((attachment, i) => (
+                <DocumentExpansionCard key={i} attachment={attachment} />
+              ))}
+            </article>
+          </div>
         </div>
       )}
     </>

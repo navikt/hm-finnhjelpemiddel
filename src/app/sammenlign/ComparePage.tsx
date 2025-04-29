@@ -17,7 +17,6 @@ import {
 } from '@/utils/string-util'
 
 import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
-import AnimateLayout from '@/components/layout/AnimateLayout'
 import ProductCard from '@/components/ProductCard'
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
 import { useEffect, useState } from 'react'
@@ -74,34 +73,32 @@ export default function ComparePage() {
   }
 
   return (
-    <AnimateLayout>
-      <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
-        <Heading level="1" size="large" spacing>
-          Sammenlign produkter
-        </Heading>
+    <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
+      <Heading level="1" size="large" spacing>
+        Sammenlign produkter
+      </Heading>
 
-        {sortedProductsToCompare && sortedProductsToCompare.length === 0 ? (
-          <section>
-            <NextLink
-              className="navds-panel navds-link-panel navds-panel--border"
-              style={{ maxWidth: '750px' }}
-              href={'/sok'}
-              onClick={handleClick}
-            >
-              <div className="navds-link-panel__content">
-                <div className="navds-link-panel__title navds-heading navds-heading--medium">
-                  Legg til produkter for sammenligning
-                </div>
-                <BodyLong>For å kunne sammenligne produkter må de velges til sammenligning på søkesiden</BodyLong>
+      {sortedProductsToCompare && sortedProductsToCompare.length === 0 ? (
+        <section>
+          <NextLink
+            className="navds-panel navds-link-panel navds-panel--border"
+            style={{ maxWidth: '750px' }}
+            href={'/sok'}
+            onClick={handleClick}
+          >
+            <div className="navds-link-panel__content">
+              <div className="navds-link-panel__title navds-heading navds-heading--medium">
+                Legg til produkter for sammenligning
               </div>
-              <ChevronRightIcon aria-hidden />
-            </NextLink>
-          </section>
-        ) : (
-          <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
-        )}
-      </div>
-    </AnimateLayout>
+              <BodyLong>For å kunne sammenligne produkter må de velges til sammenligning på søkesiden</BodyLong>
+            </div>
+            <ChevronRightIcon aria-hidden />
+          </NextLink>
+        </section>
+      ) : (
+        <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
+      )}
+    </div>
   )
 }
 
