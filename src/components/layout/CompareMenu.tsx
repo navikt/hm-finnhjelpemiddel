@@ -1,32 +1,12 @@
 import Link from 'next/link'
 
-import { AnimatePresence, motion, Variants } from 'framer-motion'
-
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button } from '@navikt/ds-react'
+import { BodyShort, Button, HStack } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
 import classNames from 'classnames'
-import ProductCard from "@/components/ProductCard";
-
-const productCardAnimations: Variants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.3,
-    transition: {
-      duration: 0.1,
-    },
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.1,
-      type: 'ease',
-    },
-  },
-}
+import ProductCard from '@/components/ProductCard'
 
 const CompareMenu = () => {
   const { compareMenuState, productsToCompare, setCompareMenuState, resetProductToCompare } = useHydratedCompareStore()
@@ -72,23 +52,13 @@ const CompareMenu = () => {
             </div>
           )}
           {productsToCompare.length !== 0 && (
-
             <>
               <ul className="compare-menu__chosen-products">
-                <AnimatePresence mode="popLayout">
-                  {reversedProductsToCompare.map((product) => (
-                    <motion.li
-                      layout
-                      key={'compare-' + product.id}
-                      variants={productCardAnimations}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                    >
-                      <ProductCard product={product} type="removable"/>
-                    </motion.li>
-                  ))}
-                </AnimatePresence>
+                {reversedProductsToCompare.map((product) => (
+                  <li key={'compare-' + product.id}>
+                    <ProductCard product={product} type="removable" />
+                  </li>
+                ))}
               </ul>
 
               {productsToCompare.length > 1 && (
