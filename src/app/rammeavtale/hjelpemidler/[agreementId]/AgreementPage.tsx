@@ -323,7 +323,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isKjoreramper = agreementId === '3ea91ddf-f8e1-4d2b-a4a7-e81fca132733' || agreementId === 'e86fd988-0381-4d0a-a027-7654e2d8dbab'
   const isMadrasserTrykkforebyggendeAvtale = agreementId === 'ff48ef4c-d450-4c0e-b99e-244ddecbfc59' || agreementId === '5b3b139e-4eec-4461-bade-18e41115b56d'
   const isSengerAvtale = agreementId === 'f38e94b6-ad85-4cf6-bc26-f14dff0f3e20' || agreementId === '61135e09-f6ba-44ba-8e0d-3994c2883f4c'
-  const isOppreisingsstolerAvtale = agreementId === '44e87ba7-6f1a-4d70-b5ff-28d6e8c54bd6' || agreementId === '547883d7-6459-44b9-9684-22192839336d'
+  const isOppreisingsstolerAvtale = agreementId === '01cd8127-5ef0-489a-aff9-9755b57da1e7' || agreementId === '2a800f62-ddaa-4a62-9aa1-e88395b59e3f'
   const isVarmehjelpemidlerAvtale = agreementId === '38a0c948-fb9f-4cbb-a8d1-de22ac158ea2' || agreementId === 'fa455679-8674-4083-8c1a-5284847b8d41'
   const isSitteputerAvtale = agreementId === '26542d09-61c1-49e6-80e8-eef6a9ea7faf'
   const isKommunikasjonsHjelpemidlerAvtale = agreementId === '1f74afc7-9740-41cc-8648-cd942c392d42'
