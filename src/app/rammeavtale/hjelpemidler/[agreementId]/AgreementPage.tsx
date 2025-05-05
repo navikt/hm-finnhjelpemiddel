@@ -332,6 +332,8 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isERSAvtlale = agreementId === 'eba4bfad-9f35-44c8-872a-d9f8583fa95f'
   const isModuloppbygdeSittesystemer = agreementId === '89c83362-13eb-43ab-80f0-99673f9b7a71'
   const isOverflyttingsplattformerPersonloftere = agreementId === '611b16c1-0e30-4093-851e-b6a5537cfc3e'
+  const isVarslingsAvtale = agreementId === '7ef2ab32-34bd-4eec-92a8-2b5c47b77c78'
+  const isSportsAvtale = agreementId === 'f74f9396-6305-4d3d-83d0-01a797d94e14'
 
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
@@ -339,7 +341,8 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
       || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale
       || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale
       || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale || isSitteputerAvtale || isKommunikasjonsHjelpemidlerAvtale || isMRSAvtale
-      || isHorselNyAvtale || isERSAvtlale || isModuloppbygdeSittesystemer || isOverflyttingsplattformerPersonloftere)
+      || isHorselNyAvtale || isERSAvtlale || isModuloppbygdeSittesystemer || isOverflyttingsplattformerPersonloftere
+      || isVarslingsAvtale || isSportsAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
