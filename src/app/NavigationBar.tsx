@@ -124,7 +124,7 @@ const NavigationBar = () => {
             <HStack wrap={false}>
               {searchOpen && (
                 <div className="nav-top-container_search">
-                  <AutocompleteSearch onSearch={onSearch} secondary />
+                  <AutocompleteSearch onSearch={onSearch} secondary autofocus={true} />
                 </div>
               )}
               <Button

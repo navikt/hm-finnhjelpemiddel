@@ -10,6 +10,7 @@ const esLintConfig = [
   {
     rules: {
       'react/display-name': 'off',
+      'jsx-a11y/no-autofocus': 'off',
     },
   },
 ]

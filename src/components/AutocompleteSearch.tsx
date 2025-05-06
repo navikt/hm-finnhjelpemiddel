@@ -16,9 +16,10 @@ type Props = {
   onSearch: (searchTerm: string) => void
   secondary?: boolean
   hideLabel?: boolean
+  autofocus?: boolean
 }
 
-const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true }: Props) => {
+const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, autofocus = false }: Props) => {
   const [openState, setOpenState] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
@@ -138,6 +139,7 @@ const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true }: P
         clearButton={false}
         onKeyUp={handleKeyUpInInputField}
         onFocus={() => virtualFocus.reset()}
+        autoFocus={autofocus}
       />
 
       <Popover
