@@ -112,6 +112,7 @@ export default function AlternativeProductsPage() {
             <li>Arbeidsstoler</li>
             <li>Elektriske rullestoler</li>
             <li>Ganghjelpemidler</li>
+            <li>Hjelpemidler for overflytting, vending og posisjonering</li>
             <li>Hørselshjelpemidler</li>
             <li>Kalendere, dagsplanleggere og tidtakere</li>
             <li>Kjøreposer og regncape</li>
@@ -120,6 +121,7 @@ export default function AlternativeProductsPage() {
             <li>Løfteplattformer og hjelpemiddel i trapp</li>
             <li>Madrasser med trykksårforebyggende egenskaper</li>
             <li>Manuelle rullestoler DK6 og DK9</li>
+            <li>Moduloppbygde sittesystemer</li>
             <li>Overflyttingsplattformer og personløftere</li>
             <li>Senger, sengebunner, skummadrasser, hjertebrett og sengebord</li>
             <li>Stoler med oppreisingsfunksjon</li>
