@@ -100,6 +100,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
     { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Setehøyde', label: 'Setehøyde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Bredde', label: 'Bredde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Terskelhøyde', label: 'Terskelhøyde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Lengde', label: 'Lengde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Håndtak hreg', label: 'Håndtak hreg', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Livvidde', label: 'Livvidde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
