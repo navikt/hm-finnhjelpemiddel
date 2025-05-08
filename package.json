@@ -22,7 +22,7 @@
     "classnames": "^2.5.1",
     "embla-carousel-react": "^8.6.0",
     "embla-carousel": "^8.5.2",
-    "framer-motion": "^11.18.0",
+    "framer-motion": "^12.10.3",
     "js-cookie": "^3.0.5",
     "next": "15.3.0",
     "qrcode.react": "^4.2.0",
