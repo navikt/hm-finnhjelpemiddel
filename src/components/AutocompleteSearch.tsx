@@ -98,7 +98,7 @@ const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, aut
     }
   }
 
-  const handleKeyUpInInputField = (event: React.KeyboardEvent) => {
+  const handleKeyDownInInputField = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault()
       const inputValue = (event.currentTarget as HTMLInputElement).value
@@ -137,7 +137,7 @@ const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, aut
           onSearch(searchTerm)
         }}
         clearButton={false}
-        onKeyUp={handleKeyUpInInputField}
+        onKeyDown={handleKeyDownInInputField}
         onFocus={() => virtualFocus.reset()}
         autoFocus={autofocus}
       />
