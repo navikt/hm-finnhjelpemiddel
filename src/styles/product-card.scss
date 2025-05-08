@@ -51,6 +51,12 @@
       z-index: 1;
     }
   }
+  
+  @media print {
+    &__link {
+      display: none;
+    }
+  }
 
   &__hms-numbers {
     z-index: 2;
