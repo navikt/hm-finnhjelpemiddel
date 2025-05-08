@@ -53,7 +53,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
     .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
 
-  const filterFunction = (variant: ProductVariant, filterFieldName: string) => {
+  const dropdownFilterPredicate = (variant: ProductVariant, filterFieldName: string) => {
     if (searchParams.get(filterFieldName)) {
       const isMinMax = variant.techData[`${filterFieldName} min`] && variant.techData[`${filterFieldName} maks`]
 
@@ -76,11 +76,11 @@ export const VariantTable = ({ product }: { product: Product }) => {
     return true
   }
 
-  const onAgreementFilter = (variant: ProductVariant, filterFieldName: string) => {
+  const onAgreementFilterPredicate = (variant: ProductVariant, filterFieldName: string) => {
     return searchParams.get(filterFieldName) ? variant.hasAgreement : true
   }
 
-  const variantIdSearch = (variant: ProductVariant, filterFieldName: string) => {
+  const variantIdSearchPredicate = (variant: ProductVariant, filterFieldName: string) => {
     const searchTerm = searchParams.get(filterFieldName)?.toLocaleLowerCase()
 
     if (searchTerm && (searchTermMatchesHms || searchTermMatchesSupplierRef)) {
@@ -96,27 +96,32 @@ export const VariantTable = ({ product }: { product: Product }) => {
     : 'search'
 
   const filters: Filter[] = [
-    { fieldName: 'Setebredde', label: 'Setebredde', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Setehøyde', label: 'Setehøyde', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Bredde', label: 'Bredde', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Lengde', label: 'Lengde', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Håndtak hreg', label: 'Håndtak hreg', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Livvidde', label: 'Livvidde', type: FilterType.DROPDOWN, predicate: filterFunction },
+    { fieldName: 'Setebredde', label: 'Setebredde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Setehøyde', label: 'Setehøyde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Bredde', label: 'Bredde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Lengde', label: 'Lengde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Håndtak hreg', label: 'Håndtak hreg', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Livvidde', label: 'Livvidde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     {
       fieldName: 'Materiale i trekk',
       label: 'Materiale i trekk',
       type: FilterType.DROPDOWN,
-      predicate: filterFunction,
+      predicate: dropdownFilterPredicate,
     },
-    { fieldName: 'Trekk', label: 'Trekk', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'Størrelse', label: 'Størrelse', type: FilterType.DROPDOWN, predicate: filterFunction },
-    { fieldName: 'agreement', label: 'På avtale med Nav', type: FilterType.TOGGLE, predicate: onAgreementFilter },
+    { fieldName: 'Trekk', label: 'Trekk', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    { fieldName: 'Størrelse', label: 'Størrelse', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
+    {
+      fieldName: 'agreement',
+      label: 'På avtale med Nav',
+      type: FilterType.TOGGLE,
+      predicate: onAgreementFilterPredicate,
+    },
     {
       fieldName: 'term',
       label: termFilterLabel,
       type: FilterType.TOGGLE,
-      predicate: variantIdSearch,
+      predicate: variantIdSearchPredicate,
     },
   ]
 
