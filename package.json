@@ -17,7 +17,7 @@
     "@navikt/ds-css": "^7.21.0",
     "@navikt/ds-react": "^7.21.0",
     "@navikt/ds-tokens": "^7.1.2",
-    "@navikt/next-logger": "^1.35.0",
+    "@navikt/next-logger": "^3.0.3",
     "@types/js-cookie": "^3.0.6",
     "classnames": "^2.5.1",
     "embla-carousel-react": "^8.6.0",
