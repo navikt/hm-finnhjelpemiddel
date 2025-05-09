@@ -15,8 +15,6 @@ import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PA
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
-
-import MobileOverlay from '@/components/MobileOverlay'
 import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
@@ -24,13 +22,13 @@ import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
 import { logFilterEndretEvent } from '@/utils/amplitude'
+import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 
 export default function SearchPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
   const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
 
@@ -39,7 +37,7 @@ export default function SearchPage() {
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
-  const { isMobileOverlayOpen, setMobileOverlayOpen } = useMobileOverlayStore()
+  const { setMobileOverlayOpen } = useMobileOverlayStore()
   const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const searchResultRef = useRef<HTMLHeadingElement>(null)
 
@@ -217,53 +215,11 @@ export default function SearchPage() {
                   >
                     Filter
                   </Button>
-                  <MobileOverlay open={isMobileOverlayOpen}>
-                    <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-                      <Heading level="2" size="medium">
-                        Filtrer søket
-                      </Heading>
-                    </MobileOverlay.Header>
-                    <MobileOverlay.Content>
-                      <SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />
-                    </MobileOverlay.Content>
-                    <MobileOverlay.Footer>
-                      <VStack gap="2">
-                        <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                          <Button
-                            ref={copyButtonMobileRef}
-                            variant="secondary"
-                            size="small"
-                            icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                            onClick={() => {
-                              navigator.clipboard.writeText(location.href)
-                              setCopyPopupOpenState(true)
-                            }}
-                          >
-                            Kopiér søket
-                          </Button>
-                          <Popover
-                            open={copyPopupOpenState}
-                            onClose={() => setCopyPopupOpenState(false)}
-                            anchorEl={copyButtonMobileRef.current}
-                            placement="right"
-                          >
-                            <Popover.Content>Søket er kopiert!</Popover.Content>
-                          </Popover>
 
-                          <Button
-                            type="button"
-                            variant="secondary"
-                            size="small"
-                            icon={<TrashIcon title="Nullstill søket" />}
-                            onClick={onReset}
-                          >
-                            Nullstill søket
-                          </Button>
-                        </HGrid>
-                        <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
-                      </VStack>
-                    </MobileOverlay.Footer>
-                  </MobileOverlay>
+                  <MobileOverlayModal
+                    body={<SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />}
+                    onReset={onReset}
+                  />
                 </div>
               )}
 
