@@ -22,6 +22,6 @@ export const LOCAL_TOGGLES = [
   },
   {
     name: 'paaskepynt',
-    enabled: true,
+    enabled: false,
   },
 ]
