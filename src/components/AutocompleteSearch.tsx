@@ -98,13 +98,17 @@ const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, aut
     }
   }
 
-  const handleKeyUpInInputField = (event: React.KeyboardEvent) => {
+  const handleKeyDownInInputField = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault()
       const inputValue = (event.currentTarget as HTMLInputElement).value
       onSearch(inputValue)
       setOpenState(false)
-    } else if (event.key === 'ArrowDown') {
+    }
+  }
+
+  const handleKeyUpInInputField = (event: React.KeyboardEvent) => {
+    if (event.key === 'ArrowDown') {
       event.preventDefault()
       const current = listContainerRef.current?.querySelector('li') as HTMLLIElement
       if (current) {
@@ -138,6 +142,7 @@ const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, aut
         }}
         clearButton={false}
         onKeyUp={handleKeyUpInInputField}
+        onKeyDown={handleKeyDownInInputField}
         onFocus={() => virtualFocus.reset()}
         autoFocus={autofocus}
       />
