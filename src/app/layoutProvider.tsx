@@ -128,8 +128,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           </Alert>
         </HStack>
       )}
-      {isMobileOverlayOpen && <div id="cover-main" />}
-      <div id="modal-container"></div>
       <header>
         <Link href={'#hovedinnhold'} variant="subtle" className="skiplink">
           Hopp til hovedinnhold

@@ -6,8 +6,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
-
-import MobileOverlay from '@/components/MobileOverlay'
 import CompareMenu from '@/components/layout/CompareMenu'
 import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
@@ -16,15 +14,7 @@ import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
-import {
-  FilesIcon,
-  FilterIcon,
-  ImageIcon,
-  PackageIcon,
-  PrinterSmallIcon,
-  TrashIcon,
-  WrenchIcon,
-} from '@navikt/aksel-icons'
+import { FilesIcon, FilterIcon, ImageIcon, PackageIcon, PrinterSmallIcon, WrenchIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -35,7 +25,6 @@ import {
   HStack,
   Link,
   Loader,
-  Popover,
   Show,
   ToggleGroup,
   VStack,
@@ -43,7 +32,9 @@ import {
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
-import PostsListIsoGroups from "@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups";
+import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
+import { MobileOverlayModal } from '@/components/MobileOverlayModal'
+import { useMobileOverlayStore } from '@/utils/global-state-util'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -55,18 +46,19 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const copyButtonMobileRef = useRef<HTMLButtonElement>(null)
-  const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
 
-  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
-  const [mobileOverlayOpen, setMobileOverlayOpen] = useState(false)
+  const { setMobileOverlayOpen } = useMobileOverlayStore()
   const [showSidebar, setShowSidebar] = useState(false)
 
   const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
-  const avtalerMedIsoGruppering = ['9d8ff31e-c536-4f4d-9b2f-75cc527c727f', 'b9a48c54-3004-4f94-ab65-b38deec78ed3', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
+  const avtalerMedIsoGruppering = [
+    '9d8ff31e-c536-4f4d-9b2f-75cc527c727f',
+    'b9a48c54-3004-4f94-ab65-b38deec78ed3',
+    '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
+  ]
 
   const formMethods = useForm<FormSearchData>({
     defaultValues: {
@@ -158,8 +150,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <BodyLong size="small">
               {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
             </BodyLong>
-            <BodyLong
-              size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
+            <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
           </div>
 
           <TopLinks agreementId={agreement.id} />
@@ -200,53 +191,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 </HStack>
               )}
 
-              <MobileOverlay open={mobileOverlayOpen}>
-                <MobileOverlay.Header onClose={() => setMobileOverlayOpen(false)}>
-                  <Heading level="1" size="medium">
-                    Filtrer søket
-                  </Heading>
-                </MobileOverlay.Header>
-                <MobileOverlay.Content>
-                  <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />
-                </MobileOverlay.Content>
-                <MobileOverlay.Footer>
-                  <VStack gap="2">
-                    <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                      <Button
-                        ref={copyButtonMobileRef}
-                        variant="secondary"
-                        size="small"
-                        icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                        onClick={() => {
-                          navigator.clipboard.writeText(location.href)
-                          setCopyPopupOpenState(true)
-                        }}
-                      >
-                        Kopiér søket
-                      </Button>
-                      <Popover
-                        open={copyPopupOpenState}
-                        onClose={() => setCopyPopupOpenState(false)}
-                        anchorEl={copyButtonMobileRef.current}
-                        placement="right"
-                      >
-                        <Popover.Content>Søket er kopiert!</Popover.Content>
-                      </Popover>
-
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="small"
-                        icon={<TrashIcon title="Nullstill søket" />}
-                        onClick={onReset}
-                      >
-                        Tøm filtre
-                      </Button>
-                    </HGrid>
-                    <Button onClick={() => setMobileOverlayOpen(false)}>Vis søkeresultater</Button>
-                  </VStack>
-                </MobileOverlay.Footer>
-              </MobileOverlay>
+              <MobileOverlayModal
+                body={<FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />}
+                onReset={onReset}
+              />
 
               <HStack gap="4" className="hurtigoversikt-toggle__container">
                 <ToggleGroup
@@ -314,20 +262,32 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isHygieneAvtale =
     agreementId === '034fccf7-c481-4c2b-9867-4d092f89c0fe' || agreementId === '22469a9d-0cc2-41c4-8564-085b0d836144'
 
-  const isLofteplattformAvtale = agreementId === '4432dc25-88c1-429e-95f3-0ed55836335e' || agreementId === '039c71d2-d325-47c0-99ec-8ac85748d40d'
-  const isStaastativAvtale = agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7' || agreementId === '216b3d7b-ce74-4bf4-aeca-f06888f5c072'
-  const isGanghjelpemidlerAvtale = agreementId === '35a25ae9-d307-42a6-8893-732de01e02ce' || agreementId === 'f1ddd971-17f1-4241-8593-edaf377f66f0'
-  const isArbeidsstolAvtale = agreementId === 'b062ea46-9cec-4503-982c-943c1734120d' || agreementId === '26e60523-b4d8-4f82-a59e-2eadcc3829e3'
-  const isOverflyttingAvtale = agreementId === 'a9f619de-1223-422f-828f-c6f380622a55' || agreementId === '02e30ace-82bc-426c-b2fc-5cc6b2c48a81'
-  const isKalendereAvtale = agreementId === 'de45889f-e4cd-45a2-9b36-5652594e1fba' || agreementId === 'f1596dac-3898-434f-8a39-902f5fb307ac'
-  const isKjoreramper = agreementId === '3ea91ddf-f8e1-4d2b-a4a7-e81fca132733' || agreementId === 'e86fd988-0381-4d0a-a027-7654e2d8dbab'
-  const isMadrasserTrykkforebyggendeAvtale = agreementId === 'ff48ef4c-d450-4c0e-b99e-244ddecbfc59' || agreementId === '5b3b139e-4eec-4461-bade-18e41115b56d'
-  const isSengerAvtale = agreementId === 'f38e94b6-ad85-4cf6-bc26-f14dff0f3e20' || agreementId === '61135e09-f6ba-44ba-8e0d-3994c2883f4c'
-  const isOppreisingsstolerAvtale = agreementId === '01cd8127-5ef0-489a-aff9-9755b57da1e7' || agreementId === '2a800f62-ddaa-4a62-9aa1-e88395b59e3f'
-  const isVarmehjelpemidlerAvtale = agreementId === '38a0c948-fb9f-4cbb-a8d1-de22ac158ea2' || agreementId === 'fa455679-8674-4083-8c1a-5284847b8d41'
+  const isLofteplattformAvtale =
+    agreementId === '4432dc25-88c1-429e-95f3-0ed55836335e' || agreementId === '039c71d2-d325-47c0-99ec-8ac85748d40d'
+  const isStaastativAvtale =
+    agreementId === 'deec7554-2d7e-442f-a63f-1fda49ef77c7' || agreementId === '216b3d7b-ce74-4bf4-aeca-f06888f5c072'
+  const isGanghjelpemidlerAvtale =
+    agreementId === '35a25ae9-d307-42a6-8893-732de01e02ce' || agreementId === 'f1ddd971-17f1-4241-8593-edaf377f66f0'
+  const isArbeidsstolAvtale =
+    agreementId === 'b062ea46-9cec-4503-982c-943c1734120d' || agreementId === '26e60523-b4d8-4f82-a59e-2eadcc3829e3'
+  const isOverflyttingAvtale =
+    agreementId === 'a9f619de-1223-422f-828f-c6f380622a55' || agreementId === '02e30ace-82bc-426c-b2fc-5cc6b2c48a81'
+  const isKalendereAvtale =
+    agreementId === 'de45889f-e4cd-45a2-9b36-5652594e1fba' || agreementId === 'f1596dac-3898-434f-8a39-902f5fb307ac'
+  const isKjoreramper =
+    agreementId === '3ea91ddf-f8e1-4d2b-a4a7-e81fca132733' || agreementId === 'e86fd988-0381-4d0a-a027-7654e2d8dbab'
+  const isMadrasserTrykkforebyggendeAvtale =
+    agreementId === 'ff48ef4c-d450-4c0e-b99e-244ddecbfc59' || agreementId === '5b3b139e-4eec-4461-bade-18e41115b56d'
+  const isSengerAvtale =
+    agreementId === 'f38e94b6-ad85-4cf6-bc26-f14dff0f3e20' || agreementId === '61135e09-f6ba-44ba-8e0d-3994c2883f4c'
+  const isOppreisingsstolerAvtale =
+    agreementId === '01cd8127-5ef0-489a-aff9-9755b57da1e7' || agreementId === '2a800f62-ddaa-4a62-9aa1-e88395b59e3f'
+  const isVarmehjelpemidlerAvtale =
+    agreementId === '38a0c948-fb9f-4cbb-a8d1-de22ac158ea2' || agreementId === 'fa455679-8674-4083-8c1a-5284847b8d41'
   const isSitteputerAvtale = agreementId === '26542d09-61c1-49e6-80e8-eef6a9ea7faf'
   const isKommunikasjonsHjelpemidlerAvtale = agreementId === '1f74afc7-9740-41cc-8648-cd942c392d42'
-  const isMRSAvtale = agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7' || agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7'
+  const isMRSAvtale =
+    agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7' || agreementId === '3a020eea-eec5-4ef4-80cc-66268a7a62a7'
   const isHorselNyAvtale = agreementId === '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96'
   const isERSAvtlale = agreementId === 'eba4bfad-9f35-44c8-872a-d9f8583fa95f'
   const isModuloppbygdeSittesystemer = agreementId === '89c83362-13eb-43ab-80f0-99673f9b7a71'
@@ -336,13 +296,27 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isSportsAvtale = agreementId === 'f74f9396-6305-4d3d-83d0-01a797d94e14'
 
   const showAccessoriesAndSparePartsList =
-    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister')
-    && (isLofteplattformAvtale
-      || isStaastativAvtale || isGanghjelpemidlerAvtale || isArbeidsstolAvtale || isOverflyttingAvtale
-      || isKalendereAvtale || isKjoreramper || isMadrasserTrykkforebyggendeAvtale || isSengerAvtale
-      || isOppreisingsstolerAvtale || isVarmehjelpemidlerAvtale || isSitteputerAvtale || isKommunikasjonsHjelpemidlerAvtale || isMRSAvtale
-      || isHorselNyAvtale || isERSAvtlale || isModuloppbygdeSittesystemer || isOverflyttingsplattformerPersonloftere
-      || isVarslingsAvtale || isSportsAvtale)
+    isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') &&
+    (isLofteplattformAvtale ||
+      isStaastativAvtale ||
+      isGanghjelpemidlerAvtale ||
+      isArbeidsstolAvtale ||
+      isOverflyttingAvtale ||
+      isKalendereAvtale ||
+      isKjoreramper ||
+      isMadrasserTrykkforebyggendeAvtale ||
+      isSengerAvtale ||
+      isOppreisingsstolerAvtale ||
+      isVarmehjelpemidlerAvtale ||
+      isSitteputerAvtale ||
+      isKommunikasjonsHjelpemidlerAvtale ||
+      isMRSAvtale ||
+      isHorselNyAvtale ||
+      isERSAvtlale ||
+      isModuloppbygdeSittesystemer ||
+      isOverflyttingsplattformerPersonloftere ||
+      isVarslingsAvtale ||
+      isSportsAvtale)
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
