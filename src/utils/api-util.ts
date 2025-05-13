@@ -945,7 +945,18 @@ export async function getAllSuppliers(): Promise<Supplier[]> {
         },
       ],
       _source: {
-        includes: ['id', 'identifier', 'postNr', 'postLocation', 'name', 'address', 'homepage', 'status', 'email', 'phone'],
+        includes: [
+          'id',
+          'identifier',
+          'postNr',
+          'postLocation',
+          'name',
+          'address',
+          'homepage',
+          'status',
+          'email',
+          'phone',
+        ],
       },
     }),
   })
@@ -1365,11 +1376,9 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
           },
         },
       ],
-      size: 100,
+      size: 1000,
     }),
   })
     .then((res) => res.json())
-    .then((data) => mapProductsVariants(data));
-};
-
-
+    .then((data) => mapProductsVariants(data))
+}
