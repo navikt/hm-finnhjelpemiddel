@@ -2,6 +2,10 @@ name: Build check
 
 on: [push]
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     name: Build application
