@@ -294,6 +294,10 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isOverflyttingsplattformerPersonloftere = agreementId === '611b16c1-0e30-4093-851e-b6a5537cfc3e'
   const isVarslingsAvtale = agreementId === '7ef2ab32-34bd-4eec-92a8-2b5c47b77c78'
   const isSportsAvtale = agreementId === 'f74f9396-6305-4d3d-83d0-01a797d94e14'
+  const isKjøreposeRegncapeAvtale =
+    agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
+
+  const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale
 
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') &&
@@ -320,35 +324,39 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
 
   return (
     <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
-      <LinkPanelLocal
-        href={
-          showAccessoriesAndSparePartsList
-            ? `/rammeavtale/${agreementId}/tilbehor`
-            : `/rammeavtale/${agreementId}#Tilbehor`
-        }
-        icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-        title="Tilbehør"
-        description={
-          showAccessoriesAndSparePartsList
-            ? 'Gå til avtalens tilbehørslister'
-            : 'Gå til avtalens tilbehørslister i PDF-format'
-        }
-      />
+      {showAccessoriesAndSparePartsButtons && (
+        <>
+          <LinkPanelLocal
+            href={
+              showAccessoriesAndSparePartsList
+                ? `/rammeavtale/${agreementId}/tilbehor`
+                : `/rammeavtale/${agreementId}#Tilbehor`
+            }
+            icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+            title="Tilbehør"
+            description={
+              showAccessoriesAndSparePartsList
+                ? 'Gå til avtalens tilbehørslister'
+                : 'Gå til avtalens tilbehørslister i PDF-format'
+            }
+          />
 
-      <LinkPanelLocal
-        href={
-          showAccessoriesAndSparePartsList
-            ? `/rammeavtale/${agreementId}/reservedeler`
-            : `/rammeavtale/${agreementId}#Reservedeler`
-        }
-        icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-        title="Reservedeler"
-        description={
-          showAccessoriesAndSparePartsList
-            ? 'Gå til avtalens reservedellister'
-            : 'Gå til avtalens reservedellister i PDF-format'
-        }
-      />
+          <LinkPanelLocal
+            href={
+              showAccessoriesAndSparePartsList
+                ? `/rammeavtale/${agreementId}/reservedeler`
+                : `/rammeavtale/${agreementId}#Reservedeler`
+            }
+            icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
+            title="Reservedeler"
+            description={
+              showAccessoriesAndSparePartsList
+                ? 'Gå til avtalens reservedellister'
+                : 'Gå til avtalens reservedellister i PDF-format'
+            }
+          />
+        </>
+      )}
       <LinkPanelLocal
         href={`/rammeavtale/${agreementId}`}
         icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
