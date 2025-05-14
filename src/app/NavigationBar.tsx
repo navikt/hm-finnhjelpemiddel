@@ -11,7 +11,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
-import { SnowfallComponent } from '@/components/Snowfall'
+import { SnowfallComponent } from '@/app/pynt/Snowfall'
 import { KyllingHareFall } from '@/app/pynt/KyllingHareFall'
 import { Pynt } from '@/app/pynt/Pynt'
 
