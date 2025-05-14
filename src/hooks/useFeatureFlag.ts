@@ -1,7 +1,11 @@
-import { IToggle } from '@/toggles/context'
 import { EXPECTED_TOGGLES, LOCAL_TOGGLES } from '@/toggles/toggles'
 import { fetcherGET } from '@/utils/api-util'
 import useSWR from 'swr'
+
+export interface IToggle {
+  name: string
+  enabled: boolean
+}
 
 interface IFeatureFlags {
   toggles: IToggle[] | undefined
