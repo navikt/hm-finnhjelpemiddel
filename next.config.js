@@ -4,9 +4,6 @@ const nextConfig = {
   output: 'standalone', // see: https://github.com/vercel/next.js/tree/canary/examples/with-docker
   assetPrefix: process.env.ASSET_PREFIX || undefined,
   reactStrictMode: true,
-  sassOptions: {
-    silenceDeprecations: ['legacy-js-api'], // TODO: next har ikke oppdatert internt enda
-  },
   async rewrites() {
     return [
       {
