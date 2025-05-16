@@ -69,7 +69,7 @@ const PostsList = ({
               <Loader size="medium" title="Laster hjelpemidler" />
             </HStack>
           )}
-          {post.products.length === 0 && !postLoading && (
+          {post.products.length === 0 && !postLoading &&  post.nr !== 99 &&(
             <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>
           )}
           <HStack as="ol" gap={'4'}>
