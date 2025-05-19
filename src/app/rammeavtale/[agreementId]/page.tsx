@@ -30,7 +30,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function AgreementPage(props: Props) {
   const params = await props.params
-  const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
+  const agreementResponse = await getAgreement(params.agreementId)
+  console.log('Agreement Response:', agreementResponse);
+  const agreement = mapAgreementFromDoc(agreementResponse)
   const hrefHurtigoversikt = `/rammeavtale/hjelpemidler/${params.agreementId}`
   // const hrefSok = `/sok?agreement&rammeavtale=${agreement?.label}`
 
