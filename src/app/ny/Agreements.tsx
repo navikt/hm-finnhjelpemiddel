@@ -18,6 +18,7 @@ import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import NextLink from 'next/link'
 import { dateToString } from '@/utils/string-util'
 import styles from './Agreements.module.scss'
+import { faro } from '@grafana/faro-core'
 
 type SortColumns = {
   orderBy: string | null
@@ -94,6 +95,7 @@ const Agreements = () => {
 
   const handleSortColumn = (sortKey: string) => {
     logKlikk(`agreements-sort-${sortKey}`)
+    faro.api.pushEvent('testevent')
     setSortColumn({
       orderBy: sortKey === sortColumn.orderBy && sortColumn.direction === 'descending' ? 'title' : sortKey,
       direction:

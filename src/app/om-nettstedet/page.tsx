@@ -1,6 +1,5 @@
 import { BodyLong, Heading, Link } from '@/components/aksel-client'
 import { Metadata } from 'next'
-import { faro } from '@grafana/faro-core'
 
 export const metadata: Metadata = {
   title: 'Om nettstedet',
@@ -8,8 +7,6 @@ export const metadata: Metadata = {
 }
 
 function AboutUs() {
-  faro.api.pushEvent('testevent')
-
   return (
     <div className="about-us-page">
       <div className="about-us-page__container">
