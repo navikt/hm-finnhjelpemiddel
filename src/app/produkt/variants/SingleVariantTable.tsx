@@ -22,7 +22,7 @@ export const SingleVariantTable = ({ variant, rows, variantNameElementRef }: Sin
     if (variantNameElementRef.current) {
       setVariantNameElementHeight(variantNameElementRef.current.offsetHeight)
     }
-  }, [])
+  }, [variantNameElementRef])
 
   return (
     <>

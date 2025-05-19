@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Product } from '@/utils/product-util'
 import useSWR from 'swr'
 import { getProductFilters } from '@/utils/api-util'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { FilterViewProductPage } from '@/components/filters/FilterViewProductPage'
 
 export type ExtendedFilterFormState = FilterFormState & {
@@ -33,11 +33,15 @@ export const VariantFilters = ({ product }: { product: Product }) => {
     keepPreviousData: true,
   })
 
-  const relevantFilterKeys = filtersFromData
-    ? Object.entries(filtersFromData)
-        .filter(([_, filter]) => filter.values.length > 1)
-        .flatMap(([key]) => key)
-    : []
+  const relevantFilterKeys = useMemo(
+    () =>
+      filtersFromData
+        ? Object.entries(filtersFromData)
+            .filter(([_, filter]) => filter.values.length > 1)
+            .flatMap(([key]) => key)
+        : [],
+    [filtersFromData]
+  )
 
   useEffect(() => {
     const relevantFilters = {
@@ -56,7 +60,7 @@ export const VariantFilters = ({ product }: { product: Product }) => {
     const currentHash = window.location.hash
     const newQueryString = toSearchQueryString({ filters: relevantFilters }, searchData.searchTerm)
     router.replace(`${pathname}?${newQueryString}${currentHash ? currentHash : ''}`, { scroll: false })
-  }, [filtersFromData])
+  }, [filtersFromData, pathname, relevantFilterKeys, router, searchData.filters, searchData.searchTerm])
 
   const formMethods = useForm({
     mode: 'onSubmit',

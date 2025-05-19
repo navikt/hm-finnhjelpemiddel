@@ -78,7 +78,13 @@ export const VariantView = ({ product }: { product: Product }) => {
             : []
           : product.variants
         : product.variants,
-    [product.variants, productWithFilteredVariants]
+    [
+      product.variants,
+      productWithFilteredVariants,
+      searchData.searchTerm,
+      searchTermMatchesHms,
+      searchTermMatchesSupplierRef,
+    ]
   )
 
   useEffect(() => {
