@@ -237,17 +237,17 @@ export const mapAgreementProducts = (
     }
   }
 
-  const allPostsWithEmpty = Array.from({ length: agreement.posts.length }, (_, index) => {
-    const listItem = postBuckets.find((post) => post.key === index + 1)
+  const allPostsWithEmpty = Array.from({ length: agreement.posts.filter((post) => post.nr !== 99).length }, (_, index) => {
+    const listItem = postBuckets.filter((postBucket) => postBucket.key !== 99).find((post) => post.key === index + 1)
 
     return listItem
       ? mapPostBucket(listItem)
       : {
-          nr: index + 1,
-          title: getPostTitle(index + 1) ?? '',
-          description: getPostDescription(index + 1) ?? '',
-          products: [],
-        }
+        nr: index + 1,
+        title: getPostTitle(index + 1) ?? '',
+        description: getPostDescription(index + 1) ?? '',
+        products: [],
+      }
   })
 
   const isFilteredOnDelkontrakt = filters.delkontrakt.length > 0
