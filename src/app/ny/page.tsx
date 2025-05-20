@@ -44,33 +44,31 @@ function FrontPage() {
   )
 
   return (
-    <div className="home-page">
-      <VStack className="main-wrapper--large" gap={{ xs: '12', md: '16' }}>
-        <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-          <HStack wrap={false} justify={'space-between'} align={'center'} marginBlock={{ xs: '10', md: '20' }}>
-            <VStack gap={{ xs: '8', md: '11' }} maxWidth={'490px'}>
-              <Heading level="1" size="large">
-                Her kan du finne hjelpemidler på det norske markedet
-              </Heading>
-              <Box>
-                <AutocompleteSearch onSearch={onSearch} />
-              </Box>
-            </VStack>
+    <VStack className={styles.container} paddingInline={{ xs: '4', md: '12' }} gap={{ xs: '12', md: '16' }}>
+      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
+        <HStack wrap={false} justify={'space-between'} align={'center'} marginBlock={{ xs: '10', md: '20' }}>
+          <VStack gap={{ xs: '8', md: '11' }} maxWidth={'490px'}>
+            <Heading level="1" size="large">
+              Her kan du finne hjelpemidler på det norske markedet
+            </Heading>
+            <Box>
+              <AutocompleteSearch onSearch={onSearch} />
+            </Box>
+          </VStack>
 
-            <Hide below={'md'} asChild>
-              <Box className={styles.logoBox}>
-                <FinnHjelpemiddelLogo />
-              </Box>
-            </Hide>
-          </HStack>
-        </Bleed>
+          <Hide below={'md'} asChild>
+            <Box className={styles.logoBox}>
+              <FinnHjelpemiddelLogo />
+            </Box>
+          </Hide>
+        </HStack>
+      </Bleed>
 
-        <Agreements />
-        <NewsFeed />
+      <Agreements />
+      <NewsFeed />
 
-        <KontaktOss />
-      </VStack>
-    </div>
+      <KontaktOss />
+    </VStack>
   )
 }
 

@@ -73,7 +73,7 @@ const Agreements = () => {
   }
 
   return (
-    <VStack gap="4" className={styles.agreementsContainer}>
+    <VStack gap="4" paddingInline={{ lg: '6' }}>
       <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center" className="agreement-page__list-container">
         <Heading level="2" size="medium">
           Hjelpemidler på avtale med Nav
