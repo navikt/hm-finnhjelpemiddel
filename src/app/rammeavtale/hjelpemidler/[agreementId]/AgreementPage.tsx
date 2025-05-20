@@ -176,14 +176,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Button>
                   <Show below="sm">
                     <Button
-                      variant="secondary-neutral"
-                      className="button-with-thin-border"
+                      variant="secondary"
                       onClick={() => {
                         window.print()
                       }}
-                      icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
+                      icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                      iconPosition={'right'}
                     >
-                      {`Hurtigoversikt (PDF)`}
+                      Skriv ut
                     </Button>
                   </Show>
                 </HStack>
