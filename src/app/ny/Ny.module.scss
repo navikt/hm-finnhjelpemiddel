@@ -23,5 +23,6 @@
   justify-self: end;
   @media (max-width: $a-breakpoint-md) {
     justify-self: center;
+    top: 0;
   }
 }
