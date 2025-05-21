@@ -71,7 +71,8 @@ export const PartsList = ({ seriesId }: Props) => {
              align="end">
         <Search
           defaultValue={inputValue}
-          label="Søk"
+          label="Søk etter tilbehør og reservedeler"
+          description="Her kan du søke på hms-nr, artikkelnavn eller leverandørens artikkelnummer"
           hideLabel={false}
           variant="simple"
           onChange={setInputValue}
