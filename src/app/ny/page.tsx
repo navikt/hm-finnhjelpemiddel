@@ -5,7 +5,7 @@ import { useCallback, useEffect } from 'react'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { logNavigationEvent, logVisit } from '@/utils/amplitude'
-import { Bleed, Box, Heading, Hide, HStack, VStack } from '@navikt/ds-react'
+import { Bleed, Box, Heading, HGrid, VStack } from '@navikt/ds-react'
 import KontaktOss from '@/app/ny/KontaktOss'
 import FinnHjelpemiddelLogo from '@/app/ny/FinnHjelpemiddelLogo'
 import Agreements from '@/app/ny/Agreements'
@@ -46,8 +46,14 @@ function FrontPage() {
   return (
     <VStack className={styles.container} paddingInline={{ xs: '4', md: '12' }} gap={{ xs: '12', md: '16' }}>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        <HStack wrap={false} justify={'space-between'} align={'center'} marginBlock={{ xs: '10', md: '20' }}>
-          <VStack gap={{ xs: '8', md: '11' }} maxWidth={'490px'}>
+        <HGrid
+          className={styles.heroContentContainer}
+          columns={{ sm: 1, md: 2 }}
+          align={'center'}
+          gap={'8'}
+          marginBlock={{ xs: '10', md: '20' }}
+        >
+          <VStack gap={{ xs: '8', md: '11' }} maxWidth={'490px'} style={{ gridArea: 'box1' }}>
             <Heading level="1" size="large">
               Her kan du finne hjelpemidler på det norske markedet
             </Heading>
@@ -56,12 +62,10 @@ function FrontPage() {
             </Box>
           </VStack>
 
-          <Hide below={'md'} asChild>
-            <Box className={styles.logoBox}>
-              <FinnHjelpemiddelLogo />
-            </Box>
-          </Hide>
-        </HStack>
+          <Box className={styles.logoBox} style={{ gridArea: 'box2' }}>
+            <FinnHjelpemiddelLogo />
+          </Box>
+        </HGrid>
       </Bleed>
 
       <Agreements />
