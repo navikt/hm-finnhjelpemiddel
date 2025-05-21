@@ -23,8 +23,8 @@ export const PartsAccessoriesList = ({ products }: { products: ProductVariant[] 
               <Table.DataCell>{product.supplierName}</Table.DataCell>
               <Table.DataCell>{product.supplierRef}</Table.DataCell>
               <Table.DataCell>{product.sparePart ?
-                <WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} /> :
-                <PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}</Table.DataCell>
+                <WrenchIcon color="#000" fontSize={'1.5rem'} aria-hidden={true} /> :
+                <PackageIcon color="#000" fontSize={'1.5rem'} aria-hidden={true} />}</Table.DataCell>
             </Table.Row>
           )
         )}

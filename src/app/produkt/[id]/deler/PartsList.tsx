@@ -97,11 +97,11 @@ export const PartsList = ({ seriesId }: Props) => {
               <Tabs.Tab
                 value={ProductFilterOption.ACCESSORIES}
                 label={`Tilbehør (${accessories.length}) `}
-                icon={<PackageIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+                icon={<PackageIcon color="#000" fontSize="1.5rem" aria-hidden />} />
               <Tabs.Tab
                 value={ProductFilterOption.SPAREPART}
                 label={`Reservedeler (${spareParts.length}) `}
-                icon={<WrenchIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+                icon={<WrenchIcon color="#000" fontSize="1.5rem" aria-hidden />} />
             </Tabs.List>
             <Tabs.Panel value={ProductFilterOption.ACCESSORIES} className="h-24 w-full bg-gray-50 p-4">
               <Box paddingBlock="4">
