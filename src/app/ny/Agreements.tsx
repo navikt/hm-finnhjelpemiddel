@@ -5,7 +5,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
 import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import NextLink from 'next/link'
@@ -133,8 +133,6 @@ const Agreements = () => {
           <AgreementRow label={label} key={label.identifier} />
         ))}
       </VStack>
-
-      <AndreAvtaler />
     </VStack>
   )
 }
@@ -166,39 +164,4 @@ const AgreementRow = ({ label }: { label: AgreementLabel }) => {
   )
 }
 
-const AndreAvtaler = () => {
-  return (
-    <Alert variant="info">
-      Du finner informasjon om andre avtaler her:
-      <ul className="spacing-vertical--small">
-        <li>
-          <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr">
-            Bil
-          </Link>
-        </li>
-        <li>
-          <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr/spesialutstyr-og-tilpasning">
-            Bilombygg
-          </Link>
-        </li>
-        <li>
-          <Link href="https://www.nav.no/forerhund">Førerhund</Link>
-        </li>
-        <li>
-          <Link href="https://www.nav.no/servicehund">Servicehund</Link>
-        </li>
-        <li>
-          <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-            Høreapparat, ørepropper og tinnitusmaskerere
-          </Link>
-        </li>
-        <li>
-          <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
-            Hjelpemidler for seksuallivet
-          </Link>
-        </li>
-      </ul>
-    </Alert>
-  )
-}
 export default Agreements

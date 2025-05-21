@@ -11,6 +11,7 @@ import FinnHjelpemiddelLogo from '@/app/ny/FinnHjelpemiddelLogo'
 import Agreements from '@/app/ny/Agreements'
 import { NewsFeed } from '@/app/ny/NewsFeed'
 import styles from './Ny.module.scss'
+import { OtherAgreements } from '@/app/ny/OtherAgreements'
 
 function FrontPage() {
   const path = usePathname()
@@ -70,6 +71,9 @@ function FrontPage() {
 
       <Agreements />
       <NewsFeed />
+      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
+        <OtherAgreements />
+      </Bleed>
 
       <KontaktOss />
     </VStack>
