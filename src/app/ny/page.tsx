@@ -59,7 +59,7 @@ function FrontPage() {
               Her kan du finne hjelpemidler på det norske markedet
             </Heading>
             <Box>
-              <AutocompleteSearch onSearch={onSearch} placeholder={'Søk etter produkt eller HMS-nummer'} />
+              <AutocompleteSearch onSearch={onSearch} placeholder={'Søk etter hjelpemiddel eller HMS-nummer'} />
             </Box>
           </VStack>
 
