@@ -14,12 +14,19 @@ import { useSearchParams } from 'next/navigation'
 
 type Props = {
   onSearch: (searchTerm: string) => void
+  placeholder?: string
   secondary?: boolean
   hideLabel?: boolean
   autofocus?: boolean
 }
 
-const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, autofocus = false }: Props) => {
+const AutocompleteSearch = ({
+  onSearch,
+  placeholder = '',
+  secondary = false,
+  hideLabel = true,
+  autofocus = false,
+}: Props) => {
   const [openState, setOpenState] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
@@ -145,6 +152,7 @@ const AutocompleteSearch = ({ onSearch, secondary = false, hideLabel = true, aut
         onKeyDown={handleKeyDownInInputField}
         onFocus={() => virtualFocus.reset()}
         autoFocus={autofocus}
+        placeholder={placeholder}
       />
 
       <Popover
