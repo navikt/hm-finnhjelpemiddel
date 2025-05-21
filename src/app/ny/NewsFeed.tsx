@@ -1,13 +1,11 @@
-import { BodyShort, Box, Detail, Heading, HStack, Link, VStack } from '@navikt/ds-react'
+import { Box, Heading, HStack, VStack } from '@navikt/ds-react'
 import styles from './NewsFeed.module.scss'
 import useSWR from 'swr'
 import { News } from '@/utils/news-util'
 import { getNews } from '@/utils/api-util'
-import NextLink from 'next/link'
-import { dateToString } from '@/utils/string-util'
 
 export const NewsFeed = () => {
-  const { data, error } = useSWR<News[]>('/news/_search', () => getNews(3), {
+  const { data } = useSWR<News[]>('/news/_search', () => getNews(3), {
     keepPreviousData: true,
   })
 
@@ -31,17 +29,25 @@ const newsIngress = (text: string) => {
 }
 
 const NewsCard = ({ news }: { news: News }) => {
+  const type = (news: News): [string, string] | string => {
+    const splitTitle = news.title.split(':')
+    return splitTitle.length > 1 ? [news.title.split(':')[0], news.title.split(':')[1]] : news.title
+  }
+
   return (
     <Box paddingInline={'8'} paddingBlock={'5'} className={styles.newsCard}>
-      <VStack gap={'2'} justify={'space-around'}>
-        <Detail>{dateToString(news.published)}</Detail>
-        <Heading size={'small'} level={'3'}>
-          {news.title}
+      <VStack gap="1">
+        <Heading level="3" size="small" spacing>
+          {Array.isArray(type(news)) ? type(news)[0] : type(news)}
         </Heading>
-        <BodyShort>{newsIngress(news.text)}</BodyShort>
-        <Link as={NextLink} href={'/ny/nyheter'}>
-          Les mer
-        </Link>
+
+        {Array.isArray(type(news)) && (
+          <Heading level="4" size="small" spacing>
+            {type(news)[1]}
+          </Heading>
+        )}
+
+        <div dangerouslySetInnerHTML={{ __html: news.text }} />
       </VStack>
     </Box>
   )
