@@ -64,7 +64,9 @@ function FrontPage() {
           </VStack>
 
           <Box className={styles.logoBox} style={{ gridArea: 'box2' }}>
-            <FinnHjelpemiddelLogo />
+            <Box width={{ xs: '300px', md: '360px' }}>
+              <FinnHjelpemiddelLogo />
+            </Box>
           </Box>
         </HGrid>
       </Bleed>

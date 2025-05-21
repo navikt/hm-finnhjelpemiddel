@@ -33,13 +33,12 @@ export const OtherAgreements = () => {
     return (
       <>
         <Accordion.Item>
-          <Accordion.Header>Høreapparat, ørepropper og tinnitusmaskerere</Accordion.Header>
+          <Accordion.Header>Høreapparater, ørepropper og tinnitusmaskerere</Accordion.Header>
           <Accordion.Content>
             Her kan du lese mer om{' '}
             <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-              høreapparat, ørepropper og tinnitusmaskerere
+              høreapparater, ørepropper og tinnitusmaskerere.
             </Link>
-            .
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item>

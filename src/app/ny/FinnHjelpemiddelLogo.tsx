@@ -1,6 +1,6 @@
 const FinnHjelpemiddelLogo = () => {
   return (
-    <svg width="361" height="242" viewBox="0 0 361 242" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" height="242" viewBox="0 0 361 242" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="208.598" width="55.8115" height="184.889" fill="#99C4DD" />
       <rect x="92.4219" width="55.8115" height="184.889" fill="#FFC2C2" />
       <rect
