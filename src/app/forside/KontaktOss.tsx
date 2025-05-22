@@ -1,11 +1,12 @@
 import { Bleed, BodyLong, Heading, HGrid, Link } from '@navikt/ds-react'
 import { Chat2Icon, HatSchoolIcon, LocationPinIcon } from '@navikt/aksel-icons'
 import { ReactNode } from 'react'
+import styles from './KontaktOss.module.scss'
 
 const KontaktOss = () => {
   return (
     <Bleed marginInline="full" asChild reflectivePadding>
-      <div className="home-page__kontakt-oss">
+      <div className={styles.kontaktOss}>
         <HGrid gap="8" columns={{ xs: 1, md: 3 }}>
           <KontaktOssItem
             icon={<Chat2Icon aria-hidden fontSize={'32px'} />}
@@ -46,7 +47,7 @@ const KontaktOssItem = ({
 }) => {
   return (
     <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
-      <div className="home-page__kontakt-oss-icon">{icon}</div>
+      <div className={styles.icon}>{icon}</div>
       <div className="spacing-top--small">
         <Heading as={Link} href={href} level="4" size="small" spacing>
           {title}
