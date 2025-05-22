@@ -13,32 +13,16 @@ import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
 import {
-  ArrowLeftIcon,
   ArrowRightIcon,
   CalendarIcon,
-  ChevronLeftIcon,
   DocPencilIcon,
   FilePdfIcon,
   FilterIcon,
   ImageIcon,
   LayersPlusIcon,
-  PrinterSmallIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
-import {
-  Alert,
-  Bleed,
-  BodyLong,
-  BodyShort,
-  Button,
-  Heading,
-  HGrid,
-  HStack,
-  Loader,
-  Show,
-  Stack,
-  VStack,
-} from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Show, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
@@ -245,16 +229,6 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
       <VStack gap="4" align={'start'} paddingBlock={'6 12'}>
-        <Button
-          as={NextLink}
-          href={'/'}
-          icon={<ChevronLeftIcon aria-hidden />}
-          variant={'tertiary'}
-          style={{ padding: 0 }}
-        >
-          Forsiden
-        </Button>
-
         <Heading level="1" size="xlarge">
           {agreement.title}
         </Heading>
