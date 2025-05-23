@@ -101,7 +101,7 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
             iconPosition={'right'}
             className={styles.bleedButton}
           >
-            Se produktene på denne avtalen
+            Se hjelpemidlene på denne avtalen
           </Button>
         )}
       </VStack>
