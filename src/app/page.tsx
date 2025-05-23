@@ -72,10 +72,10 @@ function FrontPage() {
       </Bleed>
 
       <Agreements />
-      <NewsFeed />
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <OtherAgreements />
       </Bleed>
+      <NewsFeed />
 
       <KontaktOss />
     </VStack>
