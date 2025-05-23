@@ -30,6 +30,7 @@ import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/Pos
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import NextLink from 'next/link'
+import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -350,7 +351,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
           }
           icon={<LayersPlusIcon aria-hidden />}
           variant={'secondary'}
-          style={{ width: 'fit-content' }}
+          className={styles.bleedButton}
         >
           Tilbehør
         </Button>
@@ -364,6 +365,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
           }
           icon={<PuzzlePieceIcon aria-hidden />}
           variant={'secondary'}
+          className={styles.bleedButton}
         >
           Reservedeler
         </Button>

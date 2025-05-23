@@ -11,6 +11,7 @@ import NextLink from 'next/link'
 import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
 import { CalendarIcon, ChevronRightIcon, DocPencilIcon } from '@navikt/aksel-icons'
+import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 
 type Props = {
   params: Promise<{ agreementId: string }>
@@ -98,6 +99,7 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
             icon={<ChevronRightIcon aria-hidden />}
             variant={'secondary'}
             iconPosition={'right'}
+            className={styles.bleedButton}
           >
             Se produktene på denne avtalen
           </Button>
