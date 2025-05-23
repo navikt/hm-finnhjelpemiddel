@@ -234,16 +234,16 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
         </Heading>
 
         <HStack gap={'2'} align={'center'}>
-          <DocPencilIcon aria-hidden width={'24px'} height={'24px'} />
+          <CalendarIcon aria-hidden width={'24px'} height={'24px'} />
           <BodyLong weight={'semibold'}>
-            {agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}
+            {dateToString(agreement.published)} - {dateToString(agreement.expired)}
           </BodyLong>
         </HStack>
 
         <HStack gap={'2'} align={'center'}>
-          <CalendarIcon aria-hidden width={'24px'} height={'24px'} />
+          <DocPencilIcon aria-hidden width={'24px'} height={'24px'} />
           <BodyLong weight={'semibold'}>
-            {dateToString(agreement.published)} - {dateToString(agreement.expired)}
+            {agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}
           </BodyLong>
         </HStack>
 
@@ -350,7 +350,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
           }
           icon={<LayersPlusIcon aria-hidden />}
           variant={'secondary'}
-          style={{ backgroundColor: 'white', width: 'fit-content' }}
+          style={{ width: 'fit-content' }}
         >
           Tilbehør
         </Button>
@@ -364,7 +364,6 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
           }
           icon={<PuzzlePieceIcon aria-hidden />}
           variant={'secondary'}
-          style={{ backgroundColor: 'white' }}
         >
           Reservedeler
         </Button>
