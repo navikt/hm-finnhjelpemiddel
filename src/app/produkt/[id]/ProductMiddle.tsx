@@ -75,7 +75,8 @@ const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
           as={NextLink}
           variant={'secondary'}
           icon={<ChevronRightIcon aria-hidden />}
-          href={`/rammeavtale/hjelpemidler/${agreement.id}?delkontrakt=${agreement.postTitle}`}
+          // & for å bevare trailing space som har kommet med noen delkontrakter, blir strippa bort natively (?), dum filtrering tar ikke hensyn til det
+          href={`/rammeavtale/hjelpemidler/${agreement.id}?delkontrakt=${agreement.postTitle}&`}
         >
           Flere produkter på delkontrakt
         </Button>
