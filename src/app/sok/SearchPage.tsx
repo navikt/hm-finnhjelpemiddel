@@ -142,7 +142,14 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="main-wrapper--xlarge spacing-bottom--large">
+    <VStack
+      marginInline={'auto'}
+      marginBlock={'0'}
+      maxWidth={'1408px'}
+      paddingBlock={'0 12'}
+      paddingInline={{ xs: '4', md: '12', xl: '0' }}
+      gap={{ xs: '12', md: '12' }}
+    >
       <Heading level="1" size="large" className="spacing-top--xlarge spacing-bottom--xlarge" ref={searchResultRef}>
         Alle hjelpemidler
       </Heading>
@@ -190,7 +197,7 @@ export default function SearchPage() {
 
               <SortSearchResults formRef={searchFormRef} />
             </HStack>
-            <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} formRef={searchFormRef} />
+            <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} />
             {!isAtPageTop && (
               <Button
                 type="button"
@@ -202,6 +209,6 @@ export default function SearchPage() {
           </VStack>
         </HGrid>
       </FormProvider>
-    </div>
+    </VStack>
   )
 }

@@ -2,8 +2,7 @@
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { PackageIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Detail, Link, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -14,12 +13,10 @@ import { CompareCheckbox } from '@/components/CompareCheckbox'
 
 const ProductCardSearch = ({
   product,
-  handleIsoButton,
   handleCompareClick,
   searchResultPlacement,
 }: {
   product: Product
-  handleIsoButton: (value: string) => void
   handleCompareClick?: () => void
   searchResultPlacement: number
 }) => {
@@ -57,15 +54,6 @@ const ProductCardSearch = ({
               {product.title}
             </BodyShort>
           </Link>
-
-          <Button
-            className="product-card__iso-button"
-            variant="tertiary-neutral"
-            icon={<PackageIcon aria-hidden />}
-            onClick={() => handleIsoButton(product.isoCategoryTitle)}
-          >
-            {product.isoCategoryTitle}
-          </Button>
         </VStack>
 
         <ProductImage src={firstImageSrc} productTitle={product.title} />
