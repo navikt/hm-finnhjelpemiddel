@@ -314,6 +314,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
   const isElektriskHev = agreementId === 'ba893618-8010-40b2-9a14-f89c199e32d6'
+  const isPersonlofterAvtale = agreementId === '51b2817e-774f-4361-9ee0-bdfaeea6dd6e'
 
   const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale
 
@@ -339,7 +340,8 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
       isOverflyttingsplattformerPersonloftere ||
       isVarslingsAvtale ||
       isSportsAvtale ||
-      isElektriskHev)
+      isElektriskHev ||
+      isPersonlofterAvtale)
 
   return (
     showAccessoriesAndSparePartsButtons && (
