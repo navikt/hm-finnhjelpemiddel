@@ -6,7 +6,7 @@ import { ActionMenu, Button, Checkbox } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
+import { CaretDownFillIcon, ChevronDownIcon } from '@navikt/aksel-icons'
 import styles from './CheckboxFilterNew.module.scss'
 
 const checkboxFilterCategoriesLabels = {
@@ -95,8 +95,8 @@ export const CheckboxFilterNew = ({
       <ActionMenu.Trigger>
         <Button
           variant={'secondary'}
-          size={'xsmall'}
-          icon={<ChevronDownIcon aria-hidden />}
+          size={'small'}
+          icon={<CaretDownFillIcon aria-hidden />}
           iconPosition={'right'}
           className={styles.filterButton}
         >

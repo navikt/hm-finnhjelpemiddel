@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { SubmitHandler, useFormContext } from 'react-hook-form'
 
-import { Button, HStack } from '@navikt/ds-react'
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 
 import { FilterData } from '@/utils/api-util'
 
@@ -28,22 +28,24 @@ const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSu
   useImperativeHandle(ref, () => formRef.current!)
 
   return (
-    <form
-      ref={formRef}
-      role="search"
-      onSubmit={formMethods.handleSubmit(onSubmit)}
-      aria-controls="agreementSearchResults"
-      className="agreement-page__filter-form"
-    >
-      <HStack gap="4" className="filter-container__filters filter-container__horizontal">
-        <CheckboxFilterNew filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} name={'Delkontrakt'} />
-        <CheckboxFilter filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
-        <CheckboxFilter filter={{ key: 'leverandor', data: filters?.leverandor }} showSearch={true} />
-      </HStack>
+    <VStack gap={'4'}>
+      <Heading size={'small'}>Filter</Heading>
+      <form
+        ref={formRef}
+        role="search"
+        onSubmit={formMethods.handleSubmit(onSubmit)}
+        aria-controls="agreementSearchResults"
+        className="agreement-page__filter-form"
+      >
+        <HStack gap="4" className="filter-container__filters filter-container__horizontal">
+          <CheckboxFilterNew filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} name={'Delkontrakt'} />
+          <CheckboxFilterNew filter={{ key: 'delkontrakt', data: filters?.leverandor }} name={'Leverandør'} />
+        </HStack>
 
-      {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-      <input type="submit" style={{ display: 'none' }} />
-    </form>
+        {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
+        <input type="submit" style={{ display: 'none' }} />
+      </form>
+    </VStack>
   )
 })
 
