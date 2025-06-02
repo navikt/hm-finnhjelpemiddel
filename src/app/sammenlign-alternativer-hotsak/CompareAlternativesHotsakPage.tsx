@@ -61,12 +61,6 @@ export default function CompareAlternativesHotsakPage({productIdsToCompare}: Pro
 
 const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
 
-  const allDataKeysVariants = [
-    ...new Set(
-      productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
-    ),
-  ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-
   const productRowKeyValue = productsToCompare.reduce(
     (rowKeyValue, product) => {
       const variant = product.variants[0]
@@ -89,6 +83,22 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
     },
     {} as Record<string, Record<string, string>>
   )
+
+  const sortedDataKeysVariants = [
+    ...new Set(
+      productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
+    ),
+  ].sort((keyA, keyB) => {
+    const valuesA = productsToCompare.map((product) => productRowKeyValue[product.variants[0].id][keyA]);
+    const valuesB = productsToCompare.map((product) => productRowKeyValue[product.variants[0].id][keyB]);
+
+    const hasDifferenceA = new Set(valuesA).size > 1; // Check if values differ for keyA
+    const hasDifferenceB = new Set(valuesB).size > 1; // Check if values differ for keyB
+
+    return Number(hasDifferenceB) - Number(hasDifferenceA); // Sort keys with differences to the top
+  });
+
+
 
   return (
     <section>
@@ -146,7 +156,7 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
               {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length + 1}></Table.DataCell>}
             </Table.Row>
 
-            {allDataKeysVariants.map((key, i) => (
+            {sortedDataKeysVariants.map((key, i) => (
               <Table.Row key={i}>
                 <Table.HeaderCell className="side_header">{key}</Table.HeaderCell>
                 {productsToCompare.map((product) => (
