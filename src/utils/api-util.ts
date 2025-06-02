@@ -187,7 +187,7 @@ export type FetchProductVariantsWithFilters = {
   filters: FilterData
 }
 
-const makeSearchTermQuery = ({
+export const makeSearchTermQuery = ({
   searchTerm,
   agreementId,
   seriesId,
@@ -749,7 +749,7 @@ export const getFiltersAgreement = ({ agreementId }: { agreementId: string }): P
     })
 }
 
-const mapFilters = (data: any): FilterData => {
+export const mapFilters = (data: any): FilterData => {
   const rawFilterData: RawFilterData = data.aggregations
 
   return Object.entries(rawFilterData)

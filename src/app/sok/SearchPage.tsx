@@ -2,16 +2,15 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useInView } from 'react-intersection-observer'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import useSWRInfinite from 'swr/infinite'
 
-import { ArrowUpIcon, FilterIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Button, Heading, HGrid, HStack, Loader, Show, VStack } from '@navikt/ds-react'
+import { FilterIcon } from '@navikt/aksel-icons'
+import { Alert, Bleed, BodyShort, Button, Heading, HGrid, HStack, Loader, Show, VStack } from '@navikt/ds-react'
 
-import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
+import { FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
@@ -24,6 +23,7 @@ import SearchResults from './SearchResults'
 import { logFilterEndretEvent } from '@/utils/amplitude'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { SearchSidebar } from '@/app/sok/SearchSidebar'
+import { fetchSeriesSearchResults, SeriesSearchResults } from '@/utils/search-util'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -37,12 +37,7 @@ export default function SearchPage() {
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
 
   const { setMobileOverlayOpen } = useMobileOverlayStore()
-  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.4 })
   const searchResultRef = useRef<HTMLHeadingElement>(null)
-
-  const setFocusOnSearchResults = () => {
-    searchResultRef.current && searchResultRef.current.scrollIntoView()
-  }
 
   const formMethods = useForm<FormSearchData>({
     mode: 'onSubmit',
@@ -72,8 +67,8 @@ export default function SearchPage() {
     setSize: setPage,
     error,
     isLoading,
-  } = useSWRInfinite<FetchProductsWithFilters>(
-    (index, previousPageData?: FetchProductsWithFilters) => {
+  } = useSWRInfinite<SeriesSearchResults>(
+    (index, previousPageData?: SeriesSearchResults) => {
       if (previousPageData && previousPageData.products.length === 0) return null
       return {
         from: index * PAGE_SIZE,
@@ -81,7 +76,7 @@ export default function SearchPage() {
         searchData,
       }
     },
-    fetchProducts,
+    fetchSeriesSearchResults,
     {
       initialSize: Number(searchParams.get('page') || '1'),
       keepPreviousData: true,
@@ -150,10 +145,17 @@ export default function SearchPage() {
       paddingInline={{ xs: '4', md: '12', xl: '0' }}
       gap={{ xs: '12', md: '12' }}
     >
-      <Heading level="1" size="large" className="spacing-top--xlarge spacing-bottom--xlarge" ref={searchResultRef}>
-        Alle hjelpemidler
-      </Heading>
-      <span ref={pageTopRef} />
+      <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
+        <VStack gap="4" align={'start'} paddingBlock={'12 6'}>
+          <Heading level="1" size="xlarge">
+            Søkeresultater: ‘{searchData.searchTerm}’
+          </Heading>
+
+          <BodyShort weight={'semibold'}>
+            Ditt søk på ‘{searchData.searchTerm}’ ga {data[0].totalHits} treff
+          </BodyShort>
+        </VStack>
+      </Bleed>
 
       <FormProvider {...formMethods}>
         <CompareMenu />
@@ -198,14 +200,6 @@ export default function SearchPage() {
               <SortSearchResults formRef={searchFormRef} />
             </HStack>
             <SearchResults products={products} loadMore={loadMore} isLoading={isLoading} />
-            {!isAtPageTop && (
-              <Button
-                type="button"
-                className="search__page-up-button"
-                icon={<ArrowUpIcon title="Gå til toppen av siden" />}
-                onClick={() => setFocusOnSearchResults()}
-              />
-            )}
           </VStack>
         </HGrid>
       </FormProvider>
