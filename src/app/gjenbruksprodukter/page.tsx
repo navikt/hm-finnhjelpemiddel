@@ -130,6 +130,7 @@ export default function AlternativeProductsPage() {
             <li>Synstekniske hjelpemidler</li>
             <li>Varmehjelpemidler for hender og føtter</li>
             <li>Vogner og hjelpemidler til sport og aktivitet</li>
+            <li>Hygienehjelpemidler og støttestang</li>
           </ul>
         </ReadMore>
       </div>
