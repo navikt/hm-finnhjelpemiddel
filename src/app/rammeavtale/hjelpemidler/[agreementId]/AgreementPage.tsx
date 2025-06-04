@@ -99,6 +99,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const postFilters: Filter = {
     values: agreement.posts
+      .filter((post) => post.nr != 99)
       .sort((a, b) => a.nr - b.nr)
       .map((post) => ({
         key: post.title,
@@ -315,7 +316,7 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
   const isElektriskHev = agreementId === 'ba893618-8010-40b2-9a14-f89c199e32d6'
   const isPersonlofterAvtale = agreementId === '51b2817e-774f-4361-9ee0-bdfaeea6dd6e'
-    const isSyklerAvtale = agreementId ===  'd8b40d10-2834-4962-a061-5b2f4acbb766'
+  const isSyklerAvtale = agreementId === 'd8b40d10-2834-4962-a061-5b2f4acbb766'
 
   const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale
 
