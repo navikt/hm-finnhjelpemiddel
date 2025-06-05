@@ -59,9 +59,8 @@ export default function SearchPage() {
     typeof window !== 'undefined' &&
       faro.api.pushEvent('searchPage', {
         searchTerm: searchData.searchTerm,
-        searchParams: searchParams.toString(),
       })
-  }, [searchData.searchTerm, searchParams])
+  }, [searchData.searchTerm])
 
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
