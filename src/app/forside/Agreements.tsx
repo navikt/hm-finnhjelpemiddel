@@ -1,18 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logKlikk, logNavigationEvent } from '@/utils/amplitude'
-import {
-  ArrowDownIcon,
-  ArrowsUpDownIcon,
-  ArrowUpIcon,
-  ChevronRightIcon,
-  StarFillIcon,
-  StarIcon,
-} from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
+import { ArrowDownIcon, ArrowsUpDownIcon, ArrowUpIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Button, Heading, HGrid, Hide, HStack, Link, Show, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import NextLink from 'next/link'
@@ -31,37 +24,10 @@ const Agreements = () => {
     keepPreviousData: true,
     revalidateOnFocus: false,
   })
-  const [favouritedAgreements, setFavouritedAgreements] = useState<string[] | undefined>()
-
-  const favouritedAgreementsKey = 'favouritedAgreements'
-
-  useEffect(() => {
-    const stored = localStorage.getItem(favouritedAgreementsKey)
-    if (stored) {
-      setFavouritedAgreements(JSON.parse(stored))
-    }
-  }, [])
-
-  const changeFavourite = (agreementId: string) => {
-    let favourites = favouritedAgreements ?? []
-
-    if (favourites.some((item) => item === agreementId)) {
-      favourites = favourites.filter((item) => item != agreementId)
-    } else {
-      favourites = favourites.concat(agreementId)
-    }
-
-    setFavouritedAgreements(favourites)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(favouritedAgreementsKey, JSON.stringify(favourites))
-    }
-  }
 
   const sortedData = useMemo(() => {
     if (!data) return []
-    const sorted = data.filter(
-      (agreement) => !(favouritedAgreements && favouritedAgreements.some((fav) => fav === agreement.id))
-    )
+    const sorted = [...data] // Create a copy of data to avoid modifying it in place
 
     if (sortColumn.orderBy === 'published') {
       if (sortColumn.direction === 'ascending') {
@@ -80,18 +46,7 @@ const Agreements = () => {
     }
 
     return sorted
-  }, [data, sortColumn, favouritedAgreements])
-
-  const favouriteData = useMemo(() => {
-    if (!data) return []
-    const sorted = data.filter(
-      (agreement) => favouritedAgreements && favouritedAgreements.some((fav) => fav === agreement.id)
-    )
-
-    sorted.sort((a, b) => sortAlphabetically(a.title, b.title))
-
-    return sorted
-  }, [data, favouritedAgreements])
+  }, [data, sortColumn])
 
   const handleSortColumn = (sortKey: string) => {
     logKlikk(`agreements-sort-${sortKey}`)
@@ -120,10 +75,10 @@ const Agreements = () => {
   }
 
   return (
-    <VStack gap="4" className={styles.agreementsContainer}>
+    <VStack gap="4" paddingInline={{ lg: '6' }}>
       <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center" className="agreement-page__list-container">
         <Heading level="2" size="medium">
-          Produkter på avtale med Nav
+          Hjelpemidler på avtale med Nav
         </Heading>
         <Hide below="lg" asChild>
           <Button
@@ -176,41 +131,15 @@ const Agreements = () => {
       </HGrid>
 
       <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
-        {favouriteData.map((label) => (
-          <AgreementRow label={label} isFavourite={true} key={label.identifier} changeFavourite={changeFavourite} />
-        ))}
         {sortedData.map((label) => (
-          <AgreementRow label={label} isFavourite={false} key={label.identifier} changeFavourite={changeFavourite} />
+          <AgreementRow label={label} key={label.identifier} />
         ))}
       </VStack>
-
-      <AndreAvtaler />
     </VStack>
   )
 }
 
-const AgreementRow = ({
-  label,
-  isFavourite,
-  changeFavourite,
-}: {
-  label: AgreementLabel
-  isFavourite: boolean
-  changeFavourite: (agreementId: string) => void
-}) => {
-  const FavouriteButton = () => {
-    return (
-      <button
-        className={styles.favouriteIcon}
-        onClick={() => {
-          changeFavourite(label.id)
-        }}
-      >
-        {isFavourite ? <StarFillIcon fontSize={24} color={'gold'} /> : <StarIcon fontSize={24} />}
-      </button>
-    )
-  }
-
+const AgreementRow = ({ label }: { label: AgreementLabel }) => {
   return (
     <Box as="li" className="agreement-page__list-item">
       <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center" className={styles.agreementRow}>
@@ -222,7 +151,6 @@ const AgreementRow = ({
           >
             {`${label.title} `}
           </Link>
-          <FavouriteButton />
         </HStack>
         <Hide below="lg" asChild>
           <BodyShort style={{ justifySelf: 'center' }}>{`${dateToString(label.published)}`}</BodyShort>
@@ -238,39 +166,4 @@ const AgreementRow = ({
   )
 }
 
-const AndreAvtaler = () => {
-  return (
-    <Alert variant="info">
-      Du finner informasjon om andre avtaler her:
-      <ul className="spacing-vertical--small">
-        <li>
-          <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr">
-            Bil
-          </Link>
-        </li>
-        <li>
-          <Link href="https://www.nav.no/no/person/hjelpemidler/hjelpemidler-og-tilrettelegging/bil-og-spesialutstyr/spesialutstyr-og-tilpasning">
-            Bilombygg
-          </Link>
-        </li>
-        <li>
-          <Link href="https://www.nav.no/forerhund">Førerhund</Link>
-        </li>
-        <li>
-          <Link href="https://www.nav.no/servicehund">Servicehund</Link>
-        </li>
-        <li>
-          <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-            Høreapparat, ørepropper og tinnitusmaskerere
-          </Link>
-        </li>
-        <li>
-          <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
-            Hjelpemidler for seksuallivet
-          </Link>
-        </li>
-      </ul>
-    </Alert>
-  )
-}
 export default Agreements

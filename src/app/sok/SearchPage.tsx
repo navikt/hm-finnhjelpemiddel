@@ -8,8 +8,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import useSWRInfinite from 'swr/infinite'
 
-import { ArrowUpIcon, FilesIcon, FilterIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Button, Heading, HGrid, HStack, Loader, Popover, Show, VStack } from '@navikt/ds-react'
+import { ArrowUpIcon, FilterIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Button, Heading, HGrid, HStack, Loader, Show, VStack } from '@navikt/ds-react'
 
 import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
@@ -23,6 +23,7 @@ import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
 import { logFilterEndretEvent, logVisit } from '@/utils/amplitude'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
+import { SearchSidebar } from '@/app/sok/SearchSidebar'
 import { faro } from '@grafana/faro-core'
 
 export default function SearchPage() {
@@ -30,10 +31,8 @@ export default function SearchPage() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const copyButtonDesktopRef = useRef<HTMLButtonElement>(null)
   const searchFormRef = useRef<HTMLFormElement>(null)
 
-  const [copyPopupOpenState, setCopyPopupOpenState] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
@@ -160,41 +159,24 @@ export default function SearchPage() {
       <FormProvider {...formMethods}>
         <CompareMenu />
         <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
-          {showSidebar && (
-            <section className="filter-container">
-              <SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />
-              <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
-                <Button
-                  ref={copyButtonDesktopRef}
-                  variant="secondary"
-                  size="small"
-                  icon={<FilesIcon title="Kopiér søket til utklippstavlen" />}
-                  onClick={() => {
-                    navigator.clipboard.writeText(location.href)
-                    setCopyPopupOpenState(true)
-                  }}
-                >
-                  Kopiér søket
-                </Button>
-                <Popover
-                  open={copyPopupOpenState}
-                  onClose={() => setCopyPopupOpenState(false)}
-                  anchorEl={copyButtonDesktopRef.current}
-                  placement="right"
-                >
-                  <Popover.Content>Søket er kopiert!</Popover.Content>
-                </Popover>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="small"
-                  icon={<TrashIcon title="Nullstill søket" />}
-                  onClick={onReset}
-                >
-                  Nullstill søket
-                </Button>
-              </HGrid>
-            </section>
+          {showSidebar ? (
+            <SearchSidebar onSubmit={onSubmit} filters={filters} searchFormRef={searchFormRef} onReset={onReset} />
+          ) : (
+            <div>
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => setMobileOverlayOpen(true)}
+                icon={<FilterIcon aria-hidden />}
+              >
+                Filter
+              </Button>
+
+              <MobileOverlayModal
+                body={<SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />}
+                onReset={onReset}
+              />
+            </div>
           )}
 
           <VStack gap={{ xs: '4', lg: '8' }}>
@@ -213,23 +195,6 @@ export default function SearchPage() {
                   </BodyShort>
                 </VStack>
               </Show>
-              {!showSidebar && (
-                <div>
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    onClick={() => setMobileOverlayOpen(true)}
-                    icon={<FilterIcon aria-hidden />}
-                  >
-                    Filter
-                  </Button>
-
-                  <MobileOverlayModal
-                    body={<SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />}
-                    onReset={onReset}
-                  />
-                </div>
-              )}
 
               <SortSearchResults formRef={searchFormRef} />
             </HStack>

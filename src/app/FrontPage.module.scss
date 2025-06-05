@@ -1,0 +1,28 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.heroContentContainer {
+  grid-template-areas: 'box1 box2';
+  justify-content: space-between;
+
+  @media (max-width: $a-breakpoint-md) {
+    grid-template-areas:
+      'box2'
+      'box1';
+  }
+}
+
+.logoBox {
+  position: relative;
+  top: 23px;
+
+  justify-self: end;
+  @media (max-width: $a-breakpoint-md) {
+    justify-self: center;
+    top: 0;
+  }
+}

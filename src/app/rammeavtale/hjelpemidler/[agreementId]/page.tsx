@@ -11,7 +11,8 @@ type Props = {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const agreementId = params.agreementId
-  const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
+  const agreementResponse = await getAgreement(agreementId)
+  const agreement = mapAgreementFromDoc(agreementResponse)
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
 
   //TODO: må ha fornuftig tittel

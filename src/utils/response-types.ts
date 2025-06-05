@@ -204,6 +204,7 @@ export interface AgreementInfoResponse {
   title: string
   rank: number
   postNr: number
+  refNr: string | null
   postTitle: string
   reference: string | null
   expired: string

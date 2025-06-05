@@ -1,40 +1,36 @@
 'use client'
 
 import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
-import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import CompareMenu from '@/components/layout/CompareMenu'
-import LinkPanelLocal from '@/components/link-panel/LinkPanelLocal'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
-import { FilesIcon, FilterIcon, ImageIcon, PackageIcon, PrinterSmallIcon, WrenchIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Button,
-  Heading,
-  HGrid,
-  HStack,
-  Link,
-  Loader,
-  Show,
-  ToggleGroup,
-  VStack,
-} from '@navikt/ds-react'
+  ArrowRightIcon,
+  CalendarIcon,
+  DocPencilIcon,
+  FilePdfIcon,
+  FilterIcon,
+  ImageIcon,
+  LayersPlusIcon,
+  PuzzlePieceIcon,
+} from '@navikt/aksel-icons'
+import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Show, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
 import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
+import NextLink from 'next/link'
+import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 
 export type AgreementSearchData = {
   searchTerm: string
@@ -73,7 +69,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
   }, [])
 
-  const handleSetToggle = (value: string) => {
+  const handleShowHidePics = () => {
+    const value = pictureToggleValue === 'show-pictures' ? 'hide-pictures' : 'show-pictures'
     formMethods.setValue('hidePictures', value)
     searchFormRef.current?.requestSubmit()
   }
@@ -102,6 +99,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const postFilters: Filter = {
     values: agreement.posts
+      .filter((post) => post.nr != 99)
       .sort((a, b) => a.nr - b.nr)
       .map((post) => ({
         key: post.title,
@@ -127,6 +125,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
   const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters)
 
+  const totalProducts = posts
+    .map((post) => post.products.length)
+    .reduce((previousValue, currentValue) => previousValue + currentValue)
+
   const onReset = () => {
     formMethods.reset()
     router.replace(pathname)
@@ -136,34 +138,16 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
       <VStack className="main-wrapper--large spacing-bottom--xlarge hide-print">
-        <VStack gap="5" className="spacing-vertical--xlarge">
-          <HStack gap="3">
-            <Link as={NextLink} href="/" variant="subtle">
-              Hjelpemidler på avtale med Nav
-            </Link>
-            <BodyShort textColor="subtle">/</BodyShort>
-          </HStack>
-          <Heading level="1" size="xlarge" className="agreement-page__heading">
-            {`${agreement.title}`}
-          </Heading>
-          <div>
-            <BodyLong size="small">
-              {`Avtaleperiode: ${dateToString(agreement.published)} - ${dateToString(agreement.expired)}`}
-            </BodyLong>
-            <BodyLong size="small">{`Avtalenummer:  ${agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}`}</BodyLong>
-          </div>
-
-          <TopLinks agreementId={agreement.id} />
-        </VStack>
+        <TopBar agreement={agreement} />
 
         <FormProvider {...formMethods}>
           <CompareMenu />
 
-          <VStack gap={{ xs: '4', md: '8' }}>
-            <Heading level="2" size="large">
-              Delkontrakter
+          <VStack gap={{ xs: '4', md: '8' }} paddingBlock={'12'}>
+            <Heading level="2" size={'medium'}>
+              {totalProducts} hjelpemidler i delkontrakter
             </Heading>
-            <span style={{ width: '100%', borderTop: '1px solid #838C9A' }} />
+
             <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
               {showSidebar && <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />}
               {!showSidebar && (
@@ -178,14 +162,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Button>
                   <Show below="sm">
                     <Button
-                      variant="secondary-neutral"
-                      className="button-with-thin-border"
+                      variant="secondary"
                       onClick={() => {
                         window.print()
                       }}
-                      icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
+                      icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                      iconPosition={'right'}
                     >
-                      {`Hurtigoversikt (PDF)`}
+                      Skriv ut
                     </Button>
                   </Show>
                 </HStack>
@@ -196,31 +180,26 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 onReset={onReset}
               />
 
-              <HStack gap="4" className="hurtigoversikt-toggle__container">
-                <ToggleGroup
-                  className="hurtigoversikt-toggle"
-                  defaultValue="show-pictures"
-                  onChange={handleSetToggle}
-                  value={pictureToggleValue}
-                  variant="neutral"
-                  style={{ minWidth: '222px' }}
+              <HStack gap="4">
+                <Button
+                  icon={<ImageIcon aria-hidden />}
+                  iconPosition={'right'}
+                  variant={'secondary'}
+                  onClick={() => handleShowHidePics()}
                 >
-                  <ToggleGroup.Item value="show-pictures">
-                    <ImageIcon aria-hidden />
-                    Vis bilde
-                  </ToggleGroup.Item>
-                  <ToggleGroup.Item value="hide-pictures">Uten bilde</ToggleGroup.Item>
-                </ToggleGroup>
+                  Vis/skjul bilder
+                </Button>
+
                 <Show above="sm">
                   <Button
-                    variant="secondary-neutral"
-                    className="button-with-thin-border"
+                    variant="secondary"
                     onClick={() => {
                       window.print()
                     }}
-                    icon={<PrinterSmallIcon aria-hidden fontSize="1.5rem" />}
+                    icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                    iconPosition={'right'}
                   >
-                    {`Hurtigoversikt (PDF)`}
+                    Skriv ut
                   </Button>
                 </Show>
               </HStack>
@@ -245,6 +224,45 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         </FormProvider>
       </VStack>
     </>
+  )
+}
+
+const TopBar = ({ agreement }: { agreement: Agreement }) => {
+  return (
+    <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
+      <VStack gap="4" align={'start'} paddingBlock={'12'}>
+        <Heading level="1" size="xlarge">
+          {agreement.title}
+        </Heading>
+
+        <HStack gap={'2'} align={'center'}>
+          <CalendarIcon aria-hidden width={'24px'} height={'24px'} />
+          <BodyLong weight={'semibold'}>
+            {dateToString(agreement.published)} - {dateToString(agreement.expired)}
+          </BodyLong>
+        </HStack>
+
+        <HStack gap={'2'} align={'center'}>
+          <DocPencilIcon aria-hidden width={'24px'} height={'24px'} />
+          <BodyLong weight={'semibold'}>
+            {agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}
+          </BodyLong>
+        </HStack>
+
+        <Button
+          as={NextLink}
+          href={`/rammeavtale/${agreement.id}`}
+          icon={<ArrowRightIcon aria-hidden />}
+          iconPosition={'right'}
+          variant={'tertiary'}
+          style={{ paddingBlock: '0 0.75rem', paddingInline: 0 }}
+        >
+          Les om avtalen
+        </Button>
+
+        <TopLinks agreementId={agreement.id} />
+      </VStack>
+    </Bleed>
   )
 }
 
@@ -296,6 +314,9 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isSportsAvtale = agreementId === 'f74f9396-6305-4d3d-83d0-01a797d94e14'
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
+  const isElektriskHev = agreementId === 'ba893618-8010-40b2-9a14-f89c199e32d6'
+  const isPersonlofterAvtale = agreementId === '51b2817e-774f-4361-9ee0-bdfaeea6dd6e'
+  const isSyklerAvtale = agreementId === 'd8b40d10-2834-4962-a061-5b2f4acbb766'
 
   const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale
 
@@ -320,50 +341,43 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
       isModuloppbygdeSittesystemer ||
       isOverflyttingsplattformerPersonloftere ||
       isVarslingsAvtale ||
-      isSportsAvtale)
+      isSportsAvtale ||
+      isElektriskHev ||
+      isPersonlofterAvtale ||
+      isSyklerAvtale)
 
   return (
-    <HGrid gap={{ xs: '3', md: '7' }} columns={{ xs: 1, sm: 3 }} className="spacing-top--small">
-      {showAccessoriesAndSparePartsButtons && (
-        <>
-          <LinkPanelLocal
-            href={
-              showAccessoriesAndSparePartsList
-                ? `/rammeavtale/${agreementId}/tilbehor`
-                : `/rammeavtale/${agreementId}#Tilbehor`
-            }
-            icon={<PackageIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-            title="Tilbehør"
-            description={
-              showAccessoriesAndSparePartsList
-                ? 'Gå til avtalens tilbehørslister'
-                : 'Gå til avtalens tilbehørslister i PDF-format'
-            }
-          />
+    showAccessoriesAndSparePartsButtons && (
+      <Stack gap={{ xs: '3', md: '4' }} direction={{ xs: 'column', md: 'row' }}>
+        <Button
+          as={NextLink}
+          href={
+            showAccessoriesAndSparePartsList
+              ? `/rammeavtale/${agreementId}/tilbehor`
+              : `/rammeavtale/${agreementId}#Tilbehor`
+          }
+          icon={<LayersPlusIcon aria-hidden />}
+          variant={'secondary'}
+          className={styles.bleedButton}
+        >
+          Tilbehør
+        </Button>
 
-          <LinkPanelLocal
-            href={
-              showAccessoriesAndSparePartsList
-                ? `/rammeavtale/${agreementId}/reservedeler`
-                : `/rammeavtale/${agreementId}#Reservedeler`
-            }
-            icon={<WrenchIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-            title="Reservedeler"
-            description={
-              showAccessoriesAndSparePartsList
-                ? 'Gå til avtalens reservedellister'
-                : 'Gå til avtalens reservedellister i PDF-format'
-            }
-          />
-        </>
-      )}
-      <LinkPanelLocal
-        href={`/rammeavtale/${agreementId}`}
-        icon={<FilesIcon color="#005b82" fontSize={'1.5rem'} aria-hidden={true} />}
-        title="Om avtalen"
-        description="Les om avtalen og se tilhørende dokumenter"
-      />
-    </HGrid>
+        <Button
+          as={NextLink}
+          href={
+            showAccessoriesAndSparePartsList
+              ? `/rammeavtale/${agreementId}/reservedeler`
+              : `/rammeavtale/${agreementId}#Reservedeler`
+          }
+          icon={<PuzzlePieceIcon aria-hidden />}
+          variant={'secondary'}
+          className={styles.bleedButton}
+        >
+          Reservedeler
+        </Button>
+      </Stack>
+    )
   )
 }
 

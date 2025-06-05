@@ -1,13 +1,13 @@
 @use 'src/styles/_variables' as *;
 
-.modalContainer {
+.container {
   align-self: center;
 }
 
 .newsCard {
   background: $ny-nav-orange-light;
   display: flex;
-  max-width: 390px;
+  max-width: 330px;
   min-height: 245px;
   height: fit-content;
   border-top: 6px solid $ny-nav-purple-dark;

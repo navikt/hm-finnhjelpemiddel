@@ -67,11 +67,12 @@ export const PartsList = ({ seriesId }: Props) => {
 
   return (
     <div>
-      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} maxWidth={{ md: '600px' }} marginBlock="7 3"
+      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }}  marginBlock="7 3"
              align="end">
         <Search
           defaultValue={inputValue}
-          label="Søk"
+          label=""
+          description="Her kan du søke på hms-nr, artikkelnavn eller leverandørens artikkelnummer"
           hideLabel={false}
           variant="simple"
           onChange={setInputValue}
@@ -96,11 +97,11 @@ export const PartsList = ({ seriesId }: Props) => {
               <Tabs.Tab
                 value={ProductFilterOption.ACCESSORIES}
                 label={`Tilbehør (${accessories.length}) `}
-                icon={<PackageIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+                icon={<PackageIcon color="#000" fontSize="1.5rem" aria-hidden />} />
               <Tabs.Tab
                 value={ProductFilterOption.SPAREPART}
                 label={`Reservedeler (${spareParts.length}) `}
-                icon={<WrenchIcon color="#005b82" fontSize="1.5rem" aria-hidden />} />
+                icon={<WrenchIcon color="#000" fontSize="1.5rem" aria-hidden />} />
             </Tabs.List>
             <Tabs.Panel value={ProductFilterOption.ACCESSORIES} className="h-24 w-full bg-gray-50 p-4">
               <Box paddingBlock="4">
