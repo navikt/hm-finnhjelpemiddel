@@ -1,12 +1,6 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react'
-import { SubmitHandler, useFormContext } from 'react-hook-form'
-
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 
 import { FilterData } from '@/utils/api-util'
-
-import { CheckboxFilter } from '@/components/filters/CheckboxFilter'
-import { FormSearchData } from '@/utils/search-state-util'
 import { CheckboxFilterNew } from '@/components/filters/CheckboxFilterNew'
 
 const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
@@ -16,37 +10,31 @@ const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
 )
 
 type Props = {
-  filters?: FilterData
+  filters: FilterData
+  onChange: (key: string, value: string) => void
   setFocus?: () => void
-  onSubmit: SubmitHandler<FormSearchData>
 }
 
-const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
-  const formRef = useRef<HTMLFormElement>(null)
-  const formMethods = useFormContext<FormSearchData>()
-
-  useImperativeHandle(ref, () => formRef.current!)
+const FilterForm = ({ filters, setFocus, onChange }: Props) => {
+  console.log('filters', filters)
+  const delkontraktFilterData = filters?.delkontrakt
+    ? filters?.delkontrakt.values.map((value) => (value.key ? value.key.toString() : ''))
+    : []
+  const leverandorFilterData = filters?.leverandor
+    ? filters?.leverandor.values.map((value) => (value.key ? value.key.toString() : ''))
+    : []
 
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
-      <form
-        ref={formRef}
-        role="search"
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-        aria-controls="agreementSearchResults"
-        className="agreement-page__filter-form"
-      >
-        <HStack gap="4" className="filter-container__filters filter-container__horizontal">
-          <CheckboxFilterNew filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} name={'Delkontrakt'} />
-          <CheckboxFilterNew filter={{ key: 'delkontrakt', data: filters?.leverandor }} name={'Leverandør'} />
-        </HStack>
+      <HStack gap="4" className="filter-container__filters filter-container__horizontal">
+        <CheckboxFilterNew filter={{ key: 'delkontrakt', data: delkontraktFilterData }} onChange={onChange} />
+        <CheckboxFilterNew filter={{ key: 'leverandor', data: leverandorFilterData }} onChange={onChange} />
+      </HStack>
 
-        {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-        <input type="submit" style={{ display: 'none' }} />
-      </form>
+      {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
     </VStack>
   )
-})
+}
 
 export default FilterForm
