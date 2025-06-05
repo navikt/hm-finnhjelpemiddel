@@ -66,7 +66,7 @@ const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt {agreement.postNr}
+        Andre produkter på delkontrakt {agreement.refNr}
       </Heading>
       <VStack gap={'6'}>
         <BodyShort>{agreement.postTitle}</BodyShort>
