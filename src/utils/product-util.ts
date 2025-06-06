@@ -103,7 +103,8 @@ export interface AgreementInfo {
   title: string
   rank: number
   postNr: number
-  postTitle: string
+  refNr: string | null
+  postTitle: string | null
   expired: string
 }
 
@@ -533,6 +534,7 @@ const mapAgreementInfo = (data: AgreementInfoResponse[]): AgreementInfo[] => {
       identifier: agreement.identifier,
       title: agreement.title,
       postNr: agreement.postNr,
+      refNr: agreement.refNr,
       postTitle: agreement.postTitle,
       rank: agreement.rank,
       expired: agreement.expired,

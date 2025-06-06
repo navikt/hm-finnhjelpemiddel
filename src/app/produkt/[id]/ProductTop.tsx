@@ -82,7 +82,7 @@ const TagRow = ({
           ) : (
             productAgreements.length === 1 && (
               <Tag variant={'success-moderate'} className={styles.agreementTag}>
-                Delkontrakt {productAgreements[0].postNr}
+                Delkontrakt {productAgreements[0].refNr}
               </Tag>
             )
           )}

@@ -66,7 +66,7 @@ const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt {agreement.postNr}
+        Andre produkter på delkontrakt {agreement.refNr}
       </Heading>
       <VStack gap={'6'}>
         <BodyShort>{agreement.postTitle}</BodyShort>
@@ -75,7 +75,8 @@ const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
           as={NextLink}
           variant={'secondary'}
           icon={<ChevronRightIcon aria-hidden />}
-          href={`/rammeavtale/hjelpemidler/${agreement.id}?delkontrakt=${agreement.postTitle}`}
+          // & for å bevare trailing space som har kommet med noen delkontrakter, blir strippa bort natively (?), dum filtrering tar ikke hensyn til det
+          href={`/rammeavtale/hjelpemidler/${agreement.id}?delkontrakt=${agreement.postTitle}&`}
         >
           Flere produkter på delkontrakt
         </Button>

@@ -21,9 +21,10 @@ import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/fi
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
-import { logFilterEndretEvent } from '@/utils/amplitude'
+import { logFilterEndretEvent, logVisit } from '@/utils/amplitude'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { SearchSidebar } from '@/app/sok/SearchSidebar'
+import { faro } from '@grafana/faro-core'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -52,6 +53,13 @@ export default function SearchPage() {
       ...searchData,
     },
   })
+
+  useEffect(() => {
+    typeof window !== 'undefined' &&
+      faro.api.pushEvent('searchPage', {
+        searchTerm: searchData.searchTerm,
+      })
+  }, [searchData.searchTerm])
 
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
