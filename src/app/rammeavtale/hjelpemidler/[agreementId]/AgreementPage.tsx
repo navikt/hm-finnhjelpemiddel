@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Filter,
-  FilterData,
-  getFiltersAgreement,
-  getNewFiltersAgreement,
-  getProductsOnAgreement,
-} from '@/utils/api-util'
+import { FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import useSWR from 'swr'
@@ -36,6 +30,10 @@ import { useMobileOverlayStore } from '@/utils/global-state-util'
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 import useSWRImmutable from 'swr/immutable'
+
+export type AgreementFilters = {
+  [key in 'leverandor' | 'delkontrakt']: string[]
+}
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
@@ -93,7 +91,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     keepPreviousData: true,
   })
 
-  const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
+  const { data: filtersFromData } = useSWRImmutable<FilterData>(
     { agreementId: agreement.id, type: 'filterdata' },
     getFiltersAgreement,
     {
@@ -101,24 +99,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
-  const { data: newFiltersFromData } = useSWRImmutable<FilterData>(
-    { agreementId: agreement.id, type: 'filterdata', searchData: searchData },
-    getNewFiltersAgreement,
-    {
-      keepPreviousData: true,
-    }
-  )
-
-  const postFilters: Filter = {
-    values: agreement.posts
-      .filter((post) => post.nr != 99)
-      .sort((a, b) => a.nr - b.nr)
-      .map((post) => ({
-        key: post.title,
-        doc_count: 1,
-        label: post.title,
-      })),
-  }
+  const postFilters: string[] = agreement.posts
+    .filter((post) => post.nr != 99)
+    .sort((a, b) => a.nr - b.nr)
+    .map((post) => post.title)
 
   if (!postBuckets || !filtersFromData) {
     return (
@@ -128,8 +112,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     )
   }
 
-  const filters: FilterData = {
-    ...filtersFromData,
+  const leverandorFilter: string[] = filtersFromData?.leverandor.values.map((value) => value.key.toString()) || []
+
+  const filters: AgreementFilters = {
+    leverandor: leverandorFilter,
     delkontrakt: postFilters,
   }
 
@@ -137,17 +123,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
   const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters)
 
-  const newFilters: FilterData = {
-    ...newFiltersFromData,
-    delkontrakt: { values: postFilters.values.filter((filter) => posts.find((post) => post.title === filter.label)) },
-  }
-
-  const totalProducts = posts
-    .map((post) => post.products.length)
-    .reduce((previousValue, currentValue) => previousValue + currentValue)
+  const totalProducts =
+    posts.length > 0
+      ? posts.map((post) => post.products.length).reduce((previousValue, currentValue) => previousValue + currentValue)
+      : 0
 
   const onReset = () => {
-    router.replace(pathname)
+    router.replace(pathname, { scroll: false })
   }
 
   const onChange = (filterName: string, value: string) => {
@@ -169,7 +151,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           </Heading>
 
           <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
-            {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
+            {showSidebar && <FilterForm filters={filters} onChange={onChange} onReset={onReset} />}
             {!showSidebar && (
               <HStack gap="2">
                 <Button

@@ -1,38 +1,26 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
-
-import { FilterData } from '@/utils/api-util'
 import { CheckboxFilterNew } from '@/components/filters/CheckboxFilterNew'
-
-const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
-  <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
-    Gå til resultat
-  </Button>
-)
+import { AgreementFilters } from '@/app/rammeavtale/hjelpemidler/[agreementId]/AgreementPage'
 
 type Props = {
-  filters: FilterData
+  filters: AgreementFilters
   onChange: (key: string, value: string) => void
-  setFocus?: () => void
+  onReset?: () => void
 }
 
-const FilterForm = ({ filters, setFocus, onChange }: Props) => {
-  console.log('filters', filters)
-  const delkontraktFilterData = filters?.delkontrakt
-    ? filters?.delkontrakt.values.map((value) => (value.key ? value.key.toString() : ''))
-    : []
-  const leverandorFilterData = filters?.leverandor
-    ? filters?.leverandor.values.map((value) => (value.key ? value.key.toString() : ''))
-    : []
-
+const FilterForm = ({ filters, onChange, onReset }: Props) => {
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
       <HStack gap="4" className="filter-container__filters filter-container__horizontal">
-        <CheckboxFilterNew filter={{ key: 'delkontrakt', data: delkontraktFilterData }} onChange={onChange} />
-        <CheckboxFilterNew filter={{ key: 'leverandor', data: leverandorFilterData }} onChange={onChange} />
+        <CheckboxFilterNew filterKey={'delkontrakt'} allFilters={filters.delkontrakt} onChange={onChange} />
+        <CheckboxFilterNew filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
+        {onReset && (
+          <Button variant={'secondary'} size={'small'} onClick={onReset}>
+            Fjern alle filtre
+          </Button>
+        )}
       </HStack>
-
-      {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
     </VStack>
   )
 }

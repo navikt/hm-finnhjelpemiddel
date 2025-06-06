@@ -1,41 +1,45 @@
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { ActionMenu, Alert, Button } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
-import { CaretDownFillIcon } from '@navikt/aksel-icons'
+import { CaretDownFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './CheckboxFilterNew.module.scss'
+import React from 'react'
 
 const checkboxFilterCategoriesLabels = {
   leverandor: 'Leverandør',
   delkontrakt: 'Delkontrakt',
 }
 
-type ChecboxFilterKey = keyof typeof checkboxFilterCategoriesLabels
-
 type CheckboxFilterInputProps = {
-  filter: { key: ChecboxFilterKey; data: string[] }
+  filterKey: keyof typeof checkboxFilterCategoriesLabels
+  allFilters: string[]
   onChange: (key: string, value: string) => void
 }
 
-export const CheckboxFilterNew = ({ filter, onChange }: CheckboxFilterInputProps) => {
-  const { key: filterKey, data: filterData } = filter
+export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxFilterInputProps) => {
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
 
-  const selectedFilters = filterData.filter((f) => searchData.filters[filterKey].includes(f)) || []
-  const notSelectedFilters = filterData.filter((f) => !searchData.filters[filterKey].includes(f)) || []
-  const selectedUnavailableFilters = console.log('newFilterData', filterData)
-  console.log('selectedFilters', selectedFilters)
-  console.log('notSelectedFilters', notSelectedFilters)
+  const selectedFilters = searchData.filters[filterKey].filter((value) => allFilters.includes(value))
+  const notSelectedFilters = allFilters.filter((f) => !selectedFilters.includes(f)) || []
 
-  if (!searchData.filters[filterKey].includes(filterKey) && !filterData.length) {
+  if (!searchData.filters[filterKey].includes(filterKey) && !allFilters.length) {
     return <Alert variant={'warning'}>Hei</Alert>
   }
 
-  const filterCheckbox = (value: string, unavailable?: boolean) => (
+  const change = (value: string) => {
+    onChange(filterKey, value)
+  }
+
+  const reset = () => {
+    onChange(filterKey, '')
+  }
+
+  const filterCheckbox = (value: string) => (
     <ActionMenu.CheckboxItem
       key={`${filterKey}-${value}}`}
       checked={selectedFilters.some((f) => f === value)}
-      onCheckedChange={() => onChange(filterKey, value)}
+      onCheckedChange={() => change(value)}
     >
       {value}
     </ActionMenu.CheckboxItem>
@@ -54,7 +58,12 @@ export const CheckboxFilterNew = ({ filter, onChange }: CheckboxFilterInputProps
           {checkboxFilterCategoriesLabels[filterKey]}
         </Button>
       </ActionMenu.Trigger>
-      <ActionMenu.Content>
+      <ActionMenu.Content className={styles.filterMenu}>
+        {selectedFilters.length > 0 && (
+          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={reset}>
+            Fjern filter
+          </ActionMenu.Item>
+        )}
         {selectedFilters.map((f) => filterCheckbox(f))}
         {notSelectedFilters.map((f) => filterCheckbox(f))}
       </ActionMenu.Content>
