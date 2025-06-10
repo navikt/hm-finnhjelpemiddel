@@ -151,7 +151,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           </Heading>
 
           <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
-            {showSidebar && <FilterForm filters={filters} onChange={onChange} onReset={onReset} />}
+            {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
             {!showSidebar && (
               <HStack gap="2">
                 <Button

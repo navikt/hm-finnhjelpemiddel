@@ -5,14 +5,13 @@ import { AgreementFilters } from '@/app/rammeavtale/hjelpemidler/[agreementId]/A
 type Props = {
   filters: AgreementFilters
   onChange: (key: string, value: string) => void
-  onReset?: () => void
 }
 
-const FilterForm = ({ filters, onChange, onReset }: Props) => {
+const FilterForm = ({ filters, onChange }: Props) => {
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
-      <HStack gap="4" className="filter-container__filters filter-container__horizontal">
+      <HStack gap="4">
         <CheckboxFilterNew filterKey={'delkontrakt'} allFilters={filters.delkontrakt} onChange={onChange} />
         <CheckboxFilterNew filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
       </HStack>
