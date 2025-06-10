@@ -15,16 +15,14 @@ import {
   CalendarIcon,
   DocPencilIcon,
   FilePdfIcon,
-  FilterIcon,
   LayersPlusIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
-import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Show, Stack, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
 import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
-import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
@@ -143,46 +141,18 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             </Heading>
 
             <HStack justify="space-between" align="end" gap="2">
-              {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
-              {!showSidebar && (
-                <HStack gap="2">
-                  <Button
-                    variant="secondary-neutral"
-                    className="button-with-thin-border"
-                    onClick={() => setMobileOverlayOpen(true)}
-                    icon={<FilterIcon aria-hidden />}
-                  >
-                    Filter
-                  </Button>
-                  <Show below="sm">
-                    <Button
-                      variant="secondary"
-                      onClick={() => {
-                        window.print()
-                      }}
-                      icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                      iconPosition={'right'}
-                    >
-                      Skriv ut
-                    </Button>
-                  </Show>
-                </HStack>
-              )}
+              <FilterForm filters={filters} onChange={onChange} />
 
-              <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
-
-              <Show above="sm">
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    window.print()
-                  }}
-                  icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                  iconPosition={'right'}
-                >
-                  Skriv ut
-                </Button>
-              </Show>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  window.print()
+                }}
+                icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                iconPosition={'right'}
+              >
+                Skriv ut
+              </Button>
             </HStack>
           </VStack>
 
