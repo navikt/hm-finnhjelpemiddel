@@ -1,9 +1,9 @@
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { ActionMenu, Alert, Button } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
-import { CaretDownFillIcon, TrashIcon } from '@navikt/aksel-icons'
+import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './CheckboxFilterNew.module.scss'
-import React from 'react'
+import React, { useState } from 'react'
 
 const checkboxFilterCategoriesLabels = {
   leverandor: 'Leverandør',
@@ -23,6 +23,8 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
   const selectedFilters = searchData.filters[filterKey].filter((value) => allFilters.includes(value))
   const notSelectedFilters = allFilters.filter((f) => !selectedFilters.includes(f)) || []
 
+  const [menuOpen, setMenuOpen] = useState(false)
+
   if (!searchData.filters[filterKey].includes(filterKey) && !allFilters.length) {
     return <Alert variant={'warning'}>Hei</Alert>
   }
@@ -35,6 +37,11 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
     onChange(filterKey, '')
   }
 
+  const filterLabel =
+    selectedFilters.length > 0
+      ? checkboxFilterCategoriesLabels[filterKey] + `(${selectedFilters.length})`
+      : checkboxFilterCategoriesLabels[filterKey]
+
   const filterCheckbox = (value: string) => (
     <ActionMenu.CheckboxItem
       key={`${filterKey}-${value}}`}
@@ -46,16 +53,16 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
   )
 
   return (
-    <ActionMenu>
+    <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>
       <ActionMenu.Trigger>
         <Button
           variant={'secondary'}
           size={'small'}
-          icon={<CaretDownFillIcon aria-hidden />}
+          icon={menuOpen ? <CaretUpFillIcon aria-hidden /> : <CaretDownFillIcon aria-hidden />}
           iconPosition={'right'}
-          className={styles.filterButton}
+          className={selectedFilters.length > 0 ? styles.filterButtonActive : styles.filterButton}
         >
-          {checkboxFilterCategoriesLabels[filterKey]}
+          {filterLabel}
         </Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
