@@ -3,7 +3,7 @@
 import { PostWithProducts } from '@/utils/agreement-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { FormSearchData } from '@/utils/search-state-util'
-import { Alert, Heading, HStack, Loader, ReadMore, VStack } from '@navikt/ds-react'
+import { Alert, Heading, HelpText, HStack, Loader, ReadMore, VStack } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -73,20 +73,12 @@ const PostsListIsoGroups = ({
               : 'agreement-post spacing-top--small'
           }
         >
-          <VStack gap="4">
+          <HStack gap="4" align={'center'}>
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
             </Heading>
-            <span style={{ maxWidth: '840px' }}>
-              <ReadMore
-                header="Mer informasjon"
-                style={{ paddingBottom: '4px' }}
-                defaultOpen={post.products.length === 0 && !postLoading}
-              >
-                {post.description}
-              </ReadMore>
-            </span>
-          </VStack>
+            <HelpText title={'Om delkontrakten'}>{post.description}</HelpText>
+          </HStack>
           {post.products.length === 0 && postLoading && (
             <HStack justify="center" style={{ marginTop: '18px' }}>
               <Loader size="medium" title="Laster hjelpemidler" />
