@@ -16,7 +16,6 @@ import {
   DocPencilIcon,
   FilePdfIcon,
   FilterIcon,
-  ImageIcon,
   LayersPlusIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
@@ -43,7 +42,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const { setMobileOverlayOpen } = useMobileOverlayStore()
   const [showSidebar, setShowSidebar] = useState(false)
 
-  const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
   const avtalerMedIsoGruppering = [
@@ -75,13 +73,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     },
     [searchParams]
   )
-
-  const handleShowHidePics = () => {
-    const value = pictureToggleValue === 'show-pictures' ? 'hide-pictures' : 'show-pictures'
-
-    const newSearchParams = createQueryString('hidePictures', value)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
-  }
 
   const {
     data: postBuckets,
@@ -180,29 +171,18 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
               <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
 
-              <HStack gap="4">
+              <Show above="sm">
                 <Button
-                  icon={<ImageIcon aria-hidden />}
+                  variant="secondary"
+                  onClick={() => {
+                    window.print()
+                  }}
+                  icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
                   iconPosition={'right'}
-                  variant={'secondary'}
-                  onClick={() => handleShowHidePics()}
                 >
-                  Vis/skjul bilder
+                  Skriv ut
                 </Button>
-
-                <Show above="sm">
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      window.print()
-                    }}
-                    icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                    iconPosition={'right'}
-                  >
-                    Skriv ut
-                  </Button>
-                </Show>
-              </HStack>
+              </Show>
             </HStack>
           </VStack>
 
