@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 import { logNavigationEvent } from '@/utils/amplitude'
+import { faro } from '@grafana/faro-core'
 
 export interface WarehouseStock {
   erPåLager: boolean
@@ -69,6 +70,10 @@ export default function AlternativeProductsPage() {
 
   const handleSearch = (value: string) => {
     logNavigationEvent('alternativprodukter', 'søk', 'Søk fra alternativprodukter')
+    typeof window !== 'undefined' &&
+      faro.api.pushEvent('alternativSearch', {
+        searchTerm: value,
+      })
     router.replace(`${pathname}?hms=${value}`, {
       scroll: false,
     })
@@ -83,6 +88,9 @@ export default function AlternativeProductsPage() {
     setSelectedWarehouse(name)
     if (typeof window !== 'undefined') {
       localStorage.setItem(localStorageWarehouseKey, name)
+      faro.api.pushEvent('selectedWarehouse', {
+        warehouse: name,
+      })
     }
   }
 
