@@ -146,51 +146,23 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         <CompareMenu />
 
         <VStack gap={{ xs: '4', md: '8' }} paddingBlock={'12'}>
-          <VStack gap={'4'} paddingBlock={'0 4'} className={styles.filterRow}>
-            <Heading level="2" size={'medium'}>
-              {totalProducts} hjelpemidler i delkontrakter
-            </Heading>
+          <Heading level="2" size={'medium'}>
+            {totalProducts} hjelpemidler i delkontrakter
+          </Heading>
 
-            <HStack justify="space-between" align="end" gap="2">
-              {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
-              {!showSidebar && (
-                <HStack gap="2">
-                  <Button
-                    variant="secondary-neutral"
-                    className="button-with-thin-border"
-                    onClick={() => setMobileOverlayOpen(true)}
-                    icon={<FilterIcon aria-hidden />}
-                  >
-                    Filter
-                  </Button>
-                  <Show below="sm">
-                    <Button
-                      variant="secondary"
-                      onClick={() => {
-                        window.print()
-                      }}
-                      icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                      iconPosition={'right'}
-                    >
-                      Skriv ut
-                    </Button>
-                  </Show>
-                </HStack>
-              )}
-
-              <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
-
-              <HStack gap="4">
+          <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
+            {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
+            {!showSidebar && (
+              <HStack gap="2">
                 <Button
-                  icon={<ImageIcon aria-hidden />}
-                  iconPosition={'right'}
-                  variant={'secondary'}
-                  onClick={() => handleShowHidePics()}
+                  variant="secondary-neutral"
+                  className="button-with-thin-border"
+                  onClick={() => setMobileOverlayOpen(true)}
+                  icon={<FilterIcon aria-hidden />}
                 >
-                  Vis/skjul bilder
+                  Filter
                 </Button>
-
-                <Show above="sm">
+                <Show below="sm">
                   <Button
                     variant="secondary"
                     onClick={() => {
@@ -203,8 +175,34 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Button>
                 </Show>
               </HStack>
+            )}
+
+            <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
+
+            <HStack gap="4">
+              <Button
+                icon={<ImageIcon aria-hidden />}
+                iconPosition={'right'}
+                variant={'secondary'}
+                onClick={() => handleShowHidePics()}
+              >
+                Vis/skjul bilder
+              </Button>
+
+              <Show above="sm">
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    window.print()
+                  }}
+                  icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                  iconPosition={'right'}
+                >
+                  Skriv ut
+                </Button>
+              </Show>
             </HStack>
-          </VStack>
+          </HStack>
 
           {avtalerMedIsoGruppering.includes(agreement.id) ? (
             <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
