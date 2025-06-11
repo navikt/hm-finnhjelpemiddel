@@ -1,14 +1,16 @@
 'use client'
 
-import { FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+import { Filter, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import { mapSearchParams } from '@/utils/mapSearchParams'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
+import { FormSearchData, initialAgreementSearchDataState } from '@/utils/search-state-util'
 import { dateToString } from '@/utils/string-util'
 import {
   ArrowRightIcon,
@@ -29,16 +31,18 @@ import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
-import useSWRImmutable from 'swr/immutable'
 
-export type AgreementFilters = {
-  [key in 'leverandor' | 'delkontrakt']: string[]
+export type AgreementSearchData = {
+  searchTerm: string
+  hidePictures: boolean
 }
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const searchFormRef = useRef<HTMLFormElement>(null)
 
   const { setMobileOverlayOpen } = useMobileOverlayStore()
   const [showSidebar, setShowSidebar] = useState(false)
@@ -52,35 +56,29 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
   ]
 
+  const formMethods = useForm<FormSearchData>({
+    defaultValues: {
+      hidePictures: 'show-pictures',
+      ...searchData,
+      filters: { ...initialAgreementSearchDataState.filters, ...searchData.filters, status: ['På avtale'] },
+    },
+  })
+
   useEffect(() => {
     setShowSidebar(window.innerWidth >= 1024)
     window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
   }, [])
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-
-      if (value === '') {
-        params.delete(name)
-      } else if (params.getAll(name).includes(value)) {
-        params.delete(name, value)
-      } else if (params.has(name)) {
-        params.append(name, value)
-      } else {
-        params.set(name, value)
-      }
-
-      return params.toString()
-    },
-    [searchParams]
-  )
-
   const handleShowHidePics = () => {
     const value = pictureToggleValue === 'show-pictures' ? 'hide-pictures' : 'show-pictures'
+    formMethods.setValue('hidePictures', value)
+    searchFormRef.current?.requestSubmit()
+  }
 
-    const newSearchParams = createQueryString('hidePictures', value)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
+  const onSubmit: SubmitHandler<FormSearchData> = () => {
+    router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
+      scroll: false,
+    })
   }
 
   const {
@@ -91,7 +89,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     keepPreviousData: true,
   })
 
-  const { data: filtersFromData } = useSWRImmutable<FilterData>(
+  const { data: filtersFromData, isLoading: filtersIsLoading } = useSWR<FilterData>(
     { agreementId: agreement.id, type: 'filterdata' },
     getFiltersAgreement,
     {
@@ -99,10 +97,16 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
-  const postFilters: string[] = agreement.posts
-    .filter((post) => post.nr != 99)
-    .sort((a, b) => a.nr - b.nr)
-    .map((post) => post.title)
+  const postFilters: Filter = {
+    values: agreement.posts
+      .filter((post) => post.nr != 99)
+      .sort((a, b) => a.nr - b.nr)
+      .map((post) => ({
+        key: post.title,
+        doc_count: 1,
+        label: post.title,
+      })),
+  }
 
   if (!postBuckets || !filtersFromData) {
     return (
@@ -112,10 +116,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     )
   }
 
-  const leverandorFilter: string[] = filtersFromData?.leverandor.values.map((value) => value.key.toString()) || []
-
-  const filters: AgreementFilters = {
-    leverandor: leverandorFilter,
+  const filters: FilterData = {
+    ...filtersFromData,
     delkontrakt: postFilters,
   }
 
@@ -123,18 +125,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
   const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters)
 
-  const totalProducts =
-    posts.length > 0
-      ? posts.map((post) => post.products.length).reduce((previousValue, currentValue) => previousValue + currentValue)
-      : 0
+  const totalProducts = posts
+    .map((post) => post.products.length)
+    .reduce((previousValue, currentValue) => previousValue + currentValue)
 
   const onReset = () => {
-    router.replace(pathname, { scroll: false })
-  }
-
-  const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryString(filterName, value)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
+    formMethods.reset()
+    router.replace(pathname)
   }
 
   return (
@@ -143,26 +140,57 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       <VStack className="main-wrapper--large spacing-bottom--xlarge hide-print">
         <TopBar agreement={agreement} />
 
-        <CompareMenu />
+        <FormProvider {...formMethods}>
+          <CompareMenu />
 
-        <VStack gap={{ xs: '4', md: '8' }} paddingBlock={'12'}>
-          <Heading level="2" size={'medium'}>
-            {totalProducts} hjelpemidler i delkontrakter
-          </Heading>
+          <VStack gap={{ xs: '4', md: '8' }} paddingBlock={'12'}>
+            <Heading level="2" size={'medium'}>
+              {totalProducts} hjelpemidler i delkontrakter
+            </Heading>
 
-          <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
-            {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
-            {!showSidebar && (
-              <HStack gap="2">
+            <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
+              {showSidebar && <FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />}
+              {!showSidebar && (
+                <HStack gap="2">
+                  <Button
+                    variant="secondary-neutral"
+                    className="button-with-thin-border"
+                    onClick={() => setMobileOverlayOpen(true)}
+                    icon={<FilterIcon aria-hidden />}
+                  >
+                    Filter
+                  </Button>
+                  <Show below="sm">
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        window.print()
+                      }}
+                      icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                      iconPosition={'right'}
+                    >
+                      Skriv ut
+                    </Button>
+                  </Show>
+                </HStack>
+              )}
+
+              <MobileOverlayModal
+                body={<FilterForm onSubmit={onSubmit} ref={searchFormRef} filters={filters} />}
+                onReset={onReset}
+              />
+
+              <HStack gap="4">
                 <Button
-                  variant="secondary-neutral"
-                  className="button-with-thin-border"
-                  onClick={() => setMobileOverlayOpen(true)}
-                  icon={<FilterIcon aria-hidden />}
+                  icon={<ImageIcon aria-hidden />}
+                  iconPosition={'right'}
+                  variant={'secondary'}
+                  onClick={() => handleShowHidePics()}
                 >
-                  Filter
+                  Vis/skjul bilder
                 </Button>
-                <Show below="sm">
+
+                <Show above="sm">
                   <Button
                     variant="secondary"
                     onClick={() => {
@@ -175,51 +203,25 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                   </Button>
                 </Show>
               </HStack>
+            </HStack>
+
+            {avtalerMedIsoGruppering.includes(agreement.id) ? (
+              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
+            ) : (
+              <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
             )}
 
-            <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
+            {postError && (
+              <Alert variant="error" title="Error med lasting av produkter">
+                Det har skjedd en feil ved innhenting av produkter. Vennligst prøv igjen senere.
+              </Alert>
+            )}
 
-            <HStack gap="4">
-              <Button
-                icon={<ImageIcon aria-hidden />}
-                iconPosition={'right'}
-                variant={'secondary'}
-                onClick={() => handleShowHidePics()}
-              >
-                Vis/skjul bilder
-              </Button>
-
-              <Show above="sm">
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    window.print()
-                  }}
-                  icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                  iconPosition={'right'}
-                >
-                  Skriv ut
-                </Button>
-              </Show>
-            </HStack>
-          </HStack>
-
-          {avtalerMedIsoGruppering.includes(agreement.id) ? (
-            <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
-          ) : (
-            <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
-          )}
-
-          {postError && (
-            <Alert variant="error" title="Error med lasting av produkter">
-              Det har skjedd en feil ved innhenting av produkter. Vennligst prøv igjen senere.
-            </Alert>
-          )}
-
-          {!postError && posts.length === 0 && (
-            <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
-          )}
-        </VStack>
+            {!postError && posts.length === 0 && (
+              <Alert variant="info">Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</Alert>
+            )}
+          </VStack>
+        </FormProvider>
       </VStack>
     </>
   )

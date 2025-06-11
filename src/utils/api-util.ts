@@ -749,68 +749,6 @@ export const getFiltersAgreement = ({ agreementId }: { agreementId: string }): P
     })
 }
 
-export const getNewFiltersAgreement = ({
-  agreementId,
-  searchData,
-}: {
-  agreementId: string
-  searchData: SearchData
-}): Promise<FilterData> => {
-  const { filters: activeFilters } = searchData
-
-  const { leverandor, delkontrakt } = activeFilters
-  const allActiveFilters = [filterLeverandor(leverandor), filterDelkontrakt(delkontrakt)]
-
-  const query = {
-    bool: {
-      must: {
-        term: {
-          'agreements.id': {
-            value: agreementId,
-          },
-        },
-      },
-      filter: allActiveFilters,
-    },
-  }
-
-  const filters = {
-    leverandor: {
-      filter: {
-        bool: {
-          filter: [],
-        },
-      },
-      aggs: {
-        values: {
-          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
-        },
-      },
-    },
-  }
-
-  return fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      size: 0,
-      query,
-      aggs: { ...filters },
-    }),
-  })
-    .then((res) => res.json())
-    .then((data: any) => {
-      const filters = {
-        aggregations: {
-          leverandor: data.aggregations.leverandor,
-        },
-      }
-      return mapFilters(filters)
-    })
-}
-
 const mapFilters = (data: any): FilterData => {
   const rawFilterData: RawFilterData = data.aggregations
 
