@@ -359,6 +359,21 @@ main {
   }
 }
 
+.about-us-page {
+  padding-top: $a-spacing-5;
+  padding-down: $a-spacing-5;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: $a-spacing-4;
+  padding-right: $a-spacing-4;
+
+  @include mixins.for-size(desktop-large-up) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+}
+
 .text-line-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 2;
