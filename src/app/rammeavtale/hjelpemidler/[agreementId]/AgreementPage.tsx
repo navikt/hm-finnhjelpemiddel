@@ -15,7 +15,6 @@ import {
   CalendarIcon,
   DocPencilIcon,
   FilePdfIcon,
-  FilterIcon,
   LayersPlusIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
@@ -24,7 +23,6 @@ import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
 import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
-import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
@@ -158,22 +156,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             {totalProducts} hjelpemidler i delkontrakter
           </Heading>
 
-          <HStack justify="space-between" align="center" gap="2" className="spacing-bottom--medium">
-            {showSidebar && <FilterForm filters={filters} onChange={onChange} />}
-            {!showSidebar && (
-              <HStack gap="2">
-                <Button
-                  variant="secondary-neutral"
-                  className="button-with-thin-border"
-                  onClick={() => setMobileOverlayOpen(true)}
-                  icon={<FilterIcon aria-hidden />}
-                >
-                  Filter
-                </Button>
-              </HStack>
-            )}
-
-            <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
+          <Stack
+            direction={{ sm: 'column', md: 'row' }}
+            justify="space-between"
+            align="center"
+            gap="2"
+            className="spacing-bottom--medium"
+          >
+            <FilterForm filters={filters} onChange={onChange} />
 
             <Button
               variant="secondary"
@@ -185,7 +175,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             >
               Skriv ut
             </Button>
-          </HStack>
+          </Stack>
 
           {avtalerMedIsoGruppering.includes(agreement.id) ? (
             <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
