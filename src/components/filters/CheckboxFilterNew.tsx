@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './CheckboxFilterNew.module.scss'
 import React, { useState } from 'react'
+import { FilterOption } from '@/app/rammeavtale/hjelpemidler/[agreementId]/AgreementPage'
 
 const checkboxFilterCategoriesLabels = {
   leverandor: 'Leverandør',
@@ -12,7 +13,7 @@ const checkboxFilterCategoriesLabels = {
 
 type CheckboxFilterInputProps = {
   filterKey: keyof typeof checkboxFilterCategoriesLabels
-  allFilters: string[]
+  allFilters: FilterOption[]
   onChange: (key: string, value: string) => void
 }
 
@@ -20,8 +21,8 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
 
-  const selectedFilters = searchData.filters[filterKey].filter((value) => allFilters.includes(value))
-  const notSelectedFilters = allFilters.filter((f) => !selectedFilters.includes(f)) || []
+  const selectedFilters = allFilters.filter((f) => searchData.filters[filterKey].includes(f.value))
+  const notSelectedFilters = allFilters.filter((f) => !selectedFilters.find((filter) => filter.value === f.value)) || []
 
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -42,13 +43,13 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
       ? checkboxFilterCategoriesLabels[filterKey] + `(${selectedFilters.length})`
       : checkboxFilterCategoriesLabels[filterKey]
 
-  const filterCheckbox = (value: string) => (
+  const filterCheckbox = (option: FilterOption) => (
     <ActionMenu.CheckboxItem
-      key={`${filterKey}-${value}}`}
-      checked={selectedFilters.some((f) => f === value)}
-      onCheckedChange={() => change(value)}
+      key={`${filterKey}-${option.label}}`}
+      checked={selectedFilters.some((f) => f === option)}
+      onCheckedChange={() => change(option.value)}
     >
-      {value}
+      {option.label}
     </ActionMenu.CheckboxItem>
   )
 

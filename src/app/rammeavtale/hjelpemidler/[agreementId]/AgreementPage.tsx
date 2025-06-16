@@ -30,8 +30,13 @@ import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 import useSWRImmutable from 'swr/immutable'
 
+export type FilterOption = {
+  label: string
+  value: string
+}
+
 export type AgreementFilters = {
-  [key in 'leverandor' | 'delkontrakt']: string[]
+  [key in 'leverandor' | 'delkontrakt']: FilterOption[]
 }
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
@@ -98,10 +103,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
-  const postFilters: string[] = agreement.posts
+  const postFilters: FilterOption[] = agreement.posts
     .filter((post) => post.nr != 99)
     .sort((a, b) => a.nr - b.nr)
-    .map((post) => post.title)
+    .map((post) => ({ label: `Delkontrakt ${post.nr}`, value: post.title }))
 
   if (!postBuckets || !filtersFromData) {
     return (
@@ -111,7 +116,11 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     )
   }
 
-  const leverandorFilter: string[] = filtersFromData?.leverandor.values.map((value) => value.key.toString()) || []
+  const leverandorFilter: FilterOption[] =
+    filtersFromData?.leverandor.values.map((value) => ({
+      label: value.key.toString(),
+      value: value.key.toString(),
+    })) || []
 
   const filters: AgreementFilters = {
     leverandor: leverandorFilter,
@@ -161,22 +170,21 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 >
                   Filter
                 </Button>
-                </HStack>
+              </HStack>
             )}
 
             <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
 
             <Button
-                  variant="secondary"
-                  onClick={() => {
-                    window.print()
-                  }}
-                  icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                  iconPosition={'right'}
-                >
-                  Skriv ut
-                </Button>
-              
+              variant="secondary"
+              onClick={() => {
+                window.print()
+              }}
+              icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+              iconPosition={'right'}
+            >
+              Skriv ut
+            </Button>
           </HStack>
 
           {avtalerMedIsoGruppering.includes(agreement.id) ? (
