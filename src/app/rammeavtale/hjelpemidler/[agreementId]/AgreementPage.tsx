@@ -2,7 +2,7 @@
 
 import { FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import useSWR from 'swr'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
@@ -18,12 +18,11 @@ import {
   LayersPlusIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
-import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Show, Stack, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
 import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
-import { useMobileOverlayStore } from '@/utils/global-state-util'
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 import useSWRImmutable from 'swr/immutable'
@@ -42,10 +41,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const { setMobileOverlayOpen } = useMobileOverlayStore()
-  const [showSidebar, setShowSidebar] = useState(false)
-
-  const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const searchData = mapSearchParams(searchParams)
 
   const avtalerMedIsoGruppering = [
@@ -53,11 +48,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     'b9a48c54-3004-4f94-ab65-b38deec78ed3',
     '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
   ]
-
-  useEffect(() => {
-    setShowSidebar(window.innerWidth >= 1024)
-    window.addEventListener('resize', () => setShowSidebar(window.innerWidth >= 1024))
-  }, [])
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -77,13 +67,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     },
     [searchParams]
   )
-
-  const handleShowHidePics = () => {
-    const value = pictureToggleValue === 'show-pictures' ? 'hide-pictures' : 'show-pictures'
-
-    const newSearchParams = createQueryString('hidePictures', value)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
-  }
 
   const {
     data: postBuckets,
@@ -133,10 +116,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     posts.length > 0
       ? posts.map((post) => post.products.length).reduce((previousValue, currentValue) => previousValue + currentValue)
       : 0
-
-  const onReset = () => {
-    router.replace(pathname, { scroll: false })
-  }
 
   const onChange = (filterName: string, value: string) => {
     const newSearchParams = createQueryString(filterName, value)
