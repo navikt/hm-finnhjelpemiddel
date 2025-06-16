@@ -28,7 +28,7 @@ const PostsList = ({
   return (
     <VStack as="ol" gap={{ xs: '8', md: '12' }} className="agreement-search-results" id="agreementSearchResults">
       {posts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post spacing-top--small'}>
+        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post'}>
           <HStack gap="4" align={'center'}>
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
