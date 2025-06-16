@@ -16,11 +16,10 @@ import {
   DocPencilIcon,
   FilePdfIcon,
   FilterIcon,
-  ImageIcon,
   LayersPlusIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
-import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Show, Stack, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
@@ -162,35 +161,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 >
                   Filter
                 </Button>
-                <Show below="sm">
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      window.print()
-                    }}
-                    icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-                    iconPosition={'right'}
-                  >
-                    Skriv ut
-                  </Button>
-                </Show>
-              </HStack>
+                </HStack>
             )}
 
             <MobileOverlayModal body={<FilterForm filters={filters} onChange={onChange} />} onReset={onReset} />
 
-            <HStack gap="4">
-              <Button
-                icon={<ImageIcon aria-hidden />}
-                iconPosition={'right'}
-                variant={'secondary'}
-                onClick={() => handleShowHidePics()}
-              >
-                Vis/skjul bilder
-              </Button>
-
-              <Show above="sm">
-                <Button
+            <Button
                   variant="secondary"
                   onClick={() => {
                     window.print()
@@ -200,8 +176,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
                 >
                   Skriv ut
                 </Button>
-              </Show>
-            </HStack>
+              
           </HStack>
 
           {avtalerMedIsoGruppering.includes(agreement.id) ? (
