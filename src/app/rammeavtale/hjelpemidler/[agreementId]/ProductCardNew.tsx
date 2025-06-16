@@ -33,8 +33,8 @@ export const ProductCardNew = ({
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: '2', md: '4' }} className={styles.container}>
-      <VStack width={'100%'}>
+    <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
+      <VStack>
         {onAgreement && (
           <HStack gap={'2'} paddingBlock={{ xs: '0', md: '0 4' }}>
             <Tag variant={'success-moderate'} className={styles.agreementTag}>

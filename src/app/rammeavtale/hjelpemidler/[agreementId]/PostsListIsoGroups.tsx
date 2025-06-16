@@ -2,27 +2,12 @@
 
 import { PostWithProducts } from '@/utils/agreement-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { FormSearchData } from '@/utils/search-state-util'
-import { Alert, Heading, HelpText, HStack, Loader, ReadMore, VStack } from '@navikt/ds-react'
-import { useSearchParams } from 'next/navigation'
+import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-react'
 import { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
-import { ProductCardNoPicture } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNoPicture'
 
-const PostsListIsoGroups = ({
-  posts,
-  postLoading,
-  postError,
-}: {
-  posts: PostWithProducts[]
-  postLoading: boolean
-  postError: boolean
-}) => {
-  const formMethods = useFormContext<FormSearchData>()
-  const searchParams = useSearchParams()
+const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
   const { setCompareMenuState } = useHydratedCompareStore()
-  const pictureToggleValue = searchParams.get('hidePictures') ?? 'show-pictures'
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
   const handleCompareClick = () => {
@@ -56,23 +41,9 @@ const PostsListIsoGroups = ({
   const groupedPosts = groupProductsByIsoCategory(posts)
 
   return (
-    <VStack
-      as="ol"
-      gap={{ xs: '8', md: pictureToggleValue === 'hide-pictures' ? '10' : '12' }}
-      className="agreement-search-results"
-      id="agreementSearchResults"
-    >
+    <VStack as="ol" gap={{ xs: '8', md: '12' }} className="agreement-search-results" id="agreementSearchResults">
       {groupedPosts.map((post) => (
-        <VStack
-          as="li"
-          key={post.nr}
-          gap={{ xs: '4', md: pictureToggleValue === 'hide-pictures' ? '6' : '8' }}
-          className={
-            pictureToggleValue === 'hide-pictures'
-              ? 'agreement-post spacing-top--xsmall'
-              : 'agreement-post spacing-top--small'
-          }
-        >
+        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post spacing-top--small'}>
           <HStack gap="4" align={'center'}>
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
@@ -92,30 +63,16 @@ const PostsListIsoGroups = ({
               <Heading level="3" size="small">
                 {isoCategory}
               </Heading>
-              <HStack as="ol" gap={'4'}>
+              <HStack gap={'4'}>
                 {products.map((productWithRank) => (
-                  <li key={productWithRank.product.id}>
-                    {pictureToggleValue === 'hide-pictures' ? (
-                      <ProductCardNoPicture
-                        key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                        product={productWithRank.product}
-                        linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
-                        rank={productWithRank.rank}
-                        hmsNumbers={productWithRank.hmsNumbers}
-                        variantCount={productWithRank.variantCount}
-                        handleCompareClick={handleCompareClick}
-                      />
-                    ) : (
-                      <ProductCardNew
-                        key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                        product={productWithRank.product}
-                        linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
-                        rank={productWithRank.rank}
-                        variantCount={productWithRank.variantCount ?? 0}
-                        handleCompareClick={handleCompareClick}
-                      />
-                    )}
-                  </li>
+                  <ProductCardNew
+                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                    product={productWithRank.product}
+                    linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
+                    rank={productWithRank.rank}
+                    variantCount={productWithRank.variantCount ?? 0}
+                    handleCompareClick={handleCompareClick}
+                  />
                 ))}
               </HStack>
             </VStack>

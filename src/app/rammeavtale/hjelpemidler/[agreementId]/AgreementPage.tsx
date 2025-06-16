@@ -180,9 +180,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             </HStack>
 
             {avtalerMedIsoGruppering.includes(agreement.id) ? (
-              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
+              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} />
             ) : (
-              <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
+              <PostsList posts={posts} postLoading={postsIsLoading} />
             )}
 
             {postError && (
