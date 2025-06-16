@@ -2,28 +2,26 @@
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { ArrowsSquarepathIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, CopyButton, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { ArrowsSquarepathIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Button, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
-import { logActionEvent, logNavigationEvent } from '@/utils/amplitude'
+import { logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardNew.module.scss'
 
 export const ProductCardNew = ({
   product,
   linkOverwrite,
   rank,
-  hmsNumbers,
   variantCount,
   handleCompareClick,
 }: {
   product: Product
   linkOverwrite?: string
   rank?: number
-  hmsNumbers?: string[]
-  variantCount?: number
+  variantCount: number
   handleCompareClick?: () => void
 }) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
@@ -65,29 +63,9 @@ export const ProductCardNew = ({
 
           <BodyShort size="small">{product.supplierName}</BodyShort>
         </VStack>
-        {hmsNumbers && hmsNumbers?.length === 1 && (
-          <VStack align={'start'} gap="1">
-            <BodyShort size="small" weight="semibold">
-              HMS-nummer
-            </BodyShort>
-            <CopyButton
-              size="small"
-              className={styles.hmsCopyButton}
-              copyText={hmsNumbers[0]}
-              text={hmsNumbers[0]}
-              activeText="kopiert"
-              variant="action"
-              activeIcon={<ThumbUpIcon aria-hidden />}
-              iconPosition="right"
-              onClick={() => logActionEvent('kopier')}
-            />
-          </VStack>
-        )}
 
         <Box paddingBlock={{ xs: '0 3', md: '0 8' }}>
-          {((variantCount && hmsNumbers && hmsNumbers?.length > 1) || (variantCount && !hmsNumbers)) && (
-            <BodyShort size="small">{`${variantCount} ${variantCount > 1 ? 'varianter' : 'variant'}`} </BodyShort>
-          )}
+          <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>
         </Box>
 
         <CompareButton product={product} handleCompareClick={handleCompareClick} />

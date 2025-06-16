@@ -111,8 +111,7 @@ const PostsListIsoGroups = ({
                         product={productWithRank.product}
                         linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                         rank={productWithRank.rank}
-                        hmsNumbers={productWithRank.hmsNumbers}
-                        variantCount={productWithRank.variantCount}
+                        variantCount={productWithRank.variantCount ?? 0}
                         handleCompareClick={handleCompareClick}
                       />
                     )}
