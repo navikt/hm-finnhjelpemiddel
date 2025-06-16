@@ -18,7 +18,7 @@ import {
   LayersPlusIcon,
   PuzzlePieceIcon,
 } from '@navikt/aksel-icons'
-import { Alert, Bleed, BodyLong, Button, Heading, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Show, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
 import PostsList from './PostsList'
@@ -146,24 +146,22 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   return (
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
-      <VStack className="main-wrapper--large spacing-bottom--xlarge hide-print">
+      <VStack gap={'10'} className="main-wrapper--large spacing-bottom--xlarge hide-print">
         <TopBar agreement={agreement} />
 
         <CompareMenu />
 
-        <VStack gap={{ xs: '4', md: '8' }} paddingBlock={'12'}>
+        <VStack gap={'4'}>
           <Heading level="2" size={'medium'}>
             {totalProducts} hjelpemidler i delkontrakter
           </Heading>
 
-          <Stack
-            direction={{ sm: 'column', md: 'row' }}
-            justify="space-between"
-            align="center"
-            gap="2"
-            className="spacing-bottom--medium"
-          >
+          <Stack direction={{ sm: 'column', md: 'row' }} justify="space-between" align="end" gap="4">
             <FilterForm filters={filters} onChange={onChange} />
+
+            <Hide above={'sm'} asChild>
+              <span className={styles.divider} />
+            </Hide>
 
             <Button
               variant="secondary"
@@ -176,6 +174,10 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               Skriv ut
             </Button>
           </Stack>
+
+          <Hide below={'sm'} asChild>
+            <span className={styles.divider} />
+          </Hide>
 
           {avtalerMedIsoGruppering.includes(agreement.id) ? (
             <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
