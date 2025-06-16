@@ -3,7 +3,7 @@
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Link, Tag, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -35,16 +35,17 @@ export const ProductCardNew = ({
   return (
     <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
       <VStack>
-        {onAgreement && (
-          <HStack gap={'2'} paddingBlock={{ xs: '0', md: '0 4' }}>
-            <Tag variant={'success-moderate'} className={styles.agreementTag}>
-              På avtale
-            </Tag>
+        <Box paddingBlock={{ xs: '0', md: '0 4' }}>
+          {onAgreement ? (
             <Tag variant={'success-moderate'} className={styles.agreementTag}>
               {`Rangering ${currentRank}`}
             </Tag>
-          </HStack>
-        )}
+          ) : (
+            <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+              Ikke på avtale
+            </Tag>
+          )}
+        </Box>
 
         <Box className={styles.imageWrapper}>
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />

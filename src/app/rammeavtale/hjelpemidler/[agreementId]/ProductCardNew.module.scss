@@ -23,6 +23,12 @@
   padding: $a-spacing-1-alt $a-spacing-4;
 }
 
+.nonAgreementTag {
+  @extend .agreementTag;
+  background-color: #f0ecf4;
+  border: 1px solid #e0d8e9;
+}
+
 .link {
   color: $a-text-default;
   text-decoration: underline;
