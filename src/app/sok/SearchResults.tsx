@@ -67,20 +67,18 @@ const SearchResults = ({
   return (
     <VStack gap="4">
       <HStack
-        as={'ol'}
         gap={{ xs: '4', md: '5' }}
         id="searchResults"
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
       >
         {products.map((product) => (
-          <li key={product.id}>
-            <ProductCardNew
-              product={product}
-              variantCount={product.variantCount}
-              handleCompareClick={handleCompareClick}
-            />
-          </li>
+          <ProductCardNew
+            key={product.id}
+            product={product}
+            variantCount={product.variantCount}
+            handleCompareClick={handleCompareClick}
+          />
         ))}
       </HStack>
       {loadMore && (
