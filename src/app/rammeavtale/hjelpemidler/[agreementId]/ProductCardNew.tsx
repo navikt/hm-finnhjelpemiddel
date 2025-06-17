@@ -2,8 +2,8 @@
 
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { ArrowsSquarepathIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Link, Tag, VStack } from '@navikt/ds-react'
+import { ArrowRightLeftIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Button, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -35,7 +35,7 @@ export const ProductCardNew = ({
   return (
     <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
       <VStack>
-        <Box paddingBlock={{ xs: '0', md: '0 4' }}>
+        <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'start'} justify={'space-between'}>
           {onAgreement ? (
             <Tag variant={'success-moderate'} className={styles.agreementTag}>
               {`Rangering ${currentRank}`}
@@ -45,7 +45,8 @@ export const ProductCardNew = ({
               Ikke på avtale
             </Tag>
           )}
-        </Box>
+          <CompareButton product={product} handleCompareClick={handleCompareClick} />
+        </HStack>
 
         <Box className={styles.imageWrapper}>
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
@@ -65,11 +66,9 @@ export const ProductCardNew = ({
           <BodyShort size="small">{product.supplierName}</BodyShort>
         </VStack>
 
-        <Box paddingBlock={{ xs: '0 3', md: '0 8' }}>
+        <Box>
           <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>
         </Box>
-
-        <CompareButton product={product} handleCompareClick={handleCompareClick} />
       </VStack>
     </Box>
   )
@@ -98,17 +97,13 @@ const CompareButton = ({
       className={classNames(styles.compareButton, {
         [styles.compareButtonChecked]: isInProductsToCompare,
       })}
-      size="medium"
-      variant="secondary"
+      size="small"
+      variant="secondary-neutral"
       value="Legg produktet til sammenligning"
       onClick={toggleCompareProduct}
-      icon={<ArrowsSquarepathIcon aria-hidden />}
+      icon={<ArrowRightLeftIcon aria-hidden fontSize={'24px'} />}
       iconPosition="left"
       aria-pressed={isInProductsToCompare}
-    >
-      <div aria-label={`sammenlign ${product.title}`}>
-        <span aria-hidden>Sammenlign</span>
-      </div>
-    </Button>
+    ></Button>
   )
 }
