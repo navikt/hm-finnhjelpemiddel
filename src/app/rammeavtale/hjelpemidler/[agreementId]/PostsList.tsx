@@ -40,7 +40,6 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
               <ProductCardNew
                 key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                 product={productWithRank.product}
-                linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
                 rank={productWithRank.rank}
                 variantCount={productWithRank.variantCount ?? 0}
                 handleCompareClick={handleCompareClick}

@@ -13,13 +13,11 @@ import styles from './ProductCardNew.module.scss'
 
 export const ProductCardNew = ({
   product,
-  linkOverwrite,
   rank,
   variantCount,
   handleCompareClick,
 }: {
   product: Product
-  linkOverwrite?: string
   rank?: number
   variantCount: number
   handleCompareClick?: () => void
@@ -27,7 +25,7 @@ export const ProductCardNew = ({
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   const searchParams = useSearchParams()
-  const linkToProduct = linkOverwrite || `/produkt/${product.id}?${searchParams}`
+  const linkToProduct = `/produkt/${product.id}?${searchParams}`
 
   const currentRank = rank ? rank : minRank
   const onAgreement = currentRank !== Infinity
