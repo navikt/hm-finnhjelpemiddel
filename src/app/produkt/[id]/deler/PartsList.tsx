@@ -34,6 +34,7 @@ export const PartsList = ({ seriesId }: Props) => {
   const [spareParts, setSpareParts] = useState<ProductVariant[]>([])
   const [accessories, setAccessories] = useState<ProductVariant[]>([])
 
+
   const onSearch = () => {
     router.replace(`${pathname}?searchTerm=${inputValue}`, { scroll: false })
     setFilteredProducts(data?.filter(product =>
@@ -50,24 +51,30 @@ export const PartsList = ({ seriesId }: Props) => {
 
   const { data, isLoading } = useSWR(seriesId, fetchCompatibleProducts, { keepPreviousData: true })
 
-
   useEffect(() => {
     if (data) {
-      setSpareParts(data.filter(product => product.sparePart))
-      setAccessories(data.filter(product => product.accessory))
-    }
-  }, [data]);
+      // Update filteredProducts based on searchTermValue
+      setFilteredProducts(
+        searchTermValue
+          ? data.filter(product =>
+            [product.articleName, product.hmsArtNr, product.supplierRef]
+              .some(field => field?.toLowerCase().includes(searchTermValue.toLowerCase()))
+          )
+          : data
+      );
 
-  useEffect(() => {
-    if (data) setFilteredProducts(data);
-  }, [data]);
+      // Update spareParts and accessories
+      setSpareParts(data.filter(product => product.sparePart));
+      setAccessories(data.filter(product => product.accessory));
+    }
+  }, [data, searchTermValue]);
 
 
   if (isLoading) return <Loader />
 
   return (
     <div>
-      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }}  marginBlock="7 3"
+      <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} marginBlock="7 3"
              align="end">
         <Search
           defaultValue={inputValue}
