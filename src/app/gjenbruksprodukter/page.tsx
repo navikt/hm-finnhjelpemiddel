@@ -73,6 +73,7 @@ export default function AlternativeProductsPage() {
     typeof window !== 'undefined' &&
       faro.api.pushEvent('alternativSearch', {
         searchTerm: value,
+        warehouse: selectedWarehouse ?? '',
       })
     router.replace(`${pathname}?hms=${value}`, {
       scroll: false,
