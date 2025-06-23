@@ -32,25 +32,24 @@ export const ProductCardNew = ({
 
   return (
     <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack>
-        <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'start'} justify={'space-between'}>
-          {onAgreement ? (
-            <Tag variant={'success-moderate'} className={styles.agreementTag}>
-              {`Rangering ${currentRank}`}
-            </Tag>
-          ) : (
-            <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
-              Ikke på avtale
-            </Tag>
-          )}
-          <CompareButton product={product} handleCompareClick={handleCompareClick} />
-        </HStack>
+      <VStack justify={'space-between'} height={'100%'} gap={'2'}>
+        <VStack>
+          <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'start'} justify={'space-between'}>
+            {onAgreement ? (
+              <Tag variant={'success-moderate'} className={styles.agreementTag}>
+                {`Rangering ${currentRank}`}
+              </Tag>
+            ) : (
+              <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+                Ikke på avtale
+              </Tag>
+            )}
+            <CompareButton product={product} handleCompareClick={handleCompareClick} />
+          </HStack>
 
-        <Box className={styles.imageWrapper}>
-          <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
-        </Box>
-
-        <VStack gap={'2'} paddingBlock={{ xs: '1', md: '0 4' }}>
+          <Box className={styles.imageWrapper}>
+            <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
+          </Box>
           <Link
             className={styles.link}
             href={linkToProduct}
@@ -60,13 +59,12 @@ export const ProductCardNew = ({
           >
             <BodyShort weight="semibold">{product.title}</BodyShort>
           </Link>
-
-          <BodyShort size="small">{product.supplierName}</BodyShort>
         </VStack>
 
-        <Box>
+        <VStack gap={{ xs: '1', md: '4' }}>
+          <BodyShort size="small">{product.supplierName}</BodyShort>
           <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>
-        </Box>
+        </VStack>
       </VStack>
     </Box>
   )
