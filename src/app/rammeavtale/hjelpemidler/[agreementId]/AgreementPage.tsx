@@ -158,11 +158,11 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <span className={styles.divider} />
           </Hide>
 
-          {avtalerMedIsoGruppering.includes(agreement.id) ? (
-            <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} postError={postError} />
-          ) : (
-            <PostsList posts={posts} postLoading={postsIsLoading} postError={postError} />
-          )}
+            {avtalerMedIsoGruppering.includes(agreement.id) ? (
+              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} />
+            ) : (
+              <PostsList posts={posts} postLoading={postsIsLoading} />
+            )}
 
           {postError && (
             <Alert variant="error" title="Error med lasting av produkter">

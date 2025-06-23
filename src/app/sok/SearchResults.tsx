@@ -10,7 +10,7 @@ import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
 import { logVisFlereTreff } from '@/utils/amplitude'
-import ProductCardSearch from '@/app/sok/ProductCardSearch'
+import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
 
 const SearchResults = ({
   products,
@@ -26,11 +26,6 @@ const SearchResults = ({
   const formMethods = useFormContext<FormSearchData>()
   const { setCompareMenuState } = useHydratedCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
-
-  const handleSetIsoFilter = (value: string) => {
-    formMethods.setValue(`filters.produktkategori`, [value])
-    formRef.current?.requestSubmit()
-  }
 
   const handleCompareClick = () => {
     if (firstCompareClick) {
@@ -72,21 +67,18 @@ const SearchResults = ({
   return (
     <VStack gap="4">
       <HStack
-        as={'ol'}
         gap={{ xs: '4', md: '5' }}
         id="searchResults"
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
       >
-        {products.map((product, index) => (
-          <li key={product.id}>
-            <ProductCardSearch
-              product={product}
-              handleIsoButton={handleSetIsoFilter}
-              handleCompareClick={handleCompareClick}
-              searchResultPlacement={index + 1}
-            />
-          </li>
+        {products.map((product) => (
+          <ProductCardNew
+            key={product.id}
+            product={product}
+            variantCount={product.variantCount}
+            handleCompareClick={handleCompareClick}
+          />
         ))}
       </HStack>
       {loadMore && (

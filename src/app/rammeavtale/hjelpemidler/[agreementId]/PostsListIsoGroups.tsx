@@ -6,15 +6,7 @@ import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-rea
 import { useState } from 'react'
 import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
 
-const PostsListIsoGroups = ({
-  posts,
-  postLoading,
-  postError,
-}: {
-  posts: PostWithProducts[]
-  postLoading: boolean
-  postError: boolean
-}) => {
+const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
   const { setCompareMenuState } = useHydratedCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
@@ -51,7 +43,7 @@ const PostsListIsoGroups = ({
   return (
     <VStack as="ol" gap={{ xs: '8', md: '12' }} className="agreement-search-results" id="agreementSearchResults">
       {groupedPosts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post'}>
+        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post spacing-top--small'}>
           <HStack gap="4" align={'center'}>
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
@@ -71,19 +63,15 @@ const PostsListIsoGroups = ({
               <Heading level="3" size="small">
                 {isoCategory}
               </Heading>
-              <HStack as="ol" gap={'4'}>
+              <HStack gap={'4'}>
                 {products.map((productWithRank) => (
-                  <li key={productWithRank.product.id}>
-                    <ProductCardNew
-                      key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                      product={productWithRank.product}
-                      linkOverwrite={`/produkt/${productWithRank.product.id}?status=På%20avtale`}
-                      rank={productWithRank.rank}
-                      hmsNumbers={productWithRank.hmsNumbers}
-                      variantCount={productWithRank.variantCount}
-                      handleCompareClick={handleCompareClick}
-                    />
-                  </li>
+                  <ProductCardNew
+                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                    product={productWithRank.product}
+                    rank={productWithRank.rank}
+                    variantCount={productWithRank.variantCount ?? 0}
+                    handleCompareClick={handleCompareClick}
+                  />
                 ))}
               </HStack>
             </VStack>
