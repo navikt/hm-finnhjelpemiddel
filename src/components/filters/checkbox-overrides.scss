@@ -1,0 +1,15 @@
+.navds-action-menu__item--has-icon{
+  @extend .navds-action-menu__item--has-icon;
+  align-items: start;
+  padding-bottom: 0.5rem;
+}
+
+.navds-action-menu__marker--left {
+  @extend .navds-action-menu__marker--left;
+  top: 5px;
+}
+
+.navds-action-menu__marker-icon {
+  @extend .navds-action-menu__marker-icon;
+  top: 2px;
+}

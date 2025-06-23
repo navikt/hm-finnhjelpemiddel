@@ -1,48 +1,22 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react'
-import { SubmitHandler, useFormContext } from 'react-hook-form'
-
-import { Button, HStack } from '@navikt/ds-react'
-
-import { FilterData } from '@/utils/api-util'
-
-import { CheckboxFilter } from '@/components/filters/CheckboxFilter'
-import { FormSearchData } from '@/utils/search-state-util'
-
-const FocusOnResultsButton = ({ setFocus }: { setFocus: () => void }) => (
-  <Button className="visually-hidden-focusable" variant="secondary" size="small" type="button" onClick={setFocus}>
-    Gå til resultat
-  </Button>
-)
+import { Heading, HStack, VStack } from '@navikt/ds-react'
+import { CheckboxFilterNew } from '@/components/filters/CheckboxFilterNew'
+import { AgreementFilters } from '@/app/rammeavtale/hjelpemidler/[agreementId]/AgreementPage'
 
 type Props = {
-  filters?: FilterData
-  setFocus?: () => void
-  onSubmit: SubmitHandler<FormSearchData>
+  filters: AgreementFilters
+  onChange: (key: string, value: string) => void
 }
 
-const FilterForm = forwardRef<HTMLFormElement, Props>(({ filters, setFocus, onSubmit }, ref) => {
-  const formRef = useRef<HTMLFormElement>(null)
-  const formMethods = useFormContext<FormSearchData>()
-
-  useImperativeHandle(ref, () => formRef.current!)
-
+const FilterForm = ({ filters, onChange }: Props) => {
   return (
-    <form
-      ref={formRef}
-      role="search"
-      onSubmit={formMethods.handleSubmit(onSubmit)}
-      aria-controls="agreementSearchResults"
-      className="agreement-page__filter-form"
-    >
-      <HStack gap="4" className="filter-container__filters filter-container__horizontal">
-        <CheckboxFilter filter={{ key: 'delkontrakt', data: filters?.delkontrakt }} />
-        <CheckboxFilter filter={{ key: 'leverandor', data: filters?.leverandor }} showSearch={true} />
+    <VStack gap={'4'}>
+      <Heading size={'small'}>Filter</Heading>
+      <HStack gap="4">
+        <CheckboxFilterNew filterKey={'delkontrakt'} allFilters={filters.delkontrakt} onChange={onChange} />
+        <CheckboxFilterNew filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
       </HStack>
-
-      {setFocus && <FocusOnResultsButton setFocus={setFocus} />}
-      <input type="submit" style={{ display: 'none' }} />
-    </form>
+    </VStack>
   )
-})
+}
 
 export default FilterForm
