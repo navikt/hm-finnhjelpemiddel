@@ -23,7 +23,6 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
   const searchData = mapSearchParams(searchParams)
 
   const selectedFilters = allFilters.filter((f) => searchData.filters[filterKey].includes(f.value))
-  const notSelectedFilters = allFilters.filter((f) => !selectedFilters.find((filter) => filter.value === f.value)) || []
 
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -69,12 +68,11 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
         {selectedFilters.length > 0 && (
-          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={reset} style={{ paddingBlock: '0.5rem' }}>
+          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={reset}>
             Fjern filter
           </ActionMenu.Item>
         )}
-        {selectedFilters.map((f) => filterCheckbox(f))}
-        {notSelectedFilters.map((f) => filterCheckbox(f))}
+        {allFilters.map((f) => filterCheckbox(f))}
       </ActionMenu.Content>
     </ActionMenu>
   )
