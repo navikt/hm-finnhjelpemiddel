@@ -87,7 +87,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const postFilters: FilterOption[] = agreement.posts
     .filter((post) => post.nr != 99)
     .sort((a, b) => a.nr - b.nr)
-    .map((post) => ({ label: `Delkontrakt ${post.nr}`, value: post.title }))
+    .map((post) => ({ label: post.title, value: post.title }))
 
   if (!postBuckets || !filtersFromData) {
     return (

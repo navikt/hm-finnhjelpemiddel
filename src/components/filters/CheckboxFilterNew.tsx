@@ -3,6 +3,7 @@ import { ActionMenu, Alert, Button } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './CheckboxFilterNew.module.scss'
+import './checkbox-overrides.scss'
 import React, { useState } from 'react'
 import { FilterOption } from '@/app/rammeavtale/hjelpemidler/[agreementId]/AgreementPage'
 
@@ -68,7 +69,7 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
         {selectedFilters.length > 0 && (
-          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={reset}>
+          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={reset} style={{ paddingBlock: '0.5rem' }}>
             Fjern filter
           </ActionMenu.Item>
         )}
