@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, HStack } from '@navikt/ds-react'
+import { BodyShort, Button } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
@@ -14,6 +14,10 @@ const CompareMenu = () => {
   const toggleButtonText = `Produkter til sammenligning (${productsToCompare.length})`
 
   const reversedProductsToCompare = productsToCompare.slice().reverse()
+
+  if (productsToCompare.length == 0) {
+    return <></>
+  }
 
   return (
     <div
