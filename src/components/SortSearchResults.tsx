@@ -3,7 +3,7 @@
 import { FormSearchData, isValidSortOrder } from '@/utils/search-state-util'
 import { Select } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 type Props = {
@@ -13,7 +13,6 @@ type Props = {
 const SortSearchResults = ({ formRef }: Props) => {
   const formMethods = useFormContext<FormSearchData>()
   const searchParams = useSearchParams()
-  const [hideLabel, setHideLabel] = useState(false)
 
   const options = [
     { value: 'Delkontrakt_rangering', label: 'Delkontrakt og rangering' },
@@ -27,11 +26,6 @@ const SortSearchResults = ({ formRef }: Props) => {
     }
   }
 
-  useEffect(() => {
-    setHideLabel(window.innerWidth <= 1024)
-    window.addEventListener('resize', () => setHideLabel(window.innerWidth <= 1024))
-  }, [])
-
   return (
     <>
       <Select
@@ -39,7 +33,7 @@ const SortSearchResults = ({ formRef }: Props) => {
         label="Sortering"
         onChange={handleSelectedSorting}
         defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}
-        hideLabel={hideLabel}
+        hideLabel={true}
       >
         {options.map((option, index) => (
           <option key={index} value={option.value}>

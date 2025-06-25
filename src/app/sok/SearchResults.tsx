@@ -45,7 +45,7 @@ const SearchResults = ({
 
   useRestoreScroll('search-results', !isLoading)
 
-  if (!products?.length || products.length === 0) {
+  if (products && products.length === 0) {
     return (
       <div id="searchResults">
         <Alert variant="info">
@@ -72,7 +72,7 @@ const SearchResults = ({
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
       >
-        {products.map((product) => (
+        {products?.map((product) => (
           <ProductCardNew
             key={product.id}
             product={product}
@@ -81,14 +81,13 @@ const SearchResults = ({
           />
         ))}
       </HStack>
-      {loadMore && (
+      {loadMore && !isLoading && (
         <Button
           variant="secondary"
           onClick={() => {
             loadMore()
             logVisFlereTreff()
           }}
-          loading={isLoading}
         >
           Vis flere treff
         </Button>
