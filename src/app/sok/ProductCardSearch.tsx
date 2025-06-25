@@ -1,77 +1,68 @@
 'use client'
 
-import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { PackageIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
-import classNames from 'classnames'
+import { BodyShort, Box, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import { logNavigationSearchEvent } from '@/utils/amplitude'
 import ProductImage from '@/components/ProductImage'
-import { CompareCheckbox } from '@/components/CompareCheckbox'
+import { logNavigationEvent } from '@/utils/amplitude'
+import styles from './ProductCardSearch.module.scss'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
-const ProductCardSearch = ({
+export const ProductCardSearch = ({
   product,
-  handleIsoButton,
+  rank,
+  variantCount,
   handleCompareClick,
-  searchResultPlacement,
 }: {
   product: Product
-  handleIsoButton: (value: string) => void
+  rank?: number
+  variantCount: number
   handleCompareClick?: () => void
-  searchResultPlacement: number
 }) => {
-  const { productsToCompare } = useHydratedCompareStore()
-  const [firstImageSrc] = useState(product.photos.at(0)?.uri || undefined)
-  const searchParams = useSearchParams()
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
-
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
-  const onAgreement = minRank !== Infinity
+
+  const searchParams = useSearchParams()
+  const linkToProduct = `/produkt/${product.id}?${searchParams}`
+
+  const currentRank = rank ? rank : minRank
+  const onAgreement = currentRank !== Infinity
 
   return (
-    <Box
-      padding="2"
-      className={classNames('product-card--large', {
-        'product-card__checked': isInProductsToCompare,
-      })}
-    >
-      <CompareCheckbox product={product} handleCompareClick={handleCompareClick} />
+    <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
+      <VStack justify={'space-between'} height={'100%'} gap={'2'}>
+        <VStack>
+          <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'start'} justify={'space-between'}>
+            {onAgreement ? (
+              <Tag variant={'success-moderate'} className={styles.agreementTag}>
+                {`Rangering ${currentRank}`}
+              </Tag>
+            ) : (
+              <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+                Ikke på avtale
+              </Tag>
+            )}
+            <CompareButton product={product} handleCompareClick={handleCompareClick} />
+          </HStack>
 
-      <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
-        <VStack style={{ gap: '2px' }}>
-          <Detail textColor="subtle">
-            {onAgreement ? (minRank < 90 ? `Rangering ${minRank}` : 'På avtale med Nav') : ''}
-          </Detail>
-
+          <Box className={styles.imageWrapper}>
+            <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
+          </Box>
           <Link
-            className="product-card__link"
-            href={`/produkt/${product.id}?${searchParams}`}
+            className={styles.link}
+            href={linkToProduct}
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
-            onClick={() => logNavigationSearchEvent('Produktkort', 'produkt', product.title, searchResultPlacement)}
+            onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
           >
-            <BodyShort size="small" className="text-line-clamp">
-              {product.title}
-            </BodyShort>
+            <BodyShort weight="semibold">{product.title}</BodyShort>
           </Link>
-
-          <Button
-            className="product-card__iso-button"
-            variant="tertiary-neutral"
-            icon={<PackageIcon aria-hidden />}
-            onClick={() => handleIsoButton(product.isoCategoryTitle)}
-          >
-            {product.isoCategoryTitle}
-          </Button>
         </VStack>
 
-        <ProductImage src={firstImageSrc} productTitle={product.title} />
+        <VStack gap={{ xs: '1', md: '4' }}>
+          <BodyShort size="small">{product.supplierName}</BodyShort>
+        </VStack>
       </VStack>
     </Box>
   )
 }
-
-export default ProductCardSearch
