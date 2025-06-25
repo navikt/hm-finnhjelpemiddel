@@ -10,7 +10,7 @@ import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
 import { logVisFlereTreff } from '@/utils/amplitude'
-import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
+import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
 
 const SearchResults = ({
   products,
@@ -73,7 +73,7 @@ const SearchResults = ({
         justify={{ xs: 'start', md: 'start' }}
       >
         {products?.map((product) => (
-          <ProductCardNew
+          <ProductCardSearch
             key={product.id}
             product={product}
             variantCount={product.variantCount}

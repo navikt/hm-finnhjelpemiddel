@@ -1,15 +1,13 @@
 'use client'
 
-import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { ArrowRightLeftIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, HStack, Link, Tag, Tooltip, VStack } from '@navikt/ds-react'
-import classNames from 'classnames'
+import { BodyShort, Box, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardNew.module.scss'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
 export const ProductCardNew = ({
   product,
@@ -67,41 +65,5 @@ export const ProductCardNew = ({
         </VStack>
       </VStack>
     </Box>
-  )
-}
-
-const CompareButton = ({
-  product,
-  handleCompareClick,
-}: {
-  product: Product
-  handleCompareClick: (() => void) | undefined
-}) => {
-  const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
-
-  const toggleCompareProduct = () => {
-    handleCompareClick && handleCompareClick()
-    productsToCompare.filter((procom: Product) => product.id === procom.id).length === 1
-      ? removeProduct(product.id)
-      : setProductToCompare(product)
-  }
-
-  const isInProductsToCompare = productsToCompare.filter((procom: Product) => product.id === procom.id).length >= 1
-
-  return (
-    <Tooltip content="Legg til sammenligning">
-      <Button
-        className={classNames(styles.compareButton, {
-          [styles.compareButtonChecked]: isInProductsToCompare,
-        })}
-        size="small"
-        variant="secondary-neutral"
-        value="Legg produktet til sammenligning"
-        onClick={toggleCompareProduct}
-        icon={<ArrowRightLeftIcon aria-hidden fontSize={'24px'} />}
-        iconPosition="left"
-        aria-pressed={isInProductsToCompare}
-      ></Button>
-    </Tooltip>
   )
 }
