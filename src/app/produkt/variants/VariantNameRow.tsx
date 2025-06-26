@@ -7,7 +7,7 @@ interface Props {
   variants: ProductVariant[]
   sortColumns: SortColumns
   handleSortRow: (key: string) => void
-  variantNameElementRef: React.RefObject<HTMLTableCellElement>
+  variantNameElementRef: React.RefObject<HTMLTableCellElement | null>
   iconBasedOnState: (key: string) => ReactNode
 }
 

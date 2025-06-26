@@ -2,6 +2,7 @@ import { Button, Table } from '@navikt/ds-react'
 import classNames from 'classnames'
 import { defaultAriaLabel, getAriaLabel } from '@/utils/ariaLabel-util'
 import { SortColumns } from '@/app/produkt/variants/MultipleVariants'
+import { JSX } from 'react'
 
 interface VariantDataRowProps {
   technicalDataName: string

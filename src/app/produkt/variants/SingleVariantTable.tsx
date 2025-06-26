@@ -12,7 +12,7 @@ import { default as Link } from 'next/link'
 export interface SingleVariantTableProps {
   variant: ProductVariant
   rows: { [p: string]: string[] }
-  variantNameElementRef: RefObject<HTMLTableCellElement>
+  variantNameElementRef: RefObject<HTMLTableCellElement | null>
 }
 
 export const SingleVariantTable = ({ variant, rows, variantNameElementRef }: SingleVariantTableProps) => {

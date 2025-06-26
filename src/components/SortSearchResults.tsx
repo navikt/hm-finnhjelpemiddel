@@ -7,7 +7,7 @@ import React, { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 type Props = {
-  formRef: RefObject<HTMLFormElement>
+  formRef: RefObject<HTMLFormElement | null>
 }
 
 const SortSearchResults = ({ formRef }: Props) => {

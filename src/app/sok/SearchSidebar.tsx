@@ -9,7 +9,7 @@ import { FormSearchData } from '@/utils/search-state-util'
 type SearchSidebarProps = {
   onSubmit: SubmitHandler<FormSearchData>
   filters: FilterData
-  searchFormRef: RefObject<HTMLFormElement>
+  searchFormRef: RefObject<HTMLFormElement | null>
   onReset: () => void
 }
 

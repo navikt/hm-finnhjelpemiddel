@@ -21,7 +21,7 @@ const SearchResults = ({
   loadMore?: () => void
   isLoading: boolean
   products?: Product[] | undefined
-  formRef: RefObject<HTMLFormElement>
+  formRef: RefObject<HTMLFormElement | null>
 }) => {
   const formMethods = useFormContext<FormSearchData>()
   const { setCompareMenuState } = useHydratedCompareStore()
