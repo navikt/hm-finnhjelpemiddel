@@ -2,7 +2,7 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, HStack, ReadMore, Search, Select, VStack } from '@navikt/ds-react'
+import { BodyShort, HStack, Search, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
@@ -112,36 +112,15 @@ export default function AlternativeProductsPage() {
       </Heading>
 
       <div>
-        <BodyShort>
-          Vi legger fortløpende til flere produktområder. <br />
+        <BodyShort spacing>
           Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
         </BodyShort>
-        <ReadMore header={'Disse produktområdene finner du her'}>
-          <ul>
-            <li>Arbeidsstoler</li>
-            <li>Elektriske rullestoler</li>
-            <li>Ganghjelpemidler</li>
-            <li>Hjelpemidler for overflytting, vending og posisjonering</li>
-            <li>Hørselshjelpemidler</li>
-            <li>Kalendere, dagsplanleggere og tidtakere</li>
-            <li>Kjøreposer og regncape</li>
-            <li>Kjøreramper</li>
-            <li>Kommunikasjonshjelpemidler</li>
-            <li>Løfteplattformer og hjelpemiddel i trapp</li>
-            <li>Madrasser med trykksårforebyggende egenskaper</li>
-            <li>Manuelle rullestoler DK6 og DK9</li>
-            <li>Moduloppbygde sittesystemer</li>
-            <li>Overflyttingsplattformer og personløftere</li>
-            <li>Senger, sengebunner, skummadrasser, hjertebrett og sengebord</li>
-            <li>Stoler med oppreisingsfunksjon</li>
-            <li>Ståstativ og trenings- og aktiviseringshjelpemidler</li>
-            <li>Sykler med og uten hjelpemotor og støttehjul til tohjulssykler</li>
-            <li>Synstekniske hjelpemidler</li>
-            <li>Varmehjelpemidler for hender og føtter</li>
-            <li>Vogner og hjelpemidler til sport og aktivitet</li>
-            <li>Hygienehjelpemidler og støttestang</li>
-          </ul>
-        </ReadMore>
+        <BodyShort>Hjelpemiddelområder som ikke finnes i Finn gjenbruksprodukt er:</BodyShort>
+        <ul style={{ marginTop: '0' }}>
+          <li>Sitteputer med trykksårforebyggende egenskaper</li>
+          <li>Omgivelseskontroll</li>
+          <li>Elektrisk hev- og senkfunksjon til innredning på kjøkken og bad</li>
+        </ul>
       </div>
 
       <HStack gap={'7'} align={'end'}>
