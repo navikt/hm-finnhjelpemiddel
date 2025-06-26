@@ -85,7 +85,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   )
 
   const postFilters: FilterOption[] = agreement.posts
-    .filter((post) => post.nr != 99)
+    .filter((post) => post.nr != 99 && post.title.length > 0)
     .sort((a, b) => a.nr - b.nr)
     .map((post) => ({ label: post.title, value: post.title }))
 
@@ -158,11 +158,11 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <span className={styles.divider} />
           </Hide>
 
-            {avtalerMedIsoGruppering.includes(agreement.id) ? (
-              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} />
-            ) : (
-              <PostsList posts={posts} postLoading={postsIsLoading} />
-            )}
+          {avtalerMedIsoGruppering.includes(agreement.id) ? (
+            <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} />
+          ) : (
+            <PostsList posts={posts} postLoading={postsIsLoading} />
+          )}
 
           {postError && (
             <Alert variant="error" title="Error med lasting av produkter">
