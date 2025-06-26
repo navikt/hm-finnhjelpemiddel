@@ -1,7 +1,7 @@
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
-import { digihot_customevents, logCustomEvent, logNavigationEvent } from '@/utils/amplitude'
+import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, Hide, HStack, Show } from '@navikt/ds-react'
@@ -10,38 +10,12 @@ import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
-import { SnowfallComponent } from '@/app/pynt/Snowfall'
-import { KyllingHareFall } from '@/app/pynt/KyllingHareFall'
-import { Pynt } from '@/app/pynt/Pynt'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
   const [searchOpen, setSearchOpen] = useState(searchParamValue !== '' && searchParamValue !== null)
-
-  const featureFlags = useFeatureFlags()
-  const juledekorasjonFlag = featureFlags.isEnabled('juledekorasjon')
-  const [visJulepynt, setVisJulepynt] = useState(false)
-  const clickJulepynt = () => {
-    setVisJulepynt(!visJulepynt)
-    logCustomEvent(digihot_customevents.PEPPERKAKE)
-  }
-
-  const pynteTimer = () => {
-    setTimeout(() => {
-      setVisPaaskepynt(false)
-    }, 6000)
-  }
-
-  const paaskepyntFlag = featureFlags.isEnabled('paaskepynt')
-  const [visPaaskepynt, setVisPaaskepynt] = useState(false)
-  const clickPaaskepynt = () => {
-    setVisPaaskepynt(!visPaaskepynt)
-    if (!visPaaskepynt) pynteTimer()
-    logCustomEvent(digihot_customevents.PAASKE)
-  }
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -105,8 +79,6 @@ const NavigationBar = () => {
 
   return (
     <nav className="nav" ref={outerContainerRef}>
-      {juledekorasjonFlag && visJulepynt && <SnowfallComponent />}
-      {paaskepyntFlag && visPaaskepynt && <KyllingHareFall />}
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <NextLink href={homeUrl} className="logo" onClick={() => setMenuOpen(false)}>
@@ -118,8 +90,6 @@ const NavigationBar = () => {
             </Hide>
           </NextLink>
 
-          {juledekorasjonFlag && <Pynt vis={visJulepynt} clickPynt={clickJulepynt} pyntType={'jul'} />}
-          {paaskepyntFlag && <Pynt vis={visPaaskepynt} clickPynt={clickPaaskepynt} pyntType={'paaske'} />}
           <div className="nav-top-container__menu-buttons-container">
             <HStack wrap={false}>
               {searchOpen && (
