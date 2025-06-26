@@ -182,8 +182,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 const TopBar = ({ agreement }: { agreement: Agreement }) => {
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-      <VStack gap="4" align={'start'} paddingBlock={'12'}>
-        <Heading level="1" size="xlarge">
+      <VStack gap="4" align={'start'} paddingBlock={'12'} maxWidth={'800px'}>
+        <Heading level="1" size="xlarge" style={{ textWrap: 'balance' }}>
           {agreement.title}
         </Heading>
 
