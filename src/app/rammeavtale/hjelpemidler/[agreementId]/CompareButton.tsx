@@ -2,7 +2,7 @@ import { Product } from '@/utils/product-util'
 import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Button, Tooltip } from '@navikt/ds-react'
 import classNames from 'classnames'
-import styles from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew.module.scss'
+import styles from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement.module.scss'
 import { ArrowRightLeftIcon } from '@navikt/aksel-icons'
 
 export const CompareButton = ({

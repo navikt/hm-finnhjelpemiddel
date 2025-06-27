@@ -6,10 +6,10 @@ import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
-import styles from './ProductCardNew.module.scss'
+import styles from './ProductCardAgreement.module.scss'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
-export const ProductCardNew = ({
+export const ProductCardAgreement = ({
   product,
   rank,
   variantCount,

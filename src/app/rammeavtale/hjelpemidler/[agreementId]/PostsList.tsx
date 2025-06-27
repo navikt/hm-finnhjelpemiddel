@@ -4,7 +4,7 @@ import { PostWithProducts } from '@/utils/agreement-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-react'
 import { useState } from 'react'
-import { ProductCardNew } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardNew'
+import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
 
 const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
   const { setCompareMenuState } = useHydratedCompareStore()
@@ -37,7 +37,7 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
           )}
           <HStack gap={'4'}>
             {post.products.map((productWithRank) => (
-              <ProductCardNew
+              <ProductCardAgreement
                 key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                 product={productWithRank.product}
                 rank={productWithRank.rank}
