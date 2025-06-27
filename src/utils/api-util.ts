@@ -1424,11 +1424,18 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
     body: JSON.stringify({
       query: {
         bool: {
-          must: {
-            term: {
-              'attributes.compatibleWith.seriesIds': seriesId,
+          must: [
+            {
+              term: {
+                'attributes.compatibleWith.seriesIds': seriesId,
+              },
             },
-          },
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+          ],
         },
       },
       sort: [
