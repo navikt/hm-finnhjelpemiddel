@@ -1,8 +1,6 @@
 import Image from 'next/image'
 
 import { BodyLong, Heading } from '@/components/aksel-client'
-
-import DefinitionList from '@/components/definition-list/DefinitionList'
 import { BodyShort } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import AgreementList from './AgreementList'
@@ -40,24 +38,14 @@ export default async function AgreementsInfoPage() {
               Det står følgende på kortet til hjelpemiddelet:
             </Heading>
 
-            <DefinitionList>
-              <DefinitionList.Term>
-                <BodyShort textColor="subtle">Rangering 1</BodyShort>
-              </DefinitionList.Term>
-              <DefinitionList.Definition>
-                Er på avtale med Nav, og er rangert som nr 1 på sin delkontrakt.
-              </DefinitionList.Definition>
-              <DefinitionList.Term>
-                <BodyShort textColor="subtle">Rangering 4</BodyShort>
-              </DefinitionList.Term>
-              <DefinitionList.Definition>
-                Er på avtale med Nav, og er rangert som nr 4 på sin delkontrakt
-              </DefinitionList.Definition>
-              <DefinitionList.Term>
-                <BodyShort textColor="subtle">På avtale med Nav</BodyShort>
-              </DefinitionList.Term>
-              <DefinitionList.Definition>Er på avtale med Nav uten rangering.</DefinitionList.Definition>
-            </DefinitionList>
+            <BodyShort textColor="subtle">Rangering 1</BodyShort>
+            <BodyShort spacing>Er på avtale med Nav, og er rangert som nr 1 på sin delkontrakt.</BodyShort>
+
+            <BodyShort textColor="subtle">Rangering 4</BodyShort>
+            <BodyShort spacing>Er på avtale med Nav, og er rangert som nr 4 på sin delkontrakt</BodyShort>
+
+            <BodyShort textColor="subtle">På avtale med Nav</BodyShort>
+            <BodyShort>Er på avtale med Nav uten rangering.</BodyShort>
           </div>
           <div>
             <Heading level="3" size="small" className="spacing-top--small">
