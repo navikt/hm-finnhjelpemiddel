@@ -35,7 +35,7 @@ export const ProductCardNew = ({
           <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'start'} justify={'space-between'}>
             {onAgreement ? (
               <Tag variant={'success-moderate'} className={styles.agreementTag}>
-                {`Rangering ${currentRank}`}
+                {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
               </Tag>
             ) : (
               <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
