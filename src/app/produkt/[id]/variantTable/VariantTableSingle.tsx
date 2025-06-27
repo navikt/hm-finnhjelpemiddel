@@ -1,7 +1,7 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { customSort } from '@/app/produkt/variants/variant-utils'
+import { customSort } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Box, CopyButton, Heading, Table } from '@navikt/ds-react'

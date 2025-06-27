@@ -1,5 +1,5 @@
 import { ProductVariant } from '@/utils/product-util'
-import { customSort } from '@/app/produkt/variants/variant-utils'
+import { customSort } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { Alert, Box, Heading, Table, VStack } from '@navikt/ds-react'
 import styles from '@/app/produkt/[id]/ProductMiddle.module.scss'

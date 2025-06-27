@@ -1,7 +1,7 @@
 import { ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementPosts, formatAgreementRanks } from '@/utils/string-util'
-import { SortColumns } from '@/app/produkt/variants/MultipleVariants'
+import { SortColumns } from '@/app/produkt/[id]/variantTable/VariantTable'
 
 // Spesifikk rekkefølge av bestemte rader for Terskeleliminatorer med ISO 18301505.
 // De radene som bør komme etter hverandre er: "Bredde",  "Terskelhøyde maks",  "Terskelhøyde min"
@@ -100,36 +100,4 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
       return -1
     }
   })
-}
-
-export const egenskaperText = (
-  title: string,
-  variantCount: number,
-  numberOfvariantsOnAgreement: number,
-  numberOfvariantsWithoutAgreement: number
-): string => {
-  const allVariantsOnAgreement = `${title} finnes i ${numberOfvariantsOnAgreement} ${
-    numberOfvariantsOnAgreement === 1 ? 'variant' : 'varianter'
-  } på avtale med Nav.`
-  const variantsWithAndWithoutAgreement =
-    numberOfvariantsOnAgreement === 0
-      ? `${title} finnes i ${numberOfvariantsWithoutAgreement} ${
-          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        }.`
-      : `${title} finnes i ${numberOfvariantsOnAgreement} varianter på avtale med Nav, og ${numberOfvariantsWithoutAgreement} ${
-          numberOfvariantsWithoutAgreement === 1 ? 'variant' : 'varianter'
-        } som ikke er på avtale med Nav.`
-
-  const textMultipleVariants =
-    'Nedenfor finner man en oversikt over egenskapene som varierer på de forskjellige variantene.'
-
-  return `${
-    numberOfvariantsWithoutAgreement > 0 ? variantsWithAndWithoutAgreement : allVariantsOnAgreement
-  } ${textMultipleVariants}`
-}
-
-export const hasDifferentValues = ({ row }: { row: string[] }) => {
-  let uniqueValues = new Set(row)
-  uniqueValues.delete('-')
-  return uniqueValues.size > 1
 }
