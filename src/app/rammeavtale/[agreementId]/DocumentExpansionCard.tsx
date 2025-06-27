@@ -4,8 +4,9 @@ import { BodyShort, ExpansionCard, VStack } from '@navikt/ds-react'
 
 import { Attachment } from '@/utils/agreement-util'
 
-import File from '@/components/File'
 import { useEffect, useRef, useState } from 'react'
+import { FileIcon } from '@/components/aksel-client'
+import { dateToString } from '@/utils/string-util'
 
 export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }) => {
   const trimmedTitle = attachment.title.trim()
@@ -61,6 +62,24 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
         </VStack>
       </ExpansionCard.Content>
     </ExpansionCard>
+  )
+}
+
+const File = ({ title, path, date }: { title: string; path: string; date: Date }) => {
+  const documentLoader = (path: string) => {
+    return `${process.env.CDN_URL}${path}`
+  }
+
+  return (
+    <div className="file-container">
+      <FileIcon aria-hidden fontSize="1.5rem" />
+      <div className="file-container__with-date">
+        <a href={documentLoader(path)} target="_blank" rel="noreferrer">
+          <span>{title} (PDF) </span>
+        </a>
+        <span>{dateToString(date)} </span>
+      </div>
+    </div>
   )
 }
 

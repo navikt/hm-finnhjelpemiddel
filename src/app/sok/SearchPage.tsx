@@ -14,7 +14,6 @@ import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PA
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
-import SortSearchResults from '@/components/SortSearchResults'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
@@ -24,6 +23,7 @@ import { logFilterEndretEvent } from '@/utils/amplitude'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { SearchSidebar } from '@/app/sok/SearchSidebar'
 import { faro } from '@grafana/faro-core'
+import SortSearchResults from '@/app/sok/SortSearchResults'
 
 export default function SearchPage() {
   const router = useRouter()
