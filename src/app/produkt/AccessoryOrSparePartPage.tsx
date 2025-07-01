@@ -4,7 +4,6 @@ import { BodyLong, Heading } from '@/components/aksel-client'
 
 import ProductCard from '@/components/ProductCard'
 import { VStack } from '@navikt/ds-react'
-import 'src/app/produkt/product-page.scss'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 

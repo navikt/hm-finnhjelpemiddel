@@ -4,13 +4,10 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 @use './compare-menu.scss';
 @use '../app/sammenlign/compare-page.scss';
-@use './variants-table.scss';
-@use './variants-table-common.scss';
 @use './filter.scss';
 @use '../app/[...not-found]/not-found-page.scss';
 @use './product-card.scss';
 @use './search.scss';
-@use './hms-suggestion.scss';
 @use './search-agreement.scss';
 @use './navigation-bar.scss';
 @use './burger-menu-content.scss';
