@@ -1451,3 +1451,136 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
     .then((res) => res.json())
     .then((data) => mapProductsVariants(data))
 }
+
+export type ProductVariantsPagination = {
+  products: ProductVariant[]
+  totalHits: number
+}
+
+export const fetchParts = ({
+  searchTerm,
+  currentPage,
+  pageSize,
+  id,
+  isAgreement,
+  spareParts,
+  accessories,
+  selectedSupplier,
+}: {
+  searchTerm: string
+  currentPage: number
+  pageSize: number
+  id: string
+  isAgreement?: boolean
+  spareParts?: boolean
+  accessories?: boolean
+  selectedSupplier?: string
+}): Promise<ProductVariantsPagination> => {
+  const termQuery = {
+    multi_match: {
+      query: searchTerm,
+      type: 'bool_prefix',
+      operator: 'and',
+      fields: ['title', 'hmsArtNr', 'supplierRef', 'supplier.name'],
+      lenient: true,
+    },
+  }
+  const compatibleWithSeriesQuery = {
+    term: {
+      'attributes.compatibleWith.seriesIds': !isAgreement ? id : '',
+    },
+  }
+  const agreementQuery = {
+    term: {
+      'agreements.id': {
+        value: isAgreement ? id : '',
+      },
+    },
+  }
+  const statusQuery = {
+    term: {
+      status: 'ACTIVE',
+    },
+  }
+
+  const sparePartsQuery = [
+    {
+      term: {
+        sparePart: true,
+      },
+    },
+    {
+      term: {
+        accessory: false,
+      },
+    },
+  ]
+
+  const accessoriesQuery = [
+    {
+      term: {
+        accessory: true,
+      },
+    },
+    {
+      term: {
+        sparePart: false,
+      },
+    },
+  ]
+
+  const selectedSupplierQuery = {
+    term: { 'supplier.name': { value: selectedSupplier } },
+  }
+
+  let must: any[] = []
+  must = must.concat([statusQuery])
+
+  if (isAgreement) {
+    must = must.concat(agreementQuery)
+  } else {
+    must = must.concat([compatibleWithSeriesQuery])
+  }
+
+  if (searchTerm) {
+    must = must.concat([termQuery])
+  }
+
+  if (spareParts) {
+    must = must.concat(sparePartsQuery)
+  } else if (accessories) {
+    must = must.concat(accessoriesQuery)
+  }
+
+  if (selectedSupplier) {
+    must = must.concat([selectedSupplierQuery])
+  }
+
+  return fetch(HM_SEARCH_URL + `/products/_search`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: pageSize,
+      from: pageSize * (currentPage - 1),
+      query: {
+        bool: {
+          must: must,
+        },
+      },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc', // Change to 'desc' for descending order
+          },
+        },
+      ],
+      track_total_hits: true,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return { products: mapProductsVariants(data), totalHits: data.hits.total.value }
+    })
+}

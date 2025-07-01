@@ -1,0 +1,113 @@
+'use client'
+
+import { Box, Pagination, Tabs, VStack } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { PackageIcon, WrenchIcon } from '@navikt/aksel-icons'
+import { PartsTable } from './PartsTable'
+import useQueryString from '@/utils/search-params-util'
+import { ProductVariantsPagination } from '@/utils/api-util'
+
+export enum ProductTabs {
+  ACCESSORIES = 'ACCESSORIES',
+  SPAREPART = 'SPAREPART',
+}
+
+type PartsTabsProps = {
+  accessoriesData: ProductVariantsPagination
+  sparePartsData: ProductVariantsPagination
+}
+
+export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) => {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const { createQueryStringMultiple, searchParamKeys } = useQueryString()
+
+  const rowsPerPage = 16
+  const [page, setPage] = useState<number>(parseInt(searchParams.get(searchParamKeys.page) ?? '1') || 1)
+
+  const [selectedTab, setSelectedTab] = useState<ProductTabs>(
+    (searchParams.get(searchParamKeys.tab) as ProductTabs) || ProductTabs.ACCESSORIES
+  )
+
+  useEffect(() => {
+    const newPage = parseInt(searchParams.get(searchParamKeys.page) ?? '1')
+    if (newPage !== page) setPage(newPage)
+  }, [page, searchParams, searchParamKeys.page])
+
+  const handleSetPage = (newPage: number) => {
+    setPage(newPage)
+    const pageParam = createQueryStringMultiple({ name: searchParamKeys.page, value: newPage.toString() })
+    router.replace(`${pathname}?${pageParam}`, { scroll: false })
+  }
+
+  const handleTabChange = (tab: ProductTabs) => {
+    setSelectedTab(tab)
+    setPage(1)
+    const newParams = createQueryStringMultiple(
+      { name: searchParamKeys.tab, value: tab },
+      {
+        name: searchParamKeys.page,
+        value: '1',
+      }
+    )
+    router.replace(`${pathname}?${newParams}`, { scroll: false })
+  }
+
+  const pageCount = (allItems: number) => {
+    let number = Math.ceil(allItems / rowsPerPage)
+    return number <= 0 ? 1 : number
+  }
+
+  return (
+    <Box paddingBlock="4">
+      <Tabs value={selectedTab} onChange={(value) => handleTabChange(value as ProductTabs)}>
+        <Tabs.List>
+          <Tabs.Tab
+            value={ProductTabs.ACCESSORIES}
+            label={`Tilbehør (${accessoriesData?.totalHits}) `}
+            icon={<PackageIcon color="#000" fontSize="1.5rem" aria-hidden />}
+          />
+          <Tabs.Tab
+            value={ProductTabs.SPAREPART}
+            label={`Reservedeler (${sparePartsData?.totalHits}) `}
+            icon={<WrenchIcon color="#000" fontSize="1.5rem" aria-hidden />}
+          />
+        </Tabs.List>
+        <Tabs.Panel value={ProductTabs.ACCESSORIES}>
+          <VStack gap={'4'} paddingBlock="4">
+            <PartsTable products={accessoriesData?.products} />
+            <Pagination
+              page={page}
+              count={pageCount(accessoriesData?.totalHits)}
+              size={'small'}
+              onPageChange={handleSetPage}
+              prevNextTexts
+              srHeading={{
+                tag: 'h2',
+                text: 'Tabellpaginering tilbehør',
+              }}
+            />
+          </VStack>
+        </Tabs.Panel>
+        <Tabs.Panel value={ProductTabs.SPAREPART}>
+          <VStack gap={'4'} paddingBlock="4">
+            <PartsTable products={sparePartsData?.products} />
+            <Pagination
+              page={page}
+              count={pageCount(sparePartsData?.totalHits)}
+              size={'small'}
+              onPageChange={handleSetPage}
+              prevNextTexts
+              srHeading={{
+                tag: 'h2',
+                text: 'Tabellpaginering reservedeler',
+              }}
+            />
+          </VStack>
+        </Tabs.Panel>
+      </Tabs>
+    </Box>
+  )
+}
