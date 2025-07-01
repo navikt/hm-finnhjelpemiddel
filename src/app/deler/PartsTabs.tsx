@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Pagination, Tabs, VStack } from '@navikt/ds-react'
+import { Box, Pagination, Show, Tabs, VStack } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PackageIcon, WrenchIcon } from '@navikt/aksel-icons'
@@ -81,7 +81,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
             <Pagination
               page={page}
               count={pageCount(accessoriesData?.totalHits)}
-              size={'small'}
+              size={'medium'}
               onPageChange={handleSetPage}
               prevNextTexts
               srHeading={{
@@ -97,7 +97,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
             <Pagination
               page={page}
               count={pageCount(sparePartsData?.totalHits)}
-              size={'small'}
+              size={'medium'}
               onPageChange={handleSetPage}
               prevNextTexts
               srHeading={{
