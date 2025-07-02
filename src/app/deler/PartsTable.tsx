@@ -8,7 +8,7 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
         <Table.Row>
           <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
           <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
-          <Hide below={'md'}>
+          <Hide below={'md'} asChild>
             <Table.HeaderCell scope="col">Leverandørnavn</Table.HeaderCell>
           </Hide>
           <Table.HeaderCell scope="col">Lev-artnr</Table.HeaderCell>
@@ -19,7 +19,7 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
           <Table.Row key={product.id}>
             <Table.DataCell>{product.hmsArtNr}</Table.DataCell>
             <Table.DataCell>{product.articleName}</Table.DataCell>
-            <Hide below={'md'}>
+            <Hide below={'md'} asChild>
               <Table.DataCell>{product.supplierName}</Table.DataCell>
             </Hide>
             <Table.DataCell>{product.supplierRef}</Table.DataCell>
