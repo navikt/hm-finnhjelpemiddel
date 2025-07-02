@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Pagination, Show, Tabs, VStack } from '@navikt/ds-react'
+import { Box, Hide, Pagination, Show, Tabs, VStack } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PackageIcon, WrenchIcon } from '@navikt/aksel-icons'
@@ -78,36 +78,55 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
         <Tabs.Panel value={ProductTabs.ACCESSORIES}>
           <VStack gap={'4'} paddingBlock="4">
             <PartsTable products={accessoriesData?.products} />
-            <Pagination
-              page={page}
-              count={pageCount(accessoriesData?.totalHits)}
-              size={'medium'}
-              onPageChange={handleSetPage}
-              prevNextTexts
-              srHeading={{
-                tag: 'h2',
-                text: 'Tabellpaginering tilbehør',
-              }}
-            />
+            <ResponsivePagination page={page} count={pageCount(accessoriesData?.totalHits)} setPage={handleSetPage} />
           </VStack>
         </Tabs.Panel>
         <Tabs.Panel value={ProductTabs.SPAREPART}>
           <VStack gap={'4'} paddingBlock="4">
             <PartsTable products={sparePartsData?.products} />
-            <Pagination
-              page={page}
-              count={pageCount(sparePartsData?.totalHits)}
-              size={'medium'}
-              onPageChange={handleSetPage}
-              prevNextTexts
-              srHeading={{
-                tag: 'h2',
-                text: 'Tabellpaginering reservedeler',
-              }}
-            />
+            <ResponsivePagination page={page} count={pageCount(sparePartsData?.totalHits)} setPage={handleSetPage} />
           </VStack>
         </Tabs.Panel>
       </Tabs>
     </Box>
+  )
+}
+
+type ResponsivePaginationProps = {
+  page: number
+  count: number
+  setPage: (value: number) => void
+}
+const ResponsivePagination = ({ page, count, setPage }: ResponsivePaginationProps) => {
+  return (
+    <>
+      <Hide below={'md'} asChild>
+        <Pagination
+          page={page}
+          count={count}
+          size={'medium'}
+          onPageChange={setPage}
+          prevNextTexts
+          srHeading={{
+            tag: 'h2',
+            text: 'Tabellpaginering reservedeler',
+          }}
+        />
+      </Hide>
+      <Show below={'md'} asChild>
+        <Pagination
+          page={page}
+          count={count}
+          size={'medium'}
+          onPageChange={setPage}
+          siblingCount={0}
+          boundaryCount={0}
+          srHeading={{
+            tag: 'h2',
+            text: 'Tabellpaginering reservedeler',
+          }}
+        />
+      </Show>
+    </>
   )
 }
