@@ -1,15 +1,14 @@
 import { Metadata } from 'next'
-
-import Accessories from '@/app/rammeavtale/[agreementId]/tilbehor/Accessories'
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
+import { PartsPage } from '@/app/deler/PartsPage'
 
 type Props = {
   params: Promise<{ agreementId: string }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const agreementId = params.agreementId
   const agreement = mapAgreementFromDoc(await getAgreement(agreementId))
   // Data vil cashes og blir ikke hentet på nytt på produktsiden: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
@@ -21,9 +20,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function AccessoriesPage(props: Props) {
-  const params = await props.params;
-  const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
+export default async function AccessoriesPartsPage(props: Props) {
+  const params = await props.params
+  const title = mapAgreementFromDoc(await getAgreement(params.agreementId)).title
 
-  return <Accessories agreement={agreement} />
+  return (
+    params.agreementId && (
+      <PartsPage
+        id={params.agreementId}
+        backLink={`/rammeavtale/hjelpemidler/${params.agreementId}`}
+        isAgreement={true}
+        title={title}
+      />
+    )
+  )
 }

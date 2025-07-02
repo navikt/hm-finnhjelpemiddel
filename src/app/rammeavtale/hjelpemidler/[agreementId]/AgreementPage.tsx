@@ -10,14 +10,7 @@ import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { PostBucketResponse } from '@/utils/response-types'
 import { dateToString } from '@/utils/string-util'
-import {
-  ArrowRightIcon,
-  CalendarIcon,
-  DocPencilIcon,
-  FilePdfIcon,
-  LayersPlusIcon,
-  PuzzlePieceIcon,
-} from '@navikt/aksel-icons'
+import { ArrowRightIcon, CalendarIcon, DocPencilIcon, FilePdfIcon, LayersPlusIcon } from '@navikt/aksel-icons'
 import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm from './FilterForm'
@@ -300,35 +293,15 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
 
   return (
     showAccessoriesAndSparePartsButtons && (
-      <Stack gap={{ xs: '3', md: '4' }} direction={{ xs: 'column', md: 'row' }}>
-        <Button
-          as={NextLink}
-          href={
-            showAccessoriesAndSparePartsList
-              ? `/rammeavtale/${agreementId}/tilbehor`
-              : `/rammeavtale/${agreementId}#Tilbehor`
-          }
-          icon={<LayersPlusIcon aria-hidden />}
-          variant={'secondary'}
-          className={styles.bleedButton}
-        >
-          Tilbehør
-        </Button>
-
-        <Button
-          as={NextLink}
-          href={
-            showAccessoriesAndSparePartsList
-              ? `/rammeavtale/${agreementId}/reservedeler`
-              : `/rammeavtale/${agreementId}#Reservedeler`
-          }
-          icon={<PuzzlePieceIcon aria-hidden />}
-          variant={'secondary'}
-          className={styles.bleedButton}
-        >
-          Reservedeler
-        </Button>
-      </Stack>
+      <Button
+        as={NextLink}
+        href={`/rammeavtale/${agreementId}/deler`}
+        icon={<LayersPlusIcon aria-hidden />}
+        variant={'secondary'}
+        className={styles.bleedButton}
+      >
+        Tilbehør og reservedeler
+      </Button>
     )
   )
 }
