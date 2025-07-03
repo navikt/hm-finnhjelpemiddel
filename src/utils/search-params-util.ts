@@ -28,7 +28,6 @@ export default function useQueryString() {
 
       args.forEach((arg) => (params = queryString(params, arg.name, arg.value)))
 
-      console.log('args', args)
       return params.toString()
     },
     [searchParams]
