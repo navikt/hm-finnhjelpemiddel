@@ -6,13 +6,6 @@ export const initialSearchDataState = {
   filters: initialFiltersFormState,
   sortOrder: undefined,
 }
-
-export const initialAgreementSearchDataState = {
-  searchTerm: '',
-  filters: initialFiltersFormState,
-  hidePictures: 'show-pictures',
-}
-
 export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
 
 export type SortOrder = (typeof sortOrders)[number]

@@ -77,13 +77,6 @@ export interface Hit {
   _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse | SupplierInfoResponse
 }
 
-export interface ProductDocResponse {
-  _index: string
-  _id: string
-  _found: boolean
-  _source: ProductSourceResponse
-}
-
 export interface ProductSourceResponse {
   id: string
   articleName: string

@@ -3,7 +3,6 @@ import {
   CompatibleWithResponse,
   Hit,
   MediaResponse,
-  ProductDocResponse,
   ProductSourceResponse,
   SearchResponse,
   SeriesAggregationResponse,
@@ -108,43 +107,6 @@ export interface AgreementInfo {
   expired: string
 }
 
-export const wheelchairFilters = ['Setebredde min', 'Setebredde maks', 'Setedybde min', 'Setedybde maks'] as const
-
-export type WheelchairFilter = (typeof wheelchairFilters)[number]
-
-export type HMSSuggestionWheelChair = {
-  hmsNumber: string
-  totalDiff?: number
-} & {
-  [K in WheelchairFilter]?: string
-}
-
-/**
- * Maps SearchRespons into HMSSuggestionsWheelChair with tech data for specific filters
- */
-export const mapHMSSuggestionFromSearchResponse = (data: SearchResponse): HMSSuggestionWheelChair[] => {
-  if (data.hits.hits.length) {
-    const product = mapProductWithVariants(data.hits.hits.map((h) => h._source as ProductSourceResponse))
-
-    return product.variants.reduce((acc: HMSSuggestionWheelChair[], variant) => {
-      const techDataEntry: HMSSuggestionWheelChair = {
-        hmsNumber: variant.hmsArtNr ?? '',
-      }
-
-      Object.entries(variant.techData)
-        .filter(([key]) => wheelchairFilters.includes(key as WheelchairFilter))
-        .forEach(([key, value]) => {
-          techDataEntry[key as WheelchairFilter] = value.value
-        })
-
-      acc.push(techDataEntry)
-      return acc
-    }, [])
-  } else {
-    return []
-  }
-}
-
 /**
  * Maps results from opensearch collaps into multiple products - warning: will not include all product variants
  */
@@ -173,13 +135,6 @@ export const mapProductFromHmsArtNr = (data: SearchResponse, hmsArtNr: String): 
     data.hits.hits.map((h) => h._source as ProductSourceResponse),
     hmsArtNr
   )
-}
-
-/**
- * Maps result from indexed _doc endpoint into one product with one variant (indexed on productvariants)
- */
-export const mapProductFromDoc = (data: ProductDocResponse): Product => {
-  return mapProductWithVariants(Array(data._source))
 }
 
 function filterUniqueCombinationsOfPostAndRank(agreementInfos: AgreementInfo[]): AgreementInfo[] {
@@ -216,20 +171,17 @@ function filterUniqueCombinationsOfPostAndRank(agreementInfos: AgreementInfo[]):
  * Maps results from search with aggregation into products with all variants
  */
 export const mapProductsFromAggregation = (data: SeriesAggregationResponse): Product[] => {
-  const buckets = data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
+  return data.aggregations.series_buckets.buckets.map((bucket: SeriesBucketResponse) =>
     mapProductWithVariants(bucket.products.hits.hits.map((h) => h._source as ProductSourceResponse))
   )
-  return buckets
 }
 
 export const mapProductsVariants = (data: SearchResponse): ProductVariant[] => {
   const sources = data.hits.hits.map((h) => h._source as ProductSourceResponse)
 
-  const variants = sources.map((source) => {
+  return sources.map((source) => {
     return mapProductVariant(source)
   })
-
-  return variants
 }
 
 export const mapProductsWithoutAggregationOnSeries = (data: SearchResponse): Product[] => {
@@ -242,7 +194,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
     throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
   }
 
-  const unaggregatedSeries = sources.map((product): Product => {
+  return sources.map((product): Product => {
     return {
       id: product.seriesId,
       title: product.title,
@@ -278,63 +230,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
       main: product.main,
     }
   })
-
-  return unaggregatedSeries
 }
-
-export const mapProductWithVariantsWithoutAggregationOnSeries = (sources: ProductSourceResponse[]): Product[] => {
-  const variants = sources.map((source) => {
-    return mapProductVariant(source)
-  })
-
-  if (sources.length === 0) {
-    throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
-  }
-
-  const firstVariant = sources[0]
-  const allAgreementsForAllVariants = variants.flatMap((variant) => variant.agreements)
-  const uniquesAgreementsPostAndRanks = filterUniqueCombinationsOfPostAndRank(allAgreementsForAllVariants)
-
-  const unaggregatedSeries = variants.map((variant) => {
-    return {
-      id: firstVariant.seriesId,
-      title: firstVariant.title,
-      attributes: {
-        manufacturer: firstVariant.attributes.manufacturer,
-        articlename: firstVariant.attributes.articlename,
-        series: firstVariant.attributes.series,
-        shortdescription: firstVariant.attributes.shortdescription,
-        text: firstVariant.attributes.text,
-        compatibleWith: firstVariant.attributes.compatibleWith
-          ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
-          : undefined,
-        url: firstVariant.attributes.url,
-      },
-      variantCount: 1,
-      variants: [variant],
-      compareData: {
-        techDataRange: {},
-        agreementRank: null,
-      },
-      isoCategory: firstVariant.isoCategory,
-      isoCategoryTitle: firstVariant.isoCategoryTitle,
-      isoCategoryText: firstVariant.isoCategoryText,
-      isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
-      accessory: firstVariant.accessory,
-      sparePart: firstVariant.sparePart,
-      photos: mapPhotoInfo(firstVariant.media),
-      videos: mapVideoInfo(firstVariant.media),
-      documents: mapDocuments(firstVariant.media),
-      supplierId: firstVariant.supplier?.id ?? '',
-      supplierName: firstVariant.supplier?.name ?? '',
-      agreements: uniquesAgreementsPostAndRanks,
-      main: firstVariant.main,
-    }
-  })
-
-  return unaggregatedSeries
-}
-
 export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsArtNr: String): Product => {
   const variant = sources
     .filter((source) => source.hmsArtNr === hmsArtNr)

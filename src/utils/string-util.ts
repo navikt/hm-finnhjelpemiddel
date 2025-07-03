@@ -69,16 +69,3 @@ export const formatAgreementPosts = (agreements: AgreementInfo[]): string => {
     .sort()
     .join(', ')
 }
-
-export const formatNorwegianLetter = (letter: string): string => {
-  switch (letter) {
-    case '%C3%85':
-      return 'Å'
-    case '%C3%98':
-      return 'Ø'
-    case '%C3%86':
-      return 'Æ'
-    default:
-      return letter
-  }
-}

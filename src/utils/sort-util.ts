@@ -36,17 +36,3 @@ export const sortIntWithStringFallback = (keyA: string, keyB: string, desc: bool
 
   return desc ? stringComparator(keyB, keyA) : stringComparator(keyA, keyB)
 }
-
-export const sortWithNullValuesAtEnd = (keyA: number | null | undefined, keyB: number | null | undefined): number => {
-  if (keyA === null && keyB !== null) {
-    return 1
-  } else if (keyA !== null && keyB === null) {
-    return -1
-  } else if (keyA === null && keyB === null) {
-    return 0
-  } else if (keyA && keyB) {
-    return keyA - keyB
-  } else {
-    return -1
-  }
-}

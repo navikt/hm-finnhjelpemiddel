@@ -17,5 +17,4 @@ const imageLoader = ({ src, size }: ImageOptions) =>
   src === '/assets/image-error.png' ? src : `${process.env.IMAGE_PROXY_URL}/${size}d/${src}`
 
 export const smallImageLoader = ({ src }: ImageLoaderProps) => imageLoader({ src, size: Size.SMALL })
-export const mediumImageLoader = ({ src }: ImageLoaderProps) => imageLoader({ src, size: Size.MEDIUM })
 export const largeImageLoader = ({ src }: ImageLoaderProps) => imageLoader({ src, size: Size.LARGE })

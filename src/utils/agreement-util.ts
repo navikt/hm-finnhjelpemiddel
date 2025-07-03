@@ -61,14 +61,6 @@ interface ProductOnPostInfo {
   variantCount?: number
   product: Product
 }
-
-/**
- * Maps top result from opensearch into agreement info
- */
-export const mapAgreementFromSearch = (data: SearchResponse): Agreement => {
-  return data.hits.hits.map((hit: Hit) => mapAgreement(hit._source as AgreementsSourceResponse))[0]
-}
-
 /**
  * Maps from opensearch document endpoint
  */

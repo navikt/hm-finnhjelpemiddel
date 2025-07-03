@@ -1,5 +1,4 @@
 import { mapAllNews, News } from '@/utils/news-util'
-import { formatNorwegianLetter } from '@/utils/string-util'
 import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { Fetcher } from 'swr'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
@@ -22,8 +21,6 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
-  HMSSuggestionWheelChair,
-  mapHMSSuggestionFromSearchResponse,
   mapProductFromSeriesId,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
@@ -32,17 +29,14 @@ import {
   mapProductVariant,
   Product,
   ProductVariant,
-  wheelchairFilters,
 } from './product-util'
 import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
 import { SearchData } from './search-state-util'
-import { AlternativeStockResponse } from '@/app/gjenbruksprodukter/page'
 
 export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
-const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
 
 export type Bucket = {
   key: number | string
@@ -182,11 +176,6 @@ export type FetchProductsWithFilters = {
   filters: FilterData
 }
 
-export type FetchProductVariantsWithFilters = {
-  products: ProductVariant[]
-  filters: FilterData
-}
-
 const makeSearchTermQuery = ({
   searchTerm,
   agreementId,
@@ -307,7 +296,7 @@ const makeSearchTermQuery = ({
     return must
   }
 
-  const must = {
+  return {
     must: mustAlternatives(),
     must_not: {
       bool: {
@@ -319,8 +308,6 @@ const makeSearchTermQuery = ({
       },
     },
   }
-
-  return must
 }
 
 // Because of queryString in opensearch query: https://opensearch.org/docs/latest/query-dsl/full-text/query-string/#reserved-characters
@@ -437,9 +424,7 @@ export const fetchProducts = ({
       filter: queryFilters,
     },
   }
-
-  const filterBreddePrint = filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM })
-
+  filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM })
   const body: QueryObject = {
     from,
     size,
@@ -537,92 +522,6 @@ export const fetchProducts = ({
         products: products,
         filters: mapFilters(data),
       }
-    })
-}
-
-export const getProductFilters = ({ seriesId }: { seriesId: string }): Promise<FilterData> => {
-  const query = {
-    bool: {
-      must: {
-        term: {
-          seriesId: seriesId,
-        },
-      },
-    },
-  }
-
-  const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
-    lengdeCM: filterLengde(undefined, undefined),
-    breddeCM: filterBredde(undefined, undefined),
-    totalVektKG: filterTotalvekt(undefined, undefined),
-    setebreddeMinCM: filterMinMax({ setebreddeMinCM: undefined }, { setebreddeMaksCM: undefined }),
-    setebreddeMaksCM: filterMinMax({ setebreddeMinCM: undefined }, { setebreddeMaksCM: undefined }),
-    setedybdeMinCM: filterMinMax({ setedybdeMinCM: undefined }, { setedybdeMaksCM: undefined }),
-    setedybdeMaksCM: filterMinMax({ setedybdeMinCM: undefined }, { setedybdeMaksCM: undefined }),
-    setehoydeMinCM: filterMinMax({ setehoydeMinCM: undefined }, { setehoydeMaksCM: undefined }),
-    setehoydeMaksCM: filterMinMax({ setehoydeMinCM: undefined }, { setehoydeMaksCM: undefined }),
-    brukervektMinKG: filterMinMax({ brukervektMinKG: undefined }, { brukervektMaksKG: undefined }),
-    brukervektMaksKG: filterMinMax({ brukervektMinKG: undefined }, { brukervektMaksKG: undefined }),
-    beregnetBarn: filterBeregnetBarn([]),
-    fyllmateriale: filterFyllmateriale([]),
-    materialeTrekk: filterMaterialeTrekk([]),
-    leverandor: filterLeverandor([]),
-    produktkategori: filterProduktkategoriISO([]),
-    rammeavtale: filterRammeavtale([]),
-  }
-
-  const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
-    [filterKey]: {
-      filter: {
-        bool: {
-          filter: Object.entries(filterKeyToAggsFilter)
-            .filter(([key, v]) => key !== filterKey && v != null)
-            .map(([_, v]) => v),
-        },
-      },
-      aggs,
-    },
-  })
-
-  return fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      size: 0,
-      query,
-      aggs: {
-        ...aggsFilter('lengdeCM', toMinMaxAggs(`filters.lengdeCM`)),
-        ...aggsFilter('breddeCM', toMinMaxAggs(`filters.breddeCM`)),
-        ...aggsFilter('totalVektKG', toMinMaxAggs(`filters.totalVektKG`)),
-        ...aggsFilter('setebreddeMinCM', toMinMaxAggs(`filters.setebreddeMinCM`)),
-        ...aggsFilter('setebreddeMaksCM', toMinMaxAggs(`filters.setebreddeMaksCM`)),
-        ...aggsFilter('setedybdeMinCM', toMinMaxAggs(`filters.setedybdeMinCM`)),
-        ...aggsFilter('setedybdeMaksCM', toMinMaxAggs(`filters.setedybdeMaksCM`)),
-        ...aggsFilter('setehoydeMinCM', toMinMaxAggs(`filters.setehoydeMinCM`)),
-        ...aggsFilter('setehoydeMaksCM', toMinMaxAggs(`filters.setehoydeMaksCM`)),
-        ...aggsFilter('brukervektMinKG', toMinMaxAggs(`filters.brukervektMinKG`)),
-        ...aggsFilter('brukervektMaksKG', toMinMaxAggs(`filters.brukervektMaksKG`)),
-        ...aggsFilter('beregnetBarn', {
-          values: { terms: { field: 'filters.beregnetBarn', order: { _key: 'asc' } } },
-        }),
-        ...aggsFilter('fyllmateriale', {
-          values: {
-            terms: { field: 'filters.fyllmateriale', order: { _key: 'asc' }, size: 100 },
-          },
-        }),
-        ...aggsFilter('materialeTrekk', {
-          values: {
-            terms: { field: 'filters.materialeTrekk', order: { _key: 'asc' }, size: 100 },
-          },
-        }),
-      },
-    }),
-  })
-    .then((res) => res.json())
-    .then((data: any) => {
-      return mapFilters(data)
     })
 }
 
@@ -749,68 +648,6 @@ export const getFiltersAgreement = ({ agreementId }: { agreementId: string }): P
     })
 }
 
-export const getNewFiltersAgreement = ({
-  agreementId,
-  searchData,
-}: {
-  agreementId: string
-  searchData: SearchData
-}): Promise<FilterData> => {
-  const { filters: activeFilters } = searchData
-
-  const { leverandor, delkontrakt } = activeFilters
-  const allActiveFilters = [filterLeverandor(leverandor), filterDelkontrakt(delkontrakt)]
-
-  const query = {
-    bool: {
-      must: {
-        term: {
-          'agreements.id': {
-            value: agreementId,
-          },
-        },
-      },
-      filter: allActiveFilters,
-    },
-  }
-
-  const filters = {
-    leverandor: {
-      filter: {
-        bool: {
-          filter: [],
-        },
-      },
-      aggs: {
-        values: {
-          terms: { field: 'supplier.name', order: { _key: 'asc' }, size: 300 },
-        },
-      },
-    },
-  }
-
-  return fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      size: 0,
-      query,
-      aggs: { ...filters },
-    }),
-  })
-    .then((res) => res.json())
-    .then((data: any) => {
-      const filters = {
-        aggregations: {
-          leverandor: data.aggregations.leverandor,
-        },
-      }
-      return mapFilters(filters)
-    })
-}
-
 const mapFilters = (data: any): FilterData => {
   const rawFilterData: RawFilterData = data.aggregations
 
@@ -827,14 +664,6 @@ const mapFilters = (data: any): FilterData => {
 
       return obj
     }, {} as FilterData)
-}
-
-export async function getSupplier(id: string) {
-  const res = await fetch(HM_SEARCH_URL + `/suppliers/_doc/${id}`, {
-    method: 'GET',
-  })
-
-  return res.json()
 }
 
 export async function getAgreement(id: string): Promise<AgreementDocResponse> {
@@ -866,29 +695,6 @@ export async function getAgreementLabels(): Promise<AgreementLabel[]> {
   })
 
   return res.json().then(mapAgreementLabels)
-}
-
-export async function getSuppliers(letter: string): Promise<Supplier[]> {
-  letter = formatNorwegianLetter(letter)
-
-  const res = await fetch(HM_SEARCH_URL + `/suppliers/_search`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        match_phrase_prefix: {
-          name_startswith: letter,
-        },
-      },
-      _source: {
-        includes: ['id', 'identifier', 'name', 'address', 'homepage'],
-      },
-    }),
-  })
-
-  return res.json().then(mapSuppliers)
 }
 
 export async function getAllSuppliers(): Promise<Supplier[]> {
@@ -995,108 +801,6 @@ export async function getProductByHmsartnrWithVariants(hmsArtNr: string): Promis
   return res.json()
 }
 
-export async function getAlternativeProductsInventory(hmsArtNr: string): Promise<AlternativeStockResponse> {
-  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/${hmsArtNr}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  return res.json()
-}
-
-export async function getProductFromHmsArtNr(hmsArtNrs: string[]): Promise<Product[]> {
-  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        bool: {
-          must: {
-            terms: {
-              hmsArtNr: hmsArtNrs,
-            },
-          },
-        },
-      },
-      size: 150,
-    }),
-  })
-
-  return res.json().then(mapProductsFromCollapse)
-}
-
-export async function getProductWithVariantsSuggestions(
-  seriesId: string,
-  setebredde: string,
-  setedybde: string
-): Promise<HMSSuggestionWheelChair[]> {
-  const setebreddeMinCM = setebredde
-  const setebreddeMaksCM = setebredde
-  const setedybdeMinCM = setedybde
-  const setedybdeMaksCM = setedybde
-
-  const breddeFilter = filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }, true)
-  const dybdeFilter = filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }, true)
-
-  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        bool: {
-          must: {
-            term: {
-              seriesId: seriesId,
-            },
-          },
-        },
-      },
-      post_filter: {
-        bool: {
-          filter: [
-            filterMinMax({ setebreddeMinCM }, { setebreddeMaksCM }, true),
-            filterMinMax({ setedybdeMinCM }, { setedybdeMaksCM }, true),
-            //Remove null values
-          ].filter(Boolean),
-        },
-      },
-      size: 150,
-    }),
-  })
-  return res.json().then((data) => {
-    const suggestions = mapHMSSuggestionFromSearchResponse(data)
-
-    // Calculate the differences between user input and range values for each product
-    suggestions.forEach((suggestion) => {
-      let totalDiff = 0
-
-      // Calculate the difference for each wheelchair filter and add it to the total difference
-      wheelchairFilters.forEach((filter) => {
-        const value = suggestion[filter]
-        if (value) {
-          const filterValue = Number(value)
-          if (!isNaN(filterValue)) {
-            const userInputValue = filter.includes('Setebredde') ? Number(setebredde) : Number(setedybde)
-            totalDiff += Math.abs(filterValue - userInputValue)
-          }
-        }
-      })
-
-      suggestion.totalDiff = totalDiff
-    })
-
-    // Sort the list based on the total difference (ascending order)
-    suggestions.sort((a, b) => a.totalDiff! - b.totalDiff!)
-
-    return suggestions
-  })
-}
-
 export type FetchSeriesResponse = {
   products: Product[]
 }
@@ -1175,47 +879,6 @@ export const fetchProductsWithVariant = (variantIds: string[]): Promise<FetchSer
         products: mapProductsWithoutAggregationOnSeries(data),
       }
     })
-}
-
-export async function getProductsInPost(agreementId: string, postNr: number): Promise<SearchResponse> {
-  const query = {
-    bool: {
-      must: [
-        {
-          term: {
-            'agreements.id': {
-              value: agreementId,
-            },
-          },
-        },
-        {
-          term: {
-            'agreements.postNr': {
-              value: postNr,
-            },
-          },
-        },
-        {
-          term: { main: true },
-        },
-      ],
-    },
-  }
-
-  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query,
-      size: 200,
-      collapse: {
-        field: 'seriesId',
-      },
-    }),
-  })
-  return res.json()
 }
 
 export type Suggestions = Array<{ text: string; data: ProductVariant }>

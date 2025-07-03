@@ -1,6 +1,5 @@
 import { useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import { ar } from 'date-fns/locale'
 
 export default function useQueryString() {
   const searchParams = useSearchParams()
@@ -60,6 +59,7 @@ export default function useQueryString() {
     searchTerm = 'searchTerm',
     supplier = 'supplier',
   }
+
   return {
     createQueryString,
     createQueryStringAppend,
