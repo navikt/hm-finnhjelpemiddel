@@ -1,0 +1,5 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.copyButton {
+  border: 1px dashed $a-surface-action;
+}
