@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyShort, Heading, Link, VStack } from '@navikt/ds-react'
+import { Bleed, BodyLong, Button, Heading, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { PartsSearchBar } from '@/app/deler/PartsSearchBar'
 import { PartsTabs, ProductTabs } from '@/app/deler/PartsTabs'
@@ -9,6 +9,7 @@ import useSWRImmutable from 'swr/immutable'
 import { useSearchParams } from 'next/navigation'
 import useQueryString from '@/utils/search-params-util'
 import { useEffect, useState } from 'react'
+import { ChevronLeftIcon } from '@navikt/aksel-icons'
 
 type PartsPageProps = {
   id: string
@@ -69,23 +70,36 @@ export const PartsPage = ({ id, backLink, isAgreement, title }: PartsPageProps) 
     { keepPreviousData: true }
   )
 
+  const totalParts = accessoriesData && sparePartsData && accessoriesData.totalHits + sparePartsData.totalHits
+
   return (
-    <div className="main-wrapper--large spacing-vertical--small">
-      <VStack gap="4">
-        <Link as={NextLink} href={backLink} variant="subtle">
-          {`Tilbake`}
-        </Link>
-        <Heading level="1" size="medium">
-          Tilbehør og reservedeler
-        </Heading>
-        <BodyShort>Her finner du deler til {title}</BodyShort>
+    <VStack gap="4" className="main-wrapper--large">
+      <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
+        <VStack gap={'9'} paddingBlock={'6'} align={'start'}>
+          <Button
+            as={NextLink}
+            href={backLink}
+            variant={'tertiary'}
+            icon={<ChevronLeftIcon aria-hidden />}
+            style={{ padding: 0 }}
+          >
+            {`Tilbake`}
+          </Button>
+          <VStack gap={'4'}>
+            <Heading level="1" size="medium">
+              Tilbehør og reservedeler
+            </Heading>
+            <BodyLong weight={'semibold'}>
+              Her finner du {totalParts} deler til {title}
+            </BodyLong>
+          </VStack>
+        </VStack>
+      </Bleed>
+      <PartsSearchBar id={id} showSupplierSelect={showSupplierSelect} />
 
-        <PartsSearchBar id={id} showSupplierSelect={showSupplierSelect} />
-
-        {accessoriesData && sparePartsData && (
-          <PartsTabs sparePartsData={sparePartsData} accessoriesData={accessoriesData} />
-        )}
-      </VStack>
-    </div>
+      {accessoriesData && sparePartsData && (
+        <PartsTabs sparePartsData={sparePartsData} accessoriesData={accessoriesData} />
+      )}
+    </VStack>
   )
 }
