@@ -117,16 +117,18 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
               <span className={styles.divider} />
             </Hide>
 
-            <Button
-              variant="secondary"
-              onClick={() => {
-                window.print()
-              }}
-              icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
-              iconPosition={'right'}
-            >
-              Skriv ut
-            </Button>
+            <Hide below={'md'} asChild>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  window.print()
+                }}
+                icon={<FilePdfIcon aria-hidden fontSize="1.5rem" />}
+                iconPosition={'right'}
+              >
+                Skriv ut
+              </Button>
+            </Hide>
           </Stack>
 
           <Hide below={'sm'} asChild>
