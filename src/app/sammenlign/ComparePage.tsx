@@ -8,18 +8,10 @@ import useSWR from 'swr'
 import { fetchProductsWithVariants, FetchSeriesResponse } from '@/utils/api-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import {
-  findUniqueStringValues,
-  formatAgreementPosts,
-  formatAgreementRanks,
-  toValueAndUnit,
-  tryParseNumber,
-} from '@/utils/string-util'
 
-import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/components/aksel-client'
-import ProductCard from '@/components/ProductCard'
-import { ArrowLeftIcon } from '@navikt/aksel-icons'
+import { BodyLong, ChevronRightIcon, Heading, Loader } from '@/components/aksel-client'
 import { useEffect, useState } from 'react'
+import { CompareTable } from '@/app/sammenlign/CompareTable'
 
 export default function ComparePage() {
   const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
@@ -102,135 +94,7 @@ export default function ComparePage() {
   )
 }
 
-const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
-  const router = useRouter()
-
-  const allDataKeysVariants = [
-    ...new Set(
-      productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
-    ),
-  ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-
-  const findValueRangeForProductRowKey = (values: string[]) => {
-    if (values.length === 0) return
-
-    if (values.some((value) => isNaN(tryParseNumber(value)))) {
-      return findUniqueStringValues(values)
-    }
-
-    const numberList = values.map(tryParseNumber)
-    const min = Math.min(...numberList)
-    const max = Math.max(...numberList)
-    if (min === max) return String(min)
-    return `${min} - ${max}`
-  }
-
-  const productRowKeyValue = productsToCompare.reduce(
-    (rowKeyValue, product) => {
-      rowKeyValue[product.id] = allDataKeysVariants.reduce(
-        (keysVariants, key) => {
-          const values = product.variants
-            .filter((variant) => key in variant.techData)
-            .map((variant) => variant.techData[key].value)
-
-          let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
-
-          let value = findValueRangeForProductRowKey(values)
-          if (key.includes('intervall') && value === '0') {
-            value = '-'
-            unit = ''
-          }
-
-          keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
-          return keysVariants
-        },
-        {} as Record<string, string>
-      )
-      return rowKeyValue
-    },
-    {} as Record<string, Record<string, string>>
-  )
-
-  return (
-    <section>
-      <Link as={NextLink} href="" onClick={() => router.back()}>
-        <ArrowLeftIcon fontSize="1.5rem" aria-hidden />
-        Legg til flere produkter
-      </Link>
-      <div className="compare-table-container">
-        <Table zebraStripes>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader className="common_headercell"></Table.ColumnHeader>
-              {productsToCompare.map((product) => (
-                <Table.ColumnHeader className="header" key={'id-' + product.id}>
-                  <ProductCard product={product} type="removable" />
-                </Table.ColumnHeader>
-              ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">Rangering</Table.HeaderCell>
-              {productsToCompare.map((product) => {
-                return (
-                  <Table.DataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</Table.DataCell>
-                )
-              })}
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">Delkontrakt</Table.HeaderCell>
-              {productsToCompare.map((product) => {
-                return (
-                  <Table.DataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
-                )
-              })}
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">Antall varianter</Table.HeaderCell>
-              {productsToCompare.map((product) => (
-                <Table.DataCell key={product.id}>{product.variantCount}</Table.DataCell>
-              ))}
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">HMS-nummer</Table.HeaderCell>
-              {productsToCompare.map((product) => (
-                <Table.DataCell key={product.id}>
-                  {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
-                </Table.DataCell>
-              ))}
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">Leverandør</Table.HeaderCell>
-              {productsToCompare.map((product) => (
-                <Table.DataCell key={product.id}>{product.supplierName}</Table.DataCell>
-              ))}
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell className="side_header">
-                <Heading level="2" size="medium">
-                  Tekniske egenskaper
-                </Heading>
-              </Table.HeaderCell>
-              {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length + 1}></Table.DataCell>}
-            </Table.Row>
-
-            {allDataKeysVariants.map((key, i) => (
-              <Table.Row key={i}>
-                <Table.HeaderCell className="side_header">{key}</Table.HeaderCell>
-                {productsToCompare.map((product) => (
-                  <Table.DataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</Table.DataCell>
-                ))}
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </div>
-    </section>
-  )
-}
-
-function sortProductsOnAgreementPostAndRank(products: Product[]): Product[] {
+export function sortProductsOnAgreementPostAndRank(products: Product[]): Product[] {
   return products.sort((a, b) => {
     if (a.agreements.length === 0 && b.agreements.length === 0) {
       return 0
