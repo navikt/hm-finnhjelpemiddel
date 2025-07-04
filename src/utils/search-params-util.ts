@@ -13,9 +13,7 @@ export default function useQueryString() {
   )
 
   const queryString = (params: URLSearchParams, name: string, value: string) => {
-    if (value === '') {
-      params.delete(name)
-    } else if (!params.getAll(name).includes(value)) {
+    if (!params.getAll(name).includes(value) && value !== '') {
       params.set(name, value)
     }
 
@@ -37,14 +35,8 @@ export default function useQueryString() {
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
 
-      if (value === '') {
-        params.delete(name)
-      } else if (params.getAll(name).includes(value)) {
-        params.delete(name, value)
-      } else if (params.has(name)) {
+      if (!params.getAll(name).includes(value) && value !== '') {
         params.append(name, value)
-      } else {
-        params.set(name, value)
       }
 
       return params.toString()

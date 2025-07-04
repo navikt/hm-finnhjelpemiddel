@@ -2,7 +2,6 @@
 
 import { FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
 import useSWR from 'swr'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
@@ -19,6 +18,7 @@ import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/Pos
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 import useSWRImmutable from 'swr/immutable'
+import useQueryString from '@/utils/search-params-util'
 
 export type FilterOption = {
   label: string
@@ -33,6 +33,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { createQueryStringAppend } = useQueryString()
 
   const searchData = mapSearchParams(searchParams)
 
@@ -41,25 +42,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     'b9a48c54-3004-4f94-ab65-b38deec78ed3',
     '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
   ]
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-
-      if (value === '') {
-        params.delete(name)
-      } else if (params.getAll(name).includes(value)) {
-        params.delete(name, value)
-      } else if (params.has(name)) {
-        params.append(name, value)
-      } else {
-        params.set(name, value)
-      }
-
-      return params.toString()
-    },
-    [searchParams]
-  )
 
   const {
     data: postBuckets,
@@ -111,7 +93,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       : 0
 
   const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryString(filterName, value)
+    const newSearchParams = createQueryStringAppend(filterName, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
