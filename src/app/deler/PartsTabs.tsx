@@ -39,7 +39,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
   const handleSetPage = (newPage: number) => {
     setPage(newPage)
     const pageParam = createQueryStringMultiple({ name: searchParamKeys.page, value: newPage.toString() })
-    router.replace(`${pathname}?${pageParam}`, { scroll: false })
+    router.push(`${pathname}?${pageParam}`, { scroll: false })
   }
 
   const handleTabChange = (tab: ProductTabs) => {
@@ -52,7 +52,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
         value: '1',
       }
     )
-    router.replace(`${pathname}?${newParams}`, { scroll: false })
+    router.push(`${pathname}?${newParams}`, { scroll: false })
   }
 
   const pageCount = (allItems: number) => {

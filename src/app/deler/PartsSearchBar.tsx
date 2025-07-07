@@ -33,12 +33,12 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
       { name: searchParamKeys.page, value: '1' }
     )
 
-    router.replace(`${pathname}?${newParams}`, { scroll: false })
+    router.push(`${pathname}?${newParams}`, { scroll: false })
   }
 
   const onClear = () => {
     setInputValue('')
-    router.replace(`${pathname}`, { scroll: false })
+    router.push(`${pathname}`, { scroll: false })
   }
 
   return (
