@@ -33,9 +33,7 @@ export const SupplierAccordion = ({ supplier }: Props) => {
         </Heading>
       </Accordion.Header>
       <Accordion.Content>
-        <div className="product-page__accordion">
-          <SupplierInfo supplier={supplier} />
-        </div>
+        <SupplierInfo supplier={supplier} />
       </Accordion.Content>
     </Accordion.Item>
   )
@@ -57,7 +55,7 @@ const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
     {supplier.email && (
       <VStack>
         <Label>E-post</Label>
-       <BodyShort> {supplier.email}</BodyShort>
+        <BodyShort> {supplier.email}</BodyShort>
       </VStack>
     )}
     {supplier.phone && (

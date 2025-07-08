@@ -1,0 +1,8 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.listContainer {
+  padding-top: $a-spacing-8;
+
+  margin-block-start: 0;
+  padding-inline-start: 0;
+}
