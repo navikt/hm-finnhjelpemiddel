@@ -26,7 +26,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   return (
     <VStack gap={'8'}>
       <TagRow productAgreements={product.agreements} isExpired={isExpired} />
-      <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
+      <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
       </Link>
       <Heading level="1" size="large">

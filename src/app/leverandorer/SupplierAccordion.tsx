@@ -19,7 +19,7 @@ export const SupplierAccordion = ({ supplier }: Props) => {
   useEffect(() => {
     if (supplier.id === supplierId_url && supplierRef.current) {
       supplierRef.current.style.scrollMargin = '60px'
-      supplierRef.current.scrollIntoView({ behavior: 'smooth' })
+      supplierRef.current.scrollIntoView({ behavior: 'instant' })
 
       setIsOpen(true)
     }
