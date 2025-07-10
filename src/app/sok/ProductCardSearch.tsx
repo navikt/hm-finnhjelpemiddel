@@ -32,7 +32,7 @@ export const ProductCardSearch = ({
     <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
       <VStack justify={'space-between'} height={'100%'} gap={'2'}>
         <VStack>
-          <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'start'} justify={'space-between'}>
+          <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
               <Tag variant={'success-moderate'} className={styles.agreementTag}>
                 {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
