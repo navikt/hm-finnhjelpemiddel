@@ -11,8 +11,8 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^2.18.0",
     "@axe-core/react": "^4.10.0",
-    "@grafana/faro-web-sdk": "^1.18.0",
-    "@grafana/faro-web-tracing": "^1.18.0",
+    "@grafana/faro-web-sdk": "^1.19.0",
+    "@grafana/faro-web-tracing": "^1.19.0",
     "@navikt/aksel-icons": "^7.25.1",
     "@navikt/ds-css": "^7.25.1",
     "@navikt/ds-react": "^7.25.1",
