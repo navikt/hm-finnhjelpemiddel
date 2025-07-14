@@ -20,7 +20,7 @@ export const SupplierSelect = ({ supplierNames, selectChange, selectedValue }: S
       { name: searchParamKeys.supplier, value: supplier },
       { name: searchParamKeys.page, value: '1' }
     )
-    router.replace(`${pathname}?${newParams}`, { scroll: false })
+    router.push(`${pathname}?${newParams}`, { scroll: false })
   }
 
   return (

@@ -3,6 +3,7 @@
 import { SupplierAccordion } from '@/app/leverandorer/SupplierAccordion'
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, Heading, VStack } from '@navikt/ds-react'
+import styles from './SupplierList.module.scss'
 
 type Props = {
   suppliers: Supplier[]
@@ -11,10 +12,10 @@ type Props = {
 const SupplierList = ({ suppliers, letter }: Props) => {
   return (
     <div>
-      <Heading id={letter} size={'xlarge'} className="spacing-bottom--small">
+      <Heading id={letter} size={'xlarge'}>
         {letter}
       </Heading>
-      <VStack as="ol" gap="4" id="supplier-list" className="suppliers-page__list-container">
+      <VStack as="ol" gap="4" className={styles.listContainer}>
         {suppliers && suppliers.length > 0 && (
           <Accordion>
             {suppliers.map((supplier) => (

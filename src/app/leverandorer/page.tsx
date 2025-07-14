@@ -3,12 +3,10 @@
 import SupplierList from '@/app/leverandorer/SupplierList'
 import { getAllSuppliers } from '@/utils/api-util'
 import { alphabet, Supplier } from '@/utils/supplier-util'
-import { ArrowUpIcon } from '@navikt/aksel-icons'
-import { Button, Heading, HStack, Link, Loader } from '@navikt/ds-react'
+import { BodyShort, Box, Heading, HStack, Link, Loader, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useRef } from 'react'
-import { useInView } from 'react-intersection-observer'
 import useSWR from 'swr'
+import styles from './SupplierPage.module.scss'
 
 const disabledLetters = ['Z', 'Æ', 'Å']
 
@@ -18,33 +16,36 @@ export default function SearchPage() {
     revalidateOnFocus: false,
   })
 
-  const { ref: pageTopRef, inView: isAtPageTop } = useInView({ threshold: 0.9 })
-  const headingRef = useRef<HTMLHeadingElement>(null)
-  const setFocusOnHeading = () => {
-    headingRef.current && headingRef.current.scrollIntoView()
-  }
-
   return (
-    <div className="suppliers-page">
-      <div className="suppliers-page__content  main-wrapper--medium">
-        <article>
-          <div className="flex flex--space-between" ref={headingRef}>
-            <Heading level="1" size="large" className="spacing-bottom--small" ref={pageTopRef}>
+    <div className={styles.suppliersPage}>
+      <Box
+        marginInline={'auto'}
+        marginBlock={'0'}
+        maxWidth={'1000px'}
+        paddingBlock={'0 12'}
+        paddingInline={{ xs: '4', md: '12' }}
+      >
+        <VStack
+          className={styles.pageContent}
+          gap={'4'}
+          paddingBlock={{ xs: '6', md: '12' }}
+          paddingInline={{ xs: '4', md: '12' }}
+        >
+          <div>
+            <Heading level="1" size="large" spacing>
               Leverandører
             </Heading>
           </div>
-          <div className="spacing-bottom--small">
-            {`Nedenfor finner du en liste av leverandører med produkter på finnhjelpemiddel.no`}
-          </div>
+          <BodyShort spacing>
+            Nedenfor finner du en liste av leverandører med produkter på finnhjelpemiddel.no
+          </BodyShort>
 
           {!isLoading && activeSuppliers && (
             <>
-              <HStack gap="2" className="spacing-bottom--large">
+              <HStack gap="2" paddingBlock={{ xs: '0 8', md: '0 12' }}>
                 {alphabet.map((letter) => (
                   <span
-                    className={
-                      disabledLetters.includes(letter) ? 'suppliers-page__letter-disabled' : 'suppliers-page__letter'
-                    }
+                    className={disabledLetters.includes(letter) ? styles.letterDisabled : styles.letter}
                     aria-hidden={disabledLetters.includes(letter) ? 'true' : 'false'}
                     key={letter}
                   >
@@ -70,16 +71,8 @@ export default function SearchPage() {
               <Loader size="xlarge" title="Laster leverandører" />
             </HStack>
           )}
-        </article>
-      </div>
-      {!isAtPageTop && (
-        <Button
-          type="button"
-          className="search__page-up-button"
-          icon={<ArrowUpIcon title="Gå til toppen av siden" />}
-          onClick={() => setFocusOnHeading()}
-        />
-      )}
+        </VStack>
+      </Box>
     </div>
   )
 }

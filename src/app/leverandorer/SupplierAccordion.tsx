@@ -19,7 +19,7 @@ export const SupplierAccordion = ({ supplier }: Props) => {
   useEffect(() => {
     if (supplier.id === supplierId_url && supplierRef.current) {
       supplierRef.current.style.scrollMargin = '60px'
-      supplierRef.current.scrollIntoView({ behavior: 'smooth' })
+      supplierRef.current.scrollIntoView({ behavior: 'instant' })
 
       setIsOpen(true)
     }
@@ -33,9 +33,7 @@ export const SupplierAccordion = ({ supplier }: Props) => {
         </Heading>
       </Accordion.Header>
       <Accordion.Content>
-        <div className="product-page__accordion">
-          <SupplierInfo supplier={supplier} />
-        </div>
+        <SupplierInfo supplier={supplier} />
       </Accordion.Content>
     </Accordion.Item>
   )
@@ -57,7 +55,7 @@ const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
     {supplier.email && (
       <VStack>
         <Label>E-post</Label>
-       <BodyShort> {supplier.email}</BodyShort>
+        <BodyShort> {supplier.email}</BodyShort>
       </VStack>
     )}
     {supplier.phone && (
