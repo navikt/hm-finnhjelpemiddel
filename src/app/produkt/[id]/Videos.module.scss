@@ -4,20 +4,11 @@
   padding: 0;
   margin: 0;
   list-style: none;
-
-  iframe {
-    border-radius: 1rem;
-  }
 }
 
-// responsive player https://github.com/cookpete/react-player?tab=readme-ov-file#responsive-player
-.playerWrapper {
-  position: relative;
-  padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
-}
+.player {
+  aspect-ratio: 16/9;
 
-.reactPlayer {
-  position: absolute;
-  top: 0;
-  left: 0;
+  border-radius: 1rem;
+  overflow: hidden;
 }
