@@ -25,7 +25,9 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
             </Heading>
-            <HelpText title={'Om delkontrakten'}>{post.description}</HelpText>
+            <HelpText title={'Om delkontrakten'}>
+              <div dangerouslySetInnerHTML={{ __html: post.description }} />
+            </HelpText>
           </HStack>
           {post.products.length === 0 && postLoading && (
             <HStack justify="center" style={{ marginTop: '18px' }}>
