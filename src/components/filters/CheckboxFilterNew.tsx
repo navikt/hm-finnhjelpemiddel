@@ -1,5 +1,5 @@
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { ActionMenu, Alert, Button } from '@navikt/ds-react'
+import { ActionMenu, Button } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './CheckboxFilterNew.module.scss'
@@ -25,10 +25,6 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
   const selectedFilters = allFilters.filter((f) => searchData.filters[filterKey].includes(f.value))
 
   const [menuOpen, setMenuOpen] = useState(false)
-
-  if (!searchData.filters[filterKey].includes(filterKey) && !allFilters.length) {
-    return <Alert variant={'warning'}>Hei</Alert>
-  }
 
   const change = (value: string) => {
     onChange(filterKey, value)

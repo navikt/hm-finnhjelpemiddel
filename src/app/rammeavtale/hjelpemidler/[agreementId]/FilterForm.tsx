@@ -12,8 +12,12 @@ const FilterForm = ({ filters, onChange }: Props) => {
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
       <HStack gap="4">
-        <CheckboxFilterNew filterKey={'delkontrakt'} allFilters={filters.delkontrakt} onChange={onChange} />
-        <CheckboxFilterNew filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
+        {filters.delkontrakt.length > 0 && (
+          <CheckboxFilterNew filterKey={'delkontrakt'} allFilters={filters.delkontrakt} onChange={onChange} />
+        )}
+        {filters.leverandor.length > 0 && (
+          <CheckboxFilterNew filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
+        )}
       </HStack>
     </VStack>
   )
