@@ -26,6 +26,7 @@ import {
   mapProductsFromCollapse,
   mapProductsVariants,
   mapProductsWithoutAggregationOnSeries,
+  mapProductsWithoutAggregationOnSeriesNew,
   mapProductVariant,
   Product,
   ProductVariant,
@@ -877,6 +878,32 @@ export const fetchProductsWithVariant = (variantIds: string[]): Promise<FetchSer
     .then((data) => {
       return {
         products: mapProductsWithoutAggregationOnSeries(data),
+      }
+    })
+}
+
+export const fetchProductsWithVariantNew = (variantIds: string[]): Promise<FetchSeriesResponse> => {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            terms: {
+              id: variantIds,
+            },
+          },
+        },
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: mapProductsWithoutAggregationOnSeriesNew(data),
       }
     })
 }

@@ -231,6 +231,63 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
     }
   })
 }
+
+export type ComparableProduct = {
+  rangering: string[] | string
+  delkontrakt: string[] | string
+  hmsnummer: string
+  leverandor: string
+  tekniskeegenskaper: TechData[]
+}
+
+export const mapProductsWithoutAggregationOnSeriesNew = (data: SearchResponse): Product[] => {
+  const sources = data.hits.hits.map((h) => h._source as ProductSourceResponse)
+  return mapProductWithNoAggregationNew(sources)
+}
+
+export const mapProductWithNoAggregationNew = (sources: ProductSourceResponse[]): Product[] => {
+  if (sources.length === 0) {
+    throw new Error('ProductSourceResponse array is empty. Cannot map product with variants')
+  }
+
+  return sources.map((product): Product => {
+    return {
+      id: product.seriesId,
+      title: product.title,
+      attributes: {
+        manufacturer: product.attributes.manufacturer,
+        articlename: product.attributes.articlename,
+        series: product.attributes.series,
+        shortdescription: product.attributes.shortdescription,
+        text: product.attributes.text,
+        compatibleWith: product.attributes.compatibleWith
+          ? mapCompatibleWith(product.attributes.compatibleWith)
+          : undefined,
+        url: product.attributes.url,
+      },
+      variantCount: 1,
+      variants: [mapProductVariant(product)],
+      compareData: {
+        techDataRange: {},
+        agreementRank: null,
+      },
+      isoCategory: product.isoCategory,
+      isoCategoryTitle: product.isoCategoryTitle,
+      isoCategoryTitleInternational: product.isoCategoryTitleInternational,
+      isoCategoryText: product.isoCategoryText,
+      accessory: product.accessory,
+      sparePart: product.sparePart,
+      photos: mapPhotoInfo(product.media),
+      videos: mapVideoInfo(product.media),
+      documents: mapDocuments(product.media),
+      supplierId: product.supplier?.id ?? '',
+      supplierName: product.supplier?.name ?? '',
+      agreements: product.agreements,
+      main: product.main,
+    }
+  })
+}
+
 export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsArtNr: String): Product => {
   const variant = sources
     .filter((source) => source.hmsArtNr === hmsArtNr)
