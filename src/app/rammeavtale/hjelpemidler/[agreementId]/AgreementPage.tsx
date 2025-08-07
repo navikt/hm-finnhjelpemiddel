@@ -73,7 +73,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   }
 
   const leverandorFilter: FilterOption[] =
-    filtersFromData?.leverandor.values.map((value) => ({
+    filtersFromData?.leverandor?.values?.map((value) => ({
       label: value.key.toString(),
       value: value.key.toString(),
     })) || []
@@ -111,7 +111,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
           </Heading>
 
           <Stack direction={{ sm: 'column', md: 'row' }} justify="space-between" align="end" gap="4">
-            <FilterForm filters={filters} onChange={onChange} />
+            {filters.delkontrakt.length > 0 && filters.leverandor.length > 0 && (
+              <FilterForm filters={filters} onChange={onChange} />
+            )}
 
             <Hide above={'sm'} asChild>
               <span className={styles.divider} />
