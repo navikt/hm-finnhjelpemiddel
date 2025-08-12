@@ -24,7 +24,7 @@ jobs:
       version_tag: ${{ steps.version-tag.outputs.VERSION_TAG}}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: pre-deploy
         uses: navikt/digihot-deploy/actions/pre-deploy@v3
         env:
@@ -57,7 +57,7 @@ jobs:
       VERSION_TAG: ${{ needs.build-prod.outputs.version_tag }}
     steps:
       - name: Sjekk ut koden
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Deploy
         uses: nais/deploy/actions/deploy@v2
         env:
