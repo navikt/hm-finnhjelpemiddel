@@ -16,11 +16,17 @@ export const SupplierSelect = ({ supplierNames, selectChange, selectedValue }: S
   const onSupplierChange = (supplier: string) => {
     selectChange(supplier)
 
-    const newParams = createQueryStringMultiple(
+
+    const newParamsWithSupplier = createQueryStringMultiple(
       { name: searchParamKeys.supplier, value: supplier },
       { name: searchParamKeys.page, value: '1' }
     )
-    router.push(`${pathname}?${newParams}`, { scroll: false })
+    if(supplier.length > 0) {
+      router.push(`${pathname}?${newParamsWithSupplier}`, { scroll: false })
+    } else {
+      router.push(`${pathname}?$page=1`, { scroll: false })
+    }
+
   }
 
   return (
