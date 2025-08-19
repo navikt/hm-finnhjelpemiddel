@@ -3,9 +3,10 @@ import { Product } from '@/utils/product-util'
 import { BodyLong, Heading } from '@/components/aksel-client'
 
 import ProductCard from '@/components/ProductCard'
-import { VStack } from '@navikt/ds-react'
+import { HStack, VStack } from '@navikt/ds-react'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
+import { ProductCardAgreement } from '../rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
 
 type Props = {
   product: Product
@@ -22,10 +23,18 @@ const AccessoryOrSparePartPage = ({ product, matchingProducts }: Props) => {
         </Heading>
         {matchingProducts && matchingProducts.length > 0 ? (
           <VStack gap={'4'}>
-            {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
-            {matchingProducts.map((product, i) => (
-              <ProductCard product={product} key={`${i}-${product.id}`} type="plain" />
-            ))}
+            <HStack gap="1" justify="start">
+              {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
+              {matchingProducts.map((product, i) => (
+                /*<ProductCard product={product} key={`${i}-${product.id}`} type="plain" />*/
+                <ProductCardAgreement
+                  product={product}
+                  key={`${i}-${product.id}`}
+                  variantCount={product.variantCount}
+                  rank={product.agreements?.[0]?.rank}
+                />
+              ))}
+            </HStack>
           </VStack>
         ) : (
           <BodyLong>
