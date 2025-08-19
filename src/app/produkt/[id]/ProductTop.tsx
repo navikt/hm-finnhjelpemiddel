@@ -25,6 +25,20 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
   return (
     <VStack gap={'8'}>
+      {product.accessory ? (
+        <HStack gap="3">
+          <Tag size={'small'} variant={'neutral-moderate'}>Tilbehør</Tag>
+        </HStack>
+      ): (
+        ''
+      )}
+      {product.sparePart ? (
+        <HStack gap="3">
+          <Tag size={'small'} variant={'neutral-moderate'}>Reservedel</Tag>
+        </HStack>
+      ): (
+        ''
+      )}
       <TagRow productAgreements={product.agreements} isExpired={isExpired} />
       <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
@@ -67,7 +81,7 @@ const TagRow = ({
     productAgreements &&
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
-
+  const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
   return (
     <HStack justify={'start'} gap={'3'}>
       {topRank ? (
@@ -75,7 +89,12 @@ const TagRow = ({
           <Tag variant={'success-moderate'} className={styles.agreementTag}>
             {topRank === 99 ? 'På avtale' : `Rangering ${topRank}`}
           </Tag>
-          {productAgreements.length > 1 ? (
+          {productAgreements.length === 2 ? (
+            <Tag variant={'success-moderate'} className={styles.agreementTag}>
+              Rangering {rankList?.[1]}
+            </Tag>
+          ) : ''}
+          {productAgreements.length > 2 ? (
             <Tag variant={'success-moderate'} className={styles.agreementTag}>
               Flere delkontrakter
             </Tag>
