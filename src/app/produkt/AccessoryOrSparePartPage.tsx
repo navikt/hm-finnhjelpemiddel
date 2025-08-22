@@ -19,11 +19,11 @@ const AccessoryOrSparePartPage = ({ product, matchingProducts }: Props) => {
       <ProductTop product={product} />
       <VStack>
         <Heading level="2" size="medium" spacing>
-          Produkter {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
+          Hjelpemidler {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
         </Heading>
         {matchingProducts && matchingProducts.length > 0 ? (
           <VStack gap={'4'}>
-            <HStack gap="1" justify="start">
+            <HStack gap="2" justify="start">
               {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
               {matchingProducts.map((product, i) => (
                 /*<ProductCard product={product} key={`${i}-${product.id}`} type="plain" />*/

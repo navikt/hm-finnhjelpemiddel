@@ -25,16 +25,9 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
   return (
     <VStack gap={'8'}>
-      {product.accessory ? (
+      {product.accessory || product.sparePart  ? (
         <HStack gap="3">
-          <Tag size={'small'} variant={'neutral-moderate'}>Tilbehør</Tag>
-        </HStack>
-      ): (
-        ''
-      )}
-      {product.sparePart ? (
-        <HStack gap="3">
-          <Tag size={'small'} variant={'neutral-moderate'}>Reservedel</Tag>
+          <Tag size={'small'} variant={'neutral-moderate'}>{product.accessory ? 'Tilbehør' : 'Reservedel'}</Tag>
         </HStack>
       ): (
         ''
