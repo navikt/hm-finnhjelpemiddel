@@ -14,7 +14,7 @@ async function getData() {
     if (result.ok) {
       const payload = decodeJwt(token)
       return {
-        props: { sub: payload.sub as string },
+        props: { sub: payload.sub as string, groups: payload.groups as string },
       }
     } else {
       return {
@@ -38,5 +38,5 @@ export default async function Page() {
     redirectNext(redirect.destination)
   }
   console.log(props)
-  return props ? <BodyShort>Data = {props.sub}</BodyShort> : <BodyShort>Ikke no props</BodyShort>
+  return props ? <BodyShort>Data = {props.groups}</BodyShort> : <BodyShort>Ikke no props</BodyShort>
 }
