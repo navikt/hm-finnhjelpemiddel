@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import { validateToken } from '@navikt/oasis'
 import { decodeJwt } from 'jose'
 import { BodyShort } from '@navikt/ds-react'
+import { redirect as redirectNext } from 'next/navigation'
 
 async function getData() {
   const authHeader = (await headers()).get('authorization')
@@ -19,7 +20,6 @@ async function getData() {
       return {
         redirect: {
           destination: '/oauth2/login',
-          permanent: false,
         },
       }
     }
@@ -27,12 +27,16 @@ async function getData() {
     return {
       redirect: {
         destination: '/oauth2/login',
-        permanent: false,
       },
     }
   }
 }
 export default async function Page() {
-  const { props } = await getData()
+  const { props, redirect } = await getData()
+
+  if (redirect) {
+    redirectNext(redirect.destination)
+  }
+  console.log(props)
   return props ? <BodyShort>Data = {props.sub}</BodyShort> : <BodyShort>Ikke no props</BodyShort>
 }

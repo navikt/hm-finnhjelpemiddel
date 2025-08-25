@@ -32,6 +32,9 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
+      claims:
+        groups: 
+          - id: "01f54014-1533-4975-b19d-51fb628ff950"
     sidecar:
       enabled: true
 
