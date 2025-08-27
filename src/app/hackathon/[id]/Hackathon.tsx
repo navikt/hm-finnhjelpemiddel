@@ -1,6 +1,6 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
+import { containsHTML, Product, validateHTML } from '@/utils/product-util'
 import { Accordion, BodyLong, BodyShort, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import styles from './Hackathon.module.css'
 import ProductImage from '@/components/ProductImage'
@@ -8,30 +8,28 @@ import ProductImage from '@/components/ProductImage'
 export const Hackathon = ({ product }: { product: Product }) => {
   return (
     <VStack gap={'16'} className={styles.wrapper}>
-      <VStack>
-        <HStack align={'center'}>
+      <VStack gap={'4'}>
+        <HStack align={'center'} wrap={false}>
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
           <VStack gap={'4'}>
-            <Heading size={'small'}>Rullatorer, 4 hjul innendørsbruk, begrenset utebruk</Heading>
+            <Heading size={'small'}>{product.isoCategoryTitle}</Heading>
             <Heading size={'large'}>{product.title}</Heading>
-            <BodyShort>Artnr: 177946</BodyShort>
+            <BodyShort>Artnr: {product.variants[0].hmsArtNr}</BodyShort>
           </VStack>
         </HStack>
-        <VStack gap={'2'}>
+        <VStack gap={'2'} style={{ maxWidth: '600px' }}>
           <Heading size={'small'}>Om hjelpemiddelet</Heading>
-          <BodyLong style={{ maxWidth: '600px' }}>{product.attributes.text}</BodyLong>
+          <Description description={product.attributes.text} />
         </VStack>
       </VStack>
       {product.isoCategory.startsWith('0903') && (
-        <VStack gap={'2'}>
+        <VStack gap={'6'}>
           <Heading size={'large'} className={styles.title}>
             Bestille nytt hjelpemiddel
           </Heading>
-          <BodyLong>
-            Dette hjelpemiddelet kan byttes dersom det er ødelagt eller du har vokst fra det. Du kan bestille ny her:
-          </BodyLong>
+          <BodyLong>Dette hjelpemiddelet kan byttes dersom det er ødelagt eller du har vokst fra det.</BodyLong>
           <Button style={{ width: 'fit-content' }}>Bestill ny</Button>
         </VStack>
       )}
@@ -89,13 +87,13 @@ export const Hackathon = ({ product }: { product: Product }) => {
           Returnering
         </Heading>
         {product.isoCategory.startsWith('0903') && (
-          <>
+          <VStack gap={'4'}>
             <BodyLong>
-              Dette hjelpemiddelet kan du selv kaste hvis du ikke har behov for det lenger. Meld ifra om at du har
-              kastet det her:
+              Dette hjelpemiddelet kan du selv kaste hvis du ikke har behov for det lenger. Meld ifra til oss hvis du
+              kaster det her.
             </BodyLong>
             <Button style={{ width: 'fit-content' }}>Rapporter kasting</Button>
-          </>
+          </VStack>
         )}
         {!product.isoCategory.startsWith('0903') && (
           <>
@@ -129,5 +127,16 @@ export const Hackathon = ({ product }: { product: Product }) => {
         )}
       </VStack>
     </VStack>
+  )
+}
+
+const Description = ({ description }: { description: string | undefined }) => {
+  const htmlDescription = description && containsHTML(description) && validateHTML(description)
+  return !description ? (
+    <BodyLong>Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.</BodyLong>
+  ) : htmlDescription ? (
+    <div dangerouslySetInnerHTML={{ __html: description }} />
+  ) : (
+    <BodyLong>{description}</BodyLong>
   )
 }
