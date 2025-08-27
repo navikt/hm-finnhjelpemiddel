@@ -6,6 +6,7 @@ import {
   AlternativeProduct,
   getAlternativeProductsFromHmsArtNr,
   getOriginalProductFromHmsArtNr,
+  testAlt,
   WarehouseStock,
 } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
@@ -33,6 +34,8 @@ export const AlternativeProductList = ({
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
   } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
+
+  useSWRImmutable(`asdasd-${hmsNumber}`, () => testAlt())
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
 

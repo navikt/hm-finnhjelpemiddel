@@ -2,6 +2,7 @@ import { AlternativeProductSourceResponse, Hit, SearchResponse } from '@/utils/r
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
+const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
 
 export interface AlternativeProduct {
   seriesId: string
@@ -110,3 +111,38 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
 
   return res.json().then(mapToAlternativeProducts)
 }
+
+export async function testAlt(): Promise<void> {
+  //const res = await fetch('http://localhost:8081/hmsArtNrMapping/all/distinct', {
+  const res = await fetch(
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + '/alternative_products_edit/hmsArtNrMapping/all/distinct',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  console.log(res.json())
+
+  //return res.json().then(mapToAlternativeProducts)
+}
+
+/*
+export async function getOriginalProductFromHmsArtNr(sourceHmsArtNr: string, targetHmsArtNr: string): Promise<void> {
+  const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        match: {
+          hmsArtNr: hmsArtNr,
+        },
+      },
+    }),
+  })
+}
+ */
