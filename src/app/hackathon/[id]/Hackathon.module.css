@@ -1,0 +1,9 @@
+.imageWrapper {
+  position: relative;
+  height: 180px;
+  width: 180px;
+}
+
+.wrapper {
+  position: relative;
+}
