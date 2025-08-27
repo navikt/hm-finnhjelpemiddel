@@ -9,10 +9,7 @@ export const Problem = ({ product }: { product: Product }) => {
       <Heading size={'large'}>Har du prøvd disse fiksene?</Heading>
 
       <VStack gap={'4'}>
-        <BodyLong>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dignissim. Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit.
-        </BodyLong>
+        <BodyLong>Her finner du forslag til noen ting du kan prøve</BodyLong>
       </VStack>
 
       <Accordion>

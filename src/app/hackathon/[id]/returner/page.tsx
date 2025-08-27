@@ -16,7 +16,7 @@ export default async function ProduktPage(props: Props) {
   return (
     <HackathonLayout>
       <VStack gap={'8'} style={{ maxWidth: '600px' }}>
-        <Heading size={'large'}>Returner et hjelpemiddel</Heading>
+        <Heading size={'large'}>Returner {product.title}</Heading>
         <BodyLong>
           Dersom du ikke lenger har behov for dette hjelpemiddelet kan du enkelt returnere det selv ved å levere det på
           kommunalt hjelpemiddellager.
@@ -40,7 +40,7 @@ export default async function ProduktPage(props: Props) {
         </VStack>
 
         <Button variant={'secondary'} style={{ width: 'fit-content' }}>
-          Henteskjema
+          Send henteskjema
         </Button>
       </VStack>
     </HackathonLayout>
