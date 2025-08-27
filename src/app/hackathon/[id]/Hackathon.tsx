@@ -8,20 +8,22 @@ import NextLink from 'next/link'
 
 export const Hackathon = ({ product }: { product: Product }) => {
   return (
-    <VStack gap={'10'} className={styles.wrapper}>
-      <HStack align={'center'}>
-        <Box className={styles.imageWrapper}>
-          <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
-        </Box>
-        <VStack gap={'4'}>
-          <Heading size={'small'}>Rullatorer, 4 hjul innendørsbruk, begrenset utebruk</Heading>
-          <Heading size={'large'}>{product.title}</Heading>
-          <BodyShort>Artnr: 177946</BodyShort>
+    <VStack gap={'16'} className={styles.wrapper}>
+      <VStack>
+        <HStack align={'center'}>
+          <Box className={styles.imageWrapper}>
+            <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
+          </Box>
+          <VStack gap={'4'}>
+            <Heading size={'small'}>Rullatorer, 4 hjul innendørsbruk, begrenset utebruk</Heading>
+            <Heading size={'large'}>{product.title}</Heading>
+            <BodyShort>Artnr: 177946</BodyShort>
+          </VStack>
+        </HStack>
+        <VStack gap={'2'}>
+          <Heading size={'small'}>Om hjelpemiddelet</Heading>
+          <BodyLong style={{ maxWidth: '600px' }}>{product.attributes.text}</BodyLong>
         </VStack>
-      </HStack>
-      <VStack gap={'2'}>
-        <Heading size={'small'}>Om hjelpemiddelet</Heading>
-        <BodyLong style={{ maxWidth: '600px' }}>{product.attributes.text}</BodyLong>
       </VStack>
       <VStack gap={'2'}>
         <VStack gap={'8'} style={{ maxWidth: '600px' }}>
@@ -60,10 +62,10 @@ export const Hackathon = ({ product }: { product: Product }) => {
           </Accordion>
 
           <HStack gap={'4'} justify={'space-between'}>
+            <Button style={{ width: 'fit-content' }}>Meld behov for reparasjon</Button>
             <Button variant={'secondary'} style={{ width: 'fit-content' }}>
               Bestill deler
             </Button>
-            <Button style={{ width: 'fit-content' }}>Meld behov for reparasjon</Button>
           </HStack>
         </VStack>
       </VStack>
@@ -75,14 +77,15 @@ export const Hackathon = ({ product }: { product: Product }) => {
         </BodyLong>
 
         <VStack gap={'6'}>
-          <Heading size={'large'}>Hjelpemiddellageret</Heading>
           <VStack gap={'2'}>
-            <BodyShort>Bedriftsveien 10</BodyShort>
-            <BodyShort>6517 Kristiansund</BodyShort>
+            <Heading size={'medium'}>Kristiandsund hjelpemiddellager</Heading>
+            <BodyShort>Tlf: 35232342</BodyShort>
+            <BodyShort>Man - fre 08:00 - 16:00</BodyShort>
           </VStack>
           <VStack gap={'2'}>
-            <BodyShort>Tlf: 35232342</BodyShort>
-            <BodyShort>Åpningstider: Man - fre 08:00 - 16:00</BodyShort>
+            <Heading size={'xsmall'}>Besøksadresse</Heading>
+            <BodyShort>Bedriftsveien 10</BodyShort>
+            <BodyShort>6517 Kristiansund</BodyShort>
           </VStack>
 
           <BodyLong>
