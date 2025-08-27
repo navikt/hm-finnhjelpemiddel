@@ -8,7 +8,7 @@ const nextConfig = {
     return [
       {
         source: '/products/_search/:path*',
-        destination: process.env.HM_SEARCH_URL + '/products/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/products/_search/:path*',
       },
       {
         source: '/agreements/_search/:path*',
