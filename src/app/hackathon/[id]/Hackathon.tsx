@@ -27,7 +27,9 @@ export const Hackathon = ({ product }: { product: Product }) => {
       </VStack>
       <VStack gap={'2'}>
         <VStack gap={'8'} style={{ maxWidth: '600px' }}>
-          <Heading size={'large'}>Vanlige problemer</Heading>
+          <Heading size={'large'} className={styles.title}>
+            Vanlige problemer
+          </Heading>
 
           <VStack gap={'4'}>
             <BodyLong>Her finner du forslag til noen ting du kan prøve</BodyLong>
@@ -70,7 +72,9 @@ export const Hackathon = ({ product }: { product: Product }) => {
         </VStack>
       </VStack>
       <VStack gap={'8'} style={{ maxWidth: '600px' }}>
-        <Heading size={'large'}>Returnering</Heading>
+        <Heading size={'large'} className={styles.title}>
+          Returnering
+        </Heading>
         <BodyLong>
           Dersom du ikke lenger har behov for dette hjelpemiddelet kan du enkelt returnere det selv ved å levere det på
           kommunalt hjelpemiddellager.

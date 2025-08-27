@@ -7,3 +7,7 @@
 .wrapper {
   position: relative;
 }
+
+.title {
+  color: #99185e;
+}
