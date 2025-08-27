@@ -84,7 +84,7 @@ export const Hackathon = ({ product }: { product: Product }) => {
           <VStack gap={'2'}>
             <Heading size={'medium'}>Kristiandsund hjelpemiddellager</Heading>
             <BodyShort>Tlf: 35232342</BodyShort>
-            <BodyShort>Man - fre 08:00 - 16:00</BodyShort>
+            <BodyShort>Åpningstider: Man - fre 08:00 - 16:00</BodyShort>
           </VStack>
           <VStack gap={'2'}>
             <Heading size={'xsmall'}>Besøksadresse</Heading>
