@@ -12,19 +12,19 @@ const nextConfig = {
       },
       {
         source: '/agreements/_search/:path*',
-        destination: process.env.HM_SEARCH_URL + '/agreements/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/agreements/_search/:path*',
       },
       {
         source: '/news/_search/:path*',
-        destination: process.env.HM_SEARCH_URL + '/news/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/news/_search/:path*',
       },
       {
         source: '/suppliers/_search/:path*',
-        destination: process.env.HM_SEARCH_URL + '/suppliers/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/suppliers/_search/:path*',
       },
       {
         source: '/alternative_products/_search/:path*',
-        destination: process.env.HM_SEARCH_URL + '/alternative_products/_search:path*',
+        destination: process.env.HM_SEARCH_URL + '/alternative_products/_search/:path*',
       },
       {
         source: '/alternativ/:path*',
