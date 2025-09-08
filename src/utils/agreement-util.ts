@@ -43,6 +43,7 @@ export interface Attachment {
 
 export interface Post {
   identifier: string
+  refNr: string
   nr: number
   title: string
   description: string
@@ -50,6 +51,7 @@ export interface Post {
 
 export interface PostWithProducts {
   nr: number
+  refNr: string
   title: string
   description: string
   products: ProductOnPostInfo[]
@@ -161,6 +163,7 @@ const mapPosts = (posts: PostResponse[]): Post[] => {
   return posts.map((post: PostResponse) => ({
     identifier: post.identifier,
     nr: post.nr,
+    refNr: post.refNr,
     title: post.title,
     description: post.description,
   }))
@@ -181,6 +184,7 @@ export const mapAgreementProducts = (
 ): PostWithProducts[] => {
   const getPostTitle = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.title
   const getPostDescription = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.description
+  const getPostRefNr = (postNr: number) => agreement.posts.find((post) => post.nr === postNr)?.refNr
   const getRank = (product: Product, postNr: number) =>
     product.agreements.find(
       (agreementOnProduct) => agreementOnProduct.id === agreement.id && agreementOnProduct.postNr === postNr
@@ -216,6 +220,7 @@ export const mapAgreementProducts = (
 
     return {
       nr: bucket.key,
+      refNr: getPostRefNr(bucket.key) ?? '',
       title: getPostTitle(bucket.key) ?? '',
       description: getPostDescription(bucket.key) ?? ',',
       products: products
@@ -238,6 +243,7 @@ export const mapAgreementProducts = (
         ? mapPostBucket(listItem)
         : {
             nr: index + 1,
+            refNr: getPostRefNr(index + 1) ?? '',
             title: getPostTitle(index + 1) ?? '',
             description: getPostDescription(index + 1) ?? '',
             products: [],

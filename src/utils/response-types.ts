@@ -257,6 +257,7 @@ export interface AgreementLabelResponse {
 export interface PostResponse {
   identifier: string
   nr: number
+  refNr: string
   title: string
   description: string
   created: string
