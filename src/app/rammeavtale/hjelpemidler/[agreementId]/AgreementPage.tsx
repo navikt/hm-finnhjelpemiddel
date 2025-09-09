@@ -43,6 +43,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
   ]
 
+  //Rammeavtaler som er splittet i to og har mange tomme delkontrakter
+  const splitAgreementsWithEmptyPosts = [
+    'de5cce52-cd91-469e-82a1-4ca0d3bc79d4', // Synstekniske hjelpemidler - digitale luper og lesetv
+    '9d9a0fbb-c06a-4662-ab08-b1e470ea8b74', // Hygiene - toalettløsninger med spyle- og tørkefunksjon og toalettarmstøtter med ben
+  ]
+
   const {
     data: postBuckets,
     isLoading: postsIsLoading,
@@ -59,11 +65,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
-  const postFilters: FilterOption[] = agreement.posts
-    .filter((post) => post.nr != 99 && post.title.length > 0)
-    .sort((a, b) => a.nr - b.nr)
-    .map((post) => ({ label: post.title, value: post.title }))
-
   if (!postBuckets || !filtersFromData) {
     return (
       <HStack justify="center" style={{ marginTop: '48px' }}>
@@ -71,6 +72,17 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       </HStack>
     )
   }
+
+  //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
+  //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
+  const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters).filter(
+    (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0
+  )
+
+  const postFilters: FilterOption[] = posts
+    .filter((post) => post.nr != 99 && post.title.length > 0)
+    .sort((a, b) => a.nr - b.nr)
+    .map((post) => ({ label: post.title, value: post.title }))
 
   const leverandorFilter: FilterOption[] =
     filtersFromData?.leverandor?.values?.map((value) => ({
@@ -82,10 +94,6 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     leverandor: leverandorFilter,
     delkontrakt: postFilters,
   }
-
-  //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
-  //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
-  const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters)
 
   const totalProducts =
     posts.length > 0
