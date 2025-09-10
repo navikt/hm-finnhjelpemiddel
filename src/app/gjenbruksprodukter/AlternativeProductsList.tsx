@@ -35,7 +35,7 @@ export const AlternativeProductList = ({
     error: errorAlternatives,
   } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
-  useSWRImmutable(`asdasd-${hmsNumber}`, () => testAlt())
+  useSWRImmutable(`asdasd-${hmsNumber}`, () => testAlt(hmsNumber))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
 
