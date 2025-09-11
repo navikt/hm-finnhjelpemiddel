@@ -47,6 +47,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const splitAgreementsWithEmptyPosts = [
     'de5cce52-cd91-469e-82a1-4ca0d3bc79d4', // Synstekniske hjelpemidler - digitale luper og lesetv
     '9d9a0fbb-c06a-4662-ab08-b1e470ea8b74', // Hygiene - toalettløsninger med spyle- og tørkefunksjon og toalettarmstøtter med ben
+    'dcbfde73-c72e-4af0-aebf-12884168ce4d', // Hygienehjelpemidler og støttestang
   ]
 
   const {
