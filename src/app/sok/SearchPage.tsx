@@ -183,7 +183,10 @@ export default function SearchPage() {
       <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
         <VStack gap="4" align={'start'} paddingBlock={'12'}>
           <Heading level="1" size="large">
-            {searchData.searchTerm ? `Søkeresultater: '${searchData.searchTerm}'` : 'Alle hjelpemidler'}
+            {searchData.searchTerm
+              ? `Søkeresultater: '${searchData.searchTerm}'`
+              : <>Søkeresultater: <em>intet søkeord angitt</em></>
+            }
           </Heading>
         </VStack>
       </Bleed>
