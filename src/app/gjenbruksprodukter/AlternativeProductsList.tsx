@@ -15,6 +15,9 @@ import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore,
 } from '@/utils/compare-alternatives-state-util'
+import useSWR from 'swr'
+import { Product } from '@/utils/product-util'
+import { getProductFromHmsArtNrs } from '@/utils/api-util'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -35,17 +38,34 @@ export const AlternativeProductList = ({
     error: errorAlternatives,
   } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
 
-  useSWRImmutable(`asdasd-${hmsNumber}`, () => testAlt(hmsNumber))
+  const { data: alternativeResponse, error: alternativeError } = useSWRImmutable(`asdasd-${hmsNumber}`, () =>
+    testAlt(hmsNumber)
+  )
+  const alternativeStocks = alternativeResponse?.alternatives
+  const hmsArtNrs = alternativeStocks?.map((alternativeStock) => alternativeStock.hmsArtNr) ?? []
+
+  const {
+    data: products,
+    isLoading,
+    error: productsError,
+  } = useSWR<Product[]>(alternativeResponse ? `alternatives-${hmsNumber}` : null, () =>
+    getProductFromHmsArtNrs(hmsArtNrs)
+  )
+
+  const {
+    data: originalProductResponse,
+    isLoading: isLoadingOriginal,
+    error: originalProductError,
+  } = useSWR<Product[]>(alternativeResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
-
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
   if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
   }
 
-  if (errorAlternatives || errorOrig) {
+  if (errorAlternatives || errorOrig || alternativeError) {
     return <>En feil har skjedd ved henting av data</>
   }
 

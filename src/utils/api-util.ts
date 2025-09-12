@@ -801,6 +801,29 @@ export async function getProductByHmsartnrWithVariants(hmsArtNr: string): Promis
   return res.json()
 }
 
+export async function getProductFromHmsArtNrs(hmsArtNrs: string[]): Promise<Product[]> {
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: {
+            terms: {
+              hmsArtNr: hmsArtNrs,
+            },
+          },
+        },
+      },
+      size: 150,
+    }),
+  })
+
+  return res.json().then(mapProductsFromCollapse)
+}
+
 export type FetchSeriesResponse = {
   products: Product[]
 }

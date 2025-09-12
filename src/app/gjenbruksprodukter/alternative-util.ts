@@ -1,4 +1,5 @@
 import { AlternativeProductSourceResponse, Hit, SearchResponse } from '@/utils/response-types'
+import { AlternativeStockResponse } from '@/app/gjenbruksprodukter/page'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
@@ -112,7 +113,7 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
   return res.json().then(mapToAlternativeProducts)
 }
 
-export async function testAlt(hmsArtNr: string): Promise<void> {
+export async function testAlt(hmsArtNr: string): Promise<AlternativeStockResponse> {
   //const res = await fetch('http://localhost:8081/hmsArtNrMapping/all/distinct', {
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/alternativ/stock/${hmsArtNr}`,
@@ -124,8 +125,7 @@ export async function testAlt(hmsArtNr: string): Promise<void> {
     }
   )
 
-  console.log(res.json())
-
+  return res.json()
   //return res.json().then(mapToAlternativeProducts)
 }
 
