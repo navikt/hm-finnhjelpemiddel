@@ -67,7 +67,7 @@ const TagRow = ({
     productAgreements &&
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
-
+  const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
   return (
     <HStack justify={'start'} gap={'3'}>
       {topRank ? (
@@ -75,7 +75,12 @@ const TagRow = ({
           <Tag variant={'success-moderate'} className={styles.agreementTag}>
             {topRank === 99 ? 'På avtale' : `Rangering ${topRank}`}
           </Tag>
-          {productAgreements.length > 1 ? (
+          {productAgreements.length === 2 ? (
+            <Tag variant={'success-moderate'} className={styles.agreementTag}>
+              Rangering {rankList?.[1]}
+            </Tag>
+          ) : ''}
+          {productAgreements.length > 2 ? (
             <Tag variant={'success-moderate'} className={styles.agreementTag}>
               Flere delkontrakter
             </Tag>
