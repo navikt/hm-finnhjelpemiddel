@@ -18,6 +18,7 @@ import {
 import useSWR from 'swr'
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
+import { WarehouseStockResponse } from '@/utils/response-types'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -26,12 +27,13 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
+  /*
   const {
     data: original,
     isLoading: isLoadingOrig,
     error: errorOrig,
   } = useSWRImmutable<AlternativeProduct>(`orig-${hmsNumber}`, () => getOriginalProductFromHmsArtNr(hmsNumber))
-
+*/
   const {
     data: alternatives,
     isLoading: isLoadingAlternatives,
@@ -61,20 +63,22 @@ export const AlternativeProductList = ({
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
-  if (alternatives) {
-    sortAlternativeProducts(alternatives, selectedWarehouse)
-  }
-
-  if (errorAlternatives || errorOrig || alternativeError) {
+  if (errorAlternatives || alternativeError) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoadingAlternatives || isLoadingOrig) {
+  if (isLoadingAlternatives) {
     return <Loader />
   }
 
-  if (!original) {
+  if (!originalProductResponse || !alternativeResponse) {
     return <>Finner ikke produkt {hmsNumber}</>
+  }
+
+  const original = mapToAlternativeProduct(originalProductResponse[0], alternativeResponse.original.warehouseStock)
+
+  if (alternatives) {
+    sortAlternativeProducts(alternatives, selectedWarehouse)
   }
 
   const handleCompareClick = () => {
@@ -126,6 +130,34 @@ export const AlternativeProductList = ({
       </div>
     </>
   )
+}
+
+const mapToAlternativeProduct = (product: Product, stocks: WarehouseStockResponse[]): AlternativeProduct => {
+  const variant = product.variants[0]
+  return {
+    seriesId: product.id,
+    id: variant.id,
+    seriesTitle: product.title,
+    variantTitle: variant.articleName,
+    status: variant.status,
+    hmsArtNr: variant.hmsArtNr,
+    imageUri: product.photos[0]?.uri,
+    supplierName: product.supplierName,
+    highestRank: variant.agreements[0].rank,
+    onAgreement: variant.agreements.length > 0,
+    warehouseStock: stocks
+      .filter((stock) => stock.location != 'Telemark')
+      .map((stock) => {
+        return {
+          location: stock.location,
+          available: stock.available,
+          reserved: stock.reserved,
+          needNotified: stock.needNotified,
+          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
+        }
+      }),
+    inStockAnyWarehouse: !!stocks.find((stock) => stock.available - stock.needNotified > 0),
+  }
 }
 
 const getSelectedWarehouseStock = (selectedWarehouse: string, warehouseStocks: WarehouseStock[]): WarehouseStock => {
