@@ -32,7 +32,6 @@ export const ProductCardPart = ({
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
         </Box>
         <VStack gap={{ xs: '1', md: '2' }}>
-          <HStack gap="2" align="center">
             {onAgreement ? (
               <Tag variant={'success-moderate'} className={styles.agreementTag}>
                 {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
@@ -42,7 +41,6 @@ export const ProductCardPart = ({
                 Ikke på avtale
               </Tag>
             )}
-          </HStack>
           <Box className={styles.productSummary}>
             <Link
               className={styles.link}
