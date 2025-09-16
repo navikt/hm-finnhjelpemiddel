@@ -23,6 +23,14 @@
   border: 1px solid #e0d8e9;
 }
 
+.partTag {
+  background-color: var(--a-surface-neutral-subtle);
+  border-radius: 0.25rem;
+  border: 1px solid #c6c2cc;
+  font-size: var(--a-font-size-medium);
+  padding: $a-spacing-1-alt $a-spacing-4;
+}
+
 .supplierLink {
   font-weight: $a-font-weight-bold;
 }

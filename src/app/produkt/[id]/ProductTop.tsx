@@ -25,14 +25,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
   return (
     <VStack gap={'8'}>
-      {product.accessory || product.sparePart  ? (
-        <HStack gap="3">
-          <Tag size={'small'} variant={'neutral-moderate'}>{product.accessory ? 'Tilbehør' : 'Reservedel'}</Tag>
-        </HStack>
-      ): (
-        ''
-      )}
-      <TagRow productAgreements={product.agreements} isExpired={isExpired} />
+      <TagRow productAgreements={product.agreements} accessory={product.accessory} sparePart={product.sparePart} isExpired={isExpired} />
       <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
       </Link>
@@ -65,9 +58,13 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
 const TagRow = ({
   productAgreements,
+  accessory,
+  sparePart,
   isExpired,
 }: {
   productAgreements: AgreementInfo[] | undefined
+  accessory: boolean | undefined
+  sparePart: boolean | undefined
   isExpired: boolean
 }) => {
   const topRank =
@@ -77,6 +74,14 @@ const TagRow = ({
   const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
   return (
     <HStack justify={'start'} gap={'3'}>
+      {accessory || sparePart  ? (
+        <HStack gap="3">
+          <Tag variant={'neutral-moderate'} className={styles.partTag}>
+            {accessory ? 'Tilbehør' : 'Reservedel'}</Tag>
+        </HStack>
+      ): (
+        ''
+      )}
       {topRank ? (
         <>
           <Tag variant={'success-moderate'} className={styles.agreementTag}>
