@@ -113,7 +113,7 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
   return res.json().then(mapToAlternativeProducts)
 }
 
-export async function testAlt(hmsArtNr: string): Promise<AlternativeStockResponse> {
+export async function getAlternativesAndStock(hmsArtNr: string): Promise<AlternativeStockResponse> {
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/alternativ/stock/${hmsArtNr}`,
     {
@@ -123,6 +123,36 @@ export async function testAlt(hmsArtNr: string): Promise<AlternativeStockRespons
       },
     }
   )
+
+  return res.json()
+}
+
+export async function createAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
+  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/create`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sourceHmsArtnr: sourceHmsArtnr,
+      targetHmsArtnr: targetHmsArtnr,
+    }),
+  })
+
+  return res.json()
+}
+
+export async function deleteAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
+  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/delete`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sourceHmsArtnr: sourceHmsArtnr,
+      targetHmsArtnr: targetHmsArtnr,
+    }),
+  })
 
   return res.json()
 }

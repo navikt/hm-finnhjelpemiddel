@@ -1,18 +1,24 @@
-import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
+import { BodyShort, Button, HGrid, HStack, Loader, TextField, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
-import { AlternativeProduct, testAlt, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
+import {
+  AlternativeProduct,
+  createAlternativeMapping,
+  deleteAlternativeMapping,
+  getAlternativesAndStock,
+  WarehouseStock,
+} from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore,
 } from '@/utils/compare-alternatives-state-util'
-import useSWR from 'swr'
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { WarehouseStockResponse } from '@/utils/response-types'
+import { TrashIcon } from '@navikt/aksel-icons'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -25,7 +31,8 @@ export const AlternativeProductList = ({
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
-  } = useSWRImmutable(`asdasd-${hmsNumber}`, () => testAlt(hmsNumber))
+    mutate: mutateAlternatives,
+  } = useSWRImmutable(`asdasd-${hmsNumber}`, () => getAlternativesAndStock(hmsNumber))
 
   const alternativeStocks = alternativesResponse?.alternatives
   const hmsArtNrs = alternativeStocks?.map((alternativeStock) => alternativeStock.hmsArtNr) ?? []
@@ -34,7 +41,7 @@ export const AlternativeProductList = ({
     data: alternativeProductsResponse,
     isLoading,
     error: productsError,
-  } = useSWR<Product[]>(alternativesResponse ? `alternatives-${hmsNumber}` : null, () =>
+  } = useSWRImmutable<Product[]>(alternativesResponse ? `alternatives-${hmsNumber}` : null, () =>
     getProductFromHmsArtNrs(hmsArtNrs)
   )
 
@@ -42,7 +49,7 @@ export const AlternativeProductList = ({
     data: originalProductResponse,
     isLoading: isLoadingOriginal,
     error: originalProductError,
-  } = useSWR<Product[]>(alternativesResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
+  } = useSWRImmutable<Product[]>(alternativesResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
@@ -102,21 +109,29 @@ export const AlternativeProductList = ({
           {alternatives && alternatives.length > 0 ? (
             alternatives?.map((alternative) => {
               return (
-                <AlternativeProductCard
-                  alternativeProduct={alternative}
-                  selectedWarehouseStock={
-                    selectedWarehouse
-                      ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
-                      : undefined
-                  }
-                  key={alternative.id}
-                  handleCompareClick={handleCompareClick}
-                />
+                <VStack key={'testytest' + alternative.id}>
+                  <AlternativeProductCard
+                    alternativeProduct={alternative}
+                    selectedWarehouseStock={
+                      selectedWarehouse
+                        ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
+                        : undefined
+                    }
+                    key={alternative.id}
+                    handleCompareClick={handleCompareClick}
+                  />
+                  <DeleteAlternative
+                    sourceHmsArtNr={hmsNumber}
+                    targetHmsArtNr={alternative.hmsArtNr!}
+                    mutateAlternatives={mutateAlternatives}
+                  />
+                </VStack>
               )
             })
           ) : (
             <BodyShort>Ingen kjente alternativer for produktet på lager</BodyShort>
           )}
+          <AddAlternative sourceHmsArtNr={hmsNumber} mutateAlternatives={mutateAlternatives} />
         </HGrid>
       </div>
     </>
@@ -191,4 +206,46 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
 
     return a.highestRank - b.highestRank
   })
+}
+
+export const AddAlternative = ({
+  sourceHmsArtNr,
+  mutateAlternatives,
+}: {
+  sourceHmsArtNr: string
+  mutateAlternatives: () => void
+}) => {
+  const [targetHmsArtNr, setTargetHmsArtNr] = useState('')
+
+  return (
+    <HStack gap={'2'} align={'end'}>
+      <TextField
+        value={targetHmsArtNr}
+        label="Legg til alternativ"
+        onChange={(event) => setTargetHmsArtNr(event.currentTarget.value)}
+      />
+      <Button onClick={() => createAlternativeMapping(sourceHmsArtNr, targetHmsArtNr).then(() => mutateAlternatives())}>
+        Legg til
+      </Button>
+    </HStack>
+  )
+}
+
+export const DeleteAlternative = ({
+  sourceHmsArtNr,
+  targetHmsArtNr,
+  mutateAlternatives,
+}: {
+  sourceHmsArtNr: string
+  targetHmsArtNr: string
+  mutateAlternatives: () => void
+}) => {
+  return (
+    <Button
+      icon={<TrashIcon />}
+      variant={'tertiary'}
+      style={{ width: 'fit-content' }}
+      onClick={() => deleteAlternativeMapping(sourceHmsArtNr, targetHmsArtNr).then(() => mutateAlternatives())}
+    ></Button>
+  )
 }
