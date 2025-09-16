@@ -114,7 +114,6 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
 }
 
 export async function testAlt(hmsArtNr: string): Promise<AlternativeStockResponse> {
-  //const res = await fetch('http://localhost:8081/hmsArtNrMapping/all/distinct', {
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/alternativ/stock/${hmsArtNr}`,
     {
@@ -126,23 +125,4 @@ export async function testAlt(hmsArtNr: string): Promise<AlternativeStockRespons
   )
 
   return res.json()
-  //return res.json().then(mapToAlternativeProducts)
 }
-
-/*
-export async function getOriginalProductFromHmsArtNr(sourceHmsArtNr: string, targetHmsArtNr: string): Promise<void> {
-  const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        match: {
-          hmsArtNr: hmsArtNr,
-        },
-      },
-    }),
-  })
-}
- */

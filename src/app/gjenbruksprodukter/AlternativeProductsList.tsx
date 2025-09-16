@@ -2,13 +2,7 @@ import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
-import {
-  AlternativeProduct,
-  getAlternativeProductsFromHmsArtNr,
-  getOriginalProductFromHmsArtNr,
-  testAlt,
-  WarehouseStock,
-} from '@/app/gjenbruksprodukter/alternative-util'
+import { AlternativeProduct, testAlt, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {
@@ -27,30 +21,20 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
-  /*
   const {
-    data: original,
-    isLoading: isLoadingOrig,
-    error: errorOrig,
-  } = useSWRImmutable<AlternativeProduct>(`orig-${hmsNumber}`, () => getOriginalProductFromHmsArtNr(hmsNumber))
-*/
-  const {
-    data: alternatives,
+    data: alternativesResponse,
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
-  } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
+  } = useSWRImmutable(`asdasd-${hmsNumber}`, () => testAlt(hmsNumber))
 
-  const { data: alternativeResponse, error: alternativeError } = useSWRImmutable(`asdasd-${hmsNumber}`, () =>
-    testAlt(hmsNumber)
-  )
-  const alternativeStocks = alternativeResponse?.alternatives
+  const alternativeStocks = alternativesResponse?.alternatives
   const hmsArtNrs = alternativeStocks?.map((alternativeStock) => alternativeStock.hmsArtNr) ?? []
 
   const {
-    data: products,
+    data: alternativeProductsResponse,
     isLoading,
     error: productsError,
-  } = useSWR<Product[]>(alternativeResponse ? `alternatives-${hmsNumber}` : null, () =>
+  } = useSWR<Product[]>(alternativesResponse ? `alternatives-${hmsNumber}` : null, () =>
     getProductFromHmsArtNrs(hmsArtNrs)
   )
 
@@ -58,12 +42,13 @@ export const AlternativeProductList = ({
     data: originalProductResponse,
     isLoading: isLoadingOriginal,
     error: originalProductError,
-  } = useSWR<Product[]>(alternativeResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
+  } = useSWR<Product[]>(alternativesResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
-  if (errorAlternatives || alternativeError) {
+  //TODO: håndter alle kallene
+  if (errorAlternatives) {
     return <>En feil har skjedd ved henting av data</>
   }
 
@@ -71,11 +56,17 @@ export const AlternativeProductList = ({
     return <Loader />
   }
 
-  if (!originalProductResponse || !alternativeResponse) {
+  //TODO: håndtere at ett produkt feiler
+  if (!originalProductResponse || !alternativesResponse || !alternativeProductsResponse) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  const original = mapToAlternativeProduct(originalProductResponse[0], alternativeResponse.original.warehouseStock)
+  const original = mapToAlternativeProduct(originalProductResponse[0], alternativesResponse.original.warehouseStock)
+
+  const alternatives: AlternativeProduct[] = alternativeProductsResponse.map((product) => {
+    const stocks = alternativeStocks!.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
+    return mapToAlternativeProduct(product, stocks)
+  })
 
   if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
@@ -143,7 +134,8 @@ const mapToAlternativeProduct = (product: Product, stocks: WarehouseStockRespons
     hmsArtNr: variant.hmsArtNr,
     imageUri: product.photos[0]?.uri,
     supplierName: product.supplierName,
-    highestRank: variant.agreements[0].rank,
+    highestRank:
+      variant.agreements.length > 0 ? Math.max(...variant.agreements.map((agreement) => agreement.rank)) : 99,
     onAgreement: variant.agreements.length > 0,
     warehouseStock: stocks
       .filter((stock) => stock.location != 'Telemark')
