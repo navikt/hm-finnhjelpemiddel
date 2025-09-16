@@ -42,12 +42,8 @@ export const ProductCardAgreement = ({
                 Ikke på avtale
               </Tag>
             )}
-            { handleCompareClick ?
-              <CompareButton product={product} handleCompareClick={handleCompareClick} /> :
-              ''
-            }
 
-{/*            <CompareButton product={product} handleCompareClick={handleCompareClick} />*/}
+            <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </HStack>
 
           <Box className={styles.imageWrapper}>
