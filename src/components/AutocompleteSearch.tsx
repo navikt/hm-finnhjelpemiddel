@@ -109,7 +109,7 @@ const AutocompleteSearch = ({
     if (event.key === 'Enter') {
       event.preventDefault()
       const inputValue = (event.currentTarget as HTMLInputElement).value
-      onSearch(inputValue)
+      inputValue ? onSearch(inputValue) : null
       setOpenState(false)
     }
   }
@@ -145,7 +145,8 @@ const AutocompleteSearch = ({
           setInputValue(value)
         }}
         onSearchClick={(searchTerm) => {
-          onSearch(searchTerm)
+          inputValue ? onSearch(searchTerm) : null
+          setOpenState(false)
         }}
         clearButton={false}
         onKeyUp={handleKeyUpInInputField}
