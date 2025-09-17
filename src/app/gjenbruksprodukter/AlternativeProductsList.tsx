@@ -39,8 +39,8 @@ export const AlternativeProductList = ({
 
   const {
     data: alternativeProductsResponse,
-    isLoading,
-    error: productsError,
+    isLoading: isLoadingAlternativeProducts,
+    error: errorAlternativeProducts,
   } = useSWRImmutable<Product[]>(
     alternativesResponse ? [`alternatives-${hmsNumber}`, alternativesResponse] : null,
     () => getProductFromHmsArtNrs(hmsArtNrs)
@@ -48,23 +48,21 @@ export const AlternativeProductList = ({
 
   const {
     data: originalProductResponse,
-    isLoading: isLoadingOriginal,
-    error: originalProductError,
+    isLoading: isLoadingOriginalProduct,
+    error: errorOriginalProduct,
   } = useSWRImmutable<Product[]>(alternativesResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
-  //TODO: håndter alle kallene
-  if (errorAlternatives) {
+  if (errorAlternatives || errorAlternativeProducts || errorOriginalProduct) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoadingAlternatives) {
+  if (isLoadingAlternatives || isLoadingAlternativeProducts || isLoadingOriginalProduct) {
     return <Loader />
   }
 
-  //TODO: håndtere at ett kall feiler
   if (!originalProductResponse || !alternativesResponse || !alternativeProductsResponse) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
