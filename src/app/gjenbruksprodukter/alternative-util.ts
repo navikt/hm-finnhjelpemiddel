@@ -1,5 +1,6 @@
 import { AlternativeProductSourceResponse, Hit, SearchResponse } from '@/utils/response-types'
 import { AlternativeStockResponse } from '@/app/gjenbruksprodukter/page'
+import { fetcherModify } from '@/utils/api-util'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
@@ -128,31 +129,23 @@ export async function getAlternativesAndStock(hmsArtNr: string): Promise<Alterna
 }
 
 export async function createAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
-  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  return await fetcherModify(
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/create`,
+    'POST',
+    {
       sourceHmsArtnr: sourceHmsArtnr,
       targetHmsArtnr: targetHmsArtnr,
-    }),
-  })
-
-  return res.json()
+    }
+  )
 }
 
 export async function deleteAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
-  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/delete`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  return await fetcherModify(
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/delete`,
+    'DELETE',
+    {
       sourceHmsArtnr: sourceHmsArtnr,
       targetHmsArtnr: targetHmsArtnr,
-    }),
-  })
-
-  return res.json()
+    }
+  )
 }

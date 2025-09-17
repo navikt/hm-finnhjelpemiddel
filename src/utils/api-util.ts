@@ -1008,6 +1008,25 @@ export class CustomError extends Error {
   }
 }
 
+export const fetcherModify = async (url: string, method: string, body?: any): Promise<any> => {
+  const response = await fetch(url, {
+    method,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+
+  if (response.ok) {
+    return Promise.resolve()
+  } else {
+    const json = await response.json()
+    const error = { message: json?.message || response.statusText, status: response.status }
+    return Promise.reject(error)
+  }
+}
+
 export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVariant[]> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',

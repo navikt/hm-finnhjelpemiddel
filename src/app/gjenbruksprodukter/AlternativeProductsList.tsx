@@ -41,8 +41,9 @@ export const AlternativeProductList = ({
     data: alternativeProductsResponse,
     isLoading,
     error: productsError,
-  } = useSWRImmutable<Product[]>(alternativesResponse ? `alternatives-${hmsNumber}` : null, () =>
-    getProductFromHmsArtNrs(hmsArtNrs)
+  } = useSWRImmutable<Product[]>(
+    alternativesResponse ? [`alternatives-${hmsNumber}`, alternativesResponse] : null,
+    () => getProductFromHmsArtNrs(hmsArtNrs)
   )
 
   const {
@@ -63,7 +64,7 @@ export const AlternativeProductList = ({
     return <Loader />
   }
 
-  //TODO: håndtere at ett produkt feiler
+  //TODO: håndtere at ett kall feiler
   if (!originalProductResponse || !alternativesResponse || !alternativeProductsResponse) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
