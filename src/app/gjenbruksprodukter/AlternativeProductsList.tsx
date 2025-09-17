@@ -5,7 +5,6 @@ import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProd
 import {
   AlternativeProduct,
   createAlternativeMapping,
-  deleteAlternativeMapping,
   getAlternativesAndStock,
   WarehouseStock,
 } from '@/app/gjenbruksprodukter/alternative-util'
@@ -18,7 +17,6 @@ import {
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { WarehouseStockResponse } from '@/utils/response-types'
-import { TrashIcon } from '@navikt/aksel-icons'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -27,6 +25,8 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
+  const editMode: boolean = true
+
   const {
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
@@ -98,41 +98,38 @@ export const AlternativeProductList = ({
             selectedWarehouse ? getSelectedWarehouseStock(selectedWarehouse, original.warehouseStock) : undefined
           }
           handleCompareClick={handleCompareClick}
+          originalHmsArtNr={hmsNumber}
+          editMode={false}
+          mutateAlternatives={mutateAlternatives}
         />
       </div>
-      <div>
-        <Heading size="medium" spacing>
-          Alternative produkter
-        </Heading>
+      <VStack gap={'4'}>
+        <Heading size="medium">Alternative produkter</Heading>
+        {editMode && <AddAlternative sourceHmsArtNr={hmsNumber} mutateAlternatives={mutateAlternatives} />}
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {alternatives && alternatives.length > 0 ? (
             alternatives?.map((alternative) => {
               return (
-                <VStack key={'testytest' + alternative.id}>
-                  <AlternativeProductCard
-                    alternativeProduct={alternative}
-                    selectedWarehouseStock={
-                      selectedWarehouse
-                        ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
-                        : undefined
-                    }
-                    key={alternative.id}
-                    handleCompareClick={handleCompareClick}
-                  />
-                  <DeleteAlternative
-                    sourceHmsArtNr={hmsNumber}
-                    targetHmsArtNr={alternative.hmsArtNr!}
-                    mutateAlternatives={mutateAlternatives}
-                  />
-                </VStack>
+                <AlternativeProductCard
+                  alternativeProduct={alternative}
+                  selectedWarehouseStock={
+                    selectedWarehouse
+                      ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
+                      : undefined
+                  }
+                  key={alternative.id}
+                  handleCompareClick={handleCompareClick}
+                  originalHmsArtNr={hmsNumber}
+                  editMode={editMode}
+                  mutateAlternatives={mutateAlternatives}
+                />
               )
             })
           ) : (
             <BodyShort>Ingen kjente alternativer for produktet på lager</BodyShort>
           )}
-          <AddAlternative sourceHmsArtNr={hmsNumber} mutateAlternatives={mutateAlternatives} />
         </HGrid>
-      </div>
+      </VStack>
     </>
   )
 }
@@ -227,24 +224,5 @@ export const AddAlternative = ({
         Legg til
       </Button>
     </HStack>
-  )
-}
-
-export const DeleteAlternative = ({
-  sourceHmsArtNr,
-  targetHmsArtNr,
-  mutateAlternatives,
-}: {
-  sourceHmsArtNr: string
-  targetHmsArtNr: string
-  mutateAlternatives: () => void
-}) => {
-  return (
-    <Button
-      icon={<TrashIcon />}
-      variant={'tertiary'}
-      style={{ width: 'fit-content' }}
-      onClick={() => deleteAlternativeMapping(sourceHmsArtNr, targetHmsArtNr).then(() => mutateAlternatives())}
-    ></Button>
   )
 }
