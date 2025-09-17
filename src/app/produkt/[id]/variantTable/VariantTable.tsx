@@ -205,17 +205,19 @@ export const VariantTable = ({ product }: { product: Product }) => {
                       className={selectedColumn === i ? styles.selectedColumn : ''}
                       onClick={() => handleColumnClick(i)}
                     >
-                      <CopyButton
-                        size="small"
-                        className={productTop.copyButton}
-                        copyText={variant.hmsArtNr ?? ''}
-                        text={variant.hmsArtNr ?? ''}
-                        activeText="kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
-                        iconPosition="right"
-                        onClick={() => logActionEvent('kopier')}
-                      />
+                      {variant.hmsArtNr && (
+                        <CopyButton
+                          size="small"
+                          className={productTop.copyButton}
+                          copyText={variant.hmsArtNr ?? ''}
+                          text={variant.hmsArtNr ?? ''}
+                          activeText="kopiert"
+                          variant="action"
+                          activeIcon={<ThumbUpIcon aria-hidden />}
+                          iconPosition="right"
+                          onClick={() => logActionEvent('kopier')}
+                        />
+                      )}
                     </Table.DataCell>
                   ))}
                 </Table.Row>
