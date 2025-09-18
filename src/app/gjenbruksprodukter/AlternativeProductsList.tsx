@@ -1,13 +1,8 @@
-import { BodyShort, Button, HGrid, HStack, Loader, TextField, VStack } from '@navikt/ds-react'
+import { BodyShort, HGrid, Loader, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
-import {
-  AlternativeProduct,
-  createAlternativeMapping,
-  getAlternativesAndStock,
-  WarehouseStock,
-} from '@/app/gjenbruksprodukter/alternative-util'
+import { AlternativeProduct, getAlternativesAndStock, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {
@@ -17,6 +12,7 @@ import {
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { WarehouseStockResponse } from '@/utils/response-types'
+import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -202,27 +198,4 @@ const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], sele
 
     return a.highestRank - b.highestRank
   })
-}
-
-export const AddAlternative = ({
-  sourceHmsArtNr,
-  mutateAlternatives,
-}: {
-  sourceHmsArtNr: string
-  mutateAlternatives: () => void
-}) => {
-  const [targetHmsArtNr, setTargetHmsArtNr] = useState('')
-
-  return (
-    <HStack gap={'2'} align={'end'}>
-      <TextField
-        value={targetHmsArtNr}
-        label="Legg til alternativ"
-        onChange={(event) => setTargetHmsArtNr(event.currentTarget.value)}
-      />
-      <Button onClick={() => createAlternativeMapping(sourceHmsArtNr, targetHmsArtNr).then(() => mutateAlternatives())}>
-        Legg til
-      </Button>
-    </HStack>
-  )
 }
