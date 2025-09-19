@@ -36,7 +36,7 @@ export const AddAlternative = ({
           htmlSize={'12'}
         />
         {searchedProduct?.length === 1 && (
-          <VStack>
+          <VStack gap={'2'}>
             <AddAlternativeCard product={searchedProduct[0]} />
             <Button
               onClick={() =>
