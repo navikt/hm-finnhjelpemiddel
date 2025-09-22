@@ -19,7 +19,7 @@ export const AddAlternativeCard = ({ product }: { product: Product }) => {
             <BodyShort size="small">HMS: {variant.hmsArtNr}</BodyShort>
           </VStack>
           <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-            <ProductImage src={product.photos[0].uri} productTitle={'produktbilde'}></ProductImage>
+            <ProductImage src={product.photos[0]?.uri} productTitle={'produktbilde'}></ProductImage>
           </Box>
         </HStack>
       </VStack>
