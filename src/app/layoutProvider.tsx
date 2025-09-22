@@ -15,6 +15,7 @@ import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
+import { initSkyra, stopSkyra } from '@/utils/skyra'
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
@@ -88,11 +89,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         //if (process.env.NODE_ENV == 'production') {
         hotjar.initialize({ id: 118350, sv: 6 })
         //}
+        initSkyra()
       }
       if (consent === 'false') {
         stopAmplitude()
         stopHotjar()
         removeOptionalCookies()
+        stopSkyra()
       }
       initInstrumentation()
     }
