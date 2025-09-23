@@ -13,6 +13,7 @@ import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { WarehouseStockResponse } from '@/utils/response-types'
 import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -21,6 +22,8 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
+  //const featureFlags = useFeatureFlags()
+
   const editMode: boolean = true
 
   const {
@@ -130,7 +133,10 @@ export const AlternativeProductList = ({
   )
 }
 
-const mapToAlternativeProduct = (product: Product, stocks: WarehouseStockResponse[]): AlternativeProduct => {
+const mapToAlternativeProduct = (
+  product: Product,
+  stocks: WarehouseStockResponse[] | undefined
+): AlternativeProduct => {
   const variant = product.variants[0]
   return {
     seriesId: product.id,
@@ -144,18 +150,19 @@ const mapToAlternativeProduct = (product: Product, stocks: WarehouseStockRespons
     highestRank:
       variant.agreements.length > 0 ? Math.max(...variant.agreements.map((agreement) => agreement.rank)) : 99,
     onAgreement: variant.agreements.length > 0,
-    warehouseStock: stocks
-      .filter((stock) => stock.location != 'Telemark')
-      .map((stock) => {
-        return {
-          location: stock.location,
-          available: stock.available,
-          reserved: stock.reserved,
-          needNotified: stock.needNotified,
-          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
-        }
-      }),
-    inStockAnyWarehouse: !!stocks.find((stock) => stock.available - stock.needNotified > 0),
+    warehouseStock:
+      stocks
+        ?.filter((stock) => stock.location != 'Telemark')
+        .map((stock) => {
+          return {
+            location: stock.location,
+            available: stock.available,
+            reserved: stock.reserved,
+            needNotified: stock.needNotified,
+            actualAvailable: Math.max(stock.available - stock.needNotified, 0),
+          }
+        }) ?? [],
+    inStockAnyWarehouse: !!stocks?.find((stock) => stock.available - stock.needNotified > 0),
   }
 }
 
