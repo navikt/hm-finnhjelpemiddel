@@ -22,9 +22,9 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
-  //const featureFlags = useFeatureFlags()
+  const featureFlags = useFeatureFlags()
 
-  const editMode: boolean = true
+  const editMode: boolean = featureFlags.isEnabled('finnhjelpemiddel.visAlternativEdit') ?? false
 
   const {
     data: alternativesResponse,

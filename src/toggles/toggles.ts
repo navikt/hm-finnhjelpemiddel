@@ -23,4 +23,8 @@ export const LOCAL_TOGGLES = [
     name: 'paaskepynt',
     enabled: false,
   },
+  {
+    name: 'finnhjelpemiddel.visAlternativEdit',
+    enabled: true,
+  },
 ]
