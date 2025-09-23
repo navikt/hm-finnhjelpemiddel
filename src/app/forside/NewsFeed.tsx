@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Heading, HStack, VStack } from '@navikt/ds-react'
 import styles from './NewsFeed.module.scss'
 import useSWR from 'swr'
 import { News } from '@/utils/news-util'
@@ -14,7 +14,11 @@ export const NewsFeed = () => {
       <Heading size={'large'} level={'2'}>
         Siste nytt
       </Heading>
+      { data && data.length > 0 ?
       <HStack gap={'6'}>{data && data.map((news) => <NewsCard key={news.id} news={news} />)}</HStack>
+       :
+        <BodyShort>Ingen aktuelle nyheter å vise nå</BodyShort>
+      }
     </VStack>
   )
 }
