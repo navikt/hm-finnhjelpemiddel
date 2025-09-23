@@ -150,28 +150,26 @@ const mapToAlternativeProduct = (
     highestRank:
       variant.agreements.length > 0 ? Math.max(...variant.agreements.map((agreement) => agreement.rank)) : 99,
     onAgreement: variant.agreements.length > 0,
-    warehouseStock:
-      stocks
-        ?.filter((stock) => stock.location != 'Telemark')
-        .map((stock) => {
-          return {
-            location: stock.location,
-            available: stock.available,
-            reserved: stock.reserved,
-            needNotified: stock.needNotified,
-            actualAvailable: Math.max(stock.available - stock.needNotified, 0),
-          }
-        }) ?? [],
+    warehouseStock: stocks
+      ?.filter((stock) => stock.location != 'Telemark')
+      .map((stock) => {
+        return {
+          location: stock.location,
+          available: stock.available,
+          reserved: stock.reserved,
+          needNotified: stock.needNotified,
+          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
+        }
+      }),
     inStockAnyWarehouse: !!stocks?.find((stock) => stock.available - stock.needNotified > 0),
   }
 }
 
-const getSelectedWarehouseStock = (selectedWarehouse: string, warehouseStocks: WarehouseStock[]): WarehouseStock => {
-  const stock = warehouseStocks.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
-  if (!stock) {
-    throw new Error(`Finner ikke valgt lager: ${selectedWarehouse}`)
-  }
-  return stock
+const getSelectedWarehouseStock = (
+  selectedWarehouse: string,
+  warehouseStocks: WarehouseStock[] | undefined
+): WarehouseStock | undefined => {
+  return warehouseStocks?.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
 }
 
 const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], selectedWarehouse?: string | undefined) => {

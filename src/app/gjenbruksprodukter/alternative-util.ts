@@ -17,7 +17,7 @@ export interface AlternativeProduct {
   supplierName: string
   highestRank: number
   onAgreement: boolean
-  warehouseStock: WarehouseStock[]
+  warehouseStock: WarehouseStock[] | undefined
   inStockAnyWarehouse: boolean
 }
 
