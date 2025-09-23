@@ -1,0 +1,15 @@
+name: build-check-test.yml
+on:
+  push: 
+    branches:
+      - test-deploy
+
+jobs:
+  call-workflow:
+    permissions:
+      contents: read
+      packages: read
+      actions: read
+    uses: navikt/mime-deploy/.github/workflows/node/build-check-node.yml@v0
+    with:
+      NODE_VER: '18.x'
