@@ -4,6 +4,7 @@ export const EXPECTED_TOGGLES = [
   'finnhjelpemiddel.vis-tilbehor-og-reservedel-lister',
   'finnhjelpemiddel.feilbanner',
   'paaskepynt',
+  'finnhjelpemiddel.visAlternativEdit',
 ] as const
 
 export const LOCAL_TOGGLES = [
