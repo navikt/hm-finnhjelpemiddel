@@ -114,7 +114,7 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
   return res.json().then(mapToAlternativeProducts)
 }
 
-export async function getAlternativesAndStock(hmsArtNr: string): Promise<AlternativeStockResponse> {
+export async function getAlternativesAndStock(hmsArtNr: string): Promise<AlternativeStockResponse | undefined> {
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/alternativ/stock/${hmsArtNr}`,
     {
@@ -124,6 +124,10 @@ export async function getAlternativesAndStock(hmsArtNr: string): Promise<Alterna
       },
     }
   )
+
+  if (res.status === 404) {
+    return undefined
+  }
 
   return res.json()
 }
