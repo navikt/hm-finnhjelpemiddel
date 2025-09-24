@@ -22,7 +22,7 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
       {posts.map((post) => (
         <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post spacing-top--small'}>
           <HStack gap="4" align={'center'}>
-            <Heading level="2" size="small" className="agreement-page__post-heading">
+            <Heading level="2" size="small" id={`${post.refNr}`} className="agreement-page__post-heading">
               {post.title}
             </Heading>
             <HelpText title={'Om delkontrakten'}>

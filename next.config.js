@@ -7,20 +7,20 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/products/_search:path*',
-        destination: process.env.HM_SEARCH_URL + '/products/_search:path*',
+        source: '/products/_search/:path*',
+        destination: process.env.HM_SEARCH_URL + '/products/_search/:path*',
       },
       {
-        source: '/agreements/_search:path*',
-        destination: process.env.HM_SEARCH_URL + '/agreements/_search:path*',
+        source: '/agreements/_search/:path*',
+        destination: process.env.HM_SEARCH_URL + '/agreements/_search/:path*',
       },
       {
-        source: '/news/_search:path*',
-        destination: process.env.HM_SEARCH_URL + '/news/_search:path*',
+        source: '/news/_search/:path*',
+        destination: process.env.HM_SEARCH_URL + '/news/_search/:path*',
       },
       {
-        source: '/suppliers/_search:path*',
-        destination: process.env.HM_SEARCH_URL + '/suppliers/_search:path*',
+        source: '/suppliers/_search/:path*',
+        destination: process.env.HM_SEARCH_URL + '/suppliers/_search/:path*',
       },
       {
         source: '/alternative_products_search/_search:path*',

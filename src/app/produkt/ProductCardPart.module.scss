@@ -1,0 +1,62 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  position: relative;
+  border-radius: 0.5rem;
+  border: 1px solid $a-border-default;
+
+  &:hover {
+    outline: 1px solid $a-border-action;
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.agreementTag {
+  background-color: #ccf1d67a;
+  border-radius: 0.25rem;
+  border: 1px solid #99dead7a;
+  font-size: $a-font-size-medium;
+  padding: $a-spacing-1-alt $a-spacing-2;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+}
+
+.nonAgreementTag {
+  @extend .agreementTag;
+  background-color: #f0ecf4;
+  border: 1px solid #e0d8e9;
+}
+
+.productSummary {
+  padding: $a-spacing-8 0 0 0;
+  top: 2.8rem;
+}
+
+.link {
+  color: $a-text-default;
+  text-decoration: underline;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    color: $a-text-action;
+    background-color: white;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+  }
+}
