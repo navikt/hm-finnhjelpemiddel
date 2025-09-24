@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Button, HGrid, Search, VStack } from '@navikt/ds-react'
+import { Button, ExpansionCard, Search, VStack } from '@navikt/ds-react'
 import { createAlternativeMapping } from '@/app/gjenbruksprodukter/alternative-util'
-import styles from './AddAlternative.module.scss'
 import useSWRImmutable from 'swr/immutable'
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
@@ -25,32 +24,40 @@ export const AddAlternative = ({
   )
 
   return (
-    <Box asChild paddingBlock={'8 6'} paddingInline={'8'} className={styles.wrapper}>
-      <HGrid gap={'2'} columns={'1fr 2fr'}>
-        <Search
-          label="Søk"
-          hideLabel={true}
-          variant="primary"
-          onSearchClick={setTargetHmsArtNr}
-          onClear={() => setTargetHmsArtNr(undefined)}
-          htmlSize={'12'}
-        />
-        {searchedProduct?.length === 1 && (
-          <VStack gap={'2'}>
-            <AddAlternativeCard product={searchedProduct[0]} />
-            <Button
-              onClick={() =>
-                createAlternativeMapping(sourceHmsArtNr, searchedProduct[0].variants[0].hmsArtNr!).then(() =>
-                  mutateAlternatives()
-                )
-              }
-              style={{ width: 'fit-content' }}
-            >
-              Legg til
-            </Button>
+    <VStack gap={'4'}>
+      <ExpansionCard size={'small'} aria-label="Demo med bare tittel" style={{ width: '410px' }}>
+        <ExpansionCard.Header>
+          <ExpansionCard.Title size={'small'}>Legg til alternativ</ExpansionCard.Title>
+        </ExpansionCard.Header>
+        <ExpansionCard.Content>
+          <VStack gap={'2'} padding={'2'}>
+            <Search
+              label="Skriv HMS-nummer"
+              hideLabel={false}
+              variant="primary"
+              onSearchClick={setTargetHmsArtNr}
+              onClear={() => setTargetHmsArtNr(undefined)}
+              htmlSize={'12'}
+            />
+            {searchedProduct?.length === 1 && (
+              <>
+                <AddAlternativeCard product={searchedProduct[0]} />
+                <Button
+                  size={'small'}
+                  onClick={() =>
+                    createAlternativeMapping(sourceHmsArtNr, searchedProduct[0].variants[0].hmsArtNr!).then(() =>
+                      mutateAlternatives()
+                    )
+                  }
+                  style={{ width: 'fit-content' }}
+                >
+                  Legg til
+                </Button>
+              </>
+            )}
           </VStack>
-        )}
-      </HGrid>
-    </Box>
+        </ExpansionCard.Content>
+      </ExpansionCard>
+    </VStack>
   )
 }
