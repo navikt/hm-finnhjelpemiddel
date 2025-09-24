@@ -65,7 +65,7 @@ const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): Alte
 }
 
 export async function getOriginalProductFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct> {
-  const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
+  const res = await fetch(HM_SEARCH_URL + '/alternative_products_search/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export async function getOriginalProductFromHmsArtNr(hmsArtNr: string): Promise<
 }
 
 export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct[]> {
-  const res = await fetch(HM_SEARCH_URL + '/alternative_products/_search', {
+  const res = await fetch(HM_SEARCH_URL + '/alternative_products_search/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -115,15 +115,12 @@ export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Prom
 }
 
 export async function getAlternativesAndStock(hmsArtNr: string): Promise<AlternativeStockResponse | undefined> {
-  const res = await fetch(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/alternativ/stock/${hmsArtNr}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  )
+  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/stock/${hmsArtNr}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 
   if (res.status === 404) {
     return undefined
@@ -134,7 +131,7 @@ export async function getAlternativesAndStock(hmsArtNr: string): Promise<Alterna
 
 export async function createAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
   return await fetcherModify(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/create`,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/create`,
     'POST',
     {
       sourceHmsArtnr: sourceHmsArtnr,
@@ -145,7 +142,7 @@ export async function createAlternativeMapping(sourceHmsArtnr: string, targetHms
 
 export async function deleteAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
   return await fetcherModify(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products_edit/hmsArtNrMapping/delete`,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/delete`,
     'DELETE',
     {
       sourceHmsArtnr: sourceHmsArtnr,
