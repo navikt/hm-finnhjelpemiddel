@@ -8,37 +8,16 @@ import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { faro } from '@grafana/faro-core'
+import { WarehouseStockResponse } from '@/utils/response-types'
 
-export interface WarehouseStock {
-  erPåLager: boolean
-  organisasjons_id: number
-  organisasjons_navn: string
-  artikkelnummer: string
-  artikkelid: number
-  fysisk: number
-  tilgjengeligatt: number
-  tilgjengeligroo: number
-  tilgjengelig: number
-  behovsmeldt: number
-  reservert: number
-  restordre: number
-  bestillinger: number
-  anmodning: number
-  intanmodning: number
-  forsyning: number
-  sortiment: boolean
-  lagervare: boolean
-  minmax: boolean
-}
-
-export interface ProductStock {
+export interface ProductStockResponse {
   hmsArtNr: string
-  warehouseStock: WarehouseStock[]
+  warehouseStock: WarehouseStockResponse[]
 }
 
 export interface AlternativeStockResponse {
-  original: ProductStock
-  alternatives: ProductStock[]
+  original: ProductStockResponse
+  alternatives: ProductStockResponse[]
 }
 
 export default function AlternativeProductsPage() {

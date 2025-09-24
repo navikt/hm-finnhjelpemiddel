@@ -1,19 +1,19 @@
-import { BodyShort, HGrid, Loader } from '@navikt/ds-react'
+import { BodyShort, HGrid, Loader, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
-import {
-  AlternativeProduct,
-  getAlternativeProductsFromHmsArtNr,
-  getOriginalProductFromHmsArtNr,
-  WarehouseStock,
-} from '@/app/gjenbruksprodukter/alternative-util'
+import { AlternativeProduct, getAlternativesAndStock, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore,
 } from '@/utils/compare-alternatives-state-util'
+import { Product } from '@/utils/product-util'
+import { getProductFromHmsArtNrs } from '@/utils/api-util'
+import { WarehouseStockResponse } from '@/utils/response-types'
+import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -22,36 +22,59 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
-  const {
-    data: original,
-    isLoading: isLoadingOrig,
-    error: errorOrig,
-  } = useSWRImmutable<AlternativeProduct>(`orig-${hmsNumber}`, () => getOriginalProductFromHmsArtNr(hmsNumber))
+  const featureFlags = useFeatureFlags()
+
+  const editMode: boolean = featureFlags.isEnabled('finnhjelpemiddel.visAlternativEdit') ?? false
 
   const {
-    data: alternatives,
+    data: alternativesResponse,
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
-  } = useSWRImmutable<AlternativeProduct[]>(`alts-${hmsNumber}`, () => getAlternativeProductsFromHmsArtNr(hmsNumber))
+    mutate: mutateAlternatives,
+  } = useSWRImmutable(`asdasd-${hmsNumber}`, () => getAlternativesAndStock(hmsNumber))
+
+  const alternativeStocks = alternativesResponse?.alternatives
+  const hmsArtNrs = alternativeStocks?.map((alternativeStock) => alternativeStock.hmsArtNr) ?? []
+
+  const {
+    data: alternativeProductsResponse,
+    isLoading: isLoadingAlternativeProducts,
+    error: errorAlternativeProducts,
+  } = useSWRImmutable<Product[]>(
+    alternativesResponse ? [`alternatives-${hmsNumber}`, alternativesResponse] : null,
+    () => getProductFromHmsArtNrs(hmsArtNrs)
+  )
+
+  const {
+    data: originalProductResponse,
+    isLoading: isLoadingOriginalProduct,
+    error: errorOriginalProduct,
+  } = useSWRImmutable<Product[]>(alternativesResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
-
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
-  if (alternatives) {
-    sortAlternativeProducts(alternatives, selectedWarehouse)
-  }
-
-  if (errorAlternatives || errorOrig) {
+  if (errorAlternatives || errorAlternativeProducts || errorOriginalProduct) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoadingAlternatives || isLoadingOrig) {
+  if (isLoadingAlternatives || isLoadingAlternativeProducts || isLoadingOriginalProduct) {
     return <Loader />
   }
 
-  if (!original) {
+  if (!originalProductResponse || !alternativesResponse || !alternativeProductsResponse) {
     return <>Finner ikke produkt {hmsNumber}</>
+  }
+
+  const original = mapToAlternativeProduct(originalProductResponse[0], alternativesResponse.original.warehouseStock)
+
+  const alternatives: AlternativeProduct[] = alternativeProductsResponse.map((product) => {
+    const stocks = alternativeStocks!.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
+    return mapToAlternativeProduct(product, stocks)
+  })
+
+  if (alternatives) {
+    sortAlternativeProducts(alternatives, selectedWarehouse)
   }
 
   const handleCompareClick = () => {
@@ -74,12 +97,14 @@ export const AlternativeProductList = ({
             selectedWarehouse ? getSelectedWarehouseStock(selectedWarehouse, original.warehouseStock) : undefined
           }
           handleCompareClick={handleCompareClick}
+          originalHmsArtNr={hmsNumber}
+          editMode={false}
+          mutateAlternatives={mutateAlternatives}
         />
       </div>
-      <div>
-        <Heading size="medium" spacing>
-          Alternative produkter
-        </Heading>
+      <VStack gap={'4'}>
+        <Heading size="medium">Alternative produkter</Heading>
+        {editMode && <AddAlternative sourceHmsArtNr={hmsNumber} mutateAlternatives={mutateAlternatives} />}
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {alternatives && alternatives.length > 0 ? (
             alternatives?.map((alternative) => {
@@ -93,6 +118,9 @@ export const AlternativeProductList = ({
                   }
                   key={alternative.id}
                   handleCompareClick={handleCompareClick}
+                  originalHmsArtNr={hmsNumber}
+                  editMode={editMode}
+                  mutateAlternatives={mutateAlternatives}
                 />
               )
             })
@@ -100,17 +128,48 @@ export const AlternativeProductList = ({
             <BodyShort>Ingen kjente alternativer for produktet på lager</BodyShort>
           )}
         </HGrid>
-      </div>
+      </VStack>
     </>
   )
 }
 
-const getSelectedWarehouseStock = (selectedWarehouse: string, warehouseStocks: WarehouseStock[]): WarehouseStock => {
-  const stock = warehouseStocks.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
-  if (!stock) {
-    throw new Error(`Finner ikke valgt lager: ${selectedWarehouse}`)
+const mapToAlternativeProduct = (
+  product: Product,
+  stocks: WarehouseStockResponse[] | undefined
+): AlternativeProduct => {
+  const variant = product.variants[0]
+  return {
+    seriesId: product.id,
+    id: variant.id,
+    seriesTitle: product.title,
+    variantTitle: variant.articleName,
+    status: variant.status,
+    hmsArtNr: variant.hmsArtNr,
+    imageUri: product.photos[0]?.uri,
+    supplierName: product.supplierName,
+    highestRank:
+      variant.agreements.length > 0 ? Math.max(...variant.agreements.map((agreement) => agreement.rank)) : 99,
+    onAgreement: variant.agreements.length > 0,
+    warehouseStock: stocks
+      ?.filter((stock) => stock.location != 'Telemark')
+      .map((stock) => {
+        return {
+          location: stock.location,
+          available: stock.available,
+          reserved: stock.reserved,
+          needNotified: stock.needNotified,
+          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
+        }
+      }),
+    inStockAnyWarehouse: !!stocks?.find((stock) => stock.available - stock.needNotified > 0),
   }
-  return stock
+}
+
+const getSelectedWarehouseStock = (
+  selectedWarehouse: string,
+  warehouseStocks: WarehouseStock[] | undefined
+): WarehouseStock | undefined => {
+  return warehouseStocks?.find((stockLocation) => stockLocation.location.includes(selectedWarehouse))
 }
 
 const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], selectedWarehouse?: string | undefined) => {

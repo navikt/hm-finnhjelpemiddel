@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { ActionMenu, BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/gjenbruksprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
-import { ArrowsSquarepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { AlternativeProduct, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
+import {
+  ArrowsSquarepathIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  MenuElipsisVerticalCircleIcon,
+} from '@navikt/aksel-icons'
+import { AlternativeProduct, deleteAlternativeMapping, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 
@@ -12,10 +17,16 @@ export const AlternativeProductCard = ({
   alternativeProduct,
   selectedWarehouseStock,
   handleCompareClick,
+  originalHmsArtNr,
+  editMode,
+  mutateAlternatives,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
   handleCompareClick?: () => void
+  originalHmsArtNr: string
+  editMode: boolean
+  mutateAlternatives: () => void
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -31,6 +42,15 @@ export const AlternativeProductCard = ({
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
+      {editMode && (
+        <div className={styles.editMenu}>
+          <EditMenu
+            sourceHmsArtNr={originalHmsArtNr}
+            targetHmsArtNr={alternativeProduct.hmsArtNr!}
+            mutateAlternatives={mutateAlternatives}
+          />
+        </div>
+      )}
     </Stack>
   )
 }
@@ -205,5 +225,30 @@ const CompareButton = ({
         <span aria-hidden>Sammenlign</span>
       </div>
     </Button>
+  )
+}
+
+const EditMenu = ({
+  sourceHmsArtNr,
+  targetHmsArtNr,
+  mutateAlternatives,
+}: {
+  sourceHmsArtNr: string
+  targetHmsArtNr: string
+  mutateAlternatives: () => void
+}) => {
+  return (
+    <ActionMenu>
+      <ActionMenu.Trigger>
+        <Button variant="tertiary" icon={<MenuElipsisVerticalCircleIcon aria-hidden />} iconPosition="right"></Button>
+      </ActionMenu.Trigger>
+      <ActionMenu.Content>
+        <ActionMenu.Item
+          onSelect={() => deleteAlternativeMapping(sourceHmsArtNr, targetHmsArtNr).then(() => mutateAlternatives())}
+        >
+          Slett
+        </ActionMenu.Item>
+      </ActionMenu.Content>
+    </ActionMenu>
   )
 }
