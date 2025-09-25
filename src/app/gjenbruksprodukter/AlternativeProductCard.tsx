@@ -111,13 +111,19 @@ const ProductInfo = ({
         </Box>
       </HStack>
       <HStack align={'end'} justify={'space-between'} gap={'2'} wrap={false}>
-        {!alternativeProduct.inStockAnyWarehouse && (
+        {alternativeProduct.warehouseStock === undefined && (
+          <Tag variant="neutral" size={'small'}>
+            Ukjent lagerstatus
+          </Tag>
+        )}
+
+        {!alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
           <Tag variant="neutral" size={'small'}>
             Ikke på noen lager
           </Tag>
         )}
 
-        {alternativeProduct.inStockAnyWarehouse && (
+        {alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
           <>
             <VStack gap={'2'}>
               {selectedWarehouseStock && (
@@ -157,7 +163,9 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
     <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
       {stocks
         ?.filter((stock) => stock.actualAvailable > 0)
-        .map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
+        .map((stock) => (
+          <LocationInfo stock={stock} key={stock.location} />
+        ))}
     </HGrid>
   )
 }
