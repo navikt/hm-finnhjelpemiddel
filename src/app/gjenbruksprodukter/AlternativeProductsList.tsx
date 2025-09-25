@@ -2,7 +2,12 @@ import { BodyShort, HGrid, Loader, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
-import { AlternativeProduct, getAlternativesAndStock, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
+import {
+  AlternativeProduct,
+  deleteAlternativeMapping,
+  getAlternativesAndStock,
+  WarehouseStock,
+} from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import CompareAlternativeProductsMenu from '@/components/layout/CompareAlternativeProductsMenu'
 import {
@@ -54,6 +59,8 @@ export const AlternativeProductList = ({
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
+  const [newAlternative, setNewAlternative] = useState<AlternativeProduct | undefined>(undefined)
+
   if (errorAlternatives || errorAlternativeProducts || errorOriginalProduct) {
     return <>En feil har skjedd ved henting av data</>
   }
@@ -97,15 +104,28 @@ export const AlternativeProductList = ({
             selectedWarehouse ? getSelectedWarehouseStock(selectedWarehouse, original.warehouseStock) : undefined
           }
           handleCompareClick={handleCompareClick}
-          originalHmsArtNr={hmsNumber}
           editMode={false}
-          mutateAlternatives={mutateAlternatives}
+          onDelete={() => {}}
         />
       </div>
       <VStack gap={'4'}>
         <Heading size="medium">Alternative produkter</Heading>
-        {editMode && <AddAlternative sourceHmsArtNr={hmsNumber} mutateAlternatives={mutateAlternatives} />}
+        {editMode && <AddAlternative sourceHmsArtNr={hmsNumber} setNewAlternative={setNewAlternative} />}
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
+          {newAlternative && (
+            <AlternativeProductCard
+              alternativeProduct={newAlternative}
+              selectedWarehouseStock={undefined}
+              key={newAlternative.id}
+              handleCompareClick={handleCompareClick}
+              editMode={editMode}
+              onDelete={() =>
+                deleteAlternativeMapping(hmsNumber, newAlternative.hmsArtNr!).then(() => {
+                  setNewAlternative(undefined)
+                })
+              }
+            />
+          )}
           {alternatives && alternatives.length > 0 ? (
             alternatives?.map((alternative) => {
               return (
@@ -118,9 +138,10 @@ export const AlternativeProductList = ({
                   }
                   key={alternative.id}
                   handleCompareClick={handleCompareClick}
-                  originalHmsArtNr={hmsNumber}
                   editMode={editMode}
-                  mutateAlternatives={mutateAlternatives}
+                  onDelete={() =>
+                    deleteAlternativeMapping(hmsNumber, alternative.hmsArtNr!).then(() => mutateAlternatives())
+                  }
                 />
               )
             })
@@ -133,7 +154,7 @@ export const AlternativeProductList = ({
   )
 }
 
-const mapToAlternativeProduct = (
+export const mapToAlternativeProduct = (
   product: Product,
   stocks: WarehouseStockResponse[] | undefined
 ): AlternativeProduct => {

@@ -1,17 +1,18 @@
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Button, ExpansionCard, Search, VStack } from '@navikt/ds-react'
-import { createAlternativeMapping } from '@/app/gjenbruksprodukter/alternative-util'
+import { AlternativeProduct, createAlternativeMapping } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { AddAlternativeCard } from '@/app/gjenbruksprodukter/AddAlternativeCard'
+import { mapToAlternativeProduct } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 
 export const AddAlternative = ({
   sourceHmsArtNr,
-  mutateAlternatives,
+  setNewAlternative,
 }: {
   sourceHmsArtNr: string
-  mutateAlternatives: () => void
+  setNewAlternative: Dispatch<SetStateAction<AlternativeProduct | undefined>>
 }) => {
   const [targetHmsArtNr, setTargetHmsArtNr] = useState<string | undefined>(undefined)
 
@@ -46,7 +47,7 @@ export const AddAlternative = ({
                   size={'small'}
                   onClick={() =>
                     createAlternativeMapping(sourceHmsArtNr, searchedProduct[0].variants[0].hmsArtNr!).then(() =>
-                      mutateAlternatives()
+                      setNewAlternative(mapToAlternativeProduct(searchedProduct[0], undefined))
                     )
                   }
                   style={{ width: 'fit-content' }}

@@ -9,7 +9,7 @@ import {
   ChevronUpIcon,
   MenuElipsisVerticalCircleIcon,
 } from '@navikt/aksel-icons'
-import { AlternativeProduct, deleteAlternativeMapping, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
+import { AlternativeProduct, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
 
@@ -17,16 +17,14 @@ export const AlternativeProductCard = ({
   alternativeProduct,
   selectedWarehouseStock,
   handleCompareClick,
-  originalHmsArtNr,
   editMode,
-  mutateAlternatives,
+  onDelete,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
   handleCompareClick?: () => void
-  originalHmsArtNr: string
   editMode: boolean
-  mutateAlternatives: () => void
+  onDelete: () => void
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -44,11 +42,7 @@ export const AlternativeProductCard = ({
       {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
       {editMode && (
         <div className={styles.editMenu}>
-          <EditMenu
-            sourceHmsArtNr={originalHmsArtNr}
-            targetHmsArtNr={alternativeProduct.hmsArtNr!}
-            mutateAlternatives={mutateAlternatives}
-          />
+          <EditMenu onDelete={onDelete} />
         </div>
       )}
     </Stack>
@@ -236,26 +230,14 @@ const CompareButton = ({
   )
 }
 
-const EditMenu = ({
-  sourceHmsArtNr,
-  targetHmsArtNr,
-  mutateAlternatives,
-}: {
-  sourceHmsArtNr: string
-  targetHmsArtNr: string
-  mutateAlternatives: () => void
-}) => {
+const EditMenu = ({ onDelete }: { onDelete: () => void }) => {
   return (
     <ActionMenu>
       <ActionMenu.Trigger>
         <Button variant="tertiary" icon={<MenuElipsisVerticalCircleIcon aria-hidden />} iconPosition="right"></Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content>
-        <ActionMenu.Item
-          onSelect={() => deleteAlternativeMapping(sourceHmsArtNr, targetHmsArtNr).then(() => mutateAlternatives())}
-        >
-          Slett
-        </ActionMenu.Item>
+        <ActionMenu.Item onSelect={onDelete}>Slett</ActionMenu.Item>
       </ActionMenu.Content>
     </ActionMenu>
   )
