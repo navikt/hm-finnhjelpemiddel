@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_ENV: dev
-      IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
-      CDN_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
+      IMAGE_PROXY_URL: https://finnhjelpemiddel.ekstern.dev.nav.no/imageproxy
+      CDN_URL: https://finnhjelpemiddel.ekstern.dev.nav.no/imageproxy/file/
       FARO_URL: https://telemetry.ekstern.dev.nav.no/collect
     permissions:
       contents: "write"
