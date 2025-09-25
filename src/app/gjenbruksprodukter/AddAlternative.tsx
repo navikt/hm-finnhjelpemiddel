@@ -46,9 +46,10 @@ export const AddAlternative = ({
                 <Button
                   size={'small'}
                   onClick={() =>
-                    createAlternativeMapping(sourceHmsArtNr, searchedProduct[0].variants[0].hmsArtNr!).then(() =>
+                    createAlternativeMapping(sourceHmsArtNr, searchedProduct[0].variants[0].hmsArtNr!).then(() => {
                       setNewAlternative(mapToAlternativeProduct(searchedProduct[0], undefined))
-                    )
+                      setTargetHmsArtNr(undefined)
+                    })
                   }
                   style={{ width: 'fit-content' }}
                 >
