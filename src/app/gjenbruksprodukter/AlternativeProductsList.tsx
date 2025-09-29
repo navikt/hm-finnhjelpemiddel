@@ -54,7 +54,7 @@ export const AlternativeProductList = ({
     data: originalProductResponse,
     isLoading: isLoadingOriginalProduct,
     error: errorOriginalProduct,
-  } = useSWRImmutable<Product[]>(alternativesResponse ? hmsNumber : null, () => getProductFromHmsArtNrs([hmsNumber]))
+  } = useSWRImmutable<Product[]>(hmsNumber, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
@@ -69,16 +69,22 @@ export const AlternativeProductList = ({
     return <Loader />
   }
 
-  if (!originalProductResponse || !alternativesResponse || !alternativeProductsResponse) {
+  if (!originalProductResponse) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  const original = mapToAlternativeProduct(originalProductResponse[0], alternativesResponse.original.warehouseStock)
+  //Skjuler original-produktkort med ukjent lagerstatus for de uten edit-tilgang for nå
+  if (!editMode && (!alternativesResponse || !alternativeProductsResponse)) {
+    return <>Finner ikke produkt {hmsNumber}</>
+  }
 
-  const alternatives: AlternativeProduct[] = alternativeProductsResponse.map((product) => {
-    const stocks = alternativeStocks!.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
-    return mapToAlternativeProduct(product, stocks)
-  })
+  const original = mapToAlternativeProduct(originalProductResponse[0], alternativesResponse?.original.warehouseStock)
+
+  const alternatives: AlternativeProduct[] =
+    alternativeProductsResponse?.map((product) => {
+      const stocks = alternativeStocks!.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
+      return mapToAlternativeProduct(product, stocks)
+    }) ?? []
 
   if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
