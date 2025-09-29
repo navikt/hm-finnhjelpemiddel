@@ -2,7 +2,7 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from './AlternativeProducts.module.scss'
-import { BodyShort, HStack, Search, Select, VStack } from '@navikt/ds-react'
+import { Bleed, BodyShort, Box, HStack, Search, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
@@ -86,54 +86,58 @@ export default function AlternativeProductsPage() {
 
   return (
     <VStack gap={'4'} className={`${styles.container} main-wrapper--large`}>
-      <Heading level="1" size="large" className={styles.headerColor}>
-        Finn gjenbruksprodukt
-      </Heading>
+      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
+        <VStack paddingBlock={'12'}>
+          <Heading level="1" size="large" spacing>
+            Alternativer på lager
+          </Heading>
 
-      <div>
-        <BodyShort spacing>
-          Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
-        </BodyShort>
-        <BodyShort>Hjelpemiddelområder som ikke finnes i Finn gjenbruksprodukt er:</BodyShort>
-        <ul style={{ marginTop: '0' }}>
-          <li>Sitteputer med trykksårforebyggende egenskaper</li>
-          <li>Omgivelseskontroll</li>
-          <li>Elektrisk hev- og senkfunksjon til innredning på kjøkken og bad</li>
-        </ul>
-      </div>
+          <Box paddingBlock={'0 8'}>
+            <BodyShort spacing>
+              Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
+            </BodyShort>
+            <BodyShort>Hjelpemiddelområder som ikke finnes her er:</BodyShort>
+            <ul style={{ marginTop: '0' }}>
+              <li>Sitteputer med trykksårforebyggende egenskaper</li>
+              <li>Omgivelseskontroll</li>
+              <li>Elektrisk hev- og senkfunksjon til innredning på kjøkken og bad</li>
+            </ul>
+          </Box>
 
-      <HStack gap={'7'} align={'end'}>
-        <Search
-          label={'HMS-nummer'}
-          hideLabel={false}
-          variant="secondary"
-          className={styles.search}
-          onSearchClick={(value) => handleSearch(value)}
-          onKeyUp={(event: React.KeyboardEvent) => {
-            if (event.key === 'Enter') {
-              handleSearch((event.currentTarget as HTMLInputElement).value)
-            }
-          }}
-        ></Search>
+          <HStack gap={'7'} align={'end'} wrap={false}>
+            <Search
+              label={'HMS-nummer'}
+              hideLabel={false}
+              variant="primary"
+              className={styles.search}
+              onSearchClick={(value) => handleSearch(value)}
+              onKeyUp={(event: React.KeyboardEvent) => {
+                if (event.key === 'Enter') {
+                  handleSearch((event.currentTarget as HTMLInputElement).value)
+                }
+              }}
+            ></Search>
 
-        <Select
-          label={'Velg sentral'}
-          hideLabel
-          className={styles.selectWarehouse}
-          onChange={(e) => changeSelectedWarehouse(e.target.value)}
-          value={selectedWarehouse ?? ''}
-        >
-          <option key={0} value={''}>
-            Velg sentral
-          </option>
-          {warehouseNames &&
-            warehouseNames.map((name, i) => (
-              <option key={i + 1} value={name}>
-                {name}
+            <Select
+              label={'Velg sentral'}
+              hideLabel
+              className={styles.selectWarehouse}
+              onChange={(e) => changeSelectedWarehouse(e.target.value)}
+              value={selectedWarehouse ?? ''}
+            >
+              <option key={0} value={''}>
+                Velg sentral
               </option>
-            ))}
-        </Select>
-      </HStack>
+              {warehouseNames &&
+                warehouseNames.map((name, i) => (
+                  <option key={i + 1} value={name}>
+                    {name}
+                  </option>
+                ))}
+            </Select>
+          </HStack>
+        </VStack>
+      </Bleed>
 
       {searchParams.has('hms') && (
         <AlternativeProductList hmsNumber={searchParams.get('hms')!} selectedWarehouse={selectedWarehouse} />
