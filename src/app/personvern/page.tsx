@@ -81,13 +81,6 @@ function CookieInfo() {
                 som vasker bort deler av IP-adressen din før dataene sendes til verktøyet.
               </li>
               <li>
-                _hj*
-                <br />
-                Brukes til frivillige brukerundersøkelser via verktøyet HotJar. Dataene inneholder en teknisk ID som
-                husker hvilken invitasjon som eventuelt har blitt vist, om du har takket ja til invitasjonen og om
-                undersøkelsen er ferdig besvart.
-              </li>
-              <li>
                 Umami
                 <br />
                 Brukes til statistikk og analyse av hvordan nav.no brukes. Unami bruker ikke informasjonskapsler, men

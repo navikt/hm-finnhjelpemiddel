@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
-import { hotjar } from 'react-hotjar'
 import Cookies from 'js-cookie'
 
 import { initAmplitude, stopAmplitude } from '@/utils/amplitude'
@@ -29,17 +28,6 @@ function setCookie(name: string, value: string, days = 180): void {
   document.cookie = `${name}=${value}; expires=${expiry.toUTCString()}; path=/`
 }
 
-export const stopHotjar = () => {
-  if (typeof window !== 'undefined') {
-    // Remove Hotjar script from the DOM
-    const hotjarScript = document.querySelector('script[src*="hotjar"]')
-
-    if (hotjarScript) {
-      hotjarScript.remove()
-    }
-  }
-}
-
 export const removeOptionalCookies = () => {
   const storedCookies = Object.entries(Cookies.get()).map(([name]) => name)
   const cookiesToRemove = storedCookies.filter((cookie) => cookie.startsWith('AMP_'))
@@ -50,15 +38,6 @@ export const removeOptionalCookies = () => {
       path: '/',
     })
   })
-
-  storedCookies
-    .filter((cookie) => cookie.startsWith('_hj'))
-    .forEach((hotjarCookie) => {
-      Cookies.remove(hotjarCookie, {
-        domain: '.nav.no',
-        path: '/',
-      })
-    })
 }
 
 function LayoutProvider({ children }: { children: React.ReactNode }) {
@@ -85,13 +64,9 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
-        //if (process.env.NODE_ENV == 'production') {
-        hotjar.initialize({ id: 118350, sv: 6 })
-        //}
       }
       if (consent === 'false') {
         stopAmplitude()
-        stopHotjar()
         removeOptionalCookies()
       }
       initInstrumentation()
