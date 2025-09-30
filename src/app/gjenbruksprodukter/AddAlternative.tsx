@@ -37,6 +37,11 @@ export const AddAlternative = ({
               hideLabel={false}
               variant="primary"
               onSearchClick={setTargetHmsArtNr}
+              onKeyUp={(event: React.KeyboardEvent) => {
+                if (event.key === 'Enter') {
+                  setTargetHmsArtNr((event.currentTarget as HTMLInputElement).value)
+                }
+              }}
               onClear={() => setTargetHmsArtNr(undefined)}
               htmlSize={'12'}
             />
