@@ -65,7 +65,7 @@ export const formatAgreementRanks = (agreements: AgreementInfo[]): string => {
 
 export const formatAgreementPosts = (agreements: AgreementInfo[]): string => {
   return agreements
-    .map((ag) => ag.postNr)
+    .map((ag) => ag.refNr)
     .sort()
     .join(', ')
 }
