@@ -15,6 +15,7 @@ import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
 import { initSkyra, stopSkyra } from '@/utils/skyra'
+import { SkyraSurvey } from '@/app/SkyraSurvey'
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
@@ -28,7 +29,6 @@ function setCookie(name: string, value: string, days = 180): void {
   value = encodeURIComponent(value)
   document.cookie = `${name}=${value}; expires=${expiry.toUTCString()}; path=/`
 }
-
 
 export const removeOptionalCookies = () => {
   const storedCookies = Object.entries(Cookies.get()).map(([name]) => name)
@@ -118,6 +118,11 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         {isMenuOpen && <div id="cover-main" />}
         {children}
       </main>
+
+      <SkyraSurvey
+        buttonText={'Tilbakemelding'}
+        skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
+      />
 
       <Footer setCookieConsent={setConsent} />
     </Suspense>
