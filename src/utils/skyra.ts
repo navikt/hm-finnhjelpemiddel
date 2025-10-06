@@ -20,7 +20,7 @@ export const initSkyra = () => {
   window.SKYRA_CONFIG = {
     org: 'arbeids-og-velferdsetaten-nav',
     slug: 'arbeids-og-velferdsetaten-nav/DigiHoT-Finnhjelpemiddel_test_survey_v1',
-    cookieConsent: true,
+    cookieConsent: false,
   }
 
   const script = document.createElement('script')

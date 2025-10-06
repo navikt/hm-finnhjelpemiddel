@@ -1,6 +1,20 @@
 .button {
+  --ac-button-secondary-bg: white;
+  --ac-button-border-radius: 32px;
+  position: absolute;
+  right: 1rem;
+}
+
+.container {
   position: fixed;
+
+  left: 0;
   right: 0;
-  top: 50%;
+  top: 100px;
+
+  margin-left: auto;
+  margin-right: auto;
   z-index: 1000;
+  width: 100%;
+  max-width: 1408px;
 }
