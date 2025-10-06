@@ -16,7 +16,7 @@
 }
 
 .search {
-  max-width: 440px;
+  max-width: 400px;
 }
 
 .link {
@@ -49,6 +49,7 @@
   border: 1px solid #909090;
   border-radius: 4px;
   width: fit-content;
+  position: relative;
 }
 
 .productContainer {
@@ -82,7 +83,7 @@
 }
 
 .selectWarehouse {
-  width: 27rem;
+  width: 220px;
 }
 
 .toggledButton {
@@ -95,4 +96,10 @@
     color: white;
     background-color: $a-surface-action-selected-hover;
   }
+}
+
+.editMenu {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }

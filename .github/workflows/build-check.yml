@@ -2,30 +2,14 @@ name: Build check
 
 on: [push]
 
-permissions:
-  contents: read
-  packages: read
-
 jobs:
-  build:
-    name: Build application
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18.x
-      - name: Autentiser med GitHub NPM registry
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.READER_TOKEN }}" >> ~/.npmrc
-          echo "@navikt:registry=https://npm.pkg.github.com" >> ~/.npmrc
-      - name: Install npm dependencies
-        run: npm install
-      - name: Build application
-        run: npm run build
-        env:
-          IMAGE_PROXY_URL: 'Test'
-          CDN_URL: 'Test'
-          RUNTIME_ENVIRONMENT: 'Test'
-      - name: Run linting
-        run: npm run lint
+  call-workflow:
+    permissions:
+      contents: read
+      packages: read
+      actions: read
+    uses: navikt/mime-deploy/.github/workflows/build-check-node.yml@v0
+    with:
+      NODE_VER: '18.x'
+    secrets: inherit
+ 

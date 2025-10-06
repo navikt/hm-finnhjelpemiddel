@@ -22,6 +22,10 @@ const CompareAlternativeProductsMenu = () => {
 
   const reversedAlternativeProductsToCompare = alternativeProductsToCompare.slice().reverse()
 
+  if (alternativeProductsToCompare.length == 0) {
+    return <></>
+  }
+
   return (
     <div
       className={classNames('compare-menu', {
@@ -79,8 +83,8 @@ const CompareAlternativeProductsMenu = () => {
                     variant="tertiary"
                     icon={<TrashIcon aria-hidden />}
                     onClick={() => {
-                      resetAlternativeProductToCompare(),
-                        setCompareAlternativesMenuState(CompareAlternativesMenuState.Minimized)
+                      resetAlternativeProductToCompare()
+                      setCompareAlternativesMenuState(CompareAlternativesMenuState.Minimized)
                     }}
                   >
                     Nullstill

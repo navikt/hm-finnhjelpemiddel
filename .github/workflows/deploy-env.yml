@@ -10,67 +10,16 @@ on:
           - dev
 
 jobs:
-  build:
-    name: Bygg
-    runs-on: ubuntu-latest
-    env:
-      BUILD_ENV: dev
-      IMAGE_PROXY_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy
-      CDN_URL: https://finnhjelpemiddel.intern.dev.nav.no/imageproxy/file/
-      FARO_URL: https://telemetry.ekstern.dev.nav.no/collect
-    permissions:
-      contents: "write"
-      id-token: "write"
-      packages: "write"
-    timeout-minutes: 10
-    outputs:
-      docker_image: ${{ steps.docker-build-push.outputs.image }}
-      version_tag: ${{ steps.version-tag.outputs.VERSION_TAG}}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: pre-deploy
-        uses: navikt/digihot-deploy/actions/pre-deploy@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Bygg og push Docker image
-        uses: nais/docker-build-push@v0
-        id: docker-build-push
-        with:
-          team: teamdigihot
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          tag: ${{ env.VERSION_TAG }}
-          build_args: |
-            BUILD_ENV=${{ env.BUILD_ENV }}
-            IMAGE_PROXY_URL=${{ env.IMAGE_PROXY_URL }}
-            CDN_URL=${{ env.CDN_URL }}
-            FARO_URL=${{ env.FARO_URL }}
-          build_secrets: |
-            NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-
-  deploy-dev:
-    name: Deploy til dev-gcp
-    runs-on: ubuntu-latest
-    needs: [ build ]
+  call-workflow:
     permissions:
       contents: write
       id-token: write
-    timeout-minutes: 10
-    env:
-      VERSION_TAG: ${{ needs.build.outputs.version_tag }}
-
-    steps:
-      - name: Sjekk ut koden
-        uses: actions/checkout@v4
-
-      - name: Deploy
-        uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/nais-dev.yaml
-          IMAGE: ${{ needs.build.outputs.docker_image }}
-
+      packages: write
+      actions: read
+    uses: navikt/mime-deploy/.github/workflows/build-deploy-nextjs.yml@v0
+    with:
+      NAIS_RESOURCE: .nais/nais-dev.yaml
+      BUILD_ENV: dev
+      IMAGE_PROXY_URL: https://finnhjelpemiddel.ekstern.dev.nav.no/imageproxy
+      CDN_URL: https://finnhjelpemiddel.ekstern.dev.nav.no/imageproxy/file/
+    secrets: inherit

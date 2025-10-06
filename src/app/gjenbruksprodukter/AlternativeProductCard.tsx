@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { ActionMenu, BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/gjenbruksprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
-import { ArrowsSquarepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
+import {
+  ArrowsSquarepathIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  MenuElipsisVerticalCircleIcon,
+} from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
@@ -12,10 +17,14 @@ export const AlternativeProductCard = ({
   alternativeProduct,
   selectedWarehouseStock,
   handleCompareClick,
+  editMode,
+  onDelete,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
   handleCompareClick?: () => void
+  editMode: boolean
+  onDelete: () => void
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -31,6 +40,11 @@ export const AlternativeProductCard = ({
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
+      {editMode && (
+        <div className={styles.editMenu}>
+          <EditMenu onDelete={onDelete} />
+        </div>
+      )}
     </Stack>
   )
 }
@@ -91,13 +105,19 @@ const ProductInfo = ({
         </Box>
       </HStack>
       <HStack align={'end'} justify={'space-between'} gap={'2'} wrap={false}>
-        {!alternativeProduct.inStockAnyWarehouse && (
+        {alternativeProduct.warehouseStock === undefined && (
+          <Tag variant="neutral" size={'small'}>
+            Ukjent lagerstatus
+          </Tag>
+        )}
+
+        {!alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
           <Tag variant="neutral" size={'small'}>
             Ikke på noen lager
           </Tag>
         )}
 
-        {alternativeProduct.inStockAnyWarehouse && (
+        {alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
           <>
             <VStack gap={'2'}>
               {selectedWarehouseStock && (
@@ -137,7 +157,9 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
     <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
       {stocks
         ?.filter((stock) => stock.actualAvailable > 0)
-        .map((stock) => <LocationInfo stock={stock} key={stock.location} />)}
+        .map((stock) => (
+          <LocationInfo stock={stock} key={stock.location} />
+        ))}
     </HGrid>
   )
 }
@@ -205,5 +227,18 @@ const CompareButton = ({
         <span aria-hidden>Sammenlign</span>
       </div>
     </Button>
+  )
+}
+
+const EditMenu = ({ onDelete }: { onDelete: () => void }) => {
+  return (
+    <ActionMenu>
+      <ActionMenu.Trigger>
+        <Button variant="tertiary" icon={<MenuElipsisVerticalCircleIcon aria-hidden />} iconPosition="right"></Button>
+      </ActionMenu.Trigger>
+      <ActionMenu.Content>
+        <ActionMenu.Item onSelect={onDelete}>Slett</ActionMenu.Item>
+      </ActionMenu.Content>
+    </ActionMenu>
   )
 }
