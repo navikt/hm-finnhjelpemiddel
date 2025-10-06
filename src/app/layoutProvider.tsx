@@ -14,7 +14,7 @@ import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
-import { initSkyra, stopSkyra } from '@/utils/skyra'
+import { initSkyra } from '@/utils/skyra'
 import { SkyraSurvey } from '@/app/SkyraSurvey'
 
 function getCookie(name: string): string | null {
@@ -66,13 +66,12 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
-        initSkyra()
       }
       if (consent === 'false') {
         stopAmplitude()
         removeOptionalCookies()
-        stopSkyra()
       }
+      initSkyra()
       initInstrumentation()
     }
   }, [consent])
