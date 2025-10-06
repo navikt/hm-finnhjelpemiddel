@@ -1,3 +1,5 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
 .button {
   --ac-button-secondary-bg: white;
   --ac-button-border-radius: 32px;
@@ -17,4 +19,9 @@
   z-index: 1000;
   width: 100%;
   max-width: 1408px;
+
+  @media (max-width: $a-breakpoint-sm) {
+    top: auto;
+    bottom: 60px;
+  }
 }
