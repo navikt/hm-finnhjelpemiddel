@@ -13,7 +13,7 @@ export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; sky
         ref={buttonRef}
         onClick={() => setOpenState((prev) => !prev)}
         aria-expanded={openState}
-        variant="secondary"
+        variant="tertiary"
         className={styles.button}
       >
         {buttonText}
