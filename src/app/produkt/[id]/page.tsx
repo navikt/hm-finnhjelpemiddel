@@ -1,13 +1,11 @@
-import { fetcherGET, fetchProductsWithVariants, getProductWithVariants } from '@/utils/api-util'
-import { mapProductFromSeriesId, Product } from '@/utils/product-util'
+import { fetchProductsWithVariants, getProductWithVariants } from '@/utils/api-util'
+import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
 import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
-import useSWR from 'swr'
-import { Agreement } from '@/utils/agreement-util'
 
 type Props = {
   params: Promise<{ id: string }>
