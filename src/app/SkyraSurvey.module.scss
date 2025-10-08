@@ -1,8 +1,7 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .button {
-  --ac-button-secondary-bg: white;
-  --ac-button-tertiary-bg: white;
+  --ac-button-tertiary-bg: #f5f9ff;
   --ac-button-border-radius: 32px;
   position: absolute;
   right: 1rem;
@@ -15,7 +14,7 @@
   left: 0;
   right: 0;
   top: auto;
-  bottom: 60px;
+  bottom: 70px;
 
   margin-left: auto;
   margin-right: auto;
