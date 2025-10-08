@@ -1,13 +1,13 @@
 'use client'
 
 import { FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { PostBucketResponse } from '@/utils/response-types'
+import { PostBucketResponse, ProductSourceResponse } from '@/utils/response-types'
 import { dateToString } from '@/utils/string-util'
 import { ArrowRightIcon, CalendarIcon, DocPencilIcon, FilePdfIcon, LayersPlusIcon } from '@navikt/aksel-icons'
 import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
@@ -58,6 +58,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     keepPreviousData: true,
   })
 
+  const { data: unfilteredPostBuckets } = useSWR<PostBucketResponse[]>(
+    { agreementId: agreement.id, searchData: mapSearchParams(new ReadonlyURLSearchParams()) },
+    getProductsOnAgreement,
+    {
+      keepPreviousData: true,
+    }
+  )
+
   const { data: filtersFromData } = useSWRImmutable<FilterData>(
     { agreementId: agreement.id, type: 'filterdata' },
     getFiltersAgreement,
@@ -66,7 +74,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     }
   )
 
-  if (!postBuckets || !filtersFromData) {
+  if (!postBuckets || !unfilteredPostBuckets || !filtersFromData) {
     return (
       <HStack justify="center" style={{ marginTop: '48px' }}>
         <Loader size="3xlarge" title="Laster produkter" />
@@ -74,14 +82,20 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     )
   }
 
-  //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
-  //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
-  const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters).filter(
-    (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0
+  const postsContainingProducts = new Set(
+    unfilteredPostBuckets
+      .flatMap((bucket) =>
+        bucket.topHitData.hits.hits.flatMap((hit) => (hit._source as ProductSourceResponse).agreements)
+      )
+      .map((agreement) => agreement.postIdentifier)
   )
 
-  const postFilters: FilterOption[] = posts
+  const postFilters: FilterOption[] = agreement.posts
     .filter((post) => post.nr != 99 && post.title.length > 0)
+    .filter(
+      //Skjul tomme delkontrakter for rammeavtalene i listen splitAgreementsWithEmptyPosts
+      (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || postsContainingProducts.has(post.identifier)
+    )
     .sort((a, b) => a.nr - b.nr)
     .map((post) => ({ label: post.title, value: post.title }))
 
@@ -95,6 +109,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     leverandor: leverandorFilter,
     delkontrakt: postFilters,
   }
+
+  //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
+  //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
+  const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters).filter(
+    (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0
+  )
 
   const totalProducts =
     posts.length > 0
