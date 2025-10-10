@@ -1,0 +1,16 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  border: 2px solid $a-gray-50;
+  width: 900px;
+}
+
+.container + .container {
+  border-top: 0;
+}
+
+.imageWrapper {
+  width: 75px;
+  height: 75px;
+  position: relative;
+}
