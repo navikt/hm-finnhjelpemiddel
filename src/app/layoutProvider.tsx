@@ -14,6 +14,7 @@ import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
+import { initUmami, stopUmami } from '@/utils/umami'
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
@@ -64,9 +65,11 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
+        initUmami(window.location.hostname)
       }
       if (consent === 'false') {
         stopAmplitude()
+        stopUmami()
         removeOptionalCookies()
       }
       initInstrumentation()
