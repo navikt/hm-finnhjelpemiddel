@@ -2,7 +2,7 @@
 
 export const initUmami = (hostname: string) => {
   const UMAMI_TRACKING_ID_DEV = 'd2c4d342-5355-4dbc-9c0e-6d6498f4f4e1'
-  const UMAMI_TRACKING_ID_PROD = 'umami_prodid_to_be_set'
+  const UMAMI_TRACKING_ID_PROD = '90c61615-5d2a-4195-a9ab-694b0aae94de'
 
   const UMAMI_WEBSITE_ID =
     process.env.BUILD_ENV === 'dev'
