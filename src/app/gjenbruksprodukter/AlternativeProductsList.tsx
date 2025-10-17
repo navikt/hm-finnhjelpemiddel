@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import { AlternativeProductCard } from '@/app/gjenbruksprodukter/AlternativeProductCard'
 import {
   AlternativeProduct,
+  AlternativeStockResponseNew,
   deleteAlternativeMapping,
-  getAlternativesAndStock,
+  newGetAlternatives,
   WarehouseStock,
 } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
@@ -14,9 +15,6 @@ import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore,
 } from '@/utils/compare-alternatives-state-util'
-import { Product } from '@/utils/product-util'
-import { getProductFromHmsArtNrs } from '@/utils/api-util'
-import { WarehouseStockResponse } from '@/utils/response-types'
 import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
@@ -36,55 +34,38 @@ export const AlternativeProductList = ({
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
     mutate: mutateAlternatives,
-  } = useSWRImmutable(`asdasd-${hmsNumber}`, () => getAlternativesAndStock(hmsNumber))
-
-  const alternativeStocks = alternativesResponse?.alternatives
-  const hmsArtNrs = alternativeStocks?.map((alternativeStock) => alternativeStock.hmsArtNr) ?? []
-
-  const {
-    data: alternativeProductsResponse,
-    isLoading: isLoadingAlternativeProducts,
-    error: errorAlternativeProducts,
-  } = useSWRImmutable<Product[]>(
-    alternativesResponse ? [`alternatives-${hmsNumber}`, alternativesResponse] : null,
-    () => getProductFromHmsArtNrs(hmsArtNrs)
+  } = useSWRImmutable<AlternativeStockResponseNew | undefined>(`alternatives-${hmsNumber}`, () =>
+    newGetAlternatives(hmsNumber)
   )
-
-  const {
-    data: originalProductResponse,
-    isLoading: isLoadingOriginalProduct,
-    error: errorOriginalProduct,
-  } = useSWRImmutable<Product[]>(hmsNumber, () => getProductFromHmsArtNrs([hmsNumber]))
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
   const [newAlternative, setNewAlternative] = useState<AlternativeProduct | undefined>(undefined)
 
-  if (errorAlternatives || errorAlternativeProducts || errorOriginalProduct) {
+  if (errorAlternatives || !alternativesResponse) {
     return <>En feil har skjedd ved henting av data</>
   }
 
-  if (isLoadingAlternatives || isLoadingAlternativeProducts || isLoadingOriginalProduct) {
+  if (isLoadingAlternatives) {
     return <Loader />
   }
 
-  if (!originalProductResponse || originalProductResponse.length === 0) {
+  if (!alternativesResponse.original) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
   //Skjuler original-produktkort med ukjent lagerstatus for de uten edit-tilgang for nå
-  if (!editMode && (!alternativesResponse || !alternativeProductsResponse)) {
+  if (!editMode && !alternativesResponse.original.warehouseStock) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  const original = mapToAlternativeProduct(originalProductResponse[0], alternativesResponse?.original.warehouseStock)
+  const original = alternativesResponse.original
 
-  const alternatives: AlternativeProduct[] =
-    alternativeProductsResponse?.map((product) => {
-      const stocks = alternativeStocks!.find((alt) => alt.hmsArtNr === product.variants[0].hmsArtNr)?.warehouseStock!
-      return mapToAlternativeProduct(product, stocks)
-    }) ?? []
+  const alternatives: AlternativeProduct[] = alternativesResponse.alternatives ?? []
+
+  console.log('original: ', original)
+  console.log('alternatives: ', alternatives)
 
   if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
@@ -122,7 +103,7 @@ export const AlternativeProductList = ({
             <AlternativeProductCard
               alternativeProduct={newAlternative}
               selectedWarehouseStock={undefined}
-              key={newAlternative.id}
+              key={newAlternative.variantId}
               handleCompareClick={handleCompareClick}
               editMode={editMode}
               onDelete={() =>
@@ -142,7 +123,7 @@ export const AlternativeProductList = ({
                       ? getSelectedWarehouseStock(selectedWarehouse, alternative.warehouseStock)
                       : undefined
                   }
-                  key={alternative.id}
+                  key={alternative.variantId}
                   handleCompareClick={handleCompareClick}
                   editMode={editMode}
                   onDelete={() =>
@@ -160,38 +141,6 @@ export const AlternativeProductList = ({
   )
 }
 
-export const mapToAlternativeProduct = (
-  product: Product,
-  stocks: WarehouseStockResponse[] | undefined
-): AlternativeProduct => {
-  const variant = product.variants[0]
-  return {
-    seriesId: product.id,
-    id: variant.id,
-    seriesTitle: product.title,
-    variantTitle: variant.articleName,
-    status: variant.status,
-    hmsArtNr: variant.hmsArtNr,
-    imageUri: product.photos[0]?.uri,
-    supplierName: product.supplierName,
-    highestRank:
-      variant.agreements.length > 0 ? Math.max(...variant.agreements.map((agreement) => agreement.rank)) : 99,
-    onAgreement: variant.agreements.length > 0,
-    warehouseStock: stocks
-      ?.filter((stock) => stock.location != 'Telemark')
-      .map((stock) => {
-        return {
-          location: stock.location,
-          available: stock.available,
-          reserved: stock.reserved,
-          needNotified: stock.needNotified,
-          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
-        }
-      }),
-    inStockAnyWarehouse: !!stocks?.find((stock) => stock.available - stock.needNotified > 0),
-  }
-}
-
 const getSelectedWarehouseStock = (
   selectedWarehouse: string,
   warehouseStocks: WarehouseStock[] | undefined
@@ -202,15 +151,15 @@ const getSelectedWarehouseStock = (
 const sortAlternativeProducts = (alternativeProducts: AlternativeProduct[], selectedWarehouse?: string | undefined) => {
   alternativeProducts.sort((a, b) => {
     const selectedWarehouseStockSort = selectedWarehouse
-      ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0) -
-        (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+      ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.available ?? 0) -
+        (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.available ?? 0)
       : 0
 
     const stockA = selectedWarehouse
-      ? (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.actualAvailable ?? 0)
+      ? (getSelectedWarehouseStock(selectedWarehouse, a.warehouseStock)?.available ?? 0)
       : 0
     const stockB = selectedWarehouse
-      ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.actualAvailable ?? 0)
+      ? (getSelectedWarehouseStock(selectedWarehouse, b.warehouseStock)?.available ?? 0)
       : 0
 
     if (a.inStockAnyWarehouse && !b.inStockAnyWarehouse) {

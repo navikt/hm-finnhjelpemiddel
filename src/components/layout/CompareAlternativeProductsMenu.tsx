@@ -66,7 +66,7 @@ const CompareAlternativeProductsMenu = () => {
             <>
               <ul className="compare-menu__chosen-products">
                 {reversedAlternativeProductsToCompare.map((product) => (
-                  <li key={'compare-' + product.id}>
+                  <li key={'compare-' + product.variantId}>
                     <RemovableAlternativeProductCardMenu product={product} />
                   </li>
                 ))}
