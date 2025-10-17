@@ -14,3 +14,16 @@
   height: 75px;
   position: relative;
 }
+
+.agreementTag {
+  background-color: #ccf1d67a;
+  border-radius: 0.25rem;
+  border: 1px solid #99dead7a;
+  font-size: $a-font-size-medium;
+  padding: $a-spacing-1-alt $a-spacing-2;
+}
+
+.deleteButton {
+  width: fit-content;
+  justify-self: center;
+}

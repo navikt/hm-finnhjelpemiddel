@@ -1,5 +1,5 @@
 import React from 'react'
-import { BodyShort, Box, Button, HGrid } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid, Tag } from '@navikt/ds-react'
 import styles from './EditableAlternativeCard.module.scss'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 import ProductImage from '@/components/ProductImage'
@@ -21,8 +21,10 @@ export const EditableAlternativeCard = ({ alternativeProduct }: { alternativePro
       </BodyShort>
       <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
       <BodyShort>HMS: {alternativeProduct.hmsArtNr}</BodyShort>
-      <BodyShort>Rangering: {alternativeProduct.highestRank}</BodyShort>
-      <Button variant={'secondary'} style={{ width: 'fit-content' }}>
+      <Tag variant={'success-moderate'} className={styles.agreementTag}>
+        {alternativeProduct.highestRank === 99 ? 'På avtale' : `Rangering ${alternativeProduct.highestRank}`}
+      </Tag>
+      <Button variant={'secondary'} className={styles.deleteButton}>
         Slett
       </Button>
     </HGrid>
