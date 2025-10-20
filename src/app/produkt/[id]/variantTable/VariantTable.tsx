@@ -96,6 +96,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
     : 'search'
 
   const filters: Filter[] = [
+    {
+      fieldName: 'Forstørrelsesgrad min',
+      label: 'Forstørrelsesgrad min',
+      type: FilterType.DROPDOWN,
+      predicate: dropdownFilterPredicate,
+    },
     { fieldName: 'Setebredde', label: 'Setebredde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Setedybde', label: 'Setedybde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },
     { fieldName: 'Setehøyde', label: 'Setehøyde', type: FilterType.DROPDOWN, predicate: dropdownFilterPredicate },

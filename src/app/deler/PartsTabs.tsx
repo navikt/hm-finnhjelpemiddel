@@ -28,7 +28,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
   const [page, setPage] = useState<number>(parseInt(searchParams.get(searchParamKeys.page) ?? '1') || 1)
 
   const [selectedTab, setSelectedTab] = useState<ProductTabs>(
-    (searchParams.get(searchParamKeys.tab) as ProductTabs) || ProductTabs.ACCESSORIES
+    (searchParams.get(searchParamKeys.tab) as ProductTabs) || getDefaultTab(accessoriesData)
   )
 
   useEffect(() => {
@@ -78,13 +78,17 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
         <Tabs.Panel value={ProductTabs.ACCESSORIES}>
           <VStack gap={'4'} paddingBlock="4">
             <PartsTable products={accessoriesData?.products} />
-            <ResponsivePagination page={page} count={pageCount(accessoriesData?.totalHits)} setPage={handleSetPage} />
+            {accessoriesData?.totalHits > 0 && pageCount(accessoriesData?.totalHits) > 1 && (
+              <ResponsivePagination page={page} count={pageCount(accessoriesData?.totalHits)} setPage={handleSetPage} />
+            )}
           </VStack>
         </Tabs.Panel>
         <Tabs.Panel value={ProductTabs.SPAREPART}>
           <VStack gap={'4'} paddingBlock="4">
             <PartsTable products={sparePartsData?.products} />
-            <ResponsivePagination page={page} count={pageCount(sparePartsData?.totalHits)} setPage={handleSetPage} />
+            {sparePartsData?.totalHits > 0 && pageCount(sparePartsData?.totalHits) > 1 && (
+              <ResponsivePagination page={page} count={pageCount(sparePartsData?.totalHits)} setPage={handleSetPage} />
+            )}
           </VStack>
         </Tabs.Panel>
       </Tabs>
@@ -129,4 +133,11 @@ const ResponsivePagination = ({ page, count, setPage }: ResponsivePaginationProp
       </Show>
     </>
   )
+}
+
+function getDefaultTab(accessoriesData: ProductVariantsPagination): ProductTabs {
+  if (!accessoriesData?.totalHits) {
+    return ProductTabs.SPAREPART
+  }
+  return ProductTabs.ACCESSORIES
 }

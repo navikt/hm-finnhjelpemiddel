@@ -69,7 +69,7 @@ export const AlternativeProductList = ({
     return <Loader />
   }
 
-  if (!originalProductResponse) {
+  if (!originalProductResponse || originalProductResponse.length === 0) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
