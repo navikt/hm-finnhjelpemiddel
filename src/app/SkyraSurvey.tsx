@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, Hide, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 import { useRef, useState } from 'react'
 import styles from './SkyraSurvey.module.scss'
 import { HeartFillIcon, HeartIcon, XMarkIcon } from '@navikt/aksel-icons'
@@ -17,11 +17,9 @@ export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; sky
         variant="tertiary"
         className={styles.button}
       >
-        <Show above={'sm'} asChild>
-          {buttonText}
-        </Show>
+        <Show above={'sm'}>{buttonText}</Show>
         <Show below={'sm'} asChild>
-          <HeartFillIcon aria-hidden fontSize={'24px'} />
+          <HeartFillIcon aria-hidden fontSize={'24px'} style={{ display: 'block' }} />
         </Show>
       </Button>
 
