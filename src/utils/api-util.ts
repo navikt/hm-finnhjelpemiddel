@@ -942,7 +942,7 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
   })
     .then((res) => res.json())
     .then((data) => {
-      const rawOptions = data.suggest.keywords_suggest.at(0).options || []
+      const rawOptions = data.suggest.keywords_suggest.at(0)?.options ?? []
       const filtered = rawOptions.filter((suggestion: any) => {
         const iso = suggestion._source?.isoCategory
         return !iso || !EXCLUDED_ISO_CATEGORIES.includes(iso)
