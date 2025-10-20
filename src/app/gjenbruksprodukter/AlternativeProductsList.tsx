@@ -17,7 +17,6 @@ import {
 import { Product } from '@/utils/product-util'
 import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { WarehouseStockResponse } from '@/utils/response-types'
-import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 export const AlternativeProductList = ({
@@ -116,7 +115,6 @@ export const AlternativeProductList = ({
       </div>
       <VStack gap={'4'}>
         <Heading size="medium">Alternative produkter</Heading>
-        {editMode && <AddAlternative sourceHmsArtNr={hmsNumber} setNewAlternative={setNewAlternative} />}
         <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
           {newAlternative && (
             <AlternativeProductCard

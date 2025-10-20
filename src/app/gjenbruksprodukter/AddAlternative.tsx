@@ -8,10 +8,10 @@ import { AddAlternativeCard } from '@/app/gjenbruksprodukter/AddAlternativeCard'
 import { mapToAlternativeProduct } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 
 export const AddAlternative = ({
-  sourceHmsArtNr,
+  alternativeGroup,
   setNewAlternative,
 }: {
-  sourceHmsArtNr: string
+  alternativeGroup: string[]
   setNewAlternative: Dispatch<SetStateAction<AlternativeProduct | undefined>>
 }) => {
   const [targetHmsArtNr, setTargetHmsArtNr] = useState<string | undefined>(undefined)
