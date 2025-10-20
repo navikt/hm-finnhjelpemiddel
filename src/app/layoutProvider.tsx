@@ -122,16 +122,18 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {consent === 'true' && (
+      <Footer setCookieConsent={setConsent} />
+    </Suspense>
+  )
+
+  /*
+        {consent === 'true' && (
         <SkyraSurvey
           buttonText={'Tilbakemelding'}
           skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
         />
       )}
-
-      <Footer setCookieConsent={setConsent} />
-    </Suspense>
-  )
+   */
 }
 
 reportAccessibility(React)
