@@ -122,7 +122,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {consent === 'true' && (
+      {false && consent === 'true' && (
         <SkyraSurvey
           buttonText={'Tilbakemelding'}
           skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
