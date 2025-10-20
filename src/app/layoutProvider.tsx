@@ -14,7 +14,7 @@ import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
-import { initSkyra } from '@/utils/skyra'
+import { initSkyra, stopSkyra } from '@/utils/skyra'
 import { SkyraSurvey } from '@/app/SkyraSurvey'
 import { initUmami, stopUmami } from '@/utils/umami'
 
@@ -68,13 +68,14 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
         initUmami(window.location.hostname)
+        initSkyra()
       }
       if (consent === 'false') {
         stopAmplitude()
         stopUmami()
         removeOptionalCookies()
+        stopSkyra()
       }
-      initSkyra()
       initInstrumentation()
     }
   }, [consent])
@@ -121,10 +122,12 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      <SkyraSurvey
-        buttonText={'Tilbakemelding'}
-        skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
-      />
+      {consent === 'true' && (
+        <SkyraSurvey
+          buttonText={'Tilbakemelding'}
+          skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
+        />
+      )}
 
       <Footer setCookieConsent={setConsent} />
     </Suspense>
