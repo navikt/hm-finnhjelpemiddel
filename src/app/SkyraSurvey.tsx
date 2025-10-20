@@ -1,8 +1,8 @@
 'use client'
-import { Box, Button, Popover, VStack } from '@navikt/ds-react'
+import { Box, Button, Hide, Popover, Show, VStack } from '@navikt/ds-react'
 import { useRef, useState } from 'react'
 import styles from './SkyraSurvey.module.scss'
-import { XMarkIcon } from '@navikt/aksel-icons'
+import { HeartFillIcon, HeartIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; skyraSlug: string }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -17,7 +17,12 @@ export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; sky
         variant="tertiary"
         className={styles.button}
       >
-        {buttonText}
+        <Show above={'sm'} asChild>
+          {buttonText}
+        </Show>
+        <Show below={'sm'} asChild>
+          <HeartFillIcon aria-hidden fontSize={'24px'} />
+        </Show>
       </Button>
 
       <Popover placement="bottom" open={openState} onClose={() => setOpenState(false)} anchorEl={buttonRef.current}>
