@@ -43,7 +43,7 @@ export const OtherAgreements = () => {
             </Link>
           </Accordion.Content>
         </Accordion.Item>
-        {isEnabled && isEnabled('finnhjelpemiddel.link-seksualteknisk-avtale') ? (
+        {isEnabled('finnhjelpemiddel.link-seksualteknisk-avtale') ? (
           <Accordion.Item>
             <Accordion.Header>Hjelpemidler for seksuallivet</Accordion.Header>
             <Accordion.Content>
