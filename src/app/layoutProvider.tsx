@@ -16,7 +16,8 @@ import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
 import { initSkyra, stopSkyra } from '@/utils/skyra'
 import { SkyraSurvey } from '@/app/SkyraSurvey'
-import { initUmami, stopUmami } from '@/utils/umami'
+import { initUmami, logUmamiKlikk, logUmamiNavigationEvent, stopUmami } from '@/utils/umami'
+
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
@@ -95,10 +96,14 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           enableOptionalCookies={() => {
             setCookie('finnhjelpemiddel-consent', 'true')
             setConsent('true')
+            logUmamiNavigationEvent('CookieBanner', 'button_klikked', 'cookie-consent-accepted')
+            console.debug('User accepted optional cookies.')
           }}
           disableOptionalCookies={() => {
             setCookie('finnhjelpemiddel-consent', 'false')
             setConsent('false')
+            logUmamiKlikk('cookie-consent-declined')
+            console.debug('User declined optional cookies.')
           }}
         />
       )}
