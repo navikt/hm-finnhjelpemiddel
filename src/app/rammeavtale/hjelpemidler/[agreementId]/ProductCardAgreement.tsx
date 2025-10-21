@@ -8,6 +8,7 @@ import ProductImage from '@/components/ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardAgreement.module.scss'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export const ProductCardAgreement = ({
   product,
@@ -34,15 +35,14 @@ export const ProductCardAgreement = ({
         <VStack>
           <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
-              <Tag variant={'success-moderate'} className={styles.agreementTag}>
+              <SuccessTag>
                 {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
-              </Tag>
+              </SuccessTag>
             ) : (
-              <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+              <NeutralTag>
                 Ikke på avtale
-              </Tag>
+              </NeutralTag>
             )}
-
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </HStack>
 

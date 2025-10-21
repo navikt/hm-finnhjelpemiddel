@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardPart.module.scss'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export const ProductCardPart = ({
   product,
@@ -33,13 +34,13 @@ export const ProductCardPart = ({
         </Box>
         <VStack gap={{ xs: '1', md: '2' }}>
             {onAgreement ? (
-              <Tag variant={'success-moderate'} className={styles.agreementTag}>
+              <SuccessTag>
                 {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
-              </Tag>
+              </SuccessTag>
             ) : (
-              <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
+              <NeutralTag>
                 Ikke på avtale
-              </Tag>
+              </NeutralTag>
             )}
           <Box className={styles.productSummary}>
             <Link
