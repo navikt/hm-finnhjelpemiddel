@@ -4,7 +4,13 @@ import styles from './EditableAlternativeCard.module.scss'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 import ProductImage from '@/components/ProductImage'
 
-export const EditableAlternativeCard = ({ alternativeProduct }: { alternativeProduct: AlternativeProduct }) => {
+export const EditableAlternativeCard = ({
+  alternativeProduct,
+  onDelete,
+}: {
+  alternativeProduct: AlternativeProduct
+  onDelete: () => void
+}) => {
   return (
     <HGrid
       columns={'.5fr 3fr .8fr .8fr .8fr'}
@@ -24,7 +30,7 @@ export const EditableAlternativeCard = ({ alternativeProduct }: { alternativePro
       <Tag variant={'success-moderate'} className={styles.agreementTag}>
         {alternativeProduct.highestRank === 99 ? 'På avtale' : `Rangering ${alternativeProduct.highestRank}`}
       </Tag>
-      <Button variant={'secondary'} className={styles.deleteButton}>
+      <Button variant={'secondary'} onClick={onDelete} className={styles.deleteButton}>
         Slett
       </Button>
     </HGrid>

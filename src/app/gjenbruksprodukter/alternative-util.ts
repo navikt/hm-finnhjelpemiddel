@@ -129,24 +129,24 @@ export async function getAlternativesAndStock(hmsArtNr: string): Promise<Alterna
   return res.json()
 }
 
-export async function createAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
+export async function addAlternativeToGroup(alternativeGroup: string[], alternative: string): Promise<void> {
   return await fetcherModify(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/create`,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/add`,
     'POST',
     {
-      sourceHmsArtnr: sourceHmsArtnr,
-      targetHmsArtnr: targetHmsArtnr,
+      group: alternativeGroup,
+      alternative: alternative,
     }
   )
 }
 
-export async function deleteAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
+export async function deleteAlternativeFromGroup(alternativeGroup: string[], alternative: string): Promise<void> {
   return await fetcherModify(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/delete`,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/delete`,
     'DELETE',
     {
-      sourceHmsArtnr: sourceHmsArtnr,
-      targetHmsArtnr: targetHmsArtnr,
+      alternativeGroup: alternativeGroup,
+      alternative: alternative,
     }
   )
 }
