@@ -277,8 +277,9 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const isElektriskHev = agreementId === 'ba893618-8010-40b2-9a14-f89c199e32d6'
   const isPersonlofterAvtale = agreementId === '51b2817e-774f-4361-9ee0-bdfaeea6dd6e'
   const isSyklerAvtale = agreementId === 'd8b40d10-2834-4962-a061-5b2f4acbb766'
+  const isSeksualtekniskAvtale = agreementId === '768b68d7-9e3a-4865-983e-09b47ecc6a2c'
 
-  const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale
+  const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale && !isSeksualtekniskAvtale
 
   const showAccessoriesAndSparePartsList =
     isEnabled('finnhjelpemiddel.vis-tilbehor-og-reservedel-lister') &&
