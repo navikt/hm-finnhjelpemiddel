@@ -16,6 +16,14 @@
   height: 96px;
 }
 
+.agreementTag {
+  width: 7rem;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+}
+
 .productSummary {
   padding: $a-spacing-8 0 0 0;
   top: 2.8rem;

@@ -8,7 +8,7 @@ type Props = {
 
 export const SuccessTag = ({ title, children, className}: Props) => {
 return (
-  <Tag variant={'success'} size={'small'} style={{ borderRadius: '0.3rem'}} title={title}>
+  <Tag variant={'success'} size={'small'} style={{ borderRadius: '0.3rem'}} title={title} className={className}>
     {children}
   </Tag>
 )

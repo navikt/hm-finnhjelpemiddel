@@ -34,7 +34,7 @@ export const ProductCardPart = ({
         </Box>
         <VStack gap={{ xs: '1', md: '2' }}>
             {onAgreement ? (
-              <SuccessTag>
+              <SuccessTag className={styles.agreementTag}>
                 {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
               </SuccessTag>
             ) : (
