@@ -104,8 +104,10 @@ const TagRow = ({
           {productAgreements.length > 2 ? (
             <NeutralTag>Flere delkontrakter</NeutralTag>
           ) : (
-            productAgreements.length === 1 &&
-            productAgreements[0].refNr !== '99' && <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
+            productAgreements.length <= 2 &&
+            productAgreements[0].refNr !== '99' &&
+            <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag> ||
+            <NeutralTag>Delkontrakt {productAgreements[1]?.refNr}</NeutralTag>
           )}
         </>
       ) : (
