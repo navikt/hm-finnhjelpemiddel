@@ -18,7 +18,6 @@ export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; sky
 
   return (
     <Show above={'sm'}>
-      {buttonText}
       <Box className={styles.container}>
         <Button
           ref={buttonRef}
