@@ -38,6 +38,9 @@ export const PAGE_SIZE = 24
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 
+// ISO categories that must always be excluded / filtered out (e.g. from autocomplete) and optionally from general search
+export const EXCLUDED_ISO_CATEGORIES = ['09540601', '09540901', '09540301']
+
 export type Bucket = {
   key: number | string
   doc_count: number
@@ -180,10 +183,12 @@ const makeSearchTermQuery = ({
   searchTerm,
   agreementId,
   seriesId,
+  includeNegativeIsoCategories,
 }: {
   searchTerm: string
   agreementId?: string
   seriesId?: string
+  includeNegativeIsoCategories?: boolean
 }) => {
   const commonBoosting = {
     negative: {
@@ -219,8 +224,8 @@ const makeSearchTermQuery = ({
 
   const queryStringSearchTerm = removeReservedChars(searchTerm)
 
-  //Seksualhjelpemidler filtreres ut da de ikke skal vises lenger.
-  const negativeIsoCategories = ['09540601', '09540901', '09540301']
+  //Seksualhjelpemidler filtreres ut i søk (moved to shared constant EXCLUDED_ISO_CATEGORIES)
+  // const negativeIsoCategories = ['09540601', '09540901', '09540301']
 
   const bool = {
     should: [
@@ -296,17 +301,18 @@ const makeSearchTermQuery = ({
     return must
   }
 
+  // Decide if we apply negative iso categories. Default: apply when NOT on agreement page
+  const applyNegativeIsoCategories = includeNegativeIsoCategories !== undefined ? includeNegativeIsoCategories : !agreementId
+
   return {
     must: mustAlternatives(),
-    must_not: {
-      bool: {
-        should: negativeIsoCategories.map((isoCategory) => ({
-          match: {
-            isoCategory,
-          },
-        })),
+    ...(applyNegativeIsoCategories && {
+      must_not: {
+        bool: {
+          should: EXCLUDED_ISO_CATEGORIES.map((isoCategory) => ({ match: { isoCategory } })),
+        },
       },
-    },
+    }),
   }
 }
 
@@ -908,6 +914,8 @@ export type Suggestions = Array<{ text: string; data: ProductVariant }>
 
 //TODO: Bør denne returnere Product? Vet ikke om vi trenger det
 export const fetchSuggestions = (term: string): Promise<Suggestions> => {
+  // Use shared exclusion list
+  // const excludedIsoCategories = ['09540601', '09540901', '09540301']
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
@@ -934,9 +942,15 @@ export const fetchSuggestions = (term: string): Promise<Suggestions> => {
   })
     .then((res) => res.json())
     .then((data) => {
-      const suggestions: Suggestions = data.suggest.keywords_suggest
-        .at(0)
-        .options.map((suggestion: any) => ({ text: suggestion.text, data: mapProductVariant(suggestion._source) }))
+      const rawOptions = data.suggest.keywords_suggest.at(0)?.options ?? []
+      const filtered = rawOptions.filter((suggestion: any) => {
+        const iso = suggestion._source?.isoCategory
+        return !iso || !EXCLUDED_ISO_CATEGORIES.includes(iso)
+      })
+      const suggestions: Suggestions = filtered.map((suggestion: any) => ({
+        text: suggestion.text,
+        data: mapProductVariant(suggestion._source),
+      }))
       return suggestions
     })
 }

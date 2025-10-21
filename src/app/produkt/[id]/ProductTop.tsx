@@ -2,13 +2,14 @@
 
 import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
 import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
+import { EXCLUDED_ISO_CATEGORIES } from '@/utils/api-util'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -25,13 +26,32 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
   return (
     <VStack gap={'8'}>
-      <TagRow productAgreements={product.agreements} accessory={product.accessory} sparePart={product.sparePart} isExpired={isExpired} />
+      <TagRow
+        productAgreements={product.agreements}
+        accessory={product.accessory}
+        sparePart={product.sparePart}
+        isExpired={isExpired}
+      />
       <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
       </Link>
       <Heading level="1" size="large">
         {hmsartnr ? product.variants[0].articleName : product.title}
       </Heading>
+
+      {EXCLUDED_ISO_CATEGORIES.includes(product.isoCategory) && (
+        <Alert variant="warning" size="small">
+          Kun autoriserte leger i Norge kan bestille hjelpemidler for seksuallivet.
+          Les mer på{' '}
+          <Link
+            href="https://www.nav.no/seksualtekniskehjelpemidler"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            nav.no
+          </Link>
+        </Alert>
+      )}
 
       <VStack gap={'4'}>
         {hmsartnr && (
@@ -74,12 +94,13 @@ const TagRow = ({
   const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
   return (
     <HStack justify={'start'} gap={'3'}>
-      {accessory || sparePart  ? (
+      {accessory || sparePart ? (
         <HStack gap="3">
           <Tag variant={'neutral-moderate'} className={styles.partTag}>
-            {accessory ? 'Tilbehør' : 'Reservedel'}</Tag>
+            {accessory ? 'Tilbehør' : 'Reservedel'}
+          </Tag>
         </HStack>
-      ): (
+      ) : (
         ''
       )}
       {topRank ? (
@@ -91,7 +112,9 @@ const TagRow = ({
             <Tag variant={'success-moderate'} className={styles.agreementTag}>
               Rangering {rankList?.[1]}
             </Tag>
-          ) : ''}
+          ) : (
+            ''
+          )}
           {productAgreements.length > 2 ? (
             <Tag variant={'success-moderate'} className={styles.agreementTag}>
               Flere delkontrakter

@@ -14,6 +14,8 @@ import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
+import { initSkyra, stopSkyra } from '@/utils/skyra'
+import { SkyraSurvey } from '@/app/SkyraSurvey'
 import { initUmami, stopUmami } from '@/utils/umami'
 
 function getCookie(name: string): string | null {
@@ -66,11 +68,13 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
         initUmami(window.location.hostname)
+        initSkyra()
       }
       if (consent === 'false') {
         stopAmplitude()
         stopUmami()
         removeOptionalCookies()
+        stopSkyra()
       }
       initInstrumentation()
     }
@@ -121,6 +125,15 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       <Footer setCookieConsent={setConsent} />
     </Suspense>
   )
+
+  /*
+        {consent === 'true' && (
+        <SkyraSurvey
+          buttonText={'Tilbakemelding'}
+          skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
+        />
+      )}
+   */
 }
 
 reportAccessibility(React)

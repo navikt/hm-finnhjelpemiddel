@@ -93,7 +93,7 @@ const excludedAgreementsDev: Record<string, string> = {
   Biler: '970d867a-d095-42a8-9f0a-495e42f301cb',
   Servicehunder: '744ca191-ed99-4a09-90f0-29f3733885f5',
   Høreapparater: '67196a0e-d1db-4c74-87ce-9d84da279c0a',
-  Seksuallivet: '3c4ee9ba-a348-4fee-ab92-a67990e95316',
+  Seksuallivet: '768b68d7-9e3a-4865-983e-09b47ecc6a2c',
 }
 
 const excludedAgreementsProd: Record<string, string> = {
