@@ -10,6 +10,7 @@ declare global {
       controller: {
         stop: () => void
       }
+      reload?: () => void
     }
     skyraSurvey?: object
   }
