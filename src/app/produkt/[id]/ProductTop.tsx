@@ -99,24 +99,20 @@ const TagRow = ({
       )}
       {topRank ? (
         <>
-          <SuccessTag>{topRank === 99 ? 'På avtale' : `Rangering ${rankList?.[0]}`}</SuccessTag>
-          {productAgreements.length === 2 ? <SuccessTag>Rangering {rankList?.[1]}</SuccessTag> : ''}
-          {productAgreements.length > 2 ? (
-            <NeutralTag>Flere delkontrakter</NeutralTag>
-          ) :
-            productAgreements.length === 1 &&
-            productAgreements[0].refNr !== '99' ? (
-              <>
-                <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
-              </>
-            ):
-              productAgreements.length === 2 &&
-              productAgreements[0].refNr !== '99' && (
-                <>
-                  <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
-                  <NeutralTag>Delkontrakt {productAgreements[1]?.refNr}</NeutralTag>
-                </>
-              )}
+          {productAgreements.length <= 2  && topRank !== 99 && (
+            <>
+              <SuccessTag>Rangering {rankList?.[0]}</SuccessTag>
+              <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
+            </>
+          )}
+          {productAgreements.length === 2 && topRank !== 99 && (
+            <>
+              <SuccessTag>Rangering {rankList?.[1]}</SuccessTag>
+              <NeutralTag>Delkontrakt {productAgreements[1].refNr}</NeutralTag>
+            </>
+          )}
+          {productAgreements.length > 2 && <NeutralTag>Flere delkontrakter</NeutralTag>}
+          {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}
         </>
       ) : (
         <NeutralTag>Ikke på avtale</NeutralTag>
