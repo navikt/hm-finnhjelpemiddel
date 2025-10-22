@@ -17,11 +17,7 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.articleHeaderRibbon {
-  padding: 1.25rem 1.25rem 0;
-  margin: -2.5rem -1.75rem 2rem; // pull ribbon to container edges
-  border-bottom: 1px solid $ny-nav-purple-dark;
-}
+
 
 .headerGroup {
   margin-bottom: 1.25rem;
@@ -49,7 +45,7 @@
 
 .articleBody {
   line-height: 1.55;
-  font-size: 1rem;
+
 }
 
 .articleBody :global(p) {
@@ -86,11 +82,10 @@
 }
 
 .articleBody :global(code) {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   background: #f5f5f5;
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
-  font-size: 0.85rem;
+
 }
 
 .articleBody :global(pre code) {
@@ -129,9 +124,5 @@
   }
   .metaRow {
     gap: 0.75rem;
-  }
-  .articleHeaderRibbon {
-    margin: -2rem -1rem 1.5rem;
-    padding: 1rem 1rem 0.85rem;
   }
 }

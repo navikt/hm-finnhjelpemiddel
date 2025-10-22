@@ -1,68 +1,99 @@
-import { Box, Heading, HStack, VStack } from '@navikt/ds-react'
+import { Box, Heading, HStack, Loader, VStack } from '@navikt/ds-react'
 import styles from './NewsFeed.module.scss'
 import useSWR from 'swr'
 import { News } from '@/utils/news-util'
 import { getNews } from '@/utils/api-util'
 import NextLink from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { buildNewsPreview } from '@/utils/news-html-util'
 
 export const NewsFeed = () => {
-  const { data } = useSWR<News[]>('/news/_search', () => getNews(3), {
+  const { data, isLoading } = useSWR<News[]>('/news/_search', () => getNews(3), {
     keepPreviousData: true,
   })
+
+  if (isLoading) {
+    return <Loader size="small" />
+  }
+  if (!data || data.length === 0) return null
 
   return (
     <VStack gap={'11'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Aktuelt
       </Heading>
-      <HStack gap={'6'}>{data && data.map((news) => <NewsCard key={news.id} news={news} />)}</HStack>
+      {/* Mobile simple list */}
+      <div className={styles.mobileList} aria-label="Aktuelt nyheter (mobil visning)">
+        <ul className={styles.mobileList__ul}>
+          {data.map((news) => {
+            const split = news.title.split(':')
+            const hasSub = split.length > 1
+            const mainTitle = hasSub ? split[0] : news.title
+            const subTitle = hasSub ? split.slice(1).join(':').trim() : ''
+            return (
+              <li key={news.id} className={styles.mobileList__item}>
+                <NextLink
+                  href={`/nyheter/${news.id}`}
+                  className={styles.mobileList__link}
+                  aria-label={`Les nyheten: ${news.title}`}
+                >
+                  <span className={styles.mobileList__main}>{mainTitle}</span>
+                  {hasSub && <span className={styles.mobileList__sub}>: {subTitle}</span>}
+                </NextLink>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+      {/* Desktop cards */}
+      <HStack className={styles.cardsWrapper}>
+        {data.map((news) => (
+          <NewsCard key={news.id} news={news} />
+        ))}
+      </HStack>
     </VStack>
   )
 }
 
+// Reduced preview limit for shorter cards. Adjust here if needed.
+const PREVIEW_CHAR_LIMIT = 160
+
 const NewsCard = ({ news }: { news: News }) => {
-  const type = (news: News): [string, string] | string => {
-    const splitTitle = news.title.split(':')
-    return splitTitle.length > 1 ? [news.title.split(':')[0], news.title.split(':')[1]] : news.title
-  }
+  const split = news.title.split(':')
+  const hasSub = split.length > 1
+  const mainTitle = hasSub ? split[0] : news.title
+  const subTitle = hasSub ? split.slice(1).join(':').trim() : ''
 
-  const [isTruncated, setIsTruncated] = useState(false)
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = contentRef.current
-    if (!el) return
-    // Allow layout to settle
-    requestAnimationFrame(() => {
-      if (el.scrollHeight > el.clientHeight + 4) {
-        setIsTruncated(true)
-      }
-    })
-  }, [news.id, news.text])
+  const { previewHtml, truncated } = buildNewsPreview(news.text, PREVIEW_CHAR_LIMIT)
 
   return (
-    <Box paddingInline={'8'} paddingBlock={'5'} className={styles.newsCard}>
-      <VStack gap="1" className={styles.newsCard__content} ref={contentRef}>
+    <Box paddingInline={'6'} paddingBlock={'4'} className={styles.newsCard}>
+      <VStack gap="1" className={styles.newsCard__content}>
         <Heading level="3" size="small" spacing>
-          {Array.isArray(type(news)) ? type(news)[0] : type(news)}
+          {mainTitle}
         </Heading>
-        {Array.isArray(type(news)) && (
+        {hasSub && (
           <Heading level="4" size="small" spacing>
-            {type(news)[1]}
+            {subTitle}
           </Heading>
         )}
-        <div dangerouslySetInnerHTML={{ __html: news.text }} />
+        {previewHtml && (
+          <div
+            className={styles.newsCard__excerpt}
+            dangerouslySetInnerHTML={{ __html: previewHtml }}
+          />
+        )}
       </VStack>
-      {isTruncated && (
+      {truncated && (
         <NextLink
           href={`/nyheter/${news.id}`}
           className={styles.newsCard__readMore}
           aria-label={`Les hele nyheten: ${news.title}`}
         >
-          Les mer
+          Les hele saken
         </NextLink>
       )}
     </Box>
   )
 }
+
+export default NewsFeed

@@ -57,7 +57,6 @@ export default async function NewsArticlePage({ params }: PageProps) {
   return (
     <VStack className={styles.container} gap="8" padding="8">
       <article aria-labelledby="news-main-title" className={styles.articleContainer}>
-        <div className={styles.articleHeaderRibbon}>
           <header>
             <VStack gap="4" className={styles.headerGroup}>
               <Heading id="news-main-title" level="1" size="large">
@@ -80,7 +79,6 @@ export default async function NewsArticlePage({ params }: PageProps) {
               </div>
             </VStack>
           </header>
-        </div>
 
         <div id="article-body" className={styles.articleBody} dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
 
