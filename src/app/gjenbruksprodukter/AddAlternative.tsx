@@ -1,11 +1,13 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Button, ExpansionCard, Search, VStack } from '@navikt/ds-react'
-import { AlternativeProduct, addAlternativeToGroup } from '@/app/gjenbruksprodukter/alternative-util'
+import {
+  addAlternativeToGroup,
+  AlternativeProduct,
+  AlternativeStockResponseNew,
+  newGetAlternatives,
+} from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
-import { Product } from '@/utils/product-util'
-import { getProductFromHmsArtNrs } from '@/utils/api-util'
 import { AddAlternativeCard } from '@/app/gjenbruksprodukter/AddAlternativeCard'
-import { mapToAlternativeProduct } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 
 export const AddAlternative = ({
   alternativeGroup,
@@ -17,12 +19,14 @@ export const AddAlternative = ({
   const [targetHmsArtNr, setTargetHmsArtNr] = useState<string | undefined>(undefined)
 
   const {
-    data: searchedProduct,
+    data: alternativeResponse,
     isLoading,
     error,
-  } = useSWRImmutable<Product[]>(targetHmsArtNr ? targetHmsArtNr : null, () =>
-    getProductFromHmsArtNrs([targetHmsArtNr!])
+  } = useSWRImmutable<AlternativeStockResponseNew | undefined>(targetHmsArtNr ? targetHmsArtNr : null, () =>
+    newGetAlternatives(targetHmsArtNr!)
   )
+
+  const searchedProduct = alternativeResponse?.original
 
   return (
     <VStack gap={'4'}>
@@ -45,14 +49,14 @@ export const AddAlternative = ({
               onClear={() => setTargetHmsArtNr(undefined)}
               htmlSize={'12'}
             />
-            {searchedProduct?.length === 1 && (
+            {searchedProduct && (
               <>
-                <AddAlternativeCard product={searchedProduct[0]} />
+                <AddAlternativeCard product={searchedProduct} />
                 <Button
                   size={'small'}
                   onClick={() =>
-                    addAlternativeToGroup(alternativeGroup, searchedProduct[0].variants[0].hmsArtNr!).then(() => {
-                      setNewAlternative(mapToAlternativeProduct(searchedProduct[0], undefined))
+                    addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!).then(() => {
+                      setNewAlternative(searchedProduct)
                       setTargetHmsArtNr(undefined)
                     })
                   }

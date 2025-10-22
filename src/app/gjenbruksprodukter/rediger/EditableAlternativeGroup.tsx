@@ -18,7 +18,7 @@ export const EditableAlternativeGroup = ({ alternatives }: { alternatives: Alter
             onDelete={
               () => deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!) //.then(() => mutateAlternatives())
             }
-            key={alternative.id}
+            key={alternative.variantId}
           />
         ))}
       </VStack>

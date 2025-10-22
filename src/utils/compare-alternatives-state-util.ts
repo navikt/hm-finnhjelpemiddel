@@ -32,7 +32,9 @@ export const useAlternativeProductCompareStore = create<AlternativeProductCompar
       },
       removeAlternativeProduct: (productId: string) =>
         set((state) => ({
-          alternativeProductsToCompare: state.alternativeProductsToCompare.filter((prod) => prod.id !== productId),
+          alternativeProductsToCompare: state.alternativeProductsToCompare.filter(
+            (prod) => prod.variantId !== productId
+          ),
         })),
       resetAlternativeProductToCompare: () => {
         set({ alternativeProductsToCompare: [] })

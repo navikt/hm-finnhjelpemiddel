@@ -48,7 +48,7 @@ const ProductInfo = ({
   openWarehouseStock: boolean
   handleCompareClick?: () => void
 }) => {
-  const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
+  const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.available : undefined
 
   return (
     <VStack justify="space-between" padding={'5'} gap={'2'} className={styles.productContainer}>
@@ -142,7 +142,7 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
   return (
     <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
       {stocks
-        ?.filter((stock) => stock.actualAvailable > 0)
+        ?.filter((stock) => stock.available > 0)
         .map((stock) => (
           <LocationInfo stock={stock} key={stock.location} />
         ))}
@@ -154,7 +154,7 @@ const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   return (
     <VStack className={styles.locationInfo} gap={'2'}>
       <Label>{stock.location}</Label>
-      {<StockTag amount={stock.actualAvailable} />}
+      {<StockTag amount={stock.available} />}
     </VStack>
   )
 }
@@ -189,15 +189,17 @@ const CompareButton = ({
     logNavigationEvent('alternativprodukter', 'sammenlign', product.variantTitle)
 
     const foundProductInCompareList =
-      alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1
+      alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.variantId === procom.variantId)
+        .length === 1
     if (foundProductInCompareList) {
-      removeAlternativeProduct(product.id)
+      removeAlternativeProduct(product.variantId)
     } else {
       setAlternativeProductToCompare(product)
     }
   }
 
-  const isInProductsToCompare = alternativeProductsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  const isInProductsToCompare =
+    alternativeProductsToCompare.filter((procom) => product.variantId === procom.variantId).length >= 1
   return (
     <Button
       className={isInProductsToCompare ? styles.toggledButton : ''}
