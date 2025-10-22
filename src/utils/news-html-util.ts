@@ -94,7 +94,7 @@ export function buildNewsPreview(html: string, textLimit: number): PreviewResult
         let adjusted = slice
         if (/\S/.test(token.charAt(remaining))) {
           const lastSpace = slice.lastIndexOf(' ')
-            ; if (lastSpace > 40) adjusted = slice.slice(0, lastSpace) // avoid shrinking too much
+          if (lastSpace > 40) adjusted = slice.slice(0, lastSpace) // avoid shrinking too much
         }
         adjusted = adjusted.replace(/[,;:.!?]*$/, '').trimEnd() + '…'
         output.push(adjusted)
