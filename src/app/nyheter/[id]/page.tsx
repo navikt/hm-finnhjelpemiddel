@@ -21,12 +21,15 @@ function splitTitle(full: string): { main: string; sub?: string } {
   return { main: parts[0], sub: parts.slice(1).join(':').trim() }
 }
 
-interface PageProps {
-  params: { id: string }
-}
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const news = await getNewsById(params.id)
+// Conform to Next.js generated PageProps: params is (optionally) a Promise of dynamic segment map.
+export async function generateMetadata({ params }: { params?: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
+  const resolved = params ? await params : undefined
+  const rawId = resolved?.id
+  const id = Array.isArray(rawId) ? rawId[0] : rawId
+  if (!id) {
+    return { title: 'Nyhet ikke funnet', description: 'Nyheten finnes ikke eller er utgått.' }
+  }
+  const news = await getNewsById(id)
   if (!news) {
     return { title: 'Nyhet ikke funnet', description: 'Nyheten finnes ikke eller er utgått.' }
   }
@@ -41,8 +44,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function NewsArticlePage({ params }: PageProps) {
-  const id = params.id
+export default async function NewsArticlePage({ params }: { params?: Promise<Record<string, string | string[] | undefined>> }) {
+  const resolved = params ? await params : undefined
+  const rawId = resolved?.id
+  const id = Array.isArray(rawId) ? rawId[0] : rawId
   if (!id) return notFound()
 
   const news: News | null = await getNewsById(id)
@@ -57,34 +62,33 @@ export default async function NewsArticlePage({ params }: PageProps) {
   return (
     <VStack className={styles.container} gap="8" padding="8">
       <article aria-labelledby="news-main-title" className={styles.articleContainer}>
-          <header>
-            <VStack gap="4" className={styles.headerGroup}>
-              <Heading id="news-main-title" level="1" size="large">
-                {main}
+        <header>
+          <VStack gap="4" className={styles.headerGroup}>
+            <Heading id="news-main-title" level="1" size="large">
+              {main}
+            </Heading>
+            {sub && (
+              <Heading level="2" size="medium" className={styles.subTitle}>
+                {sub}
               </Heading>
-              {sub && (
-                <Heading level="2" size="medium" className={styles.subTitle}>
-                  {sub}
-                </Heading>
+            )}
+            <div className={styles.metaRow}>
+              <time dateTime={publishedISO}>Publisert: {publishedStr}</time>
+              {isExpired && (
+                <span className={styles.statusTagWrapper}>
+                  <Tag size="small" variant="neutral-moderate">
+                    Utgått
+                  </Tag>
+                </span>
               )}
-              <div className={styles.metaRow}>
-                <time dateTime={publishedISO}>Publisert: {publishedStr}</time>
-                {isExpired && (
-                  <span className={styles.statusTagWrapper}>
-                    <Tag size="small" variant="neutral-moderate">
-                      Utgått
-                    </Tag>
-                  </span>
-                )}
-              </div>
-            </VStack>
-          </header>
+            </div>
+          </VStack>
+        </header>
 
         <div id="article-body" className={styles.articleBody} dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
 
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
@@ -107,6 +111,6 @@ export default async function NewsArticlePage({ params }: PageProps) {
       <BodyLong className={styles.backLink}>
         <Link href="/">← Til forsiden</Link>
       </BodyLong>
-    </VStack >
+    </VStack>
   )
 }
