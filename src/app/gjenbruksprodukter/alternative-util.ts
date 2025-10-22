@@ -145,7 +145,7 @@ export async function deleteAlternativeFromGroup(alternativeGroup: string[], alt
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/delete`,
     'DELETE',
     {
-      alternativeGroup: alternativeGroup,
+      group: alternativeGroup,
       alternative: alternative,
     }
   )
