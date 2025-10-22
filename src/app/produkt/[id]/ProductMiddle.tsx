@@ -21,6 +21,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
+        {product.agreements.length === 2 && <OtherProductsOnPost agreement={product.agreements[1]} />}
         {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
             productName={hmsartnr ? `serien ${product.title}` : product.title}
