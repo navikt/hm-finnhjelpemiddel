@@ -54,9 +54,7 @@ export default function AlternativeProductsPage() {
         searchTerm: value,
         warehouse: selectedWarehouse ?? '',
       })
-    router.replace(`${pathname}?hms=${value}`, {
-      scroll: false,
-    })
+    router.push(`${pathname}?hms=${value}`)
   }
 
   useEffect(() => {

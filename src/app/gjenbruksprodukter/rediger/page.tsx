@@ -18,9 +18,7 @@ export default function EditAlternativeProductsPage() {
   const searchParams = useSearchParams()
 
   const handleSearch = (value: string) => {
-    router.replace(`${pathname}?hms=${value}`, {
-      scroll: false,
-    })
+    router.push(`${pathname}?hms=${value}`)
   }
 
   if (
