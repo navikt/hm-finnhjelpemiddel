@@ -11,7 +11,7 @@ export function sanitize(html: string): string {
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
     .replace(/ on[a-z]+=('[^']*'|"[^"]*")/gi, '')
-    .replace(/javascript:/gi, '')
+    .replace(/javascript:|data:|vbscript:/gi, '')
 }
 
 // Remove disallowed tags but keep their inner text
@@ -25,7 +25,7 @@ function stripDisallowedTags(html: string): string {
           const hrefMatch = match.match(/href=("[^"]*"|'[^']*')/i)
           if (hrefMatch) {
             const hrefVal = hrefMatch[1]
-            if (/javascript:/i.test(hrefVal)) return '<a class="news-preview-link">'
+            if (/(javascript:|data:|vbscript:)/i.test(hrefVal)) return '<a class="news-preview-link">'
             return `<a ${hrefMatch[0]} class="news-preview-link">`
           }
           return '<a class="news-preview-link">'
