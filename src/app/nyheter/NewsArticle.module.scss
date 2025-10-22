@@ -1,0 +1,137 @@
+@use 'src/styles/_variables' as *;
+
+
+.container {
+  padding-left: var(--a-spacing-4);
+  padding-right: var(--a-spacing-4);
+  margin: 0 auto;
+  max-width: 840px;
+}
+
+.articleContainer {
+  margin: 0 auto;
+  padding: 2.5rem 1.75rem 4rem;
+  background: #fff;
+  border-top: 8px solid $ny-nav-purple-dark;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.articleHeaderRibbon {
+  padding: 1.25rem 1.25rem 0;
+  margin: -2.5rem -1.75rem 2rem; // pull ribbon to container edges
+  border-bottom: 1px solid $ny-nav-purple-dark;
+}
+
+.headerGroup {
+  margin-bottom: 1.25rem;
+}
+
+.subTitle {
+  margin-top: 0.5rem;
+  color: #333;
+}
+
+.metaRow {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.875rem;
+  color: #555;
+  padding: 0.5rem 0 0.25rem;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.readingTime {
+  font-style: italic;
+}
+
+.articleBody {
+  line-height: 1.55;
+  font-size: 1rem;
+}
+
+.articleBody :global(p) {
+  margin: 0 0 1rem;
+}
+
+.articleBody :global(h2),
+.articleBody :global(h3),
+.articleBody :global(h4) {
+  margin: 2rem 0 0.75rem;
+  line-height: 1.25;
+}
+
+.articleBody :global(ul),
+.articleBody :global(ol) {
+  margin: 0 0 1.25rem 1.5rem;
+  padding: 0;
+}
+
+.articleBody a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.articleBody a:hover,
+.articleBody a:focus {
+  text-decoration-thickness: 2px;
+}
+
+.articleBody :global(blockquote) {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem 0.75rem 1.25rem;
+  border-left: 4px solid $ny-nav-purple-dark;
+  font-style: italic;
+}
+
+.articleBody :global(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  background: #f5f5f5;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.articleBody :global(pre code) {
+  display: block;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+
+.statusTagWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skipLink {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skipLink:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 800px) {
+  .articleContainer {
+    padding: 2rem 1rem 3rem;
+  }
+  .metaRow {
+    gap: 0.75rem;
+  }
+  .articleHeaderRibbon {
+    margin: -2rem -1rem 1.5rem;
+    padding: 1rem 1rem 0.85rem;
+  }
+}

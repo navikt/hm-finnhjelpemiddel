@@ -7,9 +7,27 @@
 .newsCard {
   background: $ny-nav-orange-light;
   display: flex;
+  flex-direction: column;
   max-width: 330px;
   min-height: 245px;
-  height: fit-content;
+  height: 320px; // fixed equal height for all cards
   border-top: 6px solid $ny-nav-purple-dark;
   border-radius: 0 0 8px 8px;
+}
+
+.newsCard__content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.newsCard__readMore {
+  margin-top: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  align-self: flex-start;
+}
+.newsCard__readMore:hover,
+.newsCard__readMore:focus {
+  text-decoration: underline;
 }

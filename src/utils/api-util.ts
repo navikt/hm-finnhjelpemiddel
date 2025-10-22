@@ -1,4 +1,4 @@
-import { mapAllNews, News } from '@/utils/news-util'
+import { mapAllNews, News, mapNews } from '@/utils/news-util'
 import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { Fetcher } from 'swr'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
@@ -994,6 +994,18 @@ export async function getNews(size: number = 100): Promise<News[]> {
     }),
   })
   return res.json().then(mapAllNews)
+}
+
+export async function getNewsById(id: string): Promise<News | null> {
+  const res = await fetch(HM_SEARCH_URL + `/news/_doc/${id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+  if (!res.ok) return null
+  return res.json().then((data) => {
+    const source = data._source || data
+    return mapNews(source)
+  })
 }
 
 export const fetcherGET: Fetcher<any, string> = (url) =>
