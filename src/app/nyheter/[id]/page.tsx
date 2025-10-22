@@ -5,16 +5,7 @@ import { BodyLong, Heading, Tag, VStack } from '@navikt/ds-react'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-
-// Simple sanitizer: strips script/style tags and inline event handlers
-function sanitize(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
-    .replace(/ on[a-z]+=('[^']*'|"[^"]*")/gi, '')
-    .replace(/javascript:/gi, '')
-}
-
+import { sanitize } from '@/utils/news-html-util'
 function splitTitle(full: string): { main: string; sub?: string } {
   const parts = full.split(':')
   if (parts.length < 2) return { main: full }
