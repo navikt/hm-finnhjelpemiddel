@@ -20,11 +20,9 @@ export const EditableAlternativeCard = ({
       className={styles.container}
       width={'10px'}
     >
-      <BodyShort>
-        <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
-          <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
-        </Box>
-      </BodyShort>
+      <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
+        <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
+      </Box>
       <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
       <BodyShort>HMS: {alternativeProduct.hmsArtNr}</BodyShort>
       <Tag variant={'success-moderate'} className={styles.agreementTag}>
