@@ -99,7 +99,7 @@ const TagRow = ({
       )}
       {topRank ? (
         <>
-          {productAgreements.length <= 2  && topRank !== 99 && (
+          {productAgreements.length <= 3  && topRank !== 99 && (
             <>
               <SuccessTag>Rangering {rankList?.[0]}</SuccessTag>
               <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
