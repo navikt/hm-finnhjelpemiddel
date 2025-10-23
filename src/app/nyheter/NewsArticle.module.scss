@@ -11,10 +11,10 @@
 .articleContainer {
   margin: 0 auto;
   padding: 2.5rem 1.75rem 4rem;
-  background: #fff;
+  //background: #fff;
+  background: $ny-nav-orange-light;
   border-top: 8px solid $ny-nav-purple-dark;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: .5rem;
 }
 
 
