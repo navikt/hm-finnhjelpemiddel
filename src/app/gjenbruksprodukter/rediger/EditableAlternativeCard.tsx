@@ -1,8 +1,9 @@
 import React from 'react'
-import { BodyShort, Box, Button, HGrid, Tag } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid } from '@navikt/ds-react'
 import styles from './EditableAlternativeCard.module.scss'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 import ProductImage from '@/components/ProductImage'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export const EditableAlternativeCard = ({
   alternativeProduct,
@@ -25,9 +26,11 @@ export const EditableAlternativeCard = ({
       </Box>
       <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
       <BodyShort>HMS: {alternativeProduct.hmsArtNr}</BodyShort>
-      <Tag variant={'success-moderate'} className={styles.agreementTag}>
-        {alternativeProduct.highestRank === 99 ? 'På avtale' : `Rangering ${alternativeProduct.highestRank}`}
-      </Tag>
+      {alternativeProduct.onAgreement ? (
+        <SuccessTag>Rangering {alternativeProduct.highestRank}</SuccessTag>
+      ) : (
+        <NeutralTag>Ikke på avtale</NeutralTag>
+      )}
       <Button variant={'secondary'} onClick={onDelete} className={styles.deleteButton}>
         Slett
       </Button>
