@@ -21,8 +21,8 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && (
-/*          <OtherProductsOnPost agreement1={product.agreements[0]} agreement2={product?.agreements[1]} agreement3={product?.agreements[2]} />*/
-          <OtherProductsOnPost agreements={product.agreements}  />
+          /*          <OtherProductsOnPost agreement1={product.agreements[0]} agreement2={product?.agreements[1]} agreement3={product?.agreements[2]} />*/
+          <OtherProductsOnPost agreements={product.agreements} />
         )}
         {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
@@ -65,7 +65,7 @@ const AccessoriesAndParts = ({ productName, productId }: { productName: string; 
   )
 }
 
-const showdOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
+const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'} paddingBlock={'2 4'}>
       <BodyShort>{agreement.postTitle}</BodyShort>
@@ -82,32 +82,17 @@ const showdOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo
   )
 }
 
-/*const OtherProductsOnPost = ({ agreement1, agreement2, agreement3 }: { agreement1: AgreementInfo, agreement2?: AgreementInfo, agreement3?: AgreementInfo }) => {
+const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
   return (
     <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt{agreement2?.refNr ? 'er' : ''}
+        Andre produkter på delkontrakt{agreements.length > 1 ? 'er' : ''}
       </Heading>
-      <>
-        {showdOtherProductsOnAgreement({ agreement: agreement1 })}
-        {agreement2 && showdOtherProductsOnAgreement({ agreement: agreement2 })}
-        {agreement3 && showdOtherProductsOnAgreement({ agreement: agreement3 })}
-      </>
+      {agreements.length > 0 &&
+        agreements.map((agreement) => {
+          return showOtherProductsOnAgreement({ agreement: agreement })
+        })}
     </VStack>
   )
-}*/
-const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[]}) => {
-  return (
-          <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
-            <Heading size={'medium'} level={'2'}>
-              Andre produkter på delkontrakt{agreements.length > 1 ? 'er' : ''}
-            </Heading>
-
-            {agreements.length > 0 && (
-              agreements.map((agreement) => {
-                return showdOtherProductsOnAgreement({ agreement: agreement })
-            }))}
-          </VStack>
-    )
 }
 export default ProductMiddle
