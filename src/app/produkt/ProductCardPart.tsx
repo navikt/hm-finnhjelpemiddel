@@ -1,12 +1,13 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { BodyShort, Box, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import { logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardPart.module.scss'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export const ProductCardPart = ({
   product,
@@ -32,15 +33,13 @@ export const ProductCardPart = ({
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
         </Box>
         <VStack gap={{ xs: '1', md: '2' }}>
-            {onAgreement ? (
-              <Tag variant={'success-moderate'} className={styles.agreementTag}>
-                {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
-              </Tag>
-            ) : (
-              <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
-                Ikke på avtale
-              </Tag>
-            )}
+          {onAgreement ? (
+            <SuccessTag className={styles.agreementTag}>
+              {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
+            </SuccessTag>
+          ) : (
+            <NeutralTag>Ikke på avtale</NeutralTag>
+          )}
           <Box className={styles.productSummary}>
             <Link
               className={styles.link}

@@ -17,21 +17,11 @@
 }
 
 .agreementTag {
-  background-color: #ccf1d67a;
-  border-radius: 0.25rem;
-  border: 1px solid #99dead7a;
-  font-size: $a-font-size-medium;
-  padding: $a-spacing-1-alt $a-spacing-2;
+  width: 7rem;
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   z-index: 1;
-}
-
-.nonAgreementTag {
-  @extend .agreementTag;
-  background-color: #f0ecf4;
-  border: 1px solid #e0d8e9;
 }
 
 .productSummary {

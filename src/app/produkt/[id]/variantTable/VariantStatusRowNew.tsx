@@ -1,6 +1,7 @@
-import { Table, Tag } from '@navikt/ds-react'
+import { Table } from '@navikt/ds-react'
 import { ProductVariant } from '@/utils/product-util'
 import styles from './VariantTable.module.scss'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export const VariantStatusRowNew = ({ variants }: { variants: ProductVariant[] }) => (
   <Table.Row className={styles.statusRow}>
@@ -8,17 +9,11 @@ export const VariantStatusRowNew = ({ variants }: { variants: ProductVariant[] }
     {variants.map((variant) => (
       <Table.HeaderCell key={'onagreement-' + variant.id}>
         {variant.status === 'INACTIVE' ? (
-          <Tag size="small" variant="neutral-moderate" style={{ minWidth: '89px' }}>
-            Utgått
-          </Tag>
+          <NeutralTag>Utgått</NeutralTag>
         ) : variant.hasAgreement ? (
-          <Tag size="small" variant="neutral-moderate" className={styles.agreementTag} style={{ minWidth: '89px' }}>
-            På avtale
-          </Tag>
+          <SuccessTag>På avtale</SuccessTag>
         ) : (
-          <Tag size="small" variant="neutral-moderate">
-            Ikke på avtale
-          </Tag>
+          <NeutralTag>Ikke på avtale</NeutralTag>
         )}
       </Table.HeaderCell>
     ))}

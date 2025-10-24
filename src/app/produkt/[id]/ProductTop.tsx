@@ -2,7 +2,7 @@
 
 import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { Alert, BodyShort, Button, CopyButton, HGrid, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, CopyButton, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
@@ -10,6 +10,7 @@ import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 import { EXCLUDED_ISO_CATEGORIES } from '@/utils/api-util'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -41,13 +42,8 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
 
       {EXCLUDED_ISO_CATEGORIES.includes(product.isoCategory) && (
         <Alert variant="warning" size="small">
-          Kun autoriserte leger i Norge kan bestille hjelpemidler for seksuallivet.
-          Les mer på{' '}
-          <Link
-            href="https://www.nav.no/seksualtekniskehjelpemidler"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          Kun autoriserte leger i Norge kan bestille hjelpemidler for seksuallivet. Les mer på{' '}
+          <Link href="https://www.nav.no/seksualtekniskehjelpemidler" target="_blank" rel="noopener noreferrer">
             nav.no
           </Link>
         </Alert>
@@ -96,48 +92,32 @@ const TagRow = ({
     <HStack justify={'start'} gap={'3'}>
       {accessory || sparePart ? (
         <HStack gap="3">
-          <Tag variant={'neutral-moderate'} className={styles.partTag}>
-            {accessory ? 'Tilbehør' : 'Reservedel'}
-          </Tag>
+          <NeutralTag>{accessory ? 'Tilbehør' : 'Reservedel'}</NeutralTag>
         </HStack>
       ) : (
         ''
       )}
       {topRank ? (
         <>
-          <Tag variant={'success-moderate'} className={styles.agreementTag}>
-            {topRank === 99 ? 'På avtale' : `Rangering ${topRank}`}
-          </Tag>
-          {productAgreements.length === 2 ? (
-            <Tag variant={'success-moderate'} className={styles.agreementTag}>
-              Rangering {rankList?.[1]}
-            </Tag>
-          ) : (
-            ''
+          {productAgreements.length <= 3  && topRank !== 99 && (
+            <>
+              <SuccessTag>Rangering {rankList?.[0]}</SuccessTag>
+              <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
+            </>
           )}
-          {productAgreements.length > 2 ? (
-            <Tag variant={'success-moderate'} className={styles.agreementTag}>
-              Flere delkontrakter
-            </Tag>
-          ) : (
-            productAgreements.length === 1 &&
-            productAgreements[0].refNr !== '99' && (
-              <Tag variant={'success-moderate'} className={styles.agreementTag}>
-                Delkontrakt {productAgreements[0].refNr}
-              </Tag>
-            )
+          {productAgreements.length === 2 && topRank !== 99 && (
+            <>
+              <SuccessTag>Rangering {rankList?.[1]}</SuccessTag>
+              <NeutralTag>Delkontrakt {productAgreements[1].refNr}</NeutralTag>
+            </>
           )}
+          {productAgreements.length > 2 && <NeutralTag>Flere delkontrakter</NeutralTag>}
+          {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}
         </>
       ) : (
-        <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
-          Ikke på avtale
-        </Tag>
+        <NeutralTag>Ikke på avtale</NeutralTag>
       )}
-      {isExpired && (
-        <Tag variant={'neutral-moderate'} className={styles.nonAgreementTag}>
-          Utgått
-        </Tag>
-      )}
+      {isExpired && <NeutralTag>Utgått</NeutralTag>}
     </HStack>
   )
 }

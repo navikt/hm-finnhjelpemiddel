@@ -29,10 +29,10 @@ export const CompareButton = ({
         [styles.compareButtonChecked]: isInProductsToCompare,
       })}
       size="xsmall"
-      variant="secondary-neutral"
+      variant="tertiary-neutral"
       value="Legg produktet til sammenligning"
       onClick={toggleCompareProduct}
-      icon={<ArrowRightLeftIcon aria-hidden fontSize={'24px'} />}
+      icon={<ArrowRightLeftIcon aria-hidden fontSize={'16px'} />}
       iconPosition="left"
       aria-pressed={isInProductsToCompare}
     >
