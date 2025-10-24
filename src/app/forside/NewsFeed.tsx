@@ -87,7 +87,7 @@ const NewsCard = ({ news }: { news: News }) => {
         <NextLink
           href={`/nyheter/${news.id}`}
           className={styles.newsCard__readMore}
-          aria-label={`Les hele nyheten: ${news.title}`}
+          aria-label={`Les hele saken: ${news.title}`}
         >
           Les hele saken
         </NextLink>

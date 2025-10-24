@@ -41,12 +41,11 @@
 .newsCard__readMore {
   margin-top: 0.5rem;
   font-weight: 600;
-  text-decoration: none;
   align-self: flex-start;
 }
 .newsCard__readMore:hover,
 .newsCard__readMore:focus {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .newsCard__dots {
