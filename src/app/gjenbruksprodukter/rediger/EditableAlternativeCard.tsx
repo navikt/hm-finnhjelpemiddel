@@ -1,9 +1,10 @@
 import React from 'react'
-import { BodyShort, Box, Button, HGrid } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid, Link, VStack } from '@navikt/ds-react'
 import styles from './EditableAlternativeCard.module.scss'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 import ProductImage from '@/components/ProductImage'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+import NextLink from 'next/link'
 
 export const EditableAlternativeCard = ({
   alternativeProduct,
@@ -24,7 +25,16 @@ export const EditableAlternativeCard = ({
       <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
         <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
       </Box>
-      <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
+      <VStack>
+        <Link
+          as={NextLink}
+          href={`/produkt/${alternativeProduct.seriesId}?term=${alternativeProduct.hmsArtNr}`}
+          className={styles.link}
+        >
+          {alternativeProduct.seriesTitle}
+        </Link>
+        <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
+      </VStack>
       <BodyShort>HMS: {alternativeProduct.hmsArtNr}</BodyShort>
       {alternativeProduct.onAgreement ? (
         <SuccessTag>Rangering {alternativeProduct.highestRank}</SuccessTag>
