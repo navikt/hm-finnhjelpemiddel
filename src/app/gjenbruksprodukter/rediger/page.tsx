@@ -66,6 +66,7 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
   const {
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
+    mutate: mutateAlternatives,
     error: errorAlternatives,
   } = useSWRImmutable(`asdasd-${hmsNumber}`, () => newGetAlternatives(hmsNumber))
 
@@ -83,5 +84,10 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
 
   const alternatives = alternativesResponse.alternatives ?? []
 
-  return <EditableAlternativeGroup alternatives={[alternativesResponse.original, ...alternatives]} />
+  return (
+    <EditableAlternativeGroup
+      alternatives={[alternativesResponse.original, ...alternatives]}
+      mutateAlternatives={mutateAlternatives}
+    />
+  )
 }
