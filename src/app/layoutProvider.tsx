@@ -14,6 +14,9 @@ import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import CookieBanner from '@/app/CookieBanner'
+import { initSkyra, stopSkyra } from '@/utils/skyra'
+import { SkyraSurvey } from '@/app/SkyraSurvey'
+import { initUmami, stopUmami } from '@/utils/umami'
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
@@ -64,10 +67,14 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
         initAmplitude(window.location.hostname)
+        initUmami(window.location.hostname)
+        initSkyra()
       }
       if (consent === 'false') {
         stopAmplitude()
+        stopUmami()
         removeOptionalCookies()
+        stopSkyra()
       }
       initInstrumentation()
     }
@@ -115,6 +122,12 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
+      {consent === 'true' && (
+        <SkyraSurvey
+          buttonText={'Tilbakemelding'}
+          skyraSlug={'arbeids-og-velferdsetaten-nav/digihot-finnhjelpemiddeltestsurveyv1'}
+        />
+      )}
       <Footer setCookieConsent={setConsent} />
     </Suspense>
   )

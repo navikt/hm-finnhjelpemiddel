@@ -20,7 +20,10 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
         <ProductInformation product={product} />
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
-        {product.agreements.length > 0 && <OtherProductsOnPost agreement={product.agreements[0]} />}
+        {product.agreements.length > 0 && (
+          /*          <OtherProductsOnPost agreement1={product.agreements[0]} agreement2={product?.agreements[1]} agreement3={product?.agreements[2]} />*/
+          <OtherProductsOnPost agreements={product.agreements} />
+        )}
         {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
             productName={hmsartnr ? `serien ${product.title}` : product.title}
@@ -62,24 +65,33 @@ const AccessoriesAndParts = ({ productName, productId }: { productName: string; 
   )
 }
 
-const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
+const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
+  return (
+    <VStack gap={'2'} paddingBlock={'2 4'}>
+      <BodyShort>{agreement.postTitle}</BodyShort>
+      <Button
+        className={styles.button}
+        as={NextLink}
+        variant={'secondary'}
+        icon={<ChevronRightIcon aria-hidden />}
+        href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}
+      >
+        Flere produkter på delkontrakt {agreement.refNr}
+      </Button>
+    </VStack>
+  )
+}
+
+const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
   return (
     <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt {agreement.refNr}
+        Andre produkter på delkontrakt{agreements.length > 1 ? 'er' : ''}
       </Heading>
-      <VStack gap={'6'}>
-        <BodyShort>{agreement.postTitle}</BodyShort>
-        <Button
-          className={styles.button}
-          as={NextLink}
-          variant={'secondary'}
-          icon={<ChevronRightIcon aria-hidden />}
-          href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}
-        >
-          Flere produkter på delkontrakt
-        </Button>
-      </VStack>
+      {agreements.length > 0 &&
+        agreements.map((agreement) => {
+          return showOtherProductsOnAgreement({ agreement: agreement })
+        })}
     </VStack>
   )
 }

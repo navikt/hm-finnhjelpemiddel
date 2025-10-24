@@ -89,6 +89,7 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
         onChange={handleChange}
         onKeyUp={handleKeyUp}
         onClear={handleClear}
+        placeholder={'Søk etter del, HMS-nummer eller lev-artnr.'}
       />
       {showSupplierSelect && (
         <SupplierSelect

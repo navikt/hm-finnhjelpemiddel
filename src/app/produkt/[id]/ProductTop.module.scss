@@ -9,26 +9,13 @@
   text-decoration: underline;
 }
 
-.agreementTag {
-  background-color: var(--a-surface-success-subtle);
-  border-radius: 0.25rem;
-  border: 1px solid #99dead;
-  font-size: var(--a-font-size-medium);
-  padding: $a-spacing-1-alt $a-spacing-4;
-}
-
-.nonAgreementTag {
-  @extend .agreementTag;
-  background-color: #f0ecf4;
-  border: 1px solid #e0d8e9;
-}
 
 .partTag {
   background-color: var(--a-surface-neutral-subtle);
   border-radius: 0.25rem;
   border: 1px solid #c6c2cc;
   font-size: var(--a-font-size-medium);
-  padding: $a-spacing-1-alt $a-spacing-4;
+  padding: 0 $a-spacing-1-alt;
 }
 
 .supplierLink {

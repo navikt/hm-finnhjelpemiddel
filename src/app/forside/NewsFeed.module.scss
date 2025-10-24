@@ -7,9 +7,101 @@
 .newsCard {
   background: $ny-nav-orange-light;
   display: flex;
+  flex-direction: column;
   max-width: 330px;
-  min-height: 245px;
-  height: fit-content;
+  width: 330px; // fixed width for consistency
+  flex: 0 0 330px; // prevent shrinking; ensures equal width in flex row
+  box-sizing: border-box;
+  min-height: 0;
   border-top: 6px solid $ny-nav-purple-dark;
-  border-radius: 0 0 8px 8px;
+  border-radius: .5rem;
+}
+
+.newsCard__content {
+  flex: 1;
+  position: relative;
+}
+
+.newsCard__excerpt {
+  margin: 0;
+  line-height: 1.4;
+
+  a.news-preview-link {
+    color: $ny-nav-purple-dark;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  a.news-preview-link:hover,
+  a.news-preview-link:focus {
+    text-decoration: underline;
+  }
+}
+
+.newsCard__readMore {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  align-self: flex-start;
+}
+.newsCard__readMore:hover,
+.newsCard__readMore:focus {
+  text-decoration: none;
+}
+
+.newsCard__dots {
+  font-weight: 600;
+  color: $ny-nav-purple-dark;
+  margin-left: 2px;
+}
+
+.cardsWrapper {
+  display: flex;
+  flex-wrap: wrap; // allow wrapping when space is insufficient
+  gap: 1.5rem; // ensure consistent gap instead of relying solely on HStack
+}
+
+.mobileList {
+  display: none; // hidden by default on larger screens
+  width: 100%;
+}
+.mobileList__ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mobileList__item {
+  margin: 0;
+}
+.mobileList__link {
+  display: inline-flex;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  text-decoration: none;
+  border-left: 4px solid $ny-nav-purple-dark;
+  padding: 0.35rem 0.5rem 0.35rem 0.6rem;
+  background: $ny-nav-orange-light;
+  border-radius: 0 4px 4px 0;
+}
+.mobileList__link:hover,
+.mobileList__link:focus {
+  text-decoration: underline;
+}
+.mobileList__main {
+  font-weight: 600;
+}
+.mobileList__sub {
+  font-weight: 400;
+}
+
+@media (max-width: 600px) {
+  .cardsWrapper {
+    display: none;
+  }
+  .mobileList {
+    display: block;
+  }
 }

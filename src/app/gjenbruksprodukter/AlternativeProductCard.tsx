@@ -7,6 +7,7 @@ import { ArrowsSquarepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/ak
 import { AlternativeProduct, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export const AlternativeProductCard = ({
   alternativeProduct,
@@ -92,15 +93,15 @@ const ProductInfo = ({
       </HStack>
       <HStack align={'end'} justify={'space-between'} gap={'2'} wrap={false}>
         {alternativeProduct.warehouseStock === undefined && (
-          <Tag variant="neutral" size={'small'}>
+          <NeutralTag>
             Ukjent lagerstatus
-          </Tag>
+          </NeutralTag>
         )}
 
         {!alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
-          <Tag variant="neutral" size={'small'}>
+          <NeutralTag>
             Ikke på noen lager
-          </Tag>
+          </NeutralTag>
         )}
 
         {alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
@@ -162,15 +163,15 @@ const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
 const StockTag = ({ amount }: { amount: number }) => {
   if (amount === 0) {
     return (
-      <Tag variant="neutral" size={'small'}>
+      <NeutralTag>
         Ingen på lager
-      </Tag>
+      </NeutralTag>
     )
   } else
     return (
-      <Tag variant="success" size={'small'}>
+      <SuccessTag>
         {amount} stk på lager
-      </Tag>
+      </SuccessTag>
     )
 }
 

@@ -1,4 +1,4 @@
-name: Auto-deploy to NAIS (PROD)
+name: Auto-deploy to prod
 
 on:
   push:
