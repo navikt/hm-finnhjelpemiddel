@@ -68,23 +68,24 @@ const AccessoriesAndParts = ({ productName, productId }: { productName: string; 
 const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'} paddingBlock={'2 4'}>
-      <BodyShort>{agreement.postTitle}</BodyShort>
-      <Button
-        className={styles.button}
-        as={NextLink}
-        variant={'secondary'}
-        icon={<ChevronRightIcon aria-hidden />}
+{/*      <BodyShort>{agreement.postTitle}</BodyShort>*/}
+      <NextLink
+/*        className={styles.button}*/
+/*        as={NextLink}*/
+/*        variant={'secondary'}*/
+/*        icon={<ChevronRightIcon aria-hidden />}*/
         href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}
       >
-        Flere produkter på delkontrakt {agreement.refNr}
-      </Button>
+{/*        Flere produkter på delkontrakt {agreement.refNr}*/}
+        {agreement.postTitle}
+      </NextLink>
     </VStack>
   )
 }
 
 const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
   return (
-    <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
+    <VStack gap={'2'} paddingInline={'8'} paddingBlock={'4 4'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
         Andre produkter på delkontrakt{agreements.length > 1 ? 'er' : ''}
       </Heading>
