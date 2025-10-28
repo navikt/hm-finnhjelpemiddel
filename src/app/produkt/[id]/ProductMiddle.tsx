@@ -10,6 +10,7 @@ import styles from './ProductMiddle.module.scss'
 import { VariantTableSingle } from '@/app/produkt/[id]/variantTable/VariantTableSingle'
 import useSWR from 'swr'
 import { fetchCompatibleProducts } from '@/utils/api-util'
+import { useState } from 'react'
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const { data: compatibleWithProducts } = useSWR(product.id, fetchCompatibleProducts, { keepPreviousData: true })
@@ -21,15 +22,14 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && (
-          /*          <OtherProductsOnPost agreement1={product.agreements[0]} agreement2={product?.agreements[1]} agreement3={product?.agreements[2]} />*/
           <OtherProductsOnPost agreements={product.agreements} />
         )}
-        {compatibleWithProducts && compatibleWithProducts.length > 0 && (
+{/*        {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
             productName={hmsartnr ? `serien ${product.title}` : product.title}
             productId={product.id}
           />
-        )}
+        )}*/}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
         <>
@@ -43,7 +43,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
   )
 }
 
-const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
+/*const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
   return (
     <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
@@ -63,20 +63,13 @@ const AccessoriesAndParts = ({ productName, productId }: { productName: string; 
       </VStack>
     </VStack>
   )
-}
+}*/
 
 const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'} paddingBlock={'2 4'}>
-{/*      <BodyShort>{agreement.postTitle}</BodyShort>*/}
       <NextLink
-/*        className={styles.button}*/
-/*        as={NextLink}*/
-/*        variant={'secondary'}*/
-/*        icon={<ChevronRightIcon aria-hidden />}*/
-        href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}
-      >
-{/*        Flere produkter på delkontrakt {agreement.refNr}*/}
+        href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
         {agreement.postTitle}
       </NextLink>
     </VStack>
@@ -85,9 +78,9 @@ const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo 
 
 const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
   return (
-    <VStack gap={'2'} paddingInline={'8'} paddingBlock={'4 4'} className={styles.boks}>
+    <VStack gap={'2'} paddingInline={'2 0'}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt{agreements.length > 1 ? 'er' : ''}
+        Andre produkter på delkontrakt { agreements.map((agreement) => agreement.refNr ).join(', ') }:
       </Heading>
       {agreements.length > 0 &&
         agreements.map((agreement) => {

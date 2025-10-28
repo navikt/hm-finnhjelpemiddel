@@ -6,11 +6,12 @@ import { Alert, BodyShort, Button, CopyButton, HGrid, HStack, Link, VStack } fro
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
-import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, LayersPlusIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
-import { EXCLUDED_ISO_CATEGORIES } from '@/utils/api-util'
+import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+import useSWR from 'swr'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -22,6 +23,7 @@ const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string
 }
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
+  const { data: compatibleWithProducts } = useSWR(product.id, fetchCompatibleProducts, { keepPreviousData: true })
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
@@ -65,9 +67,19 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           {product.isoCategoryTitle}
         </div>
       </VStack>
-
+      <HStack gap={'6'}>
       <CopyHms product={product} />
       <QrCodeButton id={qrId} />
+        {compatibleWithProducts && compatibleWithProducts.length > 0 && (
+          <AccessoriesAndParts
+            productName={hmsartnr ? `serien ${product.title}` : product.title}
+            productId={product.id}
+          />
+        )}
+{/*          {product.agreements.length > 0 && (
+            <OtherProductsOnPost agreements={product.agreements} />
+          )}*/}
+      </HStack>
     </VStack>
   )
 }
@@ -163,6 +175,48 @@ const CopyHms = ({ product }: { product: Product }) => {
         )}
       </VStack>
     </>
+  )
+}
+
+const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
+  return (
+      <VStack gap={'6'}>
+        <Button
+          size="medium"
+          className={styles.button}
+          as={NextLink}
+          variant={'primary'}
+          icon={<LayersPlusIcon aria-hidden />}
+          href={`/produkt/${productId}/deler`}
+        >
+          Tilbehør og reservedeler
+        </Button>
+      </VStack>
+  )
+}
+
+const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
+  return (
+    <VStack gap={'2'} paddingBlock={'2 4'}>
+      <NextLink
+        href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+        {agreement.postTitle}
+      </NextLink>
+    </VStack>
+  )
+}
+
+const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
+  return (
+    <VStack gap={'2'} paddingBlock={'2 0'} className={styles.boks}>
+      <Heading size={'medium'} level={'2'}>
+        Andre produkter på delkontrakt { agreements.map((agreement) => agreement.refNr ).join(', ') }:
+      </Heading>
+      {agreements.length > 0 &&
+        agreements.map((agreement) => {
+          return showOtherProductsOnAgreement({ agreement: agreement })
+        })}
+    </VStack>
   )
 }
 
