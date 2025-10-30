@@ -30,5 +30,6 @@ spec:
   azure:
     application:
       enabled: true
+      allowAllUsers: true
     sidecar:
       enabled: true
