@@ -58,6 +58,8 @@ const nextConfig = {
     BUILD_ENV: process.env.BUILD_ENV,
     HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
     NEXT_PUBLIC_FARO_URL: process.env.FARO_URL,
+    NEXT_PUBLIC_NAIS_TOKEN_EXCHANGE_ENDPOINT: process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT,
+    NEXT_PUBLIC_ALTERNATIVER_BACKEND_AUDIENCE: process.env.ALTERNATIVER_BACKEND_AUDIENCE,
   },
   experimental: {
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
