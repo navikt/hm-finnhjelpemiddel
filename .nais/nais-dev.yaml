@@ -28,4 +28,9 @@ spec:
     - emptyDir:
         medium: Memory
       mountPath: /app/.next/server/app/no
+  azure:
+    application:
+      enabled: true
+    sidecar:
+      enabled: true
 
