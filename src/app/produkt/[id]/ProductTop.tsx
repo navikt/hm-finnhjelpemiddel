@@ -68,15 +68,15 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </div>
       </VStack>
       <HStack gap={'6'}>
-      <CopyHms product={product} />
-      <QrCodeButton id={qrId} />
+        <CopyHms product={product} />
+        <QrCodeButton id={qrId} />
         {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
             productName={hmsartnr ? `serien ${product.title}` : product.title}
             productId={product.id}
           />
         )}
-{/*          {product.agreements.length > 0 && (
+        {/*          {product.agreements.length > 0 && (
             <OtherProductsOnPost agreements={product.agreements} />
           )}*/}
       </HStack>
@@ -111,19 +111,21 @@ const TagRow = ({
       )}
       {topRank ? (
         <>
-          {productAgreements.length <= 3  && topRank !== 99 && (
+          {topRank !== 99 && (
             <>
-              <SuccessTag>Rangering {rankList?.[0]}</SuccessTag>
-              <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
+              {productAgreements.length <= 2 && (
+                <SuccessTag>
+                  Delkontrakt {productAgreements[0].refNr} - rangering {topRank}
+                </SuccessTag>
+              )}
+              {productAgreements.length === 2 && (
+                <SuccessTag>
+                  Delkontrakt {productAgreements[1].refNr} - rangering {rankList?.[1]}
+                </SuccessTag>
+              )}
+              {productAgreements.length > 2 && <SuccessTag>Flere delkontrakter og rangeringer</SuccessTag>}
             </>
           )}
-          {productAgreements.length === 2 && topRank !== 99 && (
-            <>
-              <SuccessTag>Rangering {rankList?.[1]}</SuccessTag>
-              <NeutralTag>Delkontrakt {productAgreements[1].refNr}</NeutralTag>
-            </>
-          )}
-          {productAgreements.length > 2 && <NeutralTag>Flere delkontrakter</NeutralTag>}
           {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}
         </>
       ) : (
@@ -180,28 +182,25 @@ const CopyHms = ({ product }: { product: Product }) => {
 
 const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
   return (
-      <VStack gap={'6'}>
-        <Button
-          size="medium"
-          className={styles.button}
-          as={NextLink}
-          variant={'primary'}
-          icon={<LayersPlusIcon aria-hidden />}
-          href={`/produkt/${productId}/deler`}
-        >
-          Tilbehør og reservedeler
-        </Button>
-      </VStack>
+    <VStack gap={'6'}>
+      <Button
+        size="medium"
+        className={styles.button}
+        as={NextLink}
+        variant={'primary'}
+        icon={<LayersPlusIcon aria-hidden />}
+        href={`/produkt/${productId}/deler`}
+      >
+        Tilbehør og reservedeler
+      </Button>
+    </VStack>
   )
 }
 
 const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
   return (
     <VStack gap={'2'} paddingBlock={'2 4'}>
-      <NextLink
-        href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
-        {agreement.postTitle}
-      </NextLink>
+      <NextLink href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>{agreement.postTitle}</NextLink>
     </VStack>
   )
 }
@@ -210,7 +209,7 @@ const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) =>
   return (
     <VStack gap={'2'} paddingBlock={'2 0'} className={styles.boks}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt { agreements.map((agreement) => agreement.refNr ).join(', ') }:
+        Andre produkter på delkontrakt {agreements.map((agreement) => agreement.refNr).join(', ')}:
       </Heading>
       {agreements.length > 0 &&
         agreements.map((agreement) => {
