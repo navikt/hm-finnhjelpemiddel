@@ -67,18 +67,15 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           {product.isoCategoryTitle}
         </div>
       </VStack>
-      <HStack gap={'6'}>
         <CopyHms product={product} />
-        <QrCodeButton id={qrId} />
+      <HStack gap={'6'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
             productName={hmsartnr ? `serien ${product.title}` : product.title}
             productId={product.id}
           />
         )}
-        {/*          {product.agreements.length > 0 && (
-            <OtherProductsOnPost agreements={product.agreements} />
-          )}*/}
+        <QrCodeButton id={qrId} />
       </HStack>
     </VStack>
   )
@@ -188,33 +185,10 @@ const AccessoriesAndParts = ({ productName, productId }: { productName: string; 
         className={styles.button}
         as={NextLink}
         variant={'primary'}
-        icon={<LayersPlusIcon aria-hidden />}
         href={`/produkt/${productId}/deler`}
       >
         Tilbehør og reservedeler
       </Button>
-    </VStack>
-  )
-}
-
-const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
-  return (
-    <VStack gap={'2'} paddingBlock={'2 4'}>
-      <NextLink href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>{agreement.postTitle}</NextLink>
-    </VStack>
-  )
-}
-
-const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
-  return (
-    <VStack gap={'2'} paddingBlock={'2 0'} className={styles.boks}>
-      <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt {agreements.map((agreement) => agreement.refNr).join(', ')}:
-      </Heading>
-      {agreements.length > 0 &&
-        agreements.map((agreement) => {
-          return showOtherProductsOnAgreement({ agreement: agreement })
-        })}
     </VStack>
   )
 }

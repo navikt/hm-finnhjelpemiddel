@@ -28,8 +28,6 @@ export const QrCodeButton = ({ id }: { id: string }) => {
       size="medium"
       style={{ alignSelf: 'end', border: '1px dashed #0056b4'}}
       variant={'tertiary'}
-      icon={<QrCodeIcon aria-hidden />}
-      iconPosition="left"
       as="a"
       href={qrUrl}
       download={id + '-qr.png'}

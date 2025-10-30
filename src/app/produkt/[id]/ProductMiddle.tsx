@@ -42,13 +42,17 @@ const showOtherProductsOnAgreement = ({ agreement, index }: { agreement: Agreeme
 }
 
 const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
+  const sortedAgreements = [...agreements].sort((a, b) => {
+    return b.postNr !== a.postNr ? a.postNr - b.postNr : !a.refNr ? -1 : !b.refNr ? 1 : b.refNr.localeCompare(a.refNr)
+  })
+
   return (
     <VStack gap={'2'} paddingInline={'2 0'}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt {agreements.map((agreement) => agreement.refNr).join(', ')}:
+        Andre produkter på delkontrakt {sortedAgreements.map((agreement) => agreement.refNr).join(', ')}:
       </Heading>
-      {agreements.length > 0 &&
-        agreements.map((agreement, index) => {
+      {sortedAgreements.length > 0 &&
+        sortedAgreements.map((agreement, index) => {
           return showOtherProductsOnAgreement({ agreement: agreement, index })
         })}
     </VStack>
