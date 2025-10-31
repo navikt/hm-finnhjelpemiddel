@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@amplitude/analytics-browser": "^2.27.1",
+    "@amplitude/analytics-browser": "^2.30.0",
     "@axe-core/react": "^4.11.0",
     "@grafana/faro-web-sdk": "^1.19.0",
     "@grafana/faro-web-tracing": "^1.19.0",
@@ -17,7 +17,7 @@
     "@navikt/ds-css": "^7.32.3",
     "@navikt/ds-react": "^7.32.3",
     "@navikt/ds-tokens": "^7.1.2",
-    "@navikt/next-logger": "^4.3.3",
+    "@navikt/next-logger": "^4.4.1",
     "@types/js-cookie": "^3.0.6",
     "@types/umami": "^2.10.1",
     "classnames": "^2.5.1",
