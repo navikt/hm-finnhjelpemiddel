@@ -2,11 +2,11 @@
 
 import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { Alert, BodyShort, Button, CopyButton, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, CopyButton, HelpText, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
-import { ArrowDownIcon, LayersPlusIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
@@ -67,7 +67,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           {product.isoCategoryTitle}
         </div>
       </VStack>
-        <CopyHms product={product} />
+      <CopyHms product={product} />
       <HStack gap={'6'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && (
           <AccessoriesAndParts
@@ -97,6 +97,22 @@ const TagRow = ({
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
   const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
+  const helpTextTopLabels = (agreement?: AgreementInfo) => {
+    return (
+      <>
+        <Heading size="small">Flere delkontrakt og (flere) rangeringer</Heading>
+        <BodyLong>
+          Hjelpemiddelet er på avtale med Nav. Det er på flere delkontrakter og har flere rangeringer fleste i
+          rammeavtalen: {agreement?.title}.
+          <br />
+          <br />
+          For mer info se gjeldende delkontrakt/er som er listet opp her på siden under tittel: &ldquo;Andre
+          hjelpemidler på delkontrakt&rdquo;.
+        </BodyLong>
+      </>
+    )
+  }
+
   return (
     <HStack justify={'start'} gap={'3'}>
       {accessory || sparePart ? (
@@ -120,7 +136,12 @@ const TagRow = ({
                   Delkontrakt {productAgreements[1].refNr} - rangering {rankList?.[1]}
                 </SuccessTag>
               )}
-              {productAgreements.length > 2 && <SuccessTag>Flere delkontrakter og rangeringer</SuccessTag>}
+              {productAgreements.length > 2 && (
+                <>
+                  <SuccessTag>Flere delkontrakter og rangeringer</SuccessTag>
+                  <HelpText placement="right">{helpTextTopLabels(productAgreements[0])}</HelpText>
+                </>
+              )}
             </>
           )}
           {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}

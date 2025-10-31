@@ -49,7 +49,7 @@ const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) =>
   return (
     <VStack gap={'2'} paddingInline={'2 0'}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt {sortedAgreements.map((agreement) => agreement.refNr).join(', ')}:
+        Andre hjelpemidler på delkontrakt:
       </Heading>
       {sortedAgreements.length > 0 &&
         sortedAgreements.map((agreement, index) => {
