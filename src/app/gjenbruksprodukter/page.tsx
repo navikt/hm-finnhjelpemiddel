@@ -7,22 +7,26 @@ export default async function Page() {
   const userToken = await getValidUserToken()
   const loginUrl = '/oauth2/login?redirect=/gjenbruksprodukter'
 
-  if (process.env.NODE_ENV !== 'development' && !userToken) {
-    redirect(loginUrl)
+  if (process.env.NODE_ENV === 'development' || userToken) {
+    const oboToken = await exchangeToken(userToken!)
+
+    return <AlternativeProductsPage userToken={oboToken!} />
   }
 
-  const oboToken = await exchangeToken(userToken!)
-
-  return <AlternativeProductsPage userToken={oboToken!} />
+  if (process.env.NODE_ENV === 'production' && !userToken) {
+    redirect(loginUrl)
+  }
 }
 export async function getValidUserToken(): Promise<string | undefined> {
   const token = getToken(await headers())
 
   if (!token) {
+    console.log('ingen token header')
     return undefined
   }
 
-  return (await validateToken(token)).ok ? token : undefined
+  const validToken = await validateToken(token)
+  return validToken.ok ? token : validToken.error.message
 }
 
 export async function exchangeToken(token: string): Promise<string | undefined> {
