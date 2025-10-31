@@ -33,6 +33,7 @@ async function exchangeToken(token: string): Promise<string | undefined> {
   const audience = process.env.NEXT_PUBLIC_ALTERNATIVER_BACKEND_AUDIENCE
 
   if (!exchangeEndpoint || !audience) {
+    console.log('ingen miljøvariabler')
     return undefined
   }
 
@@ -50,6 +51,7 @@ export async function newGetAlternatives(
   userToken: string
 ): Promise<AlternativeStockResponseNew | undefined> {
   const oboToken = (await exchangeToken(userToken)) ?? ''
+  if (oboToken.length === 0) console.log('obo 0')
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
     {
