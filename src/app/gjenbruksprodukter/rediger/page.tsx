@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import EditAlternativeProductsPage from '@/app/gjenbruksprodukter/rediger/EditAlternativeProductsPage'
-import { getValidUserToken } from '@/app/gjenbruksprodukter/page'
+import { exchangeToken, getValidUserToken } from '@/app/gjenbruksprodukter/page'
 
 export default async function Page() {
   const userToken = await getValidUserToken()
@@ -10,5 +10,7 @@ export default async function Page() {
     redirect(loginUrl)
   }
 
-  return <EditAlternativeProductsPage userToken={userToken!} />
+  const oboToken = await exchangeToken(userToken!)
+
+  return <EditAlternativeProductsPage userToken={oboToken!} />
 }

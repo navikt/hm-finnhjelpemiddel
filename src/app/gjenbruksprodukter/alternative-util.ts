@@ -28,37 +28,17 @@ export interface WarehouseStock {
   available: number
 }
 
-async function exchangeToken(token: string): Promise<string | undefined> {
-  const exchangeEndpoint = process.env.NEXT_PUBLIC_NAIS_TOKEN_EXCHANGE_ENDPOINT
-  const audience = process.env.NEXT_PUBLIC_ALTERNATIVER_BACKEND_AUDIENCE
-
-  if (!exchangeEndpoint || !audience) {
-    console.log('ingen miljøvariabler')
-    return undefined
-  }
-
-  const res = await fetcherModify(exchangeEndpoint, 'POST', {
-    identity_provider: 'azuread',
-    target: audience,
-    user_token: token,
-  })
-
-  return res.json()
-}
-
 export async function newGetAlternatives(
   hmsArtNr: string,
   userToken: string
 ): Promise<AlternativeStockResponseNew | undefined> {
-  const oboToken = (await exchangeToken(userToken)) ?? ''
-  if (oboToken.length === 0) console.log('obo 0')
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
     {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: oboToken,
+        Authorization: userToken,
       },
     }
   )
