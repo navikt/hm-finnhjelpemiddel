@@ -19,9 +19,11 @@ import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 export const AlternativeProductList = ({
   hmsNumber,
   selectedWarehouse,
+  userToken,
 }: {
   hmsNumber: string
   selectedWarehouse?: string | undefined
+  userToken: string
 }) => {
   const featureFlags = useFeatureFlags()
 
@@ -32,7 +34,7 @@ export const AlternativeProductList = ({
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
   } = useSWRImmutable<AlternativeStockResponseNew | undefined>(`alternatives-${hmsNumber}`, () =>
-    newGetAlternatives(hmsNumber)
+    newGetAlternatives(hmsNumber, userToken)
   )
 
   const { setCompareAlternativesMenuState } = useHydratedAlternativeProductsCompareStore()

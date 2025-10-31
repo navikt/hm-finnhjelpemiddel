@@ -1,5 +1,4 @@
 import { fetcherModify } from '@/utils/api-util'
-import { headers } from 'next/headers'
 
 //if HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL is undefined it means that we are on the client and we want to use relative url
 const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
@@ -29,15 +28,14 @@ export interface WarehouseStock {
   available: number
 }
 
-async function exchangeToken(): Promise<string | undefined> {
+async function exchangeToken(token: string): Promise<string | undefined> {
   const exchangeEndpoint = process.env.NEXT_PUBLIC_NAIS_TOKEN_EXCHANGE_ENDPOINT
   const audience = process.env.NEXT_PUBLIC_ALTERNATIVER_BACKEND_AUDIENCE
-  const authHeader = (await headers()).get('authorization')
-  if (!exchangeEndpoint || !audience || !authHeader) {
+
+  if (!exchangeEndpoint || !audience) {
     return undefined
   }
 
-  const token = authHeader.replace('Bearer ', '')
   const res = await fetcherModify(exchangeEndpoint, 'POST', {
     identity_provider: 'azuread',
     target: audience,
@@ -47,10 +45,11 @@ async function exchangeToken(): Promise<string | undefined> {
   return res.json()
 }
 
-async function getAuthHeader() {}
-
-export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeStockResponseNew | undefined> {
-  const oboToken = (await exchangeToken()) ?? ''
+export async function newGetAlternatives(
+  hmsArtNr: string,
+  userToken: string
+): Promise<AlternativeStockResponseNew | undefined> {
+  const oboToken = (await exchangeToken(userToken)) ?? ''
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
     {

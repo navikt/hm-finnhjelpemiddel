@@ -7,9 +7,11 @@ import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
 export const EditableAlternativeGroup = ({
   alternatives,
   mutateAlternatives,
+  userToken,
 }: {
   alternatives: AlternativeProduct[]
   mutateAlternatives: () => void
+  userToken: string
 }) => {
   const [newAlternative, setNewAlternative] = useState<AlternativeProduct | undefined>(undefined)
 
@@ -39,7 +41,7 @@ export const EditableAlternativeGroup = ({
           />
         )}
       </VStack>
-      <AddAlternative alternativeGroup={alternativeGroup} setNewAlternative={setNewAlternative} />
+      <AddAlternative alternativeGroup={alternativeGroup} setNewAlternative={setNewAlternative} userToken={userToken} />
     </VStack>
   )
 }

@@ -4,22 +4,21 @@ import { getToken, validateToken } from '@navikt/oasis'
 import { redirect } from 'next/navigation'
 
 export default async function Page() {
-  const auth = await isUserLoggedIn()
+  const userToken = await getValidUserToken()
   const loginUrl = '/oauth2/login?redirect=/gjenbruksprodukter'
 
-  if (process.env.NODE_ENV !== 'development' && !auth) {
+  if (process.env.NODE_ENV !== 'development' && !userToken) {
     redirect(loginUrl)
   }
 
-  return <AlternativeProductsPage />
+  return <AlternativeProductsPage userToken={userToken!} />
 }
-async function isUserLoggedIn(): Promise<boolean> {
-  const requestHeaders = await headers()
-  const token = getToken(requestHeaders)
+export async function getValidUserToken(): Promise<string | undefined> {
+  const token = getToken(await headers())
 
   if (!token) {
-    return false
+    return undefined
   }
-  const validationResult = await validateToken(token)
-  return validationResult.ok
+
+  return (await validateToken(token)).ok ? token : undefined
 }

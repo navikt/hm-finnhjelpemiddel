@@ -9,7 +9,7 @@ import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProd
 import { logNavigationEvent } from '@/utils/amplitude'
 import { faro } from '@grafana/faro-core'
 
-export default function AlternativeProductsPage() {
+export default function AlternativeProductsPage({ userToken }: { userToken: string }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -127,7 +127,11 @@ export default function AlternativeProductsPage() {
       </Bleed>
 
       {searchParams.has('hms') && (
-        <AlternativeProductList hmsNumber={searchParams.get('hms')!} selectedWarehouse={selectedWarehouse} />
+        <AlternativeProductList
+          hmsNumber={searchParams.get('hms')!}
+          selectedWarehouse={selectedWarehouse}
+          userToken={userToken}
+        />
       )}
     </VStack>
   )
