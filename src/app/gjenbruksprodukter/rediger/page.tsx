@@ -7,9 +7,9 @@ export default async function Page() {
   const loginUrl = '/oauth2/login?redirect=/gjenbruksprodukter'
 
   if (process.env.NODE_ENV === 'development' || userToken) {
-    const oboToken = await exchangeToken(userToken!)
+    const oboToken = await exchangeToken(userToken)
 
-    return <EditAlternativeProductsPage userToken={oboToken!} />
+    return <EditAlternativeProductsPage userToken={oboToken} />
   }
 
   if (process.env.NODE_ENV === 'production' && !userToken) {

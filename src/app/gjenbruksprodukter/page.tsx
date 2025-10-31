@@ -8,33 +8,31 @@ export default async function Page() {
   const loginUrl = '/oauth2/login?redirect=/gjenbruksprodukter'
 
   if (process.env.NODE_ENV === 'development' || userToken) {
-    const oboToken = await exchangeToken(userToken!)
+    const oboToken = await exchangeToken(userToken)
 
-    return <AlternativeProductsPage userToken={oboToken!} />
+    return <AlternativeProductsPage userToken={oboToken} />
   }
 
   if (process.env.NODE_ENV === 'production' && !userToken) {
     redirect(loginUrl)
   }
 }
-export async function getValidUserToken(): Promise<string | undefined> {
+export async function getValidUserToken(): Promise<string> {
   const token = getToken(await headers())
 
   if (!token) {
-    console.log('ingen token header')
-    return undefined
+    return 'ingen token header'
   }
 
   const validToken = await validateToken(token)
   return validToken.ok ? token : validToken.error.message
 }
 
-export async function exchangeToken(token: string): Promise<string | undefined> {
+export async function exchangeToken(token: string): Promise<string> {
   const audience = process.env.NEXT_PUBLIC_ALTERNATIVER_BACKEND_AUDIENCE
 
   if (!audience) {
-    console.log('ingen miljøvariabler')
-    return undefined
+    return 'ingen miljøvariabler'
   }
 
   const obo = await requestOboToken(token, audience)
