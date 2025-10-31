@@ -97,13 +97,12 @@ const TagRow = ({
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
   const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
-  const helpTextTopLabels = (agreement?: AgreementInfo) => {
+  const helpTextTopLabels = () => {
     return (
       <>
-        <Heading size="small">Flere delkontrakt og (flere) rangeringer</Heading>
+        <Heading size="small">Flere delkontrakter og (flere) rangeringer</Heading>
         <BodyLong>
-          Hjelpemiddelet er på avtale med Nav. Det er på flere delkontrakter og har flere rangeringer fleste i
-          rammeavtalen: {agreement?.title}.
+          Hjelpemiddelet er på avtale med Nav. Det er på flere delkontrakter og har flere rangeringer.
           <br />
           <br />
           For mer info se gjeldende delkontrakt/er som er listet opp her på siden under tittel: &ldquo;Andre
@@ -139,7 +138,7 @@ const TagRow = ({
               {productAgreements.length > 2 && (
                 <>
                   <SuccessTag>Flere delkontrakter og rangeringer</SuccessTag>
-                  <HelpText placement="right">{helpTextTopLabels(productAgreements[0])}</HelpText>
+                  <HelpText placement="right">{helpTextTopLabels()}</HelpText>
                 </>
               )}
             </>
