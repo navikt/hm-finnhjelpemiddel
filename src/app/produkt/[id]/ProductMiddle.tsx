@@ -1,7 +1,6 @@
 'use client'
 
-import { BodyShort, Button, Heading, HGrid, VStack } from '@navikt/ds-react'
-import { ChevronRightIcon, LayersPlusIcon } from '@navikt/aksel-icons'
+import { Heading, HGrid, VStack } from '@navikt/ds-react'
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVariantDataTable'
@@ -20,16 +19,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
         <ProductInformation product={product} />
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
-        {product.agreements.length > 0 && (
-          /*          <OtherProductsOnPost agreement1={product.agreements[0]} agreement2={product?.agreements[1]} agreement3={product?.agreements[2]} />*/
-          <OtherProductsOnPost agreements={product.agreements} />
-        )}
-        {compatibleWithProducts && compatibleWithProducts.length > 0 && (
-          <AccessoriesAndParts
-            productName={hmsartnr ? `serien ${product.title}` : product.title}
-            productId={product.id}
-          />
-        )}
+        {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
         <>
@@ -43,54 +33,27 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
   )
 }
 
-const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
+const showOtherProductsOnAgreement = ({ agreement, index }: { agreement: AgreementInfo; index: number }) => {
   return (
-    <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
-      <Heading size={'medium'} level={'2'}>
-        Passer sammen med
-      </Heading>
-      <VStack gap={'6'}>
-        <BodyShort>Her finner du en liste over tilbehør og reservedeler som passer til {productName}.</BodyShort>
-        <Button
-          className={styles.button}
-          as={NextLink}
-          variant={'primary'}
-          icon={<LayersPlusIcon aria-hidden />}
-          href={`/produkt/${productId}/deler`}
-        >
-          Tilbehør og reservedeler
-        </Button>
-      </VStack>
-    </VStack>
-  )
-}
-
-const showOtherProductsOnAgreement = ({ agreement }: { agreement: AgreementInfo }) => {
-  return (
-    <VStack gap={'2'} paddingBlock={'2 4'}>
-      <BodyShort>{agreement.postTitle}</BodyShort>
-      <Button
-        className={styles.button}
-        as={NextLink}
-        variant={'secondary'}
-        icon={<ChevronRightIcon aria-hidden />}
-        href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}
-      >
-        Flere produkter på delkontrakt {agreement.refNr}
-      </Button>
+    <VStack gap={'2'} paddingBlock={'2 4'} key={index}>
+      <NextLink href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>{agreement.postTitle}</NextLink>
     </VStack>
   )
 }
 
 const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
+  const sortedAgreements = [...agreements].sort((a, b) => {
+    return b.postNr !== a.postNr ? a.postNr - b.postNr : !a.refNr ? -1 : !b.refNr ? 1 : b.refNr.localeCompare(a.refNr)
+  })
+
   return (
-    <VStack gap={'2'} paddingInline={'8'} paddingBlock={'6 8'} className={styles.boks}>
+    <VStack gap={'2'} paddingInline={'2 0'}>
       <Heading size={'medium'} level={'2'}>
-        Andre produkter på delkontrakt{agreements.length > 1 ? 'er' : ''}
+        Andre hjelpemidler på delkontrakt:
       </Heading>
-      {agreements.length > 0 &&
-        agreements.map((agreement) => {
-          return showOtherProductsOnAgreement({ agreement: agreement })
+      {sortedAgreements.length > 0 &&
+        sortedAgreements.map((agreement, index) => {
+          return showOtherProductsOnAgreement({ agreement: agreement, index })
         })}
     </VStack>
   )
