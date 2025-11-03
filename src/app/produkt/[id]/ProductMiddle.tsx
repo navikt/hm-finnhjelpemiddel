@@ -7,11 +7,16 @@ import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVa
 import NextLink from 'next/link'
 import styles from './ProductMiddle.module.scss'
 import { VariantTableSingle } from '@/app/produkt/[id]/variantTable/VariantTableSingle'
-import useSWR from 'swr'
-import { fetchCompatibleProducts } from '@/utils/api-util'
+import useSWR, { useSWRConfig } from 'swr'
+import { fetchCompatibleProducts, fetchWorkWithProducts } from '@/utils/api-util'
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
-  const { data: compatibleWithProducts } = useSWR(product.id, fetchCompatibleProducts, { keepPreviousData: true })
+/*  const { data: worksWithProducts } = useSWR(['worksWith', product.id], () => fetchWorkWithProducts(product.id), { keepPreviousData: true })*/
+/*  const { data: worksWithProducts } = useSWR(product.id, fetchWorkWithProducts, { keepPreviousData: true })*/
+  const { mutate } = useSWRConfig();
+    const { data: worksWithProducts} = useSWR(['worksWith', product.id], () => fetchWorkWithProducts(product.id), { keepPreviousData: true })
+  console.debug(product.id)
+  console.debug(worksWithProducts)
 
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
@@ -20,6 +25,13 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
+        {worksWithProducts && worksWithProducts.length > 0 && (
+          `${worksWithProducts.length} produkter fungerer sammen med er:` +
+
+          {/*        {worksWithProducts?.map((p) =>
+              <ProductCard type={'plain'} product={p} key={p.id />
+        }*/}
+        )}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
         <>
