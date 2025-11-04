@@ -57,7 +57,7 @@ export const AddAlternative = ({
                 <Button
                   size={'small'}
                   onClick={() =>
-                    addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!).then(() => {
+                    addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!, userToken).then(() => {
                       setNewAlternative(searchedProduct)
                       setTargetHmsArtNr(undefined)
                     })

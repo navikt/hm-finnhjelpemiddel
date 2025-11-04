@@ -24,7 +24,9 @@ export const EditableAlternativeGroup = ({
           <EditableAlternativeCard
             alternativeProduct={alternative}
             onDelete={() =>
-              deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!).then(() => mutateAlternatives())
+              deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!, userToken).then(() =>
+                mutateAlternatives()
+              )
             }
             key={alternative.variantId}
           />
@@ -33,7 +35,7 @@ export const EditableAlternativeGroup = ({
           <EditableAlternativeCard
             alternativeProduct={newAlternative}
             onDelete={() =>
-              deleteAlternativeFromGroup(alternativeGroup, newAlternative.hmsArtNr!).then(() =>
+              deleteAlternativeFromGroup(alternativeGroup, newAlternative.hmsArtNr!, userToken).then(() =>
                 setNewAlternative(undefined)
               )
             }
