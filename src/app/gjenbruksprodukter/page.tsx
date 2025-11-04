@@ -33,6 +33,8 @@ export async function tokenFix(redirectPath: string): Promise<string | undefined
   const validationResult = await validateToken(token!)
 
   if (validationResult.ok) {
+    return token!
+    /*
     const obo = await requestOboToken(token!, audience)
 
     if (obo.ok) {
@@ -41,6 +43,8 @@ export async function tokenFix(redirectPath: string): Promise<string | undefined
       console.log('Feil med obo-token')
       return undefined
     }
+    
+     */
   } else if (!validationResult.ok && validationResult.errorType === 'token expired') {
     loginUser(redirectPath)
   } else {
