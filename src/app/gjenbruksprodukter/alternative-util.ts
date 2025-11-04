@@ -32,16 +32,13 @@ export async function newGetAlternatives(
   hmsArtNr: string,
   userToken: string
 ): Promise<AlternativeStockResponseNew | undefined> {
-  const res = await fetch(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`,
-      },
-    }
-  )
+  const res = await fetch(process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternativ/alternatives/${hmsArtNr}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userToken}`,
+    },
+  })
 
   if (res.status === 404) {
     return undefined
