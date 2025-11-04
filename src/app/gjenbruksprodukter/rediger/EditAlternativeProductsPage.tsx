@@ -18,16 +18,6 @@ export default function EditAlternativeProductsPage({ userToken }: { userToken: 
     router.push(`${pathname}?hms=${value}`)
   }
 
-  if (
-    typeof window !== 'undefined' &&
-    !(
-      window.location.href.startsWith('https://finnhjelpemiddel.ansatt') ||
-      window.location.href.startsWith('http://localhost')
-    )
-  ) {
-    return <div>ikke tilgang</div>
-  }
-
   return (
     <VStack gap={'4'} className={`${styles.container} main-wrapper--large`}>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>

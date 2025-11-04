@@ -139,7 +139,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                   <li>
                     <Link
                       as={NextLink}
-                      href="https://finnhjelpemiddel.ansatt.nav.no/gjenbruksprodukter"
+                      href="/gjenbruksprodukter"
                       onClick={() => {
                         setMenuOpen(false)
                         logNavigationEvent('meny', 'adminregister', 'Innlogging leverandør')
