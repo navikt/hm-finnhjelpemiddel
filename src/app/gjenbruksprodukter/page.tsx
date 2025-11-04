@@ -4,38 +4,47 @@ import { getToken, requestOboToken, validateToken } from '@navikt/oasis'
 import { redirect } from 'next/navigation'
 
 export default async function Page() {
-  const userToken = await getValidUserToken()
-  const loginUrl = '/oauth2/login?redirect=/gjenbruksprodukter'
+  const oboToken = await tokenFix('/gjenbruksprodukter')
 
-  if (process.env.NODE_ENV === 'production' && !userToken) {
-    redirect(loginUrl)
+  if (!oboToken) {
+    return <>En feil har skjedd med innlogging.</>
   }
 
-  if (process.env.NODE_ENV === 'development' || userToken) {
-    const oboToken = await exchangeToken(userToken!)
-
-    return <AlternativeProductsPage userToken={oboToken} />
-  }
-}
-export async function getValidUserToken(): Promise<string | undefined> {
-  const token = getToken(await headers())
-
-  if (!token) {
-    return 'ingen token header'
-  }
-
-  const validToken = await validateToken(token)
-  return validToken.ok ? token : undefined
+  return <AlternativeProductsPage userToken={oboToken} />
 }
 
-export async function exchangeToken(token: string): Promise<string> {
+function loginUser(redirectPath: string) {
+  redirect(`/oauth2/login?redirect=${redirectPath}`)
+}
+export async function tokenFix(redirectPath: string): Promise<string | undefined> {
   const audience = process.env.NEXT_PUBLIC_ALTERNATIVER_BACKEND_AUDIENCE
 
   if (!audience) {
-    return 'ingen miljøvariabler'
+    console.log('ingen miljøvariabler for backend_audience')
+    return undefined
   }
 
-  const obo = await requestOboToken(token, audience)
+  const token = getToken(await headers())
 
-  return obo.ok ? obo.token : obo.error.message
+  if (!token) {
+    loginUser(redirectPath)
+  }
+
+  const validationResult = await validateToken(token!)
+
+  if (validationResult.ok) {
+    const obo = await requestOboToken(token!, audience)
+
+    if (obo.ok) {
+      return obo.token
+    } else {
+      console.log('Feil med obo-token')
+      return undefined
+    }
+  } else if (!validationResult.ok && validationResult.errorType === 'token expired') {
+    loginUser(redirectPath)
+  } else {
+    console.log('Feil med tokenvalidering: ', validationResult.error)
+    return undefined
+  }
 }
