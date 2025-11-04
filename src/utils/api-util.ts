@@ -1,4 +1,4 @@
-import { mapAllNews, News, mapNews } from '@/utils/news-util'
+import { mapAllNews, mapNews, News } from '@/utils/news-util'
 import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { Fetcher } from 'swr'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
@@ -302,7 +302,8 @@ const makeSearchTermQuery = ({
   }
 
   // Decide if we apply negative iso categories. Default: apply when NOT on agreement page
-  const applyNegativeIsoCategories = includeNegativeIsoCategories !== undefined ? includeNegativeIsoCategories : !agreementId
+  const applyNegativeIsoCategories =
+    includeNegativeIsoCategories !== undefined ? includeNegativeIsoCategories : !agreementId
 
   return {
     must: mustAlternatives(),
@@ -1031,6 +1032,26 @@ export class CustomError extends Error {
     super(message)
     this.name = 'CustomError'
     this.status = statusCode
+  }
+}
+
+export const fetcherModifyAuth = async (url: string, method: string, token: string, body?: any): Promise<any> => {
+  const response = await fetch(url, {
+    method,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer: ${token},`,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+
+  if (response.ok) {
+    return Promise.resolve()
+  } else {
+    const json = await response.json()
+    const error = { message: json?.message || response.statusText, status: response.status }
+    return Promise.reject(error)
   }
 }
 
