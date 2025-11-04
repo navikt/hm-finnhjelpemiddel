@@ -24,7 +24,7 @@ export async function tokenFix(redirectPath: string): Promise<string | undefined
     return undefined
   }
 
-  const token = getToken(await headers())
+  const token = (await headers()).get('Authorization')?.split('Bearer ')[1]
 
   if (!token) {
     loginUser(redirectPath)
