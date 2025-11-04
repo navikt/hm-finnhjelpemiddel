@@ -1091,10 +1091,8 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
 }
 
 export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[]> => {
-/*  return fetch(HM_SEARCH_URL + '/products/_search', {
-  method: 'POST',*/
-      return fetch('/251103a-workswith.json', {
-        method: 'GET',
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+  method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

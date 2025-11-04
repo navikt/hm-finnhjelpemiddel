@@ -1,22 +1,32 @@
 'use client'
 
-import { Heading, HGrid, VStack } from '@navikt/ds-react'
+import { Accordion, Heading, HGrid, VStack } from '@navikt/ds-react'
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVariantDataTable'
 import NextLink from 'next/link'
 import styles from './ProductMiddle.module.scss'
 import { VariantTableSingle } from '@/app/produkt/[id]/variantTable/VariantTableSingle'
-import useSWR, { useSWRConfig } from 'swr'
-import { fetchCompatibleProducts, fetchWorkWithProducts } from '@/utils/api-util'
+import { fetchProductsWithVariants } from '@/utils/api-util'
+import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
+
+import { useEffect, useState } from 'react'
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
-/*  const { data: worksWithProducts } = useSWR(['worksWith', product.id], () => fetchWorkWithProducts(product.id), { keepPreviousData: true })*/
-/*  const { data: worksWithProducts } = useSWR(product.id, fetchWorkWithProducts, { keepPreviousData: true })*/
-  const { mutate } = useSWRConfig();
-    const { data: worksWithProducts} = useSWR(['worksWith', product.id], () => fetchWorkWithProducts(product.id), { keepPreviousData: true })
-  console.debug(product.id)
-  console.debug(worksWithProducts)
+  const [workWithProducts, setWorkWithProducts] = useState<Product[]>([])
+  const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
+  useEffect(() => {
+    const fetchData = async () => {
+      const products = (worksWithSeriesIds && (await fetchProductsWithVariants(worksWithSeriesIds)).products) || []
+      setWorkWithProducts(products)
+    }
+    fetchData()
+  }, [worksWithSeriesIds])
+
+  const agreementIds = product.agreements.map((agreement) => agreement.id)
+  const agreementTitles = product.agreements.map((agreement) => agreement.title)
+  const worksWithAgreementId = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
+  const worksWithAgreementTitle = ['Varslingshjelpemidler', 'Hørselshjelpemidler']
 
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
@@ -25,12 +35,22 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       </div>
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
-        {worksWithProducts && worksWithProducts.length > 0 && (
-          `${worksWithProducts.length} produkter fungerer sammen med er:` +
 
-          {/*        {worksWithProducts?.map((p) =>
-              <ProductCard type={'plain'} product={p} key={p.id />
-        }*/}
+        {workWithProducts && workWithProducts.length > 0 && (
+          /*          (agreementIds.some(agreementId => agreementId in worksWithAgreementId) ||
+          agreementTitles.some(agreementTitle => agreementTitle in worksWithAgreementTitle)) &&*/
+          <>
+            <Accordion headingSize={'small'}>
+              <Accordion.Item defaultOpen>
+                <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
+                <Accordion.Content>
+                  {workWithProducts.map((workWithProduct: Product, index) => (
+                    <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
+                  ))}
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          </>
         )}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
