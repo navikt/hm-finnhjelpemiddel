@@ -28,6 +28,7 @@ export async function tokenFix(redirectPath: string): Promise<string | undefined
 
   if (!token) {
     loginUser(redirectPath)
+    return undefined
   }
 
   const validationResult = await validateToken(token!)
@@ -36,7 +37,6 @@ export async function tokenFix(redirectPath: string): Promise<string | undefined
     const obo = await requestOboToken(token!, audience)
 
     if (obo.ok) {
-      console.log('herregud ', obo.token)
       return obo.token
     } else {
       console.log('Feil med obo-token')
@@ -44,6 +44,7 @@ export async function tokenFix(redirectPath: string): Promise<string | undefined
     }
   } else if (!validationResult.ok && validationResult.errorType === 'token expired') {
     loginUser(redirectPath)
+    return undefined
   } else {
     console.log('Feil med tokenvalidering: ', validationResult.error)
     return undefined
