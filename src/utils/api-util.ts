@@ -1041,7 +1041,7 @@ export const fetcherModifyAuth = async (url: string, method: string, token: stri
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer: ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     body: body ? JSON.stringify(body) : undefined,
   })

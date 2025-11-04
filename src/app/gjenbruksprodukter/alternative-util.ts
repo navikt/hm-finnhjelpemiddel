@@ -38,7 +38,7 @@ export async function newGetAlternatives(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `${userToken}`,
+        Authorization: `Bearer ${userToken}`,
       },
     }
   )
