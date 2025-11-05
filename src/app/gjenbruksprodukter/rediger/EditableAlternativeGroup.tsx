@@ -7,11 +7,9 @@ import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
 export const EditableAlternativeGroup = ({
   alternatives,
   mutateAlternatives,
-  userToken,
 }: {
   alternatives: AlternativeProduct[]
   mutateAlternatives: () => void
-  userToken: string
 }) => {
   const [newAlternative, setNewAlternative] = useState<AlternativeProduct | undefined>(undefined)
 
@@ -24,9 +22,7 @@ export const EditableAlternativeGroup = ({
           <EditableAlternativeCard
             alternativeProduct={alternative}
             onDelete={() =>
-              deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!, userToken).then(() =>
-                mutateAlternatives()
-              )
+              deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!).then(() => mutateAlternatives())
             }
             key={alternative.variantId}
           />
@@ -35,7 +31,7 @@ export const EditableAlternativeGroup = ({
           <EditableAlternativeCard
             alternativeProduct={newAlternative}
             onDelete={() =>
-              deleteAlternativeFromGroup(alternativeGroup, newAlternative.hmsArtNr!, userToken).then(() =>
+              deleteAlternativeFromGroup(alternativeGroup, newAlternative.hmsArtNr!).then(() =>
                 setNewAlternative(undefined)
               )
             }
@@ -43,7 +39,7 @@ export const EditableAlternativeGroup = ({
           />
         )}
       </VStack>
-      <AddAlternative alternativeGroup={alternativeGroup} setNewAlternative={setNewAlternative} userToken={userToken} />
+      <AddAlternative alternativeGroup={alternativeGroup} setNewAlternative={setNewAlternative} />
     </VStack>
   )
 }

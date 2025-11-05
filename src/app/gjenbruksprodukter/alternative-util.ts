@@ -1,4 +1,4 @@
-import { fetcherModifyAuth } from '@/utils/api-util'
+import { fetcherModify } from '@/utils/api-util'
 
 //if HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL is undefined it means that we are on the client and we want to use relative url
 const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
@@ -28,17 +28,16 @@ export interface WarehouseStock {
   available: number
 }
 
-export async function newGetAlternatives(
-  hmsArtNr: string,
-  userToken: string
-): Promise<AlternativeStockResponseNew | undefined> {
-  const res = await fetch(process.env.NEXT_PUBLIC_ALTERNATIVER_URL + `/alternativ/alternatives/${hmsArtNr}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${userToken}`,
-    },
-  })
+export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeStockResponseNew | undefined> {
+  const res = await fetch(
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
 
   if (res.status === 404) {
     return undefined
@@ -47,15 +46,10 @@ export async function newGetAlternatives(
   return res.json()
 }
 
-export async function addAlternativeToGroup(
-  alternativeGroup: string[],
-  alternative: string,
-  userToken: string
-): Promise<void> {
-  return await fetcherModifyAuth(
+export async function addAlternativeToGroup(alternativeGroup: string[], alternative: string): Promise<void> {
+  return await fetcherModify(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/add`,
     'POST',
-    userToken,
     {
       group: alternativeGroup,
       alternative: alternative,
@@ -63,15 +57,10 @@ export async function addAlternativeToGroup(
   )
 }
 
-export async function deleteAlternativeFromGroup(
-  alternativeGroup: string[],
-  alternative: string,
-  userToken: string
-): Promise<void> {
-  return await fetcherModifyAuth(
+export async function deleteAlternativeFromGroup(alternativeGroup: string[], alternative: string): Promise<void> {
+  return await fetcherModify(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/delete`,
     'DELETE',
-    userToken,
     {
       group: alternativeGroup,
       alternative: alternative,

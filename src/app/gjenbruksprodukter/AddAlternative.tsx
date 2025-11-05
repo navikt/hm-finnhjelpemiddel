@@ -12,11 +12,9 @@ import { AddAlternativeCard } from '@/app/gjenbruksprodukter/AddAlternativeCard'
 export const AddAlternative = ({
   alternativeGroup,
   setNewAlternative,
-  userToken,
 }: {
   alternativeGroup: string[]
   setNewAlternative: Dispatch<SetStateAction<AlternativeProduct | undefined>>
-  userToken: string
 }) => {
   const [targetHmsArtNr, setTargetHmsArtNr] = useState<string | undefined>(undefined)
 
@@ -25,7 +23,7 @@ export const AddAlternative = ({
     isLoading,
     error,
   } = useSWRImmutable<AlternativeStockResponseNew | undefined>(targetHmsArtNr ? targetHmsArtNr : null, () =>
-    newGetAlternatives(targetHmsArtNr!, userToken)
+    newGetAlternatives(targetHmsArtNr!)
   )
 
   const searchedProduct = alternativeResponse?.original
@@ -57,7 +55,7 @@ export const AddAlternative = ({
                 <Button
                   size={'small'}
                   onClick={() =>
-                    addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!, userToken).then(() => {
+                    addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!).then(() => {
                       setNewAlternative(searchedProduct)
                       setTargetHmsArtNr(undefined)
                     })
