@@ -1,6 +1,6 @@
 'use client'
 
-import { Accordion, Chips, Heading, HGrid, VStack } from '@navikt/ds-react'
+import { Accordion, Button, Chips, Heading, HGrid, VStack } from '@navikt/ds-react'
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVariantDataTable'
@@ -12,10 +12,10 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
 
+const PRODUCTS_PER_PAGE = 5
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const [workWithProducts, setWorkWithProducts] = useState<Product[]>([])
-  const [selectedComponentTypes, setSelectedComponentTypes] = useState<string[]>([])
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
 
   useEffect(() => {
@@ -26,42 +26,19 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
     fetchData()
   }, [worksWithSeriesIds])
 
-  const componentTypes = useMemo(() => {
-    const types = workWithProducts.flatMap(product =>
-      product.variants.map(variant => variant.techData?.Komponenttype?.value)
-    ).filter((type): type is string => type !== undefined && type !== '')
 
-    return [...new Set(types)]
-  }, [workWithProducts])
+  const worksWithAgreementIds = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
+  const worksWithAgreementTitles = ['Varslingshjelpemidler', 'Hørselshjelpemidler']
 
-  const filteredWorkWithProducts = useMemo(() => {
-    if (selectedComponentTypes.length === 0) {
-      return workWithProducts
-    }
+  const shouldShowWorksWithSection = useMemo(() => {
+    const agreementIds = product.agreements.map((agreement) => agreement.id)
+    const agreementTitles = product.agreements.map((agreement) => agreement.title)
 
-    return workWithProducts.filter(product =>
-      product.variants.some(variant => {
-        const variantType = variant.techData?.Komponenttype?.value
-        return variantType && selectedComponentTypes.includes(variantType)
-      })
-    )
-  }, [workWithProducts, selectedComponentTypes])
+    const hasMatchingId = agreementIds.some((id) => worksWithAgreementIds.includes(id))
+    const hasMatchingTitle = agreementTitles.some((title) => worksWithAgreementTitles.includes(title))
 
-  const handleComponentTypeToggle = (type: string) => {
-    setSelectedComponentTypes(prev =>
-      prev.includes(type)
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
-    )
-  }
-  const agreementIds = product.agreements.map((agreement) => agreement.id)
-  const agreementTitles = product.agreements.map((agreement) => agreement.title)
-  const worksWithAgreementId = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
-  const worksWithAgreementTitle = ['Varslingshjelpemidler', 'Hørselshjelpemidler']
-
-  console.log('componentTypes', componentTypes)
-  console.log('selectedComponentTypes', selectedComponentTypes)
-  console.log('filteredWorkWithProducts', filteredWorkWithProducts)
+    return hasMatchingId || hasMatchingTitle
+  }, [product.agreements])
 
 
   return (
@@ -72,40 +49,15 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
-        {workWithProducts && workWithProducts.length > 0 && (
-          <>
-            <Accordion size={'small'}>
-              <Accordion.Item defaultOpen>
-                <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
-                <Accordion.Content>
-                  <>
-                    {componentTypes.length > 1 && (
-                      <VStack gap={'4'} paddingBlock={'0 4'}>
-                        <Chips>
-                          {componentTypes.map((type) => (
-                            <Chips.Toggle
-                              key={type}
-                              selected={selectedComponentTypes.includes(type)}
-                              onClick={() => handleComponentTypeToggle(type)}
-                            >
-                              {type}
-                            </Chips.Toggle>
-                          ))}
-                        </Chips>
-                      </VStack>
-                    )}
-                    {filteredWorkWithProducts.map((workWithProduct: Product) => (
-                      <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
-                    ))}
-
-                    {filteredWorkWithProducts.length === 0 && (
-                      <p>Ingen produkter matcher valgt filter.</p>
-                    )}
-                  </>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          </>
+        {shouldShowWorksWithSection && workWithProducts && workWithProducts.length > 0 && (
+          <Accordion size={'small'}>
+            <Accordion.Item defaultOpen className={styles.accordionLast}>
+              <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
+              <Accordion.Content>
+                <WorksWithSection products={workWithProducts} />
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
         )}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
@@ -117,6 +69,100 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
         </>
       </div>
     </HGrid>
+  )
+}
+
+const ComponentTypeFilter = ({
+  componentTypes,
+  selectedTypes,
+  onToggle,
+}: {
+  componentTypes: string[]
+  selectedTypes: string[]
+  onToggle: (type: string) => void
+}) => {
+  if (componentTypes.length <= 1) {
+    return null
+  }
+
+  return (
+    <VStack gap={'2'}>
+      <Chips>
+        {componentTypes.map((type) => (
+          <Chips.Toggle key={type} selected={selectedTypes.includes(type)} onClick={() => onToggle(type)}>
+            {type}
+          </Chips.Toggle>
+        ))}
+      </Chips>
+    </VStack>
+  )
+}
+
+const WorksWithSection = ({ products }: { products: Product[] }) => {
+  const [selectedComponentTypes, setSelectedComponentTypes] = useState<string[]>([])
+  const [displayCount, setDisplayCount] = useState(PRODUCTS_PER_PAGE)
+
+  useEffect(() => {
+    setDisplayCount(PRODUCTS_PER_PAGE)
+  }, [selectedComponentTypes])
+
+
+  const componentTypes = useMemo(() => {
+    const types = products
+      .flatMap((product) => product.variants.map((variant) => variant.techData?.Komponenttype?.value))
+      .filter((type): type is string => type !== undefined && type !== '')
+
+    return [...new Set(types)]
+  }, [products])
+
+  const filteredProducts = useMemo(() => {
+    if (selectedComponentTypes.length === 0) {
+      return products
+    }
+
+    return products.filter((product) =>
+      product.variants.some((variant) => {
+        const variantType = variant.techData?.Komponenttype?.value
+        return variantType && selectedComponentTypes.includes(variantType)
+      })
+    )
+  }, [products, selectedComponentTypes])
+
+
+  const displayedProducts = useMemo(() => {
+    return filteredProducts.slice(0, displayCount)
+  }, [filteredProducts, displayCount])
+
+  const hasMoreProducts = displayCount < filteredProducts.length
+
+  const handleLoadMore = () => {
+    setDisplayCount((prev) => prev + PRODUCTS_PER_PAGE)
+  }
+
+  const handleComponentTypeToggle = (type: string) => {
+    setSelectedComponentTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]))
+  }
+
+  return (
+    <VStack gap={'4'}>
+      <ComponentTypeFilter
+        componentTypes={componentTypes}
+        selectedTypes={selectedComponentTypes}
+        onToggle={handleComponentTypeToggle}
+      />
+
+      {displayedProducts.map((workWithProduct: Product) => (
+        <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
+      ))}
+
+      {filteredProducts.length === 0 && <p>Ingen produkter matcher valgt filter.</p>}
+
+      {hasMoreProducts && (
+        <Button className={styles.buttonLoadMore} variant="secondary" size="medium" onClick={handleLoadMore}>
+          Vis flere produkter ({filteredProducts.length - displayCount} gjenstående)
+        </Button>
+      )}
+    </VStack>
   )
 }
 

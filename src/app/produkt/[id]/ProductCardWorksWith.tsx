@@ -37,7 +37,7 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
             <Box className={styles.productSummary}>
               {hmsArtNr && (
                 <CopyButton
-                  size="medium"
+                  size="small"
                   className={styles.copyButton}
                   copyText={hmsArtNr || ''}
                   text={hmsArtNr || ''}

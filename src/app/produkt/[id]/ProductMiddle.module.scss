@@ -33,3 +33,18 @@
   width: fit-content;
   --ac-button-secondary-bg: white;
 }
+
+.buttonLoadMore {
+  @extend .button;
+  border-radius: 1px;
+  align-self: center;
+  box-shadow: inset 0 0 0 1px
+}
+
+.accordion {
+  box-shadow: inset 0 1px 0 0 $a-bg-subtle !important;
+}
+
+.accordionLast {
+  box-shadow: inset 0 -1px 0 0 $a-bg-subtle, inset 0 1px 0 0 $a-bg-subtle !important;
+}
