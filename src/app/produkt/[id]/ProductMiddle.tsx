@@ -11,6 +11,7 @@ import { fetchProductsWithVariants } from '@/utils/api-util'
 import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 const PRODUCTS_PER_PAGE = 5
 
@@ -25,7 +26,9 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
     }
     fetchData()
   }, [worksWithSeriesIds])
+  const featureFlags = useFeatureFlags()
 
+  const worksWithFeatureFlag: boolean = featureFlags.isEnabled('finnhjelpemiddel.vis-virker-sammen-med-products') ?? false
 
   const worksWithAgreementIds = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
   const worksWithAgreementTitles = ['Varslingshjelpemidler', 'Hørselshjelpemidler']
@@ -49,7 +52,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
-        {shouldShowWorksWithSection && workWithProducts && workWithProducts.length > 0 && (
+        {worksWithFeatureFlag && shouldShowWorksWithSection && workWithProducts && workWithProducts.length > 0 && (
           <Accordion size={'small'}>
             <Accordion.Item defaultOpen className={styles.accordionLast}>
               <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
