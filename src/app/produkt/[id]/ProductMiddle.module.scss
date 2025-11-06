@@ -1,7 +1,6 @@
 @use "@navikt/ds-tokens/dist/tokens" as *;
 
 .middleContainer {
-  box-shadow: inset 0 1px 0 0 $a-bg-subtle !important;
   
   grid-template-areas: 
     "box1 box2"

@@ -2,15 +2,16 @@
 
 import { AgreementInfo, Product } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
-import { Alert, BodyShort, Button, CopyButton, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, CopyButton, HelpText, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
 import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
-import { EXCLUDED_ISO_CATEGORIES } from '@/utils/api-util'
+import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+import useSWR from 'swr'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -22,6 +23,7 @@ const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string
 }
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
+  const { data: compatibleWithProducts } = useSWR(product.id, fetchCompatibleProducts, { keepPreviousData: true })
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
@@ -65,9 +67,16 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           {product.isoCategoryTitle}
         </div>
       </VStack>
-
       <CopyHms product={product} />
-      <QrCodeButton id={qrId} />
+      <HStack gap={'6'}>
+        {compatibleWithProducts && compatibleWithProducts.length > 0 && (
+          <AccessoriesAndParts
+            productName={hmsartnr ? `serien ${product.title}` : product.title}
+            productId={product.id}
+          />
+        )}
+        <QrCodeButton id={qrId} />
+      </HStack>
     </VStack>
   )
 }
@@ -88,6 +97,21 @@ const TagRow = ({
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
   const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
+  const helpTextTopLabels = () => {
+    return (
+      <>
+        <Heading size="small">Flere delkontrakter og (flere) rangeringer</Heading>
+        <BodyLong>
+          Hjelpemiddelet er på avtale med Nav. Det er på flere delkontrakter og har flere rangeringer.
+          <br />
+          <br />
+          For mer info se gjeldende delkontrakt/er som er listet opp her på siden under tittel: &ldquo;Andre
+          hjelpemidler på delkontrakt&rdquo;.
+        </BodyLong>
+      </>
+    )
+  }
+
   return (
     <HStack justify={'start'} gap={'3'}>
       {accessory || sparePart ? (
@@ -99,19 +123,26 @@ const TagRow = ({
       )}
       {topRank ? (
         <>
-          {productAgreements.length <= 3  && topRank !== 99 && (
+          {topRank !== 99 && (
             <>
-              <SuccessTag>Rangering {rankList?.[0]}</SuccessTag>
-              <NeutralTag>Delkontrakt {productAgreements[0].refNr}</NeutralTag>
+              {productAgreements.length <= 2 && (
+                <SuccessTag>
+                  Delkontrakt {productAgreements[0].refNr} - rangering {topRank}
+                </SuccessTag>
+              )}
+              {productAgreements.length === 2 && (
+                <SuccessTag>
+                  Delkontrakt {productAgreements[1].refNr} - rangering {rankList?.[1]}
+                </SuccessTag>
+              )}
+              {productAgreements.length > 2 && (
+                <>
+                  <SuccessTag>Flere delkontrakter og rangeringer</SuccessTag>
+                  <HelpText placement="right">{helpTextTopLabels()}</HelpText>
+                </>
+              )}
             </>
           )}
-          {productAgreements.length === 2 && topRank !== 99 && (
-            <>
-              <SuccessTag>Rangering {rankList?.[1]}</SuccessTag>
-              <NeutralTag>Delkontrakt {productAgreements[1].refNr}</NeutralTag>
-            </>
-          )}
-          {productAgreements.length > 2 && <NeutralTag>Flere delkontrakter</NeutralTag>}
           {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}
         </>
       ) : (
@@ -163,6 +194,22 @@ const CopyHms = ({ product }: { product: Product }) => {
         )}
       </VStack>
     </>
+  )
+}
+
+const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
+  return (
+    <VStack gap={'6'}>
+      <Button
+        size="medium"
+        className={styles.button}
+        as={NextLink}
+        variant={'primary'}
+        href={`/produkt/${productId}/deler`}
+      >
+        Tilbehør og reservedeler
+      </Button>
+    </VStack>
   )
 }
 
