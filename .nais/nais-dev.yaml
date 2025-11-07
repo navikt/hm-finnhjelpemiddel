@@ -21,8 +21,6 @@ spec:
   env:
     - name: RUNTIME_ENVIRONMENT
       value: dev
-    - name: ALTERNATIVER_BACKEND_AUDIENCE
-      value: api://dev-gcp.teamdigihot.hm-grunndata-alternativprodukter/.default
   filesFrom:
     - emptyDir:
         medium: Memory
