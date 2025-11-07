@@ -13,7 +13,7 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
   const hmsArtNr = product.variants[0].hmsArtNr
 
   return (
-    <Box padding={{ xs: '2', md: '3' }} className={styles.container} width={{ xs: '100%', sm: '430px' }}>
+    <Box padding={{ xs: '2', md: '3' }} className={styles.container} width={{ xs: '100%', sm: '500px' }}>
       <VStack gap={{ xs: '1', md: '2' }}>
         {/*          <Box padding={{ xs: '2', md: '3' }} className={styles.container} width={{ xs: '100%', sm: '380px' }}>*/}
         <HStack gap="3" align="start" wrap={false}>
@@ -30,7 +30,7 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
                 onClick={() => logNavigationEvent('Produktkort_worksWith', 'produkt', product.title)}
               >
                 <BodyShort weight="semibold">
-                  {product.title.length > 50 ? product.title.slice(0, 35) + '...' : product.title}
+                  {product.title.length > 40 ? product.title.slice(0, 40) + '...' : product.title}
                 </BodyShort>
               </Link>
             </Box>

@@ -13,7 +13,12 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
-const PRODUCTS_PER_PAGE = 5
+const WORKS_WITH_CONFIG = {
+  featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
+  agreementIds: new Set(['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']),
+  agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
+  productsPerPage: 5
+}
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const [workWithProducts, setWorkWithProducts] = useState<Product[]>([])
@@ -28,21 +33,17 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
   }, [worksWithSeriesIds])
   const featureFlags = useFeatureFlags()
 
-  const worksWithFeatureFlag: boolean = featureFlags.isEnabled('finnhjelpemiddel.vis-virker-sammen-med-products') ?? false
+  const worksWithFeatureFlag: boolean = featureFlags.isEnabled(WORKS_WITH_CONFIG.featureFlag) ?? false
 
-  const worksWithAgreementIds = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']
-  const worksWithAgreementTitles = ['Varslingshjelpemidler', 'Hørselshjelpemidler']
-
-  const shouldShowWorksWithSection = useMemo(() => {
-    const agreementIds = product.agreements.map((agreement) => agreement.id)
-    const agreementTitles = product.agreements.map((agreement) => agreement.title)
-
-    const hasMatchingId = agreementIds.some((id) => worksWithAgreementIds.includes(id))
-    const hasMatchingTitle = agreementTitles.some((title) => worksWithAgreementTitles.includes(title))
-
-    return hasMatchingId || hasMatchingTitle
+  const shouldShowSection = useMemo(() => {
+    return product.agreements.some(
+      (agreement) =>
+        WORKS_WITH_CONFIG.agreementIds.has(agreement.id) || WORKS_WITH_CONFIG.agreementTitles.has(agreement.title)
+    )
   }, [product.agreements])
 
+  const worksWithShowConstrain =
+    worksWithFeatureFlag && shouldShowSection && workWithProducts && workWithProducts.length > 0
 
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
@@ -52,7 +53,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       <VStack gap={'6'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
-        {worksWithFeatureFlag && shouldShowWorksWithSection && workWithProducts && workWithProducts.length > 0 && (
+        {worksWithShowConstrain && (
           <Accordion size={'small'}>
             <Accordion.Item defaultOpen className={styles.accordionLast}>
               <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
@@ -103,12 +104,11 @@ const ComponentTypeFilter = ({
 
 const WorksWithSection = ({ products }: { products: Product[] }) => {
   const [selectedComponentTypes, setSelectedComponentTypes] = useState<string[]>([])
-  const [displayCount, setDisplayCount] = useState(PRODUCTS_PER_PAGE)
+  const [displayCount, setDisplayCount] = useState(WORKS_WITH_CONFIG.productsPerPage)
 
   useEffect(() => {
-    setDisplayCount(PRODUCTS_PER_PAGE)
+    setDisplayCount(WORKS_WITH_CONFIG.productsPerPage)
   }, [selectedComponentTypes])
-
 
   const componentTypes = useMemo(() => {
     const types = products
@@ -131,7 +131,6 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
     )
   }, [products, selectedComponentTypes])
 
-
   const displayedProducts = useMemo(() => {
     return filteredProducts.slice(0, displayCount)
   }, [filteredProducts, displayCount])
@@ -139,7 +138,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
   const hasMoreProducts = displayCount < filteredProducts.length
 
   const handleLoadMore = () => {
-    setDisplayCount((prev) => prev + PRODUCTS_PER_PAGE)
+    setDisplayCount((prev) => prev + WORKS_WITH_CONFIG.productsPerPage)
   }
 
   const handleComponentTypeToggle = (type: string) => {
