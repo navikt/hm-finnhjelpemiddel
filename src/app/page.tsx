@@ -12,13 +12,16 @@ import Agreements from '@/app/forside/Agreements'
 import { NewsFeed } from '@/app/forside/NewsFeed'
 import styles from './FrontPage.module.scss'
 import { OtherAgreements } from '@/app/forside/OtherAgreements'
+import { logUmamiNavigationEvent, logUmamiVisit } from '@/utils/umami'
 
 function FrontPage() {
   const path = usePathname()
   const router = useRouter()
 
   useEffect(() => {
-    typeof window !== 'undefined' && logVisit(window.location.href, window.document.title, 'forside')
+    typeof window !== 'undefined' &&
+      logVisit(window.location.href, window.document.title, 'forside') ||
+      logUmamiVisit(window.location.href, window.document.title, 'forside')
   }, [])
 
   const onSearch = useCallback(
@@ -30,14 +33,17 @@ function FrontPage() {
       qNoFilters.set('term', searchTerm.trim())
       if (path.includes('sok')) {
         logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
+        logUmamiNavigationEvent('søk', 'søk', 'Søk på søkesiden')
         router.push('/sok?' + qWithFilters.toString())
       } else if (path === '/') {
         logNavigationEvent('forside', 'søk', 'Søk på forsiden')
+        logUmamiNavigationEvent('forside', 'søk', 'Søk på forsiden')
         router.push('/sok?' + qWithFilters.toString())
       } else if (path.includes('produkt')) {
         router.push('/sok?' + qNoFilters.toString())
       } else {
         logNavigationEvent('annet', 'søk', 'Søk fra annen side')
+        logUmamiNavigationEvent('annet', 'søk', 'Søk fra annen side')
         router.push('/sok?' + qWithFilters.toString())
       }
     },

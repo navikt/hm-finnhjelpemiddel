@@ -7,6 +7,7 @@ import ProductImage from '@/components/ProductImage'
 import { logActionEvent, logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardWorksWith.module.scss'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
+import { logUmamiActionEvent, logUmamiNavigationEvent } from '@/utils/umami'
 
 export const ProductCardWorksWith = ({ product }: { product: Product }) => {
   const linkToProduct = `/produkt/${product.id}`
@@ -27,7 +28,10 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
                 href={linkToProduct}
                 aria-label={`Gå til ${product.title}`}
                 as={NextLink}
-                onClick={() => logNavigationEvent('Produktkort_worksWith', 'produkt', product.title)}
+                onClick={() => {
+                  logNavigationEvent('Produktkort_worksWith', 'produkt', product.title)
+                  logUmamiNavigationEvent('Produktkort_worksWith', 'produkt', product.title)
+                }}
               >
                 <BodyShort weight="semibold">
                   {product.title.length > 40 ? product.title.slice(0, 40) + '...' : product.title}
@@ -45,7 +49,10 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
                   variant="action"
                   activeIcon={<ThumbUpIcon aria-hidden />}
                   iconPosition="right"
-                  onClick={() => logActionEvent('kopier')}
+                  onClick={() => {
+                    logActionEvent('kopier')
+                    logUmamiActionEvent('kopier')
+                  }}
                 />
               )}
             </Box>

@@ -1,10 +1,13 @@
 'use client'
 
-import { digihot_customevents, nav_events } from '@/utils/amplitude'
-
 export enum umami_customevents{
+  ACTION = 'action',
+  BESØK = 'besøk side',
   KLIKK = 'knapp klikket',
-
+  NAVIGERE = 'navigere',
+  VIS_FLERE_TREFF = 'vis-flere-treff',
+  FILTRERING = 'filtrering',
+  FILTER_ENDRET = 'filter-endret',
 }
 
 export const initUmami = (hostname: string) => {
@@ -75,51 +78,51 @@ export function logUmamiCustomEvent(event: umami_customevents, data?: any) {
   })
 }
 
-/*export function logUmamiNavigationEvent(komponent: string, destinasjon: string, lenketekst: string) {
-  logUmamiCustomEvent(digihot_customevents.NAVIGERE, {
-    komponent: komponent,
-    destinasjon: destinasjon,
-    lenketekst: lenketekst,
+export function logUmamiNavigationEvent(component: string, destination: string, linkText: string) {
+  logUmamiCustomEvent(umami_customevents.NAVIGERE, {
+    component: component,
+    destination: destination,
+    linkText: linkText,
   })
 }
 
 export function logUmamiNavigationSearchEvent(
-  komponent: string,
-  destinasjon: string,
-  lenketekst: string,
-  søkeresultatplassering: number
+  component: string,
+  destination: string,
+  linkText: string,
+  searchResultPlacement: number
 ) {
-  logUmamiCustomEvent(digihot_customevents.NAVIGERE, {
-    komponent: komponent,
-    destinasjon: destinasjon,
-    lenketekst: lenketekst,
-    søkeresultatplassering: søkeresultatplassering,
+  logUmamiCustomEvent(umami_customevents.NAVIGERE, {
+    component: component,
+    destination: destination,
+    linkText: linkText,
+    searchResultPlacement: searchResultPlacement,
   })
 }
 
-export function logUmamiActionEvent(handling: string) {
-  logUmamiCustomEvent(digihot_customevents.ACTION, {
-    handling: handling,
+export function logUmamiActionEvent(action: string) {
+  logUmamiCustomEvent(umami_customevents.ACTION, {
+    action: action,
   })
 }
 
-export function logUmamiFilterEvent(filter: Record<string, string | string[]>, komponent: string) {
-  logUmamiCustomEvent(digihot_customevents.FILTRERING, {
+export function logUmamiFilterEvent(filter: Record<string, string | string[]>, component: string) {
+  logUmamiCustomEvent(umami_customevents.FILTRERING, {
     filter: filter,
-    komponent: komponent,
+    component: component,
   })
 }
 
-export function logUmamiFilterEndretEvent(komponent: string) {
-  logUmamiCustomEvent(digihot_customevents.FILTER_ENDRET, {
-    komponent: komponent,
+export function logUmamiFilterChangeEvent(component: string) {
+  logUmamiCustomEvent(umami_customevents.FILTER_ENDRET, {
+    component: component,
   })
 }
 
-export function logUmamiVisFlereTreff() {
-  logUmamiCustomEvent(digihot_customevents.VIS_FLERE_TREFF)
+export function logUmamiShowMoreResult() {
+  logUmamiCustomEvent(umami_customevents.VIS_FLERE_TREFF)
 }
-
+/*
 export function logUmamiLeverandorprodukterKlikket() {
   logUmamiCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET_V2)
 }
@@ -140,7 +143,7 @@ En knapp, f.eks. en [Aksel \<Button/>](https://aksel.nav.no/komponenter/core/but
 | `knappVariant` | Variant av knappen (primær/sekundær/etc)     |
 */
 
-export function logUmamiKlikkKnapp(buttonName: string, buttonType: string, buttonVariant: string) {
+export function logUmamiClickButton(buttonName: string, buttonType: string, buttonVariant: string) {
   logUmamiCustomEvent(umami_customevents.KLIKK, {
     buttonName: buttonName,
     buttonType: buttonType,
@@ -152,12 +155,12 @@ export function logUmamiKlikkKnapp(buttonName: string, buttonType: string, butto
   logUmamiCustomEvent(digihot_customevents.ERROR_URL, {
     url: url,
   })
-}
-
-export function logUmamiVisit(url: string, sidetittel: string, sidetype: string) {
-  logUmamiEvent(nav_events.BESØK, {
-    url: url,
-    sidetittel: sidetittel,
-    sidetype: sidetype,
-  })
 }*/
+
+export function logUmamiVisit(url: string, pageTitle: string, pageType: string) {
+  logUmamiEvent(umami_customevents.BESØK, {
+    url: url,
+    pageTitle: pageTitle,
+    pageType: pageType,
+  })
+}
