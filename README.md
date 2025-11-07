@@ -42,8 +42,12 @@ Follow the guide to acquire an On Behalf Of-token (obo) in dev in the [nais-docs
 
 Run  
 ```bash
-export DEV_TOKEN=<your token here>
 kubectl port-forward $(kubectl get pods -l app=hm-grunndata-alternativprodukter -o custom-columns=:metadata.name) 1338:8080
+```
+and  
+```bash
+export DEV_TOKEN=<your token here>
+npm run dev
 ```
 
 ### Run dev server
