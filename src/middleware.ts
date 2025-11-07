@@ -20,11 +20,14 @@ export async function middleware(request: NextRequest) {
     const destination =
       process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + request.nextUrl.pathname.split(alternativerPath)[1]
     const audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
-    const response = NextResponse.rewrite(destination)
 
     if (isLocal) {
-      response.headers.set('Authorization', `Bearer ${devtoken}`)
-      return response
+      return await fetch(new Request(destination, request), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${devtoken}`,
+        },
+      })
     }
 
     if (!audience) {
@@ -51,8 +54,12 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
 
-    response.headers.set('Authorization', `Bearer ${obo.token}`)
-    return response
+    return await fetch(new Request(destination, request), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${obo.token}`,
+      },
+    })
   }
   return NextResponse.next()
 }
