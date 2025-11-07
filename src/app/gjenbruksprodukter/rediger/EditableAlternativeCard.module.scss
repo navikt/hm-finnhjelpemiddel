@@ -1,0 +1,34 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  border: 2px solid $a-gray-50;
+  width: 900px;
+}
+
+.container + .container {
+  border-top: 0;
+}
+
+.imageWrapper {
+  width: 75px;
+  height: 75px;
+  position: relative;
+}
+
+.agreementTag {
+  background-color: #ccf1d67a;
+  border-radius: 0.25rem;
+  border: 1px solid #99dead7a;
+  font-size: $a-font-size-medium;
+  padding: $a-spacing-1-alt $a-spacing-2;
+}
+
+.deleteButton {
+  width: fit-content;
+  justify-self: center;
+}
+
+.link {
+  color: black;
+  font-weight: 600;
+}

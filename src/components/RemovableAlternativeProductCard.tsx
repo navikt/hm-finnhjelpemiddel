@@ -21,8 +21,8 @@ const RemovableAlternativeProductCard = ({
 }) => {
   const { alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
   const isInProductsToCompare =
-    alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.variants[0].id === procom.id).length >=
-    1
+    alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.variants[0].id === procom.variantId)
+      .length >= 1
 
   const [imageSrc] = useState(product.photos.at(0)?.uri || undefined)
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))

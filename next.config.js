@@ -27,10 +27,6 @@ const nextConfig = {
         destination: process.env.HM_SEARCH_URL + '/alternative_products/_search/:path*',
       },
       {
-        source: '/alternative_products/:path*',
-        destination: process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + '/:path*',
-      },
-      {
         source: '/alternativprodukter',
         destination: '/gjenbruksprodukter',
       },
@@ -58,6 +54,7 @@ const nextConfig = {
     BUILD_ENV: process.env.BUILD_ENV,
     HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
     NEXT_PUBLIC_FARO_URL: process.env.FARO_URL,
+    ALTERNATIVER_BACKEND_AUDIENCE: process.env.ALTERNATIVER_BACKEND_AUDIENCE,
   },
   experimental: {
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],

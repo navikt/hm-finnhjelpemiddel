@@ -18,4 +18,5 @@ jobs:
       BUILD_ENV: prod
       IMAGE_PROXY_URL: https://finnhjelpemiddel.nav.no/imageproxy
       CDN_URL: https://finnhjelpemiddel.nav.no/imageproxy/file/
+      ALTERNATIVER_BACKEND_AUDIENCE: prod-gcp:teamdigihot:hm-grunndata-alternativprodukter
     secrets: inherit

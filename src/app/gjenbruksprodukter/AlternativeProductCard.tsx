@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
-import { ActionMenu, BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/gjenbruksprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
-import {
-  ArrowsSquarepathIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  MenuElipsisVerticalCircleIcon,
-} from '@navikt/aksel-icons'
+import { ArrowsSquarepathIcon, ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { AlternativeProduct, WarehouseStock } from '@/app/gjenbruksprodukter/alternative-util'
 import { useHydratedAlternativeProductsCompareStore } from '@/utils/compare-alternatives-state-util'
 import { logNavigationEvent } from '@/utils/amplitude'
@@ -18,14 +13,10 @@ export const AlternativeProductCard = ({
   alternativeProduct,
   selectedWarehouseStock,
   handleCompareClick,
-  editMode,
-  onDelete,
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
   handleCompareClick?: () => void
-  editMode: boolean
-  onDelete: () => void
 }) => {
   const [openWarehouseStock, setOpenWarehouseStock] = useState(false)
   const stocks = alternativeProduct.warehouseStock
@@ -41,11 +32,6 @@ export const AlternativeProductCard = ({
       />
 
       {openWarehouseStock && <WarehouseStatus stocks={stocks} />}
-      {editMode && (
-        <div className={styles.editMenu}>
-          <EditMenu onDelete={onDelete} />
-        </div>
-      )}
     </Stack>
   )
 }
@@ -63,7 +49,7 @@ const ProductInfo = ({
   openWarehouseStock: boolean
   handleCompareClick?: () => void
 }) => {
-  const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.actualAvailable : undefined
+  const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.available : undefined
 
   return (
     <VStack justify="space-between" padding={'5'} gap={'2'} className={styles.productContainer}>
@@ -157,7 +143,7 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
   return (
     <HGrid gap="2" columns={2} className={styles.locationInfoContainer}>
       {stocks
-        ?.filter((stock) => stock.actualAvailable > 0)
+        ?.filter((stock) => stock.available > 0)
         .map((stock) => (
           <LocationInfo stock={stock} key={stock.location} />
         ))}
@@ -169,7 +155,7 @@ const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   return (
     <VStack className={styles.locationInfo} gap={'2'}>
       <Label>{stock.location}</Label>
-      {<StockTag amount={stock.actualAvailable} />}
+      {<StockTag amount={stock.available} />}
     </VStack>
   )
 }
@@ -204,15 +190,17 @@ const CompareButton = ({
     logNavigationEvent('alternativprodukter', 'sammenlign', product.variantTitle)
 
     const foundProductInCompareList =
-      alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length === 1
+      alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.variantId === procom.variantId)
+        .length === 1
     if (foundProductInCompareList) {
-      removeAlternativeProduct(product.id)
+      removeAlternativeProduct(product.variantId)
     } else {
       setAlternativeProductToCompare(product)
     }
   }
 
-  const isInProductsToCompare = alternativeProductsToCompare.filter((procom) => product.id === procom.id).length >= 1
+  const isInProductsToCompare =
+    alternativeProductsToCompare.filter((procom) => product.variantId === procom.variantId).length >= 1
   return (
     <Button
       className={isInProductsToCompare ? styles.toggledButton : ''}
@@ -228,18 +216,5 @@ const CompareButton = ({
         <span aria-hidden>Sammenlign</span>
       </div>
     </Button>
-  )
-}
-
-const EditMenu = ({ onDelete }: { onDelete: () => void }) => {
-  return (
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button variant="tertiary" icon={<MenuElipsisVerticalCircleIcon aria-hidden />} iconPosition="right"></Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item onSelect={onDelete}>Slett</ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
   )
 }

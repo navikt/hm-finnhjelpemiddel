@@ -22,7 +22,7 @@ export default function CompareAlternativesPage() {
   const router = useRouter()
 
   const seriesIDsToCompare = alternativeProductsToCompare.map((product) => product.seriesId)
-  const variantIDsToCompare = alternativeProductsToCompare.map((product) => product.id)
+  const variantIDsToCompare = alternativeProductsToCompare.map((product) => product.variantId)
 
   const { data, isLoading } = useSWR<FetchSeriesResponse>(variantIDsToCompare, fetchProductsWithVariant, {
     keepPreviousData: true,

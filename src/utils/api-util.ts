@@ -1,4 +1,4 @@
-import { mapAllNews, News, mapNews } from '@/utils/news-util'
+import { mapAllNews, mapNews, News } from '@/utils/news-util'
 import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { Fetcher } from 'swr'
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
@@ -302,7 +302,8 @@ const makeSearchTermQuery = ({
   }
 
   // Decide if we apply negative iso categories. Default: apply when NOT on agreement page
-  const applyNegativeIsoCategories = includeNegativeIsoCategories !== undefined ? includeNegativeIsoCategories : !agreementId
+  const applyNegativeIsoCategories =
+    includeNegativeIsoCategories !== undefined ? includeNegativeIsoCategories : !agreementId
 
   return {
     must: mustAlternatives(),

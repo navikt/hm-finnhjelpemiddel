@@ -1,14 +1,16 @@
-import { AlternativeProductSourceResponse, Hit, SearchResponse } from '@/utils/response-types'
-import { AlternativeStockResponse } from '@/app/gjenbruksprodukter/page'
 import { fetcherModify } from '@/utils/api-util'
 
-//if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
-const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
+//if HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL is undefined it means that we are on the client and we want to use relative url
 const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
+
+export interface AlternativeStockResponseNew {
+  original: AlternativeProduct
+  alternatives: AlternativeProduct[]
+}
 
 export interface AlternativeProduct {
   seriesId: string
-  id: string
+  variantId: string
   seriesTitle: string
   variantTitle: string
   status: 'INACTIVE' | 'ACTIVE'
@@ -24,103 +26,18 @@ export interface AlternativeProduct {
 export interface WarehouseStock {
   location: string
   available: number
-  reserved: number
-  needNotified: number
-  actualAvailable: number
 }
 
-const mapToAlternativeProducts = (data: SearchResponse): AlternativeProduct[] => {
-  return data.hits.hits.map((hit: Hit) => mapToAlternativeProduct(hit._source as AlternativeProductSourceResponse))
-}
-
-const mapToAlternativeProductFromSource = (data: SearchResponse): AlternativeProduct => {
-  return data.hits.hits.map((hit: Hit) => mapToAlternativeProduct(hit._source as AlternativeProductSourceResponse))[0]
-}
-
-const mapToAlternativeProduct = (source: AlternativeProductSourceResponse): AlternativeProduct => {
-  return {
-    seriesId: source.seriesId,
-    id: source.id,
-    seriesTitle: source.title,
-    variantTitle: source.articleName,
-    imageUri: source.media.filter((media) => media.type === 'IMAGE').sort((a, b) => a.priority - b.priority)[0]?.uri,
-    status: source.status,
-    hmsArtNr: source.hmsArtNr,
-    supplierName: source.supplier?.name ?? '',
-    highestRank: source.agreements.length > 0 ? Math.max(...source.agreements.map((agreement) => agreement.rank)) : 99,
-    onAgreement: source.agreements.length > 0,
-    warehouseStock: source.wareHouseStock
-      .filter((stock) => stock.location != 'Telemark')
-      .map((stock) => {
-        return {
-          location: stock.location,
-          available: stock.available,
-          reserved: stock.reserved,
-          needNotified: stock.needNotified,
-          actualAvailable: Math.max(stock.available - stock.needNotified, 0),
-        }
-      }),
-    inStockAnyWarehouse: !!source.wareHouseStock.find((stock) => stock.available - stock.needNotified > 0),
-  }
-}
-
-export async function getOriginalProductFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct> {
-  const res = await fetch(HM_SEARCH_URL + '/alternative_products_search/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        match: {
-          hmsArtNr: hmsArtNr,
-        },
+export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeStockResponseNew | undefined> {
+  const res = await fetch(
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    }),
-  })
-
-  return res.json().then(mapToAlternativeProductFromSource)
-}
-
-export async function getAlternativeProductsFromHmsArtNr(hmsArtNr: string): Promise<AlternativeProduct[]> {
-  const res = await fetch(HM_SEARCH_URL + '/alternative_products_search/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: {
-        bool: {
-          must: [
-            {
-              dis_max: {
-                tie_breaker: 0.7,
-                queries: [
-                  {
-                    match: {
-                      alternativeFor: hmsArtNr,
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      },
-      size: 100,
-    }),
-  })
-
-  return res.json().then(mapToAlternativeProducts)
-}
-
-export async function getAlternativesAndStock(hmsArtNr: string): Promise<AlternativeStockResponse | undefined> {
-  const res = await fetch(HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/stock/${hmsArtNr}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+    }
+  )
 
   if (res.status === 404) {
     return undefined
@@ -129,24 +46,24 @@ export async function getAlternativesAndStock(hmsArtNr: string): Promise<Alterna
   return res.json()
 }
 
-export async function createAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
+export async function addAlternativeToGroup(alternativeGroup: string[], alternative: string): Promise<void> {
   return await fetcherModify(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/create`,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/add`,
     'POST',
     {
-      sourceHmsArtnr: sourceHmsArtnr,
-      targetHmsArtnr: targetHmsArtnr,
+      group: alternativeGroup,
+      alternative: alternative,
     }
   )
 }
 
-export async function deleteAlternativeMapping(sourceHmsArtnr: string, targetHmsArtnr: string): Promise<void> {
+export async function deleteAlternativeFromGroup(alternativeGroup: string[], alternative: string): Promise<void> {
   return await fetcherModify(
-    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/delete`,
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/hmsArtNrMapping/group/delete`,
     'DELETE',
     {
-      sourceHmsArtnr: sourceHmsArtnr,
-      targetHmsArtnr: targetHmsArtnr,
+      group: alternativeGroup,
+      alternative: alternative,
     }
   )
 }

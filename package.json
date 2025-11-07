@@ -18,6 +18,7 @@
     "@navikt/ds-react": "^7.32.3",
     "@navikt/ds-tokens": "^7.1.2",
     "@navikt/next-logger": "^4.3.3",
+    "@navikt/oasis": "^4.1.0",
     "@types/js-cookie": "^3.0.6",
     "@types/umami": "^2.10.1",
     "classnames": "^2.5.1",

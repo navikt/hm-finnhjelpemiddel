@@ -19,7 +19,8 @@ const RemovableAlternativeProductCardMenu = ({
 }) => {
   const { alternativeProductsToCompare } = useHydratedAlternativeProductsCompareStore()
   const isInProductsToCompare =
-    alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.id === procom.id).length >= 1
+    alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.variantId === procom.variantId)
+      .length >= 1
 
   const imageSrc = product.imageUri
   const minRank = product.highestRank
@@ -36,7 +37,7 @@ const RemovableAlternativeProductCardMenu = ({
         'product-card__checked': isInProductsToCompare,
       })}
     >
-      <RemoveButton productId={product.id} />
+      <RemoveButton productId={product.variantId} />
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">

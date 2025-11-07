@@ -8,17 +8,6 @@ import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
 import { logNavigationEvent } from '@/utils/amplitude'
 import { faro } from '@grafana/faro-core'
-import { WarehouseStockResponse } from '@/utils/response-types'
-
-export interface ProductStockResponse {
-  hmsArtNr: string
-  warehouseStock: WarehouseStockResponse[]
-}
-
-export interface AlternativeStockResponse {
-  original: ProductStockResponse
-  alternatives: ProductStockResponse[]
-}
 
 export default function AlternativeProductsPage() {
   const router = useRouter()
@@ -54,9 +43,7 @@ export default function AlternativeProductsPage() {
         searchTerm: value,
         warehouse: selectedWarehouse ?? '',
       })
-    router.replace(`${pathname}?hms=${value}`, {
-      scroll: false,
-    })
+    router.push(`${pathname}?hms=${value}`)
   }
 
   useEffect(() => {
@@ -72,16 +59,6 @@ export default function AlternativeProductsPage() {
         warehouse: name,
       })
     }
-  }
-
-  if (
-    typeof window !== 'undefined' &&
-    !(
-      window.location.href.startsWith('https://finnhjelpemiddel.ansatt') ||
-      window.location.href.startsWith('http://localhost')
-    )
-  ) {
-    return <div>ikke tilgang</div>
   }
 
   return (
