@@ -1091,6 +1091,44 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
     .then((data) => mapProductsVariants(data))
 }
 
+export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[]> => {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+  method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'attributes.worksWith.seriesIds': seriesId,
+              },
+            },
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+          ],
+        },
+      },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc',
+          },
+        },
+      ],
+      size: 1000,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => mapProductsVariants(data))
+}
+
+
 export type ProductVariantsPagination = {
   products: ProductVariant[]
   totalHits: number

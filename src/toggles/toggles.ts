@@ -5,7 +5,8 @@ export const EXPECTED_TOGGLES = [
   'finnhjelpemiddel.feilbanner',
   'paaskepynt',
   'finnhjelpemiddel.visAlternativEdit',
-  'finnhjelpemiddel.link-seksualteknisk-avtale'
+  'finnhjelpemiddel.link-seksualteknisk-avtale',
+  'finnhjelpemiddel.vis-virker-sammen-med-products'
 ] as const
 
 export const LOCAL_TOGGLES = [
@@ -31,6 +32,10 @@ export const LOCAL_TOGGLES = [
   },
   {
     name: 'finnhjelpemiddel.visAlternativEdit',
+    enabled: true,
+  },
+  {
+    name: 'finnhjelpemiddel.vis-virker-sammen-med-products',
     enabled: true,
   },
 ]

@@ -160,6 +160,7 @@ interface AttributeResponse {
   manufacturer?: string
   articlename?: string
   compatibleWith?: CompatibleWithResponse
+  worksWith?: WorksWithResponse
   series?: string
   keywords?: string[]
   shortdescription?: string
@@ -174,6 +175,12 @@ export interface CompatibleWithResponse {
   seriesIds: string[]
   productIds: string[]
 }
+
+export interface WorksWithResponse {
+  seriesIds: string[]
+  productIds: string[]
+}
+
 
 export interface TechDataResponse {
   key: string
