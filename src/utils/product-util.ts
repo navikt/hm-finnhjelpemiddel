@@ -8,6 +8,7 @@ import {
   SeriesAggregationResponse,
   SeriesBucketResponse,
   TechDataResponse,
+  WorksWithResponse,
 } from './response-types'
 import { capitalize } from './string-util'
 
@@ -88,10 +89,16 @@ interface Attributes {
   shortdescription?: string
   text?: string
   compatibleWith?: CompatibleWith
+  worksWith?: WorksWith
   url?: string
 }
 
 interface CompatibleWith {
+  seriesIds: string[]
+  productIds: string[]
+}
+
+interface WorksWith {
   seriesIds: string[]
   productIds: string[]
 }
@@ -207,6 +214,9 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
         compatibleWith: product.attributes.compatibleWith
           ? mapCompatibleWith(product.attributes.compatibleWith)
           : undefined,
+        worksWith: product.attributes.worksWith
+          ? mapWorksWith(product.attributes.worksWith)
+          : undefined,
         url: product.attributes.url,
       },
       variantCount: 1,
@@ -258,6 +268,9 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
       compatibleWith: firstVariant.attributes.compatibleWith
         ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
         : undefined,
+      worksWith: firstVariant.attributes.worksWith
+        ? mapWorksWith(firstVariant.attributes.worksWith)
+        : undefined,
       url: firstVariant.attributes.url,
     },
     variantCount: sources.length,
@@ -307,6 +320,9 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
       text: firstVariant.attributes.text,
       compatibleWith: firstVariant.attributes.compatibleWith
         ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
+        : undefined,
+      worksWith: firstVariant.attributes.worksWith
+        ? mapWorksWith(firstVariant.attributes.worksWith)
         : undefined,
       url: firstVariant.attributes.url,
     },
@@ -392,6 +408,13 @@ export const mapCompatibleWith = (compatibleWith: CompatibleWithResponse): Compa
   return {
     seriesIds: compatibleWith.seriesIds,
     productIds: compatibleWith.productIds,
+  }
+}
+
+export const mapWorksWith = (worksWith: WorksWithResponse): WorksWith => {
+  return {
+    seriesIds: worksWith.seriesIds,
+    productIds: worksWith.productIds,
   }
 }
 
