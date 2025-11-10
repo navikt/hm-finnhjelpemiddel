@@ -1,5 +1,5 @@
 import { BodyShort, Box, HStack, VStack } from '@navikt/ds-react'
-import styles from '@/app/gjenbruksprodukter/AddAlternativeCard.module.scss'
+import styles from '@/app/gjenbruksprodukter/rediger/AddAlternativeCard.module.scss'
 import ProductImage from '@/components/ProductImage'
 import React from 'react'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'

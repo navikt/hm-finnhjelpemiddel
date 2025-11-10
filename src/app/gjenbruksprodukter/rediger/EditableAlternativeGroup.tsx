@@ -2,7 +2,7 @@ import { VStack } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import { AlternativeProduct, deleteAlternativeFromGroup } from '@/app/gjenbruksprodukter/alternative-util'
 import { EditableAlternativeCard } from '@/app/gjenbruksprodukter/rediger/EditableAlternativeCard'
-import { AddAlternative } from '@/app/gjenbruksprodukter/AddAlternative'
+import { AddAlternative } from '@/app/gjenbruksprodukter/rediger/AddAlternative'
 
 export const EditableAlternativeGroup = ({
   alternatives,

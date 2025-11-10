@@ -7,7 +7,7 @@ import {
   newGetAlternatives,
 } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
-import { AddAlternativeCard } from '@/app/gjenbruksprodukter/AddAlternativeCard'
+import { AddAlternativeCard } from '@/app/gjenbruksprodukter/rediger/AddAlternativeCard'
 
 export const AddAlternative = ({
   alternativeGroup,
