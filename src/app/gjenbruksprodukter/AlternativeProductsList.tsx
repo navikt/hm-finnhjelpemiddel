@@ -14,7 +14,6 @@ import {
   CompareAlternativesMenuState,
   useHydratedAlternativeProductsCompareStore,
 } from '@/utils/compare-alternatives-state-util'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 export const AlternativeProductList = ({
   hmsNumber,
@@ -23,10 +22,6 @@ export const AlternativeProductList = ({
   hmsNumber: string
   selectedWarehouse?: string | undefined
 }) => {
-  const featureFlags = useFeatureFlags()
-
-  const editMode: boolean = featureFlags.isEnabled('finnhjelpemiddel.visAlternativEdit') ?? false
-
   const {
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
@@ -50,8 +45,8 @@ export const AlternativeProductList = ({
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  //Skjuler original-produktkort med ukjent lagerstatus for de uten edit-tilgang for nå
-  if (!editMode && !alternativesResponse.original.warehouseStock) {
+  //Skjuler original-produktkort med ukjent lagerstatus
+  if (!alternativesResponse.original.warehouseStock) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
