@@ -59,9 +59,6 @@ export const AlternativeProductList = ({
 
   const alternatives: AlternativeProduct[] = alternativesResponse.alternatives ?? []
 
-  console.log('original: ', original)
-  console.log('alternatives: ', alternatives)
-
   if (alternatives) {
     sortAlternativeProducts(alternatives, selectedWarehouse)
   }
