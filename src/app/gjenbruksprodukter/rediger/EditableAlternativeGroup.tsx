@@ -18,15 +18,17 @@ export const EditableAlternativeGroup = ({
   return (
     <VStack gap={'2'}>
       <VStack>
-        {alternatives.map((alternative) => (
-          <EditableAlternativeCard
-            alternativeProduct={alternative}
-            onDelete={() =>
-              deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!).then(() => mutateAlternatives())
-            }
-            key={alternative.variantId}
-          />
-        ))}
+        {alternatives
+          .sort((a, b) => a.highestRank - b.highestRank)
+          .map((alternative) => (
+            <EditableAlternativeCard
+              alternativeProduct={alternative}
+              onDelete={() =>
+                deleteAlternativeFromGroup(alternativeGroup, alternative.hmsArtNr!).then(() => mutateAlternatives())
+              }
+              key={alternative.variantId}
+            />
+          ))}
         {newAlternative && (
           <EditableAlternativeCard
             alternativeProduct={newAlternative}
