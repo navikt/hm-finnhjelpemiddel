@@ -46,10 +46,11 @@ export const AlternativeProductList = ({
   }
 
   //Skjuler original-produktkort med ukjent lagerstatus
+  /*
   if (!alternativesResponse.original.warehouseStock) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
-
+  */
   const original = alternativesResponse.original
 
   const alternatives: AlternativeProduct[] = alternativesResponse.alternatives ?? []

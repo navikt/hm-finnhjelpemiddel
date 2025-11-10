@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BodyShort, Box, Button, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, HelpText, HGrid, HStack, Label, Link, Stack, Tag, VStack } from '@navikt/ds-react'
 import styles from '@/app/gjenbruksprodukter/AlternativeProducts.module.scss'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
@@ -93,15 +93,14 @@ const ProductInfo = ({
       </HStack>
       <HStack align={'end'} justify={'space-between'} gap={'2'} wrap={false}>
         {alternativeProduct.warehouseStock === undefined && (
-          <NeutralTag>
-            Ukjent lagerstatus
-          </NeutralTag>
+          <HStack gap={'2'}>
+            <NeutralTag>Ukjent lagerstatus</NeutralTag>
+            <HelpText>Vi har ikke fått lagerstatus for dette produktet fra OeBS enda</HelpText>
+          </HStack>
         )}
 
         {!alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
-          <NeutralTag>
-            Ikke på noen lager
-          </NeutralTag>
+          <NeutralTag>Ikke på noen lager</NeutralTag>
         )}
 
         {alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
@@ -162,17 +161,8 @@ const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
 
 const StockTag = ({ amount }: { amount: number }) => {
   if (amount === 0) {
-    return (
-      <NeutralTag>
-        Ingen på lager
-      </NeutralTag>
-    )
-  } else
-    return (
-      <SuccessTag>
-        {amount} stk på lager
-      </SuccessTag>
-    )
+    return <NeutralTag>Ingen på lager</NeutralTag>
+  } else return <SuccessTag>{amount} stk på lager</SuccessTag>
 }
 
 const CompareButton = ({
