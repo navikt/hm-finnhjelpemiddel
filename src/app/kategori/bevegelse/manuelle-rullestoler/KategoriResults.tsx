@@ -31,7 +31,7 @@ const KategoriResults = ({
     return (
       <div id="searchResults">
         <Alert variant="info">
-          <BodyLong>Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</BodyLong>
+          <BodyLong>Obs! Fant ingen hjelpemidler. Har du sjekket filtrene dine?</BodyLong>
         </Alert>
       </div>
     )
