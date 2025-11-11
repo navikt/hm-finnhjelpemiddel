@@ -532,6 +532,157 @@ export const fetchProducts = ({
     })
 }
 
+const makeSearchTermQueryKategori = ({ seriesId }: { seriesId?: string }) => {
+  const commonBoosting = {
+    negative: {
+      bool: {
+        must: {
+          bool: {},
+        },
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 1,
+  }
+
+  const negativeBoostInactiveProducts = {
+    negative: {
+      match: {
+        status: 'INACTIVE',
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.4,
+  }
+
+  const negativeBoostNonAgreementProducts = {
+    negative: {
+      match: {
+        hasAgreement: false,
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.1,
+  }
+
+  const bool = {
+    should: [
+      {
+        boosting: {
+          positive: {
+            multi_match: {
+              query: '',
+              type: 'cross_fields',
+              fields: [
+                'isoCategoryTitle^2',
+                'isoCategoryText^0.5',
+                'title^0.5',
+                'attributes.text^0.1',
+                'keywords_bag^0.1',
+              ],
+              operator: 'and',
+              zero_terms_query: 'all',
+            },
+          },
+          ...commonBoosting,
+          ...negativeBoostInactiveProducts,
+          ...negativeBoostNonAgreementProducts,
+        },
+      },
+    ],
+  }
+
+  const termSeriesId = {
+    seriesId: seriesId,
+  }
+
+  const mustAlternatives = () => {
+    let must: any[] = [{ bool: bool }]
+
+    if (seriesId !== undefined) {
+      must = must.concat([{ term: termSeriesId }])
+    }
+
+    return must
+  }
+
+  return {
+    must: mustAlternatives(),
+    ...{
+      must_not: {
+        bool: {
+          should: EXCLUDED_ISO_CATEGORIES.map((isoCategory) => ({ match: { isoCategory } })),
+        },
+      },
+    },
+  }
+}
+
+type QueryObjectKategori = {
+  from: number
+  size: number
+  track_scores: boolean
+  sort: any[]
+  query: {}
+  collapse?: {}
+}
+
+export const fetchProductsKategori = async ({
+  from,
+  size,
+  searchData,
+  dontCollapse = false,
+  seriesId,
+}: FetchProps): Promise<Product[]> => {
+  const { isoCode, sortOrder } = searchData
+  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
+  const searchTermQuery = makeSearchTermQueryKategori({ seriesId })
+
+  const queryFilters: Array<any> = []
+
+  if (isoCode) {
+    queryFilters.push({
+      match_bool_prefix: {
+        isoCategory: isoCode,
+      },
+    })
+  }
+
+  const query = {
+    bool: {
+      ...searchTermQuery,
+      filter: queryFilters,
+    },
+  }
+  const body: QueryObjectKategori = {
+    from,
+    size,
+    track_scores: true,
+    sort: sortOrderOpenSearch,
+    query,
+  }
+
+  if (!dontCollapse) {
+    body.collapse = {
+      field: 'seriesId',
+    }
+  }
+
+  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  const data = await res.json()
+  return dontCollapse
+    ? data.hits.hits.length > 0
+      ? new Array(mapProductFromSeriesId(data))
+      : []
+    : mapProductsFromCollapse(data)
+}
+
 //TODO bytte til label
 export const getProductsOnAgreement = ({
   agreementId,
@@ -1093,7 +1244,7 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
 
 export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[]> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {
-  method: 'POST',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -1127,7 +1278,6 @@ export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[
     .then((res) => res.json())
     .then((data) => mapProductsVariants(data))
 }
-
 
 export type ProductVariantsPagination = {
   products: ProductVariant[]
