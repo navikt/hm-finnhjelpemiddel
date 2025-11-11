@@ -327,6 +327,7 @@ const removeReservedChars = (searchTerm: String) => {
 const sortOptionsOpenSearch = {
   Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
   Best_soketreff: [{ _score: { order: 'desc' } }],
+  Rangering: [{ 'agreements.rank': 'asc' }],
 }
 
 type QueryObject = {
@@ -635,7 +636,7 @@ export const fetchProductsKategori = async ({
   seriesId,
 }: FetchProps): Promise<Product[]> => {
   const { isoCode, sortOrder } = searchData
-  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
+  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQueryKategori({ seriesId })
   const visTilbDeler = false
 

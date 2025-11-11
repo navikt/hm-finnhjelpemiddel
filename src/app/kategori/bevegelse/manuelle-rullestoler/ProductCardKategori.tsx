@@ -5,7 +5,6 @@ import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
-import { logNavigationEvent } from '@/utils/amplitude'
 import styles from '@/app/sok/ProductCardSearch.module.scss'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
@@ -45,13 +44,7 @@ export const ProductCardKategori = ({
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
-          <Link
-            className={styles.link}
-            href={linkToProduct}
-            aria-label={`Gå til ${product.title}`}
-            as={NextLink}
-            onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
-          >
+          <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
             <BodyShort weight="semibold">{product.title}</BodyShort>
           </Link>
         </VStack>

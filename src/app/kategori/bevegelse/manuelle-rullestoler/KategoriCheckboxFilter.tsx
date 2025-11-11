@@ -14,21 +14,7 @@ const initialFiltersFormState = {
 }
 type FilterFormState = typeof initialFiltersFormState
 
-const initialSearchDataState = {
-  searchTerm: '',
-  isoCode: '',
-  filters: initialFiltersFormState,
-  sortOrder: undefined,
-}
-
-const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreementSearch?: boolean): SearchData => {
-  const sortOrderStr = searchParams.get('sortering') || ''
-  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : agreementSearch ? undefined : 'Best_soketreff'
-
-  const searchTerm = searchParams.get('term') ?? ''
-  const isoCode = searchParams.get('isoCode') ?? ''
-  const hidePictures = searchParams.get('hidePictures') ?? ''
-
+const mapSearchParamsFilter = (searchParams: ReadonlyURLSearchParams): FilterFormState => {
   const filterKeys = Object.keys(initialFiltersFormState).filter((filter) => searchParams?.has(filter))
 
   const filters = filterKeys.reduce(
@@ -38,30 +24,9 @@ const mapSearchParams = (searchParams: ReadonlyURLSearchParams, agreementSearch?
     }),
     {}
   )
-  return {
-    sortOrder,
-    searchTerm,
-    isoCode,
-    filters: { ...initialSearchDataState.filters, ...filters },
-    hidePictures,
-  }
+  return { ...initialFiltersFormState, ...filters }
 }
 
-const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
-
-type SortOrder = (typeof sortOrders)[number]
-
-function isValidSortOrder(sortOrder: string): sortOrder is SortOrder {
-  return sortOrders.includes(sortOrder as SortOrder)
-}
-
-type SearchData = {
-  searchTerm: string
-  isoCode?: string
-  filters: FilterFormState
-  sortOrder?: SortOrder
-  hidePictures?: string
-}
 const checkboxFilterCategoriesLabels = {
   leverandor: 'Leverandør',
   aktive: 'Aktive rullestoler',
@@ -75,6 +40,7 @@ type FilterOption = {
   label: string
   value: string
 }
+
 type CheckboxFilterInputProps2 = {
   filterKey: keyof typeof checkboxFilterCategoriesLabels
   allFilters: FilterOption[]
@@ -83,9 +49,9 @@ type CheckboxFilterInputProps2 = {
 
 export const KategoriCheckboxFilter = ({ filterKey, allFilters, onChange }: CheckboxFilterInputProps2) => {
   const searchParams = useSearchParams()
-  const searchData = mapSearchParams(searchParams)
+  const searchData = mapSearchParamsFilter(searchParams)
 
-  const selectedFilters = allFilters.filter((f) => searchData.filters[filterKey].includes(f.value))
+  const selectedFilters = allFilters.filter((f) => searchData[filterKey].includes(f.value))
 
   const [menuOpen, setMenuOpen] = useState(false)
 

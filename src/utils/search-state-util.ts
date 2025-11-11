@@ -6,7 +6,7 @@ export const initialSearchDataState = {
   filters: initialFiltersFormState,
   sortOrder: undefined,
 }
-export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff'] as const
+export const sortOrders = ['Delkontrakt_rangering', 'Best_soketreff', 'Rangering'] as const
 
 export type SortOrder = (typeof sortOrders)[number]
 

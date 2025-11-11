@@ -1,14 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { logVisFlereTreff } from '@/utils/amplitude'
 import { ProductCardKategori } from '@/app/kategori/bevegelse/manuelle-rullestoler/ProductCardKategori'
 
-const KategoriResults = ({
+export const KategoriResults = ({
   products,
   loadMore,
   isLoading,
@@ -59,7 +57,6 @@ const KategoriResults = ({
           variant="secondary"
           onClick={() => {
             loadMore()
-            logVisFlereTreff()
           }}
         >
           Vis flere treff
@@ -68,5 +65,3 @@ const KategoriResults = ({
     </VStack>
   )
 }
-
-export default KategoriResults

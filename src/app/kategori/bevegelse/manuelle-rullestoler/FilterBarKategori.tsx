@@ -16,7 +16,7 @@ type Props = {
   onChange: (key: string, value: string) => void
 }
 
-const FilterBarKategori = ({ filters, onChange }: Props) => {
+export const FilterBarKategori = ({ filters, onChange }: Props) => {
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
@@ -45,5 +45,3 @@ const FilterBarKategori = ({ filters, onChange }: Props) => {
     </VStack>
   )
 }
-
-export default FilterBarKategori
