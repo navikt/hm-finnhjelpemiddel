@@ -637,6 +637,7 @@ export const fetchProductsKategori = async ({
   const { isoCode, sortOrder } = searchData
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
   const searchTermQuery = makeSearchTermQueryKategori({ seriesId })
+  const visTilbDeler = false
 
   const queryFilters: Array<any> = []
 
@@ -646,6 +647,10 @@ export const fetchProductsKategori = async ({
         isoCategory: isoCode,
       },
     })
+  }
+
+  if (!visTilbDeler) {
+    queryFilters.push(filterMainProductsOnly())
   }
 
   const query = {
