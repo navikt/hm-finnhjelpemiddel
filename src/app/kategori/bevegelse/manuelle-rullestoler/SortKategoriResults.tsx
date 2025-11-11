@@ -19,21 +19,19 @@ const SortKategoriResults = () => {
   }
 
   return (
-    <>
-      <Select
-        size="small"
-        label="Sortering"
-        onChange={handleSelectedSorting}
-        defaultValue={searchParams.get('sortering') ?? 'Best_soketreff'}
-        hideLabel={true}
-      >
-        {options.map((option, index) => (
-          <option key={index} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
-    </>
+    <Select
+      size="small"
+      label="Sortering"
+      onChange={handleSelectedSorting}
+      defaultValue={searchParams.get('sortering') ?? 'Delkontrakt_rangering'}
+      hideLabel={true}
+    >
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </Select>
   )
 }
 

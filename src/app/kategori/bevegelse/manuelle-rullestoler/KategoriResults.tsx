@@ -6,7 +6,7 @@ import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { logVisFlereTreff } from '@/utils/amplitude'
-import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
+import { ProductCardKategori } from '@/app/kategori/bevegelse/manuelle-rullestoler/ProductCardKategori'
 
 const KategoriResults = ({
   products,
@@ -46,7 +46,7 @@ const KategoriResults = ({
         justify={{ xs: 'start', md: 'start' }}
       >
         {products?.map((product) => (
-          <ProductCardSearch
+          <ProductCardKategori
             key={product.id}
             product={product}
             variantCount={product.variantCount}
