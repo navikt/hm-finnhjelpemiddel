@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
-import { Alert, BodyLong, Box, Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import { fetchProductsKategori, PAGE_SIZE } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import CompareMenu from '@/components/layout/CompareMenu'
@@ -81,7 +81,14 @@ export default function Page() {
   }
 
   return (
-    <VStack gap={'12'}>
+    <VStack
+      gap={'14'}
+      paddingBlock={'16'}
+      paddingInline={'4'}
+      marginInline={'auto'}
+      marginBlock={'0'}
+      maxWidth={'1440px'}
+    >
       <VStack gap="4">
         <Heading level="1" size="large">
           Manuelle rullestoler
@@ -92,7 +99,7 @@ export default function Page() {
         </BodyLong>
       </VStack>
 
-      <Box background={'surface-action-subtle'}>
+      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         {error ? (
           <HStack justify="center" style={{ marginTop: '48px' }}>
             <Alert variant="error" title="Error med lasting av produkter">
@@ -123,7 +130,7 @@ export default function Page() {
             </HGrid>
           </>
         )}
-      </Box>
+      </Bleed>
     </VStack>
   )
 }
