@@ -5,9 +5,9 @@ import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
-import styles from '@/app/sok/ProductCardSearch.module.scss'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+import styles from './ProductCardKategori.module.scss'
 
 export const ProductCardKategori = ({
   product,
