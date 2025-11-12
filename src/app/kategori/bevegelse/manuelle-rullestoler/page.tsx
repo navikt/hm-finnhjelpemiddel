@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { Alert, Bleed, BodyLong, Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
-import { fetchProductsKategori, PAGE_SIZE } from '@/utils/api-util'
+import { PAGE_SIZE } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from './KategoriResults'
@@ -12,6 +12,7 @@ import { SortKategoriResults } from '@/app/kategori/bevegelse/manuelle-rullestol
 import { FilterBarKategori, RullestolFilters } from '@/app/kategori/bevegelse/manuelle-rullestoler/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
 import { Product } from '@/utils/product-util'
+import { fetchProductsKategori } from '@/utils/kategori-inngang-util'
 
 export default function Page() {
   const router = useRouter()
@@ -65,6 +66,10 @@ export default function Page() {
   }, [productsData, page, setPage, pathname, router, searchParams])
 
   const products = productsData?.map((d) => d).flat()
+
+  const productIsoLevel3 = new Set(products?.map((product) => product.isoCategory.substring(3)))
+
+  console.log(productIsoLevel3)
 
   const filters: RullestolFilters = {
     aktive: [{ label: 'Ja', value: 'ja' }],
