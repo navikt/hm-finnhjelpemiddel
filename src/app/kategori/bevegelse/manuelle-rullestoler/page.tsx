@@ -93,7 +93,7 @@ export default function Page() {
         <Heading level="1" size="large">
           Manuelle rullestoler
         </Heading>
-        <BodyLong>
+        <BodyLong style={{ maxWidth: '735px' }}>
           Hjelpemidler som gir mobilitet og sittende støtte for personer med begrenset bevegelighet, der brukeren selv
           eller en ledsager kjører rullestolen manuelt.
         </BodyLong>
@@ -109,7 +109,7 @@ export default function Page() {
         ) : (
           <>
             <CompareMenu />
-            <HGrid columns={'374px 4'} gap={'4'}>
+            <HGrid paddingBlock={{ xs: '6 0', md: '12 0' }} columns={'374px 4'} gap={'4'}>
               <VStack gap={'4'}>
                 <Heading level="2" size="medium">
                   {isLoading ? (
