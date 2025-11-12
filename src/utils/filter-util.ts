@@ -178,6 +178,14 @@ export const filterMainProductsOnly = () => ({
   },
 })
 
+export const filterPrefixIsoKode = (values: Array<string>) => ({
+  bool: {
+    should: values.map((value) => ({
+      prefix: { isoCategory: value },
+    })),
+  },
+})
+
 export const filterVis = (values: Array<string>) => {
   const filters: any[] = values
     .map((filterKey) => {

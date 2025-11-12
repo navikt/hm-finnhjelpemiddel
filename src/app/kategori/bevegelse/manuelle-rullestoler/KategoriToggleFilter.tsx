@@ -2,40 +2,32 @@ import { Chips } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
-const checkboxFilterCategoriesLabels = {
-  leverandor: 'Leverandør',
-  aktive: 'Aktive rullestoler',
-  allround: 'Allround rullestoler',
-  komfort: 'Komfortrullestoler',
-  staa: 'Ståfunksjon',
-  drivaggregat: 'Drivaggregat',
+export type FilterToggle = {
+  key: string
+  label: string
 }
 
-type FilterOption = {
-  label: string
-  value: string
-}
-type CheckboxFilterInputProps2 = {
-  filterKey: keyof typeof checkboxFilterCategoriesLabels
-  allFilters: FilterOption[]
+type Props = {
+  searchParamKey: string
+  filter: FilterToggle
   onChange: (key: string, value: string) => void
 }
 
-export const KategoriToggleFilter = ({ filterKey, onChange }: CheckboxFilterInputProps2) => {
+export const KategoriToggleFilter = ({ searchParamKey, filter, onChange }: Props) => {
   const searchParams = useSearchParams()
 
   const change = (value: string) => {
-    onChange(filterKey, value)
+    onChange(searchParamKey, value)
   }
 
   return (
     <Chips.Toggle
-      selected={searchParams.has(filterKey)}
+      selected={searchParams.has(searchParamKey, filter.key)}
       checkmark={false}
-      key={filterKey}
-      onClick={() => change(searchParams.has(filterKey) ? '' : 'true')}
+      key={filter.key}
+      onClick={() => change(filter.key)}
     >
-      {checkboxFilterCategoriesLabels[filterKey]}
+      {filter.label}
     </Chips.Toggle>
   )
 }

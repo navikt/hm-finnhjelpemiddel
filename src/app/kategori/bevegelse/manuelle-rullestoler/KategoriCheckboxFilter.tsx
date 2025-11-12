@@ -1,80 +1,49 @@
 import { ActionMenu, Button } from '@navikt/ds-react'
-import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from '@/components/filters/CheckboxFilterNew.module.scss'
 
-const initialFiltersFormState = {
-  leverandor: [] as string[],
-  aktive: [] as string[],
-  allround: [] as string[],
-  komfort: [] as string[],
-  staa: [] as string[],
-  drivaggregat: [] as string[],
-}
-type FilterFormState = typeof initialFiltersFormState
-
-const mapSearchParamsFilter = (searchParams: ReadonlyURLSearchParams): FilterFormState => {
-  const filterKeys = Object.keys(initialFiltersFormState).filter((filter) => searchParams?.has(filter))
-
-  const filters = filterKeys.reduce(
-    (obj, fk) => ({
-      ...obj,
-      [fk]: searchParams?.getAll(fk),
-    }),
-    {}
-  )
-  return { ...initialFiltersFormState, ...filters }
-}
-
-const checkboxFilterCategoriesLabels = {
-  leverandor: 'Leverandør',
-  aktive: 'Aktive rullestoler',
-  allround: 'Allround rullestoler',
-  komfort: 'Komfortrullestoler',
-  staa: 'Ståfunksjon',
-  drivaggregat: 'Drivaggregat',
-}
-
-type FilterOption = {
+export type FilterMenuLabel = {
+  key: string
   label: string
-  value: string
 }
 
-type CheckboxFilterInputProps2 = {
-  filterKey: keyof typeof checkboxFilterCategoriesLabels
-  allFilters: FilterOption[]
+export type FilterMenu = {
+  key: FilterMenuLabel
+  options: string[]
+}
+
+type Props = {
+  filterKey: FilterMenuLabel
+  allFilters: string[]
   onChange: (key: string, value: string) => void
 }
 
-export const KategoriCheckboxFilter = ({ filterKey, allFilters, onChange }: CheckboxFilterInputProps2) => {
+export const KategoriCheckboxFilter = ({ filterKey, allFilters, onChange }: Props) => {
   const searchParams = useSearchParams()
-  const searchData = mapSearchParamsFilter(searchParams)
 
-  const selectedFilters = allFilters.filter((f) => searchData[filterKey].includes(f.value))
+  const selectedFilters = allFilters.filter((f) => searchParams.getAll(filterKey.key).includes(f))
 
   const [menuOpen, setMenuOpen] = useState(false)
 
   const change = (value: string) => {
-    onChange(filterKey, value)
+    onChange(filterKey.key, value)
   }
 
   const reset = () => {
-    onChange(filterKey, '')
+    onChange(filterKey.key, '')
   }
 
-  const filterLabel =
-    selectedFilters.length > 0
-      ? checkboxFilterCategoriesLabels[filterKey] + `(${selectedFilters.length})`
-      : checkboxFilterCategoriesLabels[filterKey]
+  const filterLabel = selectedFilters.length > 0 ? filterKey.label + `(${selectedFilters.length})` : filterKey.label
 
-  const filterCheckbox = (option: FilterOption) => (
+  const filterCheckbox = (option: string) => (
     <ActionMenu.CheckboxItem
-      key={`${filterKey}-${option.label}}`}
+      key={`${filterKey.key}-${option}}`}
       checked={selectedFilters.some((f) => f === option)}
-      onCheckedChange={() => change(option.value)}
+      onCheckedChange={() => change(option)}
     >
-      {option.label}
+      {option}
     </ActionMenu.CheckboxItem>
   )
 

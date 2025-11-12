@@ -1,28 +1,13 @@
-import { filterMainProductsOnly } from '@/utils/filter-util'
-import { SearchData } from '@/utils/search-state-util'
+import { filterPrefixIsoKode, filterLeverandor, filterMainProductsOnly } from '@/utils/filter-util'
+import { SortOrder } from '@/utils/search-state-util'
 import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
-
-type QueryObjectKategori = {
-  from: number
-  size: number
-  track_scores: boolean
-  sort: any[]
-  query: {}
-  collapse?: {}
-  aggs: {}
-}
-type FetchProps = {
-  from: number
-  size: number
-  searchData: SearchData
-  dontCollapse?: boolean
-  seriesId?: string
-}
+import { Hit } from '@/utils/response-types'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 // ISO categories that must always be excluded / filtered out (e.g. from autocomplete) and optionally from general search
 export const EXCLUDED_ISO_CATEGORIES = ['09540601', '09540901', '09540301']
+export const PAGE_SIZE = 24
 
 const sortOptionsOpenSearch = {
   Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
@@ -116,19 +101,73 @@ const makeSearchTermQueryKategori = ({ seriesId }: { seriesId?: string }) => {
   }
 }
 
+type QueryObjectKategori = {
+  from: number
+  size: number
+  track_scores: boolean
+  sort: any[]
+  query: {}
+  collapse?: {}
+  aggs: {}
+  post_filter: {}
+}
+
+export type IsoInfo = {
+  code: string
+  name: string
+}
+
+export type SupplierInfo = {
+  name: string
+}
+
+export type ProductsWithIsoAggs = {
+  products: Product[]
+  iso: IsoInfo[]
+  suppliers: SupplierInfo[]
+}
+
+export type SearchFiltersKategori = {
+  suppliers: string[]
+  isos: string[]
+}
+
+export type SearchDataKategori = {
+  isoCode?: string
+  sortOrder?: SortOrder
+  filters?: SearchFiltersKategori
+}
+
+type FetchProps = {
+  from: number
+  size: number
+  searchData: SearchDataKategori
+  dontCollapse?: boolean
+  seriesId?: string
+}
+
 export const fetchProductsKategori = async ({
   from,
   size,
   searchData,
   dontCollapse = false,
   seriesId,
-}: FetchProps): Promise<Product[]> => {
-  const { isoCode, sortOrder } = searchData
+}: FetchProps): Promise<ProductsWithIsoAggs> => {
+  const { isoCode, sortOrder, filters } = searchData
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQueryKategori({ seriesId })
   const visTilbDeler = false
 
   const queryFilters: Array<any> = []
+  const postFilters: Array<any> = []
+
+  if (filters && filters.isos) {
+    postFilters.push(filterPrefixIsoKode(filters.isos))
+  }
+
+  if (filters && filters.suppliers) {
+    postFilters.push(filterLeverandor(filters.suppliers))
+  }
 
   if (isoCode) {
     queryFilters.push({
@@ -149,7 +188,39 @@ export const fetchProductsKategori = async ({
     },
   }
 
-  const aggs = {}
+  const aggsFilter = (filterKey: string, aggs: {}, filter: {}) => ({
+    [filterKey]: {
+      filter: {
+        bool: {
+          filter: filter,
+        },
+      },
+      aggs,
+    },
+  })
+  const aggs = {
+    ...aggsFilter(
+      'iso',
+      {
+        values: {
+          multi_terms: {
+            terms: [{ field: 'isoCategory' }, { field: 'isoCategoryName' }],
+            size: 100,
+          },
+        },
+      },
+      queryFilters
+    ),
+    ...aggsFilter(
+      'suppliers',
+      {
+        values: {
+          terms: { field: 'supplier.name', size: 300 },
+        },
+      },
+      postFilters
+    ),
+  }
 
   const body: QueryObjectKategori = {
     from,
@@ -157,7 +228,12 @@ export const fetchProductsKategori = async ({
     track_scores: true,
     sort: sortOrderOpenSearch,
     query,
-    aggs,
+    aggs: { ...aggs },
+    post_filter: {
+      bool: {
+        filter: postFilters,
+      },
+    },
   }
 
   if (!dontCollapse) {
@@ -166,17 +242,65 @@ export const fetchProductsKategori = async ({
     }
   }
 
-  const res = await fetch(HM_SEARCH_URL + '/products/_search', {
+  return await fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   })
-  const data = await res.json()
-  return dontCollapse
-    ? data.hits.hits.length > 0
-      ? new Array(mapProductFromSeriesId(data))
-      : []
-    : mapProductsFromCollapse(data)
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: dontCollapse
+          ? data.hits.hits.length > 0
+            ? new Array(mapProductFromSeriesId(data))
+            : []
+          : mapProductsFromCollapse(data),
+        iso: mapIsoAggregations(data),
+        suppliers: mapSupplierAggregations(data),
+      }
+    })
+}
+
+type IsoBucket = {
+  key: string[]
+  doc_count: number
+}
+
+type IsoAggregation = {
+  doc_count: number
+  values: {
+    buckets: IsoBucket[]
+  }
+}
+
+type SupplierBucket = {
+  key: string
+  doc_count: number
+}
+
+type SupplierAggregation = {
+  doc_count: number
+  values: {
+    buckets: SupplierBucket[]
+  }
+}
+
+type ProductIsoAggregationResponse = {
+  hits: {
+    total: object
+    hits: Hit[]
+  }
+  aggregations: {
+    iso: IsoAggregation
+    suppliers: SupplierAggregation
+  }
+}
+
+const mapIsoAggregations = (data: ProductIsoAggregationResponse): IsoInfo[] => {
+  return data.aggregations.iso.values.buckets.map((bucket) => ({ code: bucket.key[0], name: bucket.key[1] }))
+}
+const mapSupplierAggregations = (data: ProductIsoAggregationResponse): SupplierInfo[] => {
+  return data.aggregations.suppliers.values.buckets.map((bucket) => ({ name: bucket.key }))
 }

@@ -1,18 +1,23 @@
 'use client'
 
 import { useMemo } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { Alert, Bleed, BodyLong, Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
-import { PAGE_SIZE } from '@/utils/api-util'
-import { mapSearchParams } from '@/utils/mapSearchParams'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from './KategoriResults'
 import { SortKategoriResults } from '@/app/kategori/bevegelse/manuelle-rullestoler/SortKategoriResults'
-import { FilterBarKategori, RullestolFilters } from '@/app/kategori/bevegelse/manuelle-rullestoler/FilterBarKategori'
+import { FilterBarKategori, Filters } from '@/app/kategori/bevegelse/manuelle-rullestoler/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
 import { Product } from '@/utils/product-util'
-import { fetchProductsKategori } from '@/utils/kategori-inngang-util'
+import {
+  fetchProductsKategori,
+  PAGE_SIZE,
+  ProductsWithIsoAggs,
+  SearchDataKategori,
+  SearchFiltersKategori,
+} from '@/utils/kategori-inngang-util'
+import { isValidSortOrder } from '@/utils/search-state-util'
 
 export default function Page() {
   const router = useRouter()
@@ -20,7 +25,24 @@ export default function Page() {
   const searchParams = useSearchParams()
   const { createQueryStringAppend } = useQueryString()
 
-  const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
+  const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
+    const sortOrderStr = searchParams.get('sortering') || ''
+    const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Best_soketreff'
+
+    const isoCode = searchParams.get('isoCode') ?? ''
+
+    const suppliers = searchParams.getAll('supplier') ?? ''
+    const isos = searchParams.getAll('iso') ?? ''
+
+    const filters: SearchFiltersKategori = { suppliers: suppliers, isos: isos }
+
+    return {
+      sortOrder,
+      isoCode,
+      filters,
+    }
+  }
+  const searchData = mapSearchParamsKategori(searchParams)
 
   const isokode = '1222' // Manuelle rullestoler
   searchData.isoCode = isokode
@@ -31,7 +53,7 @@ export default function Page() {
     setSize: setPage,
     error,
     isLoading,
-  } = useSWRInfinite<Product[]>(
+  } = useSWRInfinite<ProductsWithIsoAggs>(
     (index, previousPageData?: Product[]) => {
       if (previousPageData && previousPageData.length === 0) return null
       return {
@@ -49,8 +71,9 @@ export default function Page() {
   )
 
   const loadMore = useMemo(() => {
-    const isEmpty = productsData?.[0]?.length === 0
-    const isReachingEnd = isEmpty || (productsData && productsData[productsData.length - 1]?.length < PAGE_SIZE)
+    const isEmpty = productsData?.[0]?.products.length === 0
+    const isReachingEnd =
+      isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
     if (isReachingEnd) {
       return // no need to fetch another page
     }
@@ -65,25 +88,18 @@ export default function Page() {
     }
   }, [productsData, page, setPage, pathname, router, searchParams])
 
-  const products = productsData?.map((d) => d).flat()
+  const products = productsData?.map((d) => d.products).flat()
+  const isos = productsData?.at(-1)?.iso ?? []
+  const suppliers = productsData?.at(-1)?.suppliers ?? []
 
-  const productIsoLevel3 = new Set(products?.map((product) => product.isoCategory.substring(3)))
-
-  console.log(productIsoLevel3)
-
-  const filters: RullestolFilters = {
-    aktive: [{ label: 'Ja', value: 'ja' }],
-    allround: [{ label: 'Ja', value: 'ja' }],
-    drivaggregat: [{ label: 'Ja', value: 'ja' }],
-    komfort: [{ label: 'Ja', value: 'ja' }],
-    leverandor: [{ label: 'Ja', value: 'ja' }],
-    staa: [{ label: 'Ja', value: 'ja' }],
-  }
+  const filters: Filters = { isos: isos, suppliers: suppliers }
 
   const onChange = (filterName: string, value: string) => {
     const newSearchParams = createQueryStringAppend(filterName, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
+
+  const onReset = () => router.replace(pathname)
 
   return (
     <VStack
@@ -126,7 +142,7 @@ export default function Page() {
                   )}
                 </Heading>
                 <HStack justify={'space-between'} gap={'2'} align={'end'}>
-                  <FilterBarKategori filters={filters} onChange={onChange} />
+                  <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
                   <SortKategoriResults />
                 </HStack>
 

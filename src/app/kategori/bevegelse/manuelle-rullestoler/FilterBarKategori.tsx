@@ -1,45 +1,49 @@
-import { Chips, Heading, HStack, VStack } from '@navikt/ds-react'
-import { KategoriCheckboxFilter } from '@/app/kategori/bevegelse/manuelle-rullestoler/KategoriCheckboxFilter'
-import { KategoriToggleFilter } from '@/app/kategori/bevegelse/manuelle-rullestoler/KategoriToggleFilter'
+import { Button, Chips, Heading, HStack, VStack } from '@navikt/ds-react'
+import {
+  FilterMenu,
+  KategoriCheckboxFilter,
+} from '@/app/kategori/bevegelse/manuelle-rullestoler/KategoriCheckboxFilter'
+import { FilterToggle, KategoriToggleFilter } from '@/app/kategori/bevegelse/manuelle-rullestoler/KategoriToggleFilter'
+import { IsoInfo, SupplierInfo } from '@/utils/kategori-inngang-util'
+import { CircleSlashIcon } from '@navikt/aksel-icons'
 
-type FilterOption = {
-  label: string
-  value: string
-}
-
-export type RullestolFilters = {
-  [key in 'leverandor' | 'aktive' | 'allround' | 'komfort' | 'staa' | 'drivaggregat']: FilterOption[]
+export type Filters = {
+  ['suppliers']: SupplierInfo[]
+  ['isos']: IsoInfo[]
 }
 
 type Props = {
-  filters: RullestolFilters
+  filters: Filters
   onChange: (key: string, value: string) => void
+  onReset: () => void
 }
 
-export const FilterBarKategori = ({ filters, onChange }: Props) => {
+export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
+  const isoFilters: FilterToggle[] = filters.isos ? filters.isos.map((iso) => ({ key: iso.code, label: iso.name })) : []
+
+  const supplierFilters: FilterMenu = {
+    key: { key: 'supplier', label: 'Leverandører' },
+    options: filters.suppliers ? filters.suppliers.map((supplier) => supplier.name) : [],
+  }
+
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
+      <div>
+        <Button variant={'danger'} size={'xsmall'} onClick={onReset} icon={<CircleSlashIcon />}>
+          Nullstill filtere
+        </Button>
+      </div>
       <HStack gap="4">
-        {filters.leverandor.length > 0 && (
-          <KategoriCheckboxFilter filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
-        )}
+        <KategoriCheckboxFilter
+          filterKey={supplierFilters.key}
+          allFilters={supplierFilters.options}
+          onChange={onChange}
+        />
         <Chips>
-          {filters.aktive.length > 0 && (
-            <KategoriToggleFilter filterKey={'aktive'} allFilters={filters.aktive} onChange={onChange} />
-          )}
-          {filters.staa.length > 0 && (
-            <KategoriToggleFilter filterKey={'staa'} allFilters={filters.staa} onChange={onChange} />
-          )}
-          {filters.komfort.length > 0 && (
-            <KategoriToggleFilter filterKey={'komfort'} allFilters={filters.komfort} onChange={onChange} />
-          )}
-          {filters.drivaggregat.length > 0 && (
-            <KategoriToggleFilter filterKey={'drivaggregat'} allFilters={filters.drivaggregat} onChange={onChange} />
-          )}
-          {filters.allround.length > 0 && (
-            <KategoriToggleFilter filterKey={'allround'} allFilters={filters.allround} onChange={onChange} />
-          )}
+          {isoFilters.map((filter) => (
+            <KategoriToggleFilter key={filter.key} searchParamKey={'iso'} filter={filter} onChange={onChange} />
+          ))}
         </Chips>
       </HStack>
     </VStack>
