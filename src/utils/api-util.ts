@@ -279,7 +279,7 @@ const makeSearchTermQuery = ({
   }
 
   const termAgreement = {
-    'agreements.id': {
+    'mainAgreements.id': {
       value: agreementId,
     },
   }
