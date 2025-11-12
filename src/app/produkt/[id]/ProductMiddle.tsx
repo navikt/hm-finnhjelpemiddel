@@ -12,7 +12,7 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
-import { logUmamiClickButton } from '@/utils/umami'
+import { logUmamiClickButton, logUmamiFilterChangeEvent, logUmamiShowMoreResult } from '@/utils/umami'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -143,14 +143,12 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + WORKS_WITH_CONFIG.productsPerPage)
-    logUmamiClickButton('Vis flere produkter', 'product-worksWith', "primary")
+    logUmamiClickButton( 'Vis-flere-produkter', 'product-worksWith-loadMore', 'secondary' )
   }
 
   const handleComponentTypeToggle = (type: string) => {
     setSelectedComponentTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]))
-    logUmamiClickButton('filtereringChipsBleKlikket','product-worksWith-componentType', "primary")
-    logUmamiClickButton(type + 'ble klikket', 'product-worksWith-componentType', "primary")
-    logUmamiClickButton(selectedComponentTypes.toString(), 'product-worksWith-componentType', "primary")
+    logUmamiFilterChangeEvent( 'product-worksWith-filter', 'chips-componentType', type )
   }
 
   return (

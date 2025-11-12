@@ -1,12 +1,10 @@
 'use client'
 
 export enum umami_customevents{
-  ACTION = 'action',
-  BESØK = 'besøk side',
+  BESØK = 'besøk',
   KLIKK = 'knapp klikket',
   NAVIGERE = 'navigere',
-  VIS_FLERE_TREFF = 'vis-flere-treff',
-  FILTRERING = 'filtrering',
+  VIS_FLERE_TREFF = 'vis flere treff',
   FILTER_ENDRET = 'filter-endret',
 }
 
@@ -54,7 +52,7 @@ export const stopUmami = () => {
   }
 }
 
-export function logUmamiEvent(eventName: string, data?: any) {
+export function logUmamiEvent(eventName: string, data?: object) {
   const umamiScript = document.querySelector('script[src="https://cdn.nav.no/team-researchops/sporing/sporing.js"]')
   setTimeout(() => {
     data = {
@@ -86,6 +84,62 @@ export function logUmamiNavigationEvent(component: string, destination: string, 
   })
 }
 
+
+
+
+export function logUmamiFilterChangeEvent(component: string, filterType: string, filterValue: string) {
+  logUmamiCustomEvent(umami_customevents.FILTER_ENDRET, {
+    component: component,
+    filterType: filterType,
+    filterValue: filterValue,
+  })
+}
+
+export function logUmamiShowMoreResult(component: string, extraInfo?: string) {
+  logUmamiCustomEvent(umami_customevents.VIS_FLERE_TREFF)
+}
+
+
+export function logUmamiClickButton(buttonName: string, buttonType: string, buttonVariant: string) {
+  logUmamiCustomEvent(umami_customevents.KLIKK, {
+    buttonName: buttonName,
+    buttonType: buttonType,
+    buttonVariant: buttonVariant,
+  })
+}
+
+
+
+export function logUmamiVisit(url: string, pageTitle: string, pageType: string) {
+  logUmamiEvent(umami_customevents.BESØK, {
+    url: url,
+    pageTitle: pageTitle,
+    pageType: pageType,
+  })
+}
+
+
+/*
+export function logUmamiFilterEvent(filter: Record<string, string | string[]>, component: string) {
+  logUmamiCustomEvent(umami_customevents.FILTRERING, {
+    filter: filter,
+    component: component,
+  })
+}
+
+
+export function logUmamiErrorOnUrl(url: string) {
+  logUmamiCustomEvent(digihot_customevents.ERROR_URL, {
+    url: url,
+  })
+}
+
+export function logUmamiActionEvent(action: string) {
+  logUmamiCustomEvent(umami_customevents.ACTION, {
+    action: action,
+  })
+}
+
 export function logUmamiNavigationSearchEvent(
   component: string,
   destination: string,
@@ -99,68 +153,4 @@ export function logUmamiNavigationSearchEvent(
     searchResultPlacement: searchResultPlacement,
   })
 }
-
-export function logUmamiActionEvent(action: string) {
-  logUmamiCustomEvent(umami_customevents.ACTION, {
-    action: action,
-  })
-}
-
-export function logUmamiFilterEvent(filter: Record<string, string | string[]>, component: string) {
-  logUmamiCustomEvent(umami_customevents.FILTRERING, {
-    filter: filter,
-    component: component,
-  })
-}
-
-export function logUmamiFilterChangeEvent(component: string) {
-  logUmamiCustomEvent(umami_customevents.FILTER_ENDRET, {
-    component: component,
-  })
-}
-
-export function logUmamiShowMoreResult() {
-  logUmamiCustomEvent(umami_customevents.VIS_FLERE_TREFF)
-}
-/*
-export function logUmamiLeverandorprodukterKlikket() {
-  logUmamiCustomEvent(digihot_customevents.LEVERANDORPRODUKTER_KLIKKET_V2)
-}
-
-export function logUmamiVariantSideVist() {
-  logUmamiCustomEvent(digihot_customevents.VARIANTSIDE_VIST)
-}*/
-
-/*
-### `knapp klikket` (kilde: [Aksel-taksonomi])
-
-En knapp, f.eks. en [Aksel \<Button/>](https://aksel.nav.no/komponenter/core/button), har blitt klikket på.
-
-                                         | Detalj         | Forklaring                                   |
-                                         |----------------|----------------------------------------------|
-| `tekst`        | Beskrivelse av hvilken knapp som ble klikket |
-| `knappType`    | Type knapp (submit/reset/button)             |
-| `knappVariant` | Variant av knappen (primær/sekundær/etc)     |
 */
-
-export function logUmamiClickButton(buttonName: string, buttonType: string, buttonVariant: string) {
-  logUmamiCustomEvent(umami_customevents.KLIKK, {
-    buttonName: buttonName,
-    buttonType: buttonType,
-    buttonVariant: buttonVariant,
-  })
-}
-
-/*export function logUmamiErrorOnUrl(url: string) {
-  logUmamiCustomEvent(digihot_customevents.ERROR_URL, {
-    url: url,
-  })
-}*/
-
-export function logUmamiVisit(url: string, pageTitle: string, pageType: string) {
-  logUmamiEvent(umami_customevents.BESØK, {
-    url: url,
-    pageTitle: pageTitle,
-    pageType: pageType,
-  })
-}
