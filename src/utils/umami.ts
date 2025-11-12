@@ -1,7 +1,8 @@
 'use client'
 
-export enum umami_customevents{
+export enum umami_customevents {
   BESØK = 'besøk',
+  ERROR_URL = 'feil ved url',
   KLIKK = 'knapp klikket',
   NAVIGERE = 'navigere',
   VIS_FLERE_TREFF = 'vis flere treff',
@@ -19,7 +20,7 @@ export const initUmami = (hostname: string) => {
         ? UMAMI_TRACKING_ID_PROD
         : '39d042d3-6a34-4c21-b409-3eca4699dc4a'
 
-  const UMAMI_DATA_DOMAIN = window.location.hostname === 'localhost' ? 'http://localhost:3000' :'https://umami.nav.no'
+  const UMAMI_DATA_DOMAIN = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://umami.nav.no'
   console.debug(
     `RUNTIME_ENVIRONMENT: ${process.env.RUNTIME_ENVIRONMENT},
     BUILD_ENV: ${process.env.BUILD_ENV},
@@ -56,7 +57,7 @@ export function logUmamiEvent(eventName: string, data?: object) {
   const umamiScript = document.querySelector('script[src="https://cdn.nav.no/team-researchops/sporing/sporing.js"]')
   setTimeout(() => {
     data = {
-/*      app: APP_NAME,
+      /*      app: APP_NAME,
       team: TEAM_NAME,*/
       ...data,
     }
@@ -84,19 +85,12 @@ export function logUmamiNavigationEvent(component: string, destination: string, 
   })
 }
 
-
-
-
 export function logUmamiFilterChangeEvent(component: string, filterType: string, filterValue: string) {
   logUmamiCustomEvent(umami_customevents.FILTER_ENDRET, {
     component: component,
     filterType: filterType,
     filterValue: filterValue,
   })
-}
-
-export function logUmamiShowMoreResult(component: string, extraInfo?: string) {
-  logUmamiCustomEvent(umami_customevents.VIS_FLERE_TREFF)
 }
 
 
@@ -108,8 +102,6 @@ export function logUmamiClickButton(buttonName: string, buttonType: string, butt
   })
 }
 
-
-
 export function logUmamiVisit(url: string, pageTitle: string, pageType: string) {
   logUmamiEvent(umami_customevents.BESØK, {
     url: url,
@@ -118,8 +110,19 @@ export function logUmamiVisit(url: string, pageTitle: string, pageType: string) 
   })
 }
 
+export function logUmamiErrorOnUrl(url: string) {
+  logUmamiCustomEvent(umami_customevents.ERROR_URL, {
+    url: url,
+  })
+}
+
+
 
 /*
+export function logUmamiShowMoreResult(component: string, extraInfo?: string) {
+  logUmamiCustomEvent(umami_customevents.VIS_FLERE_TREFF)
+}
+
 export function logUmamiFilterEvent(filter: Record<string, string | string[]>, component: string) {
   logUmamiCustomEvent(umami_customevents.FILTRERING, {
     filter: filter,
@@ -127,12 +130,6 @@ export function logUmamiFilterEvent(filter: Record<string, string | string[]>, c
   })
 }
 
-
-export function logUmamiErrorOnUrl(url: string) {
-  logUmamiCustomEvent(digihot_customevents.ERROR_URL, {
-    url: url,
-  })
-}
 
 export function logUmamiActionEvent(action: string) {
   logUmamiCustomEvent(umami_customevents.ACTION, {

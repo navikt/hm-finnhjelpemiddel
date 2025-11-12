@@ -12,7 +12,7 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
-import { logUmamiClickButton, logUmamiFilterChangeEvent, logUmamiShowMoreResult } from '@/utils/umami'
+import { logUmamiClickButton, logUmamiFilterChangeEvent } from '@/utils/umami'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -143,7 +143,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + WORKS_WITH_CONFIG.productsPerPage)
-    logUmamiClickButton( 'Vis-flere-produkter', 'product-worksWith-loadMore', 'secondary' )
+    logUmamiClickButton( 'vis-flere-produkter', 'product-worksWith-loadMore', 'secondary' )
   }
 
   const handleComponentTypeToggle = (type: string) => {

@@ -96,14 +96,14 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           enableOptionalCookies={() => {
             setCookie('finnhjelpemiddel-consent', 'true')
             setConsent('true')
-            logUmamiClickButton('Godkjenn alle', 'cookieBanner', "primary")
+            logUmamiClickButton('godkjenn-alle', 'cookieBanner', "primary")
             console.debug('User accepted optional cookies.')
           }}
           disableOptionalCookies={() => {
             setCookie('finnhjelpemiddel-consent', 'false')
             setConsent('false')
 
-            logUmamiClickButton('Bare nødvendige', 'cookieBanner', "primary")
+            logUmamiClickButton('bare-nodvendige', 'cookieBanner', "primary")
             console.debug('User declined optional cookies.')
           }}
         />
