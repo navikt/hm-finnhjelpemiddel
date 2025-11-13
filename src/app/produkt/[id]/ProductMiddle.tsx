@@ -12,6 +12,7 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import { logUmamiClickButton, logUmamiFilterChangeEvent } from '@/utils/umami'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -22,6 +23,7 @@ const WORKS_WITH_CONFIG = {
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const [workWithProducts, setWorkWithProducts] = useState<Product[]>([])
+  const [open, setOpen] = useState<boolean>(false)
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
 
   useEffect(() => {
@@ -55,7 +57,9 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
 
         {worksWithShowConstrain && (
           <Accordion size={'small'}>
-            <Accordion.Item defaultOpen className={styles.accordionLast}>
+            <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={
+              () => setOpen(!open)
+            }>
               <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
               <Accordion.Content>
                 <WorksWithSection products={workWithProducts} />
@@ -139,10 +143,12 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + WORKS_WITH_CONFIG.productsPerPage)
+    logUmamiClickButton( 'vis-flere-produkter', 'product-worksWith-loadMore', 'secondary' )
   }
 
   const handleComponentTypeToggle = (type: string) => {
     setSelectedComponentTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]))
+    logUmamiFilterChangeEvent( 'product-worksWith-filter', 'chips-componentType', type )
   }
 
   return (
