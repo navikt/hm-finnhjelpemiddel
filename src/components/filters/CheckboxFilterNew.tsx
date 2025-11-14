@@ -25,26 +25,7 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const selectedFilters = options.filter((f) => searchParams.getAll(name.key).includes(f))
-
-  const change = (value: string) => {
-    onChange(name.key, value)
-  }
-
-  const reset = () => {
-    onChange(name.key, '')
-  }
-
   const filterLabel = selectedFilters.length > 0 ? name.label + `(${selectedFilters.length})` : name.label
-
-  const filterCheckbox = (option: string) => (
-    <ActionMenu.CheckboxItem
-      key={`${name.key}-${option}}`}
-      checked={selectedFilters.some((f) => f === option)}
-      onCheckedChange={() => change(option)}
-    >
-      {option}
-    </ActionMenu.CheckboxItem>
-  )
 
   return (
     <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>
@@ -61,11 +42,19 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
         {selectedFilters.length > 0 && (
-          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={reset}>
+          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={() => onChange(name.key, '')}>
             Fjern filter
           </ActionMenu.Item>
         )}
-        {options.map((f) => filterCheckbox(f))}
+        {options.map((option) => (
+          <ActionMenu.CheckboxItem
+            key={`${name.key}-${option}}`}
+            checked={selectedFilters.some((f) => f === option)}
+            onCheckedChange={() => onChange(name.key, option)}
+          >
+            {option}
+          </ActionMenu.CheckboxItem>
+        ))}
       </ActionMenu.Content>
     </ActionMenu>
   )
