@@ -1,9 +1,6 @@
 import { Button, Chips, Heading, HStack, VStack } from '@navikt/ds-react'
-import {
-  FilterMenu,
-  KategoriCheckboxFilter,
-} from '@/app/kategori/bevegelse/manuelle-rullestoler/KategoriCheckboxFilter'
-import { FilterToggle, KategoriToggleFilter } from '@/app/kategori/bevegelse/manuelle-rullestoler/KategoriToggleFilter'
+import { FilterMenu, KategoriCheckboxFilter } from '@/app/kategori/[iso]/KategoriCheckboxFilter'
+import { FilterToggle, KategoriToggleFilter } from '@/app/kategori/[iso]/KategoriToggleFilter'
 import { IsoInfo, SupplierInfo } from '@/utils/kategori-inngang-util'
 import { CircleSlashIcon } from '@navikt/aksel-icons'
 

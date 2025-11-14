@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { ProductCardKategori } from '@/app/kategori/bevegelse/manuelle-rullestoler/ProductCardKategori'
+import { ProductCardKategori } from '@/app/kategori/[iso]/ProductCardKategori'
 
 export const KategoriResults = ({
   products,

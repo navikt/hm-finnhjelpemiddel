@@ -6,8 +6,8 @@ import useSWRInfinite from 'swr/infinite'
 import { Alert, Bleed, BodyLong, Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from './KategoriResults'
-import { SortKategoriResults } from '@/app/kategori/bevegelse/manuelle-rullestoler/SortKategoriResults'
-import { FilterBarKategori, Filters } from '@/app/kategori/bevegelse/manuelle-rullestoler/FilterBarKategori'
+import { SortKategoriResults } from '@/app/kategori/[iso]/SortKategoriResults'
+import { FilterBarKategori, Filters } from '@/app/kategori/[iso]/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
 import { Product } from '@/utils/product-util'
 import {
@@ -19,7 +19,7 @@ import {
 } from '@/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
 
-export default function Page() {
+export const KategoriPage = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -27,7 +27,7 @@ export default function Page() {
 
   const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
     const sortOrderStr = searchParams.get('sortering') || ''
-    const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Best_soketreff'
+    const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Rangering'
 
     const isoCode = searchParams.get('isoCode') ?? ''
 

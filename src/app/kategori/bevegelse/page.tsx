@@ -5,7 +5,7 @@ import { WheelchairIcon } from '@navikt/aksel-icons'
 export default async function Page() {
   const icon1 = <WheelchairIcon fontSize={'5rem'} />
   const title1 = 'Manuelle rullestoler'
-  const link1 = '/manuelle-rullestoler'
+  const link1 = '1222'
   const description1 =
     'Rullestoler som manøvreres ved at den som sitter i stolen, bruker begge hender på dekkene eller på hjulenes drivringer. Omfatter f.eks. framhjulsdrevne og bakhjulsdrevne rullestoler.'
 
