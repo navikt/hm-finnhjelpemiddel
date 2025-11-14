@@ -324,13 +324,13 @@ const removeReservedChars = (searchTerm: String) => {
   return searchTerm.replaceAll(unescapables, '').replaceAll(queryStringReserved, '\\$&')
 }
 
-const sortOptionsOpenSearch = {
+export const sortOptionsOpenSearch = {
   Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
   Best_soketreff: [{ _score: { order: 'desc' } }],
   Rangering: [{ 'agreements.rank': 'asc' }],
 }
 
-type QueryObject = {
+export type QueryObject = {
   from: number
   size: number
   track_scores: boolean

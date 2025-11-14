@@ -1,19 +1,12 @@
-import { filterPrefixIsoKode, filterLeverandor, filterMainProductsOnly } from '@/utils/filter-util'
+import { filterLeverandor, filterMainProductsOnly, filterPrefixIsoKode } from '@/utils/filter-util'
 import { SortOrder } from '@/utils/search-state-util'
-import { mapProductFromSeriesId, mapProductsFromCollapse, Product } from '@/utils/product-util'
+import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
+import { QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
-// ISO categories that must always be excluded / filtered out (e.g. from autocomplete) and optionally from general search
-export const EXCLUDED_ISO_CATEGORIES = ['09540601', '09540901', '09540301']
 export const PAGE_SIZE = 24
-
-const sortOptionsOpenSearch = {
-  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
-  Best_soketreff: [{ _score: { order: 'desc' } }],
-  Rangering: [{ 'agreements.rank': 'asc' }],
-}
 
 const makeSearchTermQueryKategori = ({ seriesId }: { seriesId?: string }) => {
   const commonBoosting = {
@@ -91,25 +84,7 @@ const makeSearchTermQueryKategori = ({ seriesId }: { seriesId?: string }) => {
 
   return {
     must: mustAlternatives(),
-    ...{
-      must_not: {
-        bool: {
-          should: EXCLUDED_ISO_CATEGORIES.map((isoCategory) => ({ match: { isoCategory } })),
-        },
-      },
-    },
   }
-}
-
-type QueryObjectKategori = {
-  from: number
-  size: number
-  track_scores: boolean
-  sort: any[]
-  query: {}
-  collapse?: {}
-  aggs: {}
-  post_filter: {}
 }
 
 export type IsoInfo = {
@@ -150,7 +125,6 @@ export const fetchProductsKategori = async ({
   from,
   size,
   searchData,
-  dontCollapse = false,
   seriesId,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const { isoCode, sortOrder, filters } = searchData
@@ -222,7 +196,7 @@ export const fetchProductsKategori = async ({
     ),
   }
 
-  const body: QueryObjectKategori = {
+  const body: QueryObject = {
     from,
     size,
     track_scores: true,
@@ -234,12 +208,9 @@ export const fetchProductsKategori = async ({
         filter: postFilters,
       },
     },
-  }
-
-  if (!dontCollapse) {
-    body.collapse = {
+    collapse: {
       field: 'seriesId',
-    }
+    },
   }
 
   return await fetch(HM_SEARCH_URL + '/products/_search', {
@@ -252,11 +223,7 @@ export const fetchProductsKategori = async ({
     .then((res) => res.json())
     .then((data) => {
       return {
-        products: dontCollapse
-          ? data.hits.hits.length > 0
-            ? new Array(mapProductFromSeriesId(data))
-            : []
-          : mapProductsFromCollapse(data),
+        products: mapProductsFromCollapse(data),
         iso: mapIsoAggregations(data),
         suppliers: mapSupplierAggregations(data),
       }
