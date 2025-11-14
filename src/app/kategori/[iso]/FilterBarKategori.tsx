@@ -33,11 +33,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
       </div>
       <HStack gap="4">
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
-        <Chips>
-          {filters.isos.map((filter) => (
-            <KategoriToggleFilter key={filter.key} searchParamKey={'iso'} filter={filter} onChange={onChange} />
-          ))}
-        </Chips>
+        <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
       </HStack>
     </VStack>
   )

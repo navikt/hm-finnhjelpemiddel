@@ -9,25 +9,25 @@ export type FilterToggle = {
 
 type Props = {
   searchParamKey: string
-  filter: FilterToggle
+  filter: FilterToggle[]
   onChange: (key: string, value: string) => void
 }
 
 export const KategoriToggleFilter = ({ searchParamKey, filter, onChange }: Props) => {
   const searchParams = useSearchParams()
 
-  const change = (value: string) => {
-    onChange(searchParamKey, value)
-  }
-
   return (
-    <Chips.Toggle
-      selected={searchParams.has(searchParamKey, filter.key)}
-      checkmark={false}
-      key={filter.key}
-      onClick={() => change(filter.key)}
-    >
-      {filter.label}
-    </Chips.Toggle>
+    <Chips>
+      {filter.map((option) => (
+        <Chips.Toggle
+          selected={searchParams.has(searchParamKey, option.key)}
+          checkmark={false}
+          key={option.key}
+          onClick={() => onChange(searchParamKey, option.key)}
+        >
+          {option.label}
+        </Chips.Toggle>
+      ))}
+    </Chips>
   )
 }
