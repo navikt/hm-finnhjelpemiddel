@@ -2,90 +2,11 @@ import { filterLeverandor, filterMainProductsOnly, filterPrefixIsoKode } from '@
 import { SortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
-import { QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
+import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 export const PAGE_SIZE = 24
-
-const makeSearchTermQueryKategori = ({ seriesId }: { seriesId?: string }) => {
-  const commonBoosting = {
-    negative: {
-      bool: {
-        must: {
-          bool: {},
-        },
-      },
-    },
-    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 1,
-  }
-
-  const negativeBoostInactiveProducts = {
-    negative: {
-      match: {
-        status: 'INACTIVE',
-      },
-    },
-    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.4,
-  }
-
-  const negativeBoostNonAgreementProducts = {
-    negative: {
-      match: {
-        hasAgreement: false,
-      },
-    },
-    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
-    negative_boost: 0.1,
-  }
-
-  const bool = {
-    should: [
-      {
-        boosting: {
-          positive: {
-            multi_match: {
-              query: '',
-              type: 'cross_fields',
-              fields: [
-                'isoCategoryTitle^2',
-                'isoCategoryText^0.5',
-                'title^0.5',
-                'attributes.text^0.1',
-                'keywords_bag^0.1',
-              ],
-              operator: 'and',
-              zero_terms_query: 'all',
-            },
-          },
-          ...commonBoosting,
-          ...negativeBoostInactiveProducts,
-          ...negativeBoostNonAgreementProducts,
-        },
-      },
-    ],
-  }
-
-  const termSeriesId = {
-    seriesId: seriesId,
-  }
-
-  const mustAlternatives = () => {
-    let must: any[] = [{ bool: bool }]
-
-    if (seriesId !== undefined) {
-      must = must.concat([{ term: termSeriesId }])
-    }
-
-    return must
-  }
-
-  return {
-    must: mustAlternatives(),
-  }
-}
 
 export type IsoInfo = {
   code: string
@@ -118,18 +39,12 @@ type FetchProps = {
   size: number
   searchData: SearchDataKategori
   dontCollapse?: boolean
-  seriesId?: string
 }
 
-export const fetchProductsKategori = async ({
-  from,
-  size,
-  searchData,
-  seriesId,
-}: FetchProps): Promise<ProductsWithIsoAggs> => {
+export const fetchProductsKategori = async ({ from, size, searchData }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const { isoCode, sortOrder, filters } = searchData
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
-  const searchTermQuery = makeSearchTermQueryKategori({ seriesId })
+  const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
   const visTilbDeler = false
 
   const queryFilters: Array<any> = []

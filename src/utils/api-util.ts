@@ -179,7 +179,7 @@ export type FetchProductsWithFilters = {
   filters: FilterData
 }
 
-const makeSearchTermQuery = ({
+export const makeSearchTermQuery = ({
   searchTerm,
   agreementId,
   seriesId,
