@@ -18,7 +18,9 @@ export const CategoryCard = ({ icon, title, link, description }: Props) => {
       </VStack>
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
-          <NextLink href={link}>{title}</NextLink>
+          <NextLink href={link} scroll={false}>
+            {title}
+          </NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
       <LinkCard.Description>{description}</LinkCard.Description>
