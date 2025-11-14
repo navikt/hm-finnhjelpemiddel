@@ -111,51 +111,6 @@ export interface ProductSourceResponse {
   hasAgreement: boolean
 }
 
-export interface WarehouseStockResponse {
-  location: string
-  available: number
-  reserved: number
-  needNotified: number
-  minmax: boolean
-  updated: string
-}
-
-export interface AlternativeProductSourceResponse {
-  id: string
-  supplier: {
-    id: string
-    identifier: string
-    name: string
-  }
-  title: string
-  articleName: string
-  attributes: AttributeResponse
-  status: 'INACTIVE' | 'ACTIVE'
-  hmsArtNr: string | null
-  identifier: string
-  supplierRef: string
-  isoCategory: string
-  isoCategoryTitle: string
-  isoCategoryText: string
-  isoCategoryTitleInternational: string
-  accessory: boolean
-  sparePart: boolean
-  seriesId: string
-  data: Array<TechDataResponse>
-  main: boolean
-  media: MediaResponse[]
-  created: string
-  updated: string
-  expired: string
-  createdBy: string
-  updatedBy: string
-  filters: { [key: string]: string }
-  agreements: AgreementInfoResponse[]
-  hasAgreement: boolean
-  alternativeFor: string[]
-  wareHouseStock: WarehouseStockResponse[]
-}
-
 interface AttributeResponse {
   manufacturer?: string
   articlename?: string
@@ -180,7 +135,6 @@ export interface WorksWithResponse {
   seriesIds: string[]
   productIds: string[]
 }
-
 
 export interface TechDataResponse {
   key: string
