@@ -7,5 +7,5 @@ type Props = {
 export default async function Page(props: Props) {
   const params = await props.params
 
-  return <KategoriPage />
+  return <KategoriPage iso={params.iso} />
 }

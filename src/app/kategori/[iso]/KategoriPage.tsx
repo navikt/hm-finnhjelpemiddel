@@ -19,7 +19,11 @@ import {
 } from '@/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
 
-export const KategoriPage = () => {
+type Props = {
+  iso: string
+}
+
+export const KategoriPage = ({ iso }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -44,8 +48,7 @@ export const KategoriPage = () => {
   }
   const searchData = mapSearchParamsKategori(searchParams)
 
-  const isokode = '1222' // Manuelle rullestoler
-  searchData.isoCode = isokode
+  searchData.isoCode = iso
 
   const {
     data: productsData,
