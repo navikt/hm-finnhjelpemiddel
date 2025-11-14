@@ -1,6 +1,9 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react'
-import { CheckboxFilterNew } from '@/components/filters/CheckboxFilterNew'
-import { AgreementFilters } from '@/app/rammeavtale/hjelpemidler/[agreementId]/AgreementPage'
+import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
+
+export type AgreementFilters = {
+  [key in 'leverandor' | 'delkontrakt']: string[]
+}
 
 type Props = {
   filters: AgreementFilters
@@ -8,16 +11,21 @@ type Props = {
 }
 
 const FilterForm = ({ filters, onChange }: Props) => {
+  const postFilters: FilterMenu = {
+    name: { key: 'delkontrakt', label: 'Delkontrakt' },
+    options: filters.delkontrakt,
+  }
+  const supplierFilters: FilterMenu = {
+    name: { key: 'leverandor', label: 'Leverandør' },
+    options: filters.leverandor,
+  }
+
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
       <HStack gap="4">
-        {filters.delkontrakt.length > 0 && (
-          <CheckboxFilterNew filterKey={'delkontrakt'} allFilters={filters.delkontrakt} onChange={onChange} />
-        )}
-        {filters.leverandor.length > 0 && (
-          <CheckboxFilterNew filterKey={'leverandor'} allFilters={filters.leverandor} onChange={onChange} />
-        )}
+        <CheckboxFilterNew filterMenu={postFilters} onChange={onChange} />
+        <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
       </HStack>
     </VStack>
   )

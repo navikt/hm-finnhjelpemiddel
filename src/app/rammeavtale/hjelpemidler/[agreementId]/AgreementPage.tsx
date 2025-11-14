@@ -12,22 +12,13 @@ import { dateToString } from '@/utils/string-util'
 import { ArrowRightIcon, CalendarIcon, DocPencilIcon, FilePdfIcon, LayersPlusIcon } from '@navikt/aksel-icons'
 import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
-import FilterForm from './FilterForm'
+import FilterForm, { AgreementFilters } from './FilterForm'
 import PostsList from './PostsList'
 import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
 import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 import useSWRImmutable from 'swr/immutable'
 import useQueryString from '@/utils/search-params-util'
-
-export type FilterOption = {
-  label: string
-  value: string
-}
-
-export type AgreementFilters = {
-  [key in 'leverandor' | 'delkontrakt']: FilterOption[]
-}
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const router = useRouter()
@@ -90,20 +81,16 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       .map((agreement) => agreement.postIdentifier)
   )
 
-  const postFilters: FilterOption[] = agreement.posts
+  const postFilters = agreement.posts
     .filter((post) => post.nr != 99 && post.title.length > 0)
     .filter(
       //Skjul tomme delkontrakter for rammeavtalene i listen splitAgreementsWithEmptyPosts
       (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || postsContainingProducts.has(post.identifier)
     )
     .sort((a, b) => a.nr - b.nr)
-    .map((post) => ({ label: post.title, value: post.title }))
+    .map((post) => post.title)
 
-  const leverandorFilter: FilterOption[] =
-    filtersFromData?.leverandor?.values?.map((value) => ({
-      label: value.key.toString(),
-      value: value.key.toString(),
-    })) || []
+  const leverandorFilter = filtersFromData?.leverandor?.values?.map((value) => value.key.toString()) ?? []
 
   const filters: AgreementFilters = {
     leverandor: leverandorFilter,

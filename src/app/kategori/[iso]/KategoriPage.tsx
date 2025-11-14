@@ -92,8 +92,8 @@ export const KategoriPage = ({ iso }: Props) => {
   }, [productsData, page, setPage, pathname, router, searchParams])
 
   const products = productsData?.map((d) => d.products).flat()
-  const isos = productsData?.at(-1)?.iso ?? []
-  const suppliers = productsData?.at(-1)?.suppliers ?? []
+  const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
+  const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
 
   const filters: Filters = { isos: isos, suppliers: suppliers }
 

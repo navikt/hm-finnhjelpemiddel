@@ -1,51 +1,48 @@
-import { mapSearchParams } from '@/utils/mapSearchParams'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
-import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
-import styles from './CheckboxFilterNew.module.scss'
-import './checkbox-overrides.scss'
 import React, { useState } from 'react'
-import { FilterOption } from '@/app/rammeavtale/hjelpemidler/[agreementId]/AgreementPage'
+import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
+import styles from '@/components/filters/CheckboxFilterNew.module.scss'
 
-const checkboxFilterCategoriesLabels = {
-  leverandor: 'Leverandør',
-  delkontrakt: 'Delkontrakt',
+export type FilterMenuLabel = {
+  key: string
+  label: string
 }
 
-type CheckboxFilterInputProps = {
-  filterKey: keyof typeof checkboxFilterCategoriesLabels
-  allFilters: FilterOption[]
+export type FilterMenu = {
+  name: FilterMenuLabel
+  options: string[]
+}
+
+type Props = {
+  filterMenu: FilterMenu
   onChange: (key: string, value: string) => void
 }
 
-export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxFilterInputProps) => {
+export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
   const searchParams = useSearchParams()
-  const searchData = mapSearchParams(searchParams)
-
-  const selectedFilters = allFilters.filter((f) => searchData.filters[filterKey].includes(f.value))
-
+  const { options, name } = filterMenu
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const selectedFilters = options.filter((f) => searchParams.getAll(name.key).includes(f))
+
   const change = (value: string) => {
-    onChange(filterKey, value)
+    onChange(name.key, value)
   }
 
   const reset = () => {
-    onChange(filterKey, '')
+    onChange(name.key, '')
   }
 
-  const filterLabel =
-    selectedFilters.length > 0
-      ? checkboxFilterCategoriesLabels[filterKey] + `(${selectedFilters.length})`
-      : checkboxFilterCategoriesLabels[filterKey]
+  const filterLabel = selectedFilters.length > 0 ? name.label + `(${selectedFilters.length})` : name.label
 
-  const filterCheckbox = (option: FilterOption) => (
+  const filterCheckbox = (option: string) => (
     <ActionMenu.CheckboxItem
-      key={`${filterKey}-${option.label}}`}
+      key={`${name.key}-${option}}`}
       checked={selectedFilters.some((f) => f === option)}
-      onCheckedChange={() => change(option.value)}
+      onCheckedChange={() => change(option)}
     >
-      {option.label}
+      {option}
     </ActionMenu.CheckboxItem>
   )
 
@@ -68,7 +65,7 @@ export const CheckboxFilterNew = ({ filterKey, allFilters, onChange }: CheckboxF
             Fjern filter
           </ActionMenu.Item>
         )}
-        {allFilters.map((f) => filterCheckbox(f))}
+        {options.map((f) => filterCheckbox(f))}
       </ActionMenu.Content>
     </ActionMenu>
   )

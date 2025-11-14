@@ -1,12 +1,14 @@
 import { Button, Chips, Heading, HStack, VStack } from '@navikt/ds-react'
-import { FilterMenu, KategoriCheckboxFilter } from '@/app/kategori/[iso]/KategoriCheckboxFilter'
-import { FilterToggle, KategoriToggleFilter } from '@/app/kategori/[iso]/KategoriToggleFilter'
-import { IsoInfo, SupplierInfo } from '@/utils/kategori-inngang-util'
+import { KategoriToggleFilter } from '@/app/kategori/[iso]/KategoriToggleFilter'
 import { CircleSlashIcon } from '@navikt/aksel-icons'
+import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 
 export type Filters = {
-  ['suppliers']: SupplierInfo[]
-  ['isos']: IsoInfo[]
+  ['suppliers']: string[]
+  ['isos']: {
+    key: string
+    label: string
+  }[]
 }
 
 type Props = {
@@ -16,11 +18,9 @@ type Props = {
 }
 
 export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
-  const isoFilters: FilterToggle[] = filters.isos ? filters.isos.map((iso) => ({ key: iso.code, label: iso.name })) : []
-
   const supplierFilters: FilterMenu = {
-    key: { key: 'supplier', label: 'Leverandører' },
-    options: filters.suppliers ? filters.suppliers.map((supplier) => supplier.name) : [],
+    name: { key: 'supplier', label: 'Leverandører' },
+    options: filters.suppliers,
   }
 
   return (
@@ -32,13 +32,9 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
         </Button>
       </div>
       <HStack gap="4">
-        <KategoriCheckboxFilter
-          filterKey={supplierFilters.key}
-          allFilters={supplierFilters.options}
-          onChange={onChange}
-        />
+        <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
         <Chips>
-          {isoFilters.map((filter) => (
+          {filters.isos.map((filter) => (
             <KategoriToggleFilter key={filter.key} searchParamKey={'iso'} filter={filter} onChange={onChange} />
           ))}
         </Chips>
