@@ -19,8 +19,11 @@ import NextLink from 'next/link'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
 import useSWRImmutable from 'swr/immutable'
 import useQueryString from '@/utils/search-params-util'
+import { PostsListKomponenttypeGroups } from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListKomponenttypeGroups'
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
+  const { isEnabled, isLoading } = useFeatureFlags()
+
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -33,6 +36,8 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     'b9a48c54-3004-4f94-ab65-b38deec78ed3',
     '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
   ]
+
+  const avtalerMedKomponenttypeGruppering = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78']
 
   //Rammeavtaler som er splittet i to og har mange tomme delkontrakter
   const splitAgreementsWithEmptyPosts = [
@@ -153,7 +158,15 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
             <span className={styles.divider} />
           </Hide>
 
-          {avtalerMedIsoGruppering.includes(agreement.id) ? (
+          {isEnabled('finnhjelpemiddel.avtale-side.komponenttype-gruppering') ? (
+            avtalerMedIsoGruppering.includes(agreement.id) ? (
+              <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} />
+            ) : avtalerMedKomponenttypeGruppering.includes(agreement.id) ? (
+              <PostsListKomponenttypeGroups posts={posts} postLoading={postsIsLoading} />
+            ) : (
+              <PostsList posts={posts} postLoading={postsIsLoading} />
+            )
+          ) : avtalerMedIsoGruppering.includes(agreement.id) ? (
             <PostsListIsoGroups posts={posts} postLoading={postsIsLoading} />
           ) : (
             <PostsList posts={posts} postLoading={postsIsLoading} />

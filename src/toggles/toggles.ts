@@ -33,4 +33,8 @@ export const LOCAL_TOGGLES = [
     name: 'finnhjelpemiddel.vis-virker-sammen-med-products',
     enabled: true,
   },
+  {
+    name: 'finnhjelpemiddel.avtale-side.komponenttype-gruppering',
+    enabled: true,
+  }
 ]
