@@ -4,7 +4,7 @@ import { LinkCard, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
 type Props = {
-  icon: React.ReactNode
+  icon: React.ReactNode | undefined
   title: string
   link: string
   description: string
@@ -13,9 +13,11 @@ type Props = {
 export const CategoryCard = ({ icon, title, link, description }: Props) => {
   return (
     <LinkCard arrow={false}>
-      <VStack justify="center" height="100%" asChild>
-        <LinkCard.Icon>{icon}</LinkCard.Icon>
-      </VStack>
+      {icon && (
+        <VStack justify="center" height="100%" asChild>
+          <LinkCard.Icon>{icon}</LinkCard.Icon>
+        </VStack>
+      )}
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
           <NextLink href={link} scroll={false}>

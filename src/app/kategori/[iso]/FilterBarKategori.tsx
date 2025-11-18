@@ -1,4 +1,4 @@
-import { Button, Chips, Heading, HStack, VStack } from '@navikt/ds-react'
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { KategoriToggleFilter } from '@/app/kategori/[iso]/KategoriToggleFilter'
 import { CircleSlashIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
@@ -33,7 +33,9 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
       </div>
       <HStack gap="4">
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
-        <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
+        {filters.isos.length > 1 && (
+          <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
+        )}
       </HStack>
     </VStack>
   )

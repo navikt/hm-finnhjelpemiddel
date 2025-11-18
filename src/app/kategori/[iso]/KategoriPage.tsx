@@ -19,6 +19,7 @@ import {
 } from '@/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
 import { IsoTree } from '@/utils/iso-util'
+import { CategoryCard } from '@/app/kategori/bevegelse/CategoryCard'
 
 type Props = {
   iso: string
@@ -106,6 +107,14 @@ export const KategoriPage = ({ iso, isoTree }: Props) => {
 
   const onReset = () => router.replace(pathname)
 
+  const currentIso = isoTree[iso]!
+  const deeperIsos = Object.values(isoTree).filter(
+    (iso) => iso.isoCode.startsWith(currentIso.isoCode) && iso.isoLevel === currentIso.isoLevel + 1
+  )
+  const deeperIsosWithProducts = deeperIsos.filter((iso) =>
+    isos.find((productIso) => productIso.key.startsWith(iso.isoCode))
+  )
+
   return (
     <VStack
       gap={'14'}
@@ -117,12 +126,9 @@ export const KategoriPage = ({ iso, isoTree }: Props) => {
     >
       <VStack gap="4">
         <Heading level="1" size="large">
-          Manuelle rullestoler
+          {currentIso.isoTitle}
         </Heading>
-        <BodyLong style={{ maxWidth: '735px' }}>
-          Hjelpemidler som gir mobilitet og sittende støtte for personer med begrenset bevegelighet, der brukeren selv
-          eller en ledsager kjører rullestolen manuelt.
-        </BodyLong>
+        <BodyLong style={{ maxWidth: '735px' }}>{currentIso.isoText}</BodyLong>
       </VStack>
 
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
@@ -135,6 +141,19 @@ export const KategoriPage = ({ iso, isoTree }: Props) => {
         ) : (
           <>
             <CompareMenu />
+            {currentIso.isoLevel < 4 && deeperIsosWithProducts.length > 1 && (
+              <HGrid gap={'2'} columns={'repeat(5, 200px)'} paddingBlock={'8 0'}>
+                {deeperIsosWithProducts.map((nextIsoLevel) => (
+                  <CategoryCard
+                    icon={undefined}
+                    title={nextIsoLevel.isoTitle}
+                    link={nextIsoLevel.isoCode}
+                    description={''}
+                    key={nextIsoLevel.isoCode}
+                  />
+                ))}
+              </HGrid>
+            )}
             <HGrid paddingBlock={{ xs: '6 0', md: '12 0' }} columns={'374px 4'} gap={'4'}>
               <VStack gap={'4'}>
                 <Heading level="2" size="medium">
