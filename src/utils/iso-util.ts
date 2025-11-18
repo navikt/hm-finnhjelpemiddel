@@ -1,10 +1,7 @@
 import { IsoResponse } from '@/utils/response-types'
 
-// client stuff???
-const HM_GRUNNDATA_DB = process.env.HM_GRUNNDATA_DB || ''
-
 export const fetchIsoTree = async (): Promise<IsoTree> => {
-  return await fetch(`${HM_GRUNNDATA_DB}/api/v1/isocategories`, {
+  return await fetch(process.env.HM_GRUNNDATA_DB + '/api/v1/isocategories', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
