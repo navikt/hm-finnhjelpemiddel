@@ -141,7 +141,7 @@ export const KategoriPage = ({ iso, isoTree }: Props) => {
         ) : (
           <>
             <CompareMenu />
-            {currentIso.isoLevel < 4 && deeperIsosWithProducts.length > 1 && (
+            {currentIso.isoLevel < 4 && (
               <HGrid gap={'2'} columns={'repeat(5, 200px)'} paddingBlock={'8 0'}>
                 {deeperIsosWithProducts.map((nextIsoLevel) => (
                   <CategoryCard
