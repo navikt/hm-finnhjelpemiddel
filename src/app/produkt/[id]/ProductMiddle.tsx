@@ -13,6 +13,7 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { logUmamiClickButton, logUmamiFilterChangeEvent } from '@/utils/umami'
+import { ChevronDownIcon } from '@navikt/aksel-icons'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -166,8 +167,14 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
       {filteredProducts.length === 0 && <p>Ingen produkter matcher valgt filter.</p>}
 
       {hasMoreProducts && (
-        <Button className={styles.buttonLoadMore} variant="secondary" size="medium" onClick={handleLoadMore}>
-          Vis flere produkter ({filteredProducts.length - displayCount} gjenstående)
+        <Button variant="tertiary" size="medium"
+                icon={<ChevronDownIcon />}
+                iconPosition={'right'}
+                onClick={handleLoadMore}
+                className={styles.buttonLoadMore}
+        >
+
+          Vis flere
         </Button>
       )}
     </VStack>
