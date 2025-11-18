@@ -1,12 +1,12 @@
 @use "@navikt/ds-tokens/dist/tokens" as *;
 
 .middleContainer {
-  
+
   grid-template-areas: 
     "box1 box2"
     "box3 box2"
     "box3 .";
-  
+
   @media (max-width: $a-breakpoint-md) {
     grid-template-areas: 
     "box1"
@@ -26,7 +26,7 @@
   background: #F5F9FF;
   height: fit-content;
   border-radius: $a-border-radius-large;
-  border: 1px solid $a-bg-subtle; 
+  border: 1px solid $a-bg-subtle;
 }
 
 .button {
@@ -36,9 +36,7 @@
 
 .buttonLoadMore {
   @extend .button;
-  border-radius: 1px;
   align-self: center;
-  box-shadow: inset 0 0 0 1px
 }
 
 .accordion {

@@ -245,21 +245,3 @@ export interface NewsResponse {
   updatedBy: string
   author: string
 }
-
-export interface IsoResponse {
-  isoCode: string
-  isoTitle: string
-  isoText: string
-  isoTextShort: string
-  isoTranslations: {
-    titleEn: string
-    textEn: string
-  }
-  isoLevel: number
-  isActive: boolean
-  showTech: boolean
-  allowMulti: boolean
-  created: Date
-  updated: Date
-  searchWords: string[]
-}

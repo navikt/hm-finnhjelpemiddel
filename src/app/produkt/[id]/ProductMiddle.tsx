@@ -13,12 +13,13 @@ import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { logUmamiClickButton, logUmamiFilterChangeEvent } from '@/utils/umami'
+import { ChevronDownIcon } from '@navikt/aksel-icons'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
   agreementIds: new Set(['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78', '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96']),
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
-  productsPerPage: 5
+  productsPerPage: 5,
 }
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
@@ -57,9 +58,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
 
         {worksWithShowConstrain && (
           <Accordion size={'small'}>
-            <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={
-              () => setOpen(!open)
-            }>
+            <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={() => setOpen(!open)}>
               <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
               <Accordion.Content>
                 <WorksWithSection products={workWithProducts} />
@@ -143,12 +142,12 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + WORKS_WITH_CONFIG.productsPerPage)
-    logUmamiClickButton( 'vis-flere-produkter', 'product-worksWith-loadMore', 'secondary' )
+    logUmamiClickButton('vis-flere-produkter', 'product-worksWith-loadMore', 'secondary')
   }
 
   const handleComponentTypeToggle = (type: string) => {
     setSelectedComponentTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]))
-    logUmamiFilterChangeEvent( 'product-worksWith-filter', 'chips-componentType', type )
+    logUmamiFilterChangeEvent('product-worksWith-filter', 'chips-componentType', type)
   }
 
   return (
@@ -166,8 +165,15 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
       {filteredProducts.length === 0 && <p>Ingen produkter matcher valgt filter.</p>}
 
       {hasMoreProducts && (
-        <Button className={styles.buttonLoadMore} variant="secondary" size="medium" onClick={handleLoadMore}>
-          Vis flere produkter ({filteredProducts.length - displayCount} gjenstående)
+        <Button
+          variant="tertiary"
+          size="medium"
+          icon={<ChevronDownIcon />}
+          iconPosition={'right'}
+          onClick={handleLoadMore}
+          className={styles.buttonLoadMore}
+        >
+          Vis flere
         </Button>
       )}
     </VStack>
