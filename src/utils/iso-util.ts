@@ -9,8 +9,7 @@ export const fetchIsoTree = async (): Promise<IsoTree> => {
     headers: {
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 86400 }, // én dag
-    cache: 'force-cache',
+    cache: 'no-cache',
   })
     .then((res) => res.json())
     .then((data) => {

@@ -6,14 +6,9 @@ import { fetchIsoTree } from '@/utils/iso-util'
 export default async function Page() {
   const isos = await fetchIsoTree()
 
-  const level1 = Object.entries(isos).filter(([key, iso]) => iso.isoLevel === 1)
+  const level2 = Object.values(isos).filter((iso) => iso.isoCode.startsWith('12') && iso.isoLevel === 2)
 
   const icon1 = <WheelchairIcon fontSize={'5rem'} />
-  const title1 = 'Manuelle rullestoler'
-  const link1 = '1222'
-  const description1 =
-    'Rullestoler som manøvreres ved at den som sitter i stolen, bruker begge hender på dekkene eller på hjulenes drivringer. Omfatter f.eks. framhjulsdrevne og bakhjulsdrevne rullestoler.'
-
   return (
     <VStack
       gap={'14'}
@@ -35,10 +30,15 @@ export default async function Page() {
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <div>
           <HGrid gap={'2'} columns={'repeat(2, 600px)'}>
-            <CategoryCard icon={icon1} title={title1} link={link1} description={description1} />
-            <CategoryCard icon={icon1} title={title1} link={link1} description={description1} />
-            <CategoryCard icon={icon1} title={title1} link={link1} description={description1} />
-            <CategoryCard icon={icon1} title={title1} link={link1} description={description1} />
+            {level2.map((iso) => (
+              <CategoryCard
+                icon={icon1}
+                title={iso.isoTitle}
+                link={iso.isoCode}
+                description={iso.isoTextShort}
+                key={iso.isoCode}
+              />
+            ))}
           </HGrid>
         </div>
       </Bleed>
