@@ -18,12 +18,14 @@ import {
   SearchFiltersKategori,
 } from '@/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
+import { IsoTree } from '@/utils/iso-util'
 
 type Props = {
   iso: string
+  isoTree: IsoTree
 }
 
-export const KategoriPage = ({ iso }: Props) => {
+export const KategoriPage = ({ iso, isoTree }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
