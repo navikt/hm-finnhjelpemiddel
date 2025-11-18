@@ -45,3 +45,8 @@
   z-index: 2;
   border: 1px dashed #0056b4;
 }
+
+.textColumn {
+  min-width: 0;
+  flex: 1;
+}
