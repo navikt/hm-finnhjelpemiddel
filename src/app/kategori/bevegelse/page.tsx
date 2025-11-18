@@ -6,7 +6,10 @@ import { fetchIsoTree } from '@/utils/iso-util'
 export default async function Page() {
   const isos = await fetchIsoTree()
 
+  console.log(Object.keys(isos).length)
+
   const level1 = Object.entries(isos).filter(([key, iso]) => iso.isoLevel === 1)
+  console.log(level1)
 
   const icon1 = <WheelchairIcon fontSize={'5rem'} />
   const title1 = 'Manuelle rullestoler'
