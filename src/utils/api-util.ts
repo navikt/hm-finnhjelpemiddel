@@ -261,7 +261,7 @@ export const makeSearchTermQuery = ({
               functions: [
                 {
                   filter: { term: { main: true } },
-                  weight: 3,
+                  weight: 5,
                 },
               ],
               boost_mode: 'multiply',
