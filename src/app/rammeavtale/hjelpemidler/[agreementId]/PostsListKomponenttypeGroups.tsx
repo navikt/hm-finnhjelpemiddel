@@ -8,9 +8,9 @@ import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementI
 import { Product, ProductVariant } from '@/utils/product-util'
 
 export const PostsListKomponenttypeGroups = ({
-  posts,
-  postLoading,
-}: {
+                                               posts,
+                                               postLoading,
+                                             }: {
   posts: PostWithProducts[]
   postLoading: boolean
 }) => {
@@ -62,9 +62,15 @@ export const PostsListKomponenttypeGroups = ({
         {} as { [key: string]: PostWithProducts['products'] }
       )
 
+      // flag: does this post have any komponenttype other than "Uten komponenttype"?
+      const hasNonDefaultKomponenttype = Object.keys(productsByKomponenttype).some(
+        (k) => k !== 'Uten komponenttype'
+      )
+
       return {
         ...post,
         productsByKomponenttype,
+        hasNonDefaultKomponenttype,
       }
     })
   }
@@ -94,9 +100,12 @@ export const PostsListKomponenttypeGroups = ({
 
           {Object.entries(post.productsByKomponenttype ?? {}).map(([komponenttype, products]) => (
             <VStack key={komponenttype} gap="4">
-              <Heading level="3" size="small">
-                {komponenttype}
-              </Heading>
+              {post.hasNonDefaultKomponenttype && komponenttype !== 'Uten komponenttype' && (
+                <Heading level="3" size="small">
+                  {komponenttype}
+                </Heading>
+              )}
+
               <HStack gap="4">
                 {products.map((productWithRank) => (
                   <ProductCardAgreement
