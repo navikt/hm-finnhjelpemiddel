@@ -14,7 +14,6 @@
   //background: #fff;
   background: $ny-nav-orange-light;
   border-top: 8px solid $ny-nav-purple-dark;
-  border-radius: .5rem;
 }
 
 
@@ -84,8 +83,6 @@
 .articleBody :global(code) {
   background: #f5f5f5;
   padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-
 }
 
 .articleBody :global(pre code) {
@@ -114,7 +111,6 @@
   height: auto;
   color: #fff;
   padding: 0.5rem 0.75rem;
-  border-radius: 4px;
   margin-bottom: 1rem;
 }
 
