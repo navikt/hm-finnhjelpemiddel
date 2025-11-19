@@ -32,7 +32,7 @@ const visFilterLabels = [
   'På bestillingsordning',
   'På digital behovsmelding',
   'Skjul utgåtte hjelpemidler',
-  'Vis reservedeler og tilbehør',
+  'Skjul reservedeler og tilbehør',
 ]
 
 export type FilterFormState = typeof initialFiltersFormState
@@ -207,7 +207,7 @@ export const filterVis = (values: Array<string>) => {
     })
     .filter(Boolean)
 
-  if (!values.includes('Vis reservedeler og tilbehør')) {
+  if (values.includes('Skjul reservedeler og tilbehør')) {
     filters.push({
       term: { main: true },
     })

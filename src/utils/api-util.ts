@@ -212,6 +212,16 @@ export const makeSearchTermQuery = ({
     negative_boost: 0.4,
   }
 
+  const negativeBoostSparePartsAndAccessories = {
+    negative: {
+      match: {
+         main: false,
+      },
+    },
+    //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
+    negative_boost: 0.4,
+  }
+
   const negativeBoostNonAgreementProducts = {
     negative: {
       match: {
@@ -248,6 +258,7 @@ export const makeSearchTermQuery = ({
           },
           ...commonBoosting,
           ...negativeBoostInactiveProducts,
+          ...negativeBoostSparePartsAndAccessories,
           ...negativeBoostNonAgreementProducts,
         },
       },
@@ -261,6 +272,7 @@ export const makeSearchTermQuery = ({
           },
           ...commonBoosting,
           ...negativeBoostInactiveProducts,
+          ...negativeBoostSparePartsAndAccessories,
         },
       },
       {
@@ -273,6 +285,7 @@ export const makeSearchTermQuery = ({
           },
           ...commonBoosting,
           ...negativeBoostInactiveProducts,
+          ...negativeBoostSparePartsAndAccessories,
         },
       },
     ],
