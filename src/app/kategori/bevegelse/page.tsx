@@ -28,19 +28,17 @@ export default async function Page() {
       </VStack>
 
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        <div>
-          <HGrid gap={'2'} columns={'repeat(2, 600px)'}>
-            {level2.map((iso) => (
-              <CategoryCard
-                icon={icon1}
-                title={iso.isoTitle}
-                link={iso.isoCode}
-                description={iso.isoTextShort}
-                key={iso.isoCode}
-              />
-            ))}
-          </HGrid>
-        </div>
+        <HGrid gap={'2'} columns={'repeat(2, 600px)'} paddingBlock={'12'}>
+          {level2.map((iso) => (
+            <CategoryCard
+              icon={icon1}
+              title={iso.isoTitle}
+              link={iso.isoCode}
+              description={iso.isoTextShort}
+              key={iso.isoCode}
+            />
+          ))}
+        </HGrid>
       </Bleed>
     </VStack>
   )
