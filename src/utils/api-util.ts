@@ -242,18 +242,30 @@ export const makeSearchTermQuery = ({
       {
         boosting: {
           positive: {
-            multi_match: {
-              query: searchTerm,
-              type: 'cross_fields',
-              fields: [
-                'isoCategoryTitle^2',
-                'isoCategoryText^0.5',
-                'title^0.5',
-                'attributes.text^0.1',
-                'keywords_bag^0.1',
+            function_score: {
+              query: {
+                multi_match: {
+                  query: searchTerm,
+                  type: 'cross_fields',
+                  fields: [
+                    'isoCategoryTitle^2',
+                    'isoCategoryText^0.5',
+                    'title^0.5',
+                    'attributes.text^0.1',
+                    'keywords_bag^0.1',
+                  ],
+                  operator: 'and',
+                  zero_terms_query: 'all',
+                },
+              },
+              functions: [
+                {
+                  filter: { term: { main: true } },
+                  weight: 3,
+                },
               ],
-              operator: 'and',
-              zero_terms_query: 'all',
+              boost_mode: 'multiply',
+              score_mode: 'sum',
             },
           },
           ...commonBoosting,
