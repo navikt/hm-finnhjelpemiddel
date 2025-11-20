@@ -26,7 +26,7 @@ export const AddAlternative = ({
   )
 
   const searchedProduct = alternativeResponse?.original
-  const unknownHmsNr = targetHmsArtNr && !searchedProduct
+  const unknownHmsNr = targetHmsArtNr && !isLoading && !searchedProduct
 
   return (
     <VStack gap={'4'}>
