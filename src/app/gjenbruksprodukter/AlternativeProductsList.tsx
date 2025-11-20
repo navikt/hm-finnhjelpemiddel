@@ -100,7 +100,7 @@ export const AlternativeProductList = ({
               )
             })
           ) : (
-            <BodyShort>Ingen kjente alternativer for produktet på lager</BodyShort>
+            <BodyShort>Ingen kjente alternativer for produktet</BodyShort>
           )}
         </HGrid>
       </VStack>
