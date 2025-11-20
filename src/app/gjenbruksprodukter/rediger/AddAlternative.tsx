@@ -1,13 +1,12 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { Button, ExpansionCard, Search, VStack } from '@navikt/ds-react'
+import { ExpansionCard, Search, VStack } from '@navikt/ds-react'
 import {
-  addAlternativeToGroup,
   AlternativeProduct,
   AlternativeStockResponseNew,
   newGetAlternatives,
 } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
-import { AddAlternativeCard } from '@/app/gjenbruksprodukter/rediger/AddAlternativeCard'
+import { AddAlternativeContent } from '@/app/gjenbruksprodukter/rediger/AddAlternativeContent'
 
 export const AddAlternative = ({
   alternativeGroup,
@@ -27,6 +26,7 @@ export const AddAlternative = ({
   )
 
   const searchedProduct = alternativeResponse?.original
+  const unknownHmsNr = targetHmsArtNr && !searchedProduct
 
   return (
     <VStack gap={'4'}>
@@ -48,23 +48,15 @@ export const AddAlternative = ({
               }}
               onClear={() => setTargetHmsArtNr(undefined)}
               htmlSize={'12'}
+              error={unknownHmsNr && 'Finner ikke hjelpemiddelet'}
             />
-            {searchedProduct && (
-              <>
-                <AddAlternativeCard product={searchedProduct} />
-                <Button
-                  size={'small'}
-                  onClick={() =>
-                    addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!).then(() => {
-                      setNewAlternative(searchedProduct)
-                      setTargetHmsArtNr(undefined)
-                    })
-                  }
-                  style={{ width: 'fit-content' }}
-                >
-                  Legg til
-                </Button>
-              </>
+            {targetHmsArtNr && searchedProduct && (
+              <AddAlternativeContent
+                searchedProduct={searchedProduct}
+                alternativeGroup={alternativeGroup}
+                setNewAlternative={setNewAlternative}
+                setTargetHmsArtNr={setTargetHmsArtNr}
+              />
             )}
           </VStack>
         </ExpansionCard.Content>
