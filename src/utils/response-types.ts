@@ -38,15 +38,9 @@ export interface AgreementSearchResponse {
 }
 
 export interface PostBucketResponse {
-  doc_count: number
-
   key: number
-  topHitData: {
-    hits: {
-      total: object
-      hits: Hit[]
-    }
-  }
+  doc_count: number
+  products: Hit[]
 }
 
 interface SeriesBucketsResponse {

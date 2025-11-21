@@ -80,9 +80,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
 
   const postsContainingProducts = new Set(
     unfilteredPostBuckets
-      .flatMap((bucket) =>
-        bucket.topHitData.hits.hits.flatMap((hit) => (hit._source as ProductSourceResponse).agreements)
-      )
+      .flatMap((bucket) => bucket.products.flatMap((hit) => (hit._source as ProductSourceResponse).agreements))
       .map((agreement) => agreement.postIdentifier)
   )
 
@@ -101,9 +99,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     leverandor: leverandorFilter,
     delkontrakt: postFilters,
   }
-
-  //NB! Vi har brukt top_hits i open search til å hente produkter på delkontrakt og mapper over til serier her.
-  //Dersom det finnes en delkontrakt med over 500 varianter vil ikke alle seriene vises. Da må vi vurdere å ha et kall per delkontrakt.
+  
   const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters).filter(
     (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0
   )

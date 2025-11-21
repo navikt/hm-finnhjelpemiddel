@@ -193,7 +193,7 @@ export const mapAgreementProducts = (
   const mapPostBucket = (bucket: PostBucketResponse) => {
     let seen: { [id: string]: { count: number; hmsNumbers: string[] } } = {}
 
-    const products = bucket.topHitData.hits.hits
+    const products = bucket.products
       .map((hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
       .filter((product) => {
         const hmsNr = product.variants[0].hmsArtNr
@@ -259,17 +259,14 @@ export const mapAgreementProducts = (
   // Viser kun de delkontraktene som ikke har produkter dersom det enten kun er filtrert på delkontrakter
   // eller om det ikke er filtrert på noe
   if (
-    (isFilteredOnDelkontrakt && !isFilteredOnAnythingElse) ||
-    (!isFilteredOnDelkontrakt && !isFilteredOnAnythingElse)
+    isFilteredOnDelkontrakt && !isFilteredOnAnythingElse
   ) {
-    return allPostsWithEmpty.filter((post) => !isFilteredOnDelkontrakt || filters.delkontrakt?.includes(post.title))
+    return allPostsWithEmpty.filter((post) => filters.delkontrakt.includes(post.title))
+  } else if (!isFilteredOnDelkontrakt && !isFilteredOnAnythingElse) {
+    return allPostsWithEmpty
+  } else {
+    return allPostsWithEmpty.filter((post) => post.products.length > 0)
   }
-
-  return postBuckets
-    .map((bucket) => mapPostBucket(bucket))
-    .filter(
-      (post) => post.products.length > 0 && (!isFilteredOnDelkontrakt || filters?.delkontrakt?.includes(post.title))
-    )
 }
 
 export const agreementHasNoProducts = (identifier: string): boolean => {

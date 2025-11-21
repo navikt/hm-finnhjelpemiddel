@@ -30,7 +30,14 @@ import {
   Product,
   ProductVariant,
 } from './product-util'
-import { AgreementDocResponse, AgreementSearchResponse, PostBucketResponse, SearchResponse } from './response-types'
+import {
+  AgreementDocResponse,
+  AgreementSearchResponse,
+  AgreementInfoResponse,
+  PostBucketResponse,
+  ProductSourceResponse,
+  SearchResponse,
+} from './response-types'
 import { SearchData } from './search-state-util'
 
 export const PAGE_SIZE = 24
@@ -558,13 +565,16 @@ export const fetchProducts = ({
     })
 }
 
-//TODO bytte til label
 export const getProductsOnAgreement = ({
   agreementId,
   searchData,
+  size = 5000,
+  from = 0,
 }: {
   agreementId: string
   searchData: SearchData
+  size?: number
+  from?: number
 }): Promise<PostBucketResponse[]> => {
   const { searchTerm, filters: activeFilters } = searchData
 
@@ -580,7 +590,7 @@ export const getProductsOnAgreement = ({
       },
     },
     filterMainProductsOnly(),
-  ]
+  ].filter(Boolean)
 
   const searchTermQuery = makeSearchTermQuery({ searchTerm, agreementId })
 
@@ -591,43 +601,57 @@ export const getProductsOnAgreement = ({
     },
   }
 
-  const aggs = {
-    postNr: {
-      terms: {
-        field: 'agreements.postNr',
-        size: 1000,
-        order: {
-          _key: 'asc',
-        },
-      },
-      aggs: {
-        topHitData: {
-          top_hits: {
-            size: 500,
-            _source: {
-              includes: ['*'],
-            },
-          },
-        },
-      },
-    },
-  }
-
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      size: 0,
-      sort: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
+      size,
+      from,
+      sort: [
+        { 'agreements.postNr': 'asc' },
+        { 'agreements.rank': 'asc' },
+        { _id: 'asc' },
+      ],
       query,
-      aggs,
+      track_total_hits: true,
     }),
   })
     .then((res) => res.json())
-    .then((data: AgreementSearchResponse) => {
-      return data.aggregations.postNr.buckets
+    .then((data: SearchResponse) => {
+      const bucketsMap = new Map<number, PostBucketResponse>()
+
+      data.hits.hits.forEach((hit) => {
+        const source = hit._source as ProductSourceResponse
+        if (!source || !source.agreements) return
+
+        // A product can belong to multiple agreements; only consider the current one
+        const matchingAgreements = source.agreements.filter(
+          (agreementOnProduct: AgreementInfoResponse) => agreementOnProduct.id === agreementId
+        )
+
+        matchingAgreements.forEach((agreementOnProduct: AgreementInfoResponse) => {
+          const postNr = agreementOnProduct.postNr
+          if (postNr == null) return
+
+          let bucket = bucketsMap.get(postNr)
+          if (!bucket) {
+            bucket = {
+              key: postNr,
+              doc_count: 0,
+              products: [],
+            }
+            bucketsMap.set(postNr, bucket)
+          }
+
+          bucket.products.push(hit)
+          bucket.doc_count += 1
+        })
+      })
+
+      // Return buckets sorted by postNr to preserve expected ordering
+      return Array.from(bucketsMap.values()).sort((a, b) => a.key - b.key)
     })
 }
 
