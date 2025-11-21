@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { EditableAlternativeGroup } from '@/app/gjenbruksprodukter/rediger/EditableAlternativeGroup'
 import { newGetAlternatives } from '@/app/gjenbruksprodukter/alternative-util'
-import useSWRImmutable from 'swr/immutable'
+import useSWR from 'swr'
 
 export default function EditAlternativeProductsPage() {
   const router = useRouter()
@@ -58,7 +58,7 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
     isLoading: isLoadingAlternatives,
     mutate: mutateAlternatives,
     error: errorAlternatives,
-  } = useSWRImmutable(`asdasd-${hmsNumber}`, () => newGetAlternatives(hmsNumber))
+  } = useSWR(`asdasd-${hmsNumber}`, () => newGetAlternatives(hmsNumber))
 
   if (isLoadingAlternatives) {
     return <Loader />

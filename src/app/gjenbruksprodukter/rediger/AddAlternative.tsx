@@ -1,19 +1,15 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { useState } from 'react'
 import { ExpansionCard, Search, VStack } from '@navikt/ds-react'
-import {
-  AlternativeProduct,
-  AlternativeStockResponseNew,
-  newGetAlternatives,
-} from '@/app/gjenbruksprodukter/alternative-util'
+import { AlternativeStockResponseNew, newGetAlternatives } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
 import { AddAlternativeContent } from '@/app/gjenbruksprodukter/rediger/AddAlternativeContent'
 
 export const AddAlternative = ({
   alternativeGroup,
-  setNewAlternative,
+  mutateAlternatives,
 }: {
   alternativeGroup: string[]
-  setNewAlternative: Dispatch<SetStateAction<AlternativeProduct | undefined>>
+  mutateAlternatives: () => void
 }) => {
   const [targetHmsArtNr, setTargetHmsArtNr] = useState<string | undefined>(undefined)
 
@@ -54,8 +50,8 @@ export const AddAlternative = ({
               <AddAlternativeContent
                 searchedProduct={searchedProduct}
                 alternativeGroup={alternativeGroup}
-                setNewAlternative={setNewAlternative}
                 setTargetHmsArtNr={setTargetHmsArtNr}
+                mutateAlternatives={mutateAlternatives}
               />
             )}
           </VStack>

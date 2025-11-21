@@ -6,15 +6,15 @@ import React from 'react'
 type Props = {
   searchedProduct: AlternativeProduct
   alternativeGroup: string[]
-  setNewAlternative: (alt: AlternativeProduct) => void
   setTargetHmsArtNr: (hms: string | undefined) => void
+  mutateAlternatives: () => void
 }
 
 export const AddAlternativeContent = ({
   alternativeGroup,
   searchedProduct,
-  setNewAlternative,
   setTargetHmsArtNr,
+  mutateAlternatives,
 }: Props) => {
   return (
     <>
@@ -23,8 +23,8 @@ export const AddAlternativeContent = ({
         size={'small'}
         onClick={() =>
           addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!).then(() => {
-            setNewAlternative(searchedProduct)
             setTargetHmsArtNr(undefined)
+            mutateAlternatives()
           })
         }
         style={{ width: 'fit-content' }}
