@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { ProductCardKategori } from '@/app/kategori/[iso]/ProductCardKategori'
+import { ProductCardKategori } from '@/app/kategori/ProductCardKategori'
 
 export const KategoriResults = ({
   products,
   loadMore,
   isLoading,
 }: {
-  loadMore?: () => void
+  loadMore?: (() => void) | undefined
   isLoading: boolean
   products?: Product[] | undefined
 }) => {

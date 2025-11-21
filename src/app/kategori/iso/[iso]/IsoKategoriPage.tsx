@@ -3,11 +3,11 @@
 import { useMemo } from 'react'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
-import { Alert, Bleed, BodyLong, Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
+import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { KategoriResults } from './KategoriResults'
-import { SortKategoriResults } from '@/app/kategori/[iso]/SortKategoriResults'
-import { FilterBarKategori, Filters } from '@/app/kategori/[iso]/FilterBarKategori'
+import { KategoriResults } from '../../KategoriResults'
+import { SortKategoriResults } from '@/app/kategori/SortKategoriResults'
+import { FilterBarKategori, Filters } from '@/app/kategori/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
 import { Product } from '@/utils/product-util'
 import {
@@ -19,14 +19,15 @@ import {
 } from '@/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
 import { IsoTree } from '@/utils/iso-util'
-import { CategoryCard } from '@/app/kategori/bevegelse/CategoryCard'
+import { CategoryCard } from '@/app/kategori/CategoryCard'
+import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 
 type Props = {
   iso: string
   isoTree: IsoTree
 }
 
-export const KategoriPage = ({ iso, isoTree }: Props) => {
+export const IsoKategoriPage = ({ iso, isoTree }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -116,66 +117,42 @@ export const KategoriPage = ({ iso, isoTree }: Props) => {
   )
 
   return (
-    <VStack
-      gap={'14'}
-      paddingBlock={'16'}
-      paddingInline={'4'}
-      marginInline={'auto'}
-      marginBlock={'0'}
-      maxWidth={'1440px'}
-    >
-      <VStack gap="4">
-        <Heading level="1" size="large">
-          {currentIso.isoTitle}
-        </Heading>
-        <BodyLong style={{ maxWidth: '735px' }}>{currentIso.isoText}</BodyLong>
-      </VStack>
-
-      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        {error ? (
-          <HStack justify="center" style={{ marginTop: '48px' }}>
-            <Alert variant="error" title="Error med lasting av produkter">
-              Obs, her skjedde det noe feil :o
-            </Alert>
-          </HStack>
-        ) : (
-          <>
-            <CompareMenu />
-            {currentIso.isoLevel < 4 && (
-              <HGrid gap={'2'} columns={'repeat(5, 200px)'} paddingBlock={'8 0'}>
-                {deeperIsosWithProducts.map((nextIsoLevel) => (
-                  <CategoryCard
-                    icon={undefined}
-                    title={nextIsoLevel.isoTitle}
-                    link={nextIsoLevel.isoCode}
-                    description={''}
-                    key={nextIsoLevel.isoCode}
-                  />
-                ))}
-              </HGrid>
-            )}
-            <HGrid paddingBlock={{ xs: '6 0', md: '12 0' }} columns={'374px 4'} gap={'4'}>
-              <VStack gap={'4'}>
-                <Heading level="2" size="medium">
-                  {isLoading ? (
-                    <Skeleton variant="text" width="10rem" />
-                  ) : products ? (
-                    `${products.length} hjelpemidler`
-                  ) : (
-                    `Ingen treff`
-                  )}
-                </Heading>
-                <HStack justify={'space-between'} gap={'2'} align={'end'}>
-                  <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
-                  <SortKategoriResults />
-                </HStack>
-
-                <KategoriResults products={products} loadMore={loadMore} isLoading={isLoading} />
-              </VStack>
-            </HGrid>
-          </>
+    <KategoriPageLayout title={currentIso.isoTitle} description={currentIso.isoText} error={error}>
+      <>
+        <CompareMenu />
+        {currentIso.isoLevel < 4 && (
+          <HGrid gap={'2'} columns={'repeat(5, 200px)'} paddingBlock={'8 0'}>
+            {deeperIsosWithProducts.map((nextIsoLevel) => (
+              <CategoryCard
+                icon={undefined}
+                title={nextIsoLevel.isoTitle}
+                link={nextIsoLevel.isoCode}
+                description={''}
+                key={nextIsoLevel.isoCode}
+              />
+            ))}
+          </HGrid>
         )}
-      </Bleed>
-    </VStack>
+        <HGrid paddingBlock={{ xs: '6 0', md: '12 0' }} columns={'374px 4'} gap={'4'}>
+          <VStack gap={'4'}>
+            <Heading level="2" size="medium">
+              {isLoading ? (
+                <Skeleton variant="text" width="10rem" />
+              ) : products ? (
+                `${products.length} hjelpemidler`
+              ) : (
+                `Ingen treff`
+              )}
+            </Heading>
+            <HStack justify={'space-between'} gap={'2'} align={'end'}>
+              <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
+              <SortKategoriResults />
+            </HStack>
+
+            <KategoriResults products={products} loadMore={loadMore} isLoading={isLoading} />
+          </VStack>
+        </HGrid>
+      </>
+    </KategoriPageLayout>
   )
 }

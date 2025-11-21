@@ -38,7 +38,113 @@ type FetchProps = {
   from: number
   size: number
   searchData: SearchDataKategori
+  kategoriIsos: string[]
   dontCollapse?: boolean
+}
+
+export const fetchProductsKategori2 = async ({
+  from,
+  size,
+  searchData,
+  kategoriIsos,
+}: FetchProps): Promise<ProductsWithIsoAggs> => {
+  const { sortOrder, filters } = searchData
+  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
+  const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
+  const visTilbDeler = false
+
+  const queryFilters: Array<any> = []
+  const postFilters: Array<any> = []
+
+  if (filters && filters.isos) {
+    postFilters.push(filterPrefixIsoKode(filters.isos))
+  }
+
+  if (filters && filters.suppliers) {
+    postFilters.push(filterLeverandor(filters.suppliers))
+  }
+
+  if (kategoriIsos.length > 0) {
+    queryFilters.push(filterPrefixIsoKode(kategoriIsos))
+  }
+
+  if (!visTilbDeler) {
+    queryFilters.push(filterMainProductsOnly())
+  }
+
+  const query = {
+    bool: {
+      ...searchTermQuery,
+      filter: queryFilters,
+    },
+  }
+
+  const aggsFilter = (filterKey: string, aggs: {}, filter: {}) => ({
+    [filterKey]: {
+      filter: {
+        bool: {
+          filter: filter,
+        },
+      },
+      aggs,
+    },
+  })
+  const aggs = {
+    ...aggsFilter(
+      'iso',
+      {
+        values: {
+          multi_terms: {
+            terms: [{ field: 'isoCategory' }, { field: 'isoCategoryName' }],
+            size: 100,
+          },
+        },
+      },
+      queryFilters
+    ),
+    ...aggsFilter(
+      'suppliers',
+      {
+        values: {
+          terms: { field: 'supplier.name', size: 300 },
+        },
+      },
+      postFilters
+    ),
+  }
+
+  const body: QueryObject = {
+    from,
+    size,
+    track_scores: true,
+    sort: sortOrderOpenSearch,
+    query,
+    aggs: { ...aggs },
+    post_filter: {
+      bool: {
+        filter: postFilters,
+      },
+    },
+    collapse: {
+      field: 'seriesId',
+    },
+  }
+
+  return await fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: mapProductsFromCollapse(data),
+        iso: mapIsoAggregations(data),
+        suppliers: mapSupplierAggregations(data),
+      }
+    })
 }
 
 export const fetchProductsKategori = async ({ from, size, searchData }: FetchProps): Promise<ProductsWithIsoAggs> => {

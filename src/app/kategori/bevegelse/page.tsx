@@ -1,12 +1,15 @@
 import { Bleed, BodyLong, Heading, HGrid, VStack } from '@navikt/ds-react'
-import { CategoryCard } from '@/app/kategori/bevegelse/CategoryCard'
+import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { WheelchairIcon } from '@navikt/aksel-icons'
 import { fetchIsoTree } from '@/utils/iso-util'
+import { bevegelse, kategorier, KategoriNavn } from '@/utils/kategori-mapping'
 
 export default async function Page() {
-  const isos = await fetchIsoTree()
+  //const isos = await fetchIsoTree()
 
-  const level2 = Object.values(isos).filter((iso) => iso.isoCode.startsWith('12') && iso.isoLevel === 2)
+  //const level2 = Object.values(isos).filter((iso) => iso.isoCode.startsWith('12') && iso.isoLevel === 2)
+
+  const kategori: KategoriNavn = 'Bevegelse'
 
   const icon1 = <WheelchairIcon fontSize={'5rem'} />
   return (
@@ -20,22 +23,20 @@ export default async function Page() {
     >
       <VStack gap="4">
         <Heading level="1" size="large">
-          Bevegelse
+          {kategorier[kategori].navn}
         </Heading>
-        <BodyLong style={{ maxWidth: '735px' }}>
-          Her finner du hjelpemidler for aktiviteter og deltakelse relatert til personforflytning og transport.
-        </BodyLong>
+        <BodyLong style={{ maxWidth: '735px' }}>{kategorier[kategori].beskrivelse}</BodyLong>
       </VStack>
 
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <HGrid gap={'2'} columns={'repeat(2, 600px)'} paddingBlock={'12'}>
-          {level2.map((iso) => (
+          {bevegelse.underkategorier.map((iso) => (
             <CategoryCard
               icon={icon1}
-              title={iso.isoTitle}
-              link={iso.isoCode}
-              description={iso.isoTextShort}
-              key={iso.isoCode}
+              title={kategorier[iso].navn}
+              link={kategorier[iso].navn}
+              description={kategorier[iso].beskrivelse}
+              key={kategorier[iso].navn}
             />
           ))}
         </HGrid>

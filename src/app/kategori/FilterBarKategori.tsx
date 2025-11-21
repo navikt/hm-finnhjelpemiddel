@@ -1,5 +1,5 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
-import { KategoriToggleFilter } from '@/app/kategori/[iso]/KategoriToggleFilter'
+import { KategoriToggleFilter } from '@/app/kategori/KategoriToggleFilter'
 import { CircleSlashIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 

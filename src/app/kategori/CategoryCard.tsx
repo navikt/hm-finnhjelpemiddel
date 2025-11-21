@@ -2,15 +2,16 @@
 
 import { LinkCard, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
+import { ReactNode } from 'react'
 
 type Props = {
-  icon: React.ReactNode | undefined
   title: string
   link: string
   description: string
+  icon?: ReactNode | undefined
 }
 
-export const CategoryCard = ({ icon, title, link, description }: Props) => {
+export const CategoryCard = ({ title, link, description, icon }: Props) => {
   return (
     <LinkCard arrow={false}>
       {icon && (
