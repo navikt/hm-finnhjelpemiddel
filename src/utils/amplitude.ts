@@ -5,8 +5,8 @@ import { track } from '@amplitude/analytics-browser'
 const APP_NAME = 'hm-oversikt-frontend'
 const TEAM_NAME = 'teamdigihot'
 const AMP_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
-const AMP_PUBLIC_KEY_PROD = '10798841ebeba333b8ece6c046322d76'
-const AMP_PUBLIC_KEY_DEV = 'c1c2553d689ba4716c7d7c4410b521f5'
+const AMP_PUBLIC_KEY_PROD = ''
+const AMP_PUBLIC_KEY_DEV = ''
 
 export enum digihot_customevents {
   LEVERANDORPRODUKTER_KLIKKET_V2 = 'klikket på vis leverandørprodukter',
@@ -27,12 +27,8 @@ export enum nav_events {
 }
 
 export const initAmplitude = (hostname: string) => {
-  const apiKey =
-    process.env.BUILD_ENV === 'prod'
-      ? AMP_PUBLIC_KEY_PROD
-      : process.env.BUILD_ENV === 'dev'
-        ? AMP_PUBLIC_KEY_DEV
-        : 'mock'
+  const apiKey = 'mock'
+
 
   if (apiKey != 'mock') {
     amplitude.init(apiKey!, {
