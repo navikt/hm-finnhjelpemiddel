@@ -118,7 +118,7 @@ export const ers: Kategori = {
   beskrivelse: '',
   underkategorier: [],
   isoer: ['1223'],
-  visProdukter: false,
+  visProdukter: true,
 }
 
 export const motoriserteKjoretoy: Kategori = {
@@ -126,7 +126,7 @@ export const motoriserteKjoretoy: Kategori = {
   beskrivelse: '',
   underkategorier: [],
   isoer: ['121709'],
-  visProdukter: false,
+  visProdukter: true,
 }
 
 export const drivaggregat: Kategori = {
@@ -134,14 +134,14 @@ export const drivaggregat: Kategori = {
   beskrivelse: '',
   underkategorier: [],
   isoer: ['122409'],
-  visProdukter: false,
+  visProdukter: true,
 }
 export const tilleggsutstyr: Kategori = {
   navn: 'Tilleggsutstyr',
   beskrivelse: '',
   underkategorier: [],
   isoer: ['1224'],
-  visProdukter: false,
+  visProdukter: true,
 }
 
 export const kategorier: Kategorier = {
