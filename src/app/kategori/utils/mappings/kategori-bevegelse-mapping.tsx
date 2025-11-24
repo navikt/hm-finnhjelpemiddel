@@ -29,6 +29,12 @@ export type KategoriBevegelseNavn =
   | 'Lette inn- og utstigning av bil'
   | 'Belter og støtteseler for bil'
   | 'Ramper for bil'
+  | 'Krykker, stokker og staver'
+  | 'Gåstativer'
+  | 'Rullatorer'
+  | 'Gåstoler'
+  | 'Gåbord'
+  | 'Tilleggsutstyr til ganghjelpemidler'
 
 export const bevegelse: Kategori = {
   navn: 'Bevegelse',
@@ -66,9 +72,16 @@ export const mrs: Kategori = {
 export const ganghjelpemidler: Kategori = {
   navn: 'Ganghjelpemidler',
   beskrivelse: '',
-  underkategorier: [],
-  isoer: ['1203', '1206', '1207'],
-  visProdukter: true,
+  underkategorier: [
+    'Krykker, stokker og staver',
+    'Gåstativer',
+    'Rullatorer',
+    'Gåstoler',
+    'Gåbord',
+    'Tilleggsutstyr til ganghjelpemidler',
+  ],
+  isoer: [],
+  visProdukter: false,
 }
 export const forflytning: Kategori = {
   navn: 'Forflytning',
@@ -260,5 +273,53 @@ export const tilleggsutstyrRullestoler: Kategori = {
   beskrivelse: '',
   underkategorier: [],
   isoer: ['1224'],
+  visProdukter: true,
+}
+
+export const krykkerOgStokkerOgStaver: Kategori = {
+  navn: 'Krykker, stokker og staver',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['1203'],
+  visProdukter: true,
+}
+
+export const gåstativer: Kategori = {
+  navn: 'Gåstativer',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['120603'],
+  visProdukter: true,
+}
+
+export const rullatorer: Kategori = {
+  navn: 'Rullatorer',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['120606'],
+  visProdukter: true,
+}
+
+export const gåstoler: Kategori = {
+  navn: 'Gåstoler',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['120606'],
+  visProdukter: true,
+}
+
+export const gåbord: Kategori = {
+  navn: 'Gåbord',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['120612'],
+  visProdukter: true,
+}
+
+export const tilleggsutstyrTilGanghjelpemidler: Kategori = {
+  navn: 'Tilleggsutstyr til ganghjelpemidler',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['1207'],
   visProdukter: true,
 }
