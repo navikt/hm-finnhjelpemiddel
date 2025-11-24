@@ -1,4 +1,4 @@
-import { fetchIsoTree } from '@/utils/iso-util'
+import { fetchIsoTree } from '@/app/kategori/utils/iso-util'
 import { IsoKategoriPage } from '@/app/kategori/iso/[iso]/IsoKategoriPage'
 
 type Props = {

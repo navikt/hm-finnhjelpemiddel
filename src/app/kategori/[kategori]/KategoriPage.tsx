@@ -16,9 +16,9 @@ import {
   ProductsWithIsoAggs,
   SearchDataKategori,
   SearchFiltersKategori,
-} from '@/utils/kategori-inngang-util'
+} from '@/app/kategori/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
-import { kategorier, KategoriNavn } from '@/utils/kategori-mapping'
+import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 
 type Props = {

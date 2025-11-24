@@ -1,4 +1,4 @@
-import { kategorier, KategoriNavn } from '@/utils/kategori-mapping'
+import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { HGrid } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'

@@ -1,6 +1,6 @@
 import { KategoriPage } from './KategoriPage'
 import { KategoriOversikt } from '@/app/kategori/KategoriOversikt'
-import { kategorier, KategoriNavn } from '@/utils/kategori-mapping'
+import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { BodyShort, Link } from '@navikt/ds-react'
 import NextLink from 'next/link'
 

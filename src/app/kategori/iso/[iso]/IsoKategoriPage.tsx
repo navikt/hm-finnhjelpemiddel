@@ -16,9 +16,9 @@ import {
   ProductsWithIsoAggs,
   SearchDataKategori,
   SearchFiltersKategori,
-} from '@/utils/kategori-inngang-util'
+} from '@/app/kategori/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
-import { IsoTree } from '@/utils/iso-util'
+import { IsoTree } from '@/app/kategori/utils/iso-util'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 

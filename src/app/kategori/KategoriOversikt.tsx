@@ -1,6 +1,6 @@
 import { BodyShort, HGrid } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
-import { kategorier, KategoriNavn } from '@/utils/kategori-mapping'
+import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 
 export const KategoriOversikt = ({ kategori }: { kategori: KategoriNavn }) => {
