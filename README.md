@@ -42,7 +42,7 @@ Follow the guide to acquire an On Behalf Of-token (obo) in dev in the [nais-docs
 
 Run  
 ```bash
-kubectl port-forward $(kubectl get pods -l app=hm-grunndata-alternativprodukter -o custom-columns=:metadata.name) 1338:8080
+kubectl port-forward $(kubectl get pods -l app=hm-grunndata-alternativprodukter -o custom-columns=:metadata.name) 8081:8080
 ```
 and  
 ```bash
