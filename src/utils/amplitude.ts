@@ -5,8 +5,6 @@ import { track } from '@amplitude/analytics-browser'
 const APP_NAME = 'hm-oversikt-frontend'
 const TEAM_NAME = 'teamdigihot'
 const AMP_COLLECTION_URL = 'https://amplitude.nav.no/collect-auto'
-const AMP_PUBLIC_KEY_PROD = ''
-const AMP_PUBLIC_KEY_DEV = ''
 
 export enum digihot_customevents {
   LEVERANDORPRODUKTER_KLIKKET_V2 = 'klikket på vis leverandørprodukter',
