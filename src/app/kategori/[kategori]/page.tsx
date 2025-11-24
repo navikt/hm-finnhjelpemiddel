@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default async function Page(props: Props) {
-  const kategori = (await props.params).kategori as KategoriNavn
+  const kategori = decodeURIComponent((await props.params).kategori) as KategoriNavn
 
   if (!kategorier[kategori]) {
     return (
