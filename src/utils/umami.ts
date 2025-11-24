@@ -18,17 +18,9 @@ export const initUmami = (hostname: string) => {
       ? UMAMI_TRACKING_ID_DEV
       : process.env.BUILD_ENV === 'prod'
         ? UMAMI_TRACKING_ID_PROD
-        : '39d042d3-6a34-4c21-b409-3eca4699dc4a'
+        : ''
 
   const UMAMI_DATA_DOMAIN = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://umami.nav.no'
-  console.debug(
-    `RUNTIME_ENVIRONMENT: ${process.env.RUNTIME_ENVIRONMENT},
-    BUILD_ENV: ${process.env.BUILD_ENV},
-    NODE_ENV: ${process.env.NODE_ENV},
-    UMAMI_TRACKING_ID: ${process.env.UMAMI_TRACKING_ID},
-    UMAMI_DATA_HOST_URL: ${process.env.UMAMI_DATA_HOST_URL}
-    window.location.hostname: ${hostname}`
-  )
 
   // Ikke last Umami i lokalt miljø eller hvis det er deaktivert
   if (!UMAMI_WEBSITE_ID) {
