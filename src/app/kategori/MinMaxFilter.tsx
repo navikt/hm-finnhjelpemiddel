@@ -1,16 +1,12 @@
 import { ActionMenu, Button, HStack, TextField } from '@navikt/ds-react'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './MinMaxFilter.module.scss'
-
-export type FilterMenuLabel = {
-  key: string
-  label: string
-}
+import useQueryString from '@/utils/search-params-util'
 
 export type MinMaxMenu = {
-  name: FilterMenuLabel
+  name: string
   options: {
     minKey: string
     maxKey: string
@@ -19,19 +15,29 @@ export type MinMaxMenu = {
 
 type Props = {
   filterMenu: MinMaxMenu
-  onChange: (key: string, value: string) => void
 }
 
-export const MinMaxFilter = ({ filterMenu, onChange }: Props) => {
+export const MinMaxFilter = ({ filterMenu }: Props) => {
   const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const { createQueryStringForMinMax } = useQueryString()
+
   const { options, name } = filterMenu
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const minValue = 0
-  const maxValue = 0
-  const filterLabel = name.label
+  const filterLabel = name
 
-  const hasInputValue = minValue > 0 || maxValue > 0
+  const hasInputValue = searchParams.get(options.minKey) || searchParams.get(options.maxKey)
+
+  const onChange = (key: string, value: string, key1: string, value2: string) => {
+    const newSearchParams = createQueryStringForMinMax({ name: key, value }, { name: key1, value: value2 })
+    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
+  }
+
+  const onReset = () => {
+    onChange(options.minKey, '', options.maxKey, '')
+  }
 
   return (
     <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>
@@ -48,7 +54,7 @@ export const MinMaxFilter = ({ filterMenu, onChange }: Props) => {
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
         {hasInputValue && (
-          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={() => onChange(name.key, '')}>
+          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={onReset}>
             Fjern filter
           </ActionMenu.Item>
         )}
@@ -58,14 +64,14 @@ export const MinMaxFilter = ({ filterMenu, onChange }: Props) => {
             type={'number'}
             size={'small'}
             min={0}
-            onChange={(event) => onChange(options.minKey, event.currentTarget.value)}
+            onChange={(event) => onChange(options.minKey, event.currentTarget.value, '', '')}
           />
           <TextField
             label={'Max'}
             type={'number'}
             size={'small'}
             min={0}
-            onChange={(event) => onChange(options.maxKey, event.currentTarget.value)}
+            onChange={(event) => onChange(options.maxKey, event.currentTarget.value, '', '')}
           />
         </HStack>
       </ActionMenu.Content>

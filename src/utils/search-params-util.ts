@@ -41,11 +41,28 @@ export default function useQueryString() {
         const values = params.getAll(name)
         if (values.includes(value)) {
           params.delete(name)
-          values.filter(v => v !== value).forEach(v => params.append(name, v))
+          values.filter((v) => v !== value).forEach((v) => params.append(name, v))
         } else {
           params.append(name, value)
         }
       }
+
+      return params.toString()
+    },
+    [searchParams]
+  )
+
+  const createQueryStringForMinMax = useCallback(
+    (...args: { name: string; value: string }[]) => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      args.forEach((arg) => {
+        if (arg.value === '') {
+          params.delete(arg.name)
+        } else {
+          params.set(arg.name, arg.value)
+        }
+      })
 
       return params.toString()
     },
@@ -63,6 +80,7 @@ export default function useQueryString() {
     createQueryString,
     createQueryStringAppend,
     createQueryStringMultiple,
+    createQueryStringForMinMax,
     searchParamKeys,
   }
 }
