@@ -9,9 +9,11 @@ import NextLink from 'next/link'
 export const EditableAlternativeCard = ({
   alternativeProduct,
   onDelete,
+  isOriginal,
 }: {
   alternativeProduct: AlternativeProduct
   onDelete: () => void
+  isOriginal?: boolean
 }) => {
   return (
     <HGrid
@@ -19,7 +21,7 @@ export const EditableAlternativeCard = ({
       gap={'2'}
       padding={'4'}
       align={'center'}
-      className={styles.container}
+      className={`${styles.container} ${isOriginal ? styles.original : ''}`}
       width={'10px'}
     >
       <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
@@ -37,13 +39,19 @@ export const EditableAlternativeCard = ({
       </VStack>
       <BodyShort>HMS: {alternativeProduct.hmsArtNr}</BodyShort>
       {alternativeProduct.onAgreement ? (
-        <SuccessTag>Rangering {alternativeProduct.highestRank}</SuccessTag>
+        <SuccessTag>{`Rangering ${alternativeProduct.highestRank}`}</SuccessTag>
       ) : (
         <NeutralTag>Ikke på avtale</NeutralTag>
       )}
-      <Button variant={'secondary'} onClick={onDelete} className={styles.deleteButton}>
-        Slett
-      </Button>
+      {isOriginal ? (
+        <></>
+      ) : (
+        <Button variant={'secondary'} onClick={onDelete} className={styles.deleteButton}>
+          Slett
+        </Button>
+        )
+      }
+
     </HGrid>
   )
 }

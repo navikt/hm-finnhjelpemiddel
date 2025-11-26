@@ -1,11 +1,14 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .container {
-  border: 2px solid $a-gray-50;
+  border: 1px solid $a-gray-300;
+  border-radius: $a-border-radius-medium;
+  background-color: $a-surface-default;
   width: 900px;
 }
 
-.container + .container {
+// Only remove the top border when a container directly follows another non-original container
+.container:not(.original) + .container {
   border-top: 0;
 }
 
@@ -31,4 +34,21 @@
 .link {
   color: black;
   font-weight: 600;
+}
+
+.original {
+  position: relative;
+  margin-bottom: 1rem; // extra space before the next item
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1.1rem; // match margin-bottom so line reaches into the gap
+    transform: translateX(-50%);
+    width: 2px;
+    height: 1.1rem;
+    background-color: $a-border-strong;
+    background-color: $a-gray-300;
+  }
 }
