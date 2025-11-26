@@ -3,14 +3,14 @@ import { WheelchairIcon } from '@navikt/aksel-icons'
 
 export type KategoriBevegelseNavn =
   | 'Rullestoler'
-  | 'MRS'
+  | 'Manuelle rullestoler'
   | 'Ganghjelpemidler'
   | 'Forflytning'
   | 'Sykler'
   | 'Kjelker og akebrett'
   | 'Vogner'
   | 'Bilseter og bilutstyr'
-  | 'ERS'
+  | 'Elektriske rullestoler'
   | 'Motoriserte kjøretøy'
   | 'Drivaggregat'
   | 'Tilleggsutstyr til rullestoler'
@@ -55,15 +55,22 @@ export const bevegelse: Kategori = {
 export const rullestoler: Kategori = {
   navn: 'Rullestoler',
   beskrivelse: '',
-  underkategorier: ['MRS', 'ERS', 'Motoriserte kjøretøy', 'Drivaggregat', 'Tilleggsutstyr til rullestoler'],
+  underkategorier: [
+    'Manuelle rullestoler',
+    'Elektriske rullestoler',
+    'Motoriserte kjøretøy',
+    'Drivaggregat',
+    'Tilleggsutstyr til rullestoler',
+  ],
   isoer: [],
   visProdukter: false,
   ikon: <WheelchairIcon fontSize={'5rem'} aria-hidden />,
 }
 
-export const mrs: Kategori = {
-  navn: 'MRS',
-  beskrivelse: '',
+export const manuelleRullestoler: Kategori = {
+  navn: 'Manuelle rullestoler',
+  beskrivelse:
+    'Hjelpemidler som gir mobilitet og sittende støtte for personer med begrenset bevegelighet, der brukeren selv eller en ledsager kjører rullestolen manuelt.',
   underkategorier: [],
   isoer: ['1222', '122704'],
   visProdukter: true,
@@ -245,9 +252,10 @@ export const ramperForBil: Kategori = {
   visProdukter: true,
 }
 
-export const ers: Kategori = {
-  navn: 'ERS',
-  beskrivelse: '',
+export const elektriskeRullestoler: Kategori = {
+  navn: 'Elektriske rullestoler',
+  beskrivelse:
+    'Hjelpemidler som drives med motor, og som gir mulighet for mobilitet og sittende støtte for personer med redusert forflytningsevne. Motoren kan ha framdrift som er elektrisk eller forbrenningsbasert. ',
   underkategorier: [],
   isoer: ['1223'],
   visProdukter: true,
@@ -255,7 +263,8 @@ export const ers: Kategori = {
 
 export const motoriserteKjøretøy: Kategori = {
   navn: 'Motoriserte kjøretøy',
-  beskrivelse: '',
+  beskrivelse:
+    'Diverse motoriserte kjøretøy med 4 hjul. Omfatter f.eks. terrenggående kjøretøy (ATV), firehjulinger og gokarter. ',
   underkategorier: [],
   isoer: ['121709'],
   visProdukter: true,
@@ -263,14 +272,15 @@ export const motoriserteKjøretøy: Kategori = {
 
 export const drivaggregat: Kategori = {
   navn: 'Drivaggregat',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler som monteres på en manuell rullestol, som gjør det mulig for brukeren eller ledsageren å manøvrere eller kjøre rullestolen uten bruk av muskelkraft.',
   underkategorier: [],
   isoer: ['122409'],
   visProdukter: true,
 }
 export const tilleggsutstyrRullestoler: Kategori = {
   navn: 'Tilleggsutstyr til rullestoler',
-  beskrivelse: '',
+  beskrivelse: 'Utstyr relatert til bruk av rullestoler.',
   underkategorier: [],
   isoer: ['1224'],
   visProdukter: true,
