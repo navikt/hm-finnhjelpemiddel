@@ -11,7 +11,7 @@ export const KategoriOversikt = ({ kategori }: { kategori: KategoriNavn }) => {
 
   return (
     <KategoriPageLayout title={kategorier[kategori].navn} description={kategorier[kategori].beskrivelse}>
-      <HGrid gap={'2'} columns={'repeat(2, 600px)'} paddingBlock={'12'}>
+      <HGrid gap={'2'} columns={{ xs: 1, md: 2 }} paddingBlock={'12'}>
         {kategorier[kategori].underkategorier.map((iso) => (
           <CategoryCard
             icon={kategorier[iso].ikon}
