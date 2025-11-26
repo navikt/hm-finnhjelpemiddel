@@ -19,8 +19,8 @@ import {
 } from '@/app/kategori/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
 import { IsoTree } from '@/app/kategori/utils/iso-util'
-import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { IsoCategoryCard } from '@/app/kategori/iso/[iso]/IsoCategoryCard'
 
 type Props = {
   iso: string
@@ -123,8 +123,7 @@ export const IsoKategoriPage = ({ iso, isoTree }: Props) => {
         {currentIso.isoLevel < 4 && (
           <HGrid gap={'2'} columns={'repeat(5, 200px)'} paddingBlock={'8 0'}>
             {deeperIsosWithProducts.map((nextIsoLevel) => (
-              <CategoryCard
-                icon={undefined}
+              <IsoCategoryCard
                 title={nextIsoLevel.isoTitle}
                 link={nextIsoLevel.isoCode}
                 description={''}
