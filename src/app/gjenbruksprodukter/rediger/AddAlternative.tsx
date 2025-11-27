@@ -53,7 +53,7 @@ export const AddAlternative = ({
               htmlSize={'12'}
               error={
                 (unknownHmsNr && 'Finner ikke hjelpemiddelet') ||
-                (isAlreadyInGroup && 'Produktet er allerede i denne alternativgruppen')
+                (isAlreadyInGroup && 'Produktet er allerede i denne klyngen med alternativer')
               }
             />
             {targetHmsArtNr && searchedProduct && !isAlreadyInGroup && (
