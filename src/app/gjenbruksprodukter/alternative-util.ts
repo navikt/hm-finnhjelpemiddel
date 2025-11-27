@@ -8,6 +8,11 @@ export interface AlternativeStockResponseNew {
   alternatives: AlternativeProduct[]
 }
 
+export interface AlternativesWithStockGroupedResponse {
+  original: AlternativeProduct
+  groups: AlternativeProduct[][]
+}
+
 export interface AlternativeProduct {
   seriesId: string
   variantId: string
@@ -26,6 +31,24 @@ export interface AlternativeProduct {
 export interface WarehouseStock {
   location: string
   available: number
+}
+
+export async function getAlternativesGrouped(hmsArtNr: string): Promise<AlternativesWithStockGroupedResponse | undefined> {
+  const res = await fetch(
+    HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives-groups/${hmsArtNr}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  if (res.status === 404) {
+    return undefined
+  }
+
+  return res.json()
 }
 
 export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeStockResponseNew | undefined> {

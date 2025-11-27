@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ExpansionCard, Search, VStack } from '@navikt/ds-react'
 import { AlternativeStockResponseNew, newGetAlternatives } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWRImmutable from 'swr/immutable'
@@ -22,6 +22,13 @@ export const AddAlternative = ({
   )
 
   const searchedProduct = alternativeResponse?.original
+  const searchedHmsArtNr = searchedProduct?.hmsArtNr ?? undefined
+
+  const isAlreadyInGroup = useMemo(
+    () => !!searchedHmsArtNr && alternativeGroup.includes(searchedHmsArtNr),
+    [searchedHmsArtNr, alternativeGroup]
+  )
+
   const unknownHmsNr = targetHmsArtNr && !isLoading && !searchedProduct
 
   return (
@@ -44,9 +51,12 @@ export const AddAlternative = ({
               }}
               onClear={() => setTargetHmsArtNr(undefined)}
               htmlSize={'12'}
-              error={unknownHmsNr && 'Finner ikke hjelpemiddelet'}
+              error={
+                (unknownHmsNr && 'Finner ikke hjelpemiddelet') ||
+                (isAlreadyInGroup && 'Produktet er allerede i denne alternativgruppen')
+              }
             />
-            {targetHmsArtNr && searchedProduct && (
+            {targetHmsArtNr && searchedProduct && !isAlreadyInGroup && (
               <AddAlternativeContent
                 searchedProduct={searchedProduct}
                 alternativeGroup={alternativeGroup}
