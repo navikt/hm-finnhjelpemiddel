@@ -7,6 +7,13 @@
   width: 900px;
 }
 
+.containerDotted {
+  border: 2px dashed $a-border-strong;
+  border-radius: $a-border-radius-medium;
+  background-color: $a-surface-subtle;
+  width: 900px;
+}
+
 // Only remove the top border when a container directly follows another non-original container
 .container:not(.original) + .container {
   border-top: 0;

@@ -13,7 +13,7 @@ export const NoAlternativesCard = ({}: {}) => {
       gap={'2'}
       padding={'4'}
       align={'center'}
-      className={`${styles.container} `}
+      className={`${styles.containerDotted} `}
       width={'10px'}
     >
       <BodyShort align={'center'}>

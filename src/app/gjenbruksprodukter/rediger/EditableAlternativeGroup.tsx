@@ -14,7 +14,13 @@ export const EditableAlternativeGroup = ({
   alternatives: AlternativeProduct[]
   mutateAlternatives: () => void
 }) => {
-  const alternativeGroup = alternatives.map((alternative) => alternative.hmsArtNr!)
+  const baseGroup = alternatives.map((alternative) => alternative.hmsArtNr!).filter(Boolean)
+  const alternativeGroup =
+    baseGroup.length > 0
+      ? baseGroup
+      : originalProduct?.hmsArtNr
+      ? [originalProduct.hmsArtNr]
+      : []
 
   const others = alternatives
     .filter((alt) => !originalProduct || alt.variantId !== originalProduct.variantId)
@@ -25,7 +31,6 @@ export const EditableAlternativeGroup = ({
   return (
     <VStack gap={'2'}>
       <VStack>
-
         {orderedAlternatives.map((alternative) => (
           <EditableAlternativeCard
             alternativeProduct={alternative}
@@ -36,7 +41,7 @@ export const EditableAlternativeGroup = ({
             key={alternative.variantId}
           />
         ))}
-        {orderedAlternatives.length === 1 && <NoAlternativesCard/>}
+        {orderedAlternatives.length === 1 && <NoAlternativesCard />}
       </VStack>
       <AddAlternative alternativeGroup={alternativeGroup} mutateAlternatives={mutateAlternatives} />
     </VStack>
