@@ -79,16 +79,16 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
     return (
       <HStack gap="space-8">
         <HStack gap="2">
-          Det finnes flere grupper med alternativer for produktet
+          Det finnes flere klynger med alternativer for produktet
           <HelpText title="Forklaring av alternativgrupper">
-            En alternativgruppe er en klynge av produkter som kan erstatte hverandre. Når et produkt har flere grupper
-            med alternativer, betyr det at det finnes ulike sett av produkter som kan brukes som erstatninger.
+            Når et produkt har flere klynger med alternativer betyr det at det finnes ulike sett av produkter som kan
+            brukes som erstatninger, men at alle produktene i alle klyngene ikke kan erstatte hverandre.
           </HelpText>
         </HStack>
         {groups.map((group, index) => (
           <Box key={index} paddingBlock="space-8">
             <Heading level="2" size="medium" spacing>
-              Alternativgruppe {index + 1}
+              Klynge {index + 1}
             </Heading>
             <EditableAlternativeGroup
               originalProduct={alternativesResponse.original}
@@ -99,15 +99,16 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
         ))}
       </HStack>
     )
-  } else if(groups.length === 0) {
-    return(
+  } else if (groups.length === 0) {
+    return (
       <Box>
         <EditableAlternativeGroup
           originalProduct={alternativesResponse.original}
           alternatives={[]}
           mutateAlternatives={mutateAlternatives}
         />
-      </Box>)
+      </Box>
+    )
   }
 
   return groups.map((group, index) => (
