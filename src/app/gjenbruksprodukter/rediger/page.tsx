@@ -2,12 +2,13 @@
 
 import { Heading } from '@/components/aksel-client'
 import styles from '../AlternativeProducts.module.scss'
-import { Bleed, BodyShort, Box, HStack, Loader, Search, VStack } from '@navikt/ds-react'
+import { Bleed, BodyShort, Box, HelpText, HStack, Loader, Search, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { EditableAlternativeGroup } from '@/app/gjenbruksprodukter/rediger/EditableAlternativeGroup'
-import { newGetAlternatives } from '@/app/gjenbruksprodukter/alternative-util'
+import { getAlternativesGrouped } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWR from 'swr'
+import { NoAlternativesCard } from '@/app/gjenbruksprodukter/rediger/NoAlternativesCard'
 
 export default function EditAlternativeProductsPage() {
   const router = useRouter()
@@ -58,27 +59,64 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
     isLoading: isLoadingAlternatives,
     mutate: mutateAlternatives,
     error: errorAlternatives,
-  } = useSWR(`asdasd-${hmsNumber}`, () => newGetAlternatives(hmsNumber))
+  } = useSWR(`alternatives-groups-${hmsNumber}`, () => getAlternativesGrouped(hmsNumber))
 
   if (isLoadingAlternatives) {
     return <Loader />
   }
 
   if (errorAlternatives || !alternativesResponse) {
-    return <>En feil har skjedd ved henting av data</>
+    return <Box>En feil har skjedd ved henting av data</Box>
   }
 
   if (!alternativesResponse.original) {
     return <>Finner ikke produkt {hmsNumber}</>
   }
 
-  const alternatives = alternativesResponse.alternatives ?? []
+  const groups = alternativesResponse.groups ?? []
 
-  return (
-    <EditableAlternativeGroup
-      originalProduct={alternativesResponse.original}
-      alternatives={alternatives}
-      mutateAlternatives={mutateAlternatives}
-    />
-  )
+  if (groups.length > 1) {
+    return (
+      <HStack gap="space-8">
+        <HStack gap="2">
+          Det finnes flere grupper med alternativer for produktet
+          <HelpText title="Forklaring av alternativgrupper">
+            En alternativgruppe er en klynge av produkter som kan erstatte hverandre. Når et produkt har flere grupper
+            med alternativer, betyr det at det finnes ulike sett av produkter som kan brukes som erstatninger.
+          </HelpText>
+        </HStack>
+        {groups.map((group, index) => (
+          <Box key={index} paddingBlock="space-8">
+            <Heading level="2" size="medium" spacing>
+              Alternativgruppe {index + 1}
+            </Heading>
+            <EditableAlternativeGroup
+              originalProduct={alternativesResponse.original}
+              alternatives={group}
+              mutateAlternatives={mutateAlternatives}
+            />
+          </Box>
+        ))}
+      </HStack>
+    )
+  } else if(groups.length === 0) {
+    return(
+      <Box>
+        <EditableAlternativeGroup
+          originalProduct={alternativesResponse.original}
+          alternatives={[]}
+          mutateAlternatives={mutateAlternatives}
+        />
+      </Box>)
+  }
+
+  return groups.map((group, index) => (
+    <Box key={index} paddingBlock="space-8">
+      <EditableAlternativeGroup
+        originalProduct={alternativesResponse.original}
+        alternatives={group}
+        mutateAlternatives={mutateAlternatives}
+      />
+    </Box>
+  ))
 }

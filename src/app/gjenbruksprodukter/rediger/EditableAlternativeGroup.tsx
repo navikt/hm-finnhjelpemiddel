@@ -3,6 +3,7 @@ import React from 'react'
 import { AlternativeProduct, deleteAlternativeFromGroup } from '@/app/gjenbruksprodukter/alternative-util'
 import { EditableAlternativeCard } from '@/app/gjenbruksprodukter/rediger/EditableAlternativeCard'
 import { AddAlternative } from '@/app/gjenbruksprodukter/rediger/AddAlternative'
+import { NoAlternativesCard } from '@/app/gjenbruksprodukter/rediger/NoAlternativesCard'
 
 export const EditableAlternativeGroup = ({
   originalProduct,
@@ -24,6 +25,7 @@ export const EditableAlternativeGroup = ({
   return (
     <VStack gap={'2'}>
       <VStack>
+
         {orderedAlternatives.map((alternative) => (
           <EditableAlternativeCard
             alternativeProduct={alternative}
@@ -34,6 +36,7 @@ export const EditableAlternativeGroup = ({
             key={alternative.variantId}
           />
         ))}
+        {orderedAlternatives.length === 1 && <NoAlternativesCard/>}
       </VStack>
       <AddAlternative alternativeGroup={alternativeGroup} mutateAlternatives={mutateAlternatives} />
     </VStack>
