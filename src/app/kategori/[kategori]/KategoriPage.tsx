@@ -40,7 +40,23 @@ export const KategoriPage = ({ kategori }: Props) => {
     const suppliers = searchParams.getAll('supplier') ?? ''
     const isos = searchParams.getAll('iso') ?? ''
 
-    const filters: SearchFiltersKategori = { suppliers: suppliers, isos: isos }
+    const setebreddeMinCM = searchParams.get('setebreddeMinCM') ?? ''
+    const setebreddeMaksCM = searchParams.get('setebreddeMaksCM') ?? ''
+    const setedybdeMinCM = searchParams.get('setedybdeMinCM') ?? ''
+    const setedybdeMaksCM = searchParams.get('setedybdeMaksCM') ?? ''
+    const setehoydeMinCM = searchParams.get('setehoydeMinCM') ?? ''
+    const setehoydeMaksCM = searchParams.get('setehoydeMaksCM') ?? ''
+
+    const filters: SearchFiltersKategori = {
+      suppliers: suppliers,
+      isos: isos,
+      setehoydeMaksCM,
+      setehoydeMinCM,
+      setedybdeMaksCM,
+      setedybdeMinCM,
+      setebreddeMaksCM,
+      setebreddeMinCM,
+    }
 
     return {
       sortOrder,

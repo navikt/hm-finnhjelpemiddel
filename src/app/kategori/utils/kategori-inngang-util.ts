@@ -1,4 +1,10 @@
-import { filterLeverandor, filterMainProductsOnly, filterPrefixIsoKode } from '@/utils/filter-util'
+import {
+  filterLeverandor,
+  filterMainProductsOnly,
+  filterMinMax,
+  filterPrefixIsoKode,
+  toMinMaxAggs,
+} from '@/utils/filter-util'
 import { SortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
@@ -26,6 +32,12 @@ export type ProductsWithIsoAggs = {
 export type SearchFiltersKategori = {
   suppliers: string[]
   isos: string[]
+  setebreddeMaksCM?: string
+  setebreddeMinCM?: string
+  setedybdeMaksCM?: string
+  setehoydeMaksCM?: string
+  setehoydeMinCM?: string
+  setedybdeMinCM?: string
 }
 
 export type SearchDataKategori = {
@@ -62,6 +74,22 @@ export const fetchProductsKategori2 = async ({
 
   if (filters && filters.suppliers) {
     postFilters.push(filterLeverandor(filters.suppliers))
+  }
+
+  if (filters && filters.setebreddeMinCM && filters.setebreddeMaksCM) {
+    postFilters.push(
+      filterMinMax({ setebreddeMinCM: filters.setebreddeMinCM }, { setebreddeMaksCM: filters.setebreddeMaksCM })
+    )
+  }
+  if (filters && filters.setedybdeMinCM && filters.setedybdeMaksCM) {
+    postFilters.push(
+      filterMinMax({ setedybdeMinCM: filters.setedybdeMinCM }, { setedybdeMaksCM: filters.setedybdeMaksCM })
+    )
+  }
+  if (filters && filters.setehoydeMinCM && filters.setehoydeMaksCM) {
+    postFilters.push(
+      filterMinMax({ setehoydeMinCM: filters.setehoydeMinCM }, { setehoydeMaksCM: filters.setehoydeMaksCM })
+    )
   }
 
   if (kategoriIsos.length > 0) {
@@ -111,6 +139,12 @@ export const fetchProductsKategori2 = async ({
       },
       postFilters
     ),
+    ...aggsFilter('setebreddeMinCM', toMinMaxAggs(`filters.setebreddeMinCM`), postFilters),
+    ...aggsFilter('setebreddeMaksCM', toMinMaxAggs(`filters.setebreddeMaksCM`), postFilters),
+    ...aggsFilter('setedybdeMinCM', toMinMaxAggs(`filters.setedybdeMinCM`), postFilters),
+    ...aggsFilter('setedybdeMaksCM', toMinMaxAggs(`filters.setedybdeMaksCM`), postFilters),
+    ...aggsFilter('setehoydeMinCM', toMinMaxAggs(`filters.setehoydeMinCM`), postFilters),
+    ...aggsFilter('setehoydeMaksCM', toMinMaxAggs(`filters.setehoydeMaksCM`), postFilters),
   }
 
   const body: QueryObject = {
@@ -243,6 +277,7 @@ export const fetchProductsKategori = async ({ from, size, searchData }: FetchPro
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data)
       return {
         products: mapProductsFromCollapse(data),
         iso: mapIsoAggregations(data),
