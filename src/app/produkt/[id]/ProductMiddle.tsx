@@ -1,13 +1,24 @@
 'use client'
 
-import { Accordion, Button, Chips, Heading, HGrid, VStack } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyLong,
+  BodyShort,
+  Button,
+  Chips,
+  Heading,
+  HelpText,
+  HGrid,
+  HStack,
+  VStack,
+} from '@navikt/ds-react'
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVariantDataTable'
 import NextLink from 'next/link'
 import styles from './ProductMiddle.module.scss'
 import { VariantTableSingle } from '@/app/produkt/[id]/variantTable/VariantTableSingle'
-import { fetchProductsWithVariants } from '@/utils/api-util'
+import { fetchWorkWithProducts } from '@/utils/api-util'
 import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -29,7 +40,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
 
   useEffect(() => {
     const fetchData = async () => {
-      const products = (worksWithSeriesIds && (await fetchProductsWithVariants(worksWithSeriesIds)).products) || []
+      const products = (worksWithSeriesIds && (await fetchWorkWithProducts(worksWithSeriesIds)).products) || []
       setWorkWithProducts(products)
     }
     fetchData()
@@ -47,6 +58,20 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
 
   const worksWithShowConstrain =
     worksWithFeatureFlag && shouldShowSection && workWithProducts && workWithProducts.length > 0
+  const helpTextWorksWith = () => {
+    return (
+      <>
+        <BodyLong>
+          Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt
+          sammen.
+          <br />
+          <br />
+          Man trenger ikke å velge alle hjelpemidler fra lista. Det kan være flere alternativer av samme type, der man
+          kun trenger å velge én.
+        </BodyLong>
+      </>
+    )
+  }
 
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
@@ -59,7 +84,12 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
         {worksWithShowConstrain && (
           <Accordion size={'small'}>
             <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={() => setOpen(!open)}>
-              <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
+              <Accordion.Header className={styles.accordion}>
+                <HStack gap="4" align="center">
+                  Virker sammen med
+                  <HelpText placement="right">{helpTextWorksWith()}</HelpText>
+                </HStack>
+              </Accordion.Header>
               <Accordion.Content>
                 <WorksWithSection products={workWithProducts} />
               </Accordion.Content>
@@ -94,7 +124,10 @@ const ComponentTypeFilter = ({
 
   return (
     <VStack gap={'2'}>
-      <Chips>
+      <BodyShort size="medium" as="label">
+        Filter
+      </BodyShort>
+      <Chips size={'small'} aria-label="Filter på komponenttyper" className={styles.chips}>
         {componentTypes.map((type) => (
           <Chips.Toggle key={type} selected={selectedTypes.includes(type)} onClick={() => onToggle(type)}>
             {type}
@@ -157,7 +190,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
         selectedTypes={selectedComponentTypes}
         onToggle={handleComponentTypeToggle}
       />
-
+{/*      <BodyShort size="small">{products.length}</BodyShort>*/}
       {displayedProducts.map((workWithProduct: Product) => (
         <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
       ))}

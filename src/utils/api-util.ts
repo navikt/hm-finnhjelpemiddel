@@ -222,7 +222,7 @@ export const makeSearchTermQuery = ({
   const negativeBoostSparePartsAndAccessories = {
     negative: {
       match: {
-         main: false,
+        main: false,
       },
     },
     //Ganges med 1 betyr samme boost. Ganges med et mindre tall betyr lavere boost og kommer lenger ned. Om den settes til 0 forsvinner den helt fordi alt som ganges med 0 er 0
@@ -609,11 +609,7 @@ export const getProductsOnAgreement = ({
     body: JSON.stringify({
       size,
       from,
-      sort: [
-        { 'agreements.postNr': 'asc' },
-        { 'agreements.rank': 'asc' },
-        { _id: 'asc' },
-      ],
+      sort: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }, { _id: 'asc' }],
       query,
       track_total_hits: true,
     }),
@@ -1116,7 +1112,7 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
           must: [
             {
               term: {
-                'attributes.compatibleWith.seriesIds': seriesId,
+                seriesIds: seriesId,
               },
             },
             {
@@ -1141,7 +1137,7 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
     .then((data) => mapProductsVariants(data))
 }
 
-export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[]> => {
+export const fetchWorkWithProducts = (seriesIds: string[]): Promise<FetchSeriesResponse> => {
   return fetch(HM_SEARCH_URL + '/products/_search', {
     method: 'POST',
     headers: {
@@ -1152,8 +1148,8 @@ export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[
         bool: {
           must: [
             {
-              term: {
-                'attributes.worksWith.seriesIds': seriesId,
+              terms: {
+                seriesId: seriesIds,
               },
             },
             {
@@ -1171,11 +1167,15 @@ export const fetchWorkWithProducts = (seriesId: string): Promise<ProductVariant[
           },
         },
       ],
-      size: 1000,
+      size: 100,
     }),
   })
     .then((res) => res.json())
-    .then((data) => mapProductsVariants(data))
+    .then((data) => {
+      return {
+        products: mapProductsWithoutAggregationOnSeries(data),
+      }
+    })
 }
 
 export type ProductVariantsPagination = {
