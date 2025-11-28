@@ -1,6 +1,18 @@
 'use client'
 
-import { Accordion, Button, Chips, Heading, HGrid, VStack } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyLong,
+  BodyShort,
+  Button,
+  Chips,
+  Heading,
+  HelpText,
+  HGrid,
+  HStack,
+  Label,
+  VStack,
+} from '@navikt/ds-react'
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVariantDataTable'
@@ -47,6 +59,19 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
 
   const worksWithShowConstrain =
     worksWithFeatureFlag && shouldShowSection && workWithProducts && workWithProducts.length > 0
+  const helpTextTopLabels = () => {
+    return (
+      <>
+        <Heading size="small">Hvordan brukes &ldquo;Virker sammer med&rdquo; ? </Heading>
+        <BodyLong>
+          Hovedproduktet fungerer sammen med disse hjelpemidler på liste som leverandører eller fageksperter har satt sammen.
+          <br />
+          <br />
+          Viktig å huske på at man trenger ikke å velge alle produkter på liste for en et sammensatt produkt. Det kan vare flere alternativer av en type som man kan velge.
+        </BodyLong>
+      </>
+    )
+  }
 
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
@@ -59,7 +84,12 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
         {worksWithShowConstrain && (
           <Accordion size={'small'}>
             <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={() => setOpen(!open)}>
-              <Accordion.Header className={styles.accordion}>Virker sammen med</Accordion.Header>
+              <Accordion.Header className={styles.accordion}>
+                <HStack gap="4" align="center">
+                Virker sammen med
+                <HelpText placement="right">{helpTextTopLabels()}</HelpText>
+                </HStack>
+              </Accordion.Header>
               <Accordion.Content>
                 <WorksWithSection products={workWithProducts} />
               </Accordion.Content>
@@ -94,7 +124,10 @@ const ComponentTypeFilter = ({
 
   return (
     <VStack gap={'2'}>
-      <Chips>
+      <BodyShort size="medium" as="label">
+        Filter
+      </BodyShort>
+      <Chips size={"small"} aria-label="Filter på komponenttyper" className={styles.chips}>
         {componentTypes.map((type) => (
           <Chips.Toggle key={type} selected={selectedTypes.includes(type)} onClick={() => onToggle(type)}>
             {type}

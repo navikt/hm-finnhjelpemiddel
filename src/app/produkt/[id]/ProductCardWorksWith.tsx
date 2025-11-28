@@ -39,7 +39,7 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
               </Link>
             </Box>
             <Box className={styles.productSummary}>
-              {hmsArtNr && (
+              {product.variants.length===1 ? (
                 <CopyButton
                   size="small"
                   className={styles.copyButton}
@@ -54,7 +54,7 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
                     logUmamiClickButton('kopiert', 'product-worksWith-copyButton', 'action')
                   }}
                 />
-              )}
+              ): `${product.variants.length} varianter` }
             </Box>
           </VStack>
         </HStack>
