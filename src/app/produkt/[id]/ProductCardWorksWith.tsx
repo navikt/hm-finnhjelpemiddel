@@ -10,8 +10,8 @@ import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
 export const ProductCardWorksWith = ({ product }: { product: Product }) => {
-  const linkToProduct = `/produkt/${product.id}`
   const hmsArtNr = product.variants[0].hmsArtNr
+  const linkToProduct = `/produkt/${product.id}?term=${hmsArtNr || ''}`
 
   return (
     <Box padding={{ xs: '2', md: '3' }} className={styles.container} width={{ xs: '100%', sm: '500px' }}>
