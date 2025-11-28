@@ -1,10 +1,4 @@
-import {
-  filterLeverandor,
-  filterMainProductsOnly,
-  filterMinMax,
-  filterPrefixIsoKode,
-  toMinMaxAggs,
-} from '@/utils/filter-util'
+import { filterLeverandor, filterMainProductsOnly, filterMinMax, filterPrefixIsoKode } from '@/utils/filter-util'
 import { SortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
@@ -139,12 +133,72 @@ export const fetchProductsKategori2 = async ({
       },
       postFilters
     ),
-    ...aggsFilter('setebreddeMinCM', toMinMaxAggs(`filters.setebreddeMinCM`), postFilters),
-    ...aggsFilter('setebreddeMaksCM', toMinMaxAggs(`filters.setebreddeMaksCM`), postFilters),
-    ...aggsFilter('setedybdeMinCM', toMinMaxAggs(`filters.setedybdeMinCM`), postFilters),
-    ...aggsFilter('setedybdeMaksCM', toMinMaxAggs(`filters.setedybdeMaksCM`), postFilters),
-    ...aggsFilter('setehoydeMinCM', toMinMaxAggs(`filters.setehoydeMinCM`), postFilters),
-    ...aggsFilter('setehoydeMaksCM', toMinMaxAggs(`filters.setehoydeMaksCM`), postFilters),
+    ...aggsFilter(
+      'setebreddeMinCM',
+      {
+        min: {
+          min: {
+            field: 'filters.setebreddeMinCM',
+          },
+        },
+      },
+      postFilters
+    ),
+    ...aggsFilter(
+      'setebreddeMaksCM',
+      {
+        max: {
+          max: {
+            field: 'filters.setebreddeMaksCM',
+          },
+        },
+      },
+      postFilters
+    ),
+    ...aggsFilter(
+      'setedybdeMinCM',
+      {
+        min: {
+          min: {
+            field: 'filters.setedybdeMinCM',
+          },
+        },
+      },
+      postFilters
+    ),
+    ...aggsFilter(
+      'setedybdeMaksCM',
+      {
+        max: {
+          max: {
+            field: 'filters.setedybdeMaksCM',
+          },
+        },
+      },
+      postFilters
+    ),
+    ...aggsFilter(
+      'setehoydeMinCM',
+      {
+        min: {
+          min: {
+            field: 'filters.setehoydeMinCM',
+          },
+        },
+      },
+      postFilters
+    ),
+    ...aggsFilter(
+      'setehoydeMaksCM',
+      {
+        max: {
+          max: {
+            field: 'filters.setehoydeMaksCM',
+          },
+        },
+      },
+      postFilters
+    ),
   }
 
   const body: QueryObject = {
