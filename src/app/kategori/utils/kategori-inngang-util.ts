@@ -21,6 +21,7 @@ export type ProductsWithIsoAggs = {
   products: Product[]
   iso: IsoInfo[]
   suppliers: SupplierInfo[]
+  minMaxFilters?: MinMaxInfo[]
 }
 
 export type SearchFiltersKategori = {
@@ -231,6 +232,7 @@ export const fetchProductsKategori2 = async ({
         products: mapProductsFromCollapse(data),
         iso: mapIsoAggregations(data),
         suppliers: mapSupplierAggregations(data),
+        minMaxFilters: mapMinMaxAggregations(data),
       }
     })
 }
@@ -364,6 +366,21 @@ type SupplierAggregation = {
   }
 }
 
+type MinAggregation = {
+  min: {
+    value: {
+      parsedValue?: number
+    } | null
+  }
+}
+type MaxAggregation = {
+  max: {
+    value: {
+      parsedValue?: number
+    } | null
+  }
+}
+
 type ProductIsoAggregationResponse = {
   hits: {
     total: object
@@ -372,6 +389,12 @@ type ProductIsoAggregationResponse = {
   aggregations: {
     iso: IsoAggregation
     suppliers: SupplierAggregation
+    setebreddeMinCM: MinAggregation
+    setebreddeMaksCM: MaxAggregation
+    setedybdeMinCM: MinAggregation
+    setedybdeMaksCM: MaxAggregation
+    setehoydeMinCM: MinAggregation
+    setehoydeMaksCM: MaxAggregation
   }
 }
 
@@ -380,4 +403,45 @@ const mapIsoAggregations = (data: ProductIsoAggregationResponse): IsoInfo[] => {
 }
 const mapSupplierAggregations = (data: ProductIsoAggregationResponse): SupplierInfo[] => {
   return data.aggregations.suppliers.values.buckets.map((bucket) => ({ name: bucket.key }))
+}
+
+export type MinMaxInfo = {
+  name: string
+  type: 'min' | 'max'
+  value: number
+}
+
+const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): MinMaxInfo[] => {
+  let minMaxInfo: Array<MinMaxInfo> = []
+  minMaxInfo.push({
+    name: 'setebreddeMinCM',
+    type: 'min',
+    value: data.aggregations.setebreddeMinCM.min.value?.parsedValue ?? 0,
+  })
+  minMaxInfo.push({
+    name: 'setebreddeMaksCM',
+    type: 'max',
+    value: data.aggregations.setebreddeMaksCM.max.value?.parsedValue ?? 0,
+  })
+  minMaxInfo.push({
+    name: 'setedybdeMinCM',
+    type: 'min',
+    value: data.aggregations.setedybdeMinCM.min.value?.parsedValue ?? 0,
+  })
+  minMaxInfo.push({
+    name: 'setedybdeMaksCM',
+    type: 'max',
+    value: data.aggregations.setedybdeMaksCM.max.value?.parsedValue ?? 0,
+  })
+  minMaxInfo.push({
+    name: 'setehoydeMinCM',
+    type: 'min',
+    value: data.aggregations.setehoydeMinCM.min.value?.parsedValue ?? 0,
+  })
+  minMaxInfo.push({
+    name: 'setehoydeMaksCM',
+    type: 'max',
+    value: data.aggregations.setehoydeMaksCM.max.value?.parsedValue ?? 0,
+  })
+  return minMaxInfo
 }
