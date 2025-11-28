@@ -59,15 +59,11 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
 
   const worksWithShowConstrain =
     worksWithFeatureFlag && shouldShowSection && workWithProducts && workWithProducts.length > 0
-  const helpTextTopLabels = () => {
+  const helpTextWorksWith = () => {
     return (
       <>
-        <Heading size="small">Hvordan brukes &ldquo;Virker sammer med&rdquo; ? </Heading>
-        <BodyLong>
-          Hovedproduktet fungerer sammen med disse hjelpemidler på liste som leverandører eller fageksperter har satt sammen.
-          <br />
-          <br />
-          Viktig å huske på at man trenger ikke å velge alle produkter på liste for en et sammensatt produkt. Det kan vare flere alternativer av en type som man kan velge.
+        <BodyLong>Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt sammen.
+          <br /><br />Man trenger ikke å velge alle hjelpemidler fra lista. Det kan være flere alternativer av samme type, der man kun trenger å velge én.
         </BodyLong>
       </>
     )
@@ -87,7 +83,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
               <Accordion.Header className={styles.accordion}>
                 <HStack gap="4" align="center">
                 Virker sammen med
-                <HelpText placement="right">{helpTextTopLabels()}</HelpText>
+                <HelpText placement="right">{helpTextWorksWith()}</HelpText>
                 </HStack>
               </Accordion.Header>
               <Accordion.Content>
