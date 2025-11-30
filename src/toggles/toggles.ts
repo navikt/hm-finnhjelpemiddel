@@ -6,7 +6,7 @@ export const EXPECTED_TOGGLES = [
   'paaskepynt',
   'finnhjelpemiddel.link-seksualteknisk-avtale',
   'finnhjelpemiddel.vis-virker-sammen-med-products',
-  'finnhjelpemiddel.avtale-side.komponenttype-gruppering'
+  'finnhjelpemiddel.avtale-side.komponenttype-gruppering',
 ] as const
 
 export const LOCAL_TOGGLES = [
@@ -20,7 +20,7 @@ export const LOCAL_TOGGLES = [
   },
   {
     name: 'juledekorasjon',
-    enabled: false,
+    enabled: true,
   },
   {
     name: 'finnhjelpemiddel.feilbanner',
@@ -37,5 +37,5 @@ export const LOCAL_TOGGLES = [
   {
     name: 'finnhjelpemiddel.avtale-side.komponenttype-gruppering',
     enabled: true,
-  }
+  },
 ]
