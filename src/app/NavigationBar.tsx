@@ -10,12 +10,19 @@ import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import { SnowfallComponent } from '@/components/Snowfall'
+import Pepperkakemann from '@/app/julepynt/Pepperkakemann'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const searchParams = useSearchParams()
   const searchParamValue = searchParams.get('term')
   const [searchOpen, setSearchOpen] = useState(searchParamValue !== '' && searchParamValue !== null)
+
+  const featureFlags = useFeatureFlags()
+  const juledekorasjonFlag = featureFlags.isEnabled('juledekorasjon')
+  const [visJulepynt, setVisJulepynt] = useState(false)
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -79,6 +86,7 @@ const NavigationBar = () => {
 
   return (
     <nav className="nav" ref={outerContainerRef}>
+      {juledekorasjonFlag && visJulepynt && <SnowfallComponent />}
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
           <NextLink href={homeUrl} className="logo" onClick={() => setMenuOpen(false)}>
@@ -89,6 +97,35 @@ const NavigationBar = () => {
               </span>
             </Hide>
           </NextLink>
+
+          {juledekorasjonFlag && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                alignContent: 'flex-start',
+                marginRight: 'auto',
+                paddingLeft: '1rem',
+              }}
+            >
+              <Hide below="md">
+                <Button
+                  size="medium"
+                  variant="tertiary-neutral"
+                  icon={<Pepperkakemann active={visJulepynt} />}
+                  onClick={() => setVisJulepynt(!visJulepynt)}
+                ></Button>
+              </Hide>
+              <Hide above="sm">
+                <Button
+                  size="xsmall"
+                  variant="tertiary-neutral"
+                  icon={<Pepperkakemann active={visJulepynt} />}
+                  onClick={() => setVisJulepynt(!visJulepynt)}
+                ></Button>
+              </Hide>
+            </div>
+          )}
 
           <div className="nav-top-container__menu-buttons-container">
             <HStack wrap={false}>
