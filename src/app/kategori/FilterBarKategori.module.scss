@@ -1,0 +1,21 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.filterButton {
+  --ac-button-border-radius: var(--a-border-radius-full);
+
+  --ac-button-secondary-bg: white;
+  --ac-button-secondary-text: var(--a-text-danger);
+
+  --ac-button-secondary-hover-bg: var(--a-surface-danger-subtle-hover);
+  --ac-button-secondary-hover-text: white;
+
+  box-shadow: inset 0 0 0 1px var(--a-surface-danger);
+
+  span {
+    font-weight: normal;
+  }
+
+  &:hover {
+    box-shadow: inset 0 0 0 1px var(--a-border-danger-hover);
+  }
+}

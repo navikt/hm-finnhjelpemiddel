@@ -1,8 +1,9 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { KategoriToggleFilter } from '@/app/kategori/KategoriToggleFilter'
-import { CircleSlashIcon } from '@navikt/aksel-icons'
+import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { MinMaxFilter, MinMaxMenu } from '@/app/kategori/MinMaxFilter'
+import styles from './FilterBarKategori.module.scss'
 
 export type Filters = {
   ['suppliers']: string[]
@@ -32,17 +33,24 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   return (
     <VStack gap={'4'}>
       <Heading size={'small'}>Filter</Heading>
-      <div>
-        <Button variant={'danger'} size={'xsmall'} onClick={onReset} icon={<CircleSlashIcon />}>
-          Nullstill filtere
-        </Button>
-      </div>
       <HStack gap="4" maxWidth={'1214px'}>
         {filters.isos.length > 1 && (
           <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
         )}
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
         <MinMaxFilter filterMenu={minMaxFilters} />
+        <div>
+          <Button
+            variant={'secondary'}
+            size={'small'}
+            onClick={onReset}
+            className={styles.filterButton}
+            icon={<XMarkIcon />}
+            iconPosition={'right'}
+          >
+            Nullstill
+          </Button>
+        </div>
       </HStack>
     </VStack>
   )
