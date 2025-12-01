@@ -132,7 +132,7 @@ export const KategoriPage = ({ kategori }: Props) => {
               {isLoading ? (
                 <Skeleton variant="text" width="10rem" />
               ) : products ? (
-                `Viser første ${products.length} av ${kategori}`
+                `Viser første ${products.length}`
               ) : (
                 `Ingen treff`
               )}
