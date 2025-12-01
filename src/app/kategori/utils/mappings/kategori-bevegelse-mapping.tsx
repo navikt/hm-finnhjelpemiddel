@@ -22,14 +22,14 @@ export type KategoriBevegelseNavn =
   | 'Seil og seler'
   | 'Tandemsykler'
   | 'Tohjulssykler'
-  | 'Tre- og firehjulssykler'
+  | 'Trehjulssykler'
   | 'Hjulspark og sparkesykler'
   | 'Tilleggsutstyr til sykler'
-  | 'Bilseter og bilputer'
+  | 'Bilseter'
   | 'Lette inn- og utstigning av bil'
   | 'Belter og støtteseler for bil'
   | 'Ramper for bil'
-  | 'Krykker, stokker og staver'
+  | 'Krykker og stokker'
   | 'Gåstativer'
   | 'Rullatorer'
   | 'Gåstoler'
@@ -38,7 +38,8 @@ export type KategoriBevegelseNavn =
 
 export const bevegelse: Kategori = {
   navn: 'Bevegelse',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler for å støtte eller erstatte en persons evne til å bevege seg innendørs og utendørs. Hjelpemidlene kan være til hjelp i aktiviteter som å sitte, ligge, snu seg, forflytte seg, reise seg, stå, gå, gripe og løfte.',
   underkategorier: [
     'Ganghjelpemidler',
     'Rullestoler',
@@ -54,7 +55,8 @@ export const bevegelse: Kategori = {
 
 export const rullestoler: Kategori = {
   navn: 'Rullestoler',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler som gir mobilitet og sittende støtte for personer som har vansker med å gå eller stå over lengre tid. Rullestolene kjøres enten manuelt ved arm- eller beinkraft eller ved hjelp av en elektrisk motor. Kan også styres og driftes av ledsager.',
   underkategorier: [
     'Manuelle rullestoler',
     'Elektriske rullestoler',
@@ -70,7 +72,7 @@ export const rullestoler: Kategori = {
 export const manuelleRullestoler: Kategori = {
   navn: 'Manuelle rullestoler',
   beskrivelse:
-    'Hjelpemidler som gir mobilitet og sittende støtte for personer med begrenset bevegelighet, der brukeren selv eller en ledsager kjører rullestolen manuelt.',
+    'Rullestoler der personen selv eller en ledsager kjører rullestolen manuelt. Omfatter også rullestoler med ståfunksjon og rullestoler til bruk på stranden eller i basseng.',
   underkategorier: [],
   isoer: ['1222', '122704'],
   visProdukter: true,
@@ -78,9 +80,9 @@ export const manuelleRullestoler: Kategori = {
 
 export const ganghjelpemidler: Kategori = {
   navn: 'Ganghjelpemidler',
-  beskrivelse: '',
+  beskrivelse: 'Hjelpemidler som støtter personen under gange. Hjelpemiddelet håndteres med én eller to armer.  ',
   underkategorier: [
-    'Krykker, stokker og staver',
+    'Krykker og stokker',
     'Gåstativer',
     'Rullatorer',
     'Gåstoler',
@@ -92,14 +94,16 @@ export const ganghjelpemidler: Kategori = {
 }
 export const forflytning: Kategori = {
   navn: 'Forflytning',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler som hjelper personer med nedsatt funksjonsevne med å flytte seg fra ett sted til et annet, enten selvstendig eller med hjelpere. Eksempel på forflytningshjelpemidler er personløftere, overflyttingsplattformer, glidelaken med mer.',
   underkategorier: ['Trappeklatrere', 'Hjelpemidler for å endre kroppsstilling', 'Personløftere'],
   isoer: [],
   visProdukter: false,
 }
 export const trappeklatrere: Kategori = {
   navn: 'Trappeklatrere',
-  beskrivelse: '',
+  beskrivelse:
+    'Trappeklatrere er beregnet for å transportere personer opp eller ned trapper. Trappeklatreren er ikke festet eller koblet til trappetrinnene, veggene eller taket i tilknytning til en trapp. Betjenes av ledsager.',
   underkategorier: [],
   isoer: ['121703'],
   visProdukter: true,
@@ -107,7 +111,8 @@ export const trappeklatrere: Kategori = {
 
 export const endreKroppsstilling: Kategori = {
   navn: 'Hjelpemidler for å endre kroppsstilling',
-  beskrivelse: '',
+  beskrivelse:
+    'Dette er hjelpemidler som endrer en persons stilling eller plassering, hjelpemidler for å løfte en person opp fra gulvet, hjelpemidler som brukes for å forflytte en person fra ett sted til et annet båret av én eller flere ledsagere og hjelpemidler som hjelper en person å forflytte en annen person manuelt. Eksempler på slike hjelpemidler er sklimatter, glidebrett, overflyttingsplattformer, oppreisingsbelter og bærestoler.',
   underkategorier: [],
   isoer: ['1231'],
   visProdukter: true,
@@ -115,7 +120,8 @@ export const endreKroppsstilling: Kategori = {
 
 export const personløftere: Kategori = {
   navn: 'Personløftere',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler for forflytning av en person ved hjelp av løfting og posisjonering for å muliggjøre en planlagt aktivitet.',
   isoer: [],
   underkategorier: ['Stasjonære personløftere', 'Mobile personløftere', 'Seil og seler'],
   visProdukter: false,
@@ -123,7 +129,8 @@ export const personløftere: Kategori = {
 
 export const stasjonærePersonløftere: Kategori = {
   navn: 'Stasjonære personløftere',
-  beskrivelse: '',
+  beskrivelse:
+    'Personløftere, oftest montert i tak, for å forflytte en person innen et område som begrenses av løftesystemet. Omfatter også badekarheiser.',
   underkategorier: [],
   isoer: ['123612', '123615'],
   visProdukter: true,
@@ -131,14 +138,16 @@ export const stasjonærePersonløftere: Kategori = {
 
 export const mobilePersonløftere: Kategori = {
   navn: 'Mobile personløftere',
-  beskrivelse: '',
+  beskrivelse:
+    'Noen personløftere er for forflytning av en person i sittende, halvt sittende eller liggende stilling. Andre personløftere hjelper til med å forflytte en person fra sittende til stående stilling. Kroppen støttes av seler, seil eller knestøtte. Personløftene er mobile og kan flyttes fritt omkring.',
   underkategorier: [],
   isoer: ['123603', '123604', '123606'],
   visProdukter: true,
 }
 export const seilOgSeler: Kategori = {
   navn: 'Seil og seler',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler som gir støtte til en person som forflyttes i en mobil eller stasjonær personløfter. Omfatter for eksempel seil, seler, vester og bukser.',
   underkategorier: [],
   isoer: ['123621'],
   visProdukter: true,
@@ -146,11 +155,12 @@ export const seilOgSeler: Kategori = {
 
 export const sykler: Kategori = {
   navn: 'Sykler',
-  beskrivelse: '',
+  beskrivelse:
+    'Aktivitets- eller forflytningshjelpemiddel som finnes i mange varianter. Syklene har to eller tre hjul, kan styres med armer eller bein og har manuell eller elektrisk fremdrift.',
   underkategorier: [
     'Tandemsykler',
     'Tohjulssykler',
-    'Tre- og firehjulssykler',
+    'Trehjulssykler',
     'Hjulspark og sparkesykler',
     'Tilleggsutstyr til sykler',
   ],
@@ -160,69 +170,67 @@ export const sykler: Kategori = {
 
 export const tandemsykler: Kategori = {
   navn: 'Tandemsykler',
-  beskrivelse: '',
+  beskrivelse:
+    'pedaldrevne sykler med to eller flere seter som gjør det mulig for flere personer å sykle på samme sykkel. Finnes med og uten hjelpemotor.',
   underkategorier: [],
   isoer: ['121815'],
   visProdukter: true,
 }
 export const tohjulssykler: Kategori = {
   navn: 'Tohjulssykler',
-  beskrivelse: '',
+  beskrivelse: 'Fotdrevne tohjulssykler beregnet for én person. Finnes med og uten hjelpemotor.',
   underkategorier: [],
   isoer: ['121804'],
   visProdukter: true,
 }
-export const treOgFirehjulssykler: Kategori = {
-  navn: 'Tre- og firehjulssykler',
-  beskrivelse: '',
+export const trehjulssykler: Kategori = {
+  navn: 'Trehjulssykler',
+  beskrivelse: 'Fot- eller hånddrevne sykler med tre hjul beregnet på én person.',
   underkategorier: [],
   isoer: ['121806', '121807', '120809'],
   visProdukter: true,
 }
 export const hjulsparkOgSparkesykler: Kategori = {
   navn: 'Hjulspark og sparkesykler',
-  beskrivelse: '',
+  beskrivelse: 'Hjelpemidler med hjul, fotplate(r) og styre som drives ved å sparke seg fram.',
   underkategorier: [],
   isoer: ['121812'],
   visProdukter: true,
 }
 export const tilleggsutstyrSykler: Kategori = {
   navn: 'Tilleggsutstyr til sykler',
-  beskrivelse: '',
+  beskrivelse: 'Tilleggsutstyr for sykler. Omfatter for eksempel ekstra motorer og støttehjul.',
   underkategorier: [],
   isoer: ['121821'],
   visProdukter: true,
 }
 export const kjelkerOgAkebrett: Kategori = {
   navn: 'Kjelker og akebrett',
-  beskrivelse: '',
+  beskrivelse: 'Hjelpemidler for å transportere en person over is og snø, påmontert meier med eller uten hjul.',
   underkategorier: [],
   isoer: ['122710'],
   visProdukter: true,
 }
 export const vogner: Kategori = {
   navn: 'Vogner',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler med hjul som har plass til én eller flere personer i liggende eller sittende stilling, og som er utformet for å drives og styres av en ledsager. Omfatter f.eks. sittevogner og liggevogner for både barn og voksne.',
   underkategorier: [],
   isoer: ['122707', '122715'],
   visProdukter: true,
 }
 export const bilseterOgBilutstyr: Kategori = {
   navn: 'Bilseter og bilutstyr',
-  beskrivelse: '',
-  underkategorier: [
-    'Bilseter og bilputer',
-    'Lette inn- og utstigning av bil',
-    'Belter og støtteseler for bil',
-    'Ramper for bil',
-  ],
+  beskrivelse:
+    'Hjelpemidler som kan monteres i bil, eller tilpasninger av bil som enten gjør det mulig for en person med funksjonsnedsettelser å kjøre bilen, eller som letter inn- og utstigningen eller opphold i bil. Omfatter bilseter, dreieseter, løfteseter og glideseter.',
+  underkategorier: ['Bilseter', 'Lette inn- og utstigning av bil', 'Belter og støtteseler for bil', 'Ramper for bil'],
   isoer: [],
   visProdukter: false,
 }
 
-export const bilseterOgBilputer: Kategori = {
-  navn: 'Bilseter og bilputer',
-  beskrivelse: '',
+export const bilseter: Kategori = {
+  navn: 'Bilseter',
+  beskrivelse: 'Bilseter for barn og voksne for å gi ekstra støtte under transport.',
   underkategorier: [],
   isoer: ['121212'],
   visProdukter: true,
@@ -230,7 +238,7 @@ export const bilseterOgBilputer: Kategori = {
 
 export const letteInnOgUtstigningBil: Kategori = {
   navn: 'Lette inn- og utstigning av bil',
-  beskrivelse: '',
+  beskrivelse: 'Hjelpemidler som gjør det lettere å komme seg inn og ut av bilen.',
   underkategorier: [],
   isoer: ['121281'],
   visProdukter: true,
@@ -238,7 +246,8 @@ export const letteInnOgUtstigningBil: Kategori = {
 
 export const belterOgStøtteselerBil: Kategori = {
   navn: 'Belter og støtteseler for bil',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler som fester en person i bilen og som gir sikkerhet under transport. Omfatter for eksempel 3- og 4-punkts setebelter og beltevester for passasjerer som sitter i rullestol under transport.',
   underkategorier: [],
   isoer: ['121209'],
   visProdukter: true,
@@ -246,7 +255,7 @@ export const belterOgStøtteselerBil: Kategori = {
 
 export const ramperForBil: Kategori = {
   navn: 'Ramper for bil',
-  beskrivelse: '',
+  beskrivelse: 'Hjelpemidler for å kunne kjøre rullestol inn og ut av bil. ',
   underkategorier: [],
   isoer: ['121221'],
   visProdukter: true,
@@ -255,7 +264,7 @@ export const ramperForBil: Kategori = {
 export const elektriskeRullestoler: Kategori = {
   navn: 'Elektriske rullestoler',
   beskrivelse:
-    'Hjelpemidler som drives med motor, og som gir mulighet for mobilitet og sittende støtte for personer med redusert forflytningsevne. Motoren kan ha framdrift som er elektrisk eller forbrenningsbasert. ',
+    'Rullestoler som drives med elektrisk motor, beregnet for inne eller utebruk. Omfatter også elektriske rullestoler med ståfunksjon.',
   underkategorier: [],
   isoer: ['1223'],
   visProdukter: true,
@@ -263,8 +272,7 @@ export const elektriskeRullestoler: Kategori = {
 
 export const motoriserteKjøretøy: Kategori = {
   navn: 'Motoriserte kjøretøy',
-  beskrivelse:
-    'Diverse motoriserte kjøretøy med 4 hjul. Omfatter f.eks. terrenggående kjøretøy (ATV), firehjulinger og gokarter. ',
+  beskrivelse: 'Motoriserte kjøretøy til bruk ute i terrenget. Har ofte fire hjul eller er beltedrevet.',
   underkategorier: [],
   isoer: ['121709'],
   visProdukter: true,
@@ -273,22 +281,22 @@ export const motoriserteKjøretøy: Kategori = {
 export const drivaggregat: Kategori = {
   navn: 'Drivaggregat',
   beskrivelse:
-    'Hjelpemidler som monteres på en manuell rullestol, som gjør det mulig for brukeren eller ledsageren å manøvrere eller kjøre rullestolen uten bruk av muskelkraft.',
+    'Hjelpemidler som monteres på en manuell rullestol, som gjør det mulig for personen å kjøre rullestolen med liten eller ingen bruk av muskelkraft. Kan også av ledsagerstyres.',
   underkategorier: [],
   isoer: ['122409'],
   visProdukter: true,
 }
 export const tilleggsutstyrRullestoler: Kategori = {
   navn: 'Tilleggsutstyr til rullestoler',
-  beskrivelse: 'Utstyr relatert til bruk av rullestoler.',
+  beskrivelse: 'Utstyr relatert til rullestoler, for eksempel batterier, bremser, dekk, rullestolgarasjer og hjulski.',
   underkategorier: [],
   isoer: ['1224'],
   visProdukter: true,
 }
 
-export const krykkerOgStokkerOgStaver: Kategori = {
-  navn: 'Krykker, stokker og staver',
-  beskrivelse: '',
+export const krykkerOgStokker: Kategori = {
+  navn: 'Krykker og stokker',
+  beskrivelse: 'Hjelpemidler som gir støtte og balanse under gange, som brukes enkeltvis eller i par. ',
   underkategorier: [],
   isoer: ['1203'],
   visProdukter: true,
@@ -296,7 +304,8 @@ export const krykkerOgStokkerOgStaver: Kategori = {
 
 export const gåstativer: Kategori = {
   navn: 'Gåstativer',
-  beskrivelse: '',
+  beskrivelse:
+    'Stativ som løftes ved gange som gir stabilitet og balanse. Man støttes av egen kroppsvekt under gange eller i stående stilling.',
   underkategorier: [],
   isoer: ['120603'],
   visProdukter: true,
@@ -304,7 +313,7 @@ export const gåstativer: Kategori = {
 
 export const rullatorer: Kategori = {
   navn: 'Rullatorer',
-  beskrivelse: '',
+  beskrivelse: 'Hjelpemidler som man skyver foran eller dra etter seg som gir stabilitet og balanse under gange.',
   underkategorier: [],
   isoer: ['120606'],
   visProdukter: true,
@@ -312,7 +321,8 @@ export const rullatorer: Kategori = {
 
 export const gåstoler: Kategori = {
   navn: 'Gåstoler',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler med hjul og sete eller sele som støtter kroppen under gange. Finnes med eller uten underarmsstøtte.',
   underkategorier: [],
   isoer: ['120606'],
   visProdukter: true,
@@ -320,7 +330,8 @@ export const gåstoler: Kategori = {
 
 export const gåbord: Kategori = {
   navn: 'Gåbord',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler med hjul der man har mulighet til å støtte overkroppen under gange. Skyves forover med begge armene eventuelt i kombinasjon med overkroppen.',
   underkategorier: [],
   isoer: ['120612'],
   visProdukter: true,
@@ -328,7 +339,8 @@ export const gåbord: Kategori = {
 
 export const tilleggsutstyrTilGanghjelpemidler: Kategori = {
   navn: 'Tilleggsutstyr til ganghjelpemidler',
-  beskrivelse: '',
+  beskrivelse:
+    'Hjelpemidler som brukes sammen med, eller for å oppbevare ganghjelpemidler, som for eksempel krykkeholdere og krykkebelter.',
   underkategorier: [],
   isoer: ['1207'],
   visProdukter: true,

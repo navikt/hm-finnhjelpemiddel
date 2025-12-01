@@ -2,7 +2,7 @@ import { JSX } from 'react'
 import {
   belterOgStøtteselerBil,
   bevegelse,
-  bilseterOgBilputer,
+  bilseter,
   bilseterOgBilutstyr,
   drivaggregat,
   endreKroppsstilling,
@@ -15,7 +15,7 @@ import {
   hjulsparkOgSparkesykler,
   KategoriBevegelseNavn,
   kjelkerOgAkebrett,
-  krykkerOgStokkerOgStaver,
+  krykkerOgStokker,
   letteInnOgUtstigningBil,
   mobilePersonløftere,
   motoriserteKjøretøy,
@@ -33,7 +33,7 @@ import {
   tilleggsutstyrTilGanghjelpemidler,
   tohjulssykler,
   trappeklatrere,
-  treOgFirehjulssykler,
+  trehjulssykler,
   vogner,
 } from '@/app/kategori/utils/mappings/kategori-bevegelse-mapping'
 
@@ -61,19 +61,19 @@ export const alle: Kategori = {
 }
 
 export const kategorier: Kategorier = {
-  'Krykker, stokker og staver': krykkerOgStokkerOgStaver,
+  'Krykker og stokker': krykkerOgStokker,
   'Tilleggsutstyr til ganghjelpemidler': tilleggsutstyrTilGanghjelpemidler,
   Gåbord: gåbord,
   Gåstativer: gåstativer,
   Gåstoler: gåstoler,
   Rullatorer: rullatorer,
   'Belter og støtteseler for bil': belterOgStøtteselerBil,
-  'Bilseter og bilputer': bilseterOgBilputer,
+  Bilseter: bilseter,
   'Lette inn- og utstigning av bil': letteInnOgUtstigningBil,
   'Ramper for bil': ramperForBil,
   'Hjulspark og sparkesykler': hjulsparkOgSparkesykler,
   'Tilleggsutstyr til sykler': tilleggsutstyrSykler,
-  'Tre- og firehjulssykler': treOgFirehjulssykler,
+  Trehjulssykler: trehjulssykler,
   Tandemsykler: tandemsykler,
   Tohjulssykler: tohjulssykler,
   'Hjelpemidler for å endre kroppsstilling': endreKroppsstilling,
