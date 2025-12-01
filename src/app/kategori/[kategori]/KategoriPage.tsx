@@ -6,7 +6,6 @@ import useSWRInfinite from 'swr/infinite'
 import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
-import { SortKategoriResults } from '@/app/kategori/SortKategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
 import { Product } from '@/utils/product-util'
@@ -127,20 +126,20 @@ export const KategoriPage = ({ kategori }: Props) => {
     <KategoriPageLayout title={currentKategori.navn} description={currentKategori.beskrivelse} error={error}>
       <>
         <CompareMenu />
-        <HGrid paddingBlock={{ xs: '6 0', md: '12 0' }} columns={'374px 4'} gap={'4'}>
+        <HGrid columns={'374px 4'} gap={'4'}>
           <VStack gap={'4'}>
             <Heading level="2" size="medium">
               {isLoading ? (
                 <Skeleton variant="text" width="10rem" />
               ) : products ? (
-                `${products.length} hjelpemidler`
+                `Viser første ${products.length} av ${kategori}`
               ) : (
                 `Ingen treff`
               )}
             </Heading>
             <HStack justify={'space-between'} gap={'2'} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
-              <SortKategoriResults />
+              {/*<SortKategoriResults />*/}
             </HStack>
 
             <KategoriResults products={products} loadMore={loadMore} isLoading={isLoading} />

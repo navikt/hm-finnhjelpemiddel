@@ -1,6 +1,7 @@
 import { Chips } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
+import styles from './KategoriToggleFilter.module.scss'
 
 export type FilterToggle = {
   key: string
@@ -17,7 +18,7 @@ export const KategoriToggleFilter = ({ searchParamKey, filter, onChange }: Props
   const searchParams = useSearchParams()
 
   return (
-    <Chips>
+    <Chips className={styles.chips}>
       {filter.map((option) => (
         <Chips.Toggle
           selected={searchParams.has(searchParamKey, option.key)}

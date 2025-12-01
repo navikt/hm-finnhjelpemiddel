@@ -1,7 +1,7 @@
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
-import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
+import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from '@/components/filters/CheckboxFilterNew.module.scss'
 
 export type FilterMenuLabel = {
@@ -33,7 +33,7 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
         <Button
           variant={'secondary'}
           size={'small'}
-          icon={menuOpen ? <CaretUpFillIcon aria-hidden /> : <CaretDownFillIcon aria-hidden />}
+          icon={menuOpen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
           iconPosition={'right'}
           className={selectedFilters.length > 0 ? styles.filterButtonActive : styles.filterButton}
         >

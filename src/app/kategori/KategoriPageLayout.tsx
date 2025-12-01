@@ -1,4 +1,4 @@
-import { Alert, Bleed, BodyLong, Heading, HStack, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, HStack, VStack } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 
 type Props = {
@@ -25,17 +25,15 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
         <BodyLong style={{ maxWidth: '735px' }}>{description}</BodyLong>
       </VStack>
 
-      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        {error ? (
-          <HStack justify="center" style={{ marginTop: '48px' }}>
-            <Alert variant="error" title="Error med lasting av produkter">
-              Obs, her skjedde det noe feil :o
-            </Alert>
-          </HStack>
-        ) : (
-          children
-        )}
-      </Bleed>
+      {error ? (
+        <HStack justify="center" style={{ marginTop: '48px' }}>
+          <Alert variant="error" title="Error med lasting av produkter">
+            Obs, her skjedde det noe feil :o
+          </Alert>
+        </HStack>
+      ) : (
+        children
+      )}
     </VStack>
   )
 }

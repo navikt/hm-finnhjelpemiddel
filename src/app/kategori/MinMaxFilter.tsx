@@ -1,7 +1,7 @@
 import { ActionMenu, Button, HStack, TextField } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
-import { CaretDownFillIcon, CaretUpFillIcon, TrashIcon } from '@navikt/aksel-icons'
+import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './MinMaxFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
 
@@ -45,7 +45,7 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
         <Button
           variant={'secondary'}
           size={'small'}
-          icon={menuOpen ? <CaretUpFillIcon aria-hidden /> : <CaretDownFillIcon aria-hidden />}
+          icon={menuOpen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
           iconPosition={'right'}
           className={hasInputValue ? styles.filterButtonActive : styles.filterButton}
         >

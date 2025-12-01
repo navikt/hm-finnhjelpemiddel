@@ -1,0 +1,7 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.chips {
+  --ac-chip-toggle-bg: white;
+  --ac-chip-toggle-text: var(--a-text-action);
+  --ac-chip-toggle-border: var(--a-border-action);
+}

@@ -37,12 +37,12 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
           Nullstill filtere
         </Button>
       </div>
-      <HStack gap="4">
-        <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
-        <MinMaxFilter filterMenu={minMaxFilters} />
+      <HStack gap="4" maxWidth={'1214px'}>
         {filters.isos.length > 1 && (
           <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
         )}
+        <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
+        <MinMaxFilter filterMenu={minMaxFilters} />
       </HStack>
     </VStack>
   )
