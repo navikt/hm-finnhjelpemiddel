@@ -11,8 +11,8 @@ type Props = {
 export const KategoriPageLayout = ({ title, description, error, children }: Props) => {
   return (
     <VStack
-      gap={'14'}
-      paddingBlock={'16'}
+      gap={'12'}
+      paddingBlock={'16 0'}
       paddingInline={'4'}
       marginInline={'auto'}
       marginBlock={'0'}
