@@ -1,5 +1,4 @@
 import { Kategori } from '@/app/kategori/utils/mappings/kategori-mapping'
-import { WheelchairIcon } from '@navikt/aksel-icons'
 
 export type KategoriBevegelseNavn =
   | 'Rullestoler'
@@ -66,7 +65,6 @@ export const rullestoler: Kategori = {
   ],
   isoer: [],
   visProdukter: false,
-  ikon: <WheelchairIcon fontSize={'5rem'} aria-hidden />,
 }
 
 export const manuelleRullestoler: Kategori = {
