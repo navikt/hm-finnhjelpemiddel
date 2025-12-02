@@ -112,8 +112,9 @@ export const KategoriPage = ({ kategori }: Props) => {
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
+  const minMaxFilters = productsData?.at(-1)?.minMaxFilters ?? undefined
 
-  const filters: Filters = { isos: isos, suppliers: suppliers }
+  const filters: Filters = { isos: isos, suppliers: suppliers, minMaxFilters }
 
   const onChange = (filterName: string, value: string) => {
     const newSearchParams = createQueryStringAppend(filterName, value)

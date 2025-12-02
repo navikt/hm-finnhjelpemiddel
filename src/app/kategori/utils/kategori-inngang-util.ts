@@ -17,11 +17,24 @@ export type SupplierInfo = {
   name: string
 }
 
+export type MinMaxInfo = {
+  [key: string]: {
+    min: {
+      key: keyof SearchFiltersKategori
+      value: number
+    }
+    max: {
+      key: keyof SearchFiltersKategori
+      value: number
+    }
+  }
+}
+
 export type ProductsWithIsoAggs = {
   products: Product[]
   iso: IsoInfo[]
   suppliers: SupplierInfo[]
-  minMaxFilters?: MinMaxInfo[]
+  minMaxFilters?: MinMaxInfo
 }
 
 export type SearchFiltersKategori = {
@@ -405,43 +418,19 @@ const mapSupplierAggregations = (data: ProductIsoAggregationResponse): SupplierI
   return data.aggregations.suppliers.values.buckets.map((bucket) => ({ name: bucket.key }))
 }
 
-export type MinMaxInfo = {
-  name: string
-  type: 'min' | 'max'
-  value: number
-}
-
-const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): MinMaxInfo[] => {
-  let minMaxInfo: Array<MinMaxInfo> = []
-  minMaxInfo.push({
-    name: 'setebreddeMinCM',
-    type: 'min',
-    value: data.aggregations.setebreddeMinCM.min.value?.parsedValue ?? 0,
-  })
-  minMaxInfo.push({
-    name: 'setebreddeMaksCM',
-    type: 'max',
-    value: data.aggregations.setebreddeMaksCM.max.value?.parsedValue ?? 0,
-  })
-  minMaxInfo.push({
-    name: 'setedybdeMinCM',
-    type: 'min',
-    value: data.aggregations.setedybdeMinCM.min.value?.parsedValue ?? 0,
-  })
-  minMaxInfo.push({
-    name: 'setedybdeMaksCM',
-    type: 'max',
-    value: data.aggregations.setedybdeMaksCM.max.value?.parsedValue ?? 0,
-  })
-  minMaxInfo.push({
-    name: 'setehoydeMinCM',
-    type: 'min',
-    value: data.aggregations.setehoydeMinCM.min.value?.parsedValue ?? 0,
-  })
-  minMaxInfo.push({
-    name: 'setehoydeMaksCM',
-    type: 'max',
-    value: data.aggregations.setehoydeMaksCM.max.value?.parsedValue ?? 0,
-  })
-  return minMaxInfo
+const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): MinMaxInfo => {
+  return {
+    ['Setebredde']: {
+      min: { key: 'setebreddeMinCM', value: data.aggregations.setebreddeMinCM.min.value?.parsedValue ?? 0 },
+      max: { key: 'setebreddeMaksCM', value: data.aggregations.setebreddeMaksCM.max.value?.parsedValue ?? 0 },
+    },
+    ['Setedybde']: {
+      min: { key: 'setedybdeMinCM', value: data.aggregations.setedybdeMinCM.min.value?.parsedValue ?? 0 },
+      max: { key: 'setedybdeMaksCM', value: data.aggregations.setedybdeMaksCM.max.value?.parsedValue ?? 0 },
+    },
+    ['Setehøyde']: {
+      min: { key: 'setehoydeMinCM', value: data.aggregations.setehoydeMinCM.min.value?.parsedValue ?? 0 },
+      max: { key: 'setehoydeMaksCM', value: data.aggregations.setehoydeMaksCM.max.value?.parsedValue ?? 0 },
+    },
+  }
 }

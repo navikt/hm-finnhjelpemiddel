@@ -1,4 +1,4 @@
-import { ActionMenu, Button, HStack, TextField } from '@navikt/ds-react'
+import { ActionMenu, Button, TextField } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
@@ -8,8 +8,14 @@ import useQueryString from '@/utils/search-params-util'
 export type MinMaxMenu = {
   name: string
   options: {
-    minKey: string
-    maxKey: string
+    min: {
+      key: string
+      value: number
+    }
+    max: {
+      key: string
+      value: number
+    }
   }
 }
 
@@ -28,15 +34,18 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
 
   const filterLabel = name
 
-  const hasInputValue = searchParams.get(options.minKey) || searchParams.get(options.maxKey)
+  const hasInputValue = searchParams.get(options.min.key) || searchParams.get(options.max.key)
 
-  const onChange = (key: string, value: string, key1: string, value2: string) => {
-    const newSearchParams = createQueryStringForMinMax({ name: key, value }, { name: key1, value: value2 })
+  const onChange = (value: string) => {
+    const newSearchParams = createQueryStringForMinMax(
+      { name: options.min.key, value },
+      { name: options.max.key, value }
+    )
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const onReset = () => {
-    onChange(options.minKey, '', options.maxKey, '')
+    onChange('')
   }
 
   return (
@@ -58,22 +67,15 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
             Fjern filter
           </ActionMenu.Item>
         )}
-        <HStack gap={'4'}>
-          <TextField
-            label={'Min'}
-            type={'number'}
-            size={'small'}
-            min={0}
-            onChange={(event) => onChange(options.minKey, event.currentTarget.value, '', '')}
-          />
-          <TextField
-            label={'Max'}
-            type={'number'}
-            size={'small'}
-            min={0}
-            onChange={(event) => onChange(options.maxKey, event.currentTarget.value, '', '')}
-          />
-        </HStack>
+        <TextField
+          label={filterLabel}
+          hideLabel
+          inputMode={'numeric'}
+          size={'small'}
+          min={0}
+          defaultValue={hasInputValue ?? undefined}
+          onChange={(event) => onChange(event.currentTarget.value)}
+        />
       </ActionMenu.Content>
     </ActionMenu>
   )
