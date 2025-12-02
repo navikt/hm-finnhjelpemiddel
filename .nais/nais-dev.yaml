@@ -19,6 +19,7 @@ spec:
         - application: hm-grunndata-search
         - application: hm-grunndata-alternativprodukter
         - application: hm-grunndata-db
+        - application: hm-finnhjelpemiddel-bff
   env:
     - name: RUNTIME_ENVIRONMENT
       value: dev
