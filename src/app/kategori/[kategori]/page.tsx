@@ -9,7 +9,7 @@ type Props = {
 }
 
 export default async function Page(props: Props) {
-  const kategori = decodeURIComponent((await props.params).kategori) as KategoriNavn
+  const kategori = normalizeKategori((await props.params).kategori)
 
   if (!kategorier[kategori]) {
     return (
@@ -27,4 +27,8 @@ export default async function Page(props: Props) {
   }
 
   return <KategoriOversikt kategori={kategori} />
+}
+
+const normalizeKategori = (kategori: string) => {
+  return decodeURIComponent(kategori.charAt(0).toUpperCase() + kategori.slice(1)) as KategoriNavn
 }
