@@ -2,9 +2,9 @@ import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { KategoriToggleFilter } from '@/app/kategori/KategoriToggleFilter'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
-import { MinMaxInfo } from '@/app/kategori/utils/kategori-inngang-util'
 import { MinMaxFilter } from '@/app/kategori/MinMaxFilter'
 import styles from './FilterBarKategori.module.scss'
+import { MeasurementInfo } from '@/app/kategori/utils/kategori-inngang-util'
 
 export type Filters = {
   ['suppliers']: string[]
@@ -12,7 +12,7 @@ export type Filters = {
     key: string
     label: string
   }[]
-  ['minMaxFilters']?: MinMaxInfo
+  ['measurementFilters']?: MeasurementInfo
 }
 
 type Props = {
@@ -35,8 +35,8 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
           <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
         )}
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
-        {filters.minMaxFilters &&
-          Object.entries(filters.minMaxFilters).map(([key, value]) => (
+        {filters.measurementFilters &&
+          Object.entries(filters.measurementFilters).map(([key, value]) => (
             <MinMaxFilter key={key} filterMenu={{ name: key, options: value }} />
           ))}
         <div>

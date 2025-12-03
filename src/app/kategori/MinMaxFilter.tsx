@@ -8,14 +8,8 @@ import useQueryString from '@/utils/search-params-util'
 export type MinMaxMenu = {
   name: string
   options: {
-    min: {
-      key: string
-      value: number
-    }
-    max: {
-      key: string
-      value: number
-    }
+    key: string
+    value: number
   }
 }
 
@@ -35,14 +29,11 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
 
   const filterLabel = name
 
-  const hasSearchParam = searchParams.get(options.min.key) || searchParams.get(options.max.key)
+  const hasSearchParam = searchParams.get(options.key)
   const [inputValue, setInputValue] = useState(hasSearchParam ?? '')
 
   const onChange = (value: string) => {
-    const newSearchParams = createQueryStringForMinMax(
-      { name: options.min.key, value },
-      { name: options.max.key, value }
-    )
+    const newSearchParams = createQueryStringForMinMax(options.key, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 

@@ -53,16 +53,14 @@ export default function useQueryString() {
   )
 
   const createQueryStringForMinMax = useCallback(
-    (...args: { name: string; value: string }[]) => {
+    (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
 
-      args.forEach((arg) => {
-        if (arg.value === '') {
-          params.delete(arg.name)
-        } else {
-          params.set(arg.name, arg.value)
-        }
-      })
+      if (value === '') {
+        params.delete(name)
+      } else {
+        params.set(name, value)
+      }
 
       return params.toString()
     },

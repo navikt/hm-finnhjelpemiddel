@@ -39,22 +39,16 @@ export const KategoriPage = ({ kategori }: Props) => {
     const suppliers = searchParams.getAll('supplier') ?? ''
     const isos = searchParams.getAll('iso') ?? ''
 
-    const setebreddeMinCM = searchParams.get('setebreddeMinCM') ?? ''
-    const setebreddeMaksCM = searchParams.get('setebreddeMaksCM') ?? ''
-    const setedybdeMinCM = searchParams.get('setedybdeMinCM') ?? ''
-    const setedybdeMaksCM = searchParams.get('setedybdeMaksCM') ?? ''
-    const setehoydeMinCM = searchParams.get('setehoydeMinCM') ?? ''
-    const setehoydeMaksCM = searchParams.get('setehoydeMaksCM') ?? ''
+    const setebredde = searchParams.get('Setebredde') ?? ''
+    const setedybde = searchParams.get('Setedybde') ?? ''
+    const setehoyde = searchParams.get('Setehoyde') ?? ''
 
     const filters: SearchFiltersKategori = {
       suppliers: suppliers,
       isos: isos,
-      setehoydeMaksCM,
-      setehoydeMinCM,
-      setedybdeMaksCM,
-      setedybdeMinCM,
-      setebreddeMaksCM,
-      setebreddeMinCM,
+      Setehoyde: setehoyde,
+      Setedybde: setedybde,
+      Setebredde: setebredde,
     }
 
     return {
@@ -112,9 +106,9 @@ export const KategoriPage = ({ kategori }: Props) => {
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
-  const minMaxFilters = productsData?.at(-1)?.minMaxFilters ?? undefined
+  const measurementFilters = productsData?.at(-1)?.measurementFilters ?? undefined
 
-  const filters: Filters = { isos: isos, suppliers: suppliers, minMaxFilters }
+  const filters: Filters = { isos: isos, suppliers: suppliers, measurementFilters: measurementFilters }
 
   const onChange = (filterName: string, value: string) => {
     const newSearchParams = createQueryStringAppend(filterName, value)
