@@ -1112,7 +1112,7 @@ export const fetchCompatibleProducts = (seriesId: string): Promise<ProductVarian
           must: [
             {
               term: {
-                seriesIds: seriesId,
+                'attributes.compatibleWith.seriesIds': seriesId,
               },
             },
             {
