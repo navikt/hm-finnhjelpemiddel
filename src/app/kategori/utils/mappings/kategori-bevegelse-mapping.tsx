@@ -10,6 +10,7 @@ export type KategoriBevegelseNavn =
   | 'Vogner'
   | 'Bilseter og bilutstyr'
   | 'Elektriske rullestoler'
+  | 'Sittesystem'
   | 'Motoriserte kjøretøy'
   | 'Drivaggregat'
   | 'Tilleggsutstyr til rullestoler'
@@ -19,6 +20,10 @@ export type KategoriBevegelseNavn =
   | 'Stasjonære personløftere'
   | 'Mobile personløftere'
   | 'Seil og seler'
+  | 'Ramper, heiser og løfteplattformer'
+  | 'Ramper'
+  | 'Heiser'
+  | 'Løfteplattformer'
   | 'Tandemsykler'
   | 'Tohjulssykler'
   | 'Trehjulssykler'
@@ -59,6 +64,7 @@ export const rullestoler: Kategori = {
   underkategorier: [
     'Manuelle rullestoler',
     'Elektriske rullestoler',
+    'Sittesystem',
     'Motoriserte kjøretøy',
     'Drivaggregat',
     'Tilleggsutstyr til rullestoler',
@@ -94,7 +100,12 @@ export const forflytning: Kategori = {
   navn: 'Forflytning',
   beskrivelse:
     'Hjelpemidler som hjelper personer med nedsatt funksjonsevne med å flytte seg fra ett sted til et annet, enten selvstendig eller med hjelpere. Eksempel på forflytningshjelpemidler er personløftere, overflyttingsplattformer, glidelaken med mer.',
-  underkategorier: ['Trappeklatrere', 'Hjelpemidler for å endre kroppsstilling', 'Personløftere'],
+  underkategorier: [
+    'Trappeklatrere',
+    'Hjelpemidler for å endre kroppsstilling',
+    'Personløftere',
+    'Ramper, heiser og løfteplattformer',
+  ],
   isoer: [],
   visProdukter: false,
 }
@@ -148,6 +159,38 @@ export const seilOgSeler: Kategori = {
     'Hjelpemidler som gir støtte til en person som forflyttes i en mobil eller stasjonær personløfter. Omfatter for eksempel seil, seler, vester og bukser.',
   underkategorier: [],
   isoer: ['123621'],
+  visProdukter: true,
+}
+
+export const ramperOgHeiserOgLøfteplattformer: Kategori = {
+  navn: 'Ramper, heiser og løfteplattformer',
+  beskrivelse: '',
+  underkategorier: ['Ramper', 'Heiser', 'Løfteplattformer'],
+  isoer: [],
+  visProdukter: false,
+}
+
+export const ramper: Kategori = {
+  navn: 'Ramper',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['183015', '183018'],
+  visProdukter: true,
+}
+
+export const heiser: Kategori = {
+  navn: 'Heiser',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['183003', '183010', '183011'],
+  visProdukter: true,
+}
+
+export const løfteplattformer: Kategori = {
+  navn: 'Løfteplattformer',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['183005'],
   visProdukter: true,
 }
 
@@ -265,6 +308,14 @@ export const elektriskeRullestoler: Kategori = {
     'Rullestoler som drives med elektrisk motor, beregnet for inne eller utebruk. Omfatter også elektriske rullestoler med ståfunksjon.',
   underkategorier: [],
   isoer: ['1223'],
+  visProdukter: true,
+}
+
+export const sittesystem: Kategori = {
+  navn: 'Sittesystem',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['180939'],
   visProdukter: true,
 }
 

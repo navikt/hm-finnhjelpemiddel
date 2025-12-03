@@ -35,6 +35,11 @@ import {
   trappeklatrere,
   trehjulssykler,
   vogner,
+  sittesystem,
+  ramper,
+  løfteplattformer,
+  heiser,
+  ramperOgHeiserOgLøfteplattformer,
 } from '@/app/kategori/utils/mappings/kategori-bevegelse-mapping'
 
 export type KategoriNavn = KategoriBevegelseNavn | 'Alle' | 'Bevegelse'
@@ -61,6 +66,11 @@ export const alle: Kategori = {
 }
 
 export const kategorier: Kategorier = {
+  'Ramper, heiser og løfteplattformer': ramperOgHeiserOgLøfteplattformer,
+  Heiser: heiser,
+  Løfteplattformer: løfteplattformer,
+  Ramper: ramper,
+  Sittesystem: sittesystem,
   'Krykker og stokker': krykkerOgStokker,
   'Tilleggsutstyr til ganghjelpemidler': tilleggsutstyrTilGanghjelpemidler,
   Gåbord: gåbord,
