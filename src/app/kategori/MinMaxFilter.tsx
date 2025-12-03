@@ -52,6 +52,7 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
   }
 
   const onReset = () => {
+    setInputValue('')
     onChange('')
   }
 
