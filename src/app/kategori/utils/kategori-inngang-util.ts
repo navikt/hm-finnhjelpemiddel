@@ -110,6 +110,20 @@ export const fetchProductsKategori2 = async ({
       aggs,
     },
   })
+  const termAggs = (key: string, field: string) => ({
+    ...aggsFilter(
+      key,
+      {
+        values: {
+          terms: {
+            field: field,
+            size: 300,
+          },
+        },
+      },
+      postFilters
+    ),
+  })
   const aggs = {
     ...aggsFilter(
       'iso',
@@ -123,81 +137,13 @@ export const fetchProductsKategori2 = async ({
       },
       queryFilters
     ),
-    ...aggsFilter(
-      'suppliers',
-      {
-        values: {
-          terms: { field: 'supplier.name', size: 300 },
-        },
-      },
-      postFilters
-    ),
-    ...aggsFilter(
-      'setebreddeMinCM',
-      {
-        min: {
-          min: {
-            field: 'filters.setebreddeMinCM',
-          },
-        },
-      },
-      postFilters
-    ),
-    ...aggsFilter(
-      'setebreddeMaksCM',
-      {
-        max: {
-          max: {
-            field: 'filters.setebreddeMaksCM',
-          },
-        },
-      },
-      postFilters
-    ),
-    ...aggsFilter(
-      'setedybdeMinCM',
-      {
-        min: {
-          min: {
-            field: 'filters.setedybdeMinCM',
-          },
-        },
-      },
-      postFilters
-    ),
-    ...aggsFilter(
-      'setedybdeMaksCM',
-      {
-        max: {
-          max: {
-            field: 'filters.setedybdeMaksCM',
-          },
-        },
-      },
-      postFilters
-    ),
-    ...aggsFilter(
-      'setehoydeMinCM',
-      {
-        min: {
-          min: {
-            field: 'filters.setehoydeMinCM',
-          },
-        },
-      },
-      postFilters
-    ),
-    ...aggsFilter(
-      'setehoydeMaksCM',
-      {
-        max: {
-          max: {
-            field: 'filters.setehoydeMaksCM',
-          },
-        },
-      },
-      postFilters
-    ),
+    ...termAggs('suppliers', 'supplier.name'),
+    ...termAggs('setebreddeMinCM', 'filters.setebreddeMinCM'),
+    ...termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM'),
+    ...termAggs('setedybdeMinCM', 'filters.setedybdeMinCM'),
+    ...termAggs('setedybdeMaksCM', 'filters.setedybdeMaksCM'),
+    ...termAggs('setehoydeMinCM', 'filters.setehoydeMinCM'),
+    ...termAggs('setehoydeMaksCM', 'filters.setehoydeMaksCM'),
   }
 
   const body: QueryObject = {
@@ -331,7 +277,6 @@ export const fetchProductsKategori = async ({ from, size, searchData }: FetchPro
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data)
       return {
         products: mapProductsFromCollapse(data),
         iso: mapIsoAggregations(data),
@@ -364,18 +309,10 @@ type SupplierAggregation = {
   }
 }
 
-type MinAggregation = {
-  min: {
-    value: {
-      parsedValue?: number
-    } | null
-  }
-}
-type MaxAggregation = {
-  max: {
-    value: {
-      parsedValue?: number
-    } | null
+type NewAggregation = {
+  doc_count: number
+  values: {
+    buckets: { key: string; doc_count: number }[]
   }
 }
 
@@ -387,12 +324,12 @@ type ProductIsoAggregationResponse = {
   aggregations: {
     iso: IsoAggregation
     suppliers: SupplierAggregation
-    setebreddeMinCM: MinAggregation
-    setebreddeMaksCM: MaxAggregation
-    setedybdeMinCM: MinAggregation
-    setedybdeMaksCM: MaxAggregation
-    setehoydeMinCM: MinAggregation
-    setehoydeMaksCM: MaxAggregation
+    setebreddeMinCM: NewAggregation
+    setebreddeMaksCM: NewAggregation
+    setedybdeMinCM: NewAggregation
+    setedybdeMaksCM: NewAggregation
+    setehoydeMinCM: NewAggregation
+    setehoydeMaksCM: NewAggregation
   }
 }
 
@@ -404,18 +341,37 @@ const mapSupplierAggregations = (data: ProductIsoAggregationResponse): SupplierI
 }
 
 const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): MeasurementInfo => {
-  return {
-    ['Setebredde']: {
-      key: 'Setebredde',
-      value: data.aggregations.setebreddeMinCM.min.value?.parsedValue ?? 0,
-    },
-    ['Setedybde']: {
-      key: 'Setedybde',
-      value: data.aggregations.setedybdeMinCM.min.value?.parsedValue ?? 0,
-    },
-    ['Setehøyde']: {
-      key: 'Setehoyde',
-      value: data.aggregations.setehoydeMinCM.min.value?.parsedValue ?? 0,
-    },
+  const { setebreddeMinCM, setebreddeMaksCM, setedybdeMinCM, setedybdeMaksCM, setehoydeMinCM, setehoydeMaksCM } =
+    data.aggregations
+
+  let ferdig = {}
+
+  if (setebreddeMinCM.values.buckets.length > 0 || setebreddeMaksCM.values.buckets.length > 0) {
+    Object.assign(ferdig, {
+      ['Setebredde']: {
+        key: 'Setebredde',
+        value: data.aggregations.setebreddeMinCM.values.buckets.length ?? 0,
+      },
+    })
   }
+
+  if (setedybdeMinCM.values.buckets.length > 0 || setedybdeMaksCM.values.buckets.length > 0) {
+    Object.assign(ferdig, {
+      ['Setedybde']: {
+        key: 'Setedybde',
+        value: data.aggregations.setedybdeMinCM.values.buckets.length ?? 0,
+      },
+    })
+  }
+
+  if (setehoydeMinCM.values.buckets.length > 0 || setehoydeMaksCM.values.buckets.length > 0) {
+    Object.assign(ferdig, {
+      ['Setehøyde']: {
+        key: 'Setehoyde',
+        value: data.aggregations.setehoydeMinCM.values.buckets.length ?? 0,
+      },
+    })
+  }
+
+  return ferdig
 }

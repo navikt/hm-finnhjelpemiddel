@@ -9,6 +9,7 @@ type Props = {
 }
 
 export const KategoriPageLayout = ({ title, description, error, children }: Props) => {
+  if (error) console.debug(error)
   return (
     <VStack
       gap={'12'}

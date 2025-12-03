@@ -5,7 +5,6 @@ import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 
 export const KategoriOversikt = ({ kategori }: { kategori: KategoriNavn }) => {
   if (!kategorier[kategori]) {
-    console.log('hei')
     return <BodyShort>Oiii</BodyShort>
   }
 
