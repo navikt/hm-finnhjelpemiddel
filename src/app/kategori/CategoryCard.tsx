@@ -7,7 +7,7 @@ import { ReactNode } from 'react'
 type Props = {
   title: string
   link: string
-  description: string
+  description?: string
   icon?: ReactNode | undefined
 }
 
@@ -21,12 +21,10 @@ export const CategoryCard = ({ title, link, description, icon }: Props) => {
       )}
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
-          <NextLink href={link} scroll={false}>
-            {title}
-          </NextLink>
+          <NextLink href={link}>{title}</NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
-      <LinkCard.Description>{description}</LinkCard.Description>
+      {description && <LinkCard.Description>{description}</LinkCard.Description>}
     </LinkCard>
   )
 }

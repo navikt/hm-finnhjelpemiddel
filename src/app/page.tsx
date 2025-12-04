@@ -5,7 +5,7 @@ import { useCallback, useEffect } from 'react'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { logNavigationEvent, logVisit } from '@/utils/amplitude'
-import { Bleed, Box, Heading, HGrid, VStack } from '@navikt/ds-react'
+import { Bleed, BodyLong, Box, Heading, HGrid, VStack } from '@navikt/ds-react'
 import KontaktOss from '@/app/forside/KontaktOss'
 import FinnHjelpemiddelLogo from '@/app/forside/FinnHjelpemiddelLogo'
 import Agreements from '@/app/forside/Agreements'
@@ -13,14 +13,15 @@ import { NewsFeed } from '@/app/forside/NewsFeed'
 import styles from './FrontPage.module.scss'
 import { OtherAgreements } from '@/app/forside/OtherAgreements'
 import { logUmamiNavigationEvent, logUmamiVisit } from '@/utils/umami'
+import { CategoryCard } from '@/app/kategori/CategoryCard'
+import { BevegelseIkon } from '@/app/kategori/ikoner/BevegelseIkon'
 
 function FrontPage() {
   const path = usePathname()
   const router = useRouter()
 
   useEffect(() => {
-    typeof window !== 'undefined' &&
-      logVisit(window.location.href, window.document.title, 'forside') ||
+    ;(typeof window !== 'undefined' && logVisit(window.location.href, window.document.title, 'forside')) ||
       logUmamiVisit(window.location.href, window.document.title, 'forside')
   }, [])
 
@@ -80,6 +81,18 @@ function FrontPage() {
       <Agreements />
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <OtherAgreements />
+      </Bleed>
+      <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
+        <VStack gap={'2'} paddingBlock={'7'}>
+          <Heading size={'large'}>Kategori-inngang (beta)</Heading>
+          <BodyLong size={'large'} style={{ maxWidth: '600px' }}>
+            Vi tester en ny måte å finne hjelpemidler på. <br /> Først ut er bevegelse, og det vil komme flere
+            kategorier etter hvert.
+          </BodyLong>
+          <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'5 0'} maxWidth={'700px'}>
+            <CategoryCard title={'Bevegelse'} link={'/kategori/Bevegelse'} icon={BevegelseIkon()} />
+          </HGrid>
+        </VStack>
       </Bleed>
       <NewsFeed />
 
