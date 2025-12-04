@@ -76,20 +76,15 @@ const NewsCard = ({ news }: { news: News }) => {
             {subTitle}
           </Heading>
         )}
-        {previewHtml && (
-          <div
-            className={styles.newsCard__excerpt}
-            dangerouslySetInnerHTML={{ __html: previewHtml }}
-          />
-        )}
+        {previewHtml && <div className={styles.newsCard__excerpt} dangerouslySetInnerHTML={{ __html: previewHtml }} />}
       </VStack>
       {truncated && (
         <NextLink
           href={`/nyheter/${news.id}`}
           className={styles.newsCard__readMore}
-          aria-label={`Les hele saken: ${news.title}`}
+          aria-label={`Les mer: ${news.title}`}
         >
-          Les hele saken
+          Les mer
         </NextLink>
       )}
     </Box>
