@@ -53,7 +53,7 @@ export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; sky
   )
 }
 
-function useSkyra({
+export function useSkyra({
   skyraSurveyRef,
   openState,
   setOpenState,
