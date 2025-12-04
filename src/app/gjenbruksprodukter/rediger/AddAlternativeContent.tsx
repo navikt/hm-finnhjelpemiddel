@@ -7,7 +7,9 @@ type Props = {
   searchedProduct: AlternativeProduct
   alternativeGroup: string[]
   setTargetHmsArtNr: (hms: string | undefined) => void
-  mutateAlternatives: () => void
+  mutateAlternatives: (addedHmsArtNr?: string) => void
+  // Callback to notify parent when an alternative has been successfully added
+  onAdded?: () => void
 }
 
 export const AddAlternativeContent = ({
@@ -15,6 +17,7 @@ export const AddAlternativeContent = ({
   searchedProduct,
   setTargetHmsArtNr,
   mutateAlternatives,
+  onAdded,
 }: Props) => {
   return (
     <>
@@ -24,7 +27,9 @@ export const AddAlternativeContent = ({
         onClick={() =>
           addAlternativeToGroup(alternativeGroup, searchedProduct.hmsArtNr!).then(() => {
             setTargetHmsArtNr(undefined)
-            mutateAlternatives()
+            mutateAlternatives(searchedProduct.hmsArtNr!)
+            // Inform parent so it can reset/close its UI
+            onAdded?.()
           })
         }
         style={{ width: 'fit-content' }}

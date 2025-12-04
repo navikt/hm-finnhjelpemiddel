@@ -12,7 +12,7 @@ export const EditableAlternativeGroup = ({
 }: {
   originalProduct?: AlternativeProduct
   alternatives: AlternativeProduct[]
-  mutateAlternatives: () => void
+  mutateAlternatives: (addedHmsArtNr?: string) => void
 }) => {
   const baseGroup = alternatives.map((alternative) => alternative.hmsArtNr!).filter(Boolean)
   const alternativeGroup =
@@ -43,7 +43,11 @@ export const EditableAlternativeGroup = ({
         ))}
         {orderedAlternatives.length === 1 && <NoAlternativesCard />}
       </VStack>
-      <AddAlternative alternativeGroup={alternativeGroup} mutateAlternatives={mutateAlternatives} />
+      {/* Forward HMS number from AddAlternativeContent up so parent can highlight the correct group */}
+      <AddAlternative
+        alternativeGroup={alternativeGroup}
+        mutateAlternatives={(addedHmsArtNr?: string) => mutateAlternatives(addedHmsArtNr)}
+      />
     </VStack>
   )
 }

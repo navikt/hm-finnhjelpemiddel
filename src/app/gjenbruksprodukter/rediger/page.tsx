@@ -4,11 +4,10 @@ import { Heading } from '@/components/aksel-client'
 import styles from '../AlternativeProducts.module.scss'
 import { Bleed, BodyShort, Box, HelpText, HStack, Loader, Search, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { EditableAlternativeGroup } from '@/app/gjenbruksprodukter/rediger/EditableAlternativeGroup'
 import { getAlternativesGrouped } from '@/app/gjenbruksprodukter/alternative-util'
 import useSWR from 'swr'
-import { NoAlternativesCard } from '@/app/gjenbruksprodukter/rediger/NoAlternativesCard'
 
 export default function EditAlternativeProductsPage() {
   const router = useRouter()
@@ -53,13 +52,36 @@ export default function EditAlternativeProductsPage() {
   )
 }
 
+const buildGroupKey = (group: { hmsArtNr?: string | null }[], index: number) => {
+  // Use a stable key based on the HMS numbers in the group; fall back to index if needed
+  const key = group
+    .map((p) => p.hmsArtNr)
+    .filter((id): id is string => !!id)
+    .sort()
+    .join('|')
+
+  return key || `group-${index}`
+}
+
 const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
+  const [lastAddedHmsArtNr, setLastAddedHmsArtNr] = useState<string | null>(null)
+
   const {
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
-    mutate: mutateAlternatives,
+    mutate: mutateAlternativesBase,
     error: errorAlternatives,
   } = useSWR(`alternatives-groups-${hmsNumber}`, () => getAlternativesGrouped(hmsNumber))
+
+  const mutateAlternatives = async (addedHmsArtNr?: string) => {
+    // Trigger refetch and remember which HMS number was just added
+    await mutateAlternativesBase()
+    if (addedHmsArtNr) {
+      setLastAddedHmsArtNr(addedHmsArtNr)
+      // Clear the highlight after the CSS animation has had time to play
+      window.setTimeout(() => setLastAddedHmsArtNr(null), 2000)
+    }
+  }
 
   if (isLoadingAlternatives) {
     return <Loader />
@@ -75,6 +97,9 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
 
   const groups = alternativesResponse.groups ?? []
 
+  const groupHasLastAdded = (group: { hmsArtNr?: string | null }[]) =>
+    !!lastAddedHmsArtNr && group.some((p) => p.hmsArtNr === lastAddedHmsArtNr)
+
   if (groups.length > 1) {
     return (
       <HStack gap="space-8">
@@ -86,14 +111,18 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
           </HelpText>
         </HStack>
         {groups.map((group, index) => (
-          <Box key={index} paddingBlock="space-8">
+          <Box
+            key={buildGroupKey(group, index)}
+            paddingBlock="space-8"
+            className={groupHasLastAdded(group) ? styles.highlightGroup : undefined}
+          >
             <Heading level="2" size="medium" spacing>
-              Klynge {index + 1}
+              Klynge
             </Heading>
             <EditableAlternativeGroup
               originalProduct={alternativesResponse.original}
               alternatives={group}
-              mutateAlternatives={mutateAlternatives}
+              mutateAlternatives={(addedHmsArtNr?: string) => mutateAlternatives(addedHmsArtNr)}
             />
           </Box>
         ))}
@@ -105,18 +134,22 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
         <EditableAlternativeGroup
           originalProduct={alternativesResponse.original}
           alternatives={[]}
-          mutateAlternatives={mutateAlternatives}
+          mutateAlternatives={(addedHmsArtNr?: string) => mutateAlternatives(addedHmsArtNr)}
         />
       </Box>
     )
   }
 
   return groups.map((group, index) => (
-    <Box key={index} paddingBlock="space-8">
+    <Box
+      key={buildGroupKey(group, index)}
+      paddingBlock="space-8"
+      className={groupHasLastAdded(group) ? styles.highlightGroup : undefined}
+    >
       <EditableAlternativeGroup
         originalProduct={alternativesResponse.original}
         alternatives={group}
-        mutateAlternatives={mutateAlternatives}
+        mutateAlternatives={(addedHmsArtNr?: string) => mutateAlternatives(addedHmsArtNr)}
       />
     </Box>
   ))

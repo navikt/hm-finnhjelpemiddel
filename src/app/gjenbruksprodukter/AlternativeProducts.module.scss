@@ -103,3 +103,22 @@
   right: 10px;
   top: 10px;
 }
+
+@keyframes highlight-group-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 103, 197, 0.35);
+    background-color: #f5f9ff;
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 103, 197, 0);
+    background-color: #e0f0ff;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 103, 197, 0);
+    background-color: inherit;
+  }
+}
+
+.highlightGroup {
+  animation: highlight-group-pulse 1.5s ease-out;
+}

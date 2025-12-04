@@ -9,14 +9,15 @@ export const AddAlternative = ({
   mutateAlternatives,
 }: {
   alternativeGroup: string[]
-  mutateAlternatives: () => void
+  mutateAlternatives: (addedHmsArtNr?: string) => void
 }) => {
   const [targetHmsArtNr, setTargetHmsArtNr] = useState<string | undefined>(undefined)
+  // Control whether the expansion card is open so we can close it after adding
+  const [isOpen, setIsOpen] = useState(false)
 
   const {
     data: alternativeResponse,
     isLoading,
-    error,
   } = useSWRImmutable<AlternativeStockResponseNew | undefined>(targetHmsArtNr ? targetHmsArtNr : null, () =>
     newGetAlternatives(targetHmsArtNr!)
   )
@@ -24,6 +25,7 @@ export const AddAlternative = ({
   const searchedProduct = alternativeResponse?.original
   const searchedHmsArtNr = searchedProduct?.hmsArtNr ?? undefined
 
+  // Check if the searched product is already part of the current alternative group
   const isAlreadyInGroup = useMemo(
     () => !!searchedHmsArtNr && alternativeGroup.includes(searchedHmsArtNr),
     [searchedHmsArtNr, alternativeGroup]
@@ -31,9 +33,21 @@ export const AddAlternative = ({
 
   const unknownHmsNr = targetHmsArtNr && !isLoading && !searchedProduct
 
+  const handleAlternativeAdded = () => {
+    // Reset search and close the expansion card after a successful add
+    setTargetHmsArtNr(undefined)
+    setIsOpen(false)
+  }
+
   return (
     <VStack gap={'4'}>
-      <ExpansionCard size={'small'} aria-label="Demo med bare tittel" style={{ width: '410px' }}>
+      <ExpansionCard
+        size={'small'}
+        aria-label="Demo med bare tittel"
+        style={{ width: '410px' }}
+        open={isOpen}
+        onToggle={setIsOpen}
+      >
         <ExpansionCard.Header>
           <ExpansionCard.Title size={'small'}>Legg til alternativ</ExpansionCard.Title>
         </ExpansionCard.Header>
@@ -43,10 +57,16 @@ export const AddAlternative = ({
               label="Skriv HMS-nummer"
               hideLabel={false}
               variant="primary"
-              onSearchClick={setTargetHmsArtNr}
+              onSearchClick={(value) => {
+                setTargetHmsArtNr(value)
+                // Open card when a search is performed so content is visible
+                setIsOpen(true)
+              }}
               onKeyUp={(event: React.KeyboardEvent) => {
                 if (event.key === 'Enter') {
-                  setTargetHmsArtNr((event.currentTarget as HTMLInputElement).value)
+                  const value = (event.currentTarget as HTMLInputElement).value
+                  setTargetHmsArtNr(value)
+                  setIsOpen(true)
                 }
               }}
               onClear={() => setTargetHmsArtNr(undefined)}
@@ -56,12 +76,15 @@ export const AddAlternative = ({
                 (isAlreadyInGroup && 'Produktet er allerede i denne klyngen med alternativer')
               }
             />
+            {/* Only show AddAlternativeContent when we have a product AND it is not already in the group */}
             {targetHmsArtNr && searchedProduct && !isAlreadyInGroup && (
               <AddAlternativeContent
                 searchedProduct={searchedProduct}
                 alternativeGroup={alternativeGroup}
                 setTargetHmsArtNr={setTargetHmsArtNr}
                 mutateAlternatives={mutateAlternatives}
+                // Notify parent so it can reset search state and close card
+                onAdded={handleAlternativeAdded}
               />
             )}
           </VStack>
