@@ -20,7 +20,8 @@
 
   &Active {
     @extend .filterButton;
-    --ac-button-secondary-bg: var(--a-surface-action-subtle);
+    --ac-button-secondary-bg: var(--a-surface-action-selected);
+    --ac-button-secondary-text: var(--a-text-on-action);
   }
 }
 
