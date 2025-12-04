@@ -376,7 +376,7 @@ export const gåstoler: Kategori = {
   beskrivelse:
     'Hjelpemidler med hjul og sete eller sele som støtter kroppen under gange. Finnes med eller uten underarmsstøtte.',
   underkategorier: [],
-  isoer: ['120606'],
+  isoer: ['120609'],
   visProdukter: true,
 }
 
