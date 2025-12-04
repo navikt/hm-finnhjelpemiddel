@@ -164,7 +164,8 @@ export const seilOgSeler: Kategori = {
 
 export const ramperOgHeiserOgLøfteplattformer: Kategori = {
   navn: 'Ramper, heiser og løfteplattformer',
-  beskrivelse: '',
+  beskrivelse:
+    'Bærbare og fastmonterte ramper for trinnløs forflytning. Heiser og løfteplattformer forflytter en person fra ulike nivå.',
   underkategorier: ['Ramper', 'Heiser', 'Løfteplattformer'],
   isoer: [],
   visProdukter: false,
@@ -172,7 +173,7 @@ export const ramperOgHeiserOgLøfteplattformer: Kategori = {
 
 export const ramper: Kategori = {
   navn: 'Ramper',
-  beskrivelse: '',
+  beskrivelse: 'Fastmonterte og bærbare ramper for trinnløs forflytning mellom ulike nivåer.',
   underkategorier: [],
   isoer: ['183015', '183018'],
   visProdukter: true,
@@ -180,7 +181,8 @@ export const ramper: Kategori = {
 
 export const heiser: Kategori = {
   navn: 'Heiser',
-  beskrivelse: '',
+  beskrivelse:
+    'Trappeheiser med sete eller plattform. Omfatter også løfteutstyr som heves og senkes inne i en sjakt. Forflytter en person mellom to eller flere nivå.',
   underkategorier: [],
   isoer: ['183003', '183010', '183011'],
   visProdukter: true,
@@ -188,7 +190,7 @@ export const heiser: Kategori = {
 
 export const løfteplattformer: Kategori = {
   navn: 'Løfteplattformer',
-  beskrivelse: '',
+  beskrivelse: 'Løfteutstyr med plattform for å forflytte en person mellom to eller flere nivå.',
   underkategorier: [],
   isoer: ['183005'],
   visProdukter: true,
@@ -313,7 +315,8 @@ export const elektriskeRullestoler: Kategori = {
 
 export const sittesystem: Kategori = {
   navn: 'Sittesystem',
-  beskrivelse: '',
+  beskrivelse:
+    'Sittemoduler består av et sete som kan passe til ett eller flere et understell til ulik bruk. Noen sittemoduler kan være støpt etter kroppsform.',
   underkategorier: [],
   isoer: ['180939'],
   visProdukter: true,
