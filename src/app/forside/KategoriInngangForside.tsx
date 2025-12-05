@@ -29,7 +29,9 @@ export const KategoriInngangForside = () => {
         <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'5 0'} maxWidth={'700px'}>
           <CategoryCard title={'Bevegelse'} link={'/kategori/Bevegelse'} icon={BevegelseIkon()} />
         </HGrid>
-        {consent === 'true' && <SkyraSurveyKategori buttonText={'Vad tycks?'} />}
+        {consent === 'true' && (
+          <SkyraSurveyKategori buttonText={'Skriv en kort tilbakemelding om kategori-inngangene'} />
+        )}
       </VStack>
     </Bleed>
   )
@@ -51,7 +53,7 @@ const SkyraSurveyKategori = ({ buttonText }: { buttonText: string }) => {
 
   return (
     <Show above={'sm'}>
-      <Box className={styles.container}>
+      <Box className={styles.container} paddingBlock={'12 0'}>
         <Button
           ref={buttonRef}
           onClick={() => setOpenState((prev) => !prev)}
