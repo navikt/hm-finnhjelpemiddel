@@ -3,7 +3,7 @@
 import { PostWithProducts } from '@/utils/agreement-util'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
 
 const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
@@ -16,6 +16,22 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
     }
     setFirstCompareClick(false)
   }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!posts || posts.length === 0) return
+
+    const hash = window.location.hash
+    if (!hash) return
+
+    const id = hash.substring(1)
+    const el = document.getElementById(id)
+    if (!el) return
+
+    window.setTimeout(() => {
+      el.scrollIntoView({ behavior: 'instant', block: 'start' })
+    }, 0)
+  }, [posts])
 
   return (
     <VStack as="ol" gap={{ xs: '8', md: '12' }} className="agreement-search-results" id="agreementSearchResults">
