@@ -14,6 +14,11 @@
   width: 900px;
 }
 
+.copyButton {
+  border: 1px dashed $a-surface-action;
+}
+
+
 // Only remove the top border when a container directly follows another non-original container
 .container:not(.original) + .container {
   border-top: 0;

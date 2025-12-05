@@ -26,7 +26,7 @@ export const AlternativeProductList = ({
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
-  } = useSWRImmutable<AlternativeStockResponseNew | undefined>(`alternatives-${hmsNumber}`, () =>
+  } = useSWRImmutable<AlternativeStockResponseNew | undefined>(hmsNumber.length > 0 ? `alternatives-${hmsNumber}` : null, () =>
     newGetAlternatives(hmsNumber)
   )
 
@@ -38,7 +38,7 @@ export const AlternativeProductList = ({
   }
 
   if (errorAlternatives || !alternativesResponse) {
-    return <>En feil har skjedd ved henting av data</>
+    return <>En feil har skjedd ved henting av data ${errorAlternatives}</>
   }
 
   if (!alternativesResponse.original) {

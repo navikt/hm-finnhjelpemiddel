@@ -15,7 +15,8 @@ export default function EditAlternativeProductsPage() {
   const searchParams = useSearchParams()
 
   const handleSearch = (value: string) => {
-    router.push(`${pathname}?hms=${value}`)
+
+    router.push(`${pathname}?hms=${value.trim()}`)
   }
 
   return (
@@ -71,7 +72,7 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
     isLoading: isLoadingAlternatives,
     mutate: mutateAlternativesBase,
     error: errorAlternatives,
-  } = useSWR(`alternatives-groups-${hmsNumber}`, () => getAlternativesGrouped(hmsNumber))
+  } = useSWR(hmsNumber.length > 0  ? `alternatives-groups-${hmsNumber}` : null, () => getAlternativesGrouped(hmsNumber))
 
   const mutateAlternatives = async (addedHmsArtNr?: string) => {
     // Trigger refetch and remember which HMS number was just added
@@ -85,6 +86,10 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
 
   if (isLoadingAlternatives) {
     return <Loader />
+  }
+
+  if(hmsNumber.length === 0) {
+    return <Box>Ingen HMS-nummer oppgitt</Box>
   }
 
   if (errorAlternatives || !alternativesResponse) {

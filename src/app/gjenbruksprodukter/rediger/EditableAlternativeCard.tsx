@@ -1,10 +1,11 @@
 import React from 'react'
-import { BodyShort, Box, Button, HGrid, Link, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Button, CopyButton, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import styles from './EditableAlternativeCard.module.scss'
 import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 import ProductImage from '@/components/ProductImage'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 import NextLink from 'next/link'
+import { ThumbUpIcon } from '@navikt/aksel-icons'
 
 export const EditableAlternativeCard = ({
   alternativeProduct,
@@ -37,7 +38,19 @@ export const EditableAlternativeCard = ({
         </Link>
         <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
       </VStack>
-      <BodyShort>HMS: {alternativeProduct.hmsArtNr}</BodyShort>
+      <HStack align="center" gap="2">
+        HMS-nummer
+        <CopyButton
+          size="small"
+          copyText={alternativeProduct.hmsArtNr ?? ''}
+          text={alternativeProduct.hmsArtNr ?? ''}
+          activeText="Kopiert"
+          variant="action"
+          activeIcon={<ThumbUpIcon aria-hidden />}
+          iconPosition="right"
+          className={styles.copyButton}
+        />
+      </HStack>
       {alternativeProduct.onAgreement ? (
         <SuccessTag>{`Rangering ${alternativeProduct.highestRank}`}</SuccessTag>
       ) : (
@@ -49,9 +62,7 @@ export const EditableAlternativeCard = ({
         <Button variant={'secondary'} onClick={onDelete} className={styles.deleteButton}>
           Slett
         </Button>
-        )
-      }
-
+      )}
     </HGrid>
   )
 }
