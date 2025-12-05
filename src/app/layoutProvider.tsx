@@ -18,8 +18,7 @@ import { initSkyra, stopSkyra } from '@/utils/skyra'
 import { SkyraSurvey } from '@/app/SkyraSurvey'
 import { initUmami, logUmamiClickButton, stopUmami } from '@/utils/umami'
 
-
-function getCookie(name: string): string | null {
+export function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
   return match ? decodeURIComponent(match[2]) : null
 }
@@ -96,14 +95,14 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
           enableOptionalCookies={() => {
             setCookie('finnhjelpemiddel-consent', 'true')
             setConsent('true')
-            logUmamiClickButton('godkjenn-alle', 'cookieBanner', "primary")
+            logUmamiClickButton('godkjenn-alle', 'cookieBanner', 'primary')
             console.debug('User accepted optional cookies.')
           }}
           disableOptionalCookies={() => {
             setCookie('finnhjelpemiddel-consent', 'false')
             setConsent('false')
 
-            logUmamiClickButton('bare-nodvendige', 'cookieBanner', "primary")
+            logUmamiClickButton('bare-nodvendige', 'cookieBanner', 'primary')
             console.debug('User declined optional cookies.')
           }}
         />
