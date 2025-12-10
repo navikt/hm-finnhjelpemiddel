@@ -77,11 +77,12 @@ function FrontPage() {
         </HGrid>
       </Bleed>
 
+      <KategoriInngangForside />
+
       <Agreements />
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <OtherAgreements />
       </Bleed>
-      <KategoriInngangForside />
       <NewsFeed />
 
       <KontaktOss />

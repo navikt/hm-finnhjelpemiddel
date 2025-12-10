@@ -13,7 +13,7 @@ type Props = {
 
 export const CategoryCard = ({ title, link, description, icon }: Props) => {
   return (
-    <LinkCard arrow={false}>
+    <LinkCard arrow={false} style={{ boxShadow: 'var(--a-shadow-medium)' }}>
       {icon && (
         <VStack justify="center" height="100%" asChild>
           <LinkCard.Icon>{icon}</LinkCard.Icon>

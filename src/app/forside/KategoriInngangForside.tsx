@@ -1,11 +1,11 @@
 'use client'
 
-import { Bleed, BodyLong, Box, Button, Heading, HGrid, Popover, Show, VStack } from '@navikt/ds-react'
+import { BodyLong, Box, Button, Heading, HGrid, Popover, Show, VStack } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { BevegelseIkon } from '@/app/kategori/ikoner/BevegelseIkon'
 import { useRef, useState } from 'react'
 import styles from './SkyraSurveyKategori.module.scss'
-import { HeartFillIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { ChatIcon, HeartFillIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { useSkyra } from '@/app/SkyraSurvey'
 import { getCookie } from '@/app/layoutProvider'
 
@@ -19,21 +19,18 @@ export const KategoriInngangForside = () => {
   })
 
   return (
-    <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-      <VStack gap={'2'} paddingBlock={'7'}>
-        <Heading size={'large'}>Kategori-inngang (beta)</Heading>
-        <BodyLong size={'large'} style={{ maxWidth: '600px' }}>
-          Vi tester en ny måte å finne hjelpemidler på. <br /> Først ut er bevegelse, og det vil komme flere kategorier
-          etter hvert.
-        </BodyLong>
-        <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'5 0'} maxWidth={'700px'}>
-          <CategoryCard title={'Bevegelse'} link={'/kategori/Bevegelse'} icon={BevegelseIkon()} />
-        </HGrid>
-        {consent === 'true' && (
-          <SkyraSurveyKategori buttonText={'Skriv en kort tilbakemelding om kategori-inngangene'} />
-        )}
-      </VStack>
-    </Bleed>
+    <VStack gap={'2'} paddingInline={{ lg: '6' }}>
+      <Heading level={'2'} size={'large'}>
+        Kategori-inngang (beta)
+      </Heading>
+      <BodyLong size={'large'} style={{ maxWidth: '600px' }}>
+        Vi tester en ny måte å finne hjelpemidler på.
+      </BodyLong>
+      <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'2 0'} maxWidth={'700px'}>
+        <CategoryCard title={'Bevegelse'} link={'/kategori/Bevegelse'} icon={BevegelseIkon()} />
+      </HGrid>
+      {consent === 'true' && <SkyraSurveyKategori buttonText={'Gi oss tilbakemelding'} />}
+    </VStack>
   )
 }
 
@@ -53,13 +50,17 @@ const SkyraSurveyKategori = ({ buttonText }: { buttonText: string }) => {
 
   return (
     <Show above={'sm'}>
-      <Box className={styles.container} paddingBlock={'12 0'}>
+      <Box className={styles.container} paddingBlock={'4 0'}>
         <Button
           ref={buttonRef}
           onClick={() => setOpenState((prev) => !prev)}
           aria-expanded={openState}
-          variant="tertiary"
-          size={'xsmall'}
+          variant="secondary"
+          icon={<ChatIcon aria-hidden />}
+          style={{
+            boxShadow:
+              'inset 0 0 0 1px var(--ac-button-secondary-border, var(--__ac-button-secondary-border, var(--a-border-action)))',
+          }}
         >
           <Show above={'sm'}>{buttonText}</Show>
           <Show below={'sm'} asChild>
