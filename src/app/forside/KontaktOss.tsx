@@ -5,31 +5,29 @@ import styles from './KontaktOss.module.scss'
 
 const KontaktOss = () => {
   return (
-    <Bleed marginInline="full" asChild reflectivePadding>
-      <div className={styles.kontaktOss}>
-        <HGrid gap="8" columns={{ xs: 1, md: 3 }}>
-          <KontaktOssItem
-            icon={<Chat2Icon aria-hidden fontSize={'32px'} />}
-            title="Kontakt Nav"
-            href="https://www.nav.no/kontaktoss"
-            description="Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i Nav."
-          />
+    <Bleed marginInline="full" asChild reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
+      <HGrid gap="8" columns={{ xs: 1, md: 3 }} paddingBlock={'24'}>
+        <KontaktOssItem
+          icon={<Chat2Icon aria-hidden fontSize={'32px'} />}
+          title="Kontakt Nav"
+          href="https://www.nav.no/kontaktoss"
+          description="Skriv med Chatrobot Frida, skriv til oss, eller ring kontaktsenteret i Nav."
+        />
 
-          <KontaktOssItem
-            icon={<LocationPinIcon aria-hidden fontSize={'32px'} />}
-            title="Finn din hjelpemiddelsentral"
-            href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral"
-            description="Finn kontaktinformasjon og les om inn- og utlevering av hjelpemidler."
-          />
+        <KontaktOssItem
+          icon={<LocationPinIcon aria-hidden fontSize={'32px'} />}
+          title="Finn din hjelpemiddelsentral"
+          href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral"
+          description="Finn kontaktinformasjon og les om inn- og utlevering av hjelpemidler."
+        />
 
-          <KontaktOssItem
-            icon={<HatSchoolIcon aria-hidden fontSize={'32px'} />}
-            title="Kunnskapsbanken"
-            href="https://www.kunnskapsbanken.net/"
-            description="Fagstoff og kurs om hjelpemidler og tilrettelegging."
-          />
-        </HGrid>
-      </div>
+        <KontaktOssItem
+          icon={<HatSchoolIcon aria-hidden fontSize={'32px'} />}
+          title="Kunnskapsbanken"
+          href="https://www.kunnskapsbanken.net/"
+          description="Fagstoff og kurs om hjelpemidler og tilrettelegging."
+        />
+      </HGrid>
     </Bleed>
   )
 }
