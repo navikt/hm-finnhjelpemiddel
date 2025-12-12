@@ -51,7 +51,7 @@ const Description = ({ description }: { description: string | undefined }) => {
 type BestillingsordningBehovsmeldingProps = {
   heading: string
   helpText: string
-  sett: Set<boolean | Boolean>
+  sett: Set<boolean | boolean>
 }
 const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: BestillingsordningBehovsmeldingProps) => {
   const bestillingsordning =

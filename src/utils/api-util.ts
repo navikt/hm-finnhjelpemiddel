@@ -350,7 +350,7 @@ export const makeSearchTermQuery = ({
 }
 
 // Because of queryString in opensearch query: https://opensearch.org/docs/latest/query-dsl/full-text/query-string/#reserved-characters
-const removeReservedChars = (searchTerm: String) => {
+const removeReservedChars = (searchTerm: string) => {
   const unescapables = /([<>\\])/g
   const queryStringReserved = /(\+|-|=|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\/)/g
   return searchTerm.replaceAll(unescapables, '').replaceAll(queryStringReserved, '\\$&')
@@ -410,7 +410,7 @@ export const fetchProducts = ({
     categories,
   } = filters
 
-  const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, Object | null> = {
+  const filterKeyToAggsFilter: Record<Exclude<FilterCategoryKeyServer, 'delkontrakt'>, object | null> = {
     lengdeCM: filterLengde(lengdeMinCM, lengdeMaxCM),
     breddeCM: filterBredde(breddeMinCM, breddeMaxCM),
     totalVektKG: filterTotalvekt(totalVektMinKG, totalVektMaxKG),

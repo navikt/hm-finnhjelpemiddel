@@ -56,7 +56,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
   }
 
   const pageCount = (allItems: number) => {
-    let number = Math.ceil(allItems / rowsPerPage)
+    const number = Math.ceil(allItems / rowsPerPage)
     return number <= 0 ? 1 : number
   }
 

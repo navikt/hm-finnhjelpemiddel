@@ -27,7 +27,7 @@ const RemovableAlternativeProductCardMenu = ({
   const currentRank = minRank
   const onAgreement = currentRank !== Infinity
 
-  let cardClassName = 'product-card--removable'
+  const cardClassName = 'product-card--removable'
   const searchParams = useSearchParams()
   const linkToProduct = `/produkt/${product.seriesId}?${searchParams}`
   return (

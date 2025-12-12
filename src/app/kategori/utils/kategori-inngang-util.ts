@@ -344,7 +344,7 @@ const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): Measurement
   const { setebreddeMinCM, setebreddeMaksCM, setedybdeMinCM, setedybdeMaksCM, setehoydeMinCM, setehoydeMaksCM } =
     data.aggregations
 
-  let ferdig = {}
+  const ferdig = {}
 
   if (setebreddeMinCM.values.buckets.length > 0 || setebreddeMaksCM.values.buckets.length > 0) {
     Object.assign(ferdig, {

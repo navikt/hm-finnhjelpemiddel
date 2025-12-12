@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import useDebounce from './useDebounce'
 
 export default function useRestoreScroll(id: string, shouldRestore: boolean) {
-  const [scrollTop, setScrollTop] = useState<Number>()
+  const [scrollTop, setScrollTop] = useState<number>()
   const debouncedScrollTop = useDebounce(scrollTop, 100)
   const SESSION_STORAGE_ID = `restore-scroll-${id}`
 

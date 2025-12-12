@@ -57,7 +57,7 @@ export interface ProductVariant {
   expired: string
   agreements: AgreementInfo[]
   bestillingsordning: boolean
-  digitalSoknad: Boolean
+  digitalSoknad: boolean
   accessory: boolean
   sparePart: boolean
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
@@ -134,7 +134,7 @@ export const mapProductFromSeriesId = (data: SearchResponse): Product => {
 /**
  * Maps results from search for hmsArtNr into one product with the specified variant
  */
-export const mapProductFromHmsArtNr = (data: SearchResponse, hmsArtNr: String): Product => {
+export const mapProductFromHmsArtNr = (data: SearchResponse, hmsArtNr: string): Product => {
   if (data.hits.hits.map((h) => h._source as ProductSourceResponse).length === 0) {
     throw new Error(`ProductSourceResponse array is empty. Cannot map product with variants ${JSON.stringify(data)}`)
   }
@@ -241,7 +241,7 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
     }
   })
 }
-export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsArtNr: String): Product => {
+export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsArtNr: string): Product => {
   const variant = sources
     .filter((source) => source.hmsArtNr === hmsArtNr)
     .map((source) => {

@@ -191,7 +191,7 @@ export const mapAgreementProducts = (
     )?.rank
 
   const mapPostBucket = (bucket: PostBucketResponse) => {
-    let seen: { [id: string]: { count: number; hmsNumbers: string[] } } = {}
+    const seen: { [id: string]: { count: number; hmsNumbers: string[] } } = {}
 
     const products = bucket.products
       .map((hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
@@ -204,7 +204,7 @@ export const mapAgreementProducts = (
         ) {
           return false
         } else if (Object.keys(seen).some((seenProduct) => seenProduct === product.id)) {
-          let obj = seen[product.id]
+          const obj = seen[product.id]
           if (obj) {
             obj.count += 1
             hmsNr && obj.hmsNumbers.push(hmsNr)
