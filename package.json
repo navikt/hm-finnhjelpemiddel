@@ -6,7 +6,7 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.31.3",
@@ -39,7 +39,6 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.0",
     "@next/eslint-plugin-next": "16.0.7",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@types/amplitude-js": "^8.16.5",
