@@ -127,12 +127,12 @@ const TagRow = ({
             <>
               {productAgreements.length <= 2 && (
                 <SuccessTag>
-                  Delkontrakt {productAgreements[0].refNr} - rangering {topRank}
+                  Delkontrakt {productAgreements[0].refNr} - rangering {productAgreements[0].rank}
                 </SuccessTag>
               )}
               {productAgreements.length === 2 && (
                 <SuccessTag>
-                  Delkontrakt {productAgreements[1].refNr} - rangering {rankList?.[1]}
+                  Delkontrakt {productAgreements[1].refNr} - rangering {productAgreements[1].rank}
                 </SuccessTag>
               )}
               {productAgreements.length > 2 && (
