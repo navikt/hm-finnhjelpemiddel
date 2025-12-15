@@ -78,7 +78,9 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
               <Accordion.Header className={styles.accordion}>
                 <HStack gap="2" align="center">
                   Virker sammen med
-                  <HelpText placement="right">{helpTextWorksWith}</HelpText>
+                  <HelpText onClick={(event) => event.stopPropagation()} placement="right">
+                    {helpTextWorksWith}
+                  </HelpText>
                 </HStack>
               </Accordion.Header>
               <Accordion.Content>
