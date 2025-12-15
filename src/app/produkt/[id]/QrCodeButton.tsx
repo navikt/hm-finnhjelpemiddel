@@ -1,11 +1,10 @@
 'use client'
 
-import { Button, Heading } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useEffect, useState } from 'react'
 import { logActionEvent } from '@/utils/amplitude'
 import { usePathname } from 'next/navigation'
-import { QrCodeIcon } from '@navikt/aksel-icons'
 
 export const QrCodeButton = ({ id }: { id: string }) => {
   const [qrUrl, setQrUrl] = useState('')
@@ -24,20 +23,20 @@ export const QrCodeButton = ({ id }: { id: string }) => {
 
   return (
     <>
-    <Button
-      size="medium"
-      style={{ alignSelf: 'end', border: '1px dashed #0056b4'}}
-      variant={'tertiary'}
-      as="a"
-      href={qrUrl}
-      download={id + '-qr.png'}
-      onClick={() => logActionEvent('qr-kode')}
-    >
-      Last ned QR-kode
-      <div style={{ display: 'none' }}>
-        <QRCodeCanvas includeMargin={true} value={url} id="qr-canvas" />
-      </div>
-    </Button>
+      <Button
+        size="medium"
+        style={{ alignSelf: 'end', border: '1px dashed #0056b4' }}
+        variant={'tertiary'}
+        as="a"
+        href={qrUrl}
+        download={id + '-qr.png'}
+        onClick={() => logActionEvent('qr-kode')}
+      >
+        Last ned QR-kode
+        <div style={{ display: 'none' }}>
+          <QRCodeCanvas marginSize={4} value={url} id="qr-canvas" />
+        </div>
+      </Button>
     </>
   )
 }

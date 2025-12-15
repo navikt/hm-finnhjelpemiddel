@@ -9,7 +9,7 @@ import reportAccessibility from '@/utils/reportAccessibility'
 
 import NavigationBar from '@/app/NavigationBar'
 import Footer from '@/components/layout/Footer'
-import { useMenuStore, useMobileOverlayStore } from '@/utils/global-state-util'
+import { useMenuStore } from '@/utils/global-state-util'
 import { Alert, HStack, Link } from '@navikt/ds-react'
 import { initInstrumentation } from '@/faro/faro'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
@@ -47,7 +47,6 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const featureFlags = useFeatureFlags()
   const { isMenuOpen } = useMenuStore()
-  const { isMobileOverlayOpen } = useMobileOverlayStore()
   const [consent, setConsent] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       return getCookie('finnhjelpemiddel-consent')

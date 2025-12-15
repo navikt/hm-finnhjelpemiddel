@@ -1,7 +1,7 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { BodyShort, Box, HStack, Link, Tag, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
@@ -13,7 +13,6 @@ import { NeutralTag, SuccessTag } from '@/components/Tags'
 export const ProductCardSearch = ({
   product,
   rank,
-  variantCount,
   handleCompareClick,
 }: {
   product: Product
@@ -35,13 +34,9 @@ export const ProductCardSearch = ({
         <VStack>
           <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
-              <SuccessTag>
-                {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
-              </SuccessTag>
+              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>
             ) : (
-              <NeutralTag>
-                Ikke på avtale
-              </NeutralTag>
+              <NeutralTag>Ikke på avtale</NeutralTag>
             )}
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </HStack>

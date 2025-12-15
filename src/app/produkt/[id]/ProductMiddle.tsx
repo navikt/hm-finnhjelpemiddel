@@ -18,7 +18,7 @@ const WORKS_WITH_CONFIG = {
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
 }
 
-const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
+const ProductMiddle = ({ product }: { product: Product }) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
 
   const featureFlags = useFeatureFlags()

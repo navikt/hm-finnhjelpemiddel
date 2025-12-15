@@ -22,7 +22,7 @@ import useQueryString from '@/utils/search-params-util'
 import { PostsListKomponenttypeGroups } from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListKomponenttypeGroups'
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
-  const { isEnabled, isLoading } = useFeatureFlags()
+  const { isEnabled } = useFeatureFlags()
 
   const router = useRouter()
   const pathname = usePathname()
@@ -99,7 +99,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     leverandor: leverandorFilter,
     delkontrakt: postFilters,
   }
-  
+
   const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters).filter(
     (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0
   )
@@ -223,7 +223,7 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
 }
 
 const TopLinks = ({ agreementId }: { agreementId: string }) => {
-  const { toggles, isEnabled, isLoading } = useFeatureFlags()
+  const { isLoading } = useFeatureFlags()
 
   if (isLoading) {
     return (

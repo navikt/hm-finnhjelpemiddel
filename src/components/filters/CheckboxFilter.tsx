@@ -1,7 +1,7 @@
 import { Filter } from '@/utils/api-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { FormSearchData } from '@/utils/search-state-util'
-import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
+import { sortIntWithStringFallback } from '@/utils/sort-util'
 import { Checkbox, CheckboxGroup, Search, VStack } from '@navikt/ds-react'
 import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'

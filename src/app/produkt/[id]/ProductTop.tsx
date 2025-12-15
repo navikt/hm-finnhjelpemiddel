@@ -69,12 +69,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
       </VStack>
       <CopyHms product={product} />
       <HStack gap={'6'}>
-        {compatibleWithProducts && compatibleWithProducts.length > 0 && (
-          <AccessoriesAndParts
-            productName={hmsartnr ? `serien ${product.title}` : product.title}
-            productId={product.id}
-          />
-        )}
+        {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
       </HStack>
     </VStack>
@@ -96,7 +91,6 @@ const TagRow = ({
     productAgreements &&
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
-  const rankList = productAgreements?.map((agreement) => agreement.rank).sort((a, b) => a - b)
   const helpTextTopLabels = () => {
     return (
       <>
@@ -197,7 +191,7 @@ const CopyHms = ({ product }: { product: Product }) => {
   )
 }
 
-const AccessoriesAndParts = ({ productName, productId }: { productName: string; productId: string }) => {
+const AccessoriesAndParts = ({ productId }: { productId: string }) => {
   return (
     <VStack gap={'6'}>
       <Button

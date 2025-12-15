@@ -34,7 +34,7 @@ export default async function ProduktPage(props: Props) {
   ) : (
     <ProductPageLayout>
       <ProductTop product={product} hmsartnr={params.hmsartnr} />
-      <ProductMiddle product={product} hmsartnr={params.hmsartnr} />
+      <ProductMiddle product={product} />
     </ProductPageLayout>
   )
 }

@@ -35,7 +35,7 @@ type SortColumns = {
 
 const AgreementList = () => {
   const [sortColumn, setSortColumn] = useState<SortColumns>({ orderBy: 'title', direction: 'ascending' })
-  const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+  const { data } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
     revalidateOnFocus: false,
   })

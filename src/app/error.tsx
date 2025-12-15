@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { NotFound } from '@/app/[...not-found]/NotFound'
 import { logUmamiErrorOnUrl } from '@/utils/umami'
 
-export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function Error({ error }: { error: Error & { digest?: string } }) {
   const path = usePathname()
 
   useEffect(() => {

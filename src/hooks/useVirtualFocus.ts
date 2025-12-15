@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-function useVirtualFocus<T>(containerRef: HTMLElement | null) {
+function useVirtualFocus(containerRef: HTMLElement | null) {
   const [index, setIndex] = useState(-1)
 
   const getElementsAbleToReceiveFocus = () => {

@@ -7,15 +7,13 @@ import { Product } from '@/utils/product-util'
 import { formatAgreementPosts, formatAgreementRanks, toValueAndUnit } from '@/utils/string-util'
 
 import { Heading, Loader, Table } from '@/components/aksel-client'
-import RemovableAlternativeProductCard from '@/components/RemovableAlternativeProductCard'
-import AlternativeProductCard from "@/components/AlternativeProductCard";
+import AlternativeProductCard from '@/components/AlternativeProductCard'
 
 interface Props {
   productIdsToCompare: string[]
 }
 
-export default function CompareAlternativesHotsakPage({productIdsToCompare}: Props) {
-
+export default function CompareAlternativesHotsakPage({ productIdsToCompare }: Props) {
   const { data, isLoading } = useSWR<FetchSeriesResponse>(productIdsToCompare, fetchProductsWithVariant, {
     keepPreviousData: true,
   })
@@ -38,7 +36,7 @@ export default function CompareAlternativesHotsakPage({productIdsToCompare}: Pro
     )
   }
 
-  if(!sortedProductsToCompare || sortedProductsToCompare?.length === 0) {
+  if (!sortedProductsToCompare || sortedProductsToCompare?.length === 0) {
     return (
       <div className="main-wrapper--large compare-page spacing-top--large spacing-bottom--xlarge">
         <Heading level="1" size="large" spacing>
@@ -54,13 +52,12 @@ export default function CompareAlternativesHotsakPage({productIdsToCompare}: Pro
       <Heading level="1" size="large" spacing>
         Sammenlign produkter
       </Heading>
-        <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
+      <>{sortedProductsToCompare && <CompareTable productsToCompare={sortedProductsToCompare} />}</>
     </div>
   )
 }
 
 const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
-
   const allDataKeysVariants = [
     ...new Set(
       productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))

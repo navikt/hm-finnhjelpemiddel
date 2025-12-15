@@ -13,7 +13,7 @@ import { dateToString } from '@/utils/string-util'
 import styles from './Agreements.module.scss'
 import { faro } from '@grafana/faro-core'
 
-type SortColumns = {
+export type SortColumns = {
   orderBy: string | null
   direction: 'ascending' | 'descending'
 }

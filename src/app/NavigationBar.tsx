@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import BurgerMenuContent from './BurgerMenuContent'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { SnowfallComponent } from '@/components/Snowfall'
-import Pepperkakemann from '@/app/julepynt/Pepperkakemann'
+import { Pepperkakemann } from '@/app/julepynt/Pepperkakemann'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)

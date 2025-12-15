@@ -1,7 +1,7 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { BodyShort, Box, CopyButton, HStack, Link, Stack, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, CopyButton, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { logActionEvent, logNavigationEvent } from '@/utils/amplitude'

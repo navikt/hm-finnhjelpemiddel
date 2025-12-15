@@ -1,4 +1,4 @@
-import { Table, Tag } from '@navikt/ds-react'
+import { Table } from '@navikt/ds-react'
 import { AgreementInfo, ProductVariant } from '@/utils/product-util'
 import styles from './VariantTable.module.scss'
 import { SuccessTag } from '@/components/Tags'
@@ -26,9 +26,7 @@ export const VariantRankRow = ({ variants, selectedColumn, handleColumnClick }: 
           className={selectedColumn === i ? styles.selectedColumn : ''}
           onClick={() => handleColumnClick(i)}
         >
-          <SuccessTag title={'Rangering'}>
-            {text(variant.agreements)}
-          </SuccessTag>
+          <SuccessTag title={'Rangering'}>{text(variant.agreements)}</SuccessTag>
         </Table.DataCell>
       ))}
     </Table.Row>

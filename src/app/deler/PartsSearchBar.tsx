@@ -26,7 +26,7 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
     if (searchTermValue !== inputValue) {
       setInputValue(searchTermValue)
     }
-  }, [searchTermValue])
+  }, [inputValue, searchTermValue])
 
   const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string>(
     searchParams.get(searchParamKeys.supplier) || ''
