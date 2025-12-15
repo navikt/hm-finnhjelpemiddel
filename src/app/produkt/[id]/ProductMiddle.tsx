@@ -72,6 +72,15 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
       </>
     )
   }
+  const helpTextWorksWith = (
+    <BodyLong>
+      Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt sammen.
+      <br />
+      <br />
+      Man trenger ikke å velge alle hjelpemidler fra lista. Det kan være flere alternativer av samme type, der man kun
+      trenger å velge én.
+    </BodyLong>
+  )
 
   return (
     <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
@@ -87,7 +96,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
               <Accordion.Header className={styles.accordion}>
                 <HStack gap="2" align="center">
                   Virker sammen med
-                  <HelpText placement="right">{helpTextWorksWith()}</HelpText>
+                  <HelpText placement="right">{helpTextWorksWith}</HelpText>
                 </HStack>
               </Accordion.Header>
               <Accordion.Content>
