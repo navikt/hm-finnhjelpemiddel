@@ -16,7 +16,6 @@ const WORKS_WITH_CONFIG = {
 }
 
 export const WorksWith = ({ worksWithSeriesIds }: Props) => {
-  const [open, setOpen] = useState<boolean>(false)
   const { data } = useSWRImmutable<FetchSeriesResponse>(worksWithSeriesIds, fetchWorkWithProducts)
   const worksWithProducts = data?.products
 
@@ -34,7 +33,7 @@ export const WorksWith = ({ worksWithSeriesIds }: Props) => {
     worksWithProducts &&
     worksWithProducts.length > 0 && (
       <Accordion size={'small'} indent={false}>
-        <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={() => setOpen(!open)}>
+        <Accordion.Item defaultOpen className={styles.accordionLast}>
           <Accordion.Header className={styles.accordion}>
             <HStack gap="2" align="center">
               Virker sammen med
@@ -144,7 +143,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
         <Button
           variant="tertiary"
           size="medium"
-          icon={<ChevronDownIcon />}
+          icon={<ChevronDownIcon aria-hidden />}
           iconPosition={'right'}
           onClick={handleLoadMore}
           className={styles.buttonLoadMore}

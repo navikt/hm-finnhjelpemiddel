@@ -70,7 +70,7 @@ const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bestilling
   return (
     <div>
       <HStack gap={'2'}>
-        <Heading size={'xsmall'} level={'4'}>
+        <Heading size={'xsmall'} level={'3'}>
           {heading}
         </Heading>
         <HelpText placement="right">{helpText}</HelpText>

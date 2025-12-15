@@ -114,6 +114,7 @@ const NavigationBar = () => {
                   variant="tertiary-neutral"
                   icon={<Pepperkakemann active={visJulepynt} />}
                   onClick={() => setVisJulepynt(!visJulepynt)}
+                  title={'Pepperkake'}
                 ></Button>
               </Hide>
               <Hide above="sm">
@@ -122,6 +123,7 @@ const NavigationBar = () => {
                   variant="tertiary-neutral"
                   icon={<Pepperkakemann active={visJulepynt} />}
                   onClick={() => setVisJulepynt(!visJulepynt)}
+                  title={'Pepperkake'}
                 ></Button>
               </Hide>
             </div>

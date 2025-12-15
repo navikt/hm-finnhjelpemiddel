@@ -54,14 +54,14 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
       <VStack gap={'4'}>
         {hmsartnr && (
           <div>
-            <Heading size={'xsmall'} level={'3'}>
+            <Heading size={'xsmall'} level={'2'}>
               Serie
             </Heading>
             {product.title}
           </div>
         )}
         <div>
-          <Heading size={'xsmall'} level={'3'}>
+          <Heading size={'xsmall'} level={'2'}>
             Produktkategori
           </Heading>
           {product.isoCategoryTitle}
