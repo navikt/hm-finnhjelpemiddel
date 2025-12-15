@@ -18,13 +18,14 @@ import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVa
 import NextLink from 'next/link'
 import styles from './ProductMiddle.module.scss'
 import { VariantTableSingle } from '@/app/produkt/[id]/variantTable/VariantTableSingle'
-import { fetchWorkWithProducts } from '@/utils/api-util'
+import { FetchSeriesResponse, fetchWorkWithProducts } from '@/utils/api-util'
 import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { logUmamiClickButton, logUmamiFilterChangeEvent } from '@/utils/umami'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
+import useSWRImmutable from 'swr/immutable'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -34,17 +35,12 @@ const WORKS_WITH_CONFIG = {
 }
 
 const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
-  const [workWithProducts, setWorkWithProducts] = useState<Product[]>([])
   const [open, setOpen] = useState<boolean>(false)
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const products = (worksWithSeriesIds && (await fetchWorkWithProducts(worksWithSeriesIds)).products) || []
-      setWorkWithProducts(products)
-    }
-    fetchData()
-  }, [worksWithSeriesIds])
+  const { data } = useSWRImmutable<FetchSeriesResponse>(worksWithSeriesIds, fetchWorkWithProducts)
+  const worksWithProducts = data?.products
+
   const featureFlags = useFeatureFlags()
 
   const worksWithFeatureFlag: boolean = featureFlags.isEnabled(WORKS_WITH_CONFIG.featureFlag) ?? false
@@ -57,21 +53,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
   }, [product.agreements])
 
   const worksWithShowConstrain =
-    worksWithFeatureFlag && shouldShowSection && workWithProducts && workWithProducts.length > 0
-  const helpTextWorksWith = () => {
-    return (
-      <>
-        <BodyLong>
-          Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt
-          sammen.
-          <br />
-          <br />
-          Man trenger ikke å velge alle hjelpemidler fra lista. Det kan være flere alternativer av samme type, der man
-          kun trenger å velge én.
-        </BodyLong>
-      </>
-    )
-  }
+    worksWithFeatureFlag && shouldShowSection && worksWithProducts && worksWithProducts.length > 0
   const helpTextWorksWith = (
     <BodyLong>
       Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt sammen.
@@ -100,7 +82,7 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
                 </HStack>
               </Accordion.Header>
               <Accordion.Content>
-                <WorksWithSection products={workWithProducts} />
+                <WorksWithSection products={worksWithProducts} />
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
