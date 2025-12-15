@@ -82,10 +82,10 @@ const ProductMiddle = ({ product, hmsartnr }: { product: Product; hmsartnr?: str
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
         {worksWithShowConstrain && (
-          <Accordion size={'small'}>
+          <Accordion size={'small'} indent={false}>
             <Accordion.Item defaultOpen className={styles.accordionLast} onOpenChange={() => setOpen(!open)}>
               <Accordion.Header className={styles.accordion}>
-                <HStack gap="4" align="center">
+                <HStack gap="2" align="center">
                   Virker sammen med
                   <HelpText placement="right">{helpTextWorksWith()}</HelpText>
                 </HStack>
@@ -190,7 +190,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
         selectedTypes={selectedComponentTypes}
         onToggle={handleComponentTypeToggle}
       />
-{/*      <BodyShort size="small">{products.length}</BodyShort>*/}
+      {/*      <BodyShort size="small">{products.length}</BodyShort>*/}
       {displayedProducts.map((workWithProduct: Product) => (
         <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
       ))}
