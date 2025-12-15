@@ -115,7 +115,7 @@ const ComponentTypeFilter = ({
 
   return (
     <VStack gap={'2'}>
-      <BodyShort size="medium" as="label">
+      <BodyShort size="small" as="label">
         Filter
       </BodyShort>
       <Chips size={'small'} aria-label="Filter på komponenttyper" className={styles.chips}>
