@@ -1,5 +1,5 @@
 import { Accordion, BodyLong, BodyShort, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react'
-import styles from '@/app/produkt/[id]/ProductMiddle.module.scss'
+import styles from '@/app/produkt/[id]/WorksWith.module.scss'
 import { useEffect, useMemo, useState } from 'react'
 import useSWRImmutable from 'swr/immutable'
 import { FetchSeriesResponse, fetchWorkWithProducts } from '@/utils/api-util'

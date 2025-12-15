@@ -33,21 +33,3 @@
   width: fit-content;
   --ac-button-secondary-bg: white;
 }
-
-.buttonLoadMore {
-  @extend .button;
-  align-self: center;
-}
-
-.accordion {
-  box-shadow: inset 0 1px 0 0 $a-bg-subtle !important;
-  padding-bottom: $a-spacing-4 !important;
-}
-
-.accordionLast {
-  box-shadow: inset 0 -1px 0 0 $a-bg-subtle, inset 0 1px 0 0 $a-bg-subtle !important;
-}
-.chips {
-  margin-right: $a-spacing-2;
-  --ac-chip-toggle-bg: white;
-}
