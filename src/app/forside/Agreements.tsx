@@ -27,21 +27,23 @@ const Agreements = () => {
 
   const { isFavorite, toggleFavorite, isReady: isFavoritesReady } = useAgreementFavorites()
 
-  const sortedData = useMemo(() => {
-    if (!data) return []
+  const { favourites, others } = useMemo(() => {
+    if (!data) return { favourites: [] as AgreementLabel[], others: [] as AgreementLabel[] }
     const sorted = [...data]
 
     sorted.sort((a, b) => sortAlphabetically(a.title, b.title, false))
 
     if (!isFavoritesReady) {
-      return sorted
+      return { favourites: [], others: sorted }
     }
 
-    const favourites = sorted.filter((agreement) => isFavorite(agreement.id))
-    const others = sorted.filter((agreement) => !isFavorite(agreement.id))
+    const favs = sorted.filter((agreement) => isFavorite(agreement.id))
+    const rest = sorted.filter((agreement) => !isFavorite(agreement.id))
 
-    return [...favourites, ...others]
+    return { favourites: favs, others: rest }
   }, [data, isFavorite, isFavoritesReady])
+
+  const hasFavorites = favourites.length > 0
 
   return (
     <VStack gap="4" paddingInline={{ lg: '6' }}>
@@ -59,22 +61,44 @@ const Agreements = () => {
           gap="2"
           className="agreement-page__list-container"
         >
-          {sortedData.map((label) => (
+          {favourites.map((label) => (
             <AgreementRow
               label={label}
-              key={label.identifier}
-              isFavorite={isFavorite(label.id)}
+              key={`fav-${label.identifier}`}
+              isFavorite={true}
+              onToggleFavorite={() => toggleFavorite(label.id)}
+            />
+          ))}
+
+          {hasFavorites && others.length > 0 && <Box as="li" style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }} />}
+
+          {others.map((label) => (
+            <AgreementRow
+              label={label}
+              key={`other-${label.identifier}`}
+              isFavorite={false}
               onToggleFavorite={() => toggleFavorite(label.id)}
             />
           ))}
         </HGrid>
       ) : (
         <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
-          {sortedData.map((label) => (
+          {favourites.map((label) => (
             <AgreementRow
               label={label}
-              key={label.identifier}
-              isFavorite={isFavorite(label.id)}
+              key={`fav-${label.identifier}`}
+              isFavorite={true}
+              onToggleFavorite={() => toggleFavorite(label.id)}
+            />
+          ))}
+
+          {hasFavorites && others.length > 0 && <Box as="li" style={{ marginTop: '1.5rem' }} />}
+
+          {others.map((label) => (
+            <AgreementRow
+              label={label}
+              key={`other-${label.identifier}`}
+              isFavorite={false}
               onToggleFavorite={() => toggleFavorite(label.id)}
             />
           ))}
