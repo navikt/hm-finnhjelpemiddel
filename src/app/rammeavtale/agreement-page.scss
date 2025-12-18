@@ -114,7 +114,7 @@
   }
 
   &__list-item {
-    border-bottom: 1px solid #e2e8f0;
+
     padding: $a-spacing-2;
 
     @include mixins.for-size(tablet-up) {
