@@ -4,8 +4,19 @@
 
 .favouriteIcon {
   display: flex;
-  position: absolute;
-  left: -3rem;
+  justify-content: center;
+  align-items: center;
   background-color: transparent;
   border: none;
+}
+
+.favouriteIconMarked {
+  color: #ffb703; // yellow for marked favourite
+}
+
+@media (min-width: 768px) {
+  .favouriteIcon {
+    position: absolute;
+    left: -3rem;
+  }
 }
