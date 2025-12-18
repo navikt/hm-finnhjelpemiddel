@@ -9,6 +9,7 @@ import { Box, Heading, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import styles from './Agreements.module.scss'
 import { useAgreementFavorites } from '@/hooks/useAgreementFavorites'
+import { useSearchParams } from 'next/navigation'
 
 export type SortColumns = {
   orderBy: string | null
@@ -16,6 +17,9 @@ export type SortColumns = {
 }
 
 const Agreements = () => {
+  const searchParams = useSearchParams()
+  const isGridView = searchParams?.has('GRID_VIEW') ?? false
+
   const { data } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
     revalidateOnFocus: false,
@@ -47,16 +51,35 @@ const Agreements = () => {
         </Heading>
       </HGrid>
 
-      <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
-        {sortedData.map((label) => (
-          <AgreementRow
-            label={label}
-            key={label.identifier}
-            isFavorite={isFavorite(label.id)}
-            onToggleFavorite={() => toggleFavorite(label.id)}
-          />
-        ))}
-      </VStack>
+      {isGridView ? (
+        <HGrid
+          as="ol"
+          id="agreement-list"
+          columns={{ xs: '1fr', lg: '1fr 1fr' }}
+          gap="2"
+          className="agreement-page__list-container"
+        >
+          {sortedData.map((label) => (
+            <AgreementRow
+              label={label}
+              key={label.identifier}
+              isFavorite={isFavorite(label.id)}
+              onToggleFavorite={() => toggleFavorite(label.id)}
+            />
+          ))}
+        </HGrid>
+      ) : (
+        <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
+          {sortedData.map((label) => (
+            <AgreementRow
+              label={label}
+              key={label.identifier}
+              isFavorite={isFavorite(label.id)}
+              onToggleFavorite={() => toggleFavorite(label.id)}
+            />
+          ))}
+        </VStack>
+      )}
     </VStack>
   )
 }
