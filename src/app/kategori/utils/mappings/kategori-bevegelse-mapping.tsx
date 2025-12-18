@@ -13,7 +13,7 @@ export type KategoriBevegelseNavn =
   | 'Sittesystem'
   | 'Motoriserte kjøretøy'
   | 'Drivaggregat'
-  | 'Tilleggsutstyr til rullestoler'
+  | 'Utstyr til rullestoler'
   | 'Trappeklatrere'
   | 'Hjelpemidler for å endre kroppsstilling'
   | 'Personløftere'
@@ -67,7 +67,7 @@ export const rullestoler: Kategori = {
     'Sittesystem',
     'Motoriserte kjøretøy',
     'Drivaggregat',
-    'Tilleggsutstyr til rullestoler',
+    'Utstyr til rullestoler',
   ],
   isoer: [],
   visProdukter: false,
@@ -338,11 +338,11 @@ export const drivaggregat: Kategori = {
   isoer: ['122409'],
   visProdukter: true,
 }
-export const tilleggsutstyrRullestoler: Kategori = {
-  navn: 'Tilleggsutstyr til rullestoler',
+export const utstyrTilRullestoler: Kategori = {
+  navn: 'Utstyr til rullestoler',
   beskrivelse: 'Utstyr relatert til rullestoler, for eksempel batterier, bremser, dekk, rullestolgarasjer og hjulski.',
   underkategorier: [],
-  isoer: ['1224'],
+  isoer: ['1224', '090205', '090312'],
   visProdukter: true,
 }
 
