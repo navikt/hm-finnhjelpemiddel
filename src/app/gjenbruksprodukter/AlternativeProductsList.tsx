@@ -26,7 +26,7 @@ export const AlternativeProductList = ({
     data: alternativesResponse,
     isLoading: isLoadingAlternatives,
     error: errorAlternatives,
-  } = useSWRImmutable<AlternativeStockResponseNew | undefined>(hmsNumber.length > 0 ? `alternatives-${hmsNumber}` : null, () =>
+  } = useSWRImmutable<AlternativeStockResponseNew>(hmsNumber.length > 0 ? `alternatives-${hmsNumber}` : null, () =>
     newGetAlternatives(hmsNumber)
   )
 
@@ -37,20 +37,17 @@ export const AlternativeProductList = ({
     return <Loader />
   }
 
-  if (errorAlternatives || !alternativesResponse) {
-    return <>En feil har skjedd ved henting av data ${errorAlternatives}</>
+  if (errorAlternatives) {
+    if (errorAlternatives.status === 404) {
+      return <>Finner ikke hjelpemiddel med HMS-nummer {hmsNumber}</>
+    }
+    return <>En feil har skjedd ved henting av data: {errorAlternatives.message}</>
   }
 
-  if (!alternativesResponse.original) {
-    return <>Finner ikke produkt {hmsNumber}</>
+  if (!alternativesResponse) {
+    return <></>
   }
 
-  //Skjuler original-produktkort med ukjent lagerstatus
-  /*
-  if (!alternativesResponse.original.warehouseStock) {
-    return <>Finner ikke produkt {hmsNumber}</>
-  }
-  */
   const original = alternativesResponse.original
 
   const alternatives: AlternativeProduct[] = alternativesResponse.alternatives ?? []

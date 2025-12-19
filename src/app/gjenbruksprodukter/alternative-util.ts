@@ -1,4 +1,4 @@
-import { fetcherModify } from '@/utils/api-util'
+import { CustomError, fetcherModify } from '@/utils/api-util'
 
 //if HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL is undefined it means that we are on the client and we want to use relative url
 const HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL || ''
@@ -33,7 +33,9 @@ export interface WarehouseStock {
   available: number
 }
 
-export async function getAlternativesGrouped(hmsArtNr: string): Promise<AlternativesWithStockGroupedResponse | undefined> {
+export async function getAlternativesGrouped(
+  hmsArtNr: string
+): Promise<AlternativesWithStockGroupedResponse | undefined> {
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives-groups/${hmsArtNr}`,
     {
@@ -51,7 +53,7 @@ export async function getAlternativesGrouped(hmsArtNr: string): Promise<Alternat
   return res.json()
 }
 
-export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeStockResponseNew | undefined> {
+export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeStockResponseNew> {
   const res = await fetch(
     HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + `/alternative_products/alternativ/alternatives/${hmsArtNr}`,
     {
@@ -63,7 +65,7 @@ export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeS
   )
 
   if (res.status === 404) {
-    return undefined
+    throw new CustomError(res.statusText, res.status)
   }
 
   return res.json()
