@@ -77,13 +77,17 @@ function FrontPage() {
         </HGrid>
       </Bleed>
 
-      <KategoriInngangForside />
+      <HGrid columns={{ xs: 1, lg: '2fr 1fr' }} gap={{ xs: '8', lg: '10' }} align="start">
+        <VStack gap={{ xs: '12', md: '16' }}>
+          <KategoriInngangForside />
+          <Agreements />
+        </VStack>
+        <NewsFeed />
+      </HGrid>
 
-      <Agreements />
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <OtherAgreements />
       </Bleed>
-      <NewsFeed />
 
       <KontaktOss />
     </VStack>

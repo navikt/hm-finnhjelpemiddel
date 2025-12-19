@@ -1,16 +1,16 @@
 @use 'src/styles/_variables' as *;
 
 .container {
-  align-self: center;
+
 }
 
 .newsCard {
   background: $ny-nav-orange-light;
   display: flex;
   flex-direction: column;
-  max-width: 330px;
-  width: 330px; // fixed width for consistency
-  flex: 0 0 330px; // prevent shrinking; ensures equal width in flex row
+  max-width: 400px;
+  width: 400px; // fixed width for consistency
+  flex: 0 0 400px; // prevent shrinking; ensures equal width in flex row
   box-sizing: border-box;
   min-height: 0;
   border-top: 6px solid $ny-nav-purple-dark;
