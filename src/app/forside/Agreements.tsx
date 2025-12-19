@@ -11,11 +11,6 @@ import styles from './Agreements.module.scss'
 import { useAgreementFavorites } from '@/hooks/useAgreementFavorites'
 import { useSearchParams } from 'next/navigation'
 
-export type SortColumns = {
-  orderBy: string | null
-  direction: 'ascending' | 'descending'
-}
-
 const Agreements = () => {
   const searchParams = useSearchParams()
   const isGridView = searchParams?.has('GRID_VIEW') ?? false
@@ -123,7 +118,20 @@ const AgreementRow = ({
 
   return (
     <Box as="li" className="agreement-page__list-item">
-      <HGrid columns={{ xs: 'auto 40px', lg: 'auto 40px' }} gap="2" align="center" className={styles.agreementRow}>
+      <HGrid columns={'40px auto'} gap="2" align="center" className={styles.agreementRow}>
+        <button
+          type="button"
+          className={styles.favouriteIcon}
+          onClick={onToggleFavorite}
+          aria-pressed={isFavorite}
+          aria-label={ariaLabel}
+        >
+          {isFavorite ? (
+            <StarFillIcon aria-hidden height={32} width={32} className={styles.favouriteIconMarked} />
+          ) : (
+            <StarIcon aria-hidden height={32} width={32} />
+          )}
+        </button>
         <HStack align={'center'}>
           <Link
             as={NextLink}
@@ -133,19 +141,6 @@ const AgreementRow = ({
             {`${label.title} `}
           </Link>
         </HStack>
-        <button
-          type="button"
-          className={styles.favouriteIcon}
-          onClick={onToggleFavorite}
-          aria-pressed={isFavorite}
-          aria-label={ariaLabel}
-        >
-          {isFavorite ? (
-            <StarFillIcon aria-hidden height={24} width={24} className={styles.favouriteIconMarked} />
-          ) : (
-            <StarIcon aria-hidden height={24} width={24} />
-          )}
-        </button>
       </HGrid>
     </Box>
   )

@@ -1,4 +1,3 @@
-import { SortColumns } from '@/app/forside/Agreements'
 
 export const defaultAriaLabel: string = 'Trykk for å sortere stigende eller synkende'
 
@@ -8,4 +7,9 @@ export const getAriaLabel = ({ sortColumns, ariaLabelKey }: { sortColumns: SortC
     : sortColumns.direction === 'descending'
       ? `${ariaLabelKey} sortert synkende, trykk for å endre`
       : defaultAriaLabel + ariaLabelKey
+}
+
+type SortColumns = {
+  orderBy: string | null
+  direction: 'ascending' | 'descending'
 }
