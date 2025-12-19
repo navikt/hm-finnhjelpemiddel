@@ -4,8 +4,32 @@
 
 .favouriteIcon {
   display: flex;
-  position: absolute;
-  left: -3rem;
+  justify-content: center;
+  align-items: center;
   background-color: transparent;
   border: none;
 }
+
+.favouriteIconMarked {
+  color: #ffb703; // yellow for marked favourite
+}
+
+.separatorRow {
+  list-style: none;
+  grid-column: 1 / -1; // span all columns in grid view
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.separatorLine {
+  border-top: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.firstNonFavorite {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+
