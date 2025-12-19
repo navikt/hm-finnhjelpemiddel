@@ -4,6 +4,7 @@ import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logNavigationEvent } from '@/utils/amplitude'
+import { logUmamiEvent } from '@/utils/umami'
 import { StarFillIcon, StarIcon } from '@navikt/aksel-icons'
 import { Box, Heading, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
@@ -114,13 +115,23 @@ const AgreementRow = ({
     ? `Fjern avtale "${label.title}" fra favoritter`
     : `Legg avtale "${label.title}" til favoritter`
 
+  const handleToggleFavorite = () => {
+    const nextValue = !isFavorite
+    onToggleFavorite()
+    logUmamiEvent('agreement_favorite_toggled', {
+      agreementId: label.id,
+      agreementTitle: label.title,
+      isFavorite: nextValue,
+    })
+  }
+
   return (
     <Box as="li" className="agreement-page__list-item">
       <HGrid columns={'40px auto'} gap="2" align="center" className={styles.agreementRow}>
         <button
           type="button"
           className={styles.favouriteIcon}
-          onClick={onToggleFavorite}
+          onClick={handleToggleFavorite}
           aria-pressed={isFavorite}
           aria-label={ariaLabel}
         >
