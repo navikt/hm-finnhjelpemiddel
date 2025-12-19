@@ -21,30 +21,6 @@ export const NewsFeed = () => {
       <Heading size={'large'} level={'2'}>
         Aktuelt
       </Heading>
-      {/* Mobile simple list */}
-      <div className={styles.mobileList} aria-label="Aktuelt nyheter (mobil visning)">
-        <ul className={styles.mobileList__ul}>
-          {data.map((news) => {
-            const split = news.title.split(':')
-            const hasSub = split.length > 1
-            const mainTitle = hasSub ? split[0] : news.title
-            const subTitle = hasSub ? split.slice(1).join(':').trim() : ''
-            return (
-              <li key={news.id} className={styles.mobileList__item}>
-                <NextLink
-                  href={`/nyheter/${news.id}`}
-                  className={styles.mobileList__link}
-                  aria-label={`Les nyheten: ${news.title}`}
-                >
-                  <span className={styles.mobileList__main}>{mainTitle}</span>
-                  {hasSub && <span className={styles.mobileList__sub}>: {subTitle}</span>}
-                </NextLink>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-      {/* Desktop cards */}
       <HStack className={styles.cardsWrapper}>
         {data.map((news) => (
           <NewsCard key={news.id} news={news} />
