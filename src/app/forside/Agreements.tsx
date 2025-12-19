@@ -4,7 +4,7 @@ import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logNavigationEvent } from '@/utils/amplitude'
-import { logUmamiEvent } from '@/utils/umami'
+import { logUmamiEvent, logUmamiFavoriteAgreementEvent } from '@/utils/umami'
 import { StarFillIcon, StarIcon } from '@navikt/aksel-icons'
 import { Box, Heading, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
@@ -43,9 +43,9 @@ const Agreements = () => {
 
   return (
     <VStack gap="4" paddingInline={{ lg: '6' }}>
-        <Heading level="2" size="medium">
-          Hjelpemidler på avtale med Nav
-        </Heading>
+      <Heading level="2" size="medium">
+        Hjelpemidler på avtale med Nav
+      </Heading>
 
       {isGridView ? (
         <HGrid
@@ -118,11 +118,7 @@ const AgreementRow = ({
   const handleToggleFavorite = () => {
     const nextValue = !isFavorite
     onToggleFavorite()
-    logUmamiEvent('agreement_favorite_toggled', {
-      agreementId: label.id,
-      agreementTitle: label.title,
-      isFavorite: nextValue,
-    })
+    logUmamiFavoriteAgreementEvent(label.title, nextValue)
   }
 
   return (

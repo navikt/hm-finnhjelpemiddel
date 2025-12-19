@@ -5,6 +5,7 @@ export enum umami_customevents {
   ERROR_URL = 'feil ved url',
   KLIKK = 'knapp klikket',
   NAVIGERE = 'navigere',
+  FAVORITE = 'favorite',
   VIS_FLERE_TREFF = 'vis flere treff',
   FILTER_ENDRET = 'filter-endret',
 }
@@ -93,6 +94,14 @@ export function logUmamiClickButton(buttonName: string, buttonType: string, butt
     buttonVariant: buttonVariant,
   })
 }
+
+export function logUmamiFavoriteAgreementEvent(agreementName: string, favorite: boolean) {
+  logUmamiCustomEvent(umami_customevents.FAVORITE, {
+    agreementName: agreementName,
+    favorite: favorite,
+  })
+}
+
 
 export function logUmamiVisit(url: string, pageTitle: string, pageType: string) {
   logUmamiEvent(umami_customevents.BESØK, {
