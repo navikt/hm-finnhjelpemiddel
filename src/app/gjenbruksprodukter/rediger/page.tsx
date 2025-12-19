@@ -15,7 +15,6 @@ export default function EditAlternativeProductsPage() {
   const searchParams = useSearchParams()
 
   const handleSearch = (value: string) => {
-
     router.push(`${pathname}?hms=${value.trim()}`)
   }
 
@@ -72,7 +71,7 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
     isLoading: isLoadingAlternatives,
     mutate: mutateAlternativesBase,
     error: errorAlternatives,
-  } = useSWR(hmsNumber.length > 0  ? `alternatives-groups-${hmsNumber}` : null, () => getAlternativesGrouped(hmsNumber))
+  } = useSWR(hmsNumber.length > 0 ? `alternatives-groups-${hmsNumber}` : null, () => getAlternativesGrouped(hmsNumber))
 
   const mutateAlternatives = async (addedHmsArtNr?: string) => {
     // Trigger refetch and remember which HMS number was just added
@@ -88,16 +87,19 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
     return <Loader />
   }
 
-  if(hmsNumber.length === 0) {
+  if (hmsNumber.length === 0) {
     return <Box>Ingen HMS-nummer oppgitt</Box>
   }
 
-  if (errorAlternatives || !alternativesResponse) {
-    return <Box>En feil har skjedd ved henting av data</Box>
+  if (errorAlternatives) {
+    if (errorAlternatives.status === 404) {
+      return <>Finner ikke hjelpemiddel med HMS-nummer {hmsNumber}</>
+    }
+    return <>En feil har skjedd ved henting av data: {errorAlternatives.message}</>
   }
 
-  if (!alternativesResponse.original) {
-    return <>Finner ikke produkt {hmsNumber}</>
+  if (!alternativesResponse) {
+    return <></>
   }
 
   const groups = alternativesResponse.groups ?? []

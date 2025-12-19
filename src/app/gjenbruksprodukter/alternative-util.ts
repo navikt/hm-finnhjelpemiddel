@@ -46,8 +46,8 @@ export async function getAlternativesGrouped(
     }
   )
 
-  if (res.status === 404) {
-    return undefined
+  if (!res.ok) {
+    throw new CustomError(res.statusText, res.status)
   }
 
   return res.json()
@@ -64,7 +64,7 @@ export async function newGetAlternatives(hmsArtNr: string): Promise<AlternativeS
     }
   )
 
-  if (res.status === 404) {
+  if (!res.ok) {
     throw new CustomError(res.statusText, res.status)
   }
 
