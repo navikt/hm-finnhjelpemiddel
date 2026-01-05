@@ -178,6 +178,18 @@ export const filterMainProductsOnly = () => ({
   },
 })
 
+export const filterNotExpiredOnly = () => ({
+  bool: {
+    should: {
+      range: {
+        expired: {
+          gte: 'now',
+        },
+      },
+    },
+  },
+})
+
 export const filterPrefixIsoKode = (values: Array<string>) => ({
   bool: {
     should: values.map((value) => ({

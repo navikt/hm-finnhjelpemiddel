@@ -1,4 +1,4 @@
-import { filterLeverandor, filterMainProductsOnly, filterMinMax, filterPrefixIsoKode } from '@/utils/filter-util'
+import { filterLeverandor, filterMainProductsOnly, filterMinMax, filterNotExpiredOnly, filterPrefixIsoKode } from '@/utils/filter-util'
 import { SortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
@@ -92,6 +92,8 @@ export const fetchProductsKategori2 = async ({
   if (!visTilbDeler) {
     queryFilters.push(filterMainProductsOnly())
   }
+
+  queryFilters.push(filterNotExpiredOnly())
 
   const query = {
     bool: {
