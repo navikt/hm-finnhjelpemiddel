@@ -80,7 +80,6 @@ export const KategoriPage = ({ kategori }: Props) => {
     fetchProductsKategori2,
     {
       initialSize: Number(searchParams.get('page') || '1'),
-      keepPreviousData: true,
       revalidateFirstPage: false,
     }
   )
