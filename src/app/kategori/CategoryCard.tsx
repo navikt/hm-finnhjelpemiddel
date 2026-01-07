@@ -3,6 +3,7 @@
 import { LinkCard, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { ReactNode } from 'react'
+import styles from './CategoryCard.module.scss'
 
 type Props = {
   title: string
@@ -13,7 +14,7 @@ type Props = {
 
 export const CategoryCard = ({ title, link, description, icon }: Props) => {
   return (
-    <LinkCard arrow={false} style={{ boxShadow: 'var(--a-shadow-medium)' }}>
+    <LinkCard arrow={true} className={styles.container}>
       {icon && (
         <VStack justify="center" height="100%" asChild>
           <LinkCard.Icon>{icon}</LinkCard.Icon>
@@ -24,7 +25,6 @@ export const CategoryCard = ({ title, link, description, icon }: Props) => {
           <NextLink href={link}>{title}</NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
-      {description && <LinkCard.Description>{description}</LinkCard.Description>}
     </LinkCard>
   )
 }

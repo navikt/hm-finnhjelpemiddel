@@ -1,4 +1,8 @@
 import { Kategori } from '@/app/kategori/utils/mappings/kategori-mapping'
+import { BicycleIcon, CarIcon, StrollerIcon, WheelchairIcon } from '@navikt/aksel-icons'
+import { GanghjelpemiddelIkon } from '@/app/kategori/ikoner/GanghjelpemiddelIkon'
+import { ForflytningIkon } from '@/app/kategori/ikoner/ForflytningIkon'
+import { KjelkerOgAkebrettIkon } from '@/app/kategori/ikoner/KjelkerOgAkebrettIkon'
 
 export type KategoriBevegelseNavn =
   | 'Rullestoler'
@@ -71,6 +75,7 @@ export const rullestoler: Kategori = {
   ],
   isoer: [],
   visProdukter: false,
+  ikon: <WheelchairIcon aria-hidden fontSize={'32px'} />,
 }
 
 export const manuelleRullestoler: Kategori = {
@@ -95,6 +100,7 @@ export const ganghjelpemidler: Kategori = {
   ],
   isoer: [],
   visProdukter: false,
+  ikon: <GanghjelpemiddelIkon aria-hidden />,
 }
 export const forflytning: Kategori = {
   navn: 'Forflytning',
@@ -108,6 +114,7 @@ export const forflytning: Kategori = {
   ],
   isoer: [],
   visProdukter: false,
+  ikon: <ForflytningIkon aria-hidden />,
 }
 export const trappeklatrere: Kategori = {
   navn: 'Trappeklatrere',
@@ -209,6 +216,7 @@ export const sykler: Kategori = {
   ],
   isoer: [],
   visProdukter: false,
+  ikon: <BicycleIcon aria-hidden fontSize={'32px'} />,
 }
 
 export const tandemsykler: Kategori = {
@@ -253,6 +261,7 @@ export const kjelkerOgAkebrett: Kategori = {
   underkategorier: [],
   isoer: ['122710'],
   visProdukter: true,
+  ikon: <KjelkerOgAkebrettIkon aria-hidden />,
 }
 export const vogner: Kategori = {
   navn: 'Vogner',
@@ -261,6 +270,7 @@ export const vogner: Kategori = {
   underkategorier: [],
   isoer: ['122707', '122715'],
   visProdukter: true,
+  ikon: <StrollerIcon aria-hidden fontSize={'32px'} />,
 }
 export const bilseterOgBilutstyr: Kategori = {
   navn: 'Bilseter og bilutstyr',
@@ -269,6 +279,7 @@ export const bilseterOgBilutstyr: Kategori = {
   underkategorier: ['Bilseter', 'Lette inn- og utstigning av bil', 'Belter og støtteseler for bil', 'Ramper for bil'],
   isoer: [],
   visProdukter: false,
+  ikon: <CarIcon aria-hidden fontSize={'32px'} />,
 }
 
 export const bilseter: Kategori = {
