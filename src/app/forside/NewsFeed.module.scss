@@ -1,4 +1,5 @@
 @use 'src/styles/_variables' as *;
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .container {
 
@@ -28,6 +29,10 @@
   position: relative;
 }
 
+.newsCard__date {
+  color: $a-gray-800
+}
+
 .newsCard__excerpt {
   margin: 0;
   line-height: 1.4;
@@ -48,6 +53,7 @@
   margin-top: 0.5rem;
   font-weight: 600;
   align-self: flex-start;
+  color: $a-text-default
 }
 
 .newsCard__readMore:hover,

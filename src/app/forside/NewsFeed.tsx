@@ -1,10 +1,11 @@
-import { Box, Heading, HStack, Loader, VStack } from '@navikt/ds-react'
+import { BodyShort, Box, Heading, HStack, Loader, VStack } from '@navikt/ds-react'
 import styles from './NewsFeed.module.scss'
 import useSWR from 'swr'
 import { News } from '@/utils/news-util'
 import { getNews } from '@/utils/api-util'
 import NextLink from 'next/link'
 import { buildNewsPreview } from '@/utils/news-html-util'
+import { dateToString } from '@/utils/string-util'
 
 export const NewsFeed = () => {
   const { data, isLoading } = useSWR<News[]>('/news/_search', () => getNews(3), {
@@ -45,24 +46,17 @@ const NewsCard = ({ news }: { news: News }) => {
     <Box paddingInline={'6'} paddingBlock={'4'} className={styles.newsCard}>
       <VStack gap="1" className={styles.newsCard__content}>
         <Heading level="3" size="small" spacing>
-          {mainTitle}
+          <NextLink
+            href={`/nyheter/${news.id}`}
+            className={styles.newsCard__readMore}
+            aria-label={`Les mer: ${news.title}`}
+          >
+            {' '}
+            {mainTitle} - {subTitle}
+          </NextLink>
         </Heading>
-        {hasSub && (
-          <Heading level="4" size="small" spacing>
-            {subTitle}
-          </Heading>
-        )}
-        {previewHtml && <div className={styles.newsCard__excerpt} dangerouslySetInnerHTML={{ __html: previewHtml }} />}
+        <BodyShort  className={styles.newsCard__date} >{dateToString(news.published)}</BodyShort>
       </VStack>
-      {truncated && (
-        <NextLink
-          href={`/nyheter/${news.id}`}
-          className={styles.newsCard__readMore}
-          aria-label={`Les mer: ${news.title}`}
-        >
-          Les mer
-        </NextLink>
-      )}
     </Box>
   )
 }
