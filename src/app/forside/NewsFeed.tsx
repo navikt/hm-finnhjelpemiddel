@@ -18,7 +18,7 @@ export const NewsFeed = () => {
   if (!data || data.length === 0) return null
 
   return (
-    <VStack gap={'11'} className={styles.container}>
+    <VStack gap={'5'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Aktuelt
       </Heading>
@@ -45,17 +45,18 @@ const NewsCard = ({ news }: { news: News }) => {
   return (
     <Box paddingInline={'6'} paddingBlock={'4'} className={styles.newsCard}>
       <VStack gap="1" className={styles.newsCard__content}>
-        <Heading level="3" size="small" spacing>
+        <BodyShort weight={'regular'}>{mainTitle}</BodyShort>
+        <BodyShort >
           <NextLink
             href={`/nyheter/${news.id}`}
             className={styles.newsCard__readMore}
             aria-label={`Les mer: ${news.title}`}
           >
             {' '}
-            {mainTitle} - {subTitle}
+            {subTitle}
           </NextLink>
-        </Heading>
-        <BodyShort  className={styles.newsCard__date} >{dateToString(news.published)}</BodyShort>
+        </BodyShort>
+        <BodyShort className={styles.newsCard__date}>{dateToString(news.published)}</BodyShort>
       </VStack>
     </Box>
   )

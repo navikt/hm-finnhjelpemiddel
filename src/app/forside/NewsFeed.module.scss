@@ -14,7 +14,8 @@
   flex: 0 0 400px; // prevent shrinking; ensures equal width in flex row
   box-sizing: border-box;
   min-height: 0;
-  border-top: 6px solid $ny-nav-purple-dark;
+  border-radius: 10px;
+
 
   @media (max-width: 600px) {
     width: 100%; 
