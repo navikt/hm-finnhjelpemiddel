@@ -2,6 +2,7 @@ import { Chips } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import styles from './KategoriToggleFilter.module.scss'
+import { getIsoLabel } from './isoLabelMapping'
 
 export type FilterToggle = {
   key: string
@@ -26,7 +27,7 @@ export const KategoriToggleFilter = ({ searchParamKey, filter, onChange }: Props
           key={option.key}
           onClick={() => onChange(searchParamKey, option.key)}
         >
-          {option.label}
+          {getIsoLabel(option.key, option.label)}
         </Chips.Toggle>
       ))}
     </Chips>
