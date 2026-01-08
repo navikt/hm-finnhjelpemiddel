@@ -59,6 +59,11 @@ export const KategoriPage = ({ kategori }: Props) => {
   }
   const searchData = mapSearchParamsKategori(searchParams)
 
+  const searchParamsKey = useMemo(() => {
+    const params = new URLSearchParams(searchParams)
+    return params.toString()
+  }, [searchParams])
+
   const currentKategori = kategorier[kategori]
 
   const {
@@ -101,7 +106,7 @@ export const KategoriPage = ({ kategori }: Props) => {
       router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
       setPage(nextPage)
     }
-  }, [productsData, page, setPage, pathname, router, searchParams])
+  }, [productsData, page, setPage, pathname, router, searchParamsKey])
 
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
