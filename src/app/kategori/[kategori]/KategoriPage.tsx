@@ -28,7 +28,7 @@ export const KategoriPage = ({ kategori }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { createQueryStringAppend } = useQueryString()
+  const { createQueryStringAppendRemovePage } = useQueryString()
 
   const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
     const sortOrderStr = searchParams.get('sortering') || ''
@@ -111,7 +111,7 @@ export const KategoriPage = ({ kategori }: Props) => {
   const filters: Filters = { isos: isos, suppliers: suppliers, measurementFilters: measurementFilters }
 
   const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppend(filterName, value)
+    const newSearchParams = createQueryStringAppendRemovePage(filterName, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 

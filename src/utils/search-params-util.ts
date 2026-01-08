@@ -52,6 +52,29 @@ export default function useQueryString() {
     [searchParams]
   )
 
+  const createQueryStringAppendRemovePage = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (value === '') {
+        params.delete(name)
+      } else {
+        const values = params.getAll(name)
+        if (values.includes(value)) {
+          params.delete(name)
+          values.filter((v) => v !== value).forEach((v) => params.append(name, v))
+        } else {
+          params.append(name, value)
+        }
+      }
+
+      params.delete('page')
+
+      return params.toString()
+    },
+    [searchParams]
+  )
+
   const createQueryStringForMinMax = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -77,6 +100,7 @@ export default function useQueryString() {
   return {
     createQueryString,
     createQueryStringAppend,
+    createQueryStringAppendRemovePage,
     createQueryStringMultiple,
     createQueryStringForMinMax,
     searchParamKeys,
