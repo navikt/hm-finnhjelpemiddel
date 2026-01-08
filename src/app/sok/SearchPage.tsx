@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -30,6 +30,8 @@ export default function SearchPage() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
+  const [isRedirecting, setIsRedirecting] = useState(false)
+
   const searchFormRef = useRef<HTMLFormElement>(null)
 
   const searchData = useMemo(() => mapSearchParams(searchParams), [searchParams])
@@ -46,10 +48,11 @@ export default function SearchPage() {
   })
 
   useEffect(() => {
-    typeof window !== 'undefined' &&
+    if (typeof window !== 'undefined') {
       faro.api.pushEvent('searchPage', {
         searchTerm: searchData.searchTerm,
       })
+    }
   }, [searchData.searchTerm])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
@@ -108,6 +111,23 @@ export default function SearchPage() {
 
   const products = data?.map((d) => d.products).flat()
   const filtersFromData = data?.at(-1)?.filters
+
+  useEffect(() => {
+    if (!products || products.length !== 1) return
+
+    const term = searchData.searchTerm?.trim() ?? ''
+    if (!/^[0-9]{6}$/.test(term)) return
+
+    if (products[0].variants.find((variant) => variant.hmsArtNr === term)) {
+      setIsRedirecting(true)
+
+      const params = new URLSearchParams(searchParams)
+      const query = params.toString()
+      const suffix = query ? `?${query}` : ''
+
+      router.replace(`/produkt/${products[0].id}${suffix}`)
+    }
+  }, [products, searchData.searchTerm, router, searchParams])
 
   const filters: FilterData = {
     ...(filtersFromData ?? initialFilters),
@@ -171,6 +191,10 @@ export default function SearchPage() {
     )
   }
 
+  if (isRedirecting) {
+    return null
+  }
+
   return (
     <VStack
       marginInline={'auto'}
@@ -183,10 +207,13 @@ export default function SearchPage() {
       <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
         <VStack gap="4" align={'start'} paddingBlock={'12'}>
           <Heading level="1" size="large">
-            {searchData.searchTerm
-              ? `Søkeresultater: '${searchData.searchTerm}'`
-              : <>Søkeresultater: <em>intet søkeord angitt</em></>
-            }
+            {searchData.searchTerm ? (
+              `Søkeresultater: '${searchData.searchTerm}'`
+            ) : (
+              <>
+                Søkeresultater: <em>intet søkeord angitt</em>
+              </>
+            )}
           </Heading>
         </VStack>
       </Bleed>
