@@ -20,7 +20,7 @@ export const LOCAL_TOGGLES = [
   },
   {
     name: 'juledekorasjon',
-    enabled: true,
+    enabled: false,
   },
   {
     name: 'finnhjelpemiddel.feilbanner',
