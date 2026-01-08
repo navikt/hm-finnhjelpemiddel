@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { FilterIcon } from '@navikt/aksel-icons'
-import { Alert, Bleed, Button, Heading, HGrid, HStack, Show, Skeleton, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, Button, Heading, HGrid, HStack, Loader, Show, Skeleton, VStack } from '@navikt/ds-react'
 
 import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
@@ -118,8 +118,10 @@ export default function SearchPage() {
     const term = searchData.searchTerm?.trim() ?? ''
     if (!/^[0-9]{6}$/.test(term)) return
 
+    setIsRedirecting(true)
+
     if (products[0].variants.find((variant) => variant.hmsArtNr === term)) {
-      setIsRedirecting(true)
+
 
       const params = new URLSearchParams(searchParams)
       const query = params.toString()
@@ -192,7 +194,20 @@ export default function SearchPage() {
   }
 
   if (isRedirecting) {
-    return null
+    return (
+      <VStack
+        marginInline={'auto'}
+        marginBlock={'0'}
+        maxWidth={'1408px'}
+        paddingBlock={'0 12'}
+        paddingInline={'4'}
+        gap={{ xs: '12', md: '12' }}
+      >
+        <HStack justify="center" style={{ marginTop: '48px' }}>
+          <Loader size="3xlarge" title="Venter..." />
+        </HStack>
+      </VStack>
+    )
   }
 
   return (
