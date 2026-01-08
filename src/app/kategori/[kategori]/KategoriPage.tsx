@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
@@ -84,25 +85,28 @@ export const KategoriPage = ({ kategori }: Props) => {
     }
   )
 
+  const loadMore = useMemo(() => {
+    const isEmpty = productsData?.[0]?.products.length === 0
+    const isReachingEnd =
+      isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
+    if (isReachingEnd) {
+      return // no need to fetch another page
+    }
+
+    return () => {
+      const nextPage = page + 1
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('page', `${nextPage}`)
+      const searchQueryString = newParams.toString()
+      router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
+      setPage(nextPage)
+    }
+  }, [productsData, page, setPage, pathname, router, searchParams])
+
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
   const measurementFilters = productsData?.at(-1)?.measurementFilters ?? undefined
-
-  const isEmpty = productsData?.[0]?.products.length === 0
-  const isReachingEnd =
-    isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
-
-  const loadMore = !isReachingEnd
-    ? () => {
-        const nextPage = page + 1
-        const newParams = new URLSearchParams(searchParams)
-        newParams.set('page', `${nextPage}`)
-        const searchQueryString = newParams.toString()
-        router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-        setPage(nextPage)
-      }
-    : undefined
 
   const filters: Filters = { isos: isos, suppliers: suppliers, measurementFilters: measurementFilters }
 
