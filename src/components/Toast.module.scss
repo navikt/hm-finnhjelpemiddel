@@ -1,0 +1,20 @@
+.container {
+  background-color: var(--a-surface-success-subtle);
+  border-radius: 4px;
+  border: #333333 1px solid;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.message {
+  display: inline-block;
+}
+

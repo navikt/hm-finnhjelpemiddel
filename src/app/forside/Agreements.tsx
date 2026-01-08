@@ -1,20 +1,25 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import useSWR from 'swr'
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logNavigationEvent } from '@/utils/amplitude'
-import { logUmamiEvent, logUmamiFavoriteAgreementEvent } from '@/utils/umami'
+import { logUmamiFavoriteAgreementEvent } from '@/utils/umami'
 import { StarFillIcon, StarIcon } from '@navikt/aksel-icons'
 import { Box, Heading, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import styles from './Agreements.module.scss'
 import { useAgreementFavorites } from '@/hooks/useAgreementFavorites'
 import { useSearchParams } from 'next/navigation'
+import { Toast } from '@/components/Toast'
+import { useToast } from '@/hooks/useToast'
 
 const Agreements = () => {
   const searchParams = useSearchParams()
   const isGridView = searchParams?.has('GRID_VIEW') ?? false
+
+  const favouritesRef = useRef<HTMLOListElement | null>(null)
+  const { message: toastMessage, showToast } = useToast()
 
   const { data } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
@@ -41,64 +46,87 @@ const Agreements = () => {
 
   const hasFavorites = favourites.length > 0
 
+  const handleToggleFavorite = (label: AgreementLabel, currentlyFavorite: boolean) => {
+    const nextValue = !currentlyFavorite
+    toggleFavorite(label.id)
+    logUmamiFavoriteAgreementEvent(label.title, nextValue)
+
+    if (nextValue) {
+      showToast(`${label.title} er lagt til som favoritt`)
+
+      if (favouritesRef.current) {
+        favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+  }
+
   return (
-    <VStack gap="4" paddingInline={{ lg: '6' }}>
-      <Heading level="2" size="medium">
-        Hjelpemidler på avtale med Nav
-      </Heading>
-
-      {isGridView ? (
-        <HGrid
-          as="ol"
-          id="agreement-list"
-          columns={{ xs: '1fr', lg: '1fr 1fr' }}
-          gap="2"
-          className="agreement-page__list-container"
-        >
-          {favourites.map((label) => (
-            <AgreementRow
-              label={label}
-              key={`fav-${label.identifier}`}
-              isFavorite={true}
-              onToggleFavorite={() => toggleFavorite(label.id)}
-            />
-          ))}
-
-          {hasFavorites && others.length > 0 && <Box as="li" style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }} />}
-
-          {others.map((label) => (
-            <AgreementRow
-              label={label}
-              key={`other-${label.identifier}`}
-              isFavorite={false}
-              onToggleFavorite={() => toggleFavorite(label.id)}
-            />
-          ))}
-        </HGrid>
-      ) : (
-        <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
-          {favourites.map((label) => (
-            <AgreementRow
-              label={label}
-              key={`fav-${label.identifier}`}
-              isFavorite={true}
-              onToggleFavorite={() => toggleFavorite(label.id)}
-            />
-          ))}
-
-          {hasFavorites && others.length > 0 && <Box as="li" style={{ marginTop: '1.5rem' }} />}
-
-          {others.map((label) => (
-            <AgreementRow
-              label={label}
-              key={`other-${label.identifier}`}
-              isFavorite={false}
-              onToggleFavorite={() => toggleFavorite(label.id)}
-            />
-          ))}
-        </VStack>
+    <>
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          icon={<StarFillIcon aria-hidden height={20} width={20} color={'#ffb703'} />}
+        />
       )}
-    </VStack>
+      <VStack gap="4" paddingInline={{ lg: '6' }}>
+        <Heading level="2" size="medium">
+          Hjelpemidler på avtale med Nav
+        </Heading>
+
+        {isGridView ? (
+          <HGrid
+            as="ol"
+            id="agreement-list"
+            columns={{ xs: '1fr', lg: '1fr 1fr' }}
+            gap="2"
+            className="agreement-page__list-container"
+            ref={favouritesRef}
+          >
+            {favourites.map((label) => (
+              <AgreementRow
+                label={label}
+                key={`fav-${label.identifier}`}
+                isFavorite={true}
+                onToggleFavorite={() => handleToggleFavorite(label, true)}
+              />
+            ))}
+
+            {hasFavorites && others.length > 0 && <Box as="li" style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }} />}
+
+            {others.map((label) => (
+              <AgreementRow
+                label={label}
+                key={`other-${label.identifier}`}
+                isFavorite={false}
+                onToggleFavorite={() => handleToggleFavorite(label, false)}
+              />
+            ))}
+          </HGrid>
+        ) : (
+          <VStack as="ol" id="agreement-list" className="agreement-page__list-container" ref={favouritesRef}>
+            {favourites.map((label) => (
+              <AgreementRow
+                label={label}
+                key={`fav-${label.identifier}`}
+                isFavorite={true}
+                onToggleFavorite={() => handleToggleFavorite(label, true)}
+              />
+            ))}
+
+            {hasFavorites && others.length > 0 && <Box as="li" style={{ marginTop: '1.5rem' }} />}
+
+            {others.map((label) => (
+              <AgreementRow
+                label={label}
+                key={`other-${label.identifier}`}
+                isFavorite={false}
+                onToggleFavorite={() => handleToggleFavorite(label, false)}
+              />
+            ))}
+          </VStack>
+        )}
+      </VStack>
+    </>
   )
 }
 
@@ -115,19 +143,13 @@ const AgreementRow = ({
     ? `Fjern avtale "${label.title}" fra favoritter`
     : `Legg avtale "${label.title}" til favoritter`
 
-  const handleToggleFavorite = () => {
-    const nextValue = !isFavorite
-    onToggleFavorite()
-    logUmamiFavoriteAgreementEvent(label.title, nextValue)
-  }
-
   return (
     <Box as="li" className="agreement-page__list-item">
       <HGrid columns={'40px auto'} gap="2" align="center" className={styles.agreementRow}>
         <button
           type="button"
           className={styles.favouriteIcon}
-          onClick={handleToggleFavorite}
+          onClick={onToggleFavorite}
           aria-pressed={isFavorite}
           aria-label={ariaLabel}
         >
