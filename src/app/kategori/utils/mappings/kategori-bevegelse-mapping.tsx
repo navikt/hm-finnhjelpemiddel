@@ -34,7 +34,6 @@ export type KategoriBevegelseNavn =
   | 'Hjulspark og sparkesykler'
   | 'Tilleggsutstyr til sykler'
   | 'Bilseter'
-  | 'Lette inn- og utstigning av bil'
   | 'Belter og støtteseler for bil'
   | 'Ramper for bil'
   | 'Krykker og stokker'
@@ -276,7 +275,7 @@ export const bilseterOgBilutstyr: Kategori = {
   navn: 'Bilseter og bilutstyr',
   beskrivelse:
     'Hjelpemidler som kan monteres i bil, eller tilpasninger av bil som enten gjør det mulig for en person med funksjonsnedsettelser å kjøre bilen, eller som letter inn- og utstigningen eller opphold i bil. Omfatter bilseter, dreieseter, løfteseter og glideseter.',
-  underkategorier: ['Bilseter', 'Lette inn- og utstigning av bil', 'Belter og støtteseler for bil', 'Ramper for bil'],
+  underkategorier: ['Bilseter', 'Belter og støtteseler for bil', 'Ramper for bil'],
   isoer: [],
   visProdukter: false,
   ikon: <CarIcon aria-hidden fontSize={'32px'} />,
@@ -287,14 +286,6 @@ export const bilseter: Kategori = {
   beskrivelse: 'Bilseter for barn og voksne for å gi ekstra støtte under transport.',
   underkategorier: [],
   isoer: ['121212'],
-  visProdukter: true,
-}
-
-export const letteInnOgUtstigningBil: Kategori = {
-  navn: 'Lette inn- og utstigning av bil',
-  beskrivelse: 'Hjelpemidler som gjør det lettere å komme seg inn og ut av bilen.',
-  underkategorier: [],
-  isoer: ['121281'],
   visProdukter: true,
 }
 
