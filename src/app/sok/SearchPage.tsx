@@ -30,7 +30,7 @@ export default function SearchPage() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const [isRedirecting, setIsRedirecting] = useState(false)
+  const [isMaybeRedirecting, setIsMaybeRedirecting] = useState(false)
 
   const searchFormRef = useRef<HTMLFormElement>(null)
 
@@ -113,23 +113,26 @@ export default function SearchPage() {
   const filtersFromData = data?.at(-1)?.filters
 
   useEffect(() => {
-    if (!products || products.length !== 1) return
-
     const term = searchData.searchTerm?.trim() ?? ''
     if (!/^[0-9]{6}$/.test(term)) return
 
-    setIsRedirecting(true)
+    setIsMaybeRedirecting(true)
+
+    if (!products || products.length !== 1) {
+      setIsMaybeRedirecting(false)
+      return
+    }
 
     if (products[0].variants.find((variant) => variant.hmsArtNr === term)) {
-
-
       const params = new URLSearchParams(searchParams)
       const query = params.toString()
       const suffix = query ? `?${query}` : ''
 
       router.replace(`/produkt/${products[0].id}${suffix}`)
+    } else {
+      setIsMaybeRedirecting(false)
     }
-  }, [products, searchData.searchTerm, router, searchParams])
+  }, [products, searchData.searchTerm, router, searchParams, isMaybeRedirecting])
 
   const filters: FilterData = {
     ...(filtersFromData ?? initialFilters),
@@ -193,7 +196,7 @@ export default function SearchPage() {
     )
   }
 
-  if (isRedirecting) {
+  if (isMaybeRedirecting) {
     return (
       <VStack
         marginInline={'auto'}
