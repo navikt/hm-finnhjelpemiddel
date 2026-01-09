@@ -2,10 +2,6 @@
 
 .container {
   position: relative;
-
-  &:hover {
-    outline: 1px solid $a-border-action;
-  }
 }
 
 .imageWrapper {
