@@ -9,7 +9,6 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-
 import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
 import { useFormContext } from 'react-hook-form'
-import { logVisFlereTreff } from '@/utils/amplitude'
 import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
 
 const SearchResults = ({
@@ -86,7 +85,6 @@ const SearchResults = ({
           variant="secondary"
           onClick={() => {
             loadMore()
-            logVisFlereTreff()
           }}
         >
           Vis flere treff

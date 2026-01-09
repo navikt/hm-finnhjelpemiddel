@@ -7,7 +7,6 @@ import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from './ProductImage'
-import { logNavigationEvent } from '@/utils/amplitude'
 
 const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; product: Product; rank?: number }) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
@@ -39,7 +38,6 @@ const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; pro
             href={linkToProduct}
             aria-label={`Gå til ${product.title}`}
             as={NextLink}
-            onClick={() => logNavigationEvent('Produktkort', 'produkt', product.title)}
           >
             <BodyShort size="small" className="text-line-clamp">
               {product.title}

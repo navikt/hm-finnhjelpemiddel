@@ -7,7 +7,6 @@ import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { Box, CopyButton, Heading, Table } from '@navikt/ds-react'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTable.module.scss'
-import { logActionEvent } from '@/utils/amplitude'
 import { viewAgreementRanks } from '@/components/AgreementIcon'
 
 export type TechDataRow = { key: string; value: string; unit: string | undefined }
@@ -60,7 +59,6 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
                   variant="action"
                   activeIcon={<ThumbUpIcon aria-hidden />}
                   iconPosition="right"
-                  onClick={() => logActionEvent('kopier')}
                 />
               </Table.DataCell>
             </Table.Row>
@@ -76,7 +74,6 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
                   variant="action"
                   activeIcon={<ThumbUpIcon aria-hidden />}
                   iconPosition="right"
-                  onClick={() => logActionEvent('kopier')}
                 />
               </Table.DataCell>
             </Table.Row>

@@ -19,7 +19,6 @@ import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/fi
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
-import { logFilterEndretEvent } from '@/utils/amplitude'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { SearchSidebar } from '@/app/sok/SearchSidebar'
 import { faro } from '@grafana/faro-core'
@@ -56,8 +55,6 @@ export default function SearchPage() {
   }, [searchData.searchTerm])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
-    logFilterEndretEvent('Søk')
-
     router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
       scroll: false,
     })

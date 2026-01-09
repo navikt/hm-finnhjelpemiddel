@@ -4,7 +4,6 @@ import { Document } from '@/utils/product-util'
 import { BodyShort, Link } from '@navikt/ds-react'
 import { titleCapitalized } from '@/utils/string-util'
 import { FileIcon } from '@/components/aksel-client'
-import { logActionEvent } from '@/utils/amplitude'
 import styles from './Documents.module.scss'
 import NextLink from 'next/link'
 
@@ -21,13 +20,7 @@ export const Documents = ({ documents }: { documents: Document[] }) => {
     <ul className={styles.documentList}>
       {documents.map((doc, index) => (
         <li key={index} className={styles.fileContainer}>
-          <Link
-            as={NextLink}
-            href={documentLoader(doc.uri)}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => logActionEvent('dokumentnedlasting')}
-          >
+          <Link as={NextLink} href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
             {titleCapitalized(doc.title)} (PDF)
             <FileIcon aria-hidden fontSize="1.5rem" />
           </Link>

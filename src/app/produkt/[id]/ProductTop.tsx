@@ -7,7 +7,6 @@ import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'
 import styles from './ProductTop.module.scss'
 import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { logActionEvent } from '@/utils/amplitude'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
@@ -170,7 +169,6 @@ const CopyHms = ({ product }: { product: Product }) => {
             variant="action"
             activeIcon={<ThumbUpIcon aria-hidden />}
             iconPosition="right"
-            onClick={() => logActionEvent('kopier')}
           />
         ) : (
           <BodyShort>

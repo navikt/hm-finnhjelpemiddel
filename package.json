@@ -9,7 +9,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@amplitude/analytics-browser": "^2.33.1",
     "@axe-core/react": "^4.11.0",
     "@grafana/faro-web-sdk": "^2.1.0",
     "@grafana/faro-web-tracing": "^2.1.0",
@@ -41,7 +40,6 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "16.1.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
-    "@types/amplitude-js": "^8.16.5",
     "@types/deep-equal": "^1.0.4",
     "@types/node": "24.10.1",
     "@types/react": "19.2.2",

@@ -3,7 +3,6 @@
 import { Button } from '@navikt/ds-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useEffect, useState } from 'react'
-import { logActionEvent } from '@/utils/amplitude'
 import { usePathname } from 'next/navigation'
 
 export const QrCodeButton = ({ id }: { id: string }) => {
@@ -30,7 +29,6 @@ export const QrCodeButton = ({ id }: { id: string }) => {
         as="a"
         href={qrUrl}
         download={id + '-qr.png'}
-        onClick={() => logActionEvent('qr-kode')}
       >
         Last ned QR-kode
         <div style={{ display: 'none' }}>

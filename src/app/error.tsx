@@ -1,6 +1,5 @@
 'use client'
 
-import { logErrorOnUrl } from '@/utils/amplitude'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { NotFound } from '@/app/[...not-found]/NotFound'
@@ -10,7 +9,6 @@ export default function Error({ error }: { error: Error & { digest?: string } })
   const path = usePathname()
 
   useEffect(() => {
-    logErrorOnUrl(path)
     logUmamiErrorOnUrl(path)
   }, [error, path])
 

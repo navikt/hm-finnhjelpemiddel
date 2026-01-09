@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import { agreementHasNoProducts, AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
-import { logNavigationEvent } from '@/utils/amplitude'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
@@ -49,7 +48,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                         href={baseUrl + agreementProductsLink(agreement.id)}
                         onClick={() => {
                           setMenuOpen(false)
-                          logNavigationEvent('meny', 'hurtigoversikt', agreement.title)
                         }}
                       >
                         {agreement.title}
@@ -90,7 +88,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       href={baseUrl + '/rammeavtale'}
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent('meny', 'rammeavtale', 'Avtaler med Nav')
                       }}
                     >
                       Avtaler med Nav
@@ -102,11 +99,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       href={baseUrl + '/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale'}
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent(
-                          'meny',
-                          'rammeavtale',
-                          'Slik kan du se at et hjelpemiddel er på avtale med Nav'
-                        )
                       }}
                     >
                       Slik kan du se at et hjelpemiddel er på avtale med Nav
@@ -118,7 +110,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       href={baseUrl + '/leverandorer'}
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent('meny', 'leverandorer', 'Leverandøroversikt')
                       }}
                     >
                       Leverandøroversikt
@@ -130,7 +121,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       href={baseUrl + '/adminregister'}
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent('meny', 'adminregister', 'Innlogging leverandør')
                       }}
                     >
                       Innlogging leverandør
@@ -142,7 +132,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                       href="/gjenbruksprodukter"
                       onClick={() => {
                         setMenuOpen(false)
-                        logNavigationEvent('meny', 'adminregister', 'Innlogging leverandør')
                       }}
                     >
                       For Nav-ansatte: Alternativer på lager

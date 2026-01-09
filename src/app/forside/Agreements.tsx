@@ -3,8 +3,7 @@ import useSWR from 'swr'
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
-import { logNavigationEvent } from '@/utils/amplitude'
-import { logUmamiEvent, logUmamiFavoriteAgreementEvent } from '@/utils/umami'
+import { logUmamiFavoriteAgreementEvent } from '@/utils/umami'
 import { StarFillIcon, StarIcon } from '@navikt/aksel-icons'
 import { Box, Heading, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
@@ -138,11 +137,7 @@ const AgreementRow = ({
           )}
         </button>
         <HStack align={'center'}>
-          <Link
-            as={NextLink}
-            href={agreementProductsLink(label.id)}
-            onClick={() => logNavigationEvent('forside', 'hurtigoversikt', label.title)}
-          >
+          <Link as={NextLink} href={agreementProductsLink(label.id)}>
             {`${label.title} `}
           </Link>
         </HStack>

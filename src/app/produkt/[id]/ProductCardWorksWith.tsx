@@ -4,7 +4,6 @@ import { Product } from '@/utils/product-util'
 import { BodyShort, Box, CopyButton, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
-import { logActionEvent, logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardWorksWith.module.scss'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
@@ -27,7 +26,6 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
               aria-label={`Gå til ${product.title}`}
               as={NextLink}
               onClick={() => {
-                logNavigationEvent('produktkort_worksWith', 'produkt', product.title)
                 logUmamiNavigationEvent('product_worksWith', linkToProduct, product.title)
               }}
             >
@@ -48,7 +46,6 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
                 activeIcon={<ThumbUpIcon aria-hidden />}
                 iconPosition="right"
                 onClick={() => {
-                  logActionEvent('kopier')
                   logUmamiClickButton('kopiert', 'product-worksWith-copyButton', 'action')
                 }}
               />
