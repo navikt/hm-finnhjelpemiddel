@@ -18,6 +18,7 @@ export const useToast = (options?: ToastOptions) => {
       if (autoHideMs > 0) {
         window.setTimeout(() => {
           setMessage((current) => (current === nextMessage ? null : current))
+          setIcon((current) => (current === nextIcon ? null : current))
         }, autoHideMs)
       }
     },
