@@ -1,15 +1,15 @@
 @use 'src/styles/_variables' as *;
 
 .container {
-  background-color: $ny-nav-orange-light;
-  border-radius: 4px;
-  border: #333333 1px solid;
+  background-color: var(--a-orange-100);
+  border-radius: var(--a-border-radius-large);
+  border: var(--a-orange-400) 1px solid;
   position: fixed;
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  min-width: min(90vw, 768px);
+  min-width: min(90vw, 479px);
 
 }
 
