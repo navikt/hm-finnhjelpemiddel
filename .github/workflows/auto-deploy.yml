@@ -19,4 +19,5 @@ jobs:
       IMAGE_PROXY_URL: https://finnhjelpemiddel.nav.no/imageproxy
       CDN_URL: https://finnhjelpemiddel.nav.no/imageproxy/file/
       ALTERNATIVER_BACKEND_AUDIENCE: api://prod-gcp.teamdigihot.hm-grunndata-alternativprodukter/.default
+      BFF_AUDIENCE: api://prod-gcp.teamdigihot.hm-finnhjelpemiddel-bff/.default
     secrets: inherit
