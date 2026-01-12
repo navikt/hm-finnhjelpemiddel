@@ -1,5 +1,7 @@
+@use 'src/styles/_variables' as *;
+
 .container {
-  background-color: var(--a-surface-success-subtle);
+  background-color: $ny-nav-orange-light;
   border-radius: 4px;
   border: #333333 1px solid;
   position: fixed;
@@ -8,11 +10,11 @@
   transform: translateX(-50%);
   z-index: 1000;
   min-width: min(90vw, 768px);
+
 }
 
 .content {
   display: inline-flex;
-  align-items: center;
   gap: 0.5rem;
 }
 
@@ -21,6 +23,6 @@
 }
 
 .message {
-  display: inline-block;
+  display: inline-flex;
 }
 

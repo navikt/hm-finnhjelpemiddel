@@ -61,7 +61,7 @@ const Agreements = () => {
         favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     } else {
-      showToast(`${label.title} er fjernet som favoritt`, <StarIcon aria-hidden height={20} width={20} color={'#ffb703'} />)
+      showToast(`${label.title} er fjernet som favoritt`, <StarIcon aria-hidden height={20} width={20} />)
     }
   }
 
