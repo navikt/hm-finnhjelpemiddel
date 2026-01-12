@@ -58,7 +58,7 @@ const Agreements = () => {
 
       if (favouritesRef.current) {
         const rect = favouritesRef.current.getBoundingClientRect()
-        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0
         
         if (!isVisible) {
           favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
