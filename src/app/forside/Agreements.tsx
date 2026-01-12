@@ -66,7 +66,7 @@ const Agreements = () => {
 
   return (
     <>
-      {toastMessage && <Toast message={toastMessage} icon={toastIcon} />}
+      <Toast message={toastMessage} icon={toastIcon} />
       <VStack gap="4" paddingInline={{ lg: '6' }}>
         <Heading level="2" size="medium">
           Hjelpemidler på avtale med Nav

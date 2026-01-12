@@ -10,7 +10,6 @@
   transform: translateX(-50%);
   z-index: 1000;
   min-width: min(90vw, 479px);
-
 }
 
 .content {
@@ -26,3 +25,20 @@
   display: inline-flex;
 }
 
+.fadeEnter {
+  opacity: 0;
+}
+
+.fadeEnterActive {
+  opacity: 1;
+  transition: opacity 250ms ease-out;
+}
+
+.fadeExit {
+  opacity: 1;
+}
+
+.fadeExitActive {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
