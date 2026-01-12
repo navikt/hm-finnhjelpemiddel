@@ -32,7 +32,7 @@ export const Toast = ({ message, icon }: ToastProps) => {
     <CSSTransition
       in={isVisible}
       nodeRef={ref}
-      timeout={1500}
+      timeout={300}
       unmountOnExit
       classNames={{
         enter: styles.fadeEnter,
