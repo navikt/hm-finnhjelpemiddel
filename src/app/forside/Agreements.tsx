@@ -57,7 +57,12 @@ const Agreements = () => {
       )
 
       if (favouritesRef.current) {
-        favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        const rect = favouritesRef.current.getBoundingClientRect()
+        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
+        
+        if (!isVisible) {
+          favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
       }
     } else {
       showToast(`${label.title} er fjernet som favoritt`, <StarIcon aria-hidden height={20} width={20} />)
