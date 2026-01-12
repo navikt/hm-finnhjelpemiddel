@@ -1,0 +1,44 @@
+@use 'src/styles/_variables' as *;
+
+.container {
+  background-color: var(--a-orange-100);
+  border-radius: var(--a-border-radius-large);
+  border: var(--a-orange-400) 1px solid;
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  min-width: min(90vw, 479px);
+}
+
+.content {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.message {
+  display: inline-flex;
+}
+
+.fadeEnter {
+  opacity: 0;
+}
+
+.fadeEnterActive {
+  opacity: 1;
+  transition: opacity 250ms ease-out;
+}
+
+.fadeExit {
+  opacity: 1;
+}
+
+.fadeExitActive {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
