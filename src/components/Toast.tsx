@@ -17,12 +17,14 @@ export const Toast = ({ message, icon }: ToastProps) => {
   const ref = useRef<HTMLDivElement | null>(null)
 
   const [displayMessage, setDisplayMessage] = useState<ReactNode>(message)
+  const [displayIcon, setDisplayIcon] = useState<ReactNode | undefined>(icon)
 
   useEffect(() => {
     if (isMessageVisible(message)) {
       setDisplayMessage(message)
+      setDisplayIcon(icon)
     }
-  }, [message])
+  }, [message, icon])
 
   const isVisible = isMessageVisible(message)
 
@@ -41,7 +43,7 @@ export const Toast = ({ message, icon }: ToastProps) => {
     >
       <Box ref={ref} padding="space-16" className={styles.container} aria-live="polite">
         <span className={styles.content}>
-          {icon && <span className={styles.icon}>{icon}</span>}
+          {displayIcon && <span className={styles.icon}>{displayIcon}</span>}
           <span className={styles.message}>{displayMessage}</span>
         </span>
       </Box>
