@@ -10,18 +10,21 @@ export interface ToastProps {
   icon?: ReactNode
 }
 
+const isMessageVisible = (message: ReactNode) =>
+  message !== null && message !== undefined && message !== ''
+
 export const Toast = ({ message, icon }: ToastProps) => {
   const ref = useRef<HTMLDivElement | null>(null)
 
   const [displayMessage, setDisplayMessage] = useState<ReactNode>(message)
 
   useEffect(() => {
-    if (message !== null && message !== undefined && message !== '') {
+    if (isMessageVisible(message)) {
       setDisplayMessage(message)
     }
   }, [message])
 
-  const isVisible = message !== null && message !== undefined && message !== ''
+  const isVisible = isMessageVisible(message)
 
   return (
     <CSSTransition
