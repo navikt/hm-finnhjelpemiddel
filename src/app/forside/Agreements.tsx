@@ -19,7 +19,7 @@ const Agreements = () => {
   const isGridView = searchParams?.has('GRID_VIEW') ?? false
 
   const favouritesRef = useRef<HTMLOListElement | null>(null)
-  const { message: toastMessage, showToast } = useToast()
+  const { message: toastMessage, icon: toastIcon, showToast } = useToast()
 
   const { data } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
@@ -52,22 +52,22 @@ const Agreements = () => {
     logUmamiFavoriteAgreementEvent(label.title, nextValue)
 
     if (nextValue) {
-      showToast(`${label.title} er lagt til som favoritt`)
+      showToast(
+        `${label.title} er lagt til som favoritt`,
+        <StarFillIcon aria-hidden height={20} width={20} color={'#ffb703'} />
+      )
 
       if (favouritesRef.current) {
         favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
+    } else {
+      showToast(`${label.title} er fjernet som favoritt`, <StarIcon aria-hidden height={20} width={20} color={'#ffb703'} />)
     }
   }
 
   return (
     <>
-      {toastMessage && (
-        <Toast
-          message={toastMessage}
-          icon={<StarFillIcon aria-hidden height={20} width={20} color={'#ffb703'} />}
-        />
-      )}
+      {toastMessage && <Toast message={toastMessage} icon={toastIcon} />}
       <VStack gap="4" paddingInline={{ lg: '6' }}>
         <Heading level="2" size="medium">
           Hjelpemidler på avtale med Nav

@@ -1,32 +1,33 @@
-"use client";
+'use client'
 
-import { useCallback, useState } from "react";
+import { JSX, useCallback, useState } from 'react'
 
 export type ToastOptions = {
-  autoHideMs?: number;
-};
+  autoHideMs?: number
+}
 
 export const useToast = (options?: ToastOptions) => {
-  const { autoHideMs = 3000 } = options || {};
-  const [message, setMessage] = useState<string | null>(null);
+  const { autoHideMs = 3000 } = options || {}
+  const [message, setMessage] = useState<string | null>(null)
+  const [icon, setIcon] = useState<JSX.Element | null>(null)
 
   const showToast = useCallback(
-    (nextMessage: string) => {
-      setMessage(nextMessage);
-
+    (nextMessage: string, nextIcon: JSX.Element) => {
+      setMessage(nextMessage)
+      setIcon(nextIcon)
       if (autoHideMs > 0) {
         window.setTimeout(() => {
-          setMessage((current) => (current === nextMessage ? null : current));
-        }, autoHideMs);
+          setMessage((current) => (current === nextMessage ? null : current))
+        }, autoHideMs)
       }
     },
     [autoHideMs]
-  );
+  )
 
   const hideToast = useCallback(() => {
-    setMessage(null);
-  }, []);
+    setMessage(null)
+    setIcon(null)
+  }, [])
 
-  return { message, showToast, hideToast };
-};
-
+  return { message, icon, showToast, hideToast }
+}
