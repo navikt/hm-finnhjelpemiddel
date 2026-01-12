@@ -1,7 +1,6 @@
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
-import { logNavigationEvent } from '@/utils/amplitude'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Button, Hide, HStack, Show } from '@navikt/ds-react'
@@ -43,15 +42,12 @@ const NavigationBar = () => {
       qWithFilters.set('term', searchTerm.trim())
       qNoFilters.set('term', searchTerm.trim())
       if (path.includes('sok')) {
-        logNavigationEvent('søk', 'søk', 'Søk på søkesiden')
         router.push('/sok?' + qWithFilters.toString())
       } else if (path === '/') {
-        logNavigationEvent('forside', 'søk', 'Søk på forsiden')
         router.push('/sok?' + qWithFilters.toString())
       } else if (path.includes('produkt')) {
         router.push('/sok?' + qNoFilters.toString())
       } else {
-        logNavigationEvent('annet', 'søk', 'Søk fra annen side')
         router.push('/sok?' + qWithFilters.toString())
       }
     },

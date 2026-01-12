@@ -5,7 +5,6 @@ import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
-import { logNavigationEvent } from '@/utils/amplitude'
 import styles from './ProductCardPart.module.scss'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 
@@ -41,13 +40,7 @@ export const ProductCardPart = ({
             <NeutralTag>Ikke på avtale</NeutralTag>
           )}
           <Box className={styles.productSummary}>
-            <Link
-              className={styles.link}
-              href={linkToProduct}
-              aria-label={`Gå til ${product.title}`}
-              as={NextLink}
-              onClick={() => logNavigationEvent('Produktkort_deler', 'produkt', product.title)}
-            >
+            <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
               <BodyShort weight="semibold">{product.title}</BodyShort>
             </Link>
             <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>

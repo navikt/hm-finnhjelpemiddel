@@ -73,14 +73,6 @@ function CookieInfo() {
             navnet betyr alle informasjonskapsler som har navn som starter med det.
             <ul>
               <li>
-                AMP_*
-                <br />
-                Brukes til statistikk og analyse av hvordan nav.no brukes i verktøyet Amplitude. Statistikken er
-                anonymisert og kan ikke spores til deg som enkeltperson, men vi kan se tidspunkt, landsdel, type
-                nettleser og hvilke sider som er besøkt. For å hindre identifisering, bruker vi en egenutviklet proxy
-                som vasker bort deler av IP-adressen din før dataene sendes til verktøyet.
-              </li>
-              <li>
                 Umami
                 <br />
                 Brukes til statistikk og analyse av hvordan nav.no brukes. Unami bruker ikke informasjonskapsler, men

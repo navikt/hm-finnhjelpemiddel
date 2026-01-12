@@ -1,6 +1,5 @@
 'use client'
 
-import { logLeverandorprodukterKlikket } from '@/utils/amplitude'
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, BodyShort, Heading, Label, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
@@ -72,11 +71,7 @@ const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
       </BodyShort>
     )}
 
-    <Link
-      as={NextLink}
-      href={`/sok?sortering=Best_soketreff&leverandor=${encodeURIComponent(supplier.name)}`}
-      onClick={() => logLeverandorprodukterKlikket()}
-    >
+    <Link as={NextLink} href={`/sok?sortering=Best_soketreff&leverandor=${encodeURIComponent(supplier.name)}`}>
       Se produkter fra {supplier.name}
     </Link>
   </VStack>

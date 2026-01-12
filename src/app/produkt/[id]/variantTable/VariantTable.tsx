@@ -11,7 +11,6 @@ import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTable.module.scss'
-import { logActionEvent } from '@/utils/amplitude'
 import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStatusRowNew'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
@@ -222,7 +221,6 @@ export const VariantTable = ({ product }: { product: Product }) => {
                           variant="action"
                           activeIcon={<ThumbUpIcon aria-hidden />}
                           iconPosition="right"
-                          onClick={() => logActionEvent('kopier')}
                         />
                       )}
                     </Table.DataCell>
@@ -246,7 +244,6 @@ export const VariantTable = ({ product }: { product: Product }) => {
                       variant="action"
                       activeIcon={<ThumbUpIcon aria-hidden />}
                       iconPosition="right"
-                      onClick={() => logActionEvent('kopier')}
                     />
                   </Table.DataCell>
                 ))}

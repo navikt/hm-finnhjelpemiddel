@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 
-import { initAmplitude, stopAmplitude } from '@/utils/amplitude'
 import reportAccessibility from '@/utils/reportAccessibility'
 
 import NavigationBar from '@/app/NavigationBar'
@@ -62,15 +61,12 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   }, [pathname])
 
   useEffect(() => {
-    // if browser initialize amplitude
     if (typeof window !== 'undefined') {
       if (consent === 'true') {
-        initAmplitude(window.location.hostname)
         initUmami(window.location.hostname)
         initSkyra()
       }
       if (consent === 'false') {
-        stopAmplitude()
         stopUmami()
         removeOptionalCookies()
         stopSkyra()

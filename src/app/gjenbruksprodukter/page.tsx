@@ -6,7 +6,6 @@ import { Bleed, BodyShort, Box, HStack, Search, Select, VStack } from '@navikt/d
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { AlternativeProductList } from '@/app/gjenbruksprodukter/AlternativeProductsList'
-import { logNavigationEvent } from '@/utils/amplitude'
 import { faro } from '@grafana/faro-core'
 
 export default function AlternativeProductsPage() {
@@ -37,7 +36,6 @@ export default function AlternativeProductsPage() {
   ]
 
   const handleSearch = (value: string) => {
-    logNavigationEvent('alternativprodukter', 'søk', 'Søk fra alternativprodukter')
     typeof window !== 'undefined' &&
       faro.api.pushEvent('alternativSearch', {
         searchTerm: value,

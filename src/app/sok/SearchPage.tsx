@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 
 import { FilterIcon } from '@navikt/aksel-icons'
-import { Alert, Bleed, Button, Heading, HGrid, HStack, Show, Skeleton, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, Button, Heading, HGrid, HStack, Loader, Show, Skeleton, VStack } from '@navikt/ds-react'
 
 import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
@@ -19,7 +19,6 @@ import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/fi
 import { useMobileOverlayStore } from '@/utils/global-state-util'
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
-import { logFilterEndretEvent } from '@/utils/amplitude'
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { SearchSidebar } from '@/app/sok/SearchSidebar'
 import { faro } from '@grafana/faro-core'
@@ -29,6 +28,8 @@ export default function SearchPage() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const [isMaybeRedirecting, setIsMaybeRedirecting] = useState(false)
 
   const searchFormRef = useRef<HTMLFormElement>(null)
 
@@ -46,15 +47,14 @@ export default function SearchPage() {
   })
 
   useEffect(() => {
-    typeof window !== 'undefined' &&
+    if (typeof window !== 'undefined') {
       faro.api.pushEvent('searchPage', {
         searchTerm: searchData.searchTerm,
       })
+    }
   }, [searchData.searchTerm])
 
   const onSubmit: SubmitHandler<FormSearchData> = () => {
-    logFilterEndretEvent('Søk')
-
     router.replace(`${pathname}?${toSearchQueryString(formMethods.getValues(), searchData.searchTerm)}`, {
       scroll: false,
     })
@@ -108,6 +108,28 @@ export default function SearchPage() {
 
   const products = data?.map((d) => d.products).flat()
   const filtersFromData = data?.at(-1)?.filters
+
+  useEffect(() => {
+    const term = searchData.searchTerm?.trim() ?? ''
+    if (!/^[0-9]{6}$/.test(term)) return
+
+    setIsMaybeRedirecting(true)
+
+    if (!products || products.length !== 1) {
+      setIsMaybeRedirecting(false)
+      return
+    }
+
+    if (products[0].variants.find((variant) => variant.hmsArtNr === term)) {
+      const params = new URLSearchParams(searchParams)
+      const query = params.toString()
+      const suffix = query ? `?${query}` : ''
+
+      router.replace(`/produkt/${products[0].id}${suffix}`)
+    } else {
+      setIsMaybeRedirecting(false)
+    }
+  }, [products, searchData.searchTerm, router, searchParams, isMaybeRedirecting])
 
   const filters: FilterData = {
     ...(filtersFromData ?? initialFilters),
@@ -171,6 +193,23 @@ export default function SearchPage() {
     )
   }
 
+  if (isMaybeRedirecting) {
+    return (
+      <VStack
+        marginInline={'auto'}
+        marginBlock={'0'}
+        maxWidth={'1408px'}
+        paddingBlock={'0 12'}
+        paddingInline={'4'}
+        gap={{ xs: '12', md: '12' }}
+      >
+        <HStack justify="center" style={{ marginTop: '48px' }}>
+          <Loader size="3xlarge" title="Venter..." />
+        </HStack>
+      </VStack>
+    )
+  }
+
   return (
     <VStack
       marginInline={'auto'}
@@ -183,10 +222,13 @@ export default function SearchPage() {
       <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
         <VStack gap="4" align={'start'} paddingBlock={'12'}>
           <Heading level="1" size="large">
-            {searchData.searchTerm
-              ? `Søkeresultater: '${searchData.searchTerm}'`
-              : <>Søkeresultater: <em>intet søkeord angitt</em></>
-            }
+            {searchData.searchTerm ? (
+              `Søkeresultater: '${searchData.searchTerm}'`
+            ) : (
+              <>
+                Søkeresultater: <em>intet søkeord angitt</em>
+              </>
+            )}
           </Heading>
         </VStack>
       </Bleed>

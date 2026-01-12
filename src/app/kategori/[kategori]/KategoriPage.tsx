@@ -1,6 +1,5 @@
 'use client'
 
-import { useMemo } from 'react'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
@@ -8,7 +7,6 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
-import { Product } from '@/utils/product-util'
 import {
   fetchProductsKategori2,
   PAGE_SIZE,
@@ -28,7 +26,7 @@ export const KategoriPage = ({ kategori }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { createQueryStringAppend } = useQueryString()
+  const { createQueryStringAppendRemovePage } = useQueryString()
 
   const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
     const sortOrderStr = searchParams.get('sortering') || ''
@@ -44,8 +42,8 @@ export const KategoriPage = ({ kategori }: Props) => {
     const setehoyde = searchParams.get('Setehoyde') ?? ''
 
     const filters: SearchFiltersKategori = {
-      suppliers: suppliers,
-      isos: isos,
+      suppliers,
+      isos,
       Setehoyde: setehoyde,
       Setedybde: setedybde,
       Setebredde: setebredde,
@@ -57,8 +55,8 @@ export const KategoriPage = ({ kategori }: Props) => {
       filters,
     }
   }
-  const searchData = mapSearchParamsKategori(searchParams)
 
+  const searchData = mapSearchParamsKategori(searchParams)
   const currentKategori = kategorier[kategori]
 
   const {
@@ -68,12 +66,14 @@ export const KategoriPage = ({ kategori }: Props) => {
     error,
     isLoading,
   } = useSWRInfinite<ProductsWithIsoAggs>(
-    (index, previousPageData?: Product[]) => {
-      if (previousPageData && previousPageData.length === 0) return null
+    (index, previousPageData?: ProductsWithIsoAggs) => {
+      // Stop paginating when previous page has no products
+      if (previousPageData && previousPageData.products.length === 0) return null
+
       return {
         from: index * PAGE_SIZE,
         size: PAGE_SIZE,
-        searchData: searchData,
+        searchData,
         kategoriIsos: currentKategori.isoer,
       }
     },
@@ -85,37 +85,38 @@ export const KategoriPage = ({ kategori }: Props) => {
     }
   )
 
-  const loadMore = useMemo(() => {
-    const isEmpty = productsData?.[0]?.products.length === 0
-    const isReachingEnd =
-      isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
-    if (isReachingEnd) {
-      return // no need to fetch another page
-    }
-
-    return () => {
-      const nextPage = page + 1
-      const newParams = new URLSearchParams(searchParams)
-      newParams.set('page', `${nextPage}`)
-      const searchQueryString = newParams.toString()
-      router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-      setPage(nextPage)
-    }
-  }, [productsData, page, setPage, pathname, router, searchParams])
-
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
   const measurementFilters = productsData?.at(-1)?.measurementFilters ?? undefined
 
-  const filters: Filters = { isos: isos, suppliers: suppliers, measurementFilters: measurementFilters }
+  const isEmpty = productsData?.[0]?.products.length === 0
+  const isReachingEnd = isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
+
+  const loadMore = !isReachingEnd
+    ? () => {
+        const nextPage = page + 1
+        const newParams = new URLSearchParams(searchParams)
+        newParams.set('page', `${nextPage}`)
+        const searchQueryString = newParams.toString()
+        router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
+        setPage(nextPage)
+      }
+    : undefined
+
+  const filters: Filters = { isos, suppliers, measurementFilters }
 
   const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppend(filterName, value)
+    const newSearchParams = createQueryStringAppendRemovePage(filterName, value)
+    // Reset paging when filters change so we don’t mix old pages with new filters
+    setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
-  const onReset = () => router.replace(pathname)
+  const onReset = () => {
+    setPage(1)
+    router.replace(pathname)
+  }
 
   return (
     <KategoriPageLayout title={currentKategori.navn} description={currentKategori.beskrivelse} error={error}>
