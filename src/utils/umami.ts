@@ -8,6 +8,7 @@ export enum umami_customevents {
   FAVORITE = 'favorite',
   VIS_FLERE_TREFF = 'vis flere treff',
   FILTER_ENDRET = 'filter-endret',
+  HMSNR_OPPSLAG_SOK = 'hmsnr-oppslag-søk',
 }
 
 export const initUmami = (hostname: string) => {
@@ -99,6 +100,12 @@ export function logUmamiFavoriteAgreementEvent(agreementName: string, favorite: 
   logUmamiCustomEvent(umami_customevents.FAVORITE, {
     agreementName: agreementName,
     favorite: favorite,
+  })
+}
+
+export function logUmamiHMSNrOppslagSokEvent(hmsNr: string) {
+  logUmamiCustomEvent(umami_customevents.HMSNR_OPPSLAG_SOK, {
+    hmsNr: hmsNr,
   })
 }
 
