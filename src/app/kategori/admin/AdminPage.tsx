@@ -1,16 +1,27 @@
 'use client'
 
-import { BodyShort, VStack } from '@navikt/ds-react'
-import useSWRImmutable from 'swr/immutable'
-import { Category, getCategories } from '@/app/kategori/category-util'
+import { BodyShort, Button, Loader, VStack } from '@navikt/ds-react'
+import { CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
+import { CategoryList } from '@/app/kategori/admin/CategoryList'
+import NextLink from 'next/link'
+import useSWR from 'swr'
 
 export const AdminPage = () => {
-  const { data, isLoading, error } = useSWRImmutable<Category[]>('categories', () => getCategories())
+  const { data: categories, isLoading, error } = useSWR<CategoryDTO[]>('categories', () => getCategories())
+
+  if (isLoading || !categories) {
+    return <Loader size="small" />
+  }
 
   return (
     <VStack gap={'4'}>
       <BodyShort>Kategori-admin</BodyShort>
-      <BodyShort>Kategorier: {data?.length}</BodyShort>
+      <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
+        Ny kategori
+      </Button>
+
+      <BodyShort>Kategorier: {categories?.length}</BodyShort>
+      <CategoryList categories={categories} />
     </VStack>
   )
 }
