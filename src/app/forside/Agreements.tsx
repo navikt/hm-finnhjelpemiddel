@@ -5,7 +5,7 @@ import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logUmamiFavoriteAgreementEvent } from '@/utils/umami'
 import { StarFillIcon, StarIcon } from '@navikt/aksel-icons'
-import { Box, Heading, HGrid, HStack, Link, VStack, Tabs } from '@navikt/ds-react'
+import { Box, Heading, HGrid, HStack, Link, VStack, Tabs, Loader } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import styles from './Agreements.module.scss'
 import { useAgreementFavorites } from '@/hooks/useAgreementFavorites'
@@ -17,10 +17,7 @@ const Agreements = () => {
   const searchParams = useSearchParams()
   const isGridView = searchParams?.has('GRID_VIEW') ?? false
 
-  const favouritesRef = useRef<HTMLDivElement | null>(null)
   const { message: toastMessage, icon: toastIcon, showToast } = useToast()
-
-  const [shouldScrollToFavorites, setShouldScrollToFavorites] = useState(false)
 
   const { data } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
@@ -32,7 +29,6 @@ const Agreements = () => {
   const { favourites, others } = useMemo(() => {
     if (!data) return { favourites: [] as AgreementLabel[], others: [] as AgreementLabel[] }
     const sorted = [...data]
-
     sorted.sort((a, b) => sortAlphabetically(a.title, b.title, false))
 
     if (!isFavoritesReady) {
@@ -41,41 +37,25 @@ const Agreements = () => {
 
     const favs = sorted.filter((agreement) => isFavorite(agreement.id))
     const rest = sorted.filter((agreement) => !isFavorite(agreement.id))
-
     return { favourites: favs, others: rest }
   }, [data, isFavorite, isFavoritesReady])
 
-  const hasFavorites = favourites.length > 0
-
   type AgreementTab = 'FAVORITES' | 'OTHERS'
   const [selectedTab, setSelectedTab] = useState<AgreementTab>('OTHERS')
-  const hasInitializedTabRef = useRef(false)
+  const hasInitializedDefaultTabRef = useRef(false)
   useEffect(() => {
-    if (!hasInitializedTabRef.current && isFavoritesReady) {
-      setSelectedTab(hasFavorites ? 'FAVORITES' : 'OTHERS')
-      hasInitializedTabRef.current = true
+    if (!hasInitializedDefaultTabRef.current && data && isFavoritesReady) {
+      setSelectedTab(favourites.length > 0 ? 'FAVORITES' : 'OTHERS')
+      hasInitializedDefaultTabRef.current = true
     }
-  }, [isFavoritesReady, hasFavorites])
-
-  useEffect(() => {
-    if (selectedTab === 'FAVORITES' && shouldScrollToFavorites && favouritesRef.current) {
-      favouritesRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setShouldScrollToFavorites(false)
-    }
-  }, [selectedTab, shouldScrollToFavorites])
+  }, [data, isFavoritesReady, favourites.length])
 
   const handleToggleFavorite = (label: AgreementLabel, currentlyFavorite: boolean) => {
     const nextValue = !currentlyFavorite
-    if (!nextValue && currentlyFavorite && favourites.length === 1) {
-      setSelectedTab('OTHERS')
-    }
-
     toggleFavorite(label.id)
     logUmamiFavoriteAgreementEvent(label.title, nextValue)
 
     if (nextValue) {
-      setSelectedTab('FAVORITES')
-      setShouldScrollToFavorites(true)
       showToast(
         `${label.title} er lagt til som favoritt`,
         <StarFillIcon aria-hidden height={20} width={20} color={'#ffb703'} />
@@ -85,105 +65,113 @@ const Agreements = () => {
     }
   }
 
+  const isReadyToRenderTabs = Boolean(data) && isFavoritesReady && hasInitializedDefaultTabRef.current
+
   return (
     <>
       <Toast message={toastMessage} icon={toastIcon} />
       <VStack gap="4" paddingInline={{ lg: '6' }}>
-        <div ref={favouritesRef} aria-hidden />
         <Heading level="2" size="medium">
           Hjelpemidler på avtale med Nav
         </Heading>
 
-        <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as AgreementTab)}>
-          <Tabs.List>
-            <Tabs.Tab value="FAVORITES" label={`Din liste${hasFavorites ? ` (${favourites.length})` : ''}`} />
-            <Tabs.Tab value="OTHERS" label={`Andre avtaler${others.length ? ` (${others.length})` : ''}`} />
-          </Tabs.List>
+        {!isReadyToRenderTabs ? (
+          <HStack align="center" gap="2">
+            <Loader size="small" title="Laster avtaler" />
+            <span>Laster avtaler…</span>
+          </HStack>
+        ) : (
+          <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as AgreementTab)}>
+            <Tabs.List>
+              <Tabs.Tab value="FAVORITES" label={`Din liste${favourites.length ? ` (${favourites.length})` : ''}`} />
+              <Tabs.Tab value="OTHERS" label={`Andre avtaler${others.length ? ` (${others.length})` : ''}`} />
+            </Tabs.List>
 
-          <Tabs.Panel value="FAVORITES">
-            {isGridView ? (
-              <HGrid
-                as="ol"
-                id="agreement-list-favourites"
-                columns={{ xs: '1fr', lg: '1fr 1fr' }}
-                gap="2"
-                className="agreement-page__list-container"
-              >
-                {favourites.map((label) => (
-                  <AgreementRow
-                    label={label}
-                    key={`fav-${label.id}`}
-                    isFavorite={true}
-                    onToggleFavorite={() => handleToggleFavorite(label, true)}
-                  />
-                ))}
-                {favourites.length === 0 && (
-                  <Box as="li" padding="4">
-                    Ingen favoritter enda.
-                  </Box>
-                )}
-              </HGrid>
-            ) : (
-              <VStack as="ol" id="agreement-list-favourites" className="agreement-page__list-container">
-                {favourites.map((label) => (
-                  <AgreementRow
-                    label={label}
-                    key={`fav-${label.id}`}
-                    isFavorite={true}
-                    onToggleFavorite={() => handleToggleFavorite(label, true)}
-                  />
-                ))}
-                {favourites.length === 0 && (
-                  <Box as="li" padding="4">
-                    Ingen favoritter enda.
-                  </Box>
-                )}
-              </VStack>
-            )}
-          </Tabs.Panel>
+            <Tabs.Panel value="FAVORITES">
+              {isGridView ? (
+                <HGrid
+                  as="ol"
+                  id="agreement-list-favourites"
+                  columns={{ xs: '1fr', lg: '1fr 1fr' }}
+                  gap="2"
+                  className="agreement-page__list-container"
+                >
+                  {favourites.map((label) => (
+                    <AgreementRow
+                      label={label}
+                      key={`fav-${label.id}`}
+                      isFavorite={true}
+                      onToggleFavorite={() => handleToggleFavorite(label, true)}
+                    />
+                  ))}
+                  {favourites.length === 0 && (
+                    <Box as="li" padding="4">
+                      Ingen favoritter enda.
+                    </Box>
+                  )}
+                </HGrid>
+              ) : (
+                <VStack as="ol" id="agreement-list-favourites" className="agreement-page__list-container">
+                  {favourites.map((label) => (
+                    <AgreementRow
+                      label={label}
+                      key={`fav-${label.id}`}
+                      isFavorite={true}
+                      onToggleFavorite={() => handleToggleFavorite(label, true)}
+                    />
+                  ))}
+                  {favourites.length === 0 && (
+                    <Box as="li" padding="4">
+                      Ingen favoritter enda.
+                    </Box>
+                  )}
+                </VStack>
+              )}
+            </Tabs.Panel>
 
-          <Tabs.Panel value="OTHERS">
-            {isGridView ? (
-              <HGrid
-                as="ol"
-                id="agreement-list-others"
-                columns={{ xs: '1fr', lg: '1fr 1fr' }}
-                gap="2"
-                className="agreement-page__list-container"
-              >
-                {others.map((label) => (
-                  <AgreementRow
-                    label={label}
-                    key={`other-${label.id}`}
-                    isFavorite={false}
-                    onToggleFavorite={() => handleToggleFavorite(label, false)}
-                  />
-                ))}
-                {others.length === 0 && (
-                  <Box as="li" padding="4">
-                    Ingen andre avtaler.
-                  </Box>
-                )}
-              </HGrid>
-            ) : (
-              <VStack as="ol" id="agreement-list-others" className="agreement-page__list-container">
-                {others.map((label) => (
-                  <AgreementRow
-                    label={label}
-                    key={`other-${label.id}`}
-                    isFavorite={false}
-                    onToggleFavorite={() => handleToggleFavorite(label, false)}
-                  />
-                ))}
-                {others.length === 0 && (
-                  <Box as="li" padding="4">
-                    Ingen andre avtaler.
-                  </Box>
-                )}
-              </VStack>
-            )}
-          </Tabs.Panel>
-        </Tabs>
+            <Tabs.Panel value="OTHERS">
+              {isGridView ? (
+                <HGrid
+                  as="ol"
+                  id="agreement-list-others"
+                  columns={{ xs: '1fr', lg: '1fr 1fr' }}
+                  gap="2"
+                  className="agreement-page__list-container"
+                >
+                  {others.map((label) => (
+                    <AgreementRow
+                      label={label}
+                      key={`other-${label.id}`}
+                      isFavorite={false}
+                      onToggleFavorite={() => handleToggleFavorite(label, false)}
+                    />
+                  ))}
+                  {others.length === 0 && (
+                    <Box as="li" padding="4">
+                      Ingen andre avtaler.
+                    </Box>
+                  )}
+                </HGrid>
+              ) : (
+                <VStack as="ol" id="agreement-list-others" className="agreement-page__list-container">
+                  {others.map((label) => (
+                    <AgreementRow
+                      label={label}
+                      key={`other-${label.id}`}
+                      isFavorite={false}
+                      onToggleFavorite={() => handleToggleFavorite(label, false)}
+                    />
+                  ))}
+                  {others.length === 0 && (
+                    <Box as="li" padding="4">
+                      Ingen andre avtaler.
+                    </Box>
+                  )}
+                </VStack>
+              )}
+            </Tabs.Panel>
+          </Tabs>
+        )}
       </VStack>
     </>
   )
