@@ -53,6 +53,10 @@ const Agreements = () => {
 
   const handleToggleFavorite = (label: AgreementLabel, currentlyFavorite: boolean) => {
     const nextValue = !currentlyFavorite
+    // If removing and there is exactly one favourite currently, switch to others BEFORE toggling
+    if (!nextValue && currentlyFavorite && favourites.length === 1) {
+      setSelectedTab('OTHERS')
+    }
     toggleFavorite(label.id)
     logUmamiFavoriteAgreementEvent(label.title, nextValue)
 
@@ -66,8 +70,6 @@ const Agreements = () => {
     }
   }
 
-  // Render tabs as soon as agreements data and favorites readiness are available.
-  // Do not gate on the default-tab initialization ref to avoid rare deadlocks in prod when no favourites.
   const isReadyToRenderTabs = Boolean(data) && isFavoritesReady
 
   return (
@@ -81,14 +83,15 @@ const Agreements = () => {
         {!isReadyToRenderTabs ? (
           <HStack align="center" gap="2">
             <Loader size="small" title="Laster avtaler" />
-            <span>
-              {error ? 'Kunne ikke hente avtaler' : 'Laster avtaler…'}
-            </span>
+            <span>{error ? 'Kunne ikke hente avtaler' : 'Laster avtaler…'}</span>
           </HStack>
         ) : (
           <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as AgreementTab)}>
             <Tabs.List>
-              <Tabs.Tab value="FAVORITES" label={`Din liste${favourites.length ? ` (${favourites.length})` : ''}`} />
+              <Tabs.Tab
+                value="FAVORITES"
+                label={`Din liste${favourites.length ? ` (${favourites.length})` : ` (0)`}`}
+              />
               <Tabs.Tab value="OTHERS" label={`Andre avtaler${others.length ? ` (${others.length})` : ''}`} />
             </Tabs.List>
 
