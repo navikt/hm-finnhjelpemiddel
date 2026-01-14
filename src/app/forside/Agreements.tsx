@@ -20,7 +20,7 @@ const Agreements = () => {
 
   const { message: toastMessage, icon: toastIcon, showToast } = useToast()
 
-  const { data } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
+  const { data, error } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
     keepPreviousData: true,
     revalidateOnFocus: false,
   })
@@ -66,7 +66,9 @@ const Agreements = () => {
     }
   }
 
-  const isReadyToRenderTabs = Boolean(data) && isFavoritesReady && hasInitializedDefaultTabRef.current
+  // Render tabs as soon as agreements data and favorites readiness are available.
+  // Do not gate on the default-tab initialization ref to avoid rare deadlocks in prod when no favourites.
+  const isReadyToRenderTabs = Boolean(data) && isFavoritesReady
 
   return (
     <>
@@ -79,7 +81,9 @@ const Agreements = () => {
         {!isReadyToRenderTabs ? (
           <HStack align="center" gap="2">
             <Loader size="small" title="Laster avtaler" />
-            <span>Laster avtaler…</span>
+            <span>
+              {error ? 'Kunne ikke hente avtaler' : 'Laster avtaler…'}
+            </span>
           </HStack>
         ) : (
           <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as AgreementTab)}>
