@@ -1,3 +1,4 @@
+'use client'
 import { useMemo, useRef, useState, useEffect } from 'react'
 import useSWR from 'swr'
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
