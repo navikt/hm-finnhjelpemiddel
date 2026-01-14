@@ -45,7 +45,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
             size={'small'}
             onClick={onReset}
             className={styles.filterButton}
-            icon={<XMarkIcon title="Nullstill filtervalg" />}
+            icon={<XMarkIcon aria-hidden />}
             iconPosition={'right'}
           >
             Nullstill
