@@ -5,6 +5,9 @@ const HM_FINNHJELPEMIDDEL_BFF_URL = process.env.HM_FINNHJELPEMIDDEL_BFF_URL || '
 export type Category = {
   name: string
   description: string
+  subCategories: string[]
+  isos: string[]
+  showProducts: boolean
 }
 
 export type CategoryDTO = {
@@ -48,6 +51,10 @@ export async function getCategory(id: string): Promise<CategoryDTO> {
 
 export async function createCategory(category: CreateCategoryDTO): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, 'POST', category)
+}
+
+export async function updateCategory(category: CategoryDTO): Promise<void> {
+  return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, 'PUT', category)
 }
 
 export async function deleteCategory(categoryId: string): Promise<void> {
