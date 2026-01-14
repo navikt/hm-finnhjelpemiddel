@@ -80,11 +80,10 @@ function FrontPage() {
         <NewsFeed />
       </HGrid>
 
-      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
+      <Bleed marginInline="full" reflectivePadding style={{marginBottom: '1.5rem'}}>
         <OtherAgreements />
       </Bleed>
 
-      <KontaktOss />
     </VStack>
   )
 }
