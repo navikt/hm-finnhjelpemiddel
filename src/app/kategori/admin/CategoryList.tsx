@@ -7,7 +7,9 @@ import React, { useState } from 'react'
 export const CategoryList = ({ categories }: { categories: CategoryDTO[] }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
 
-  const filteredCategories = categories.filter((category) => category.data.name.includes(searchTerm))
+  const filteredCategories = categories
+    .filter((category) => category.data.name.includes(searchTerm))
+    .sort((a, b) => a.data.name.localeCompare(b.data.name))
 
   return (
     <Box>
