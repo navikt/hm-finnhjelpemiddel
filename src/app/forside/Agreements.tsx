@@ -27,18 +27,17 @@ const Agreements = () => {
 
   const { isFavorite, toggleFavorite, isReady: isFavoritesReady } = useAgreementFavorites()
 
-  const { favourites, others } = useMemo(() => {
-    if (!data) return { favourites: [] as AgreementLabel[], others: [] as AgreementLabel[] }
+  const { favourites, all } = useMemo(() => {
+    if (!data) return { favourites: [] as AgreementLabel[], all: [] as AgreementLabel[] }
     const sorted = [...data]
     sorted.sort((a, b) => sortAlphabetically(a.title, b.title, false))
 
     if (!isFavoritesReady) {
-      return { favourites: [], others: sorted }
+      return { favourites: [], all: sorted }
     }
 
     const favs = sorted.filter((agreement) => isFavorite(agreement.id))
-    const rest = sorted.filter((agreement) => !isFavorite(agreement.id))
-    return { favourites: favs, others: rest }
+    return { favourites: favs, all: sorted }
   }, [data, isFavorite, isFavoritesReady])
 
   type AgreementTab = 'FAVORITES' | 'OTHERS'
@@ -88,11 +87,11 @@ const Agreements = () => {
         ) : (
           <Tabs value={selectedTab} onChange={(value) => setSelectedTab(value as AgreementTab)}>
             <Tabs.List>
+              <Tabs.Tab value="OTHERS" label={`Alle avtaler${all.length ? ` (${all.length})` : ''}`} />
               <Tabs.Tab
                 value="FAVORITES"
                 label={`Din liste${favourites.length ? ` (${favourites.length})` : ` (0)`}`}
               />
-              <Tabs.Tab value="OTHERS" label={`Andre avtaler${others.length ? ` (${others.length})` : ''}`} />
             </Tabs.List>
 
             <Tabs.Panel value="FAVORITES">
@@ -146,33 +145,33 @@ const Agreements = () => {
                   gap="2"
                   className="agreement-page__list-container"
                 >
-                  {others.map((label) => (
+                  {all.map((label) => (
                     <AgreementRow
                       label={label}
                       key={`other-${label.id}`}
-                      isFavorite={false}
+                      isFavorite={isFavorite(label.id)}
                       onToggleFavorite={() => handleToggleFavorite(label, false)}
                     />
                   ))}
-                  {others.length === 0 && (
+                  {all.length === 0 && (
                     <Box as="li" padding="4">
-                      Ingen andre avtaler.
+                      Ingen avtaler funnet
                     </Box>
                   )}
                 </HGrid>
               ) : (
                 <VStack as="ol" id="agreement-list-others" className="agreement-page__list-container">
-                  {others.map((label) => (
+                  {all.map((label) => (
                     <AgreementRow
                       label={label}
                       key={`other-${label.id}`}
-                      isFavorite={false}
+                      isFavorite={isFavorite(label.id)}
                       onToggleFavorite={() => handleToggleFavorite(label, false)}
                     />
                   ))}
-                  {others.length === 0 && (
+                  {all.length === 0 && (
                     <Box as="li" padding="4">
-                      Ingen andre avtaler.
+                      Ingen avtaler funnet
                     </Box>
                   )}
                 </VStack>
