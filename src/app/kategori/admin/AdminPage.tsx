@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Heading, Loader, VStack } from '@navikt/ds-react'
+import { Bleed, Box, Button, Heading, Loader, VStack } from '@navikt/ds-react'
 import { CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import { CategoryList } from '@/app/kategori/admin/CategoryList'
 import NextLink from 'next/link'
@@ -14,13 +14,17 @@ export const AdminPage = () => {
   }
 
   return (
-    <VStack gap={'8'}>
-      <Heading size={'large'}>Kategori-admin 🤠</Heading>
+    <>
+      <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
+        <Box paddingBlock={'8'}>
+          <Heading size={'large'}>Kategori-admin 🤠</Heading>
+        </Box>
+      </Bleed>
       <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
         Ny kategori
       </Button>
 
       <CategoryList categories={categories} />
-    </VStack>
+    </>
   )
 }
