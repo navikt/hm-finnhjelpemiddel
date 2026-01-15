@@ -2,7 +2,11 @@
 
 import {
   BodyShort,
+  Box,
+  Button,
   Chips,
+  HStack,
+  Link,
   Popover,
   Skeleton,
   Switch,
@@ -14,6 +18,8 @@ import {
 import { useRef, useState } from 'react'
 import { Category, CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import useSWR from 'swr'
+import NextLink from 'next/link'
+import { XMarkIcon } from '@navikt/aksel-icons'
 
 export const EditableCategory = ({
   inputValue,
@@ -135,7 +141,7 @@ const SubCategoriesModule = ({
         selectedOptions={selectedOptions}
         onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
       />
-      <Chips>
+      <HStack gap={'2'}>
         {selectedOptions?.map((option) => (
           <ChipsPopover
             key={option.value + '-chip'}
@@ -144,7 +150,7 @@ const SubCategoriesModule = ({
             categories={categories}
           />
         ))}
-      </Chips>
+      </HStack>
     </VStack>
   )
 }
@@ -158,22 +164,38 @@ const ChipsPopover = ({
   removeSubCategory: (val: string) => void
   categories: CategoryDTO[]
 }) => {
-  const chipRef = useRef<HTMLButtonElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const category = categories.find((cat) => cat.id === option.value)!.data
   return (
     <>
-      <Chips.Removable
-        ref={chipRef}
-        onClick={() => {
-          removeSubCategory(option.value)
-        }}
+      <Box
+        ref={ref}
+        borderColor={'border-action'}
+        borderRadius={'full'}
+        borderWidth={'1'}
+        width={'fit-content'}
+        height={'fit-content'}
+        paddingInline={'3'}
+        paddingBlock={'1'}
         onMouseOver={() => setPopoverOpen(true)}
         onMouseLeave={() => setPopoverOpen(false)}
+        asChild
       >
-        {option.label}
-      </Chips.Removable>
-      <Popover anchorEl={chipRef.current} open={popoverOpen} onClose={() => setPopoverOpen(false)}>
+        <HStack gap={'1'} justify={'space-between'} align={'end'}>
+          <Link as={NextLink} href={option.value} title={'Gå til redigering'}>
+            {option.label}
+          </Link>
+          <Button
+            size={'xsmall'}
+            variant={'tertiary'}
+            icon={<XMarkIcon aria-hidden />}
+            title={'Slett'}
+            onClick={() => removeSubCategory(option.value)}
+          />
+        </HStack>
+      </Box>
+      <Popover anchorEl={ref.current} open={popoverOpen} onClose={() => setPopoverOpen(false)}>
         <Popover.Content>
           <VStack gap={'2'} width={'400px'}>
             <BodyShort weight={'semibold'}>{category.name}</BodyShort>
@@ -183,11 +205,12 @@ const ChipsPopover = ({
                 Underkategorier:{' '}
                 {categories
                   .filter((cat) => category.subCategories.includes(cat.id))
-                  .map((val) => val.data.name)
+                  .map((val) => ' ' + val.data.name)
                   .toString()}
               </BodyShort>
             )}
             {category.isos.length > 0 && <BodyShort>Iso-er: {category.isos.toString()}</BodyShort>}
+            <BodyShort>Viser produkter: {category.showProducts ? 'Ja' : 'Nei'}</BodyShort>
           </VStack>
         </Popover.Content>
       </Popover>
