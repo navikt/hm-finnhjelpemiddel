@@ -1,7 +1,7 @@
 'use client'
 
 import { Chips, Switch, Textarea, TextField, UNSAFE_Combobox, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Category, CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import useSWR from 'swr'
 
@@ -17,22 +17,7 @@ export const EditableCategory = ({
   inputValue: Category
   setInputValue: (value: Category) => void
 }) => {
-  const { data: categories, isLoading, error } = useSWR<CategoryDTO[]>('categories', () => getCategories())
-
-  const options: Options[] =
-    categories?.map((category) => ({
-      label: category.data.name,
-      value: category.data.name,
-    })) ?? []
-
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([])
-
   const [isoFieldValue, setIsoFieldValue] = useState('')
-
-  const setSubCategories = (option: string[]) => {
-    setSelectedOptions(option)
-    setInputValue({ ...inputValue, subCategories: option })
-  }
 
   return (
     <VStack gap={'4'} maxWidth={'300px'}>
@@ -47,19 +32,7 @@ export const EditableCategory = ({
         onChange={(event) => setInputValue({ ...inputValue, description: event.currentTarget.value })}
       />
 
-      <UNSAFE_Combobox
-        label={'Underkategorier'}
-        isMultiSelect
-        shouldAutocomplete
-        isLoading={isLoading}
-        options={options}
-        selectedOptions={selectedOptions}
-        onToggleSelected={(option, isSelected) =>
-          isSelected
-            ? setSubCategories([...selectedOptions, option])
-            : setSubCategories(selectedOptions.filter((o) => o !== option))
-        }
-      />
+      <SubCategoriesModule inputValue={inputValue} setInputValue={setInputValue} />
 
       <div>
         <Chips>
@@ -97,5 +70,46 @@ export const EditableCategory = ({
         Vis produkter
       </Switch>
     </VStack>
+  )
+}
+
+const SubCategoriesModule = ({
+  inputValue,
+  setInputValue,
+}: {
+  inputValue: Category
+  setInputValue: (value: Category) => void
+}) => {
+  const { data: categories, isLoading, error } = useSWR<CategoryDTO[]>('categories', () => getCategories())
+
+  const options: Options[] =
+    categories?.map((category) => ({
+      label: category.data.name,
+      value: category.data.name,
+    })) ?? []
+
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(inputValue.subCategories ?? [])
+
+  const chipRef = useRef(null)
+
+  const setSubCategories = (selectedOptions: string[]) => {
+    setSelectedOptions(selectedOptions)
+    setInputValue({ ...inputValue, subCategories: selectedOptions })
+  }
+
+  return (
+    <UNSAFE_Combobox
+      label={'Underkategorier'}
+      isMultiSelect
+      shouldAutocomplete
+      isLoading={isLoading}
+      options={options}
+      selectedOptions={selectedOptions}
+      onToggleSelected={(option, isSelected) =>
+        isSelected
+          ? setSubCategories([...selectedOptions, option])
+          : setSubCategories(selectedOptions.filter((o) => o !== option))
+      }
+    />
   )
 }
