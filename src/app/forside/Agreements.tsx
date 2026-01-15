@@ -65,7 +65,10 @@ const Agreements = () => {
         <StarFillIcon aria-hidden height={20} width={20} color={'#ffb703'} />
       )
     } else {
-      showToast(`${label.title} er fjernet som favoritt`, <StarIcon aria-hidden height={20} width={20} />)
+      showToast(
+        `${label.title} er fjernet som favoritt`,
+        <StarFillIcon aria-hidden height={20} width={20} className={styles.favouriteIconNotMarked} />
+      )
     }
   }
 
