@@ -211,7 +211,7 @@ const AgreementRow = ({
           {isFavorite ? (
             <StarFillIcon aria-hidden height={32} width={32} className={styles.favouriteIconMarked} />
           ) : (
-            <StarIcon aria-hidden height={32} width={32} />
+            <StarFillIcon aria-hidden height={32} width={32} className={styles.favouriteIconNotMarked} />
           )}
         </button>
         <HStack align={'center'}>
