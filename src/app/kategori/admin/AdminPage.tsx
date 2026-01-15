@@ -15,7 +15,7 @@ export const AdminPage = () => {
 
   return (
     <VStack gap={'8'}>
-      <Heading size={'large'}>Kategori-admin</Heading>
+      <Heading size={'large'}>Kategori-admin 🤠</Heading>
       <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
         Ny kategori
       </Button>
