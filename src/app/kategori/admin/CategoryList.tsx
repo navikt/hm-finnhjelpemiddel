@@ -1,16 +1,35 @@
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { HGrid, Link, VStack } from '@navikt/ds-react'
+import { Box, Heading, HGrid, Link, Search, VStack } from '@navikt/ds-react'
 import styles from './CategoryList.module.scss'
 import NextLink from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
 export const CategoryList = ({ categories }: { categories: CategoryDTO[] }) => {
+  const [searchTerm, setSearchTerm] = useState<string>('')
+
+  const filteredCategories = categories.filter((category) => category.data.name.includes(searchTerm))
+
   return (
-    <VStack maxWidth={'400px'}>
-      {categories.map((category) => (
-        <CategoryCard category={category} key={category.id} />
-      ))}
-    </VStack>
+    <Box>
+      <Heading size={'medium'} spacing>
+        Alle kategorier
+      </Heading>
+      <VStack maxWidth={'400px'}>
+        <Search
+          label="Søk"
+          variant="simple"
+          clearButton={true}
+          placeholder="Søk etter kategorinavn"
+          size="medium"
+          value={searchTerm}
+          onChange={(value) => setSearchTerm(value)}
+          hideLabel={true}
+        />
+        {filteredCategories.map((category) => (
+          <CategoryCard category={category} key={category.id} />
+        ))}
+      </VStack>
+    </Box>
   )
 }
 

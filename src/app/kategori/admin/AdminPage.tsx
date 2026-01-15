@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyShort, Button, Loader, VStack } from '@navikt/ds-react'
+import { Button, Heading, Loader, VStack } from '@navikt/ds-react'
 import { CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import { CategoryList } from '@/app/kategori/admin/CategoryList'
 import NextLink from 'next/link'
@@ -14,13 +14,12 @@ export const AdminPage = () => {
   }
 
   return (
-    <VStack gap={'4'}>
-      <BodyShort>Kategori-admin</BodyShort>
+    <VStack gap={'8'}>
+      <Heading size={'large'}>Kategori-admin</Heading>
       <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
         Ny kategori
       </Button>
 
-      <BodyShort>Kategorier: {categories?.length}</BodyShort>
       <CategoryList categories={categories} />
     </VStack>
   )
