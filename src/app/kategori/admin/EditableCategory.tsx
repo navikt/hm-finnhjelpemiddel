@@ -83,7 +83,7 @@ export const EditableCategory = ({
           onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
-              setInputValue({ ...inputValue, isos: [...inputValue.isos, event.currentTarget.value] })
+              setInputValue({ ...inputValue, isos: [...(inputValue?.isos ?? []), event.currentTarget.value] })
               setIsoFieldValue('')
             }
           }}
