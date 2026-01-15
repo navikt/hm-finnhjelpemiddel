@@ -49,7 +49,7 @@ export const EditCategory = ({
 
       <Heading size={'large'}>Rediger kategori</Heading>
 
-      <EditableCategory inputValue={inputValue} setInputValue={setInputValue} />
+      <EditableCategory inputValue={inputValue} setInputValue={setInputValue} id={categoryDTO.id} />
 
       <HStack gap={'6'}>
         <Button

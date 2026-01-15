@@ -13,9 +13,11 @@ type Options = {
 export const EditableCategory = ({
   inputValue,
   setInputValue,
+  id,
 }: {
   inputValue: Category
   setInputValue: (value: Category) => void
+  id?: string
 }) => {
   const [isoFieldValue, setIsoFieldValue] = useState('')
 
@@ -32,7 +34,7 @@ export const EditableCategory = ({
         onChange={(event) => setInputValue({ ...inputValue, description: event.currentTarget.value })}
       />
 
-      <SubCategoriesModule inputValue={inputValue} setInputValue={setInputValue} />
+      <SubCategoriesModule inputValue={inputValue} setInputValue={setInputValue} id={id} />
 
       <div>
         <Chips>
@@ -76,17 +78,21 @@ export const EditableCategory = ({
 const SubCategoriesModule = ({
   inputValue,
   setInputValue,
+  id = '',
 }: {
   inputValue: Category
   setInputValue: (value: Category) => void
+  id?: string
 }) => {
   const { data: categories, isLoading, error } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   const options: Options[] =
-    categories?.map((category) => ({
-      label: category.data.name,
-      value: category.data.name,
-    })) ?? []
+    categories
+      ?.filter((category) => category.id != id)
+      .map((category) => ({
+        label: category.data.name,
+        value: category.data.name,
+      })) ?? []
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(inputValue.subCategories ?? [])
 
