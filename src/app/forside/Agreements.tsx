@@ -150,7 +150,7 @@ const Agreements = () => {
                       label={label}
                       key={`other-${label.id}`}
                       isFavorite={isFavorite(label.id)}
-                      onToggleFavorite={() => handleToggleFavorite(label, false)}
+                      onToggleFavorite={() => handleToggleFavorite(label, isFavorite(label.id))}
                     />
                   ))}
                   {all.length === 0 && (
@@ -166,7 +166,7 @@ const Agreements = () => {
                       label={label}
                       key={`other-${label.id}`}
                       isFavorite={isFavorite(label.id)}
-                      onToggleFavorite={() => handleToggleFavorite(label, false)}
+                      onToggleFavorite={() => handleToggleFavorite(label, isFavorite(label.id))}
                     />
                   ))}
                   {all.length === 0 && (
