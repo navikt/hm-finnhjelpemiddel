@@ -1,6 +1,16 @@
 'use client'
 
-import { Chips, Skeleton, Switch, Textarea, TextField, UNSAFE_Combobox, VStack } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Chips,
+  Popover,
+  Skeleton,
+  Switch,
+  Textarea,
+  TextField,
+  UNSAFE_Combobox,
+  VStack,
+} from '@navikt/ds-react'
 import { useRef, useState } from 'react'
 import { Category, CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import useSWR from 'swr'
@@ -36,7 +46,18 @@ export const EditableCategory = ({
         <SubCategoriesModule categories={categories} inputValue={inputValue} setInputValue={setInputValue} id={id} />
       )}
 
-      <div>
+      <VStack gap={'2'}>
+        <TextField
+          label={'ISO-er'}
+          value={isoFieldValue}
+          onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              setInputValue({ ...inputValue, isos: [...(inputValue?.isos ?? []), event.currentTarget.value] })
+              setIsoFieldValue('')
+            }
+          }}
+        />
         <Chips>
           {inputValue.isos?.map((iso) => (
             <Chips.Removable
@@ -52,18 +73,7 @@ export const EditableCategory = ({
             </Chips.Removable>
           ))}
         </Chips>
-        <TextField
-          label={'ISO-er'}
-          value={isoFieldValue}
-          onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              setInputValue({ ...inputValue, isos: [...(inputValue?.isos ?? []), event.currentTarget.value] })
-              setIsoFieldValue('')
-            }
-          }}
-        />
-      </div>
+      </VStack>
 
       <Switch
         checked={inputValue.showProducts}
@@ -103,8 +113,6 @@ const SubCategoriesModule = ({
     options.filter((option) => inputValue.subCategories.includes(option.value))
   )
 
-  const chipRef = useRef(null)
-
   const addSubCategory = (optionValue: string) => {
     const newSelected = [...selectedOptions, options.filter((option) => option.value === optionValue)[0]]
     setSelectedOptions(newSelected)
@@ -117,13 +125,72 @@ const SubCategoriesModule = ({
   }
 
   return (
-    <UNSAFE_Combobox
-      label={'Underkategorier'}
-      isMultiSelect
-      shouldAutocomplete
-      options={options}
-      selectedOptions={selectedOptions}
-      onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
-    />
+    <VStack gap={'2'}>
+      <UNSAFE_Combobox
+        label={'Underkategorier'}
+        isMultiSelect
+        shouldAutocomplete
+        shouldShowSelectedOptions={false}
+        options={options}
+        selectedOptions={selectedOptions}
+        onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
+      />
+      <Chips>
+        {selectedOptions?.map((option) => (
+          <ChipsPopover
+            key={option.value + '-chip'}
+            option={option}
+            removeSubCategory={removeSubCategory}
+            categories={categories}
+          />
+        ))}
+      </Chips>
+    </VStack>
+  )
+}
+
+const ChipsPopover = ({
+  option,
+  removeSubCategory,
+  categories,
+}: {
+  option: Options
+  removeSubCategory: (val: string) => void
+  categories: CategoryDTO[]
+}) => {
+  const chipRef = useRef<HTMLButtonElement>(null)
+  const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
+  const category = categories.find((cat) => cat.id === option.value)!.data
+  return (
+    <>
+      <Chips.Removable
+        ref={chipRef}
+        onClick={() => {
+          removeSubCategory(option.value)
+        }}
+        onMouseOver={() => setPopoverOpen(true)}
+        onMouseLeave={() => setPopoverOpen(false)}
+      >
+        {option.label}
+      </Chips.Removable>
+      <Popover anchorEl={chipRef.current} open={popoverOpen} onClose={() => setPopoverOpen(false)}>
+        <Popover.Content>
+          <VStack gap={'2'} width={'400px'}>
+            <BodyShort weight={'semibold'}>{category.name}</BodyShort>
+            <BodyShort>{category.description}</BodyShort>
+            {category.subCategories.length > 0 && (
+              <BodyShort>
+                Underkategorier:{' '}
+                {categories
+                  .filter((cat) => category.subCategories.includes(cat.id))
+                  .map((val) => val.data.name)
+                  .toString()}
+              </BodyShort>
+            )}
+            {category.isos.length > 0 && <BodyShort>Iso-er: {category.isos.toString()}</BodyShort>}
+          </VStack>
+        </Popover.Content>
+      </Popover>
+    </>
   )
 }
