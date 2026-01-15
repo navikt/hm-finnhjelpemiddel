@@ -39,6 +39,7 @@ export const EditCategory = ({
   const router = useRouter()
   const [inputValue, setInputValue] = useState<Category>(categoryDTO.data)
   const [saved, setSaved] = useState<boolean>(false)
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false)
 
   return (
     <VStack gap={'2'}>
@@ -53,15 +54,20 @@ export const EditCategory = ({
 
       <HStack gap={'6'}>
         <Button
-          variant={'danger'}
-          style={{ width: 'fit-content' }}
-          onClick={() => deleteCategory(categoryDTO.id).then(() => router.push('/kategori/admin'))}
+          variant={confirmDelete ? 'danger' : 'secondary'}
+          className={styles.deleteButton}
+          onBlur={() => setConfirmDelete(false)}
+          onClick={() =>
+            confirmDelete
+              ? deleteCategory(categoryDTO.id).then(() => router.push('/kategori/admin'))
+              : setConfirmDelete(true)
+          }
         >
-          Slett
+          {confirmDelete ? 'Bekreft' : 'Slett'}
         </Button>
         <Button
           className={saved ? styles.buttonSaved : styles.button}
-          onBlur={() => setSaved((prev) => !prev)}
+          onBlur={() => setSaved(false)}
           onClick={() =>
             saved
               ? setSaved(false)
