@@ -414,8 +414,7 @@ export const kjøreposerOgRegntøy: Kategori = {
 
 export const posisjonering: Kategori = {
   navn: 'Posisjonering',
-  beskrivelse:
-    'Hjelpemidler som brukes sammen med, eller for å oppbevare ganghjelpemidler, som for eksempel krykkeholdere og krykkebelter.',
+  beskrivelse: '',
   underkategorier: [],
   isoer: ['0907'],
   visProdukter: true,
