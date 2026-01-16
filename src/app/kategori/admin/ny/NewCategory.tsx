@@ -21,6 +21,7 @@ export const NewCategory = () => {
 
   const onSave = () => {
     return createCategory({
+      title: inputValue.name,
       data: inputValue,
     })
   }

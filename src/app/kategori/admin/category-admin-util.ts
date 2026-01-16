@@ -16,6 +16,7 @@ export type CategoryDTO = {
 }
 
 export type CreateCategoryDTO = {
+  title: string
   data: Category
 }
 
