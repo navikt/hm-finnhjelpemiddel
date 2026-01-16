@@ -8,7 +8,7 @@ async function CategoryAdminLayout({ children }: { children: React.ReactNode }) 
       paddingInline={'4'}
       marginInline={'auto'}
       marginBlock={'0'}
-      maxWidth={'900px'}
+      maxWidth={'1280px'}
     >
       {children}
     </VStack>
