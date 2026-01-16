@@ -39,6 +39,8 @@ import {
   løfteplattformer,
   heiser,
   ramperOgHeiserOgLøfteplattformer,
+  kjøreposerOgRegntøy,
+  posisjonering,
 } from '@/app/kategori/utils/mappings/kategori-bevegelse-mapping'
 
 export type KategoriNavn = KategoriBevegelseNavn | 'Alle' | 'Bevegelse'
@@ -65,6 +67,8 @@ export const alle: Kategori = {
 }
 
 export const kategorier: Kategorier = {
+  'Kjøreposer og regntøy': kjøreposerOgRegntøy,
+  Posisjonering: posisjonering,
   'Ramper, heiser og løfteplattformer': ramperOgHeiserOgLøfteplattformer,
   Heiser: heiser,
   Løfteplattformer: løfteplattformer,

@@ -42,6 +42,8 @@ export type KategoriBevegelseNavn =
   | 'Gåstoler'
   | 'Gåbord'
   | 'Tilleggsutstyr til ganghjelpemidler'
+  | 'Kjøreposer og regntøy'
+  | 'Posisjonering'
 
 export const bevegelse: Kategori = {
   navn: 'Bevegelse',
@@ -55,6 +57,8 @@ export const bevegelse: Kategori = {
     'Kjelker og akebrett',
     'Vogner',
     'Bilseter og bilutstyr',
+    'Kjøreposer og regntøy',
+    'Posisjonering',
   ],
   isoer: [],
   visProdukter: false,
@@ -397,5 +401,22 @@ export const tilleggsutstyrTilGanghjelpemidler: Kategori = {
     'Hjelpemidler som brukes sammen med, eller for å oppbevare ganghjelpemidler, som for eksempel krykkeholdere og krykkebelter.',
   underkategorier: [],
   isoer: ['1207'],
+  visProdukter: true,
+}
+
+export const kjøreposerOgRegntøy: Kategori = {
+  navn: 'Kjøreposer og regntøy',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['090305'],
+  visProdukter: true,
+}
+
+export const posisjonering: Kategori = {
+  navn: 'Posisjonering',
+  beskrivelse:
+    'Hjelpemidler som brukes sammen med, eller for å oppbevare ganghjelpemidler, som for eksempel krykkeholdere og krykkebelter.',
+  underkategorier: [],
+  isoer: ['0907'],
   visProdukter: true,
 }
