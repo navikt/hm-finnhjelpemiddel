@@ -14,6 +14,10 @@
   color: #ffb703; // yellow for marked favourite
 }
 
+.favouriteIconNotMarked {
+  color: #b0b0b0; // grey for not marked favourite
+}
+
 .separatorRow {
   list-style: none;
   grid-column: 1 / -1; // span all columns in grid view
