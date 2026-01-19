@@ -3,19 +3,19 @@ import { CustomError, fetcherModify } from '@/utils/api-util'
 const HM_FINNHJELPEMIDDEL_BFF_URL = process.env.HM_FINNHJELPEMIDDEL_BFF_URL || ''
 
 export type Category = {
-  name: string
-  description: string
-  subCategories: string[]
-  isos: string[]
-  showProducts: boolean
+  description: string | undefined
+  subCategories: string[] | undefined
+  isos: string[] | undefined
+  showProducts: boolean | undefined
 }
 
 export type CategoryDTO = {
   id: string
+  title: string
   data: Category
 }
 
-export type CreateCategoryDTO = {
+export type EditableCategoryDTO = {
   title: string
   data: Category
 }
@@ -50,11 +50,11 @@ export async function getCategory(id: string): Promise<CategoryDTO> {
   return res.json()
 }
 
-export async function createCategory(category: CreateCategoryDTO): Promise<void> {
+export async function createCategory(category: EditableCategoryDTO): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, 'POST', category)
 }
 
-export async function updateCategory(category: CategoryDTO): Promise<void> {
+export async function updateCategory(category: EditableCategoryDTO): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, 'PUT', category)
 }
 

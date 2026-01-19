@@ -8,8 +8,8 @@ export const CategoryList = ({ categories }: { categories: CategoryDTO[] }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   const filteredCategories = categories
-    .filter((category) => category.data.name.includes(searchTerm))
-    .sort((a, b) => a.data.name.localeCompare(b.data.name))
+    .filter((category) => category.title.includes(searchTerm))
+    .sort((a, b) => a.title.localeCompare(b.title))
 
   return (
     <Box>
@@ -39,7 +39,7 @@ const CategoryCard = ({ category }: { category: CategoryDTO }) => {
   return (
     <HGrid className={styles.categoryCard}>
       <Link as={NextLink} href={`admin/${category.id}`}>
-        {category.data.name}
+        {category.title}
       </Link>
     </HGrid>
   )

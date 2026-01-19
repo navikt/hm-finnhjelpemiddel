@@ -1,9 +1,8 @@
 'use client'
 
 import {
-  Category,
-  CategoryDTO,
   deleteCategory,
+  EditableCategoryDTO,
   getCategory,
   updateCategory,
 } from '@/app/kategori/admin/category-admin-util'
@@ -18,7 +17,12 @@ import useSWRImmutable from 'swr/immutable'
 import { KeyedMutator } from 'swr'
 
 export const EditCategoryPage = ({ id }: { id: string }) => {
-  const { data: categoryDTO, mutate, isLoading, error } = useSWRImmutable<CategoryDTO>(id, () => getCategory(id))
+  const {
+    data: categoryDTO,
+    mutate,
+    isLoading,
+    error,
+  } = useSWRImmutable<EditableCategoryDTO>(id, () => getCategory(id))
 
   if (error) {
     return <Alert variant={'error'}>Det har skjedd en feil ved henting av kategorien</Alert>
@@ -26,18 +30,20 @@ export const EditCategoryPage = ({ id }: { id: string }) => {
   if (isLoading || !categoryDTO) {
     return <Loader size="small" />
   }
-  return <EditCategory categoryDTO={categoryDTO} mutate={mutate} />
+  return <EditCategory categoryDTO={categoryDTO} mutate={mutate} id={id} />
 }
 
 export const EditCategory = ({
   categoryDTO,
+  id,
   mutate,
 }: {
-  categoryDTO: CategoryDTO
-  mutate: KeyedMutator<CategoryDTO>
+  categoryDTO: EditableCategoryDTO
+  id: string
+  mutate: KeyedMutator<EditableCategoryDTO>
 }) => {
   const router = useRouter()
-  const [inputValue, setInputValue] = useState<Category>(categoryDTO.data)
+  const [inputValue, setInputValue] = useState<EditableCategoryDTO>(categoryDTO)
   const [saved, setSaved] = useState<boolean>(false)
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false)
 
@@ -50,7 +56,7 @@ export const EditCategory = ({
 
       <Heading size={'large'}>Rediger kategori</Heading>
 
-      <EditableCategory inputValue={inputValue} setInputValue={setInputValue} id={categoryDTO.id} />
+      <EditableCategory inputValue={inputValue} setInputValue={setInputValue} id={id} />
 
       <HStack gap={'6'}>
         <Button
@@ -58,9 +64,7 @@ export const EditCategory = ({
           className={styles.deleteButton}
           onBlur={() => setConfirmDelete(false)}
           onClick={() =>
-            confirmDelete
-              ? deleteCategory(categoryDTO.id).then(() => router.push('/kategori/admin'))
-              : setConfirmDelete(true)
+            confirmDelete ? deleteCategory(id).then(() => router.push('/kategori/admin')) : setConfirmDelete(true)
           }
         >
           {confirmDelete ? 'Bekreft' : 'Slett'}
@@ -71,8 +75,8 @@ export const EditCategory = ({
           onClick={() =>
             saved
               ? setSaved(false)
-              : updateCategory({ ...categoryDTO, data: inputValue })
-                  .then(() => mutate({ ...categoryDTO, data: inputValue }))
+              : updateCategory(inputValue)
+                  .then(() => mutate(inputValue))
                   .finally(() => setSaved(true))
           }
         >

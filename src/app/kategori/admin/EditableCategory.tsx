@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@navikt/ds-react'
 import { useRef, useState } from 'react'
-import { Category, CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
+import { CategoryDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import { XMarkIcon } from '@navikt/aksel-icons'
@@ -26,8 +26,8 @@ export const EditableCategory = ({
   setInputValue,
   id,
 }: {
-  inputValue: Category
-  setInputValue: (value: Category) => void
+  inputValue: EditableCategoryDTO
+  setInputValue: (value: EditableCategoryDTO) => void
   id?: string
 }) => {
   const [isoFieldValue, setIsoFieldValue] = useState('')
@@ -37,13 +37,15 @@ export const EditableCategory = ({
     <VStack gap={'4'} maxWidth={'300px'}>
       <TextField
         label="Tittel"
-        defaultValue={inputValue.name}
-        onChange={(event) => setInputValue({ ...inputValue, name: event.currentTarget.value })}
+        defaultValue={inputValue.title}
+        onChange={(event) => setInputValue({ ...inputValue, title: event.currentTarget.value })}
       />
       <Textarea
         label={'Beskrivelse'}
-        defaultValue={inputValue.description}
-        onChange={(event) => setInputValue({ ...inputValue, description: event.currentTarget.value })}
+        defaultValue={inputValue.data.description}
+        onChange={(event) =>
+          setInputValue({ ...inputValue, data: { ...inputValue.data, description: event.currentTarget.value } })
+        }
       />
 
       {isLoading || !categories ? (
@@ -59,19 +61,25 @@ export const EditableCategory = ({
           onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
-              setInputValue({ ...inputValue, isos: [...(inputValue?.isos ?? []), event.currentTarget.value] })
+              setInputValue({
+                ...inputValue,
+                data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), event.currentTarget.value] },
+              })
               setIsoFieldValue('')
             }
           }}
         />
         <Chips>
-          {inputValue.isos?.map((iso) => (
+          {inputValue.data.isos?.map((iso) => (
             <Chips.Removable
               key={iso + '-chip'}
               onClick={(event) =>
                 setInputValue({
                   ...inputValue,
-                  isos: [...inputValue.isos.filter((iso) => iso === event.currentTarget.value)],
+                  data: {
+                    ...inputValue.data,
+                    isos: [...(inputValue.data.isos ?? []).filter((iso) => iso === event.currentTarget.value)],
+                  },
                 })
               }
             >
@@ -82,8 +90,10 @@ export const EditableCategory = ({
       </VStack>
 
       <Switch
-        checked={inputValue.showProducts}
-        onChange={(event) => setInputValue({ ...inputValue, showProducts: event.currentTarget.checked })}
+        checked={inputValue.data.showProducts}
+        onChange={(event) =>
+          setInputValue({ ...inputValue, data: { ...inputValue.data, showProducts: event.currentTarget.checked } })
+        }
       >
         Vis produkter
       </Switch>
@@ -103,31 +113,37 @@ const SubCategoriesModule = ({
   id = '',
 }: {
   categories: CategoryDTO[]
-  inputValue: Category
-  setInputValue: (value: Category) => void
+  inputValue: EditableCategoryDTO
+  setInputValue: (value: EditableCategoryDTO) => void
   id?: string
 }) => {
   const options: Options[] =
     categories
       ?.filter((category) => category.id != id)
       .map((category) => ({
-        label: category.data.name,
+        label: category.title,
         value: category.id,
       })) ?? []
 
   const [selectedOptions, setSelectedOptions] = useState<Options[]>(
-    options.filter((option) => inputValue.subCategories.includes(option.value))
+    options.filter((option) => inputValue.data.subCategories?.includes(option.value))
   )
 
   const addSubCategory = (optionValue: string) => {
     const newSelected = [...selectedOptions, options.filter((option) => option.value === optionValue)[0]]
     setSelectedOptions(newSelected)
-    setInputValue({ ...inputValue, subCategories: newSelected.flatMap((option) => option.value) })
+    setInputValue({
+      ...inputValue,
+      data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
+    })
   }
   const removeSubCategory = (optionValue: string) => {
     const newSelected = selectedOptions.filter((o) => o.value !== optionValue)
     setSelectedOptions(newSelected)
-    setInputValue({ ...inputValue, subCategories: newSelected.flatMap((option) => option.value) })
+    setInputValue({
+      ...inputValue,
+      data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
+    })
   }
 
   return (
@@ -166,7 +182,7 @@ const ChipsPopover = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
-  const category = categories.find((cat) => cat.id === option.value)!.data
+  const category = categories.find((cat) => cat.id === option.value)
   return (
     <>
       <Box
@@ -198,19 +214,21 @@ const ChipsPopover = ({
       <Popover anchorEl={ref.current} open={popoverOpen} onClose={() => setPopoverOpen(false)}>
         <Popover.Content>
           <VStack gap={'2'} width={'400px'}>
-            <BodyShort weight={'semibold'}>{category.name}</BodyShort>
-            <BodyShort>{category.description}</BodyShort>
-            {category.subCategories.length > 0 && (
+            <BodyShort weight={'semibold'}>{category?.title}</BodyShort>
+            <BodyShort>{category?.data.description}</BodyShort>
+            {category?.data.subCategories && category?.data.subCategories.length > 0 && (
               <BodyShort>
                 Underkategorier:{' '}
                 {categories
-                  .filter((cat) => category.subCategories.includes(cat.id))
-                  .map((val) => ' ' + val.data.name)
+                  .filter((cat) => category.data.subCategories?.includes(cat.id))
+                  .map((val) => ' ' + val.title)
                   .toString()}
               </BodyShort>
             )}
-            {category.isos.length > 0 && <BodyShort>Iso-er: {category.isos.toString()}</BodyShort>}
-            <BodyShort>Viser produkter: {category.showProducts ? 'Ja' : 'Nei'}</BodyShort>
+            {category?.data.isos && category?.data.isos.length > 0 && (
+              <BodyShort>Iso-er: {category.data.isos.toString()}</BodyShort>
+            )}
+            <BodyShort>Viser produkter: {category?.data.showProducts ? 'Ja' : 'Nei'}</BodyShort>
           </VStack>
         </Popover.Content>
       </Popover>

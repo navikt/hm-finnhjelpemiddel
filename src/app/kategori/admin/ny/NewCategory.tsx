@@ -2,7 +2,7 @@
 
 import { Button, Heading, Link, VStack } from '@navikt/ds-react'
 import { useState } from 'react'
-import { Category, createCategory } from '@/app/kategori/admin/category-admin-util'
+import { createCategory, EditableCategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { useRouter } from 'next/navigation'
 import { EditableCategory } from '@/app/kategori/admin/EditableCategory'
 import NextLink from 'next/link'
@@ -11,19 +11,18 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons'
 export const NewCategory = () => {
   const router = useRouter()
 
-  const [inputValue, setInputValue] = useState<Category>({
-    name: '',
-    description: '',
-    subCategories: [],
-    isos: [],
-    showProducts: false,
+  const [inputValue, setInputValue] = useState<EditableCategoryDTO>({
+    title: '',
+    data: {
+      description: '',
+      subCategories: [],
+      isos: [],
+      showProducts: false,
+    },
   })
 
   const onSave = () => {
-    return createCategory({
-      title: inputValue.name,
-      data: inputValue,
-    })
+    return createCategory(inputValue)
   }
 
   return (
