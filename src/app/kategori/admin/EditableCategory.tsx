@@ -34,14 +34,16 @@ export const EditableCategory = ({
   const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   return (
-    <VStack gap={'4'} maxWidth={'400px'} style={{ display: 'flex' }}>
+    <VStack gap={'4'} style={{ display: 'flex' }}>
       <TextField
         label="Tittel"
+        style={{ width: '400px' }}
         defaultValue={inputValue.title}
         onChange={(event) => setInputValue({ ...inputValue, title: event.currentTarget.value })}
       />
       <Textarea
         label={'Beskrivelse'}
+        style={{ width: '400px' }}
         defaultValue={inputValue.data.description}
         onChange={(event) =>
           setInputValue({ ...inputValue, data: { ...inputValue.data, description: event.currentTarget.value } })
@@ -56,24 +58,32 @@ export const EditableCategory = ({
 
       <IsoModule inputValue={inputValue} setInputValue={setInputValue} />
 
-      <Textarea
-        label={'Ikon-svg'}
-        maxRows={5}
-        UNSAFE_autoScrollbar
-        defaultValue={inputValue.data.ikon}
-        onChange={(event) =>
-          setInputValue({ ...inputValue, data: { ...inputValue.data, ikon: event.currentTarget.value } })
-        }
-      />
-
-      {inputValue.data.ikon && inputValue.data.ikon?.length > 0 && (
-        <Image
-          width={50}
-          height={50}
-          alt={'ikon'}
-          src={`data:image/svg+xml;utf8,${encodeURIComponent(inputValue.data.ikon)}`}
+      <HStack gap={'4'}>
+        <Textarea
+          label={'Ikon-svg'}
+          maxRows={5}
+          style={{ width: '400px' }}
+          UNSAFE_autoScrollbar
+          defaultValue={inputValue.data.ikon}
+          onChange={(event) =>
+            setInputValue({ ...inputValue, data: { ...inputValue.data, ikon: event.currentTarget.value } })
+          }
         />
-      )}
+
+        {inputValue.data.ikon && inputValue.data.ikon?.length > 0 && (
+          <VStack>
+            <BodyShort weight={'semibold'}>Ikon:</BodyShort>
+            {
+              <Image
+                width={50}
+                height={50}
+                alt={'ikon'}
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(inputValue.data.ikon)}`}
+              />
+            }
+          </VStack>
+        )}
+      </HStack>
 
       <Switch
         checked={inputValue.data.showProducts}
@@ -202,7 +212,7 @@ const SubCategoriesModule = ({
   }
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={'2'} maxWidth={'400px'}>
       <UNSAFE_Combobox
         label={'Underkategorier'}
         isMultiSelect
