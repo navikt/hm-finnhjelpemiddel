@@ -12,7 +12,7 @@ export const KategoriOversikt = ({ kategori }: { kategori: KategoriNavn }) => {
     <KategoriPageLayout title={kategorier[kategori].navn} description={kategorier[kategori].beskrivelse}>
       <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
         <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'12 24'}>
-          {kategorier[kategori].underkategorier.map((iso) => (
+          {kategorier[kategori].underkategorier.sort().map((iso) => (
             <CategoryCard
               icon={kategorier[iso].ikon}
               title={kategorier[iso].navn}
