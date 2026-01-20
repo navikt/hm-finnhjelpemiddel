@@ -99,12 +99,12 @@ const IsoModule = ({
         {inputValue.data.isos?.map((iso) => (
           <Chips.Removable
             key={iso + '-chip'}
-            onClick={(event) =>
+            onClick={() =>
               setInputValue({
                 ...inputValue,
                 data: {
                   ...inputValue.data,
-                  isos: [...(inputValue.data.isos ?? []).filter((iso) => iso === event.currentTarget.value)],
+                  isos: [...(inputValue.data.isos ?? []).filter((i) => i != iso)],
                 },
               })
             }
