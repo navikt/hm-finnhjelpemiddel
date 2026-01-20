@@ -45,6 +45,7 @@ export type KategoriBevegelseNavn =
   | 'Kjøreposer og regntøy'
   | 'Posisjonering'
   | 'Stå og gå'
+  | 'Trening'
 
 export const bevegelse: Kategori = {
   navn: 'Bevegelse',
@@ -60,6 +61,7 @@ export const bevegelse: Kategori = {
     'Bilseter og bilutstyr',
     'Kjøreposer og regntøy',
     'Posisjonering',
+    'Trening',
   ],
   isoer: [],
   visProdukter: false,
@@ -424,6 +426,13 @@ export const posisjonering: Kategori = {
 
 export const ståOgGå: Kategori = {
   navn: 'Stå og gå',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['04481503'],
+  visProdukter: true,
+}
+export const trening: Kategori = {
+  navn: 'Trening',
   beskrivelse: '',
   underkategorier: [],
   isoer: ['04481501'],
