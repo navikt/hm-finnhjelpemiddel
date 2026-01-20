@@ -435,6 +435,6 @@ export const trening: Kategori = {
   navn: 'Trening',
   beskrivelse: '',
   underkategorier: [],
-  isoer: ['04481501'],
+  isoer: ['04481501', '04482702'],
   visProdukter: true,
 }
