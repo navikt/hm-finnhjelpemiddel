@@ -81,14 +81,17 @@ const IsoModule = ({
       <TextField
         label={'ISO-er'}
         value={isoFieldValue}
+        style={{ width: '100px' }}
         onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
-            setInputValue({
-              ...inputValue,
-              data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), event.currentTarget.value] },
-            })
-            setIsoFieldValue('')
+            if (event.currentTarget.value != '') {
+              setInputValue({
+                ...inputValue,
+                data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), event.currentTarget.value] },
+              })
+              setIsoFieldValue('')
+            }
           }
         }}
       />
