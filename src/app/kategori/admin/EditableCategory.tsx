@@ -75,8 +75,8 @@ export const EditableCategory = ({
             <BodyShort weight={'semibold'}>Ikon:</BodyShort>
             {
               <Image
-                width={50}
-                height={50}
+                width={60}
+                height={60}
                 alt={'ikon'}
                 src={`data:image/svg+xml;utf8,${encodeURIComponent(inputValue.data.ikon)}`}
               />
