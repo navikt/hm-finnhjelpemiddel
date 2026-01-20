@@ -120,6 +120,19 @@ const SubCategoriesModule = ({
   const options: Options[] =
     categories
       ?.filter((category) => category.id != id)
+      ?.sort((a, b) => {
+        console.log(inputValue.data.subCategories)
+        if (inputValue.data.subCategories?.includes(a.id) && !inputValue.data.subCategories?.includes(b.id)) {
+          return -1
+        }
+
+        if (!inputValue.data.subCategories?.includes(a.id) && inputValue.data.subCategories?.includes(b.id)) {
+          return 1
+        }
+
+        return a.title.localeCompare(b.title)
+      })
+
       .map((category) => ({
         label: category.title,
         value: category.id,
