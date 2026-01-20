@@ -20,6 +20,7 @@ import { CategoryDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
+import Image from 'next/image'
 
 export const EditableCategory = ({
   inputValue,
@@ -33,7 +34,7 @@ export const EditableCategory = ({
   const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   return (
-    <VStack gap={'4'} maxWidth={'400px'}>
+    <VStack gap={'4'} maxWidth={'400px'} style={{ display: 'flex' }}>
       <TextField
         label="Tittel"
         defaultValue={inputValue.title}
@@ -54,6 +55,25 @@ export const EditableCategory = ({
       )}
 
       <IsoModule inputValue={inputValue} setInputValue={setInputValue} />
+
+      <Textarea
+        label={'Ikon-svg'}
+        maxRows={5}
+        UNSAFE_autoScrollbar
+        defaultValue={inputValue.data.ikon}
+        onChange={(event) =>
+          setInputValue({ ...inputValue, data: { ...inputValue.data, ikon: event.currentTarget.value } })
+        }
+      />
+
+      {inputValue.data.ikon && inputValue.data.ikon?.length > 0 && (
+        <Image
+          width={50}
+          height={50}
+          alt={'ikon'}
+          src={`data:image/svg+xml;utf8,${encodeURIComponent(inputValue.data.ikon)}`}
+        />
+      )}
 
       <Switch
         checked={inputValue.data.showProducts}
@@ -144,7 +164,6 @@ const SubCategoriesModule = ({
     categories
       ?.filter((category) => category.id != id)
       ?.sort((a, b) => {
-        console.log(inputValue.data.subCategories)
         if (inputValue.data.subCategories?.includes(a.id) && !inputValue.data.subCategories?.includes(b.id)) {
           return -1
         }
