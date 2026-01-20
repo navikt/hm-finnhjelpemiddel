@@ -30,7 +30,6 @@ export const EditableCategory = ({
   setInputValue: (value: EditableCategoryDTO) => void
   id?: string
 }) => {
-  const [isoFieldValue, setIsoFieldValue] = useState('')
   const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   return (
@@ -54,40 +53,7 @@ export const EditableCategory = ({
         <SubCategoriesModule categories={categories} inputValue={inputValue} setInputValue={setInputValue} id={id} />
       )}
 
-      <VStack gap={'2'}>
-        <TextField
-          label={'ISO-er'}
-          value={isoFieldValue}
-          onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              setInputValue({
-                ...inputValue,
-                data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), event.currentTarget.value] },
-              })
-              setIsoFieldValue('')
-            }
-          }}
-        />
-        <Chips>
-          {inputValue.data.isos?.map((iso) => (
-            <Chips.Removable
-              key={iso + '-chip'}
-              onClick={(event) =>
-                setInputValue({
-                  ...inputValue,
-                  data: {
-                    ...inputValue.data,
-                    isos: [...(inputValue.data.isos ?? []).filter((iso) => iso === event.currentTarget.value)],
-                  },
-                })
-              }
-            >
-              {iso}
-            </Chips.Removable>
-          ))}
-        </Chips>
-      </VStack>
+      <IsoModule inputValue={inputValue} setInputValue={setInputValue} />
 
       <Switch
         checked={inputValue.data.showProducts}
@@ -97,6 +63,53 @@ export const EditableCategory = ({
       >
         Vis produkter
       </Switch>
+    </VStack>
+  )
+}
+
+const IsoModule = ({
+  inputValue,
+  setInputValue,
+}: {
+  inputValue: EditableCategoryDTO
+  setInputValue: (value: EditableCategoryDTO) => void
+}) => {
+  const [isoFieldValue, setIsoFieldValue] = useState('')
+
+  return (
+    <VStack gap={'2'}>
+      <TextField
+        label={'ISO-er'}
+        value={isoFieldValue}
+        onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            setInputValue({
+              ...inputValue,
+              data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), event.currentTarget.value] },
+            })
+            setIsoFieldValue('')
+          }
+        }}
+      />
+      <Chips>
+        {inputValue.data.isos?.map((iso) => (
+          <Chips.Removable
+            key={iso + '-chip'}
+            onClick={(event) =>
+              setInputValue({
+                ...inputValue,
+                data: {
+                  ...inputValue.data,
+                  isos: [...(inputValue.data.isos ?? []).filter((iso) => iso === event.currentTarget.value)],
+                },
+              })
+            }
+          >
+            {iso}
+          </Chips.Removable>
+        ))}
+      </Chips>
     </VStack>
   )
 }
