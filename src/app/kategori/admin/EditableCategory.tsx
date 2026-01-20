@@ -31,10 +31,10 @@ export const EditableCategory = ({
   id?: string
 }) => {
   const [isoFieldValue, setIsoFieldValue] = useState('')
-  const { data: categories, isLoading, error } = useSWR<CategoryDTO[]>('categories', () => getCategories())
+  const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   return (
-    <VStack gap={'4'} maxWidth={'300px'}>
+    <VStack gap={'4'} maxWidth={'400px'}>
       <TextField
         label="Tittel"
         defaultValue={inputValue.title}
