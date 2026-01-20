@@ -40,6 +40,7 @@ import {
   tohjulssykler,
   trappeklatrere,
   trehjulssykler,
+  trening,
   utstyrTilRullestoler,
   vogner,
 } from '@/app/kategori/utils/mappings/kategori-bevegelse-mapping'
@@ -110,4 +111,5 @@ export const kategorier: Kategorier = {
   Rullestoler: rullestoler,
   'Manuelle rullestoler': manuelleRullestoler,
   'Stå og gå': ståOgGå,
+  Trening: trening,
 }
