@@ -19,7 +19,7 @@ import { useRef, useState } from 'react'
 import { CategoryDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
-import { XMarkIcon } from '@navikt/aksel-icons'
+import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
 
 export const EditableCategory = ({
   inputValue,
@@ -76,25 +76,32 @@ const IsoModule = ({
 }) => {
   const [isoFieldValue, setIsoFieldValue] = useState('')
 
+  const addIso = () => {
+    if (isoFieldValue != '') {
+      setInputValue({
+        ...inputValue,
+        data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), isoFieldValue] },
+      })
+      setIsoFieldValue('')
+    }
+  }
+
   return (
     <VStack gap={'2'}>
-      <TextField
-        label={'ISO-er'}
-        value={isoFieldValue}
-        style={{ width: '100px' }}
-        onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter') {
-            if (event.currentTarget.value != '') {
-              setInputValue({
-                ...inputValue,
-                data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), event.currentTarget.value] },
-              })
-              setIsoFieldValue('')
+      <HStack gap={'1'} align={'end'}>
+        <TextField
+          label={'ISO-er'}
+          value={isoFieldValue}
+          style={{ width: '100px' }}
+          onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              addIso()
             }
-          }
-        }}
-      />
+          }}
+        />
+        {isoFieldValue.length > 0 && <Button variant="tertiary" icon={<PlusCircleIcon />} onClick={addIso}></Button>}
+      </HStack>
       <Chips>
         {inputValue.data.isos?.map((iso) => (
           <Chips.Removable
