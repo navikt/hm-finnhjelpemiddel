@@ -276,6 +276,9 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
         : undefined,
       worksWith: firstVariant.attributes.worksWith ? mapWorksWith(firstVariant.attributes.worksWith) : undefined,
       url: firstVariant.attributes.url,
+      documentUrls: firstVariant.attributes.documentUrls
+        ? mapDocumentUrls(firstVariant.attributes.documentUrls)
+        : undefined,
     },
     variantCount: sources.length,
     variants: variant,
@@ -327,6 +330,9 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
         : undefined,
       worksWith: firstVariant.attributes.worksWith ? mapWorksWith(firstVariant.attributes.worksWith) : undefined,
       url: firstVariant.attributes.url,
+      documentUrls: firstVariant.attributes.documentUrls
+        ? mapDocumentUrls(firstVariant.attributes.documentUrls)
+        : undefined,
     },
     variantCount: sources.length,
     variants: variants,
