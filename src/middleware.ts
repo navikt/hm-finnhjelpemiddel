@@ -8,18 +8,36 @@ export async function middleware(request: NextRequest) {
   const gjenbruksprodukterPath = '/gjenbruksprodukter'
   const alternativerPath = '/alternative_products'
 
+  const categoryAdminPath = '/kategori/admin'
+  const categoryAdminBackendPath = '/admin/category'
+
   const redirectPath = request.nextUrl.pathname
   const loginUrl = `${request.nextUrl.origin}/oauth2/login?redirect=${redirectPath}`
 
-  if (request.nextUrl.pathname.startsWith(gjenbruksprodukterPath)) {
+  if (
+    request.nextUrl.pathname.startsWith(gjenbruksprodukterPath) ||
+    request.nextUrl.pathname.startsWith(categoryAdminPath)
+  ) {
     if (!isLocal && !getToken(request.headers)) {
       return NextResponse.redirect(loginUrl)
     }
-  } else if (request.nextUrl.pathname.startsWith(alternativerPath)) {
+  } else if (
+    request.nextUrl.pathname.startsWith(alternativerPath) ||
+    request.nextUrl.pathname.startsWith(categoryAdminBackendPath)
+  ) {
     const devtoken = process.env.DEV_TOKEN
-    const destination =
-      process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + request.nextUrl.pathname.split(alternativerPath)[1]
-    const audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
+
+    let destination
+    let audience
+
+    if (request.nextUrl.pathname.startsWith(alternativerPath)) {
+      destination =
+        process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + request.nextUrl.pathname.split(alternativerPath)[1]
+      audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
+    } else {
+      destination = process.env.HM_FINNHJELPEMIDDEL_BFF_URL + request.nextUrl.pathname
+      audience = process.env.BFF_AUDIENCE
+    }
 
     if (isLocal) {
       return await fetch(new Request(destination, request), {
@@ -64,6 +82,11 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 export const config = {
-  matcher: ['/alternative_products/:path*', '/gjenbruksprodukter/:path*'],
+  matcher: [
+    '/alternative_products/:path*',
+    '/gjenbruksprodukter/:path*',
+    '/kategori/admin/:path*',
+    '/admin/category/:path*',
+  ],
   runtime: 'nodejs',
 }

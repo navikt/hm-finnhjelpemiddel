@@ -55,6 +55,7 @@ const nextConfig = {
     HM_OEBS_API_URL: process.env.HM_OEBS_API_URL,
     NEXT_PUBLIC_FARO_URL: process.env.FARO_URL,
     ALTERNATIVER_BACKEND_AUDIENCE: process.env.ALTERNATIVER_BACKEND_AUDIENCE,
+    BFF_AUDIENCE: process.env.BFF_AUDIENCE,
     HM_GRUNNDATA_DB: process.env.HM_GRUNNDATA_DB,
   },
   experimental: {
