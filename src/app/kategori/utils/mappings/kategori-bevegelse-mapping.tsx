@@ -42,6 +42,10 @@ export type KategoriBevegelseNavn =
   | 'Gåstoler'
   | 'Gåbord'
   | 'Tilleggsutstyr til ganghjelpemidler'
+  | 'Kjøreposer og regntøy'
+  | 'Posisjonering'
+  | 'Stå og gå'
+  | 'Trening'
 
 export const bevegelse: Kategori = {
   navn: 'Bevegelse',
@@ -55,6 +59,9 @@ export const bevegelse: Kategori = {
     'Kjelker og akebrett',
     'Vogner',
     'Bilseter og bilutstyr',
+    'Kjøreposer og regntøy',
+    'Posisjonering',
+    'Trening',
   ],
   isoer: [],
   visProdukter: false,
@@ -96,6 +103,7 @@ export const ganghjelpemidler: Kategori = {
     'Gåstoler',
     'Gåbord',
     'Tilleggsutstyr til ganghjelpemidler',
+    'Stå og gå',
   ],
   isoer: [],
   visProdukter: false,
@@ -397,5 +405,36 @@ export const tilleggsutstyrTilGanghjelpemidler: Kategori = {
     'Hjelpemidler som brukes sammen med, eller for å oppbevare ganghjelpemidler, som for eksempel krykkeholdere og krykkebelter.',
   underkategorier: [],
   isoer: ['1207'],
+  visProdukter: true,
+}
+
+export const kjøreposerOgRegntøy: Kategori = {
+  navn: 'Kjøreposer og regntøy',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['090305'],
+  visProdukter: true,
+}
+
+export const posisjonering: Kategori = {
+  navn: 'Posisjonering',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['0907', '04482701'],
+  visProdukter: true,
+}
+
+export const ståOgGå: Kategori = {
+  navn: 'Stå og gå',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['04481503'],
+  visProdukter: true,
+}
+export const trening: Kategori = {
+  navn: 'Trening',
+  beskrivelse: '',
+  underkategorier: [],
+  isoer: ['04481501', '04482702', '04481504'],
   visProdukter: true,
 }

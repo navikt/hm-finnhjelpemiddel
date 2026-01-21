@@ -3,7 +3,7 @@ import { Bleed, BodyShort, Heading, HStack, Link, VStack } from '@navikt/ds-reac
 import Image from 'next/image'
 import NextLink from 'next/link'
 import styles from './Footer.module.scss'
-import { ArrowUpIcon } from '@navikt/aksel-icons'
+import { ArrowUpIcon, TabsAddIcon } from '@navikt/aksel-icons'
 
 const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) => (
   <footer className="main-wrapper--xlarge" style={{ width: '100%' }}>
@@ -54,6 +54,14 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
               Personvernerklæring
             </Link>
             <Link onClick={() => setCookieConsent(null)}>Endre samtykke for informasjonskapsler</Link>
+          </VStack>
+          <VStack gap={'4'} className={styles.footerLinkGroup}>
+            <Heading level="2" size="small" className={styles.heading}>
+              Annet
+            </Heading>
+            <Link href="https://www.kunnskapsbanken.net/" target="_blank">
+              Kunnskapsbanken - fagstoff og kurs om hjelpemidler og tilrettelegging
+            </Link>
           </VStack>
         </div>
         <Image src="/nav-logo-white.svg" alt="NAV-logo" width={64} height={20} />

@@ -23,6 +23,7 @@ import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { SearchSidebar } from '@/app/sok/SearchSidebar'
 import { faro } from '@grafana/faro-core'
 import SortSearchResults from '@/app/sok/SortSearchResults'
+import { logUmamiHMSNrOppslagSokEvent } from '@/utils/umami'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -124,7 +125,7 @@ export default function SearchPage() {
       const params = new URLSearchParams(searchParams)
       const query = params.toString()
       const suffix = query ? `?${query}` : ''
-
+      logUmamiHMSNrOppslagSokEvent(term)
       router.replace(`/produkt/${products[0].id}${suffix}`)
     } else {
       setIsMaybeRedirecting(false)

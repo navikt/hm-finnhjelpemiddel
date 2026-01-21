@@ -153,7 +153,13 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
   }
 
   if (filters.length === 0) {
-    return <></>
+    return (
+      <VStack paddingBlock={'0 6'}>
+        <Heading level="3" size="small">
+          {`${variants.length} varianter`}
+        </Heading>
+      </VStack>
+    )
   }
 
   const dropdownFilters = filters.filter((filter) => filter.type === FilterType.DROPDOWN)
