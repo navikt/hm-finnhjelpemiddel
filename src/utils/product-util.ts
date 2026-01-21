@@ -1,6 +1,7 @@
 import {
   AgreementInfoResponse,
   CompatibleWithResponse,
+  DocumentUrlResponse,
   Hit,
   MediaResponse,
   ProductSourceResponse,
@@ -91,11 +92,17 @@ interface Attributes {
   compatibleWith?: CompatibleWith
   worksWith?: WorksWith
   url?: string
+  documentUrls?: DocumentUrl[]
 }
 
 interface CompatibleWith {
   seriesIds: string[]
   productIds: string[]
+}
+
+export interface DocumentUrl {
+  url: string
+  title: string
 }
 
 interface WorksWith {
@@ -214,10 +221,9 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
         compatibleWith: product.attributes.compatibleWith
           ? mapCompatibleWith(product.attributes.compatibleWith)
           : undefined,
-        worksWith: product.attributes.worksWith
-          ? mapWorksWith(product.attributes.worksWith)
-          : undefined,
+        worksWith: product.attributes.worksWith ? mapWorksWith(product.attributes.worksWith) : undefined,
         url: product.attributes.url,
+        documentUrls: product.attributes.documentUrls ? mapDocumentUrls(product.attributes.documentUrls) : undefined,
       },
       variantCount: 1,
       variants: [mapProductVariant(product)],
@@ -268,10 +274,11 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
       compatibleWith: firstVariant.attributes.compatibleWith
         ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
         : undefined,
-      worksWith: firstVariant.attributes.worksWith
-        ? mapWorksWith(firstVariant.attributes.worksWith)
-        : undefined,
+      worksWith: firstVariant.attributes.worksWith ? mapWorksWith(firstVariant.attributes.worksWith) : undefined,
       url: firstVariant.attributes.url,
+      documentUrls: firstVariant.attributes.documentUrls
+        ? mapDocumentUrls(firstVariant.attributes.documentUrls)
+        : undefined,
     },
     variantCount: sources.length,
     variants: variant,
@@ -321,10 +328,11 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
       compatibleWith: firstVariant.attributes.compatibleWith
         ? mapCompatibleWith(firstVariant.attributes.compatibleWith)
         : undefined,
-      worksWith: firstVariant.attributes.worksWith
-        ? mapWorksWith(firstVariant.attributes.worksWith)
-        : undefined,
+      worksWith: firstVariant.attributes.worksWith ? mapWorksWith(firstVariant.attributes.worksWith) : undefined,
       url: firstVariant.attributes.url,
+      documentUrls: firstVariant.attributes.documentUrls
+        ? mapDocumentUrls(firstVariant.attributes.documentUrls)
+        : undefined,
     },
     variantCount: sources.length,
     variants: variants,
@@ -408,6 +416,17 @@ export const mapCompatibleWith = (compatibleWith: CompatibleWithResponse): Compa
   return {
     seriesIds: compatibleWith.seriesIds,
     productIds: compatibleWith.productIds,
+  }
+}
+
+export const mapDocumentUrls = (documentUrls: DocumentUrlResponse[]): DocumentUrl[] => {
+  return documentUrls.map((doc) => mapDocumentUrl(doc))
+}
+
+const mapDocumentUrl = (documentUrl: DocumentUrlResponse): DocumentUrl => {
+  return {
+    url: documentUrl.url,
+    title: documentUrl.title,
   }
 }
 

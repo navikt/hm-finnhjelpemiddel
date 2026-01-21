@@ -30,7 +30,7 @@ export const ProductInformation = ({ product }: { product: Product }) => {
         <Accordion.Item className={styles.accordionLast} onOpenChange={() => setOpen(!open)}>
           <Accordion.Header className={open ? styles.accordion : styles.accordionLast}>Dokumenter</Accordion.Header>
           <Accordion.Content>
-            <Documents documents={product.documents} />
+            <Documents documents={product.documents} documentUrls={product.attributes.documentUrls ?? []} />
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
