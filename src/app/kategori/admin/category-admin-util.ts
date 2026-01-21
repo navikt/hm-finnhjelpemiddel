@@ -6,7 +6,6 @@ export type Category = {
   description: string | undefined
   subCategories: string[] | undefined
   isos: string[] | undefined
-  showProducts: boolean | undefined
   ikon: string | undefined
 }
 

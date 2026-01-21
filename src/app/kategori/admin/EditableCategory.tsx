@@ -9,7 +9,6 @@ import {
   Link,
   Popover,
   Skeleton,
-  Switch,
   Textarea,
   TextField,
   UNSAFE_Combobox,
@@ -34,7 +33,7 @@ export const EditableCategory = ({
   const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   return (
-    <VStack gap={'4'} style={{ display: 'flex' }}>
+    <VStack gap={'4'} paddingBlock={'0 4'} style={{ display: 'flex' }}>
       <TextField
         label="Tittel"
         style={{ width: '400px' }}
@@ -84,15 +83,6 @@ export const EditableCategory = ({
           </VStack>
         )}
       </HStack>
-
-      <Switch
-        checked={inputValue.data.showProducts}
-        onChange={(event) =>
-          setInputValue({ ...inputValue, data: { ...inputValue.data, showProducts: event.currentTarget.checked } })
-        }
-      >
-        Vis produkter
-      </Switch>
     </VStack>
   )
 }
@@ -293,7 +283,6 @@ const ChipsPopover = ({
             {category?.data.isos && category?.data.isos.length > 0 && (
               <BodyShort>Iso-er: {category.data.isos.toString()}</BodyShort>
             )}
-            <BodyShort>Viser produkter: {category?.data.showProducts ? 'Ja' : 'Nei'}</BodyShort>
           </VStack>
         </Popover.Content>
       </Popover>
