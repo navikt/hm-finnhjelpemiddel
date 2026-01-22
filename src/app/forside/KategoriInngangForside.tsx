@@ -1,10 +1,10 @@
 'use client'
 
 import { Heading, HGrid, VStack } from '@navikt/ds-react'
-import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { BevegelseIkon } from '@/app/kategori/ikoner/BevegelseIkon'
 import { useState } from 'react'
 import { getCookie } from '@/app/layoutProvider'
+import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
 
 export const KategoriInngangForside = () => {
   const [consent] = useState<string | null>(() => {
@@ -21,7 +21,7 @@ export const KategoriInngangForside = () => {
         Kategori-inngang
       </Heading>
       <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'2 0'} maxWidth={'700px'}>
-        <CategoryCard title={'Bevegelse'} link={'/kategori/Bevegelse'} icon={BevegelseIkon()} />
+        <CategoryCardFrontPage title={'Bevegelse'} link={'/kategori/Bevegelse'} icon={BevegelseIkon()} />
       </HGrid>
     </VStack>
   )

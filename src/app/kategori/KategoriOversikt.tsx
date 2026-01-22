@@ -13,7 +13,7 @@ export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
               .sort((a, b) => a.title.localeCompare(b.title))
               .map((subCategory) => (
                 <CategoryCard
-                  //icon={subCategory.data.ikon}
+                  icon={subCategory.icon}
                   title={subCategory.title}
                   link={subCategory.title}
                   key={subCategory.title}
