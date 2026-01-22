@@ -1,8 +1,7 @@
 import { KategoriPage } from './KategoriPage'
 import { KategoriOversikt } from '@/app/kategori/KategoriOversikt'
-import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
-import { BodyShort, Link } from '@navikt/ds-react'
-import NextLink from 'next/link'
+import { KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
+import { getCategoryByTitle } from '@/app/kategori/admin/category-admin-util'
 
 type Props = {
   params: Promise<{ kategori: string }>
@@ -11,6 +10,9 @@ type Props = {
 export default async function Page(props: Props) {
   const kategori = normalizeKategori((await props.params).kategori)
 
+  const category = await getCategoryByTitle(kategori)
+
+  /*
   if (!kategorier[kategori]) {
     return (
       <BodyShort>
@@ -22,11 +24,13 @@ export default async function Page(props: Props) {
     )
   }
 
-  if (kategorier[kategori].visProdukter) {
-    return <KategoriPage kategori={kategori} />
+   */
+
+  if (category.data.isos?.length) {
+    return <KategoriPage category={category} />
   }
 
-  return <KategoriOversikt kategori={kategori} />
+  return <KategoriOversikt category={category} />
 }
 
 const normalizeKategori = (kategori: string) => {

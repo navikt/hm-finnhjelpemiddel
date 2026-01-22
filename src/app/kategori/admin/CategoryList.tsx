@@ -1,10 +1,10 @@
-import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
+import { CategoryAdminDTO } from '@/app/kategori/admin/category-admin-util'
 import { Box, Heading, HGrid, Link, Search, VStack } from '@navikt/ds-react'
 import styles from './CategoryList.module.scss'
 import NextLink from 'next/link'
 import React, { useState } from 'react'
 
-export const CategoryList = ({ categories }: { categories: CategoryDTO[] }) => {
+export const CategoryList = ({ categories }: { categories: CategoryAdminDTO[] }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   const filteredCategories = categories
@@ -35,7 +35,7 @@ export const CategoryList = ({ categories }: { categories: CategoryDTO[] }) => {
   )
 }
 
-const CategoryCard = ({ category }: { category: CategoryDTO }) => {
+const CategoryCard = ({ category }: { category: CategoryAdminDTO }) => {
   return (
     <HGrid className={styles.categoryCard}>
       <Link as={NextLink} href={`admin/${category.id}`}>

@@ -15,14 +15,14 @@ import {
   SearchFiltersKategori,
 } from '@/app/kategori/utils/kategori-inngang-util'
 import { isValidSortOrder } from '@/utils/search-state-util'
-import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
 type Props = {
-  kategori: KategoriNavn
+  category: CategoryDTO
 }
 
-export const KategoriPage = ({ kategori }: Props) => {
+export const KategoriPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -57,7 +57,6 @@ export const KategoriPage = ({ kategori }: Props) => {
   }
 
   const searchData = mapSearchParamsKategori(searchParams)
-  const currentKategori = kategorier[kategori]
 
   const {
     data: productsData,
@@ -74,7 +73,7 @@ export const KategoriPage = ({ kategori }: Props) => {
         from: index * PAGE_SIZE,
         size: PAGE_SIZE,
         searchData,
-        kategoriIsos: currentKategori.isoer,
+        kategoriIsos: category.data.isos,
       }
     },
     fetchProductsKategori2,
@@ -119,7 +118,7 @@ export const KategoriPage = ({ kategori }: Props) => {
   }
 
   return (
-    <KategoriPageLayout title={currentKategori.navn} description={currentKategori.beskrivelse} error={error}>
+    <KategoriPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
         <HGrid columns={'374px 4'} gap={'4'}>

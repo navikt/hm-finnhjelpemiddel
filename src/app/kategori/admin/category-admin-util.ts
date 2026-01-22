@@ -9,9 +9,16 @@ export type Category = {
   ikon: string | undefined
 }
 
+export type CategoryAdminDTO = {
+  id: string
+  title: string
+  data: Category
+}
+
 export type CategoryDTO = {
   id: string
   title: string
+  subCategories?: { id: string; title: string }[]
   data: Category
 }
 
@@ -20,7 +27,7 @@ export type EditableCategoryDTO = {
   data: Category
 }
 
-export async function getCategories(): Promise<CategoryDTO[]> {
+export async function getCategories(): Promise<CategoryAdminDTO[]> {
   const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, {
     method: 'GET',
     headers: {
@@ -35,8 +42,23 @@ export async function getCategories(): Promise<CategoryDTO[]> {
   return res.json()
 }
 
-export async function getCategory(id: string): Promise<CategoryDTO> {
+export async function getCategoryById(id: string): Promise<CategoryAdminDTO> {
   const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category/id/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    throw new CustomError(res.statusText, res.status)
+  }
+
+  return res.json()
+}
+
+export async function getCategoryByTitle(title: string): Promise<CategoryDTO> {
+  const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/category/${title}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
