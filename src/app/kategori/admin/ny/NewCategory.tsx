@@ -17,7 +17,7 @@ export const NewCategory = () => {
       description: '',
       subCategories: [],
       isos: [],
-      ikon: '',
+      icon: '',
     },
   })
 

@@ -63,13 +63,13 @@ export const EditableCategory = ({
           maxRows={5}
           style={{ width: '400px' }}
           UNSAFE_autoScrollbar
-          defaultValue={inputValue.data.ikon}
+          defaultValue={inputValue.data.icon}
           onChange={(event) =>
-            setInputValue({ ...inputValue, data: { ...inputValue.data, ikon: event.currentTarget.value } })
+            setInputValue({ ...inputValue, data: { ...inputValue.data, icon: event.currentTarget.value } })
           }
         />
 
-        {inputValue.data.ikon && inputValue.data.ikon?.length > 0 && (
+        {inputValue.data.icon && inputValue.data.icon?.length > 0 && (
           <VStack>
             <BodyShort weight={'semibold'}>Ikon:</BodyShort>
             {
@@ -77,7 +77,7 @@ export const EditableCategory = ({
                 width={60}
                 height={60}
                 alt={'ikon'}
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(inputValue.data.ikon)}`}
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(inputValue.data.icon)}`}
               />
             }
           </VStack>
