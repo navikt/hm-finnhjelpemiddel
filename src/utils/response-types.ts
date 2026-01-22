@@ -115,6 +115,7 @@ interface AttributeResponse {
   shortdescription?: string
   text?: string
   url?: string
+  documentUrls?: DocumentUrlResponse[]
   tags?: string[]
   bestillingsordning?: boolean
   digitalSoknad?: boolean
@@ -128,6 +129,11 @@ export interface CompatibleWithResponse {
 export interface WorksWithResponse {
   seriesIds: string[]
   productIds: string[]
+}
+
+export interface DocumentUrlResponse {
+  url: string,
+  title: string
 }
 
 export interface TechDataResponse {
