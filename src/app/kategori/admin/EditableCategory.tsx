@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@navikt/ds-react'
 import { useRef, useState } from 'react'
-import { CategoryDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
+import { CategoryAdminDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 import useSWR from 'swr'
 import NextLink from 'next/link'
 import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
@@ -30,7 +30,7 @@ export const EditableCategory = ({
   setInputValue: (value: EditableCategoryDTO) => void
   id?: string
 }) => {
-  const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
+  const { data: categories, isLoading } = useSWR<CategoryAdminDTO[]>('categories', () => getCategories())
 
   return (
     <VStack gap={'4'} paddingBlock={'0 4'} style={{ display: 'flex' }}>
@@ -155,7 +155,7 @@ const SubCategoriesModule = ({
   setInputValue,
   id = '',
 }: {
-  categories: CategoryDTO[]
+  categories: CategoryAdminDTO[]
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
   id?: string
@@ -233,7 +233,7 @@ const ChipsPopover = ({
 }: {
   option: Options
   removeSubCategory: (val: string) => void
-  categories: CategoryDTO[]
+  categories: CategoryAdminDTO[]
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)

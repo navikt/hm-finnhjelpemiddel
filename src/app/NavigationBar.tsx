@@ -132,21 +132,32 @@ const NavigationBar = () => {
                   <AutocompleteSearch onSearch={onSearch} secondary autofocus={true} />
                 </div>
               )}
-              <Button
-                className="nav-top-container__search-button"
-                icon={searchOpen ? <XMarkIcon aria-hidden /> : <MagnifyingGlassIcon aria-hidden />}
-                aria-label={searchOpen ? 'Fjern' : 'Søk'}
-                variant="tertiary"
-                onClick={() => {
-                  if (searchOpen) {
+              {searchOpen ? (
+                <Button
+                  className="nav-top-container__search-button"
+                  icon={<XMarkIcon aria-hidden />}
+                  aria-label={'Fjern'}
+                  variant="tertiary"
+                  onClick={() => {
+                    console.log('aaaaaa')
                     removeSearchTerm()
-                  }
-                  setSearchOpen(!searchOpen)
-                }}
-                aria-expanded={searchOpen}
-              >
-                {searchOpen ? '' : 'Søk'}
-              </Button>
+                  }}
+                  aria-expanded={searchOpen}
+                ></Button>
+              ) : (
+                <Button
+                  className="nav-top-container__search-button"
+                  icon={<MagnifyingGlassIcon aria-hidden />}
+                  aria-label={'Søk'}
+                  variant="tertiary"
+                  onClick={() => {
+                    setSearchOpen(!searchOpen)
+                  }}
+                  aria-expanded={searchOpen}
+                >
+                  Søk
+                </Button>
+              )}
             </HStack>
 
             <>

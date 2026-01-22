@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 type Props = {
   title: string
-  description: string
+  description?: string
   error?: boolean
   children: ReactNode
 }

@@ -1,28 +1,27 @@
-import { Bleed, BodyShort, HGrid } from '@navikt/ds-react'
+import { Bleed, HGrid } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
-import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
-export const KategoriOversikt = ({ kategori }: { kategori: KategoriNavn }) => {
-  if (!kategorier[kategori]) {
-    return <BodyShort>Oiii</BodyShort>
-  }
-
+export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
   return (
-    <KategoriPageLayout title={kategorier[kategori].navn} description={kategorier[kategori].beskrivelse}>
-      <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-        <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'12 24'}>
-          {kategorier[kategori].underkategorier.sort().map((iso) => (
-            <CategoryCard
-              icon={kategorier[iso].ikon}
-              title={kategorier[iso].navn}
-              link={kategorier[iso].navn}
-              description={kategorier[iso].beskrivelse}
-              key={kategorier[iso].navn}
-            />
-          ))}
-        </HGrid>
-      </Bleed>
+    <KategoriPageLayout title={category.title} description={category.data.description}>
+      {category.subCategories?.length && (
+        <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
+          <HGrid gap={'4'} columns={{ xs: 1, md: 2 }} paddingBlock={'12 24'}>
+            {category.subCategories
+              .sort((a, b) => a.title.localeCompare(b.title))
+              .map((subCategory) => (
+                <CategoryCard
+                  icon={subCategory.icon}
+                  title={subCategory.title}
+                  link={subCategory.title}
+                  key={subCategory.title}
+                />
+              ))}
+          </HGrid>
+        </Bleed>
+      )}
     </KategoriPageLayout>
   )
 }

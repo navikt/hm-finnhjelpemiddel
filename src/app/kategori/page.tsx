@@ -1,7 +1,7 @@
 import { kategorier, KategoriNavn } from '@/app/kategori/utils/mappings/kategori-mapping'
 import { HGrid } from '@navikt/ds-react'
-import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
 
 export default async function Page() {
   const forsideKategorier: KategoriNavn[] = ['Bevegelse']
@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <KategoriPageLayout title={'Her er alle kategoriene'} description={''}>
       <HGrid gap={'2'} columns={'repeat(2, 600px)'} paddingBlock={'12'}>
-        <CategoryCard
+        <CategoryCardFrontPage
           icon={kategorier['Alle'].ikon}
           title={kategorier['Alle'].navn}
           link={'sok'}
@@ -17,7 +17,7 @@ export default async function Page() {
           key={kategorier['Alle'].navn}
         />
         {forsideKategorier.map((kategori) => (
-          <CategoryCard
+          <CategoryCardFrontPage
             icon={kategorier[kategori].ikon}
             title={kategorier[kategori].navn}
             link={`kategori/${kategorier[kategori].navn}`}

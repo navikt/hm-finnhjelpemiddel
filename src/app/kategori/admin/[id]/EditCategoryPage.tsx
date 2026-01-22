@@ -3,7 +3,7 @@
 import {
   deleteCategory,
   EditableCategoryDTO,
-  getCategory,
+  getCategoryById,
   updateCategory,
 } from '@/app/kategori/admin/category-admin-util'
 import { Alert, Button, Heading, HStack, Link, Loader, VStack } from '@navikt/ds-react'
@@ -22,7 +22,7 @@ export const EditCategoryPage = ({ id }: { id: string }) => {
     mutate,
     isLoading,
     error,
-  } = useSWRImmutable<EditableCategoryDTO>(id, () => getCategory(id))
+  } = useSWRImmutable<EditableCategoryDTO>(id, () => getCategoryById(id))
 
   if (error) {
     return <Alert variant={'error'}>Det har skjedd en feil ved henting av kategorien</Alert>
