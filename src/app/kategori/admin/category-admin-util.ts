@@ -6,7 +6,7 @@ export type Category = {
   description: string | undefined
   subCategories: string[] | undefined
   isos: string[] | undefined
-  ikon: string | undefined
+  icon: string | undefined
 }
 
 export type CategoryAdminDTO = {
