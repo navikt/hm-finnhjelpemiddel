@@ -8,7 +8,7 @@ export const CategoryList = ({ categories }: { categories: CategoryDTO[] }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
 
   const filteredCategories = categories
-    .filter((category) => category.title.includes(searchTerm))
+    .filter((category) => category.title.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => a.title.localeCompare(b.title))
 
   return (
