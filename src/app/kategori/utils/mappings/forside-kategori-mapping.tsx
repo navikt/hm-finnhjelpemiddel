@@ -1,7 +1,9 @@
 import { JSX } from 'react'
 import { BevegelseIkon } from '@/app/kategori/ikoner/BevegelseIkon'
+import { HygieneIkon } from '@/app/kategori/ikoner/HygieneIkon'
+import { HjeomOgBoligIkon } from '@/app/kategori/ikoner/HjeomOgBoligIkon'
 
-export type FrontPageCategoryTitles = 'Bevegelse'
+export type FrontPageCategoryTitles = 'Bevegelse' | 'Hygiene' | 'Hjem og bolig'
 export type TopLevelCategoryTitles = FrontPageCategoryTitles | 'Alle'
 
 type TopLevelCategories = {
@@ -26,14 +28,28 @@ const bevegelse: TopLevelCategory = {
   description: '',
   icon: <BevegelseIkon />,
 }
+const hygiene: TopLevelCategory = {
+  title: 'Hygiene',
+  description: '',
+  icon: <HygieneIkon />,
+}
+const hjemOgBolig: TopLevelCategory = {
+  title: 'Hjem og bolig',
+  description: '',
+  icon: <HjeomOgBoligIkon />,
+}
 
 export const topLevelcategories: TopLevelCategories = {
   Bevegelse: bevegelse,
+  Hygiene: hygiene,
+  'Hjem og bolig': hjemOgBolig,
   Alle: alle,
 }
 export const frontPageCategories: FrontPageCategories = {
   Bevegelse: bevegelse,
+  Hygiene: hygiene,
+  'Hjem og bolig': hjemOgBolig,
 }
 
-export const topLevelCategoryTitles: TopLevelCategoryTitles[] = ['Bevegelse', 'Alle']
-export const frontPageTitles: FrontPageCategoryTitles[] = ['Bevegelse']
+export const topLevelCategoryTitles: TopLevelCategoryTitles[] = ['Bevegelse', 'Hygiene', 'Hjem og bolig', 'Alle']
+export const frontPageTitles: FrontPageCategoryTitles[] = ['Bevegelse', 'Hygiene', 'Hjem og bolig']
