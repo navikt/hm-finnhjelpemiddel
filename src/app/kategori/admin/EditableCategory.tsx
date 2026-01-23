@@ -38,7 +38,7 @@ export const EditableCategory = ({
         label="Tittel"
         style={{ width: '400px' }}
         defaultValue={inputValue.title}
-        onChange={(event) => setInputValue({ ...inputValue, title: event.currentTarget.value })}
+        onChange={(event) => setInputValue({ ...inputValue, title: event.currentTarget.value.trimEnd() })}
       />
       <Textarea
         label={'Beskrivelse'}
