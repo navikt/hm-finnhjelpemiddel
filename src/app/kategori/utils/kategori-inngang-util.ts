@@ -1,4 +1,10 @@
-import { filterLeverandor, filterMainProductsOnly, filterMinMax, filterNotExpiredOnly, filterPrefixIsoKode } from '@/utils/filter-util'
+import {
+  filterLeverandor,
+  filterMainProductsOnly,
+  filterMinMax,
+  filterNotExpiredOnly,
+  filterPrefixIsoKode,
+} from '@/utils/filter-util'
 import { SortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
@@ -53,7 +59,7 @@ type FetchProps = {
   dontCollapse?: boolean
 }
 
-export const fetchProductsKategori2 = async ({
+export const fetchProductsKategori = async ({
   from,
   size,
   searchData,
@@ -179,110 +185,6 @@ export const fetchProductsKategori2 = async ({
         iso: mapIsoAggregations(data),
         suppliers: mapSupplierAggregations(data),
         measurementFilters: mapMinMaxAggregations(data),
-      }
-    })
-}
-
-export const fetchProductsKategori = async ({ from, size, searchData }: FetchProps): Promise<ProductsWithIsoAggs> => {
-  const { isoCode, sortOrder, filters } = searchData
-  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
-  const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
-  const visTilbDeler = false
-
-  const queryFilters: Array<any> = []
-  const postFilters: Array<any> = []
-
-  if (filters && filters.isos) {
-    postFilters.push(filterPrefixIsoKode(filters.isos))
-  }
-
-  if (filters && filters.suppliers) {
-    postFilters.push(filterLeverandor(filters.suppliers))
-  }
-
-  if (isoCode) {
-    queryFilters.push({
-      match_bool_prefix: {
-        isoCategory: isoCode,
-      },
-    })
-  }
-
-  if (!visTilbDeler) {
-    queryFilters.push(filterMainProductsOnly())
-  }
-
-  const query = {
-    bool: {
-      ...searchTermQuery,
-      filter: queryFilters,
-    },
-  }
-
-  const aggsFilter = (filterKey: string, aggs: {}, filter: {}) => ({
-    [filterKey]: {
-      filter: {
-        bool: {
-          filter: filter,
-        },
-      },
-      aggs,
-    },
-  })
-  const aggs = {
-    ...aggsFilter(
-      'iso',
-      {
-        values: {
-          multi_terms: {
-            terms: [{ field: 'isoCategory' }, { field: 'isoCategoryName' }],
-            size: 100,
-          },
-        },
-      },
-      queryFilters
-    ),
-    ...aggsFilter(
-      'suppliers',
-      {
-        values: {
-          terms: { field: 'supplier.name', size: 300 },
-        },
-      },
-      postFilters
-    ),
-  }
-
-  const body: QueryObject = {
-    from,
-    size,
-    track_scores: true,
-    sort: sortOrderOpenSearch,
-    query,
-    aggs: { ...aggs },
-    post_filter: {
-      bool: {
-        filter: postFilters,
-      },
-    },
-    collapse: {
-      field: 'seriesId',
-    },
-  }
-
-  return await fetch(HM_SEARCH_URL + '/products/_search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      return {
-        products: mapProductsFromCollapse(data),
-        iso: mapIsoAggregations(data),
-        suppliers: mapSupplierAggregations(data),
       }
     })
 }

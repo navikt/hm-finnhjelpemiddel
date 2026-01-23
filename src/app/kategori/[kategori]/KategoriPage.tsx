@@ -5,10 +5,10 @@ import useSWRInfinite from 'swr/infinite'
 import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
-import { FilterBarKategori, Filters } from '@/app/kategori/FilterBarKategori'
+import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
 import {
-  fetchProductsKategori2,
+  fetchProductsKategori,
   PAGE_SIZE,
   ProductsWithIsoAggs,
   SearchDataKategori,
@@ -76,7 +76,7 @@ export const KategoriPage = ({ category }: Props) => {
         kategoriIsos: category.data.isos,
       }
     },
-    fetchProductsKategori2,
+    fetchProductsKategori,
     {
       initialSize: Number(searchParams.get('page') || '1'),
       keepPreviousData: true,

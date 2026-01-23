@@ -2,7 +2,7 @@ import { Chips } from '@navikt/ds-react'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import styles from './KategoriToggleFilter.module.scss'
-import { getIsoLabel } from './isoLabelMapping'
+import { getIsoLabel } from '../utils/mappings/isoLabelMapping'
 
 export type FilterToggle = {
   key: string

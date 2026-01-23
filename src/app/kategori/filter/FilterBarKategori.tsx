@@ -1,8 +1,8 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
-import { KategoriToggleFilter } from '@/app/kategori/KategoriToggleFilter'
+import { KategoriToggleFilter } from '@/app/kategori/filter/KategoriToggleFilter'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
-import { MinMaxFilter } from '@/app/kategori/MinMaxFilter'
+import { MinMaxFilter } from '@/app/kategori/filter/MinMaxFilter'
 import styles from './FilterBarKategori.module.scss'
 import { MeasurementInfo } from '@/app/kategori/utils/kategori-inngang-util'
 
@@ -29,7 +29,9 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
 
   return (
     <VStack gap={'4'}>
-      <Heading level={"3"} size={'small'}>Filter</Heading>
+      <Heading level={'3'} size={'small'}>
+        Filter
+      </Heading>
       <HStack gap="2" maxWidth={'1214px'}>
         {filters.isos.length > 1 && (
           <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />

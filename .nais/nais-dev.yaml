@@ -34,6 +34,9 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
+      claims:
+        groups:
+          - id: "da88f4ec-23b3-427b-87c5-e890b7d02519"
     sidecar:
       enabled: true
 
