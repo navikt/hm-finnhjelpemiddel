@@ -1,5 +1,6 @@
 export const HygieneIkon = () => (
   <svg width="81" height="84" viewBox="0 0 81 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M45.0011 8L69.2326 64.9996L45.0011 52.6754L20.7695 64.9996L45.0011 8Z" fill="#FFECCC" />
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"

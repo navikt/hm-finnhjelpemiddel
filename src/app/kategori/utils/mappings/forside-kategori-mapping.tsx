@@ -47,9 +47,9 @@ export const topLevelcategories: TopLevelCategories = {
 }
 export const frontPageCategories: FrontPageCategories = {
   Bevegelse: bevegelse,
-  Hygiene: hygiene,
   'Hjem og bolig': hjemOgBolig,
+  Hygiene: hygiene,
 }
 
 export const topLevelCategoryTitles: TopLevelCategoryTitles[] = ['Bevegelse', 'Hygiene', 'Hjem og bolig', 'Alle']
-export const frontPageTitles: FrontPageCategoryTitles[] = ['Bevegelse', 'Hygiene', 'Hjem og bolig']
+export const frontPageTitles: FrontPageCategoryTitles[] = ['Bevegelse', 'Hjem og bolig', 'Hygiene']
