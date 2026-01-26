@@ -56,6 +56,11 @@ export const KategoriPage = ({ category }: Props) => {
   }
 
   const searchData = mapSearchParamsKategori(searchParams)
+  
+  useEffect(() => {
+    mapSearchParamsKategori(searchParams)
+  }, [searchParams])
+
 
   const {
     data: productsData,
