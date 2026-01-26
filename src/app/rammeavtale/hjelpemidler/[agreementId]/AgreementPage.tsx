@@ -109,8 +109,18 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       ? posts.map((post) => post.products.length).reduce((previousValue, currentValue) => previousValue + currentValue)
       : 0
 
-  const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppend(filterName, value)
+  const onChange = (filterName: string, value: string | string[]) => {
+    // Handle clear all (empty string)
+    if (value === '') {
+      const params = new URLSearchParams(searchParams.toString())
+      params.delete(filterName)
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      return
+    }
+
+    // Handle single value (toggle logic)
+    const singleValue = Array.isArray(value) ? value[0] : value
+    const newSearchParams = createQueryStringAppend(filterName, singleValue)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 

@@ -7,7 +7,7 @@ export type AgreementFilters = {
 
 type Props = {
   filters: AgreementFilters
-  onChange: (key: string, value: string) => void
+  onChange: (key: string, value: string | string[]) => void
 }
 
 const FilterForm = ({ filters, onChange }: Props) => {

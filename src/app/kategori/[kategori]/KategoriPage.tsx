@@ -139,11 +139,10 @@ export const KategoriPage = ({ category }: Props) => {
 
     if (filterName === 'isos') {
       let newValues: string[]
-      
+
       if (value === '') {
         newValues = []
       } else {
-        // Toggle logic: add if not present, remove if present
         const singleValue = Array.isArray(value) ? value[0] : value
         const currentValues = searchParams.getAll('iso') ?? []
 
