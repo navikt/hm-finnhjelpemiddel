@@ -1,12 +1,12 @@
 'use client'
 
+import React, { useEffect } from 'react'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
-import useQueryString from '@/utils/search-params-util'
 import {
   fetchProductsKategori,
   PAGE_SIZE,
@@ -26,7 +26,6 @@ export const KategoriPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { createQueryStringAppendRemovePage } = useQueryString()
 
   const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
     const sortOrderStr = searchParams.get('sortering') || ''
@@ -57,6 +56,10 @@ export const KategoriPage = ({ category }: Props) => {
   }
 
   const searchData = mapSearchParamsKategori(searchParams)
+  useEffect(() => {
+    // Ensure filters are synced with search params
+    mapSearchParamsKategori(searchParams)
+  }, [searchParams])
 
   const {
     data: productsData,
@@ -105,11 +108,76 @@ export const KategoriPage = ({ category }: Props) => {
 
   const filters: Filters = { isos, suppliers, measurementFilters }
 
-  const onChange = (filterName: string, value: string) => {
+
+/*  const onChange = (filterName: string, value: string) => {
     const newSearchParams = createQueryStringAppendRemovePage(filterName, value)
     // Reset paging when filters change so we don’t mix old pages with new filters
     setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
+  }*/
+
+  const onChange = (filterName: string, value: string | string[]) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('page') // reset pagination
+
+    // suppliers is array-valued but URL param is 'supplier' (repeated)
+    if (filterName === 'suppliers') {
+      let newValues: string[]
+
+      // Handle clear all (empty string)
+      if (value === '') {
+        newValues = []
+      } else {
+        // Toggle logic: add if not present, remove if present
+        const singleValue = Array.isArray(value) ? value[0] : value
+        const currentValues = searchParams.getAll('supplier') ?? []
+
+        if (currentValues.includes(singleValue)) {
+          newValues = currentValues.filter((v) => v !== singleValue)
+        } else {
+          newValues = [...currentValues, singleValue]
+        }
+      }
+
+      params.delete('supplier')
+      newValues.forEach((v) => params.append('supplier', v))
+      setPage(1)
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      return
+    }
+
+    // isos is array-valued, URL param is 'iso' (repeated)
+    if (filterName === 'isos') {
+      let newValues: string[]
+
+      // Handle clear all (empty string)
+      if (value === '') {
+        newValues = []
+      } else {
+        // Toggle logic: add if not present, remove if present
+        const singleValue = Array.isArray(value) ? value[0] : value
+        const currentValues = searchParams.getAll('iso') ?? []
+
+        if (currentValues.includes(singleValue)) {
+          newValues = currentValues.filter((v) => v !== singleValue)
+        } else {
+          newValues = [...currentValues, singleValue]
+        }
+      }
+
+      params.delete('iso')
+      newValues.forEach((v) => params.append('iso', v))
+      setPage(1)
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+      return
+    }
+
+    // measurement / single-value filters
+    const valueStr = Array.isArray(value) ? value.join(',') : value
+
+    params.set(String(filterName), valueStr)
+    setPage(1)
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
   const onReset = () => {

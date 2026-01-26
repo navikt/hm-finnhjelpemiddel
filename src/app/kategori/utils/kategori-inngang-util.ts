@@ -132,6 +132,15 @@ export const fetchProductsKategori = async ({
       postFilters
     ),
   })
+
+  // Create supplier aggregation filters without the supplier filter
+  // This allows all suppliers to be visible regardless of which supplier is selected
+  const supplierPostFilters = postFilters.filter((filter) => {
+    // Check if this is the supplier filter - it contains 'supplier.name' in its structure
+    const filterStr = JSON.stringify(filter)
+    return !filterStr.includes('supplier.name')
+  })
+
   const aggs = {
     ...aggsFilter(
       'iso',
@@ -145,7 +154,18 @@ export const fetchProductsKategori = async ({
       },
       queryFilters
     ),
-    ...termAggs('suppliers', 'supplier.name'),
+    ...aggsFilter(
+      'suppliers',
+      {
+        values: {
+          terms: {
+            field: 'supplier.name',
+            size: 300,
+          },
+        },
+      },
+      supplierPostFilters
+    ),
     ...termAggs('setebreddeMinCM', 'filters.setebreddeMinCM'),
     ...termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM'),
     ...termAggs('setedybdeMinCM', 'filters.setedybdeMinCM'),

@@ -17,13 +17,13 @@ export type Filters = {
 
 type Props = {
   filters: Filters
-  onChange: (key: string, value: string) => void
+  onChange: (key: string, value: string | string[]) => void
   onReset: () => void
 }
 
 export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   const supplierFilters: FilterMenu = {
-    name: { key: 'supplier', label: 'Leverandører' },
+    name: { key: 'suppliers', label: 'Leverandører', paramKey: 'supplier' },
     options: filters.suppliers,
   }
 

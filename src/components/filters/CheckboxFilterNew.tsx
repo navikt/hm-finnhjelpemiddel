@@ -7,6 +7,8 @@ import styles from '@/components/filters/CheckboxFilterNew.module.scss'
 export type FilterMenuLabel = {
   key: string
   label: string
+  // Optional query param key when it differs from the logical filter key (e.g. supplier vs suppliers)
+  paramKey?: string
 }
 
 export type FilterMenu = {
@@ -16,7 +18,7 @@ export type FilterMenu = {
 
 type Props = {
   filterMenu: FilterMenu
-  onChange: (key: string, value: string) => void
+  onChange: (key: string, value: string | string[]) => void
 }
 
 export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
@@ -24,7 +26,8 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
   const { options, name } = filterMenu
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const selectedFilters = options.filter((f) => searchParams.getAll(name.key).includes(f))
+  const paramKey = name.paramKey ?? name.key
+  const selectedFilters = options.filter((f) => searchParams.getAll(paramKey).includes(f))
   const filterLabel = selectedFilters.length > 0 ? name.label + `(${selectedFilters.length})` : name.label
 
   return (
