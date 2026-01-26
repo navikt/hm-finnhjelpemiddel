@@ -56,10 +56,6 @@ export const KategoriPage = ({ category }: Props) => {
   }
 
   const searchData = mapSearchParamsKategori(searchParams)
-  useEffect(() => {
-    // Ensure filters are synced with search params
-    mapSearchParamsKategori(searchParams)
-  }, [searchParams])
 
   const {
     data: productsData,
