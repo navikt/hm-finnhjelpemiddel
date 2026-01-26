@@ -109,26 +109,17 @@ export const KategoriPage = ({ category }: Props) => {
   const filters: Filters = { isos, suppliers, measurementFilters }
 
 
-/*  const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppendRemovePage(filterName, value)
-    // Reset paging when filters change so we don’t mix old pages with new filters
-    setPage(1)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
-  }*/
-
   const onChange = (filterName: string, value: string | string[]) => {
     const params = new URLSearchParams(searchParams.toString())
-    params.delete('page') // reset pagination
+    params.delete('page')
 
-    // suppliers is array-valued but URL param is 'supplier' (repeated)
+
     if (filterName === 'suppliers') {
       let newValues: string[]
 
-      // Handle clear all (empty string)
       if (value === '') {
         newValues = []
       } else {
-        // Toggle logic: add if not present, remove if present
         const singleValue = Array.isArray(value) ? value[0] : value
         const currentValues = searchParams.getAll('supplier') ?? []
 
@@ -146,11 +137,9 @@ export const KategoriPage = ({ category }: Props) => {
       return
     }
 
-    // isos is array-valued, URL param is 'iso' (repeated)
     if (filterName === 'isos') {
       let newValues: string[]
-
-      // Handle clear all (empty string)
+      
       if (value === '') {
         newValues = []
       } else {

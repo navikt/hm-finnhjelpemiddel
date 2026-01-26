@@ -7,7 +7,6 @@ import styles from '@/components/filters/CheckboxFilterNew.module.scss'
 export type FilterMenuLabel = {
   key: string
   label: string
-  // Optional query param key when it differs from the logical filter key (e.g. supplier vs suppliers)
   paramKey?: string
 }
 

@@ -133,10 +133,7 @@ export const fetchProductsKategori = async ({
     ),
   })
 
-  // Create supplier aggregation filters without the supplier filter
-  // This allows all suppliers to be visible regardless of which supplier is selected
   const supplierPostFilters = postFilters.filter((filter) => {
-    // Check if this is the supplier filter - it contains 'supplier.name' in its structure
     const filterStr = JSON.stringify(filter)
     return !filterStr.includes('supplier.name')
   })

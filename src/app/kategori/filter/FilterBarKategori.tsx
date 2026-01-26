@@ -5,6 +5,7 @@ import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilt
 import { MinMaxFilter } from '@/app/kategori/filter/MinMaxFilter'
 import styles from './FilterBarKategori.module.scss'
 import { MeasurementInfo } from '@/app/kategori/utils/kategori-inngang-util'
+import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 
 export type Filters = {
   ['suppliers']: string[]
@@ -29,7 +30,8 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
 
   const isoFilters: FilterMenu = {
     name: { key: 'isos', label: 'Produktkategorier', paramKey: 'iso' },
-    options: filters.isos.map((iso) => ({ value: iso.key, label: iso.label })),
+
+    options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label)})),
   }
 
   return (
