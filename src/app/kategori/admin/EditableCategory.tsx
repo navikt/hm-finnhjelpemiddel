@@ -239,7 +239,7 @@ const ChipsPopover = ({
     <>
       <Box
         ref={ref}
-        borderColor={'border-action'}
+        borderColor={"accent"}
         borderRadius={'full'}
         borderWidth={'1'}
         width={'fit-content'}
