@@ -7,6 +7,7 @@ import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
+import useQueryString from '@/utils/search-params-util'
 import {
   fetchProductsKategori,
   PAGE_SIZE,
@@ -26,6 +27,7 @@ export const KategoriPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { createQueryStringAppendRemovePage, createQueryStringForMinMax } = useQueryString()
 
   const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
     const sortOrderStr = searchParams.get('sortering') || ''
@@ -56,7 +58,7 @@ export const KategoriPage = ({ category }: Props) => {
   }
 
   const searchData = mapSearchParamsKategori(searchParams)
-  
+
   useEffect(() => {
     mapSearchParamsKategori(searchParams)
   }, [searchParams])
@@ -111,62 +113,23 @@ export const KategoriPage = ({ category }: Props) => {
 
 
   const onChange = (filterName: string, value: string | string[]) => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.delete('page')
-
-
-    if (filterName === 'suppliers') {
-      let newValues: string[]
-
-      if (value === '') {
-        newValues = []
-      } else {
-        const singleValue = Array.isArray(value) ? value[0] : value
-        const currentValues = searchParams.getAll('supplier') ?? []
-
-        if (currentValues.includes(singleValue)) {
-          newValues = currentValues.filter((v) => v !== singleValue)
-        } else {
-          newValues = [...currentValues, singleValue]
-        }
-      }
-
-      params.delete('supplier')
-      newValues.forEach((v) => params.append('supplier', v))
-      setPage(1)
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-      return
+    const singleValue = Array.isArray(value) ? value[0] : value
+    const paramKeyMap: Record<string, string> = {
+      suppliers: 'supplier',
+      isos: 'iso',
     }
-
-    if (filterName === 'isos') {
-      let newValues: string[]
-
-      if (value === '') {
-        newValues = []
-      } else {
-        const singleValue = Array.isArray(value) ? value[0] : value
-        const currentValues = searchParams.getAll('iso') ?? []
-
-        if (currentValues.includes(singleValue)) {
-          newValues = currentValues.filter((v) => v !== singleValue)
-        } else {
-          newValues = [...currentValues, singleValue]
-        }
-      }
-
-      params.delete('iso')
-      newValues.forEach((v) => params.append('iso', v))
-      setPage(1)
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-      return
+    const paramKey = paramKeyMap[filterName] || filterName
+    let newSearchParams: string
+    if (filterName === 'suppliers' || filterName === 'isos') {
+      newSearchParams = createQueryStringAppendRemovePage(paramKey, singleValue)
+    } else {
+      newSearchParams = createQueryStringForMinMax(paramKey, singleValue)
+      const params = new URLSearchParams(newSearchParams)
+      params.delete('page')
+      newSearchParams = params.toString()
     }
-
-    // measurement / single-value filters
-    const valueStr = Array.isArray(value) ? value.join(',') : value
-
-    params.set(String(filterName), valueStr)
     setPage(1)
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const onReset = () => {
