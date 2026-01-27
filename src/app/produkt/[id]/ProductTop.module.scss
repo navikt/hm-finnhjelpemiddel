@@ -4,12 +4,6 @@
   border: 1px dashed #0056b4;
 }
 
-.linkButton {
-  --__ac-button-padding:$ax-space-2$ax-space-8;
-  text-decoration: underline;
-}
-
-
 .partTag {
   background-color: var(--ax-bg-neutral-soft);
   border-radius: 0.25rem;
@@ -19,5 +13,5 @@
 }
 
 .supplierLink {
-  font-weight:$ax-font-weight-bold;
+  font-weight: $ax-font-weight-bold;
 }

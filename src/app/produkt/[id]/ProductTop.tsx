@@ -14,11 +14,11 @@ import useSWR from 'swr'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
-    <HGrid columns={{ sm: 1, md: 2 }} gap={"space-32"}>
+    <HGrid columns={{ sm: 1, md: 2 }} gap={'space-32'}>
       {product.photos && <ImageCarousel images={product.photos} />}
       <ProductSummary product={product} hmsartnr={hmsartnr} />
     </HGrid>
-  );
+  )
 }
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
@@ -27,7 +27,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
   return (
-    <VStack gap={"space-32"}>
+    <VStack gap={'space-32'}>
       <TagRow
         productAgreements={product.agreements}
         accessory={product.accessory}
@@ -48,7 +48,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           </Link>
         </Alert>
       )}
-      <VStack gap={"space-16"}>
+      <VStack gap={'space-16'}>
         {hmsartnr && (
           <div>
             <Heading size={'xsmall'} level={'2'}>
@@ -65,12 +65,12 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </div>
       </VStack>
       <CopyHms product={product} />
-      <HStack gap={"space-24"}>
+      <HStack gap={'space-24'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
       </HStack>
     </VStack>
-  );
+  )
 }
 
 const TagRow = ({
@@ -104,7 +104,7 @@ const TagRow = ({
   }
 
   return (
-    <HStack justify={'start'} gap={"space-12"}>
+    <HStack justify={'start'} gap={'space-12'}>
       {accessory || sparePart ? (
         <HStack gap="space-12">
           <NeutralTag>{accessory ? 'Tilbehør' : 'Reservedel'}</NeutralTag>
@@ -141,7 +141,7 @@ const TagRow = ({
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
     </HStack>
-  );
+  )
 }
 
 const CopyHms = ({ product }: { product: Product }) => {
@@ -153,7 +153,7 @@ const CopyHms = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <VStack gap={"space-8"} align={'start'}>
+      <VStack gap={'space-8'} align={'start'}>
         <Heading level="3" size="xsmall">
           HMS-nummer
         </Heading>
@@ -169,27 +169,18 @@ const CopyHms = ({ product }: { product: Product }) => {
             iconPosition="right"
           />
         ) : (
-          <BodyShort>
-            <Button
-              className={styles.linkButton}
-              as={NextLink}
-              href="#variants-table"
-              variant={'tertiary'}
-              icon={<ArrowDownIcon aria-hidden />}
-              iconPosition={'right'}
-            >
-              Se tabell med varianter
-            </Button>
-          </BodyShort>
+          <HStack as={Link} href="#variants-table">
+            <BodyShort>Se tabell med varianter</BodyShort> <ArrowDownIcon aria-hidden fontSize={'24'} />
+          </HStack>
         )}
       </VStack>
     </>
-  );
+  )
 }
 
 const AccessoriesAndParts = ({ productId }: { productId: string }) => {
   return (
-    <VStack gap={"space-24"}>
+    <VStack gap={'space-24'}>
       <Button
         size="medium"
         className={styles.button}
@@ -200,7 +191,7 @@ const AccessoriesAndParts = ({ productId }: { productId: string }) => {
         Tilbehør og reservedeler
       </Button>
     </VStack>
-  );
+  )
 }
 
 export default ProductTop
