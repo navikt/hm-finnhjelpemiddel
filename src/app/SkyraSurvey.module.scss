@@ -1,11 +1,19 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .button {
-  --ac-button-tertiary-bg: #f5f9ff;
-  --ac-button-border-radius: 32px;
+  background-color: #f5f9ff;
+  border-radius: 32px;
   position: absolute;
   right: 1rem;
   box-shadow: 0 0.0625rem 0.375rem rgba(0, 0, 0, 0.16);
+
+  &:hover {
+    background-color: $ax-bg-accent-moderate-hover;
+  }
+
+  &:active {
+    background-color: $ax-bg-accent-moderate-pressed;
+  }
 }
 
 .container {
