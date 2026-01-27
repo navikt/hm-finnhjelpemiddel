@@ -29,7 +29,7 @@ export const EditableAlternativeGroup = ({
   const orderedAlternatives = originalProduct ? [originalProduct, ...others] : others
 
   return (
-    <VStack gap="8">
+    <VStack gap="space-32">
       <VStack>
         {orderedAlternatives.map((alternative) => (
           <EditableAlternativeCard
@@ -49,5 +49,5 @@ export const EditableAlternativeGroup = ({
         mutateAlternatives={(addedHmsArtNr?: string) => mutateAlternatives(addedHmsArtNr)}
       />
     </VStack>
-  )
+  );
 }

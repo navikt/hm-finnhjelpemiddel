@@ -39,16 +39,16 @@ export default async function AgreementPage(props: Props) {
       {agreement && (
         <VStack
           marginInline={'auto'}
-          marginBlock={'0'}
+          marginBlock={"space-0"}
           maxWidth={'750px'}
-          paddingBlock={'0 12'}
-          paddingInline={{ xs: '4', md: '12' }}
-          gap={{ xs: '12', md: '12' }}
+          paddingBlock={"space-0 space-48"}
+          paddingInline={{ xs: "space-16", md: "space-48" }}
+          gap={{ xs: "space-48", md: "space-48" }}
         >
           <TopBar agreement={agreement} />
           <AgreementDescription agreement={agreement} />
 
-          <VStack gap={'4'}>
+          <VStack gap={"space-16"}>
             <Heading level="1" size="medium" id="dokumenter">
               Dokumenter
             </Heading>
@@ -59,7 +59,7 @@ export default async function AgreementPage(props: Props) {
         </VStack>
       )}
     </>
-  )
+  );
 }
 
 const TopBar = ({ agreement }: { agreement: Agreement }) => {
@@ -71,20 +71,20 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-      <VStack gap="8" align={'start'} paddingBlock={'12'}>
+      <VStack gap="space-32" align={'start'} paddingBlock={"space-48"}>
         <Heading level="1" size="xlarge">
           {agreement.title}
         </Heading>
 
-        <VStack gap="4">
-          <HStack gap="2" align={'center'}>
+        <VStack gap="space-16">
+          <HStack gap="space-8" align={'center'}>
             <CalendarIcon aria-hidden width={'24px'} height={'24px'} />
             <BodyLong weight={'semibold'}>
               {dateToString(agreement.published)} - {dateToString(agreement.expired)}
             </BodyLong>
           </HStack>
 
-          <HStack gap={'2'} align={'center'}>
+          <HStack gap={"space-8"} align={'center'}>
             <DocPencilIcon aria-hidden width={'24px'} height={'24px'} />
             <BodyLong weight={'semibold'}>
               {agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}
@@ -106,5 +106,5 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
         )}
       </VStack>
     </Bleed>
-  )
+  );
 }

@@ -33,7 +33,7 @@ export const SharedVariantDataTable = ({
       <Heading level="2" size="medium">
         Felles egenskaper
       </Heading>
-      <Box paddingBlock="4">
+      <Box paddingBlock="space-16">
         {Object.keys(commonDataRows).length === 0 ? (
           <Alert variant={'info'} inline>
             Ingen felles egenskaper
@@ -54,5 +54,5 @@ export const SharedVariantDataTable = ({
         )}
       </Box>
     </VStack>
-  )
+  );
 }

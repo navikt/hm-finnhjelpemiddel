@@ -78,10 +78,10 @@ export const PostsListKomponenttypeGroups = ({
   const groupedPosts = groupProductsByKomponenttype(posts)
 
   return (
-    <VStack as="ol" gap={{ xs: '8', md: '12' }} className="agreement-search-results" id="agreementSearchResults">
+    <VStack as="ol" gap={{ xs: "space-32", md: "space-48" }} className="agreement-search-results" id="agreementSearchResults">
       {groupedPosts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className="agreement-post spacing-top--small">
-          <HStack gap="4" align="center">
+        <VStack as="li" key={post.nr} gap={{ xs: "space-16", md: "space-32" }} className="agreement-post spacing-top--small">
+          <HStack gap="space-16" align="center">
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
             </Heading>
@@ -99,14 +99,14 @@ export const PostsListKomponenttypeGroups = ({
           )}
 
           {Object.entries(post.productsByKomponenttype ?? {}).map(([komponenttype, products]) => (
-            <VStack key={komponenttype} gap="4">
+            <VStack key={komponenttype} gap="space-16">
               {post.hasNonDefaultKomponenttype && komponenttype !== 'Uten komponenttype' && (
                 <Heading level="3" size="small">
                   {komponenttype}
                 </Heading>
               )}
 
-              <HStack gap="4">
+              <HStack gap="space-16">
                 {products.map((productWithRank) => (
                   <ProductCardAgreement
                     key={`${productWithRank.product.id} + ${productWithRank.rank}`}
@@ -122,5 +122,5 @@ export const PostsListKomponenttypeGroups = ({
         </VStack>
       ))}
     </VStack>
-  )
+  );
 }

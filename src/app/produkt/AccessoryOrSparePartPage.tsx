@@ -20,17 +20,17 @@ const AccessoryOrSparePartPage = ({ product, matchingProducts }: Props) => {
           Hjelpemidler {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
         </Heading>
         {matchingProducts && matchingProducts.length > 0 ? (
-          <VStack gap={'4'}>
-            <HStack gap="2" justify="start">
+          <VStack gap={"space-16"}>
+            <HStack gap="space-8" justify="start">
               {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
               {matchingProducts.map((product, i) => (
                 /*<ProductCard product={product} key={`${i}-${product.id}`} type="plain" />*/
-                <ProductCardPart
+                (<ProductCardPart
                   product={product}
                   key={`${i}-${product.id}`}
                   variantCount={product.variantCount}
                   rank={product.agreements?.[0]?.rank}
-                />
+                />)
               ))}
             </HStack>
           </VStack>
@@ -42,7 +42,7 @@ const AccessoryOrSparePartPage = ({ product, matchingProducts }: Props) => {
         )}
       </VStack>
     </ProductPageLayout>
-  )
+  );
 }
 
 export default AccessoryOrSparePartPage

@@ -15,7 +15,7 @@ const SupplierList = ({ suppliers, letter }: Props) => {
       <Heading id={letter} size={'xlarge'}>
         {letter}
       </Heading>
-      <VStack as="ol" gap="4" className={styles.listContainer}>
+      <VStack as="ol" gap="space-16" className={styles.listContainer}>
         {suppliers && suppliers.length > 0 && (
           <Accordion>
             {suppliers.map((supplier) => (
@@ -25,7 +25,7 @@ const SupplierList = ({ suppliers, letter }: Props) => {
         )}
       </VStack>
     </div>
-  )
+  );
 }
 
 export default SupplierList

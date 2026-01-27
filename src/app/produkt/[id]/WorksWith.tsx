@@ -29,26 +29,22 @@ export const WorksWith = ({ worksWithSeriesIds }: Props) => {
     </BodyLong>
   )
 
-  return (
-    worksWithProducts &&
-    worksWithProducts.length > 0 && (
-      <Accordion size={'small'} indent={false}>
-        <Accordion.Item defaultOpen className={styles.accordionLast}>
-          <Accordion.Header className={styles.accordion}>
-            <HStack gap="2" align="center">
-              Virker sammen med
-              <HelpText onClick={(event) => event.stopPropagation()} placement="right">
-                {helpTextWorksWith}
-              </HelpText>
-            </HStack>
-          </Accordion.Header>
-          <Accordion.Content>
-            <WorksWithSection products={worksWithProducts} />
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
-    )
-  )
+  return (worksWithProducts &&
+  worksWithProducts.length > 0 && (<Accordion size={'small'} indent={false}>
+    <Accordion.Item defaultOpen className={styles.accordionLast}>
+      <Accordion.Header className={styles.accordion}>
+        <HStack gap="space-8" align="center">
+          Virker sammen med
+          <HelpText onClick={(event) => event.stopPropagation()} placement="right">
+            {helpTextWorksWith}
+          </HelpText>
+        </HStack>
+      </Accordion.Header>
+      <Accordion.Content>
+        <WorksWithSection products={worksWithProducts} />
+      </Accordion.Content>
+    </Accordion.Item>
+  </Accordion>));
 }
 
 const ComponentTypeFilter = ({
@@ -65,7 +61,7 @@ const ComponentTypeFilter = ({
   }
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <BodyShort size="small" as="label">
         Filter
       </BodyShort>
@@ -77,7 +73,7 @@ const ComponentTypeFilter = ({
         ))}
       </Chips>
     </VStack>
-  )
+  );
 }
 
 const WorksWithSection = ({ products }: { products: Product[] }) => {
@@ -126,7 +122,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <ComponentTypeFilter
         componentTypes={componentTypes}
         selectedTypes={selectedComponentTypes}
@@ -136,9 +132,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
       {displayedProducts.map((workWithProduct: Product) => (
         <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
       ))}
-
       {filteredProducts.length === 0 && <p>Ingen produkter matcher valgt filter.</p>}
-
       {hasMoreProducts && (
         <Button
           variant="tertiary"
@@ -152,5 +146,5 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
         </Button>
       )}
     </VStack>
-  )
+  );
 }

@@ -61,7 +61,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
   }
 
   return (
-    <Box paddingBlock="4">
+    <Box paddingBlock="space-16">
       <Tabs value={selectedTab} onChange={(value) => handleTabChange(value as ProductTabs)}>
         <Tabs.List>
           <Tabs.Tab
@@ -76,7 +76,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
           />
         </Tabs.List>
         <Tabs.Panel value={ProductTabs.ACCESSORIES}>
-          <VStack gap={'4'} paddingBlock="4">
+          <VStack gap={"space-16"} paddingBlock="space-16">
             <PartsTable products={accessoriesData?.products} />
             {accessoriesData?.totalHits > 0 && pageCount(accessoriesData?.totalHits) > 1 && (
               <ResponsivePagination page={page} count={pageCount(accessoriesData?.totalHits)} setPage={handleSetPage} />
@@ -84,7 +84,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
           </VStack>
         </Tabs.Panel>
         <Tabs.Panel value={ProductTabs.SPAREPART}>
-          <VStack gap={'4'} paddingBlock="4">
+          <VStack gap={"space-16"} paddingBlock="space-16">
             <PartsTable products={sparePartsData?.products} />
             {sparePartsData?.totalHits > 0 && pageCount(sparePartsData?.totalHits) > 1 && (
               <ResponsivePagination page={page} count={pageCount(sparePartsData?.totalHits)} setPage={handleSetPage} />
@@ -93,7 +93,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
         </Tabs.Panel>
       </Tabs>
     </Box>
-  )
+  );
 }
 
 type ResponsivePaginationProps = {

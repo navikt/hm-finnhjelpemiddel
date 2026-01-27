@@ -48,17 +48,14 @@ export const EditCategory = ({
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false)
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Link as={NextLink} href={'/kategori/admin'} style={{ width: 'fit-content' }}>
         <ArrowLeftIcon aria-hidden />
         Tilbake til oversikt
       </Link>
-
       <Heading size={'large'}>Rediger kategori</Heading>
-
       <EditableCategory inputValue={inputValue} setInputValue={setInputValue} id={id} />
-
-      <HStack gap={'6'}>
+      <HStack gap={"space-24"}>
         <Button
           variant={confirmDelete ? 'danger' : 'secondary'}
           className={styles.deleteButton}
@@ -84,5 +81,5 @@ export const EditCategory = ({
         </Button>
       </HStack>
     </VStack>
-  )
+  );
 }

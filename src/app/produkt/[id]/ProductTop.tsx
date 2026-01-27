@@ -14,11 +14,11 @@ import useSWR from 'swr'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
-    <HGrid columns={{ sm: 1, md: 2 }} gap={'8'}>
+    <HGrid columns={{ sm: 1, md: 2 }} gap={"space-32"}>
       {product.photos && <ImageCarousel images={product.photos} />}
       <ProductSummary product={product} hmsartnr={hmsartnr} />
     </HGrid>
-  )
+  );
 }
 
 const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
@@ -27,7 +27,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
   return (
-    <VStack gap={'8'}>
+    <VStack gap={"space-32"}>
       <TagRow
         productAgreements={product.agreements}
         accessory={product.accessory}
@@ -40,7 +40,6 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
       <Heading level="1" size="large">
         {hmsartnr ? product.variants[0].articleName : product.title}
       </Heading>
-
       {EXCLUDED_ISO_CATEGORIES.includes(product.isoCategory) && (
         <Alert variant="warning" size="small">
           Kun autoriserte leger i Norge kan bestille hjelpemidler for seksuallivet. Les mer på{' '}
@@ -49,8 +48,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           </Link>
         </Alert>
       )}
-
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         {hmsartnr && (
           <div>
             <Heading size={'xsmall'} level={'2'}>
@@ -67,12 +65,12 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </div>
       </VStack>
       <CopyHms product={product} />
-      <HStack gap={'6'}>
+      <HStack gap={"space-24"}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
       </HStack>
     </VStack>
-  )
+  );
 }
 
 const TagRow = ({
@@ -106,9 +104,9 @@ const TagRow = ({
   }
 
   return (
-    <HStack justify={'start'} gap={'3'}>
+    <HStack justify={'start'} gap={"space-12"}>
       {accessory || sparePart ? (
-        <HStack gap="3">
+        <HStack gap="space-12">
           <NeutralTag>{accessory ? 'Tilbehør' : 'Reservedel'}</NeutralTag>
         </HStack>
       ) : (
@@ -143,7 +141,7 @@ const TagRow = ({
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
     </HStack>
-  )
+  );
 }
 
 const CopyHms = ({ product }: { product: Product }) => {
@@ -155,7 +153,7 @@ const CopyHms = ({ product }: { product: Product }) => {
 
   return (
     <>
-      <VStack gap={'2'} align={'start'}>
+      <VStack gap={"space-8"} align={'start'}>
         <Heading level="3" size="xsmall">
           HMS-nummer
         </Heading>
@@ -186,12 +184,12 @@ const CopyHms = ({ product }: { product: Product }) => {
         )}
       </VStack>
     </>
-  )
+  );
 }
 
 const AccessoriesAndParts = ({ productId }: { productId: string }) => {
   return (
-    <VStack gap={'6'}>
+    <VStack gap={"space-24"}>
       <Button
         size="medium"
         className={styles.button}
@@ -202,7 +200,7 @@ const AccessoriesAndParts = ({ productId }: { productId: string }) => {
         Tilbehør og reservedeler
       </Button>
     </VStack>
-  )
+  );
 }
 
 export default ProductTop

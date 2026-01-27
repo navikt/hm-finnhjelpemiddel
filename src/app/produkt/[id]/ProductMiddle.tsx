@@ -35,11 +35,11 @@ const ProductMiddle = ({ product }: { product: Product }) => {
   const worksWithShowConstrain = worksWithFeatureFlag && shouldShowSection
 
   return (
-    <HGrid gap={'20 8'} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={'6 0'}>
+    <HGrid gap={"space-80 space-32"} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={"space-24 space-0"}>
       <div style={{ gridArea: 'box1' }}>
         <ProductInformation product={product} />
       </div>
-      <VStack gap={'6'} style={{ gridArea: 'box2' }}>
+      <VStack gap={"space-24"} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
         {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
@@ -53,15 +53,15 @@ const ProductMiddle = ({ product }: { product: Product }) => {
         </>
       </div>
     </HGrid>
-  )
+  );
 }
 
 const showOtherProductsOnAgreement = ({ agreement, index }: { agreement: AgreementInfo; index: number }) => {
   return (
-    <VStack gap={'2'} paddingBlock={'2 4'} key={index}>
+    <VStack gap={"space-8"} paddingBlock={"space-8 space-16"} key={index}>
       <NextLink href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>{agreement.postTitle}</NextLink>
     </VStack>
-  )
+  );
 }
 
 const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
@@ -70,7 +70,7 @@ const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) =>
   })
 
   return (
-    <VStack gap={'2'} paddingInline={'2 0'}>
+    <VStack gap={"space-8"} paddingInline={"space-8 space-0"}>
       <Heading size={'medium'} level={'2'}>
         Andre hjelpemidler på delkontrakt:
       </Heading>
@@ -79,7 +79,7 @@ const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) =>
           return showOtherProductsOnAgreement({ agreement: agreement, index })
         })}
     </VStack>
-  )
+  );
 }
 
 export default ProductMiddle

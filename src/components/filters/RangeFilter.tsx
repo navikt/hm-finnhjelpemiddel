@@ -49,18 +49,18 @@ const RangeFilter = ({ groupTitle, filters }: Props) => {
       spacing
       className={classNames('input-filter', { active: numberOfactiveFiltersInGroup.length > 0 })}
     >
-      <VStack gap="4">
+      <VStack gap="space-16">
         {filters.map((filter) => {
           return (
-            <VStack key={filter.name} className="range-filter-input-group" gap="2">
+            <VStack key={filter.name} className="range-filter-input-group" gap="space-8">
               <Label size="small">{filter.name}</Label>
               <FilterMinMaxRow filterKeyMin={filter.min} filterKeyMax={filter.max} />
             </VStack>
-          )
+          );
         })}
       </VStack>
     </ShowMore>
-  )
+  );
 }
 
 export default RangeFilter
@@ -75,10 +75,10 @@ const FilterMinMaxRow = ({
   const formMethods = useFormContext<FormSearchData>()
 
   return (
-    <HStack wrap={false} gap="2">
+    <HStack wrap={false} gap="space-8">
       <InputFieldMinMax inputName="Min" filterKey={filterKeyMin} />
       <InputFieldMinMax inputName="Max" filterKey={filterKeyMax} />
-      <HStack gap="2">
+      <HStack gap="space-8">
         <Button
           size="small"
           type="button"
@@ -101,7 +101,7 @@ const FilterMinMaxRow = ({
         />
       </HStack>
     </HStack>
-  )
+  );
 }
 
 const InputFieldMinMax = ({ inputName, filterKey }: { inputName: 'Min' | 'Max'; filterKey: PickedFiltersFormKey }) => {

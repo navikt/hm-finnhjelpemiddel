@@ -75,9 +75,9 @@ export const PartsPage = ({ id, backLink, isAgreement, title }: PartsPageProps) 
 
   return (
     <Box className={styles.container}>
-      <VStack gap="4" className="main-wrapper--large">
+      <VStack gap="space-16" className="main-wrapper--large">
         <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-          <VStack gap={'9'} paddingBlock={'6'} align={'start'}>
+          <VStack gap={"space-36"} paddingBlock={"space-24"} align={'start'}>
             <Button
               as={NextLink}
               href={backLink}
@@ -87,7 +87,7 @@ export const PartsPage = ({ id, backLink, isAgreement, title }: PartsPageProps) 
             >
               {`Tilbake`}
             </Button>
-            <VStack gap={'4'}>
+            <VStack gap={"space-16"}>
               <Heading level="1" size="medium">
                 Tilbehør og reservedeler
               </Heading>
@@ -104,5 +104,5 @@ export const PartsPage = ({ id, backLink, isAgreement, title }: PartsPageProps) 
         )}
       </VStack>
     </Box>
-  )
+  );
 }

@@ -28,11 +28,11 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <Heading level={'3'} size={'small'}>
         Filter
       </Heading>
-      <HStack gap="2" maxWidth={'1214px'}>
+      <HStack gap="space-8" maxWidth={'1214px'}>
         {filters.isos.length > 1 && (
           <KategoriToggleFilter searchParamKey={'iso'} filter={filters.isos} onChange={onChange} />
         )}
@@ -55,5 +55,5 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
         </div>
       </HStack>
     </VStack>
-  )
+  );
 }

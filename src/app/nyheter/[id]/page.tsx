@@ -51,10 +51,10 @@ export default async function NewsArticlePage({ params }: { params?: Promise<Rec
   const publishedStr = news.published.toLocaleDateString('nb-NO')
 
   return (
-    <VStack className={styles.container} gap="8" padding="8">
+    <VStack className={styles.container} gap="space-32" padding="space-32">
       <article aria-labelledby="news-main-title" className={styles.articleContainer}>
         <header>
-          <VStack gap="4" className={styles.headerGroup}>
+          <VStack gap="space-16" className={styles.headerGroup}>
             <Heading id="news-main-title" level="1" size="large">
               {main}
             </Heading>
@@ -103,5 +103,5 @@ export default async function NewsArticlePage({ params }: { params?: Promise<Rec
         <Link href="/">← Til forsiden</Link>
       </BodyLong>
     </VStack>
-  )
+  );
 }

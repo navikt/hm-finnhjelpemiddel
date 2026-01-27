@@ -34,10 +34,10 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
   }, [posts])
 
   return (
-    <VStack as="ol" gap={{ xs: '8', md: '12' }} className="agreement-search-results" id="agreementSearchResults">
+    <VStack as="ol" gap={{ xs: "space-32", md: "space-48" }} className="agreement-search-results" id="agreementSearchResults">
       {posts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: '4', md: '8' }} className={'agreement-post spacing-top--small'}>
-          <HStack gap="4" align={'center'}>
+        <VStack as="li" key={post.nr} gap={{ xs: "space-16", md: "space-32" }} className={'agreement-post spacing-top--small'}>
+          <HStack gap="space-16" align={'center'}>
             <Heading level="2" size="small" id={`${post.refNr}`} className="agreement-page__post-heading">
               {post.title}
             </Heading>
@@ -53,7 +53,7 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
           {post.products.length === 0 && !postLoading && post.nr !== 99 && (
             <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>
           )}
-          <HStack gap={'4'}>
+          <HStack gap={"space-16"}>
             {post.products.map((productWithRank) => (
               <ProductCardAgreement
                 key={`${productWithRank.product.id} + ${productWithRank.rank}`}
@@ -67,7 +67,7 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
         </VStack>
       ))}
     </VStack>
-  )
+  );
 }
 
 export default PostsList

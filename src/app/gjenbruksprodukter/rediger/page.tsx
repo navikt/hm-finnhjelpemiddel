@@ -19,18 +19,18 @@ export default function EditAlternativeProductsPage() {
   }
 
   return (
-    <VStack gap={'4'} className={`${styles.container} main-wrapper--large`}>
+    <VStack gap={"space-16"} className={`${styles.container} main-wrapper--large`}>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        <VStack paddingBlock={'12'}>
+        <VStack paddingBlock={"space-48"}>
           <Heading level="1" size="large" spacing>
             Rediger alternativer
           </Heading>
 
-          <Box paddingBlock={'0 8'}>
+          <Box paddingBlock={"space-0 space-32"}>
             <BodyShort spacing>Søk opp et hms-nummer til klyngen med alternativer du vil redigere</BodyShort>
           </Box>
 
-          <HStack gap={'7'} align={'end'} wrap={false}>
+          <HStack gap={"space-28"} align={'end'} wrap={false}>
             <Search
               label={'HMS-nummer'}
               hideLabel={false}
@@ -46,10 +46,9 @@ export default function EditAlternativeProductsPage() {
           </HStack>
         </VStack>
       </Bleed>
-
       {searchParams.has('hms') && <AlternativeGroupList hmsNumber={searchParams.get('hms')!} />}
     </VStack>
-  )
+  );
 }
 
 const buildGroupKey = (group: { hmsArtNr?: string | null }[], index: number) => {
@@ -110,7 +109,7 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
   if (groups.length > 1) {
     return (
       <HStack gap="space-8">
-        <HStack gap="2">
+        <HStack gap="space-8">
           Det finnes flere klynger med alternativer for produktet
           <HelpText title="Forklaring av alternativgrupper">
             Når et produkt har flere klynger med alternativer betyr det at det finnes ulike sett av produkter som kan
@@ -134,7 +133,7 @@ const AlternativeGroupList = ({ hmsNumber }: { hmsNumber: string }) => {
           </Box>
         ))}
       </HStack>
-    )
+    );
   } else if (groups.length === 0) {
     return (
       <Box>

@@ -121,8 +121,8 @@ export const KategoriPage = ({ category }: Props) => {
     <KategoriPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
-        <HGrid columns={'374px 4'} gap={'4'}>
-          <VStack gap={'4'}>
+        <HGrid columns={'374px 4'} gap={"space-16"}>
+          <VStack gap={"space-16"}>
             <Heading level="2" size="medium">
               {isLoading ? (
                 <Skeleton variant="text" width="10rem" />
@@ -132,7 +132,7 @@ export const KategoriPage = ({ category }: Props) => {
                 `Ingen treff`
               )}
             </Heading>
-            <HStack justify={'space-between'} gap={'2'} align={'end'}>
+            <HStack justify={'space-between'} gap={"space-8"} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
               {/*<SortKategoriResults />*/}
             </HStack>
@@ -142,5 +142,5 @@ export const KategoriPage = ({ category }: Props) => {
         </HGrid>
       </>
     </KategoriPageLayout>
-  )
+  );
 }

@@ -14,11 +14,11 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
 
   return (
     <Box className={styles.container} width={{ xs: '100%', sm: '500px' }}>
-      <HStack gap="3" align="start" wrap={false}>
+      <HStack gap="space-12" align="start" wrap={false}>
         <Box className={styles.imageWrapper}>
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
         </Box>
-        <VStack gap={{ xs: '1', md: '2' }} className={styles.textColumn}>
+        <VStack gap={{ xs: "space-4", md: "space-8" }} className={styles.textColumn}>
           <Box className={styles.productSummary}>
             <Link
               className={styles.link}
@@ -56,5 +56,5 @@ export const ProductCardWorksWith = ({ product }: { product: Product }) => {
         </VStack>
       </HStack>
     </Box>
-  )
+  );
 }

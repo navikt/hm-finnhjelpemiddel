@@ -77,13 +77,13 @@ const Agreements = () => {
   return (
     <>
       <Toast message={toastMessage} icon={toastIcon} />
-      <VStack gap="4" paddingInline={{ lg: '6' }}>
+      <VStack gap="space-16" paddingInline={{ lg: "space-24" }}>
         <Heading level="2" size="medium">
           Hjelpemidler på avtale med Nav
         </Heading>
 
         {!isReadyToRenderTabs ? (
-          <HStack align="center" gap="2">
+          <HStack align="center" gap="space-8">
             <Loader size="small" title="Laster avtaler" />
             <span>{error ? 'Kunne ikke hente avtaler' : 'Laster avtaler…'}</span>
           </HStack>
@@ -103,7 +103,7 @@ const Agreements = () => {
                   as="ol"
                   id="agreement-list-favourites"
                   columns={{ xs: '1fr', lg: '1fr 1fr' }}
-                  gap="2"
+                  gap="space-8"
                   className="agreement-page__list-container"
                 >
                   {favourites.map((label) => (
@@ -115,7 +115,7 @@ const Agreements = () => {
                     />
                   ))}
                   {favourites.length === 0 && (
-                    <Box as="li" padding="4">
+                    <Box as="li" padding="space-16">
                       Ingen favoritter enda.
                     </Box>
                   )}
@@ -131,7 +131,7 @@ const Agreements = () => {
                     />
                   ))}
                   {favourites.length === 0 && (
-                    <Box as="li" padding="4">
+                    <Box as="li" padding="space-16">
                       Ingen favoritter enda.
                     </Box>
                   )}
@@ -145,7 +145,7 @@ const Agreements = () => {
                   as="ol"
                   id="agreement-list-others"
                   columns={{ xs: '1fr', lg: '1fr 1fr' }}
-                  gap="2"
+                  gap="space-8"
                   className="agreement-page__list-container"
                 >
                   {all.map((label) => (
@@ -157,7 +157,7 @@ const Agreements = () => {
                     />
                   ))}
                   {all.length === 0 && (
-                    <Box as="li" padding="4">
+                    <Box as="li" padding="space-16">
                       Ingen avtaler funnet
                     </Box>
                   )}
@@ -173,7 +173,7 @@ const Agreements = () => {
                     />
                   ))}
                   {all.length === 0 && (
-                    <Box as="li" padding="4">
+                    <Box as="li" padding="space-16">
                       Ingen avtaler funnet
                     </Box>
                   )}
@@ -184,7 +184,7 @@ const Agreements = () => {
         )}
       </VStack>
     </>
-  )
+  );
 }
 
 const AgreementRow = ({
@@ -202,7 +202,7 @@ const AgreementRow = ({
 
   return (
     <Box as="li" className="agreement-page__list-item">
-      <HGrid columns={'40px auto'} gap="2" align="center" className={styles.agreementRow}>
+      <HGrid columns={'40px auto'} gap="space-8" align="center" className={styles.agreementRow}>
         <button
           type="button"
           className={styles.favouriteIcon}
@@ -223,7 +223,7 @@ const AgreementRow = ({
         </HStack>
       </HGrid>
     </Box>
-  )
+  );
 }
 
 export default Agreements

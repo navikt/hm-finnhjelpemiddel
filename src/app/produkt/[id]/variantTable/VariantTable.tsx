@@ -167,12 +167,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <VStack gap={'4'}>
+        <VStack gap={"space-16"}>
           <Heading size={'medium'} level={'2'} spacing>
             Andre egenskaper
           </Heading>
 
-          <VStack gap={'4'}>
+          <VStack gap={"space-16"}>
             <FilterRow
               variants={product.variants}
               filterConfigs={filters}
@@ -182,13 +182,11 @@ export const VariantTable = ({ product }: { product: Product }) => {
           </VStack>
         </VStack>
       )}
-
       {productVariantsToShow.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
           Ingen av variantene passer med filteret ditt
         </Alert>
       )}
-
       {productVariantsToShow.length > 0 && (
         <div className={styles.variantsTable} id="variants-table">
           <Table zebraStripes>
@@ -313,5 +311,5 @@ export const VariantTable = ({ product }: { product: Product }) => {
         </div>
       )}
     </Box>
-  )
+  );
 }

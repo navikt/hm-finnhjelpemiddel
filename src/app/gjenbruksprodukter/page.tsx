@@ -60,14 +60,14 @@ export default function AlternativeProductsPage() {
   }
 
   return (
-    <VStack gap={'4'} className={`${styles.container} main-wrapper--large`}>
+    <VStack gap={"space-16"} className={`${styles.container} main-wrapper--large`}>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        <VStack paddingBlock={'12'}>
+        <VStack paddingBlock={"space-48"}>
           <Heading level="1" size="large" spacing>
             Alternativer på lager
           </Heading>
 
-          <Box paddingBlock={'0 8'}>
+          <Box paddingBlock={"space-0 space-32"}>
             <BodyShort spacing>
               Lagerstatusen oppdateres hver natt fra OeBS, og er regnet ut fra tilgjengelig minus behovsmeldt.
             </BodyShort>
@@ -79,7 +79,7 @@ export default function AlternativeProductsPage() {
             </ul>
           </Box>
 
-          <HStack gap={'7'} align={'end'} wrap={false}>
+          <HStack gap={"space-28"} align={'end'} wrap={false}>
             <Search
               label={'HMS-nummer'}
               hideLabel={false}
@@ -113,10 +113,9 @@ export default function AlternativeProductsPage() {
           </HStack>
         </VStack>
       </Bleed>
-
       {searchParams.has('hms') && (
         <AlternativeProductList hmsNumber={searchParams.get('hms')!} selectedWarehouse={selectedWarehouse} />
       )}
     </VStack>
-  )
+  );
 }

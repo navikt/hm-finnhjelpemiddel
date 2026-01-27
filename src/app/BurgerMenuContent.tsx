@@ -35,8 +35,8 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
       {menuOpen && (
         <div className="burgermenu-container">
           <div className="burgermenu-container__content main-wrapper--large">
-            <HGrid columns={{ xs: 1, md: '4fr 3fr' }} gap={{ xs: '8', md: '16' }}>
-              <VStack gap={{ xs: '1', md: '1' }}>
+            <HGrid columns={{ xs: 1, md: '4fr 3fr' }} gap={{ xs: "space-32", md: "space-64" }}>
+              <VStack gap={{ xs: "space-4", md: "space-4" }}>
                 <Heading level="2" size="small">
                   AVTALER
                 </Heading>
@@ -77,11 +77,11 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                 </ul> */}
               </VStack>
 
-              <VStack gap={{ xs: '1', md: '2' }}>
+              <VStack gap={{ xs: "space-4", md: "space-8" }}>
                 <Heading level="2" size="small">
                   SNARVEIER
                 </Heading>
-                <VStack as={'ul'} gap={{ xs: '4', md: '6' }}>
+                <VStack as={'ul'} gap={{ xs: "space-16", md: "space-24" }}>
                   <li>
                     <Link
                       as={NextLink}
@@ -144,7 +144,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
         </div>
       )}
     </>
-  )
+  );
 }
 
 export default BurgerMenuContent

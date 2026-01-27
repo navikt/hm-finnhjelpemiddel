@@ -19,13 +19,13 @@ export const EditableAlternativeCard = ({
   return (
     <HGrid
       columns={'.5fr 3fr .8fr .8fr .8fr'}
-      gap={'2'}
-      padding={'4'}
+      gap={"space-8"}
+      padding={"space-16"}
       align={'center'}
       className={`${styles.container} ${isOriginal ? styles.original : ''}`}
       width={'10px'}
     >
-      <Box paddingInline="2" paddingBlock="2" className={styles.imageWrapper}>
+      <Box paddingInline="space-8" paddingBlock="space-8" className={styles.imageWrapper}>
         <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
       </Box>
       <VStack>
@@ -38,7 +38,7 @@ export const EditableAlternativeCard = ({
         </Link>
         <BodyShort>{alternativeProduct.variantTitle}</BodyShort>
       </VStack>
-      <HStack align="center" gap="2">
+      <HStack align="center" gap="space-8">
         HMS-nummer
         <CopyButton
           size="small"
@@ -64,5 +64,5 @@ export const EditableAlternativeCard = ({
         </Button>
       )}
     </HGrid>
-  )
+  );
 }

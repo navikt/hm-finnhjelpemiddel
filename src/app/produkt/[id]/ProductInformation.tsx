@@ -10,7 +10,7 @@ export const ProductInformation = ({ product }: { product: Product }) => {
   const [open, setOpen] = useState<boolean>(false)
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Heading size={'medium'} level={'2'}>
         Produktinformasjon
       </Heading>
@@ -35,5 +35,5 @@ export const ProductInformation = ({ product }: { product: Product }) => {
         </Accordion.Item>
       </Accordion>
     </VStack>
-  )
+  );
 }
