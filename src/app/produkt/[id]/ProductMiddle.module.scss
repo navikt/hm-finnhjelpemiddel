@@ -7,7 +7,7 @@
     "box3 box2"
     "box3 .";
 
-  @media (max-width: $a-breakpoint-md) {
+  @media (max-width:$ax-breakpoint-md) {
     grid-template-areas: 
     "box1"
     "box2"
@@ -18,15 +18,15 @@
 
 .commonAttributes {
   th, td {
-    border-bottom: 1px solid $a-bg-subtle !important;
+    border-bottom: 1px solid$ax-bg-neutral-soft !important;
   }
 }
 
 .boks {
   background: #F5F9FF;
   height: fit-content;
-  border-radius: $a-border-radius-large;
-  border: 1px solid $a-bg-subtle;
+  border-radius:$ax-radius-8;
+  border: 1px solid$ax-bg-neutral-soft;
 }
 
 .button {

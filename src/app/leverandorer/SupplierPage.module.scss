@@ -12,9 +12,9 @@
 
 .letter {
   a {
-    border: 2px solid $a-deepblue-600;
+    border: 2px solid$ax-brand-blue-700;
     border-radius: 5px;
-    background-color: $a-deepblue-600;
+    background-color:$ax-brand-blue-700;
     padding: 5px 10px;
     font-size: 1.5rem;
     margin-left: 5px;
@@ -26,9 +26,9 @@
 .letterDisabled {
   a {
     pointer-events: none;
-    border: 2px solid $a-gray-400;
+    border: 2px solid$ax-neutral-500;
     border-radius: 5px;
-    background-color: $a-gray-400;
+    background-color:$ax-neutral-500;
     padding: 5px 10px;
     font-size: 1.5rem;
     margin-left: 5px;

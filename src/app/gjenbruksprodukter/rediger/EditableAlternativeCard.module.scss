@@ -1,21 +1,21 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .container {
-  border: 1px solid $a-gray-300;
-  border-radius: $a-border-radius-medium;
-  background-color: $a-surface-default;
+  border: 1px solid$ax-neutral-400;
+  border-radius:$ax-radius-4;
+  background-color:$ax-bg-default;
   width: 900px;
 }
 
 .containerDotted {
-  border: 2px dashed $a-border-strong;
-  border-radius: $a-border-radius-medium;
-  background-color: $a-surface-subtle;
+  border: 2px dashed$ax-border-neutral-strong;
+  border-radius:$ax-radius-4;
+  background-color:$ax-bg-neutral-soft;
   width: 900px;
 }
 
 .copyButton {
-  border: 1px dashed $a-surface-action;
+  border: 1px dashed$ax-bg-accent-strong;
 }
 
 
@@ -34,8 +34,8 @@
   background-color: #ccf1d67a;
   border-radius: 0.25rem;
   border: 1px solid #99dead7a;
-  font-size: $a-font-size-medium;
-  padding: $a-spacing-1-alt $a-spacing-2;
+  font-size:$ax-font-size-medium;
+  padding:$ax-space-6$ax-space-8;
 }
 
 .deleteButton {
@@ -60,7 +60,7 @@
     transform: translateX(-50%);
     width: 2px;
     height: 1.1rem;
-    background-color: $a-border-strong;
-    background-color: $a-gray-300;
+    background-color:$ax-border-neutral-strong;
+    background-color:$ax-neutral-400;
   }
 }

@@ -13,7 +13,7 @@
     }
 
     tbody .navds-table__row--shade-on-hover:hover th {
-      background-color: $a-bg-subtle;
+      background-color: $ax-bg-neutral-soft;
     }
 
     table {
@@ -27,7 +27,7 @@
 
     tbody th {
       background-color: inherit;
-      border-right: 2px solid $a-bg-subtle;
+      border-right: 2px solid$ax-bg-neutral-soft;
       white-space: nowrap;
       text-align: right;
       font-weight: 600;
@@ -57,21 +57,21 @@
     }
   }
 
-  .back-to-search {
+  /*.back-to-search {
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: $a-spacing-3;
-    color: $a-text-default;
-    padding: $a-spacing-3 $a-spacing-1;
-    border-radius: $a-border-radius-small;
-    border: 1px solid $a-border-default;
+    gap:$ax-space-12;
+    color:$ax-text-neutral;
+    padding:$ax-space-12$ax-space-4;
+    border-radius:$ax-radius-2;
+    border: 1px solid$ax-border-neutral;
     box-shadow: $a-shadow-small;
 
     &:hover {
       text-decoration: underline;
-      color: $a-text-action;
+      color:$ax-text-accent-subtle;
       box-shadow: $a-shadow-medium;
     }
-  }
+  }*/
 }

@@ -50,11 +50,11 @@
 
   tbody th {
     background-color: inherit;
-    border-right: 1px solid $a-bg-subtle;
+    border-right: 1px solid$ax-bg-neutral-soft;
   }
 
   tbody .navds-table__row--shade-on-hover:hover th {
-    background-color: $a-bg-subtle;
+    background-color:$ax-bg-neutral-soft;
   }
 
   table thead th:first-child {
@@ -65,7 +65,7 @@
 
   .navds-table__header-cell,
   .navds-table__data-cell {
-    padding: $a-spacing-3 $a-spacing-3;
+    padding:$ax-space-12$ax-space-12;
   }
 
   .navds-table__data-cell {

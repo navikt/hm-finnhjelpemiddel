@@ -31,17 +31,17 @@
 .modalContainer {
   display: flex;
   flex-direction: column;
-  gap: $a-spacing-8;
-  padding-top: $a-spacing-4;
-  padding-bottom: $a-spacing-4;
+  gap:$ax-space-32;
+  padding-top:$ax-space-16;
+  padding-bottom:$ax-space-16;
 
   @include mixins.for-size(tablet-up) {
-    padding-top: $a-spacing-8;
-    padding-bottom: $a-spacing-8;
+    padding-top:$ax-space-32;
+    padding-bottom:$ax-space-32;
   }
   @include mixins.for-size(desktop-up) {
-    padding-top: $a-spacing-14;
-    padding-bottom: $a-spacing-14;
+    padding-top:$ax-space-56;
+    padding-bottom:$ax-space-56;
   }
 }
 
@@ -79,7 +79,7 @@
   justify-content: space-between;
   align-items: flex-start;
   border-radius: 0.25rem;
-  border: 1px solid $a-border-divider;
+  border: 1px solid$ax-border-neutral-subtle;
 }
 
 .selectWarehouse {
@@ -88,13 +88,13 @@
 
 .toggledButton {
   color: #fff;
-  background-color: $a-surface-action-selected-hover;
+  background-color:$ax-bg-accent-strong-hover;
   box-shadow: none;
   z-index: 2;
 
   &:hover {
     color: white;
-    background-color: $a-surface-action-selected-hover;
+    background-color:$ax-bg-accent-strong-hover;
   }
 }
 

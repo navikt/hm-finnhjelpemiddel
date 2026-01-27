@@ -3,7 +3,7 @@ import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Button, Hide, HStack, Show } from '@navikt/ds-react'
+import { Button, Hide, HStack, Show, VStack } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -85,14 +85,22 @@ const NavigationBar = () => {
       {juledekorasjonFlag && visJulepynt && <SnowfallComponent />}
       <div className={menuOpen ? 'nav-top-container open' : 'nav-top-container'}>
         <div className="nav-top-container__content main-wrapper--xlarge">
-          <NextLink href={homeUrl} className="logo" onClick={() => setMenuOpen(false)}>
+          <HStack
+            as={NextLink}
+            href={homeUrl}
+            align={'center'}
+            className="logo"
+            gap={'space-12'}
+            onClick={() => setMenuOpen(false)}
+            wrap={false}
+          >
             <Image src="/nav-logo-red.svg" width="60" height="35" alt="Til forsiden" />
             <Hide below="sm">
               <span className="logo__text">
                 <span>FinnHjelpemiddel</span>
               </span>
             </Hide>
-          </NextLink>
+          </HStack>
 
           {juledekorasjonFlag && (
             <div

@@ -1,9 +1,9 @@
 @use 'src/styles/_variables' as *;
 
 .container {
-  background-color: var(--a-orange-100);
-  border-radius: var(--a-border-radius-large);
-  border: var(--a-orange-400) 1px solid;
+  background-color: var(--ax-warning-200);
+  border-radius: var(--ax-radius-8);
+  border: var(--ax-warning-500) 1px solid;
   position: fixed;
   bottom: 1.5rem;
   left: 50%;

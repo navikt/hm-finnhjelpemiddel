@@ -1,27 +1,27 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .filterButton {
-  --ac-button-border-radius: var(--a-border-radius-full);
+  --ac-button-border-radius: var(--ax-radius-full);
 
   --ac-button-secondary-bg: white;
-  --ac-button-secondary-text: var(--a-text-action);
+  --ac-button-secondary-text: var(--ax-text-accent-subtle);
 
-  --ac-button-secondary-hover-bg: var(--a-surface-action-subtle-hover);
+  --ac-button-secondary-hover-bg: var(--ax-bg-accent-moderate-hover);
 
-  box-shadow: inset 0 0 0 1px var(--a-surface-action);
+  box-shadow: inset 0 0 0 1px var(--ax-bg-accent-strong);
 
   span {
     font-weight: normal;
   }
 
   &:hover {
-    box-shadow: inset 0 0 0 1px var(--a-border-action-hover);
+    box-shadow: inset 0 0 0 1px var(--ax-border-accent);
   }
 
   &Active {
     @extend .filterButton;
-    --ac-button-secondary-bg: var(--a-surface-action-selected);
-    --ac-button-secondary-text: var(--a-text-on-action);
+    --ac-button-secondary-bg: var(--ax-bg-accent-strong-pressed);
+    --ac-button-secondary-text: var(--ax-text-accent-contrast);
   }
 }
 

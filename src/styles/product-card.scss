@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  outline: 1px solid $a-border-subtle;
-  background-color: $a-surface-default;
+  outline: 1px solid$ax-border-neutral-subtle;
+  background-color: $ax-bg-default;
   width: 10.5rem;
   height: 13.7rem;
 
@@ -23,21 +23,21 @@
   }
 
   &:hover {
-    outline: 1px solid $a-border-action;
+    outline: 1px solid$ax-border-accent;
   }
 
   &__link {
     height: 2.75rem;
     outline: none;
     text-decoration: none;
-    color: $a-text-default;
+    color: $ax-text-neutral;
     font-weight: 400;
     line-height: 1.375rem;
 
     &:hover,
     &:focus {
       text-decoration: underline;
-      color: $a-text-action;
+      color: $ax-text-accent-subtle;
       background-color: white;
     }
 
@@ -79,7 +79,7 @@
 
   &__checked:hover,
   &__checked {
-    outline: 3px solid $a-text-action-selected;
+    outline: 3px solid$ax-text-accent-subtle;
   }
 
   &__checkbox {
@@ -88,7 +88,7 @@
     z-index: 2;
 
     .navds-checkbox__input:checked + .navds-checkbox__label::before {
-      box-shadow: 0 0 0 2px var(--ac-radio-checkbox-action, var(--a-surface-action));
+      box-shadow: 0 0 0 2px var(--ac-radio-checkbox-action, var(--ax-bg-accent-strong));
       background-color: #fff;
     }
 
@@ -101,7 +101,7 @@
       .navds-checkbox__content {
         .navds-body-short--small {
           font-size: 14px;
-          color: $a-text-subtle;
+          color: $ax-text-neutral-subtle;
         }
       }
 
@@ -115,7 +115,7 @@
   &__remove-button {
     align-self: flex-end;
     padding: 0;
-    margin: $a-spacing-1;
+    margin: $ax-space-4;
 
     svg {
       width: 2rem;
@@ -124,10 +124,10 @@
   }
 
   &__iso-button.navds-button {
-    background-color: $a-gray-50;
-    border: 1px solid $a-border-subtle;
-    border-radius: $a-border-radius-large;
-    padding: $a-spacing-1 $a-spacing-2;
+    background-color: $ax-neutral-100;
+    border: 1px solid$ax-border-neutral-subtle;
+    border-radius: $ax-radius-8;
+    padding: $ax-space-4$ax-space-8;
     text-align: start;
     z-index: 2;
     justify-content: flex-start;
@@ -135,7 +135,7 @@
 
     .navds-label {
       @extend .text-line-clamp !optional;
-      font-size: $a-font-size-small;
+      font-size: $ax-font-size-small;
       line-height: 1rem;
       font-weight: 400;
       text-overflow: ellipsis;
@@ -148,8 +148,8 @@
     }
 
     &:hover {
-      border: 1px solid $a-gray-800;
-      background-color: $a-gray-200;
+      border: 1px solid$ax-neutral-900;
+      background-color: $ax-neutral-300;
     }
   }
 
@@ -229,7 +229,7 @@
   .navds-checkbox__content {
     .navds-body-short--small {
       font-size: 14px;
-      color: $a-text-subtle;
+      color: $ax-text-neutral-subtle;
     }
   }
 
@@ -250,7 +250,7 @@
   }
 }
 
-.product-card--horizontal {
+/*.product-card--horizontal {
   @extend .product-card;
   width: auto;
   height: auto;
@@ -266,29 +266,29 @@
   .picture-container {
     margin-right: auto;
   }
-}
+}*/
 
 .product-card--new {
   position: relative;
-  border: 1px solid $a-border-default;
-  border-radius: $a-border-radius-medium;
+  border: 1px solid$ax-border-neutral;
+  border-radius: $ax-radius-4;
 
   .product-card__nav-on-agreement-text {
     color: $ny-nav-purple-dark;
   }
 
   .product-card__nav-not-on-agreement-text {
-    color: $a-gray-800;
+    color: $ax-neutral-900;
   }
 
   .product-card__link-2 {
-    color: $a-text-default;
+    color: $ax-text-neutral;
     text-decoration: underline;
 
     &:hover,
     &:focus {
       text-decoration: underline;
-      color: $a-text-action;
+      color: $ax-text-accent-subtle;
       background-color: white;
     }
 
@@ -340,11 +340,11 @@
 
   .product-card__compare-button--checked {
     color: #fff;
-    background-color: $a-surface-action-selected-hover;
+    background-color: $ax-bg-accent-strong-hover;
     box-shadow: none;
   }
 
   &:hover {
-    outline: 1px solid $a-border-action;
+    outline: 1px solid$ax-border-accent;
   }
 }

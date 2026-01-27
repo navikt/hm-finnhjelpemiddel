@@ -5,19 +5,19 @@
 }
 
 .linkButton {
-  --__ac-button-padding: $a-spacing-05 $a-spacing-2;
+  --__ac-button-padding:$ax-space-2$ax-space-8;
   text-decoration: underline;
 }
 
 
 .partTag {
-  background-color: var(--a-surface-neutral-subtle);
+  background-color: var(--ax-bg-neutral-soft);
   border-radius: 0.25rem;
   border: 1px solid #c6c2cc;
-  font-size: var(--a-font-size-medium);
-  padding: 0 $a-spacing-1-alt;
+  font-size: var(--ax-font-size-medium);
+  padding: 0$ax-space-6;
 }
 
 .supplierLink {
-  font-weight: $a-font-weight-bold;
+  font-weight:$ax-font-weight-bold;
 }
