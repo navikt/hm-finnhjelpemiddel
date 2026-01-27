@@ -117,12 +117,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   return (
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
-      <VStack gap={"space-40"} className="main-wrapper--large spacing-bottom--xlarge hide-print">
+      <VStack gap={'space-40'} className="main-wrapper--large spacing-bottom--xlarge hide-print">
         <TopBar agreement={agreement} />
 
         <CompareMenu />
 
-        <VStack gap={"space-16"}>
+        <VStack gap={'space-16'}>
           <Heading level="2" size={'medium'}>
             {totalProducts} hjelpemidler i delkontrakter
           </Heading>
@@ -180,25 +180,25 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         </VStack>
       </VStack>
     </>
-  );
+  )
 }
 
 const TopBar = ({ agreement }: { agreement: Agreement }) => {
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-      <VStack gap="space-16" align={'start'} paddingBlock={"space-48"} maxWidth={'800px'}>
+      <VStack gap="space-16" align={'start'} paddingBlock={'space-48'} maxWidth={'800px'}>
         <Heading level="1" size="xlarge" style={{ textWrap: 'balance' }}>
           {agreement.title}
         </Heading>
 
-        <HStack gap={"space-8"} align={'center'}>
+        <HStack gap={'space-8'} align={'center'}>
           <CalendarIcon aria-hidden width={'24px'} height={'24px'} />
           <BodyLong weight={'semibold'}>
             {dateToString(agreement.published)} - {dateToString(agreement.expired)}
           </BodyLong>
         </HStack>
 
-        <HStack gap={"space-8"} align={'center'}>
+        <HStack gap={'space-8'} align={'center'}>
           <DocPencilIcon aria-hidden width={'24px'} height={'24px'} />
           <BodyLong weight={'semibold'}>
             {agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}
@@ -219,7 +219,7 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
         <TopLinks agreementId={agreement.id} />
       </VStack>
     </Bleed>
-  );
+  )
 }
 
 const TopLinks = ({ agreementId }: { agreementId: string }) => {
