@@ -26,14 +26,16 @@ export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; sho
     if (searchTerm !== inputValue) {
       setInputValue(searchTerm)
     }
-  }, [searchParams, searchParamKeys.searchTerm, inputValue])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, searchParamKeys.searchTerm])
 
   useEffect(() => {
     const supplier = searchParams.get(searchParamKeys.supplier) || ''
     if (supplier !== currentSelectedSupplier) {
       setCurrentSelectedSupplier(supplier)
     }
-  }, [searchParams, searchParamKeys.supplier, currentSelectedSupplier])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, searchParamKeys.supplier])
 
   const { data: filtersFromData } = useSWRImmutable<FilterData>(
     showSupplierSelect ? { agreementId: id, type: 'filterdata' } : null,
