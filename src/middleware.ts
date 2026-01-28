@@ -32,9 +32,9 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     } else if (azureToken.ok && azureToken.groups && !azureToken.groups?.includes(categoryAdminGroupDev)) {
       console.log('not a member of correct azure group')
+      console.log('azgroups:', azureToken.groups)
       return NextResponse.next()
     }
-    console.log('azgroups:', azureToken.groups)
   } else if (pathname.startsWith(alternativerBackendPath)) {
     return alternativerAdmin(request, loginUrl)
   } else if (pathname.startsWith(categoryAdminBackendPath)) {
