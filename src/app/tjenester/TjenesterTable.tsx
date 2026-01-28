@@ -4,7 +4,7 @@ import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { ServiceJob } from '@/utils/servicejob-util'
 
 export const TjenesterTable = ({ tjenester }: { tjenester: ServiceJob[] }) => {
-  return tjenester ? (
+  return (
     <Table zebraStripes>
       <Table.Header>
         <Table.Row>
@@ -38,7 +38,5 @@ export const TjenesterTable = ({ tjenester }: { tjenester: ServiceJob[] }) => {
         ))}
       </Table.Body>
     </Table>
-  ) : (
-    <Skeleton />
   )
 }
