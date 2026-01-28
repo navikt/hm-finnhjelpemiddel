@@ -14,11 +14,27 @@ const runtimeEnv = process.env.RUNTIME_ENVIRONMENT
 export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl
   const loginUrl = `${origin}/oauth2/login?redirect=${pathname}`
-  console.log('nexturl', request.nextUrl)
-  if (pathname.startsWith(gjenbruksprodukterPath) || pathname.startsWith(categoryAdminPath)) {
+
+  if (pathname.startsWith(gjenbruksprodukterPath)) {
     if (!isLocal && !getToken(request.headers)) {
       return NextResponse.redirect(loginUrl)
     }
+  } else if (pathname.startsWith(categoryAdminPath)) {
+    const token = getToken(request.headers)
+    if (!isLocal && !token) {
+      return NextResponse.redirect(loginUrl)
+    }
+    const categoryAdminGroupDev = 'da88f4ec-23b3-427b-87c5-e890b7d02519'
+
+    const azureToken = parseAzureUserToken(token!)
+    if (!azureToken.ok) {
+      console.log('azuretoken not ok: ', azureToken.error)
+      return NextResponse.next()
+    } else if (azureToken.ok && azureToken.groups && !azureToken.groups?.includes(categoryAdminGroupDev)) {
+      console.log('not a member of correct azure group')
+      return NextResponse.next()
+    }
+    console.log('azgroups:', azureToken.groups)
   } else if (pathname.startsWith(alternativerBackendPath)) {
     return alternativerAdmin(request, loginUrl)
   } else if (pathname.startsWith(categoryAdminBackendPath)) {
