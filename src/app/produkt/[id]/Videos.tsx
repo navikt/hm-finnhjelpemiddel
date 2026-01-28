@@ -11,7 +11,7 @@ export const Videos = ({ videos }: { videos: Video[] }) => {
     return <BodyShort>Ingen videolenker er lagt til av leverandør på dette hjelpemiddelet.</BodyShort>
   }
   return (
-    <VStack as="ul" gap={"space-32"} className={styles.videoList}>
+    <VStack as="ul" gap={'space-32'} className={styles.videoList}>
       {videos.map((video, index) => (
         <VStack as="li" key={index} gap="space-16">
           <Link target="_blank" title={video.uri} href={video.uri}>
@@ -21,5 +21,5 @@ export const Videos = ({ videos }: { videos: Video[] }) => {
         </VStack>
       ))}
     </VStack>
-  );
+  )
 }
