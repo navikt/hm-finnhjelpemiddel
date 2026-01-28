@@ -1,86 +1,125 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { getToken, requestOboToken, validateToken } from '@navikt/oasis'
+import { getToken, parseAzureUserToken, requestOboToken, validateToken } from '@navikt/oasis'
+
+const categoryAdminPath = '/kategori/admin'
+const categoryAdminBackendPath = '/admin/category'
+
+const gjenbruksprodukterPath = '/gjenbruksprodukter'
+const alternativerBackendPath = '/alternative_products'
+
+const isLocal = process.env.NODE_ENV === 'development'
+const runtimeEnv = process.env.RUNTIME_ENVIRONMENT
 
 export async function middleware(request: NextRequest) {
-  const isLocal = process.env.NODE_ENV === 'development'
+  const { pathname, origin } = request.nextUrl
+  const loginUrl = `${origin}/oauth2/login?redirect=${pathname}`
 
-  const gjenbruksprodukterPath = '/gjenbruksprodukter'
-  const alternativerPath = '/alternative_products'
-
-  const categoryAdminPath = '/kategori/admin'
-  const categoryAdminBackendPath = '/admin/category'
-
-  const redirectPath = request.nextUrl.pathname
-  const loginUrl = `${request.nextUrl.origin}/oauth2/login?redirect=${redirectPath}`
-
-  if (
-    request.nextUrl.pathname.startsWith(gjenbruksprodukterPath) ||
-    request.nextUrl.pathname.startsWith(categoryAdminPath)
-  ) {
+  if (pathname.startsWith(gjenbruksprodukterPath) || pathname.startsWith(categoryAdminPath)) {
     if (!isLocal && !getToken(request.headers)) {
       return NextResponse.redirect(loginUrl)
     }
-  } else if (
-    request.nextUrl.pathname.startsWith(alternativerPath) ||
-    request.nextUrl.pathname.startsWith(categoryAdminBackendPath)
-  ) {
+  } else if (pathname.startsWith(alternativerBackendPath)) {
+    return alternativerAdmin(request, loginUrl)
+  } else if (pathname.startsWith(categoryAdminBackendPath)) {
+    return categoryAdmin(request, loginUrl)
+  }
+  return NextResponse.next()
+}
+
+const alternativerAdmin = async (request: NextRequest, loginUrl: string) => {
+  const destination =
+    process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + request.nextUrl.pathname.split(alternativerBackendPath)[1]
+  const audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
+
+  if (isLocal) {
     const devtoken = process.env.DEV_TOKEN
-
-    let destination
-    let audience
-
-    if (request.nextUrl.pathname.startsWith(alternativerPath)) {
-      destination =
-        process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + request.nextUrl.pathname.split(alternativerPath)[1]
-      audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
-    } else {
-      destination = process.env.HM_FINNHJELPEMIDDEL_BFF_URL + request.nextUrl.pathname
-      audience = process.env.BFF_AUDIENCE
-    }
-
-    if (isLocal) {
-      return await fetch(new Request(destination, request), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${devtoken}`,
-        },
-      })
-    }
-
-    if (!audience) {
-      console.log('ingen miljøvariabler for backend_audience')
-      return NextResponse.next()
-    }
-
-    const token = getToken(request.headers)
-    if (!token) {
-      return NextResponse.redirect(loginUrl)
-    }
-
-    const validationResult = await validateToken(token)
-    if (!validationResult.ok && validationResult.errorType === 'token expired') {
-      return NextResponse.redirect(loginUrl)
-    } else if (!validationResult.ok) {
-      console.log('validation not ok:', validationResult.error)
-      return NextResponse.next()
-    }
-
-    const obo = await requestOboToken(token, audience)
-    if (!obo.ok) {
-      console.log('obo not ok:', obo.error)
-      return NextResponse.next()
-    }
 
     return await fetch(new Request(destination, request), {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${obo.token}`,
+        Authorization: `Bearer ${devtoken}`,
       },
     })
   }
-  return NextResponse.next()
+
+  return tokenFlow(request, audience, destination, loginUrl)
 }
+const categoryAdmin = async (request: NextRequest, loginUrl: string) => {
+  const destination = process.env.HM_FINNHJELPEMIDDEL_BFF_URL + request.nextUrl.pathname
+  const audience = process.env.BFF_AUDIENCE
+
+  const categoryAdminGroupProd = 'a6d5a807-6173-4654-9317-8b196cccef5d'
+  const categoryAdminGroupDev = 'da88f4ec-23b3-427b-87c5-e890b7d02519'
+  let group
+  if (runtimeEnv === 'prod') {
+    group = categoryAdminGroupProd
+  } else if (runtimeEnv === 'dev') {
+    group = categoryAdminGroupDev
+  }
+
+  if (isLocal) {
+    const devtoken = process.env.DEV_TOKEN
+
+    return await fetch(new Request(destination, request), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${devtoken}`,
+      },
+    })
+  }
+
+  return tokenFlow(request, audience, destination, loginUrl, group)
+}
+
+const tokenFlow = async (
+  request: NextRequest,
+  audience: string | undefined,
+  destination: string,
+  loginUrl: string,
+  group?: string | undefined
+) => {
+  if (!audience) {
+    console.log('ingen miljøvariabler for backend_audience')
+    return NextResponse.next()
+  }
+
+  const token = getToken(request.headers)
+  if (!token) {
+    return NextResponse.redirect(loginUrl)
+  }
+
+  const validationResult = await validateToken(token)
+  if (!validationResult.ok && validationResult.errorType === 'token expired') {
+    return NextResponse.redirect(loginUrl)
+  } else if (!validationResult.ok) {
+    console.log('validation not ok:', validationResult.error)
+    return NextResponse.next()
+  }
+
+  if (group) {
+    const azureToken = parseAzureUserToken(token)
+    if (!azureToken.ok) {
+      console.log('azuretoken not ok: ', azureToken.error)
+    } else if (azureToken.ok && azureToken.groups) {
+      console.log('groups: ' + azureToken.groups?.includes(group))
+    }
+  }
+
+  const obo = await requestOboToken(token, audience)
+  if (!obo.ok) {
+    console.log('obo not ok:', obo.error)
+    return NextResponse.next()
+  }
+
+  return await fetch(new Request(destination, request), {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${obo.token}`,
+    },
+  })
+}
+
 export const config = {
   matcher: [
     '/alternative_products/:path*',
