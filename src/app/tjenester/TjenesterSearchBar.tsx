@@ -2,7 +2,7 @@
 
 import { HGrid, Search } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useQueryString from '@/utils/search-params-util'
 import useSWRImmutable from 'swr/immutable'
 import { FilterData, getFiltersAgreement } from '@/utils/api-util'
@@ -20,6 +20,20 @@ export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; sho
   const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string>(
     searchParams.get(searchParamKeys.supplier) || ''
   )
+
+  useEffect(() => {
+    const searchTerm = searchParams.get(searchParamKeys.searchTerm) || ''
+    if (searchTerm !== inputValue) {
+      setInputValue(searchTerm)
+    }
+  }, [searchParams, searchParamKeys.searchTerm, inputValue])
+
+  useEffect(() => {
+    const supplier = searchParams.get(searchParamKeys.supplier) || ''
+    if (supplier !== currentSelectedSupplier) {
+      setCurrentSelectedSupplier(supplier)
+    }
+  }, [searchParams, searchParamKeys.supplier, currentSelectedSupplier])
 
   const { data: filtersFromData } = useSWRImmutable<FilterData>(
     showSupplierSelect ? { agreementId: id, type: 'filterdata' } : null,
