@@ -2,6 +2,7 @@
 
 .filterButton {
   box-shadow: inset 0 0 0 1px var(--ax-bg-danger-strong);
+  border-radius: var(--ax-radius-full);
 
   span {
     font-weight: normal;
