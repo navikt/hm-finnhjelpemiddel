@@ -1,4 +1,4 @@
-@use "@navikt/ds-tokens/dist/tokens" as *;
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .buttonLoadMore {
   align-self: center;
@@ -6,15 +6,21 @@
 
 .accordion {
   box-shadow: inset 0 1px 0 0$ax-bg-neutral-soft !important;
-  padding-bottom:$ax-space-16 !important;
+  padding-bottom: $ax-space-16 !important;
 }
 
 .accordionLast {
-  box-shadow: inset 0 -1px 0 0$ax-bg-neutral-soft, inset 0 1px 0 0$ax-bg-neutral-soft !important;
+  box-shadow:
+    inset 0 -1px 0 0$ax-bg-neutral-soft,
+    inset 0 1px 0 0$ax-bg-neutral-soft !important;
 }
+
 .chips {
-  margin-right:$ax-space-8;
-  --ac-chip-toggle-bg: white;
+  margin-right: 8px;
+}
+
+.chip {
+  // background-color: white;
   --ac-chip-toggle-circle-border: var(--ax-border-accent);
   --ac-chip-toggle-border: var(--ax-border-accent);
 }
