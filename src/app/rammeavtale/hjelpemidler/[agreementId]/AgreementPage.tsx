@@ -43,12 +43,12 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     () =>
       fetchTjenesterForAgreement({
         searchTerm: '',
-        pageSize: 1,
+        pageSize: 0,
         currentPage: 1,
         agreementId: agreement.id,
         selectedSupplier: undefined,
       }),
-    { keepPreviousData: true }
+    { keepPreviousData: true}
   )
 
   const avtalerMedIsoGruppering = [
