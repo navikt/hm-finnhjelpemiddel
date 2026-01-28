@@ -99,6 +99,7 @@ const tokenFlow = async (
 
   if (group) {
     const azureToken = parseAzureUserToken(token)
+    console.log('group:', group)
     if (!azureToken.ok) {
       console.log('azuretoken not ok: ', azureToken.error)
       return NextResponse.next()
@@ -106,6 +107,7 @@ const tokenFlow = async (
       console.log('not a member of correct azure group')
       return NextResponse.next()
     }
+    console.log('azgroups:', azureToken.groups)
   }
 
   const obo = await requestOboToken(token, audience)
