@@ -118,7 +118,7 @@ const ResponsivePagination = ({ page, count, setPage }: ResponsivePaginationProp
           prevNextTexts
           srHeading={{
             tag: 'h2',
-            text: 'Tabellpaginering reservedeler',
+            text: 'Tabellpaginering tjenester',
           }}
         />
       </Hide>
@@ -132,7 +132,7 @@ const ResponsivePagination = ({ page, count, setPage }: ResponsivePaginationProp
           boundaryCount={0}
           srHeading={{
             tag: 'h2',
-            text: 'Tabellpaginering reservedeler',
+            text: 'Tabellpaginering tjenester',
           }}
         />
       </Show>
