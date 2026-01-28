@@ -8,7 +8,6 @@
   }
 }
 
-
 .variantsTable {
   overflow: auto;
 
@@ -43,18 +42,8 @@
     z-index: 1;
   }
 
-  //Need to set background on every second to white to avoid the header to be transparent
-  tr:nth-child(2n) th {
-    background-color: white;
-  }
-
   tbody th {
-    background-color: inherit;
     border-right: 1px solid$ax-bg-neutral-soft;
-  }
-
-  tbody .navds-table__row--shade-on-hover:hover th {
-    background-color:$ax-bg-neutral-soft;
   }
 
   table thead th:first-child {
@@ -65,7 +54,7 @@
 
   .navds-table__header-cell,
   .navds-table__data-cell {
-    padding:$ax-space-12$ax-space-12;
+    padding: $ax-space-12$ax-space-12;
   }
 
   .navds-table__data-cell {
@@ -87,8 +76,7 @@
 
 .selectedColumn {
   border-left: #0056b4 dashed 1px;
-  border-right: #0056b4 dashed 1px;;
+  border-right: #0056b4 dashed 1px;
   background-color: #f1f5f9;
-  font-weight: 500
+  font-weight: 500;
 }
-
