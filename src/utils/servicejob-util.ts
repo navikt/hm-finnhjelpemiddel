@@ -1,5 +1,5 @@
 import { AgreementInfo } from '@/utils/product-util'
-import { AgreementInfoResponse, SearchResponse, ServiceAgreementInfoResponse, ServiceJobSourceResponse } from '@/utils/response-types'
+import { SearchResponse, ServiceAgreementInfoResponse, ServiceJobSourceResponse } from '@/utils/response-types'
 
 export interface ServiceJob {
   id: string
