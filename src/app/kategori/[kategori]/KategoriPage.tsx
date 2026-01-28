@@ -35,7 +35,7 @@ export const KategoriPage = ({ category }: Props) => {
 
     const isoCode = searchParams.get('isoCode') ?? ''
 
-    const suppliers = searchParams.getAll('supplier') ?? ''
+    const suppliers = searchParams.getAll('leverandor') ?? ''
     const isos = searchParams.getAll('iso') ?? ''
 
     const setebredde = searchParams.get('Setebredde') ?? ''
@@ -115,7 +115,7 @@ export const KategoriPage = ({ category }: Props) => {
   const onChange = (filterName: string, value: string | string[]) => {
     const singleValue = Array.isArray(value) ? value[0] : value
     const paramKeyMap: Record<string, string> = {
-      suppliers: 'supplier',
+      suppliers: 'leverandor',
       isos: 'iso',
     }
     const paramKey = paramKeyMap[filterName] || filterName
@@ -144,13 +144,12 @@ export const KategoriPage = ({ category }: Props) => {
         <HGrid columns={'374px 4'} gap={'4'}>
           <VStack gap={'4'}>
             <Heading level="2" size="medium">
-              {isLoading ? (
-                <Skeleton variant="text" width="10rem" />
-              ) : products ? (
-                `Viser første ${products.length}`
-              ) : (
-                `Ingen treff`
-              )}
+              {isLoading ?
+                /* <Skeleton variant="text" width="10rem" />*/
+                  'Viser første '
+                : products
+                  ? `Viser første ${products.length}`
+                  : `Ingen treff`}
             </Heading>
             <HStack justify={'space-between'} gap={'2'} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />

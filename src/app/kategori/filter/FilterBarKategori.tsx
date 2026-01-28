@@ -24,7 +24,7 @@ type Props = {
 
 export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   const supplierFilters: FilterMenu = {
-    name: { key: 'suppliers', label: 'Leverandører', paramKey: 'supplier' },
+    name: { key: 'suppliers', label: 'Leverandører', paramKey: 'leverandor' },
     options: filters.suppliers,
   }
 
