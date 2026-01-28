@@ -38,6 +38,7 @@ import {
   SearchResponse,
 } from './response-types'
 import { SearchData } from './search-state-util'
+import { mapServicejobs, ServiceJob } from '@/utils/servicejob-util'
 
 export const PAGE_SIZE = 24
 
@@ -1182,6 +1183,11 @@ export type ProductVariantsPagination = {
   totalHits: number
 }
 
+export type ServicejobsPagination = {
+  servicejobs: ServiceJob[]
+  totalHits: number
+}
+
 export const fetchParts = ({
   searchTerm,
   currentPage,
@@ -1307,5 +1313,85 @@ export const fetchParts = ({
     .then((res) => res.json())
     .then((data) => {
       return { products: mapProductsVariants(data), totalHits: data.hits.total.value }
+    })
+}
+
+export const fetchTjenesterForAgreement = ({
+  searchTerm,
+  currentPage,
+  pageSize,
+  agreementId,
+  selectedSupplier,
+}: {
+  searchTerm: string
+  currentPage: number
+  pageSize: number
+  agreementId: string
+  selectedSupplier?: string
+}): Promise<ServicejobsPagination> => {
+  const termQuery = {
+    multi_match: {
+      query: searchTerm,
+      type: 'bool_prefix',
+      operator: 'and',
+      fields: ['title', 'hmsArtNr', 'supplierRef', 'supplier.name'],
+      lenient: true,
+    },
+  }
+  const agreementQuery = {
+    term: {
+      'agreements.agreementId': {
+        value: agreementId,
+      },
+    },
+  }
+  const statusQuery = {
+    term: {
+      status: 'ACTIVE',
+    },
+  }
+
+  const selectedSupplierQuery = {
+    term: { 'supplier.name': { value: selectedSupplier } },
+  }
+
+  let must: any[] = []
+  must = must.concat([statusQuery])
+  must = must.concat(agreementQuery)
+
+  if (searchTerm) {
+    must = must.concat([termQuery])
+  }
+
+  if (selectedSupplier) {
+    must = must.concat([selectedSupplierQuery])
+  }
+
+  return fetch(HM_SEARCH_URL + `/servicejobs/_search`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: pageSize,
+      from: pageSize * (currentPage - 1),
+      query: {
+        bool: {
+          must: must,
+        },
+      },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc', // Change to 'desc' for descending order
+          },
+        },
+      ],
+      track_total_hits: true,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return { servicejobs: mapServicejobs(data), totalHits: data.hits.total.value }
     })
 }

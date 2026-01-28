@@ -1,4 +1,3 @@
-// src/app/deler/PartsSearchBar.tsx
 'use client'
 
 import { HGrid, Search } from '@navikt/ds-react'
@@ -7,9 +6,9 @@ import { useState } from 'react'
 import useQueryString from '@/utils/search-params-util'
 import useSWRImmutable from 'swr/immutable'
 import { FilterData, getFiltersAgreement } from '@/utils/api-util'
-import { SupplierSelect } from '@/app/deler/SupplierSelect'
+import { SupplierSelect } from '@/app/tjenester/SupplierSelect'
 
-export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSupplierSelect?: boolean }) => {
+export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; showSupplierSelect?: boolean }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -76,7 +75,7 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
         onChange={handleChange}
         onKeyUp={handleKeyUp}
         onClear={handleClear}
-        placeholder={'Søk etter del, HMS-nummer eller lev-artnr.'}
+        placeholder={'Søk etter tjenester, HMS-nummer eller lev-artnr.'}
       />
       {showSupplierSelect && (
         <SupplierSelect

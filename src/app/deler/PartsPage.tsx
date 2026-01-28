@@ -71,8 +71,6 @@ export const PartsPage = ({ id, backLink, isAgreement, title }: PartsPageProps) 
     { keepPreviousData: true }
   )
 
-  const totalParts = accessoriesData && sparePartsData && accessoriesData.totalHits + sparePartsData.totalHits
-
   return (
     <Box className={styles.container}>
       <VStack gap="4" className="main-wrapper--large">
@@ -92,7 +90,7 @@ export const PartsPage = ({ id, backLink, isAgreement, title }: PartsPageProps) 
                 Tilbehør og reservedeler
               </Heading>
               <BodyLong weight={'semibold'}>
-                Her finner du {totalParts} deler til {title}
+                Her finner du deler til {title}
               </BodyLong>
             </VStack>
           </VStack>
