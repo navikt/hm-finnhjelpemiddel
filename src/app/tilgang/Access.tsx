@@ -15,7 +15,9 @@ export const Access = () => {
         Beklager, brukeren din har ikke tilgang til denne siden.
       </Heading>
       <BodyShort>Ta kontakt med Team Mime/Digihot</BodyShort>
-      <Link href="/">Gå til forsiden</Link>
+      <Link href="/" style={{ width: 'fit-content' }}>
+        Gå til forsiden
+      </Link>
     </VStack>
   )
 }
