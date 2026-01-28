@@ -42,6 +42,15 @@
     z-index: 1;
   }
 
+  //Need to set background on every second to white to avoid the header to be transparent
+  tbody tr:nth-child(even) th {
+    background-color: white;
+  }
+
+  tbody tr:nth-child(odd) th {
+    background-color: $ax-bg-neutral-soft;
+  }
+
   tbody th {
     border-right: 1px solid$ax-bg-neutral-soft;
   }
@@ -50,15 +59,6 @@
     position: sticky;
     left: 0;
     z-index: 2;
-  }
-
-  .navds-table__header-cell,
-  .navds-table__data-cell {
-    padding: $ax-space-12$ax-space-12;
-  }
-
-  .navds-table__data-cell {
-    max-width: 13rem;
   }
 
   * {
