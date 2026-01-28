@@ -28,7 +28,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   }
 
   return (
-    <VStack gap={"space-16"}>
+    <VStack gap={'space-16'}>
       <Heading level={'3'} size={'small'}>
         Filter
       </Heading>
@@ -47,6 +47,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
             size={'small'}
             onClick={onReset}
             className={styles.filterButton}
+            data-color={'danger'}
             icon={<XMarkIcon aria-hidden />}
             iconPosition={'right'}
           >
@@ -55,5 +56,5 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
         </div>
       </HStack>
     </VStack>
-  );
+  )
 }
