@@ -81,7 +81,7 @@ export const TjenesterPage = ({ agreementId, backLink, title }: TjenesterPagePro
                 Tjenester
               </Heading>
               <BodyLong weight={'semibold'}>
-                Her finner du {tjenesterData?.totalHits} tjenester til {title}
+                Her finner du tjenester til {title}
               </BodyLong>
             </VStack>
           </VStack>

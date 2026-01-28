@@ -247,15 +247,10 @@ const TopBar = ({ agreement, harTjenester }: { agreement: Agreement, harTjeneste
 }
 
 const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjenester: boolean }) => {
-  const { isLoading } = useFeatureFlags()
 
-  if (isLoading) {
-    return (
-      <HStack justify="center" style={{ marginTop: '28px' }}>
-        <Loader size="xlarge" title="Laster..." />
-      </HStack>
-    )
-  }
+  const featureFlags = useFeatureFlags()
+
+  const visTjenesterFeatureFlag: boolean = featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') ?? false
 
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
@@ -276,7 +271,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjene
           Tilbehør og reservedeler
         </Button>
       )}
-      {harTjenester && (
+      {visTjenesterFeatureFlag && harTjenester && (
         <Button
           as={NextLink}
           href={`/rammeavtale/${agreementId}/tjenester`}
