@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { mapAgreementFromDoc } from '@/utils/agreement-util'
 import { getAgreement } from '@/utils/api-util'
-import { PartsPage } from '@/app/deler/PartsPage'
 import { TjenesterPage } from '@/app/tjenester/TjenesterPage'
 
 type Props = {
