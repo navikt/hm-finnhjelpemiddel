@@ -27,7 +27,7 @@ export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; sho
       setInputValue(searchTerm)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, searchParamKeys.searchTerm])
+  }, [searchParams])
 
   useEffect(() => {
     const supplier = searchParams.get(searchParamKeys.supplier) || ''
@@ -35,7 +35,7 @@ export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; sho
       setCurrentSelectedSupplier(supplier)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, searchParamKeys.supplier])
+  }, [searchParams])
 
   const { data: filtersFromData } = useSWRImmutable<FilterData>(
     showSupplierSelect ? { agreementId: id, type: 'filterdata' } : null,
