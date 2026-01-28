@@ -109,8 +109,9 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       ? posts.map((post) => post.products.length).reduce((previousValue, currentValue) => previousValue + currentValue)
       : 0
 
-  const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppend(filterName, value)
+  const onChange = (filterName: string, value: string | string[]) => {
+    const singleValue = Array.isArray(value) ? value[0] : value
+    const newSearchParams = createQueryStringAppend(filterName, singleValue)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 

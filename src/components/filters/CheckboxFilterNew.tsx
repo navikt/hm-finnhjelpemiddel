@@ -7,16 +7,19 @@ import styles from '@/components/filters/CheckboxFilterNew.module.scss'
 export type FilterMenuLabel = {
   key: string
   label: string
+  paramKey?: string
 }
+
+export type FilterOption = string | { value: string; label: string }
 
 export type FilterMenu = {
   name: FilterMenuLabel
-  options: string[]
+  options: FilterOption[]
 }
 
 type Props = {
   filterMenu: FilterMenu
-  onChange: (key: string, value: string) => void
+  onChange: (key: string, value: string | string[]) => void
 }
 
 export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
@@ -24,7 +27,11 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
   const { options, name } = filterMenu
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const selectedFilters = options.filter((f) => searchParams.getAll(name.key).includes(f))
+  const paramKey = name.paramKey ?? name.key
+  const normalizedOptions = options.map((opt) =>
+    typeof opt === 'string' ? { value: opt, label: opt } : opt
+  )
+  const selectedFilters = normalizedOptions.filter((o) => searchParams.getAll(paramKey).includes(o.value))
   const filterLabel = selectedFilters.length > 0 ? name.label + `(${selectedFilters.length})` : name.label
 
   return (
@@ -46,13 +53,13 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
             Fjern filter
           </ActionMenu.Item>
         )}
-        {options.map((option) => (
+        {normalizedOptions.map((option) => (
           <ActionMenu.CheckboxItem
-            key={`${name.key}-${option}}`}
-            checked={selectedFilters.some((f) => f === option)}
-            onCheckedChange={() => onChange(name.key, option)}
+            key={`${name.key}-${option.value}`}
+            checked={selectedFilters.some((f) => f.value === option.value)}
+            onCheckedChange={() => onChange(name.key, option.value)}
           >
-            {option}
+            {option.label}
           </ActionMenu.CheckboxItem>
         ))}
       </ActionMenu.Content>
