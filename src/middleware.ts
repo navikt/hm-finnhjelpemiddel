@@ -14,7 +14,7 @@ const runtimeEnv = process.env.RUNTIME_ENVIRONMENT
 export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl
   const loginUrl = `${origin}/oauth2/login?redirect=${pathname}`
-
+  console.log('nexturl', request.nextUrl)
   if (pathname.startsWith(gjenbruksprodukterPath) || pathname.startsWith(categoryAdminPath)) {
     if (!isLocal && !getToken(request.headers)) {
       return NextResponse.redirect(loginUrl)
