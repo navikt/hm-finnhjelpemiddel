@@ -101,8 +101,10 @@ const tokenFlow = async (
     const azureToken = parseAzureUserToken(token)
     if (!azureToken.ok) {
       console.log('azuretoken not ok: ', azureToken.error)
-    } else if (azureToken.ok && azureToken.groups) {
-      console.log('groups: ' + azureToken.groups?.includes(group))
+      return NextResponse.next()
+    } else if (azureToken.ok && azureToken.groups && !azureToken.groups?.includes(group)) {
+      console.log('not a member of correct azure group')
+      return NextResponse.next()
     }
   }
 
