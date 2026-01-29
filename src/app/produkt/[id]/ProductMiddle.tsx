@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, HGrid, VStack } from '@navikt/ds-react'
+import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import { SharedVariantDataTable } from '@/app/produkt/[id]/variantTable/SharedVariantDataTable'
@@ -35,11 +35,16 @@ const ProductMiddle = ({ product }: { product: Product }) => {
   const worksWithShowConstrain = worksWithFeatureFlag && shouldShowSection
 
   return (
-    <HGrid gap={"space-80 space-32"} columns={{ sm: 1, md: 2 }} className={styles.middleContainer} paddingBlock={"space-24 space-0"}>
+    <HGrid
+      gap={'space-80 space-32'}
+      columns={{ sm: 1, md: 2 }}
+      className={styles.middleContainer}
+      paddingBlock={'space-24 space-0'}
+    >
       <div style={{ gridArea: 'box1' }}>
         <ProductInformation product={product} />
       </div>
-      <VStack gap={"space-24"} style={{ gridArea: 'box2' }}>
+      <VStack gap={'space-24'} style={{ gridArea: 'box2' }}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
         {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
@@ -53,15 +58,17 @@ const ProductMiddle = ({ product }: { product: Product }) => {
         </>
       </div>
     </HGrid>
-  );
+  )
 }
 
 const showOtherProductsOnAgreement = ({ agreement, index }: { agreement: AgreementInfo; index: number }) => {
   return (
-    <VStack gap={"space-8"} paddingBlock={"space-8 space-16"} key={index}>
-      <NextLink href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>{agreement.postTitle}</NextLink>
+    <VStack gap={'space-8'} paddingBlock={'space-8 space-16'} key={index}>
+      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+        {agreement.postTitle}
+      </Link>
     </VStack>
-  );
+  )
 }
 
 const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
@@ -70,7 +77,7 @@ const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) =>
   })
 
   return (
-    <VStack gap={"space-8"} paddingInline={"space-8 space-0"}>
+    <VStack gap={'space-8'} paddingInline={'space-8 space-0'}>
       <Heading size={'medium'} level={'2'}>
         Andre hjelpemidler på delkontrakt:
       </Heading>
@@ -79,7 +86,7 @@ const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) =>
           return showOtherProductsOnAgreement({ agreement: agreement, index })
         })}
     </VStack>
-  );
+  )
 }
 
 export default ProductMiddle
