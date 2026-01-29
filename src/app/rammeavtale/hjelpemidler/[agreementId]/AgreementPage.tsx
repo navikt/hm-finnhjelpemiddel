@@ -259,7 +259,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjene
   const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale && !isSeksualtekniskAvtale
 
   return (
-    <HStack gap="6">
+    <HStack gap="space-24">
       {showAccessoriesAndSparePartsButtons && (
         <Button
           as={NextLink}
@@ -283,7 +283,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjene
         </Button>
       )}
     </HStack>
-  )
+  );
 }
 
 export default AgreementPage

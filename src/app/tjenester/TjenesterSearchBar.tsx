@@ -66,7 +66,7 @@ export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; sho
   }
 
   return (
-    <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} marginBlock="7 3" align="end">
+    <HGrid gap={{ xs: "space-12", md: "space-16" }} columns={{ xs: 1, md: 2 }} marginBlock="space-28 space-12" align="end">
       <Search
         value={inputValue}
         label="Søk"
@@ -85,5 +85,5 @@ export const TjenesterSearchBar = ({ id, showSupplierSelect }: { id: string; sho
         />
       )}
     </HGrid>
-  )
+  );
 }

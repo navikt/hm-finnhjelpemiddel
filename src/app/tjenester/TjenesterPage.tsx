@@ -64,9 +64,9 @@ export const TjenesterPage = ({ agreementId, backLink, title }: TjenesterPagePro
 
   return (
     <Box className={styles.container}>
-      <VStack gap="4" className="main-wrapper--large">
+      <VStack gap="space-16" className="main-wrapper--large">
         <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-          <VStack gap={'9'} paddingBlock={'6'} align={'start'}>
+          <VStack gap={"space-36"} paddingBlock={"space-24"} align={'start'}>
             <Button
               as={NextLink}
               href={backLink}
@@ -76,7 +76,7 @@ export const TjenesterPage = ({ agreementId, backLink, title }: TjenesterPagePro
             >
               {`Tilbake`}
             </Button>
-            <VStack gap={'4'}>
+            <VStack gap={"space-16"}>
               <Heading level="1" size="medium">
                 Tjenester
               </Heading>
@@ -89,7 +89,7 @@ export const TjenesterPage = ({ agreementId, backLink, title }: TjenesterPagePro
         <TjenesterSearchBar id={agreementId} showSupplierSelect={showSupplierSelect} />
 
         {tjenesterData && (
-          <VStack gap={'4'} paddingBlock="4">
+          <VStack gap={"space-16"} paddingBlock="space-16">
             <TjenesterTable tjenester={tjenesterData?.servicejobs} />
             {tjenesterData?.totalHits > 0 && pageCount(tjenesterData?.totalHits) > 1 && (
               <ResponsivePagination page={page} count={pageCount(tjenesterData?.totalHits)} setPage={handleSetPage} />
@@ -98,7 +98,7 @@ export const TjenesterPage = ({ agreementId, backLink, title }: TjenesterPagePro
         )}
       </VStack>
     </Box>
-  )
+  );
 }
 
 type ResponsivePaginationProps = {

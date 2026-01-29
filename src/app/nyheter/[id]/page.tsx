@@ -113,5 +113,5 @@ export default async function NewsArticlePage({
         </Link>
       </BodyLong>
     </VStack>
-  )
+  );
 }
