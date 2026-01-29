@@ -8,96 +8,25 @@ const categoryAdminBackendPath = '/admin/category'
 const gjenbruksprodukterPath = '/gjenbruksprodukter'
 const alternativerBackendPath = '/alternative_products'
 
-const isLocal = process.env.NODE_ENV === 'development'
-const runtimeEnv = process.env.RUNTIME_ENVIRONMENT
+export const config = {
+  matcher: [
+    '/alternative_products/:path*',
+    '/gjenbruksprodukter/:path*',
+    '/kategori/admin/:path*',
+    '/admin/category/:path*',
+  ],
+  runtime: 'nodejs',
+}
 
 export async function middleware(request: NextRequest) {
+  const isLocal = process.env.NODE_ENV === 'development'
+  const runtimeEnv = process.env.RUNTIME_ENVIRONMENT
+
   const { pathname, origin } = request.nextUrl
   const loginUrl = `${origin}/oauth2/login?redirect=${pathname}`
 
-  if (pathname.startsWith(gjenbruksprodukterPath)) {
-    if (!isLocal && !getToken(request.headers)) {
-      return NextResponse.redirect(loginUrl)
-    }
-  } else if (pathname.startsWith(categoryAdminPath)) {
-    const token = getToken(request.headers)
-    if (!isLocal && !token) {
-      return NextResponse.redirect(loginUrl)
-    }
-    const categoryAdminGroupDev = 'da88f4ec-23b3-427b-87c5-e890b7d02519'
-
-    const azureToken = parseAzureUserToken(token!)
-    if (!azureToken.ok) {
-      console.log('azuretoken not ok: ', azureToken.error)
-      return NextResponse.next()
-    } else if (azureToken.ok && azureToken.groups && !azureToken.groups?.includes(categoryAdminGroupDev)) {
-      console.log('not a member of correct azure group')
-      console.log('azgroups:', azureToken.groups)
-      return NextResponse.redirect(`${origin}/tilgang`)
-    }
-  } else if (pathname.startsWith(alternativerBackendPath)) {
-    return alternativerAdmin(request, loginUrl)
-  } else if (pathname.startsWith(categoryAdminBackendPath)) {
-    return categoryAdmin(request, loginUrl)
-  }
-  return NextResponse.next()
-}
-
-const alternativerAdmin = async (request: NextRequest, loginUrl: string) => {
-  const destination =
-    process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + request.nextUrl.pathname.split(alternativerBackendPath)[1]
-  const audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
-
   if (isLocal) {
-    const devtoken = process.env.DEV_TOKEN
-
-    return await fetch(new Request(destination, request), {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${devtoken}`,
-      },
-    })
-  }
-
-  return tokenFlow(request, audience, destination, loginUrl)
-}
-const categoryAdmin = async (request: NextRequest, loginUrl: string) => {
-  const destination = process.env.HM_FINNHJELPEMIDDEL_BFF_URL + request.nextUrl.pathname
-  const audience = process.env.BFF_AUDIENCE
-
-  const categoryAdminGroupProd = 'a6d5a807-6173-4654-9317-8b196cccef5d'
-  const categoryAdminGroupDev = 'da88f4ec-23b3-427b-87c5-e890b7d02519'
-  let group
-  if (runtimeEnv === 'prod') {
-    group = categoryAdminGroupProd
-  } else if (runtimeEnv === 'dev') {
-    group = categoryAdminGroupDev
-  }
-
-  if (isLocal) {
-    const devtoken = process.env.DEV_TOKEN
-
-    return await fetch(new Request(destination, request), {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${devtoken}`,
-      },
-    })
-  }
-
-  return tokenFlow(request, audience, destination, loginUrl, group)
-}
-
-const tokenFlow = async (
-  request: NextRequest,
-  audience: string | undefined,
-  destination: string,
-  loginUrl: string,
-  group?: string | undefined
-) => {
-  if (!audience) {
-    console.log('ingen miljøvariabler for backend_audience')
-    return NextResponse.next()
+    return localDev(pathname, request)
   }
 
   const token = getToken(request.headers)
@@ -110,42 +39,89 @@ const tokenFlow = async (
     return NextResponse.redirect(loginUrl)
   } else if (!validationResult.ok) {
     console.log('validation not ok:', validationResult.error)
-    return NextResponse.next()
+    return errorResponse('token validation')
   }
 
-  if (group) {
+  if (pathname.startsWith(categoryAdminPath) || pathname.startsWith(categoryAdminBackendPath)) {
+    const categoryAdminGroupProd = 'a6d5a807-6173-4654-9317-8b196cccef5d'
+    const categoryAdminGroupDev = 'da88f4ec-23b3-427b-87c5-e890b7d02519'
+    let group = ''
+    if (runtimeEnv === 'prod') {
+      group = categoryAdminGroupProd
+    } else if (runtimeEnv === 'dev') {
+      group = categoryAdminGroupDev
+    }
+
     const azureToken = parseAzureUserToken(token)
-    console.log('group:', group)
     if (!azureToken.ok) {
       console.log('azuretoken not ok: ', azureToken.error)
-      return NextResponse.next()
+      return errorResponse('azure token not ok')
     } else if (azureToken.ok && azureToken.groups && !azureToken.groups?.includes(group)) {
       console.log('not a member of correct azure group')
-      return NextResponse.next()
+      return NextResponse.redirect(`${origin}/tilgang`)
     }
-    console.log('azgroups:', azureToken.groups)
   }
 
-  const obo = await requestOboToken(token, audience)
-  if (!obo.ok) {
-    console.log('obo not ok:', obo.error)
+  if (pathname.startsWith(categoryAdminBackendPath) || pathname.startsWith(alternativerBackendPath)) {
+    let audience
+    let destination = pathname
+
+    if (pathname.startsWith(categoryAdminBackendPath)) {
+      destination = process.env.HM_FINNHJELPEMIDDEL_BFF_URL + pathname
+      audience = process.env.BFF_AUDIENCE
+    }
+    if (pathname.startsWith(alternativerBackendPath)) {
+      destination = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + pathname.split(alternativerBackendPath)[1]
+      audience = process.env.ALTERNATIVER_BACKEND_AUDIENCE
+    }
+
+    if (!audience) {
+      console.log('ingen miljøvariabler for backend_audience')
+      return errorResponse('no audience')
+    }
+
+    const obo = await requestOboToken(token, audience)
+    if (!obo.ok) {
+      console.log('obo not ok:', obo.error)
+      return errorResponse('obo token not ok')
+    }
+
+    return await fetch(new Request(destination, request), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${obo.token}`,
+      },
+    })
+  }
+
+  return NextResponse.next()
+}
+
+const localDev = async (pathname: string, request: NextRequest) => {
+  if (pathname.startsWith(categoryAdminPath) || pathname.startsWith(gjenbruksprodukterPath)) {
     return NextResponse.next()
   }
 
-  return await fetch(new Request(destination, request), {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${obo.token}`,
-    },
-  })
+  if (pathname.startsWith(categoryAdminBackendPath) || pathname.startsWith(alternativerBackendPath)) {
+    let destination = pathname
+    if (pathname.startsWith(categoryAdminBackendPath)) {
+      destination = process.env.HM_FINNHJELPEMIDDEL_BFF_URL + pathname
+    }
+    if (pathname.startsWith(alternativerBackendPath)) {
+      destination = process.env.HM_GRUNNDATA_ALTERNATIVPRODUKTER_URL + pathname.split(alternativerBackendPath)[1]
+    }
+
+    const devtoken = process.env.DEV_TOKEN
+
+    return await fetch(new Request(destination, request), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${devtoken}`,
+      },
+    })
+  }
 }
 
-export const config = {
-  matcher: [
-    '/alternative_products/:path*',
-    '/gjenbruksprodukter/:path*',
-    '/kategori/admin/:path*',
-    '/admin/category/:path*',
-  ],
-  runtime: 'nodejs',
+const errorResponse = (cause: string) => {
+  return NextResponse.json({ success: false, message: `Server error from ${cause}}` }, { status: 500 })
 }
