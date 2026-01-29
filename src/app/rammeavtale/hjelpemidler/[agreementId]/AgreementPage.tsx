@@ -1,6 +1,6 @@
 'use client'
 
-import { FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+import { fetchTjenesterForAgreement, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 import CompareMenu from '@/components/layout/CompareMenu'
@@ -9,7 +9,14 @@ import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { PostBucketResponse, ProductSourceResponse } from '@/utils/response-types'
 import { dateToString } from '@/utils/string-util'
-import { ArrowRightIcon, CalendarIcon, DocPencilIcon, FilePdfIcon, LayersPlusIcon } from '@navikt/aksel-icons'
+import {
+  ArrowRightIcon,
+  CalendarIcon,
+  DocPencilIcon,
+  FilePdfIcon,
+  LayersPlusIcon,
+  WrenchIcon,
+} from '@navikt/aksel-icons'
 import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm, { AgreementFilters } from './FilterForm'
@@ -30,6 +37,19 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const { createQueryStringAppend } = useQueryString()
 
   const searchData = mapSearchParams(searchParams)
+
+  const { data: tjenesterData } = useSWRImmutable(
+    'tjenester' + agreement.id,
+    () =>
+      fetchTjenesterForAgreement({
+        searchTerm: '',
+        pageSize: 0,
+        currentPage: 1,
+        agreementId: agreement.id,
+        selectedSupplier: undefined,
+      }),
+    { keepPreviousData: true}
+  )
 
   const avtalerMedIsoGruppering = [
     '9d8ff31e-c536-4f4d-9b2f-75cc527c727f',
@@ -109,16 +129,20 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
       ? posts.map((post) => post.products.length).reduce((previousValue, currentValue) => previousValue + currentValue)
       : 0
 
-  const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppend(filterName, value)
+  const onChange = (filterName: string, value: string | string[]) => {
+    const singleValue = Array.isArray(value) ? value[0] : value
+    const newSearchParams = createQueryStringAppend(filterName, singleValue)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
+
+  const harTjenester = tjenesterData && tjenesterData.totalHits > 0 || false
+
 
   return (
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
       <VStack gap={'space-40'} className="main-wrapper--large spacing-bottom--xlarge hide-print">
-        <TopBar agreement={agreement} />
+        <TopBar agreement={agreement} harTjenester={harTjenester}/>
 
         <CompareMenu />
 
@@ -183,7 +207,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   )
 }
 
-const TopBar = ({ agreement }: { agreement: Agreement }) => {
+const TopBar = ({ agreement, harTjenester }: { agreement: Agreement, harTjenester: boolean }) => {
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
       <VStack gap="space-16" align={'start'} paddingBlock={'space-48'} maxWidth={'800px'}>
@@ -216,22 +240,17 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
           Les om avtalen
         </Button>
 
-        <TopLinks agreementId={agreement.id} />
+        <TopLinks agreementId={agreement.id} harTjenester={harTjenester}/>
       </VStack>
     </Bleed>
   )
 }
 
-const TopLinks = ({ agreementId }: { agreementId: string }) => {
-  const { isLoading } = useFeatureFlags()
+const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjenester: boolean }) => {
 
-  if (isLoading) {
-    return (
-      <HStack justify="center" style={{ marginTop: '28px' }}>
-        <Loader size="xlarge" title="Laster..." />
-      </HStack>
-    )
-  }
+  const featureFlags = useFeatureFlags()
+
+  const visTjenesterFeatureFlag: boolean = featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') ?? false
 
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
@@ -240,17 +259,30 @@ const TopLinks = ({ agreementId }: { agreementId: string }) => {
   const showAccessoriesAndSparePartsButtons = !isKjøreposeRegncapeAvtale && !isSeksualtekniskAvtale
 
   return (
-    showAccessoriesAndSparePartsButtons && (
-      <Button
-        as={NextLink}
-        href={`/rammeavtale/${agreementId}/deler`}
-        icon={<LayersPlusIcon aria-hidden />}
-        variant={'secondary'}
-        className={styles.bleedButton}
-      >
-        Tilbehør og reservedeler
-      </Button>
-    )
+    <HStack gap="6">
+      {showAccessoriesAndSparePartsButtons && (
+        <Button
+          as={NextLink}
+          href={`/rammeavtale/${agreementId}/deler`}
+          icon={<LayersPlusIcon aria-hidden />}
+          variant={'secondary'}
+          className={styles.bleedButton}
+        >
+          Tilbehør og reservedeler
+        </Button>
+      )}
+      {visTjenesterFeatureFlag && harTjenester && (
+        <Button
+          as={NextLink}
+          href={`/rammeavtale/${agreementId}/tjenester`}
+          icon={<WrenchIcon aria-hidden />}
+          variant={'secondary'}
+          className={styles.bleedButton}
+        >
+          Tjenester
+        </Button>
+      )}
+    </HStack>
   )
 }
 

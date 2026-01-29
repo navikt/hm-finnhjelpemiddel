@@ -68,7 +68,7 @@ export interface Hit {
   _type: string | null
   _id: string
   _score: string
-  _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse | SupplierInfoResponse
+  _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse | SupplierInfoResponse | ServiceJobSourceResponse
 }
 
 export interface ProductSourceResponse {
@@ -105,6 +105,34 @@ export interface ProductSourceResponse {
   hasAgreement: boolean
 }
 
+
+export interface ServiceJobSourceResponse {
+  id: string
+  title: string
+  supplier: {
+    id: string
+    name: string
+  }
+  attributes: ServiceJobAttributeResponse
+  status: 'INACTIVE' | 'ACTIVE' | 'DELETED'
+  hmsArtNr: string
+  supplierRef: string | null
+  isoCategory: string
+  created: string
+  updated: string
+  expired: string
+  createdBy: string
+  updatedBy: string
+  agreements: ServiceAgreementInfoResponse[]
+}
+
+interface ServiceJobAttributeResponse {
+  keywords?: string[]
+  text?: string
+  url?: string
+  serviceFor?: ServiceForResponse
+}
+
 interface AttributeResponse {
   manufacturer?: string
   articlename?: string
@@ -122,6 +150,11 @@ interface AttributeResponse {
 }
 
 export interface CompatibleWithResponse {
+  seriesIds: string[]
+  productIds: string[]
+}
+
+export interface ServiceForResponse {
   seriesIds: string[]
   productIds: string[]
 }
@@ -162,6 +195,13 @@ export interface AgreementInfoResponse {
   refNr: string | null
   postTitle: string
   reference: string | null
+  expired: string
+}
+
+export interface ServiceAgreementInfoResponse {
+  agreementId: string
+  status: 'INACTIVE' | 'ACTIVE' | 'DELETED'
+  published: string
   expired: string
 }
 

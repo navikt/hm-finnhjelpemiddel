@@ -27,6 +27,10 @@ const nextConfig = {
         destination: process.env.HM_SEARCH_URL + '/alternative_products/_search/:path*',
       },
       {
+        source: '/servicejobs/_search/:path*',
+        destination: process.env.HM_SEARCH_URL + '/servicejobs/_search/:path*',
+      },
+      {
         source: '/alternativprodukter',
         destination: '/gjenbruksprodukter',
       },
