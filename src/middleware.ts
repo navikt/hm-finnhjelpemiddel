@@ -56,8 +56,11 @@ export async function middleware(request: NextRequest) {
     if (!azureToken.ok) {
       console.log('azuretoken not ok: ', azureToken.error)
       return errorResponse('azure token not ok')
-    } else if (azureToken.ok && azureToken.groups && !azureToken.groups?.includes(group)) {
+    } else if (azureToken.ok && (!azureToken.groups || !azureToken.groups.includes(group))) {
       console.log('not a member of correct azure group')
+      console.log('azgrupper:', azureToken.groups)
+      console.log('group:', group)
+      console.log('runtime', runtimeEnv)
       return NextResponse.redirect(`${origin}/tilgang`)
     }
   }
