@@ -71,12 +71,7 @@ const ComponentTypeFilter = ({
       </BodyShort>
       <Chips size={'small'} aria-label="Filter på komponenttyper" className={styles.chips}>
         {componentTypes.map((type) => (
-          <Chips.Toggle
-            className={styles.chip}
-            key={type}
-            selected={selectedTypes.includes(type)}
-            onClick={() => onToggle(type)}
-          >
+          <Chips.Toggle key={type} selected={selectedTypes.includes(type)} onClick={() => onToggle(type)}>
             {type}
           </Chips.Toggle>
         ))}

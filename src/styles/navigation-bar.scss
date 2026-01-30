@@ -47,9 +47,8 @@
 
   &:focus-visible {
     background-color: transparent;
-    //border-color: transparent;
     border-radius: $ax-radius-4;
-    border: $ax-border-focus;
+    box-shadow: 0 0 0 3px $ax-border-focus;
     outline: none;
   }
 

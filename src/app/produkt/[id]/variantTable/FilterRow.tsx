@@ -154,21 +154,21 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
 
   if (filters.length === 0) {
     return (
-      <VStack paddingBlock={"space-0 space-24"}>
+      <VStack paddingBlock={'space-0 space-24'}>
         <Heading level="3" size="small">
           {`${variants.length} varianter`}
         </Heading>
       </VStack>
-    );
+    )
   }
 
   const dropdownFilters = filters.filter((filter) => filter.type === FilterType.DROPDOWN)
   const toggleFilters = filters.filter((filter) => filter.type === FilterType.TOGGLE)
 
   return (
-    <Box asChild paddingBlock={"space-32 space-24"} paddingInline={"space-32"} className={styles.wrapper}>
-      <VStack gap={"space-16"}>
-        <HStack gap={{ xs: "space-32", md: "space-80" }} width={'fit-content'} align={'end'}>
+    <Box asChild paddingBlock={'space-32 space-24'} paddingInline={'space-32'} className={styles.wrapper}>
+      <VStack gap={'space-16'}>
+        <HStack gap={{ xs: 'space-32', md: 'space-80' }} width={'fit-content'} align={'end'}>
           <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
           <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
         </HStack>
@@ -177,7 +177,7 @@ export const FilterRow = ({ variants, filterConfigs, techDataRows, numberOfVaria
         </Heading>
       </VStack>
     </Box>
-  );
+  )
 }
 
 const ChipFilters = ({
@@ -199,7 +199,7 @@ const ChipFilters = ({
             key={name}
             onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
             disabled={values.length < 2}
-            className={values.length < 2 ? styles.disabledChip : ''}
+            className={values.length < 2 ? styles.disabledChip : styles.enabledChip}
           >
             {label}
           </Chips.Toggle>
@@ -218,7 +218,7 @@ const SelectFilters = ({
 }) => {
   const searchParams = useSearchParams()
   return (
-    <HStack gap={"space-32"}>
+    <HStack gap={'space-32'}>
       {filters.map(({ name, label, values, unit }, index) => {
         return (
           values.length > 0 && (
@@ -241,5 +241,5 @@ const SelectFilters = ({
         )
       })}
     </HStack>
-  );
+  )
 }
