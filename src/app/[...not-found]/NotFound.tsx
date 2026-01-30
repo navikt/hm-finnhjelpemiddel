@@ -1,15 +1,15 @@
 import { BodyShort, Heading } from '@/components/aksel-client'
-import { List, VStack } from '@navikt/ds-react'
-import Link from 'next/link'
+import { Link, List, VStack } from '@navikt/ds-react'
+import NextLink from 'next/link'
 
 export const NotFound = () => {
   return (
     <VStack
       marginInline={'auto'}
-      marginBlock={"space-0"}
+      marginBlock={'space-0'}
       maxWidth={'1280px'}
-      paddingBlock={{ xs: "space-64", md: "space-80" }}
-      paddingInline={{ xs: "space-16" }}
+      paddingBlock={{ xs: 'space-64', md: 'space-80' }}
+      paddingInline={{ xs: 'space-16' }}
     >
       <Heading level="1" size="large" className="spacing-bottom--medium">
         Beklager, vi fant ikke siden
@@ -18,9 +18,11 @@ export const NotFound = () => {
       <List>
         <List.Item>Bruk gjerne søket eller menyen</List.Item>
         <List.Item>
-          <Link href="/">Gå til forsiden</Link>
+          <Link as={NextLink} href="/">
+            Gå til forsiden
+          </Link>
         </List.Item>
       </List>
     </VStack>
-  );
+  )
 }

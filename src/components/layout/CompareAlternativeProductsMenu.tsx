@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import NextLink from 'next/link'
 
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button } from '@navikt/ds-react'
@@ -74,11 +74,11 @@ const CompareAlternativeProductsMenu = () => {
 
               {alternativeProductsToCompare.length > 1 && (
                 <div className="compare-menu__buttons">
-                  <Link href="/sammenlign-alternativer" passHref legacyBehavior>
+                  <NextLink href="/sammenlign-alternativer" passHref>
                     <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
                       Sammenlign
                     </Button>
-                  </Link>
+                  </NextLink>
                   <Button
                     variant="tertiary"
                     icon={<TrashIcon aria-hidden />}
