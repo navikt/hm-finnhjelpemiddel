@@ -39,9 +39,9 @@ export const SupplierAccordion = ({ supplier }: Props) => {
 }
 
 const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
-  <VStack gap="1">
+  <VStack gap="space-4">
     {supplier.address && (
-      <VStack gap="0">
+      <VStack gap="space-0">
         <Label>Adresse</Label>
         {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
         {supplier.postNr && supplier.postLocation && (

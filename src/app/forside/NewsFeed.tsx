@@ -18,7 +18,7 @@ export const NewsFeed = () => {
   if (!data || data.length === 0) return null
 
   return (
-    <VStack gap={'5'} className={styles.container} paddingInline={{ lg: '6' }}>
+    <VStack gap={"space-20"} className={styles.container} paddingInline={{ lg: "space-24" }}>
       <Heading size={'large'} level={'2'}>
         Aktuelt
       </Heading>
@@ -28,7 +28,7 @@ export const NewsFeed = () => {
         ))}
       </HStack>
     </VStack>
-  )
+  );
 }
 
 // Reduced preview limit for shorter cards. Adjust here if needed.
@@ -43,8 +43,8 @@ const NewsCard = ({ news }: { news: News }) => {
   const { previewHtml, truncated } = buildNewsPreview(news.text, PREVIEW_CHAR_LIMIT)
 
   return (
-    <Box paddingInline={'6'} paddingBlock={'4'} className={styles.newsCard}>
-      <VStack gap="1" className={styles.newsCard__content}>
+    <Box paddingInline={"space-24"} paddingBlock={"space-16"} className={styles.newsCard}>
+      <VStack gap="space-4" className={styles.newsCard__content}>
         <BodyShort weight={'regular'}>{mainTitle}</BodyShort>
         <BodyShort>
           <NextLink
@@ -59,7 +59,7 @@ const NewsCard = ({ news }: { news: News }) => {
         <BodyShort className={styles.newsCard__date}>{dateToString(news.published)}</BodyShort>
       </VStack>
     </Box>
-  )
+  );
 }
 
 export default NewsFeed

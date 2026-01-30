@@ -1,9 +1,8 @@
 @use 'src/styles/_variables' as *;
 
-
 .container {
-  padding-left: var(--a-spacing-4);
-  padding-right: var(--a-spacing-4);
+  padding-left: var(--ax-space-16);
+  padding-right: var(--ax-space-16);
   margin: 0 auto;
   max-width: 840px;
 }
@@ -15,8 +14,6 @@
   background: $ny-nav-orange-light;
   border-radius: 10px;
 }
-
-
 
 .headerGroup {
   margin-bottom: 1.25rem;
@@ -35,7 +32,7 @@
   font-size: 0.875rem;
   color: #555;
   padding: 0.5rem 0 0.25rem;
-  border-top: 1px solid rgba(0,0,0,0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .readingTime {
@@ -44,7 +41,6 @@
 
 .articleBody {
   line-height: 1.55;
-
 }
 
 .articleBody :global(p) {

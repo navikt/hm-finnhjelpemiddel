@@ -87,8 +87,8 @@ const AgreementList = () => {
   }
 
   return (
-    <VStack gap="4">
-      <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="2" align="center" className="agreement-page__list-header">
+    <VStack gap="space-16">
+      <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="space-8" align="center" className="agreement-page__list-header">
         <Heading level="2" size="medium">
           På avtale med Nav
         </Heading>
@@ -141,12 +141,11 @@ const AgreementList = () => {
           </Button>
         </Hide>
       </HGrid>
-
       <VStack as="ol" id="agreement-list" className="agreement-page__list-container">
         {data &&
           sortedData.map((label) => (
             <Box as="li" key={label.identifier} className="agreement-page__list-item">
-              <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="2" align="center">
+              <HGrid columns={{ xs: 'auto 30px', lg: '4fr 1fr 1fr' }} gap="space-8" align="center">
                 {/*<Link as={NextLink} href={`/rammeavtale/hjelpemidler/${label.id}`}>*/}
                 <Link as={NextLink} href={agreementProductsLink(label.id)}>
                   {`${label.title} `}
@@ -170,7 +169,6 @@ const AgreementList = () => {
           <Loader size="xlarge" title="Laster produkter" />
         </HStack>
       )}
-
       <Alert variant="info">
         Du finner informasjon om andre avtaler her:
         <ul className="spacing-vertical--small">
@@ -203,7 +201,7 @@ const AgreementList = () => {
         </ul>
       </Alert>
     </VStack>
-  )
+  );
 }
 
 export default AgreementList

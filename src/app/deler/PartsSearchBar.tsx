@@ -3,7 +3,7 @@
 
 import { HGrid, Search } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState, useRef } from 'react'
+import { useState } from 'react'
 import useQueryString from '@/utils/search-params-util'
 import useSWRImmutable from 'swr/immutable'
 import { FilterData, getFiltersAgreement } from '@/utils/api-util'
@@ -15,18 +15,8 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
   const searchParams = useSearchParams()
   const { createQueryStringMultiple, searchParamKeys } = useQueryString()
 
-  const searchTermValue = searchParams.get(searchParamKeys.searchTerm) || ''
-  const [inputValue, setInputValue] = useState(searchTermValue)
-
-  // Optional debounce (adjust delay or remove for immediate navigation)
-  const debounceRef = useRef<number | null>(null)
-  const DEBOUNCE_MS = 250
-
-  useEffect(() => {
-    if (searchTermValue !== inputValue) {
-      setInputValue(searchTermValue)
-    }
-  }, [searchTermValue])
+  const initialSearchTerm = searchParams.get(searchParamKeys.searchTerm) || ''
+  const [inputValue, setInputValue] = useState(initialSearchTerm)
 
   const [currentSelectedSupplier, setCurrentSelectedSupplier] = useState<string>(
     searchParams.get(searchParamKeys.supplier) || ''
@@ -39,48 +29,45 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
   )
 
   const pushSearch = (term: string) => {
-    if (term.trim() === '') {
+    const trimmed = term.trim()
+
+    if (trimmed === '') {
+      // Empty term: reset search by navigating to the base pathname (no search term param)
       router.push(pathname, { scroll: false })
       return
     }
-    if (term === searchTermValue) return
+
     const newParams = createQueryStringMultiple(
-      { name: searchParamKeys.searchTerm, value: term },
+      { name: searchParamKeys.searchTerm, value: trimmed },
       { name: searchParamKeys.page, value: '1' }
     )
     router.push(`${pathname}?${newParams}`, { scroll: false })
   }
 
-  const schedulePush = (value: string) => {
-    if (debounceRef.current) window.clearTimeout(debounceRef.current)
-    debounceRef.current = window.setTimeout(() => pushSearch(value), DEBOUNCE_MS)
-  }
-
   const handleChange = (value: string) => {
+    // Only update local state while typing
     setInputValue(value)
+
+    // If the user clears the field by typing backspace to empty, also reset the search
     if (value === '') {
-      if (searchTermValue !== '') router.push(pathname, { scroll: false })
-      if (debounceRef.current) window.clearTimeout(debounceRef.current)
-      return
+      router.push(pathname, { scroll: false })
     }
-    schedulePush(value)
   }
 
   const handleClear = () => {
-    if (debounceRef.current) window.clearTimeout(debounceRef.current)
     setInputValue('')
+    // Clear button: also reset search by going back to base pathname
     router.push(pathname, { scroll: false })
   }
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (debounceRef.current) window.clearTimeout(debounceRef.current)
       pushSearch(inputValue)
     }
   }
 
   return (
-    <HGrid gap={{ xs: '3', md: '4' }} columns={{ xs: 1, md: 2 }} marginBlock="7 3" align="end">
+    <HGrid gap={{ xs: "space-12", md: "space-16" }} columns={{ xs: 1, md: 2 }} marginBlock="space-28 space-12" align="end">
       <Search
         value={inputValue}
         label="Søk"
@@ -99,5 +86,5 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
         />
       )}
     </HGrid>
-  )
+  );
 }

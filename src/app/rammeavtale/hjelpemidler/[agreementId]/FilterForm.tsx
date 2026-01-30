@@ -7,7 +7,7 @@ export type AgreementFilters = {
 
 type Props = {
   filters: AgreementFilters
-  onChange: (key: string, value: string) => void
+  onChange: (key: string, value: string | string[]) => void
 }
 
 const FilterForm = ({ filters, onChange }: Props) => {
@@ -21,14 +21,14 @@ const FilterForm = ({ filters, onChange }: Props) => {
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <Heading size={'small'}>Filter</Heading>
-      <HStack gap="4">
+      <HStack gap="space-16">
         <CheckboxFilterNew filterMenu={postFilters} onChange={onChange} />
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
       </HStack>
     </VStack>
-  )
+  );
 }
 
 export default FilterForm

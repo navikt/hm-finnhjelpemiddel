@@ -4,14 +4,14 @@ import { ReactNode } from 'react'
 export const ProductPageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <VStack
-      gap={'14'}
-      paddingBlock={'16'}
-      paddingInline={'4'}
+      gap={"space-56"}
+      paddingBlock={"space-64"}
+      paddingInline={"space-16"}
       marginInline={'auto'}
-      marginBlock={'0'}
+      marginBlock={"space-0"}
       maxWidth={'1200px'}
     >
       {children}
     </VStack>
-  )
+  );
 }

@@ -132,6 +132,12 @@ export const fetchProductsKategori = async ({
       postFilters
     ),
   })
+
+  const supplierPostFilters = postFilters.filter((filter) => {
+    const filterStr = JSON.stringify(filter)
+    return !filterStr.includes('supplier.name')
+  })
+
   const aggs = {
     ...aggsFilter(
       'iso',
@@ -145,7 +151,18 @@ export const fetchProductsKategori = async ({
       },
       queryFilters
     ),
-    ...termAggs('suppliers', 'supplier.name'),
+    ...aggsFilter(
+      'suppliers',
+      {
+        values: {
+          terms: {
+            field: 'supplier.name',
+            size: 300,
+          },
+        },
+      },
+      supplierPostFilters
+    ),
     ...termAggs('setebreddeMinCM', 'filters.setebreddeMinCM'),
     ...termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM'),
     ...termAggs('setedybdeMinCM', 'filters.setedybdeMinCM'),

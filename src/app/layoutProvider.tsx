@@ -103,7 +103,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         />
       )}
       {visFeilbanner && (
-        <HStack padding="4" gap="3" justify="center">
+        <HStack padding="space-16" gap="space-12" justify="center">
           <Alert variant="error">
             Vi har dessverre tekniske problemer for tiden og siden kan være ustabil som følge av dette. Vi arbeider med
             å løse problemet.
@@ -116,12 +116,10 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         </Link>
         <NavigationBar />
       </header>
-
       <main id="hovedinnhold">
         {isMenuOpen && <div id="cover-main" />}
         {children}
       </main>
-
       {consent === 'true' && (
         <SkyraSurvey
           buttonText={'Tilbakemelding'}
@@ -130,7 +128,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       )}
       <Footer setCookieConsent={setConsent} />
     </Suspense>
-  )
+  );
 }
 
 reportAccessibility(React)

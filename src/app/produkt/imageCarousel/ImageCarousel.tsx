@@ -92,7 +92,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           icon={<XMarkIcon aria-hidden height={30} width={30} />}
           style={{ alignSelf: 'end' }}
         />
-        <VStack gap={'4'} className={styles.modalContainer}>
+        <VStack gap={"space-16"} className={styles.modalContainer}>
           <div className={styles.embla__viewport} ref={emblaMainRef}>
             <div className={styles.embla__container}>
               {images.map((image, index) => (
@@ -113,7 +113,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           </div>
 
           {images.length > 1 && (
-            <HStack gap={'2'} align={'center'} justify={'center'}>
+            <HStack gap={"space-8"} align={'center'} justify={'center'}>
               <Button
                 aria-label="Forrige bilde"
                 variant="tertiary"
@@ -123,7 +123,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               />
               <Hide below={'lg'}>
                 <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
-                  <HStack wrap={false} gap={'2'}>
+                  <HStack wrap={false} gap={"space-8"}>
                     {images.map((image, index) => (
                       <Thumb
                         imageUri={image.uri}
@@ -152,11 +152,11 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           )}
         </VStack>
       </VStack>
-    )
+    );
   } else {
     return (
       <>
-        <VStack gap={'4'} className={styles.embla}>
+        <VStack gap={"space-16"} className={styles.embla}>
           <div style={{ position: 'relative' }}>
             <button
               aria-label="Gå til fullskjermmodus"
@@ -185,7 +185,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           </div>
 
           {images.length > 1 && (
-            <HStack gap={'2'} align={'center'} justify={'center'} style={{ position: 'relative', zIndex: '100' }}>
+            <HStack gap={"space-8"} align={'center'} justify={'center'} style={{ position: 'relative', zIndex: '100' }}>
               <Button
                 aria-label="Forrige bilde"
                 variant="tertiary"
@@ -195,7 +195,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
               />
               <Hide below={'lg'}>
                 <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
-                  <HStack wrap={false} gap={'2'}>
+                  <HStack wrap={false} gap={"space-8"}>
                     {images.map((image, index) => (
                       <Thumb
                         imageUri={image.uri}
@@ -224,7 +224,7 @@ const ImageCarousel = ({ images }: { images: Photo[] }) => {
           )}
         </VStack>
       </>
-    )
+    );
   }
 }
 

@@ -51,7 +51,7 @@ const SearchResults = ({
           {!isHideUtgåttActive ? (
             <BodyLong>Obs! Fant ingen hjelpemiddel. Har du sjekket filtrene dine?</BodyLong>
           ) : (
-            <HStack gap="1">
+            <HStack gap="space-4">
               <BodyLong>Obs! Fant ingen hjelpemiddel. Kan hjelpemiddelet være utgått? </BodyLong>
               <Button variant="tertiary" onClick={handleSetUtgåttFilter} size="xsmall">
                 Vis utgåtte hjelpemidler
@@ -60,13 +60,13 @@ const SearchResults = ({
           )}
         </Alert>
       </div>
-    )
+    );
   }
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <HStack
-        gap={{ xs: '4', md: '5' }}
+        gap={{ xs: "space-16", md: "space-20" }}
         id="searchResults"
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
@@ -91,7 +91,7 @@ const SearchResults = ({
         </Button>
       )}
     </VStack>
-  )
+  );
 }
 
 export default SearchResults

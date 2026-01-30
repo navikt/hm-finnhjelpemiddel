@@ -3,11 +3,11 @@
 .container {
   position: relative;
   border-radius: 0.5rem;
-  border: 1px solid $a-border-default;
+  border: 1px solid$ax-border-neutral;
   background-color: white;
 
   &:hover {
-    outline: 1px solid $a-border-action;
+    outline: 1px solid$ax-border-accent;
   }
 }
 
@@ -17,13 +17,13 @@
 }
 
 .link {
-  color: $a-text-default;
+  color:$ax-text-neutral;
   text-decoration: underline;
 
   &:hover,
   &:focus {
     text-decoration: underline;
-    color: $a-text-action;
+    color:$ax-text-accent-subtle;
     background-color: white;
   }
 
@@ -40,20 +40,20 @@
 
 .compareButton {
   z-index: 2;
-  box-shadow: inset 0 0 0 1px $a-border-default;
-  color: $a-icon-subtle;
+  box-shadow: inset 0 0 0 1px$ax-border-neutral;
+  color:$ax-text-neutral-subtle;
 
   &:active {
-    background-color: $a-surface-action-selected-hover;
+    background-color:$ax-bg-accent-strong-hover;
   }
 }
 .compareButtonChecked {
   color: #fff;
-  background-color: $a-surface-action-selected-hover;
+  background-color:$ax-bg-accent-strong-hover;
   box-shadow: none;
 
   &:hover,
   &:active {
-    background-color: $a-surface-action-selected-hover;
+    background-color:$ax-bg-accent-strong-hover;
   }
 }

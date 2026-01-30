@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useEffect } from 'react'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
@@ -26,7 +27,7 @@ export const KategoriPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { createQueryStringAppendRemovePage } = useQueryString()
+  const { createQueryStringAppendRemovePage, createQueryStringForMinMax } = useQueryString()
 
   const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
     const sortOrderStr = searchParams.get('sortering') || ''
@@ -34,7 +35,7 @@ export const KategoriPage = ({ category }: Props) => {
 
     const isoCode = searchParams.get('isoCode') ?? ''
 
-    const suppliers = searchParams.getAll('supplier') ?? ''
+    const suppliers = searchParams.getAll('leverandor') ?? ''
     const isos = searchParams.getAll('iso') ?? ''
 
     const setebredde = searchParams.get('Setebredde') ?? ''
@@ -57,6 +58,11 @@ export const KategoriPage = ({ category }: Props) => {
   }
 
   const searchData = mapSearchParamsKategori(searchParams)
+
+  useEffect(() => {
+    mapSearchParamsKategori(searchParams)
+  }, [searchParams])
+
 
   const {
     data: productsData,
@@ -105,9 +111,23 @@ export const KategoriPage = ({ category }: Props) => {
 
   const filters: Filters = { isos, suppliers, measurementFilters }
 
-  const onChange = (filterName: string, value: string) => {
-    const newSearchParams = createQueryStringAppendRemovePage(filterName, value)
-    // Reset paging when filters change so we don’t mix old pages with new filters
+
+  const onChange = (filterName: string, value: string | string[]) => {
+    const singleValue = Array.isArray(value) ? value[0] : value
+    const paramKeyMap: Record<string, string> = {
+      suppliers: 'leverandor',
+      isos: 'iso',
+    }
+    const paramKey = paramKeyMap[filterName] || filterName
+    let newSearchParams: string
+    if (filterName === 'suppliers' || filterName === 'isos') {
+      newSearchParams = createQueryStringAppendRemovePage(paramKey, singleValue)
+    } else {
+      newSearchParams = createQueryStringForMinMax(paramKey, singleValue)
+      const params = new URLSearchParams(newSearchParams)
+      params.delete('page')
+      newSearchParams = params.toString()
+    }
     setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
@@ -121,18 +141,17 @@ export const KategoriPage = ({ category }: Props) => {
     <KategoriPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
-        <HGrid columns={'374px 4'} gap={'4'}>
-          <VStack gap={'4'}>
+        <HGrid columns={'374px 4'} gap={"space-16"}>
+          <VStack gap={"space-16"}>
             <Heading level="2" size="medium">
-              {isLoading ? (
-                <Skeleton variant="text" width="10rem" />
-              ) : products ? (
-                `Viser første ${products.length}`
-              ) : (
-                `Ingen treff`
-              )}
+              {isLoading ?
+                /* <Skeleton variant="text" width="10rem" />*/
+                  'Viser første '
+                : products
+                  ? `Viser første ${products.length}`
+                  : `Ingen treff`}
             </Heading>
-            <HStack justify={'space-between'} gap={'2'} align={'end'}>
+            <HStack justify={'space-between'} gap={"space-8"} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
               {/*<SortKategoriResults />*/}
             </HStack>
@@ -142,5 +161,5 @@ export const KategoriPage = ({ category }: Props) => {
         </HGrid>
       </>
     </KategoriPageLayout>
-  )
+  );
 }

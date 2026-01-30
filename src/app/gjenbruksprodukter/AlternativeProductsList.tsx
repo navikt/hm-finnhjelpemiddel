@@ -68,7 +68,7 @@ export const AlternativeProductList = ({
       <CompareAlternativeProductsMenu />
       <div>
         <Heading size="medium" spacing>
-          Treff på HMS {hmsNumber}:<HGrid gap={'4'} columns={{ sm: 1, md: 1 }}></HGrid>
+          Treff på HMS {hmsNumber}:<HGrid gap={"space-16"} columns={{ sm: 1, md: 1 }}></HGrid>
         </Heading>
         <AlternativeProductCard
           alternativeProduct={original}
@@ -78,9 +78,9 @@ export const AlternativeProductList = ({
           handleCompareClick={handleCompareClick}
         />
       </div>
-      <VStack gap={'4'}>
+      <VStack gap={"space-16"}>
         <Heading size="medium">Alternative produkter</Heading>
-        <HGrid gap={'4'} columns={{ sm: 1, md: 1 }}>
+        <HGrid gap={"space-16"} columns={{ sm: 1, md: 1 }}>
           {alternatives && alternatives.length > 0 ? (
             alternatives?.map((alternative) => {
               return (
@@ -102,7 +102,7 @@ export const AlternativeProductList = ({
         </HGrid>
       </VStack>
     </>
-  )
+  );
 }
 
 const getSelectedWarehouseStock = (

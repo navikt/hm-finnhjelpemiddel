@@ -66,7 +66,7 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
             Fjern filter
           </ActionMenu.Item>
         )}
-        <HStack gap={'2'}>
+        <HStack gap={"space-8"}>
           <TextField
             label={filterLabel}
             hideLabel
@@ -86,5 +86,5 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
         </HStack>
       </ActionMenu.Content>
     </ActionMenu>
-  )
+  );
 }

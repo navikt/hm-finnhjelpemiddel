@@ -24,8 +24,8 @@ export const ProductCardPrint = ({
   )
 
   return (
-    <Box paddingInline="2" paddingBlock="1" className="product-card--print">
-      <VStack gap="1">
+    <Box paddingInline="space-8" paddingBlock="space-4" className="product-card--print">
+      <VStack gap="space-4">
         <BodyShort size="small" className="text-line-clamp">
           {rank && rank < 90 ? `${rank}: ${product.title}` : `${product.title}`}
         </BodyShort>
@@ -33,5 +33,5 @@ export const ProductCardPrint = ({
         <Detail textColor="subtle">{product.supplierName}</Detail>
       </VStack>
     </Box>
-  )
+  );
 }

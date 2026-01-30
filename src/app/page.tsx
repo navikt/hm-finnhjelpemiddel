@@ -46,16 +46,16 @@ function FrontPage() {
   )
 
   return (
-    <VStack className={styles.container} paddingInline={{ xs: '4', md: '12' }} gap={{ xs: '12', md: '16' }}>
+    <VStack className={styles.container} paddingInline={{ xs: "space-16", md: "space-48" }} gap={{ xs: "space-48", md: "space-64" }}>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <HGrid
           className={styles.heroContentContainer}
           columns={{ sm: 1, md: 2 }}
           align={'center'}
-          gap={'8'}
-          marginBlock={{ xs: '10', md: '20' }}
+          gap={"space-32"}
+          marginBlock={{ xs: "space-40", md: "space-80" }}
         >
-          <VStack gap={{ xs: '8', md: '11' }} maxWidth={'490px'} style={{ gridArea: 'box1' }}>
+          <VStack gap={{ xs: "space-32", md: "space-44" }} maxWidth={'490px'} style={{ gridArea: 'box1' }}>
             <Heading level="1" size="large">
               Her kan du finne hjelpemidler på det norske markedet
             </Heading>
@@ -71,18 +71,16 @@ function FrontPage() {
           </Box>
         </HGrid>
       </Bleed>
-
       <KategoriInngangForside />
-      <HGrid columns={{ xs: 1, lg: '2fr 1fr' }} gap={{ xs: '8', lg: '10' }} align="start">
+      <HGrid columns={{ xs: 1, lg: '2fr 1fr' }} gap={{ xs: "space-32", lg: "space-40" }} align="start">
         <Agreements />
         <NewsFeed />
       </HGrid>
-
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />
       </Bleed>
     </VStack>
-  )
+  );
 }
 
 export default FrontPage

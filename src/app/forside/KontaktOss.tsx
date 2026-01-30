@@ -6,7 +6,7 @@ import styles from './KontaktOss.module.scss'
 const KontaktOss = () => {
   return (
     <Bleed marginInline="full" asChild reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-      <HGrid gap="8" columns={{ xs: 1, md: 3 }} paddingBlock={'24'}>
+      <HGrid gap="space-32" columns={{ xs: 1, md: 3 }} paddingBlock={"space-96"}>
         <KontaktOssItem
           icon={<Chat2Icon aria-hidden fontSize={'32px'} />}
           title="Kontakt Nav"
@@ -29,7 +29,7 @@ const KontaktOss = () => {
         />
       </HGrid>
     </Bleed>
-  )
+  );
 }
 
 const KontaktOssItem = ({
@@ -44,7 +44,7 @@ const KontaktOssItem = ({
   description: string
 }) => {
   return (
-    <HGrid columns={'65px auto'} gap={{ xs: '2', md: '6' }}>
+    <HGrid columns={'65px auto'} gap={{ xs: "space-8", md: "space-24" }}>
       <div className={styles.icon}>{icon}</div>
       <div className="spacing-top--small">
         <Heading as={Link} href={href} level="4" size="small" spacing>
@@ -53,7 +53,7 @@ const KontaktOssItem = ({
         <BodyLong>{description}</BodyLong>
       </div>
     </HGrid>
-  )
+  );
 }
 
 export default KontaktOss

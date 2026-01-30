@@ -6,18 +6,10 @@
   padding: 1rem;
 }
 
-.resetFiltersButton {
-  padding-bottom: 0.5rem;
-  --ac-chip-removable-neutral-border: 0;
-}
-
 .chipsRow {
   padding-bottom: 0.5rem;
-  --ac-chip-toggle-bg: white;
 }
 
 .disabledChip {
   opacity: 0.3;
-  --ac-chip-toggle-hover-bg: white;
-  --ac-chip-toggle-hover-border: var(--a-border-subtle);
 }

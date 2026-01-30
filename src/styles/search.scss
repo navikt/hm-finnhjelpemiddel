@@ -6,14 +6,14 @@
 .search {
   &__page-up-button {
     position: fixed;
-    top: $a-spacing-4;
-    right: $a-spacing-4;
+    top:$ax-space-16;
+    right:$ax-space-16;
     z-index: 2;
   }
 }
 
 .results__loader {
-  margin-top: $a-spacing-12;
+  margin-top:$ax-space-48;
   align-self: center;
   justify-self: center;
 }
@@ -36,7 +36,7 @@
   width: 100%;
   max-height: 400px;
   overflow-y: auto;
-  border: 1px solid var(--ac-combobox-list-border-color, var(--a-border-divider));
+  border: 1px solid var(--ac-combobox-list-border-color, var(--ax-border-neutral-subtle));
   z-index: var(--z-index-popover);
 
   .popover-content {
@@ -53,7 +53,7 @@
   li {
     display: flex;
     align-items: center;
-    background-color: var(--ac-combobox-list-item-bg, var(--a-surface-default));
+    background-color: var(--ac-combobox-list-item-bg, var(--ax-bg-default));
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -64,7 +64,7 @@
       gap: 0.5rem;
       border: none;
       margin: 0;
-      padding: var(--a-spacing-2);
+      padding: var(--ax-space-8);
       width: auto;
       text-align: left;
       background: transparent;
@@ -75,18 +75,18 @@
       outline: inherit;
       &:hover {
         cursor: pointer;
-        background-color: var(--ac-combobox-list-item-hover-bg, var(--a-surface-hover));
-        border-left: 4px solid var(--ac-combobox-list-item-hover-border-left, var(--a-border-strong));
-        padding-left: calc(var(--a-spacing-3) - 4px);
+        background-color: var(--ac-combobox-list-item-hover-bg, var(--ax-bg-neutral-moderate-hoverA));
+        border-left: 4px solid var(--ac-combobox-list-item-hover-border-left, var(--ax-border-neutral-strong));
+        padding-left: calc(var(--ax-space-12) - 4px);
       }
       &:focus {
-        background-color: var(--ac-combobox-list-item-hover-bg, var(--a-surface-hover));
-        border-left: 4px solid var(--ac-combobox-list-item-hover-border-left, var(--a-border-strong));
+        background-color: var(--ac-combobox-list-item-hover-bg, var(--ax-bg-neutral-moderate-hoverA));
+        border-left: 4px solid var(--ac-combobox-list-item-hover-border-left, var(--ax-border-neutral-strong));
       }
     }
 
     &:last-child {
-      border-top: 1px solid var(--a-border-divider);
+      border-top: 1px solid var(--ax-border-neutral-subtle);
     }
   }
 }

@@ -8,12 +8,12 @@ import { ArrowUpIcon, TabsAddIcon } from '@navikt/aksel-icons'
 const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) => (
   <footer className="main-wrapper--xlarge" style={{ width: '100%' }}>
     <Bleed marginInline="full" asChild reflectivePadding>
-      <VStack gap={'14'} className="nav-bunn nav-bunn__info">
-        <HStack as={Link} href="#" gap={'2'}>
+      <VStack gap={"space-56"} className="nav-bunn nav-bunn__info">
+        <HStack as={Link} href="#" gap={"space-8"}>
           <ArrowUpIcon fontSize={24} aria-hidden /> <BodyShort size="large">Til toppen</BodyShort>
         </HStack>
         <div className={styles.footerLinks}>
-          <VStack gap={'4'} className={styles.footerLinkGroup}>
+          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Kontakt
             </Heading>
@@ -21,7 +21,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             <Link href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral">Finn din hjelpemiddelsentral</Link>
           </VStack>
 
-          <VStack gap={'4'} className={styles.footerLinkGroup}>
+          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Søke om hjelpemiddel
             </Heading>
@@ -29,7 +29,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             <Link href="https://www.nav.no/soknader">Søknad og skjema for hjelpemidler</Link>
           </VStack>
 
-          <VStack gap={'4'} className={styles.footerLinkGroup}>
+          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Om FinnHjelpemiddel
             </Heading>
@@ -55,7 +55,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             </Link>
             <Link onClick={() => setCookieConsent(null)}>Endre samtykke for informasjonskapsler</Link>
           </VStack>
-          <VStack gap={'4'} className={styles.footerLinkGroup}>
+          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Annet
             </Heading>

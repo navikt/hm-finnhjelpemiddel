@@ -143,7 +143,7 @@ export default function SearchPage() {
     return (
       <FormProvider {...formMethods}>
         <CompareMenu />
-        <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: '4', lg: '18' }}>
+        <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: "space-16", lg: "space-72" }}>
           <Show above={'lg'}>
             <SearchSidebar onSubmit={onSubmit} filters={filters} searchFormRef={searchFormRef} onReset={onReset} />
           </Show>
@@ -164,10 +164,10 @@ export default function SearchPage() {
             />
           </Show>
 
-          <VStack gap={{ xs: '4', lg: '8' }}>
+          <VStack gap={{ xs: "space-16", lg: "space-32" }}>
             <HStack
               justify={{ xs: 'start', lg: 'space-between' }}
-              gap={{ xs: '4', lg: '0' }}
+              gap={{ xs: "space-16", lg: "space-0" }}
               className="results__header"
             >
               <Show above="lg">
@@ -191,37 +191,37 @@ export default function SearchPage() {
           </VStack>
         </HGrid>
       </FormProvider>
-    )
+    );
   }
 
   if (isMaybeRedirecting) {
     return (
       <VStack
         marginInline={'auto'}
-        marginBlock={'0'}
+        marginBlock={"space-0"}
         maxWidth={'1408px'}
-        paddingBlock={'0 12'}
-        paddingInline={'4'}
-        gap={{ xs: '12', md: '12' }}
+        paddingBlock={"space-0 space-48"}
+        paddingInline={"space-16"}
+        gap={{ xs: "space-48", md: "space-48" }}
       >
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Loader size="3xlarge" title="Venter..." />
         </HStack>
       </VStack>
-    )
+    );
   }
 
   return (
     <VStack
       marginInline={'auto'}
-      marginBlock={'0'}
+      marginBlock={"space-0"}
       maxWidth={'1408px'}
-      paddingBlock={'0 12'}
-      paddingInline={'4'}
-      gap={{ xs: '12', md: '12' }}
+      paddingBlock={"space-0 space-48"}
+      paddingInline={"space-16"}
+      gap={{ xs: "space-48", md: "space-48" }}
     >
       <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-        <VStack gap="4" align={'start'} paddingBlock={'12'}>
+        <VStack gap="space-16" align={'start'} paddingBlock={"space-48"}>
           <Heading level="1" size="large">
             {searchData.searchTerm ? (
               `Søkeresultater: '${searchData.searchTerm}'`
@@ -233,7 +233,6 @@ export default function SearchPage() {
           </Heading>
         </VStack>
       </Bleed>
-
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Alert variant="error" title="Error med lasting av produkter">
@@ -244,5 +243,5 @@ export default function SearchPage() {
         <SearchPageBody />
       )}
     </VStack>
-  )
+  );
 }

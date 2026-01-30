@@ -33,7 +33,7 @@ const AlternativeProductCard = ({
   const linkToProduct = `/produkt/${product.id}?${searchParams}`
   return (
     <Box
-      padding="2"
+      padding="space-8"
       className={classNames(cardClassName, {
         'product-card__checked': isInProductsToCompare,
       })}
@@ -58,7 +58,7 @@ const AlternativeProductCard = ({
         <ProductImage src={imageSrc} productTitle={product.variants[0].articleName} />
       </VStack>
     </Box>
-  )
+  );
 }
 
 export default AlternativeProductCard

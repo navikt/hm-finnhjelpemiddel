@@ -1,0 +1,8 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  padding-left: var(--a-space-16);
+  padding-right: var(--a-space-16);
+  margin: 0 auto;
+  max-width: 1200px;
+}

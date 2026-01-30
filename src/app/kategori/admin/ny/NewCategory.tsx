@@ -26,18 +26,16 @@ export const NewCategory = () => {
   }
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={"space-8"}>
       <Link as={NextLink} href={'/kategori/admin'} style={{ width: 'fit-content' }}>
         <ArrowLeftIcon aria-hidden />
         Tilbake til oversikt
       </Link>
       <Heading size={'large'}>Ny kategori</Heading>
-
       <EditableCategory inputValue={inputValue} setInputValue={setInputValue} />
-
       <Button onClick={() => onSave().then(() => router.push('/kategori/admin'))} style={{ width: 'fit-content' }}>
         Lagre
       </Button>
     </VStack>
-  )
+  );
 }

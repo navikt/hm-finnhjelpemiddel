@@ -5,8 +5,8 @@ import styles from './EditableAlternativeCard.module.scss'
 export const NoAlternativesCard = () => (
   <HGrid
     columns={'1fr'}
-    gap={'2'}
-    padding={'4'}
+    gap={"space-8"}
+    padding={"space-16"}
     align={'center'}
     className={`${styles.containerDotted} `}
     width={'10px'}

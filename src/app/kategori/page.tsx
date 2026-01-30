@@ -6,7 +6,7 @@ import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
 export default async function Page() {
   return (
     <KategoriPageLayout title={'Her er alle kategoriene'} description={''}>
-      <HGrid gap={'2'} columns={'repeat(2, 600px)'} paddingBlock={'12'}>
+      <HGrid gap={"space-8"} columns={'repeat(2, 600px)'} paddingBlock={"space-48"}>
         {topLevelCategoryTitles.map((kategori) => (
           <CategoryCardFrontPage
             icon={topLevelcategories[kategori].icon}
@@ -18,5 +18,5 @@ export default async function Page() {
         ))}
       </HGrid>
     </KategoriPageLayout>
-  )
+  );
 }

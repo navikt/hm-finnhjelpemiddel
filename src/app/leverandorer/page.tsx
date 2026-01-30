@@ -20,16 +20,16 @@ export default function SearchPage() {
     <div className={styles.suppliersPage}>
       <Box
         marginInline={'auto'}
-        marginBlock={'0'}
+        marginBlock={"space-0"}
         maxWidth={'1000px'}
-        paddingBlock={'0 12'}
-        paddingInline={{ xs: '4', md: '12' }}
+        paddingBlock={"space-0 space-48"}
+        paddingInline={{ xs: "space-16", md: "space-48" }}
       >
         <VStack
           className={styles.pageContent}
-          gap={'4'}
-          paddingBlock={{ xs: '6', md: '12' }}
-          paddingInline={{ xs: '4', md: '12' }}
+          gap={"space-16"}
+          paddingBlock={{ xs: "space-24", md: "space-48" }}
+          paddingInline={{ xs: "space-16", md: "space-48" }}
         >
           <div>
             <Heading level="1" size="large" spacing>
@@ -42,7 +42,7 @@ export default function SearchPage() {
 
           {!isLoading && activeSuppliers && (
             <>
-              <HStack gap="2" paddingBlock={{ xs: '0 8', md: '0 12' }}>
+              <HStack gap="space-8" paddingBlock={{ xs: "space-0 space-32", md: "space-0 space-48" }}>
                 {alphabet.map((letter) => (
                   <span
                     className={disabledLetters.includes(letter) ? styles.letterDisabled : styles.letter}
@@ -74,5 +74,5 @@ export default function SearchPage() {
         </VStack>
       </Box>
     </div>
-  )
+  );
 }

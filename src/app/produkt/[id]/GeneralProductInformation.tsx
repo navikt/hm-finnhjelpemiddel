@@ -14,9 +14,9 @@ export const GeneralProductInformation = ({ product }: { product: Product }) => 
     '        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.'
 
   return (
-    <VStack gap={'11'}>
+    <VStack gap={"space-44"}>
       <Description description={description} />
-      <VStack gap={'6'}>
+      <VStack gap={"space-24"}>
         <BestillingsordningBehovsmelding
           heading={'Bestillingsordning'}
           helpText={helpTextBestilling}
@@ -34,7 +34,7 @@ export const GeneralProductInformation = ({ product }: { product: Product }) => 
         />
       </VStack>
     </VStack>
-  )
+  );
 }
 
 const Description = ({ description }: { description: string | undefined }) => {
@@ -69,7 +69,7 @@ const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bestilling
     )
   return (
     <div>
-      <HStack gap={'2'}>
+      <HStack gap={"space-8"}>
         <Heading size={'xsmall'} level={'3'}>
           {heading}
         </Heading>
@@ -77,7 +77,7 @@ const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bestilling
       </HStack>
       {bestillingsordning}
     </div>
-  )
+  );
 }
 
 type ISOCategoryProps = {
@@ -91,14 +91,14 @@ const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInternatio
       <Heading size={'xsmall'} level={'4'}>
         ISO-kategori (kode)
       </Heading>
-      <HStack gap={'1'}>
+      <HStack gap={"space-4"}>
         <BodyShort>Nivå 3:</BodyShort>
         <BodyShort size="medium">{isoCategoryTitleInternational + ' (' + isoCategory.slice(0, 6) + ')'}</BodyShort>
       </HStack>
-      <HStack gap="1">
+      <HStack gap="space-4">
         <BodyShort>Nivå 4:</BodyShort>
         <BodyShort size="medium"> {isoCategoryTitle + ' (' + isoCategory + ')'}</BodyShort>
       </HStack>
     </div>
-  )
+  );
 }
