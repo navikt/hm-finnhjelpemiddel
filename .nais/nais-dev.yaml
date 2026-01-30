@@ -13,6 +13,11 @@ spec:
     - 'https://finnhjelpemiddel.ekstern.dev.nav.no'
     - 'https://finnhjelpemiddel.intern.dev.nav.no'
     - 'https://finnhjelpemiddel.ansatt.dev.nav.no'
+  observability:
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
   accessPolicy:
     outbound:
       rules:
