@@ -20,7 +20,7 @@ export const config = {
 
 export async function middleware(request: NextRequest) {
   const isLocal = process.env.NODE_ENV === 'development'
-  const runtimeEnv = process.env.RUNTIME_ENVIRONMENT
+  const buildenv = process.env.BUILD_ENV
 
   const { pathname, origin } = request.nextUrl
   const loginUrl = `${origin}/oauth2/login?redirect=${pathname}`
@@ -46,9 +46,9 @@ export async function middleware(request: NextRequest) {
     const categoryAdminGroupProd = 'a6d5a807-6173-4654-9317-8b196cccef5d'
     const categoryAdminGroupDev = 'da88f4ec-23b3-427b-87c5-e890b7d02519'
     let group = ''
-    if (runtimeEnv === 'prod') {
+    if (buildenv === 'prod') {
       group = categoryAdminGroupProd
-    } else if (runtimeEnv === 'dev') {
+    } else if (buildenv === 'dev') {
       group = categoryAdminGroupDev
     }
 
@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
       console.log('not a member of correct azure group')
       console.log('azgrupper:', azureToken.groups)
       console.log('group:', group)
-      console.log('runtime', runtimeEnv)
+      console.log('runtime', buildenv)
       return NextResponse.redirect(`${origin}/tilgang`)
     }
   }
