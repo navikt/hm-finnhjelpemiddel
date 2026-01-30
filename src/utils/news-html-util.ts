@@ -11,7 +11,7 @@ export function sanitize(html: string): string {
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
     .replace(/ on[a-z]+=('[^']*'|"[^"]*")/gi, '')
-    .replace(/javascript:|data:|vbscript:/gi, '')
+    .replace(/javascript:|data:|vbscript:/gi, '');
 }
 
 // Remove disallowed tags but keep their inner text
@@ -37,7 +37,7 @@ function stripDisallowedTags(html: string): string {
     .replace(/<\/(.*?)>/gi, (match, tag) => {
       const lower = tag.toLowerCase()
       return ALLOWED_TAGS.includes(lower) ? `</${lower}>` : ''
-    })
+    });
 }
 
 interface PreviewResult {

@@ -40,7 +40,7 @@ export const AddAlternative = ({
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={"space-16"}>
       <ExpansionCard
         size={'small'}
         aria-label="Demo med bare tittel"
@@ -52,7 +52,7 @@ export const AddAlternative = ({
           <ExpansionCard.Title size={'small'}>Legg til alternativ</ExpansionCard.Title>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
-          <VStack gap={'2'} padding={'2'}>
+          <VStack gap={"space-8"} padding={"space-8"}>
             <Search
               label="Skriv HMS-nummer"
               hideLabel={false}
@@ -91,5 +91,5 @@ export const AddAlternative = ({
         </ExpansionCard.Content>
       </ExpansionCard>
     </VStack>
-  )
+  );
 }

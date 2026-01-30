@@ -7,7 +7,7 @@ import { AlternativeProduct } from '@/app/gjenbruksprodukter/alternative-util'
 export const AddAlternativeCard = ({ product }: { product: AlternativeProduct }) => (
   <Box className={styles.alternativeProductContainer}>
     <HStack justify="space-between" align={'center'} wrap={false} className={styles.productContainer}>
-      <VStack gap={'1'} className={styles.productProperties}>
+      <VStack gap={"space-4"} className={styles.productProperties}>
         <BodyShort size="small" weight="semibold">
           {product.variantTitle}
         </BodyShort>

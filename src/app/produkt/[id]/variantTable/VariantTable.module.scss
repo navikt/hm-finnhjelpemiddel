@@ -8,7 +8,6 @@
   }
 }
 
-
 .variantsTable {
   overflow: auto;
 
@@ -44,32 +43,22 @@
   }
 
   //Need to set background on every second to white to avoid the header to be transparent
-  tr:nth-child(2n) th {
+  tbody tr:nth-child(even) th {
     background-color: white;
   }
 
-  tbody th {
-    background-color: inherit;
-    border-right: 1px solid $a-bg-subtle;
+  tbody tr:nth-child(odd) th {
+    background-color: $ax-bg-neutral-soft;
   }
 
-  tbody .navds-table__row--shade-on-hover:hover th {
-    background-color: $a-bg-subtle;
+  tbody th {
+    border-right: 1px solid$ax-bg-neutral-soft;
   }
 
   table thead th:first-child {
     position: sticky;
     left: 0;
     z-index: 2;
-  }
-
-  .navds-table__header-cell,
-  .navds-table__data-cell {
-    padding: $a-spacing-3 $a-spacing-3;
-  }
-
-  .navds-table__data-cell {
-    max-width: 13rem;
   }
 
   * {
@@ -87,8 +76,7 @@
 
 .selectedColumn {
   border-left: #0056b4 dashed 1px;
-  border-right: #0056b4 dashed 1px;;
+  border-right: #0056b4 dashed 1px;
   background-color: #f1f5f9;
-  font-weight: 500
+  font-weight: 500;
 }
-

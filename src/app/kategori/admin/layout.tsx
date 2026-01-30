@@ -3,16 +3,16 @@ import { VStack } from '@navikt/ds-react'
 async function CategoryAdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <VStack
-      gap={'8'}
-      paddingBlock={'0 16'}
-      paddingInline={'4'}
+      gap={"space-32"}
+      paddingBlock={"space-0 space-64"}
+      paddingInline={"space-16"}
       marginInline={'auto'}
-      marginBlock={'0'}
+      marginBlock={"space-0"}
       maxWidth={'1280px'}
     >
       {children}
     </VStack>
-  )
+  );
 }
 
 export default CategoryAdminLayout

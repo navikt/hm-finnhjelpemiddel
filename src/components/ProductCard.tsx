@@ -25,7 +25,7 @@ const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; pro
   }
 
   return (
-    <Box padding="2" className={cardClassName}>
+    <Box padding="space-8" className={cardClassName}>
       {type === 'removable' && <RemoveButton product={product} />}
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
@@ -48,7 +48,7 @@ const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; pro
         <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
       </VStack>
     </Box>
-  )
+  );
 }
 
 const RemoveButton = ({ product }: { product: Product }) => {

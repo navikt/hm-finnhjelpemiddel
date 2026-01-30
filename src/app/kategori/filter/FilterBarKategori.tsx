@@ -35,11 +35,11 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={'space-16'}>
       <Heading level={'3'} size={'small'}>
         Filter
       </Heading>
-      <HStack gap="2" maxWidth={'1214px'}>
+      <HStack gap="space-8" maxWidth={'1214px'}>
         {filters.isos.length > 1 && <CheckboxFilterNew filterMenu={isoFilters} onChange={onChange} />}
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
         {filters.measurementFilters &&
@@ -52,6 +52,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
             size={'small'}
             onClick={onReset}
             className={styles.filterButton}
+            data-color={'danger'}
             icon={<XMarkIcon aria-hidden />}
             iconPosition={'right'}
           >

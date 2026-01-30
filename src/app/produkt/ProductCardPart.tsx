@@ -26,12 +26,12 @@ export const ProductCardPart = ({
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: '2', md: '3' }} className={styles.container} width={{ xs: '100%', sm: '380px' }}>
-      <HStack gap="3" align="start" wrap={false}>
+    <Box padding={{ xs: "space-8", md: "space-12" }} className={styles.container} width={{ xs: '100%', sm: '380px' }}>
+      <HStack gap="space-12" align="start" wrap={false}>
         <Box className={styles.imageWrapper}>
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
         </Box>
-        <VStack gap={{ xs: '1', md: '2' }}>
+        <VStack gap={{ xs: "space-4", md: "space-8" }}>
           {onAgreement ? (
             <SuccessTag className={styles.agreementTag}>
               {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
@@ -49,5 +49,5 @@ export const ProductCardPart = ({
         </VStack>
       </HStack>
     </Box>
-  )
+  );
 }

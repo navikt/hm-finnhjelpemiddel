@@ -11,17 +11,17 @@
 }
 
 .productSummary {
-  padding: $a-spacing-2 0 0 0;
+  padding:$ax-space-8 0 0 0;
 }
 
 .link {
-  color: $a-text-default;
+  color:$ax-text-neutral;
   text-decoration: underline;
 
   &:hover,
   &:focus {
     text-decoration: underline;
-    color: $a-text-action;
+    color:$ax-text-accent-subtle;
     background-color: white;
   }
 }

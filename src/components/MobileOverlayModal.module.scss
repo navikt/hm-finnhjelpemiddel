@@ -13,25 +13,25 @@
   justify-content: space-between;
   
   &__header {
-    border-bottom: 0.1px solid $a-border-divider;
+    border-bottom: 0.1px solid$ax-border-neutral-subtle;
     text-align: center;
 
     button {
-      color: $a-icon-action;
+      color:$ax-text-accent-decoration;
     }
   }
 
   &__content {
     flex: 1;
-    padding-top: $a-spacing-4 !important;
+    padding-top:$ax-space-16 !important;
   }
 
   &__footer {
-    border-top: 1px solid $a-border-divider;
+    border-top: 1px solid$ax-border-neutral-subtle;
     display: block;
     
     button {
-      padding: $a-spacing-2 $a-spacing-3;
+      padding:$ax-space-8$ax-space-12;
       
       span {
         margin-left: 0!important;

@@ -3,10 +3,18 @@
 .bleedButton {
   background-color: white;
   width: fit-content;
+
+  &:hover {
+    background-color: $ax-bg-accent-moderate-hover;
+  }
+
+  &:active {
+    background-color: $ax-bg-accent-moderate-pressed;
+  }
 }
 
 .divider {
-  border-bottom: 1px solid var(--a-bg-subtle);
+  border-bottom: 1px solid var(--ax-bg-neutral-soft);
   width: 100%;
-  margin-bottom: var(--a-spacing-2);
+  margin-bottom: var(--ax-space-8);
 }

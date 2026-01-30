@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button } from '@navikt/ds-react'
 
@@ -7,6 +5,7 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-
 
 import classNames from 'classnames'
 import ProductCard from '@/components/ProductCard'
+import NextLink from 'next/link'
 
 const CompareMenu = () => {
   const { compareMenuState, productsToCompare, setCompareMenuState, resetProductToCompare } = useHydratedCompareStore()
@@ -67,16 +66,16 @@ const CompareMenu = () => {
 
               {productsToCompare.length > 1 && (
                 <div className="compare-menu__buttons">
-                  <Link href="/sammenlign" passHref legacyBehavior>
+                  <NextLink href="/sammenlign" passHref>
                     <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
                       Sammenlign
                     </Button>
-                  </Link>
+                  </NextLink>
                   <Button
                     variant="tertiary"
                     icon={<TrashIcon aria-hidden />}
                     onClick={() => {
-                      resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized)
+                      ;(resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized))
                     }}
                   >
                     Nullstill

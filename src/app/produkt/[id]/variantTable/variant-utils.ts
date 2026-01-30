@@ -57,7 +57,7 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
         variantA.articleName.trim().replace(/\s/g, ''),
         variantB.articleName.trim().replace(/\s/g, ''),
         sortColumns?.direction === 'descending'
-      )
+      );
     }
 
     if (sortColumns.orderBy === 'rank') {
@@ -86,7 +86,7 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
           variantA.articleName.trim().replace(/\s/g, ''),
           variantB.articleName.trim().replace(/\s/g, ''),
           sortColumns?.direction === 'descending'
-        )
+        );
       }
       return -1
     }
@@ -99,5 +99,5 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
     } else {
       return -1
     }
-  })
+  });
 }

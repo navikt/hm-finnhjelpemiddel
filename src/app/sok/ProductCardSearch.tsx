@@ -28,10 +28,10 @@ export const ProductCardSearch = ({
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: '2', md: '4' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack justify={'space-between'} height={'100%'} gap={'2'}>
+    <Box padding={{ xs: "space-8", md: "space-16" }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
+      <VStack justify={'space-between'} height={'100%'} gap={"space-8"}>
         <VStack>
-          <HStack paddingBlock={{ xs: '0', md: '0 4' }} align={'center'} justify={'space-between'}>
+          <HStack paddingBlock={{ xs: "space-0", md: "space-0 space-16" }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
               <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>
             ) : (
@@ -48,10 +48,10 @@ export const ProductCardSearch = ({
           </Link>
         </VStack>
 
-        <VStack gap={{ xs: '1', md: '4' }}>
+        <VStack gap={{ xs: "space-4", md: "space-16" }}>
           <BodyShort size="small">{product.supplierName}</BodyShort>
         </VStack>
       </VStack>
     </Box>
-  )
+  );
 }

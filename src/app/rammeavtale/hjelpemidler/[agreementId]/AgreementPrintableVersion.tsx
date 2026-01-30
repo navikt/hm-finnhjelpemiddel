@@ -28,7 +28,7 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
                 <Table.DataCell>{nr}</Table.DataCell>
                 <Table.DataCell className="printable-version__post-title">{titleWithoutPostNumber}</Table.DataCell>
                 <Table.DataCell key={i}>
-                  <HStack gap="2" wrap>
+                  <HStack gap="space-8" wrap>
                     {!products.length ? (
                       <BodyShort>Delkontrakten inneholder ingen hjelpemidler</BodyShort>
                     ) : (
@@ -49,12 +49,12 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
                   </HStack>
                 </Table.DataCell>
               </Table.Row>
-            )
+            );
           })}
         </Table.Body>
       </Table>
     </VStack>
-  )
+  );
 }
 
 export default AgreementPrintableVersion

@@ -76,12 +76,12 @@ export const OtherAgreements = () => {
   }
 
   return (
-    <VStack paddingBlock={{ xs: '9', md: '12' }}>
+    <VStack paddingBlock={{ xs: "space-36", md: "space-48" }}>
       <Heading size={'medium'} level={'2'} spacing>
         Andre hjelpemiddelavtaler
       </Heading>
       <Show above={'lg'}>
-        <HGrid columns={'1fr 1fr'} gap={'8'}>
+        <HGrid columns={'1fr 1fr'} gap={"space-32"}>
           <Accordion>
             <AccordionItems1 />
           </Accordion>
@@ -97,5 +97,5 @@ export const OtherAgreements = () => {
         </Accordion>
       </Show>
     </VStack>
-  )
+  );
 }

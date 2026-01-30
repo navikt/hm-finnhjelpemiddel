@@ -16,15 +16,14 @@ export const AdminPage = () => {
   return (
     <>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
-        <Box paddingBlock={'8'}>
+        <Box paddingBlock={"space-32"}>
           <Heading size={'large'}>Kategori-admin 🤠</Heading>
         </Box>
       </Bleed>
       <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
         Ny kategori
       </Button>
-
       <CategoryList categories={categories} />
     </>
-  )
+  );
 }

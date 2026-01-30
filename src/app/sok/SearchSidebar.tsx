@@ -20,7 +20,7 @@ export const SearchSidebar = ({ onSubmit, filters, searchFormRef, onReset }: Sea
   return (
     <section className="filter-container">
       <SearchForm onSubmit={onSubmit} filters={filters} ref={searchFormRef} />
-      <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="2">
+      <HGrid columns={{ xs: 2 }} className="filter-container__footer" gap="space-8">
         <Button
           ref={copyButtonDesktopRef}
           variant="secondary"
@@ -52,5 +52,5 @@ export const SearchSidebar = ({ onSubmit, filters, searchFormRef, onReset }: Sea
         </Button>
       </HGrid>
     </section>
-  )
+  );
 }

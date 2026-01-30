@@ -25,7 +25,7 @@ body {
   margin: 0;
   height: 100%;
   min-height: 100%;
-  background-color: $a-bg-default;
+  background-color: $ax-bg-default;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -47,30 +47,26 @@ main {
 }
 
 .nav-bunn {
-  background-color: $a-deepblue-800;
+  background-color: $ax-brand-blue-900;
   padding-bottom: 48px;
   padding-top: 40px;
 
   &__info {
-    color: $a-white;
+    color: white;
 
     a {
-      color: $a-white;
-      --ac-link-active-text: #cce1ff;
-      --ac-link-active-bg: transparent;
-      --ac-link-focus-text: #cce1ff;
-      --ac-link-focus-bg: transparent;
+      color: white;
     }
   }
 }
 
 .standalone-page-wrapper {
-  padding: $a-spacing-4;
+  padding: $ax-space-16;
 }
 
 .main-wrapper {
-  padding-left: $a-spacing-4;
-  padding-right: $a-spacing-4;
+  padding-left: $ax-space-16;
+  padding-right: $ax-space-16;
   margin: 0 auto;
 
   &--small {
@@ -167,42 +163,42 @@ main {
 .spacing {
   &-top {
     &--xsmall {
-      margin-top: $a-spacing-1;
+      margin-top: $ax-space-4;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-2;
+        margin-top: $ax-space-8;
       }
     }
 
     &--small {
-      margin-top: $a-spacing-2;
+      margin-top: $ax-space-8;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-4;
+        margin-top: $ax-space-16;
       }
     }
 
     &--medium {
-      margin-top: $a-spacing-4;
+      margin-top: $ax-space-16;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-8;
+        margin-top: $ax-space-32;
       }
     }
 
     &--large {
-      margin-top: $a-spacing-8;
+      margin-top: $ax-space-32;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-12;
+        margin-top: $ax-space-48;
       }
     }
 
     &--xlarge {
-      margin-top: $a-spacing-12;
+      margin-top: $ax-space-48;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-20;
+        margin-top: $ax-space-80;
       }
     }
   }
@@ -211,34 +207,34 @@ main {
 .spacing {
   &-bottom {
     &--small {
-      margin-bottom: $a-spacing-2;
+      margin-bottom: $ax-space-8;
 
       @include mixins.for-size(desktop-up) {
-        margin-bottom: $a-spacing-4;
+        margin-bottom: $ax-space-16;
       }
     }
 
     &--medium {
-      margin-bottom: $a-spacing-4;
+      margin-bottom: $ax-space-16;
 
       @include mixins.for-size(desktop-up) {
-        margin-bottom: $a-spacing-8;
+        margin-bottom: $ax-space-32;
       }
     }
 
     &--large {
-      margin-bottom: $a-spacing-8;
+      margin-bottom: $ax-space-32;
 
       @include mixins.for-size(desktop-up) {
-        margin-bottom: $a-spacing-12;
+        margin-bottom: $ax-space-48;
       }
     }
 
     &--xlarge {
-      margin-bottom: $a-spacing-16;
+      margin-bottom: $ax-space-64;
 
       @include mixins.for-size(desktop-up) {
-        margin-bottom: $a-spacing-20;
+        margin-bottom: $ax-space-80;
       }
     }
   }
@@ -247,42 +243,42 @@ main {
 .spacing {
   &-vertical {
     &--small {
-      margin-top: $a-spacing-2;
-      margin-bottom: $a-spacing-2;
+      margin-top: $ax-space-8;
+      margin-bottom: $ax-space-8;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-4;
-        margin-bottom: $a-spacing-4;
+        margin-top: $ax-space-16;
+        margin-bottom: $ax-space-16;
       }
     }
 
     &--medium {
-      margin-top: $a-spacing-4;
-      margin-bottom: $a-spacing-4;
+      margin-top: $ax-space-16;
+      margin-bottom: $ax-space-16;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-8;
-        margin-bottom: $a-spacing-8;
+        margin-top: $ax-space-32;
+        margin-bottom: $ax-space-32;
       }
     }
 
     &--large {
-      margin-top: $a-spacing-8;
-      margin-bottom: $a-spacing-8;
+      margin-top: $ax-space-32;
+      margin-bottom: $ax-space-32;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-12;
-        margin-bottom: $a-spacing-12;
+        margin-top: $ax-space-48;
+        margin-bottom: $ax-space-48;
       }
     }
 
     &--xlarge {
-      margin-top: $a-spacing-16;
-      margin-bottom: $a-spacing-16;
+      margin-top: $ax-space-64;
+      margin-bottom: $ax-space-64;
 
       @include mixins.for-size(desktop-up) {
-        margin-top: $a-spacing-20;
-        margin-bottom: $a-spacing-20;
+        margin-top: $ax-space-80;
+        margin-bottom: $ax-space-80;
       }
     }
   }
@@ -292,7 +288,7 @@ main {
   height: 42px;
   min-width: 36px;
   width: fit-content;
-  padding: 0 $a-spacing-5;
+  padding: 0$ax-space-20;
   border-radius: 8px;
   display: flex;
   justify-content: center;
@@ -304,7 +300,7 @@ main {
 
   &--xsmall {
     height: 28px;
-    padding: 0 $a-spacing-2;
+    padding: 0$ax-space-8;
   }
 }
 
@@ -314,17 +310,17 @@ main {
   button {
     width: 100%;
     align-self: center;
-    color: $a-blue-700;
+    color: $ax-accent-800;
   }
 
   button:hover {
-    color: $a-blue-700;
+    color: $ax-accent-800;
   }
 }
 
 .file-container {
   display: flex;
-  gap: $a-spacing-1;
+  gap: $ax-space-4;
 
   &__with-date {
     padding: 1px 0;
@@ -337,40 +333,40 @@ main {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: $a-spacing-2;
-  padding-left: $a-spacing-2;
+  gap: $ax-space-8;
+  padding-left: $ax-space-8;
 }
 
-.video-list {
+/*.video-list {
   padding: 0;
 
   li {
-    padding: $a-spacing-4;
+    padding: $ax-space-16;
     background-color: #ffffff;
     box-shadow: $a-shadow-xsmall;
-    border-radius: $a-border-radius-medium;
+    border-radius: $ax-radius-4;
     width: 600px;
     height: 500px;
   }
-}
+}*/
 
 .about-us-page {
   width: 100%;
   height: 100%;
-  background-color: $a-deepblue-50;
+  background-color: $ax-brand-blue-100;
 
   &__container {
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: $a-spacing-8 $a-spacing-4;
+    padding: $ax-space-32$ax-space-16;
 
     @include mixins.for-size(tablet-up) {
-      padding: $a-spacing-12 $a-spacing-4;
+      padding: $ax-space-48$ax-space-16;
     }
 
     @include mixins.for-size(desktop-up) {
-      padding: $a-spacing-12 0;
+      padding: $ax-space-48 0;
     }
   }
 
@@ -394,7 +390,7 @@ main {
 .printable-version {
   &__post-title {
     width: 12rem;
-    font-size: $a-font-size-medium;
+    font-size: $ax-font-size-medium;
   }
 }
 
@@ -447,7 +443,7 @@ main {
     outline: none;
     color: white;
     text-decoration: none;
-    background-color: var(--a-border-focus);
-    box-shadow: 0 0 0 2px var(--a-border-focus);
+    background-color: var(--ax-border-focus);
+    box-shadow: 0 0 0 2px var(--ax-border-focus);
   }
 }

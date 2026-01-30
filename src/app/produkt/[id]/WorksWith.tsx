@@ -1,4 +1,4 @@
-import { Accordion, BodyLong, BodyShort, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, Box, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react'
 import styles from '@/app/produkt/[id]/WorksWith.module.scss'
 import { useEffect, useMemo, useState } from 'react'
 import useSWRImmutable from 'swr/immutable'
@@ -35,7 +35,7 @@ export const WorksWith = ({ worksWithSeriesIds }: Props) => {
       <Accordion size={'small'} indent={false}>
         <Accordion.Item defaultOpen className={styles.accordionLast}>
           <Accordion.Header className={styles.accordion}>
-            <HStack gap="2" align="center">
+            <HStack gap="space-8" align="center">
               Virker sammen med
               <HelpText onClick={(event) => event.stopPropagation()} placement="right">
                 {helpTextWorksWith}
@@ -65,7 +65,7 @@ const ComponentTypeFilter = ({
   }
 
   return (
-    <VStack gap={'2'}>
+    <VStack gap={'space-8'}>
       <BodyShort size="small" as="label">
         Filter
       </BodyShort>
@@ -126,7 +126,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
   }
 
   return (
-    <VStack gap={'4'}>
+    <VStack gap={'space-16'}>
       <ComponentTypeFilter
         componentTypes={componentTypes}
         selectedTypes={selectedComponentTypes}
@@ -136,9 +136,7 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
       {displayedProducts.map((workWithProduct: Product) => (
         <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
       ))}
-
       {filteredProducts.length === 0 && <p>Ingen produkter matcher valgt filter.</p>}
-
       {hasMoreProducts && (
         <Button
           variant="tertiary"

@@ -29,8 +29,8 @@ export const MobileOverlayModal = ({ body, onReset }: MobileOverlayModalProps) =
       </Modal.Header>
       <Modal.Body className={styles.mobileOverlay__content}>{body}</Modal.Body>
       <Modal.Footer className={styles.mobileOverlay__footer}>
-        <VStack gap="2">
-          <HGrid columns={{ xs: 2 }} gap="2">
+        <VStack gap="space-8">
+          <HGrid columns={{ xs: 2 }} gap="space-8">
             <Button
               ref={copyButtonMobileRef}
               variant="secondary"
@@ -66,5 +66,5 @@ export const MobileOverlayModal = ({ body, onReset }: MobileOverlayModalProps) =
         </VStack>
       </Modal.Footer>
     </Modal>
-  )
+  );
 }

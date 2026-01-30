@@ -5,24 +5,24 @@
   &__checkboxes {
     > div {
       margin: 2px 0;
-      margin-left: $a-spacing-3;
+      margin-left:$ax-space-12;
     }
   }
 
   &__search {
-    padding: $a-spacing-1 $a-spacing-2;
-    padding-bottom: $a-spacing-3;
+    padding:$ax-space-4$ax-space-8;
+    padding-bottom:$ax-space-12;
   }
 
   &__scroll-container {
-    padding-top: $a-spacing-3;
+    padding-top:$ax-space-12;
     max-height: 400px;
     overflow-y: auto;
   }
 
   &__selected-unavailable {
     .navds-body-short--small {
-      color: $a-text-subtle;
+      color:$ax-text-neutral-subtle;
     }
   }
 }
@@ -31,25 +31,25 @@
   padding-top: 20px;
 
   &__agreement-switch {
-    margin-bottom: $a-spacing-6;
+    margin-bottom:$ax-space-24;
   }
 
   &__divider {
-    border-bottom: 1px solid $a-border-divider;
+    border-bottom: 1px solid$ax-border-neutral-subtle;
   }
 
   &__filters:not(.filter-container__horizontal) {
     details > div {
-      margin-bottom: $a-spacing-4;
+      margin-bottom:$ax-space-16;
     }
 
     details[open] > summary {
-      margin-bottom: $a-spacing-2;
+      margin-bottom:$ax-space-8;
     }
 
     .checkbox-filter,
     .input-filter {
-      border: 1px solid $a-border-divider;
+      border: 1px solid$ax-border-neutral-subtle;
       border-radius: 4px;
     }
   }
@@ -58,7 +58,7 @@
     .checkbox-filter.active,
     .input-filter.active {
       summary {
-        background-color: $a-surface-action-subtle;
+        background-color:$ax-bg-accent-soft;
       }
     }
 
@@ -78,7 +78,7 @@
       font-size: 17px;
       padding: 0;
       border-radius: 4px;
-      padding: $a-spacing-2 $a-spacing-3;
+      padding:$ax-space-8$ax-space-12;
       transition: margin 150ms ease-out;
       cursor: pointer;
       user-select: none;
@@ -91,10 +91,10 @@
       &:hover {
         text-decoration: underline;
         text-decoration-thickness: 2px;
-        text-decoration-color: $a-text-default;
+        text-decoration-color:$ax-text-neutral;
 
         .chevron-wrapper {
-          background-color: $a-surface-neutral-subtle-hover;
+          background-color:$ax-bg-neutral-moderate-hover;
         }
       }
     }
@@ -103,9 +103,9 @@
       display: grid;
       align-self: center;
       place-content: center;
-      border-radius: $a-border-radius-medium;
-      height: $a-spacing-6;
-      width: $a-spacing-6;
+      border-radius:$ax-radius-4;
+      height:$ax-space-24;
+      width:$ax-space-24;
 
       svg {
         transition: transform 200ms ease-in-out;
@@ -115,8 +115,8 @@
 
   &__horizontal {
     summary {
-      padding: $a-spacing-3;
-      border: 1px solid $a-border-divider;
+      padding:$ax-space-12;
+      border: 1px solid$ax-border-neutral-subtle;
     }
 
     .checkbox-filter,
@@ -129,7 +129,7 @@
     }
 
     .range-filter-input-group {
-      margin-left: $a-spacing-1;
+      margin-left:$ax-space-4;
       input {
         width: 100px;
       }
@@ -141,7 +141,7 @@
     }
 
     details > div {
-      border: 1px solid $a-border-divider;
+      border: 1px solid$ax-border-neutral-subtle;
       top: 48px;
       border-top: none;
       border-radius: 0 0 4px 4px;
@@ -152,8 +152,8 @@
       width: 100%;
       z-index: 4;
       padding: 10px;
-      padding-top: $a-spacing-4;
-      padding-bottom: $a-spacing-6;
+      padding-top:$ax-space-16;
+      padding-bottom:$ax-space-24;
     }
 
     details[open] > summary {
@@ -163,19 +163,19 @@
 
   &__footer {
     button {
-      padding: $a-spacing-2 $a-spacing-3;
+      padding:$ax-space-8$ax-space-12;
     }
   }
 
   &__chips {
     .chip {
-      padding: 2px var(--a-spacing-3);
+      padding: 2px var(--ax-space-12);
     }
   }
 }
 
 .range-filter-input-group {
-  margin-left: $a-spacing-3;
+  margin-left:$ax-space-12;
 
   input {
     width: 115px;
@@ -189,6 +189,6 @@
 
 form {
   [data-invalid] {
-    outline: 2px solid var(--a-red-400);
+    outline: 2px solid var(--ax-danger-500);
   }
 }

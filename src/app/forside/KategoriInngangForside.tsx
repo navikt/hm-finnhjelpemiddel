@@ -16,11 +16,11 @@ export const KategoriInngangForside = () => {
   })
 
   return (
-    <VStack gap={'4'} paddingInline={{ lg: '6' }}>
+    <VStack gap={"space-16"} paddingInline={{ lg: "space-24" }}>
       <Heading level={'2'} size={'large'}>
         Kategorier
       </Heading>
-      <HGrid gap={'4'} columns={{ xs: 1, md: 3 }} paddingBlock={'2 0'}>
+      <HGrid gap={"space-16"} columns={{ xs: 1, md: 3 }} paddingBlock={"space-8 space-0"}>
         {frontPageTitles.map((value) => (
           <CategoryCardFrontPage
             key={value + '-card'}
@@ -31,5 +31,5 @@ export const KategoriInngangForside = () => {
         ))}
       </HGrid>
     </VStack>
-  )
+  );
 }

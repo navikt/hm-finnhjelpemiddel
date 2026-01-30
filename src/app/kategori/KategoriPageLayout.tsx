@@ -12,20 +12,19 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
   if (error) console.debug(error)
   return (
     <VStack
-      gap={'12'}
-      paddingBlock={'16 16'}
-      paddingInline={'4'}
+      gap={"space-48"}
+      paddingBlock={"space-64 space-64"}
+      paddingInline={"space-16"}
       marginInline={'auto'}
-      marginBlock={'0'}
+      marginBlock={"space-0"}
       maxWidth={'1440px'}
     >
-      <VStack gap="4">
+      <VStack gap="space-16">
         <Heading level="1" size="large">
           {title}
         </Heading>
         <BodyLong style={{ maxWidth: '735px' }}>{description}</BodyLong>
       </VStack>
-
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Alert variant="error" title="Error med lasting av produkter">
@@ -36,5 +35,5 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
         children
       )}
     </VStack>
-  )
+  );
 }

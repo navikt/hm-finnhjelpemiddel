@@ -121,7 +121,7 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
                 {...field}
               >
                 {!showSearch && (
-                  <VStack gap="1" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
+                  <VStack gap="space-4" className="checkbox-filter__checkboxes checkbox-filter__scroll-container">
                     {selectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
                     {selectedUnavailableFilters?.map((f) => filterCheckbox(f, true))}
                     {notSelectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
@@ -129,13 +129,13 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
                 )}
                 {showSearch && (
                   <>
-                    <VStack gap="1" className="checkbox-filter__checkboxes" aria-label="Valgte filtre">
+                    <VStack gap="space-4" className="checkbox-filter__checkboxes" aria-label="Valgte filtre">
                       {selectedFilters.map((f) => filterCheckbox(f.label ?? f.key.toString()))}
                       {selectedUnavailableFilters.map((f) => filterCheckbox(f, true))}
                       <span className="filter-container__divider"></span>
                     </VStack>
                     <VStack
-                      gap="1"
+                      gap="space-4"
                       className="checkbox-filter__checkboxes checkbox-filter__scroll-container"
                       aria-label="Ikke valgte filtre"
                     >
@@ -144,10 +144,10 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
                   </>
                 )}
               </CheckboxGroup>
-            )
+            );
           }}
         />
       </>
     </ShowMore>
-  )
+  );
 }

@@ -1,11 +1,11 @@
 import styles from '@/app/nyheter/NewsArticle.module.scss'
 import { getNewsById } from '@/utils/api-util'
 import { News } from '@/utils/news-util'
-import { BodyLong, Heading, Tag, VStack } from '@navikt/ds-react'
-import Link from 'next/link'
+import { BodyLong, Heading, Link, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { sanitize } from '@/utils/news-html-util'
+import NextLink from 'next/link'
 function splitTitle(full: string): { main: string; sub?: string } {
   const parts = full.split(':')
   if (parts.length < 2) return { main: full }
@@ -13,7 +13,11 @@ function splitTitle(full: string): { main: string; sub?: string } {
 }
 
 // Conform to Next.js generated PageProps: params is (optionally) a Promise of dynamic segment map.
-export async function generateMetadata({ params }: { params?: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>
+}): Promise<Metadata> {
   const resolved = params ? await params : undefined
   const rawId = resolved?.id
   const id = Array.isArray(rawId) ? rawId[0] : rawId
@@ -35,7 +39,11 @@ export async function generateMetadata({ params }: { params?: Promise<Record<str
   }
 }
 
-export default async function NewsArticlePage({ params }: { params?: Promise<Record<string, string | string[] | undefined>> }) {
+export default async function NewsArticlePage({
+  params,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>
+}) {
   const resolved = params ? await params : undefined
   const rawId = resolved?.id
   const id = Array.isArray(rawId) ? rawId[0] : rawId
@@ -51,10 +59,10 @@ export default async function NewsArticlePage({ params }: { params?: Promise<Rec
   const publishedStr = news.published.toLocaleDateString('nb-NO')
 
   return (
-    <VStack className={styles.container} gap="8" padding="8">
+    <VStack className={styles.container} gap="space-32" padding="space-32">
       <article aria-labelledby="news-main-title" className={styles.articleContainer}>
         <header>
-          <VStack gap="4" className={styles.headerGroup}>
+          <VStack gap="space-16" className={styles.headerGroup}>
             <Heading id="news-main-title" level="1" size="large">
               {main}
             </Heading>
@@ -100,8 +108,10 @@ export default async function NewsArticlePage({ params }: { params?: Promise<Rec
         />
       </article>
       <BodyLong className={styles.backLink}>
-        <Link href="/">← Til forsiden</Link>
+        <Link as={NextLink} href="/">
+          ← Til forsiden
+        </Link>
       </BodyLong>
     </VStack>
-  )
+  );
 }

@@ -3,10 +3,10 @@
 .container {
   position: relative;
   border-radius: 0.5rem;
-  border: 1px solid $a-border-default;
+  border: 1px solid$ax-border-neutral;
 
   &:hover {
-    outline: 1px solid $a-border-action;
+    outline: 1px solid$ax-border-accent;
   }
 }
 
@@ -25,18 +25,18 @@
 }
 
 .productSummary {
-  padding: $a-spacing-8 0 0 0;
+  padding:$ax-space-32 0 0 0;
   top: 2.8rem;
 }
 
 .link {
-  color: $a-text-default;
+  color:$ax-text-neutral;
   text-decoration: underline;
 
   &:hover,
   &:focus {
     text-decoration: underline;
-    color: $a-text-action;
+    color:$ax-text-accent-subtle;
     background-color: white;
   }
 

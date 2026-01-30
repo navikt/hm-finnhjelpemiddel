@@ -38,7 +38,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
         </ExpansionCard.Title>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        <VStack gap={{ xs: '4', md: '8' }}>
+        <VStack gap={{ xs: "space-16", md: "space-32" }}>
           <div style={{ maxWidth: '550px' }} dangerouslySetInnerHTML={{ __html: attachment.description }}></div>
           {attachment.documents.length === 1 && (
             <div className="document-list spacing-bottom--medium">
@@ -62,7 +62,7 @@ export const DocumentExpansionCard = ({ attachment }: { attachment: Attachment }
         </VStack>
       </ExpansionCard.Content>
     </ExpansionCard>
-  )
+  );
 }
 
 const File = ({ title, path, date }: { title: string; path: string; date: Date }) => {

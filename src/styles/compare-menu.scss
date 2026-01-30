@@ -25,14 +25,14 @@
   display: flex;
   flex-direction: column;
   z-index: 5;
-  background-color: $a-surface-action-subtle-hover;
-  border-radius: $a-border-radius-large $a-border-radius-large 0 0;
-  border: 1px solid $a-border-divider;
+  background-color: $ax-bg-accent-moderate-hover;
+  border-radius: $ax-radius-8$ax-radius-8 0 0;
+  border: 1px solid$ax-border-neutral-subtle;
   box-shadow: 0 1px 15px 4px rgba(0, 34, 82, 0.1);
-  padding: $a-spacing-3 $a-spacing-2;
+  padding: $ax-space-12$ax-space-8;
 
   @include mixins.for-size(desktop-up) {
-    padding: $a-spacing-3 $a-spacing-6;
+    padding: $ax-space-12$ax-space-24;
   }
 
   &__container {
@@ -40,8 +40,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: $a-spacing-4 0;
-    gap: $a-spacing-4;
+    padding: $ax-space-16 0;
+    gap: $ax-space-16;
 
     h2 {
       max-width: 250px;
@@ -50,7 +50,7 @@
     @include mixins.for-size(desktop-up) {
       flex-direction: row;
       justify-content: center;
-      padding: $a-spacing-4 $a-spacing-5;
+      padding: $ax-space-16$ax-space-20;
     }
   }
 
@@ -62,14 +62,14 @@
     max-width: 62rem;
     list-style: none;
     margin: 0;
-    padding: 0 0 $a-spacing-4 0;
+    padding: 0 0$ax-space-16 0;
 
     li {
-      margin: $a-spacing-2;
+      margin: $ax-space-8;
     }
 
     @include mixins.for-size(phone-only) {
-      gap: $a-spacing-5;
+      gap: $ax-space-20;
 
       li {
         margin: 0;
@@ -85,11 +85,11 @@
       overflow-x: auto;
 
       li:first-child {
-        margin-left: $a-spacing-5;
+        margin-left: $ax-space-20;
       }
 
       li:last-child {
-        margin-right: $a-spacing-5;
+        margin-right: $ax-space-20;
       }
     }
 
@@ -113,10 +113,10 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: $a-surface-action-subtle;
-    border: 1px dashed $a-surface-action;
-    padding: $a-spacing-6;
-    margin-bottom: $a-spacing-4;
+    background-color: $ax-bg-accent-soft;
+    border: 1px dashed$ax-bg-accent-strong;
+    padding: $ax-space-24;
+    margin-bottom: $ax-space-16;
 
     &__empty {
       height: 15rem;
@@ -131,7 +131,7 @@
     &__one-more {
       height: 14rem;
       width: 10rem;
-      border-radius: $a-border-radius-large;
+      border-radius: $ax-radius-8;
 
       @include mixins.for-size(phone-only) {
         width: 100%;
@@ -139,10 +139,10 @@
     }
 
     p {
-      font-size: $a-font-size-large;
-      font-weight: $a-font-weight-regular;
+      font-size: $ax-font-size-large;
+      font-weight: $ax-font-weight-regular;
       letter-spacing: 0;
-      line-height: $a-font-line-height-large;
+      line-height: $ax-font-line-height-large;
       margin: 0;
       max-width: 200px;
     }
@@ -150,16 +150,11 @@
 
   &__chevron-button {
     align-self: center;
-    color: $a-blue-700;
-  }
-
-  &__chevron-button:hover {
-    background-color: $a-surface-action-subtle;
   }
 
   &__buttons {
     display: flex;
     flex-direction: column;
-    gap: $a-spacing-2;
+    gap: $ax-space-8;
   }
 }

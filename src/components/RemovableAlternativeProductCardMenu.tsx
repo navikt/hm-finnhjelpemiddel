@@ -32,7 +32,7 @@ const RemovableAlternativeProductCardMenu = ({
   const linkToProduct = `/produkt/${product.seriesId}?${searchParams}`
   return (
     <Box
-      padding="2"
+      padding="space-8"
       className={classNames(cardClassName, {
         'product-card__checked': isInProductsToCompare,
       })}
@@ -58,7 +58,7 @@ const RemovableAlternativeProductCardMenu = ({
         <ProductImage src={imageSrc} productTitle={product.variantTitle} />
       </VStack>
     </Box>
-  )
+  );
 }
 
 const RemoveButton = ({ productId }: { productId: string }) => {

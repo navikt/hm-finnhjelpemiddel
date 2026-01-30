@@ -1,4 +1,4 @@
-@use "@navikt/ds-tokens/dist/tokens" as *;
+@use '@navikt/ds-tokens/dist/tokens' as *;
 
 .videoList {
   padding: 0;
@@ -8,7 +8,7 @@
 
 .player {
   aspect-ratio: 16/9;
-
+  min-width: unset;
   border-radius: 1rem;
   overflow: hidden;
 }
