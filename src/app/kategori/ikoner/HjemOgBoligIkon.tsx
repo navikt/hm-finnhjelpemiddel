@@ -1,4 +1,4 @@
-export const HjeomOgBoligIkon = () => (
+export const HjemOgBoligIkon = () => (
   <svg width="80" height="75" viewBox="0 0 56 59" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M31.5006 5.97363L48.4627 48.5333L31.5006 39.3312L14.5386 48.5333L31.5006 5.97363Z" fill="#FFECCC" />
     <path
