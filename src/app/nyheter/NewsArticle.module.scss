@@ -35,10 +35,6 @@
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.readingTime {
-  font-style: italic;
-}
-
 .articleBody {
   line-height: 1.55;
 }
@@ -63,6 +59,7 @@
 .articleBody a {
   text-decoration: underline;
   text-underline-offset: 2px;
+  color: var(--ax-text-subtle);
 }
 .articleBody a:hover,
 .articleBody a:focus {
@@ -91,23 +88,6 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.skipLink {
-  position: absolute;
-  left: -999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-.skipLink:focus {
-  position: static;
-  width: auto;
-  height: auto;
-  color: #fff;
-  padding: 0.5rem 0.75rem;
-  margin-bottom: 1rem;
 }
 
 @media (max-width: 800px) {
