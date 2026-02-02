@@ -2,7 +2,6 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .container {
-
 }
 
 .newsCard {
@@ -16,13 +15,10 @@
   min-height: 0;
   border-radius: 10px;
 
-
   @media (max-width: 600px) {
-    width: 100%; 
+    width: 100%;
     max-width: 100%;
-
   }
-
 }
 
 .newsCard__content {
@@ -31,7 +27,7 @@
 }
 
 .newsCard__date {
-  color:$ax-neutral-900
+  color: $ax-neutral-900;
 }
 
 .newsCard__excerpt {
@@ -49,28 +45,3 @@
     text-decoration: underline;
   }
 }
-
-.newsCard__readMore {
-  margin-top: 0.5rem;
-  font-weight: 600;
-  align-self: flex-start;
-  color:$ax-text-neutral
-}
-
-.newsCard__readMore:hover,
-.newsCard__readMore:focus {
-  text-decoration: none;
-}
-
-.newsCard__dots {
-  font-weight: 600;
-  color: $ny-nav-purple-dark;
-  margin-left: 2px;
-}
-
-.cardsWrapper {
-  display: flex;
-  flex-wrap: wrap; // allow wrapping when space is insufficient
-  gap: 1.5rem; // ensure consistent gap instead of relying solely on HStack
-}
-
