@@ -10,6 +10,6 @@ jobs:
       actions: read
     uses: navikt/mime-deploy/.github/workflows/build-check-node.yml@v0
     with:
-      NODE_VER: '18.x'
+      NODE_VER: '20.x'
     secrets: inherit
  
