@@ -107,11 +107,9 @@ export default async function NewsArticlePage({
           }}
         />
       </article>
-      <BodyLong className={styles.backLink}>
-        <Link as={NextLink} href="/">
-          ← Til forsiden
-        </Link>
-      </BodyLong>
+      <NextLink href="/" passHref>
+        <Link>← Til forsiden</Link>
+      </NextLink>
     </VStack>
-  );
+  )
 }

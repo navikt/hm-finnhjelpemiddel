@@ -39,16 +39,16 @@ export default async function AgreementPage(props: Props) {
       {agreement && (
         <VStack
           marginInline={'auto'}
-          marginBlock={"space-0"}
+          marginBlock={'space-0'}
           maxWidth={'750px'}
-          paddingBlock={"space-0 space-48"}
-          paddingInline={{ xs: "space-16", md: "space-48" }}
-          gap={{ xs: "space-48", md: "space-48" }}
+          paddingBlock={'space-0 space-48'}
+          paddingInline={{ xs: 'space-16', md: 'space-48' }}
+          gap={{ xs: 'space-48', md: 'space-48' }}
         >
           <TopBar agreement={agreement} />
           <AgreementDescription agreement={agreement} />
 
-          <VStack gap={"space-16"}>
+          <VStack gap={'space-16'}>
             <Heading level="1" size="medium" id="dokumenter">
               Dokumenter
             </Heading>
@@ -59,7 +59,7 @@ export default async function AgreementPage(props: Props) {
         </VStack>
       )}
     </>
-  );
+  )
 }
 
 const TopBar = ({ agreement }: { agreement: Agreement }) => {
@@ -71,7 +71,7 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
 
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-      <VStack gap="space-32" align={'start'} paddingBlock={"space-48"}>
+      <VStack gap="space-32" align={'start'} paddingBlock={'space-48'}>
         <Heading level="1" size="xlarge">
           {agreement.title}
         </Heading>
@@ -84,7 +84,7 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
             </BodyLong>
           </HStack>
 
-          <HStack gap={"space-8"} align={'center'}>
+          <HStack gap={'space-8'} align={'center'}>
             <DocPencilIcon aria-hidden width={'24px'} height={'24px'} />
             <BodyLong weight={'semibold'}>
               {agreement.reference.includes('og') ? agreement.reference : agreement.reference.replace(' ', ' og ')}
@@ -93,18 +93,18 @@ const TopBar = ({ agreement }: { agreement: Agreement }) => {
         </VStack>
 
         {!hideProductLink && (
-          <Button
-            as={NextLink}
-            href={`/rammeavtale/hjelpemidler/${agreement.id}`}
-            icon={<ChevronRightIcon aria-hidden />}
-            variant={'secondary'}
-            iconPosition={'right'}
-            className={styles.bleedButton}
-          >
-            Se hjelpemidlene på denne avtalen
-          </Button>
+          <NextLink href={`/rammeavtale/hjelpemidler/${agreement.id}`} passHref>
+            <Button
+              icon={<ChevronRightIcon aria-hidden />}
+              variant={'secondary'}
+              iconPosition={'right'}
+              className={styles.bleedButton}
+            >
+              Se hjelpemidlene på denne avtalen
+            </Button>
+          </NextLink>
         )}
       </VStack>
     </Bleed>
-  );
+  )
 }
