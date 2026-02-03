@@ -24,11 +24,11 @@
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.6.0",
     "js-cookie": "^3.0.5",
-    "next": "15.5.9",
+    "next": "16.1.6",
     "qrcode.react": "^4.2.0",
     "query-string": "^9.3.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "react-hook-form": "^7.71.1",
     "react-intersection-observer": "^10.0.0",
     "react-player": "^3.4.0",
@@ -39,23 +39,19 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "16.1.1",
+    "@next/eslint-plugin-next": "16.1.6",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@types/deep-equal": "^1.0.4",
     "@types/node": "24.10.1",
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2",
+    "@types/react": "19.2.10",
+    "@types/react-dom": "19.2.3",
     "@types/react-transition-group": "^4.4.12",
     "eslint": "9.39.1",
-    "eslint-config-next": "16.1.1",
+    "eslint-config-next": "16.1.6",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "prettier": "^3.8.1",
     "sass": "^1.97.1",
     "sharp": "^0.34.1",
     "typescript": "5.9.2"
-  },
-  "overrides": {
-    "nanoid": "^3.3.8",
-    "use-sync-external-store": "1.5.0"
   }
 }
