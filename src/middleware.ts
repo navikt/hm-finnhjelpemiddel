@@ -14,10 +14,11 @@ export const config = {
     '/gjenbruksprodukter/:path*',
     '/kategori/admin/:path*',
     '/admin/category/:path*',
-  ]
+  ],
+  runtime: 'nodejs',
 }
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const isLocal = process.env.NODE_ENV === 'development'
   const buildenv = process.env.BUILD_ENV
 
