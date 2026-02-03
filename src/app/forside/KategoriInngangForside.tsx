@@ -20,7 +20,7 @@ export const KategoriInngangForside = () => {
       <Heading level={'2'} size={'large'}>
         Kategorier
       </Heading>
-      <HGrid gap={"space-16"} columns={{ xs: 1, md: 3 }} paddingBlock={"space-8 space-0"}>
+      <HGrid gap={"space-28"} columns={{ xs: 1, md: 2 }} paddingBlock={"space-8 space-0"}>
         {frontPageTitles.map((value) => (
           <CategoryCardFrontPage
             key={value + '-card'}
