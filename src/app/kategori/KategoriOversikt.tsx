@@ -17,6 +17,7 @@ export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
                   title={subCategory.title}
                   link={subCategory.title}
                   key={subCategory.title}
+                  showSubCategoryIcons={category.data.showSubCategoryIcons}
                 />
               ))}
           </HGrid>

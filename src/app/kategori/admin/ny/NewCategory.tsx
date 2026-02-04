@@ -18,6 +18,7 @@ export const NewCategory = () => {
       subCategories: [],
       isos: [],
       icon: '',
+      showSubCategoryIcons: true,
     },
   })
 

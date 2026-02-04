@@ -7,6 +7,7 @@ export type Category = {
   subCategories: string[] | undefined
   isos: string[] | undefined
   icon: string | undefined
+  showSubCategoryIcons: boolean | undefined
 }
 
 export type CategoryAdminDTO = {

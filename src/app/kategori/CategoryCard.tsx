@@ -10,12 +10,14 @@ type Props = {
   link: string
   description?: string
   icon?: string
+  showSubCategoryIcons?: boolean
 }
 
-export const CategoryCard = ({ title, link, description, icon }: Props) => {
+export const CategoryCard = ({ title, link, description, icon, showSubCategoryIcons }: Props) => {
+  const showIcon = (showSubCategoryIcons === undefined || showSubCategoryIcons) && icon !== undefined
   return (
     <LinkCard arrow={true} className={styles.container}>
-      {icon && (
+      {showIcon && (
         <VStack justify="center" height="100%" asChild>
           <LinkCard.Icon>
             {
