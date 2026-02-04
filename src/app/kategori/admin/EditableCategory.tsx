@@ -33,7 +33,7 @@ export const EditableCategory = ({
   const { data: categories, isLoading } = useSWR<CategoryAdminDTO[]>('categories', () => getCategories())
 
   return (
-    <VStack gap={"space-16"} paddingBlock={"space-0 space-16"} style={{ display: 'flex' }}>
+    <VStack gap={'space-16'} paddingBlock={'space-0 space-16'} style={{ display: 'flex' }}>
       <TextField
         label="Tittel"
         style={{ width: '400px' }}
@@ -54,7 +54,7 @@ export const EditableCategory = ({
         <SubCategoriesModule categories={categories} inputValue={inputValue} setInputValue={setInputValue} id={id} />
       )}
       <IsoModule inputValue={inputValue} setInputValue={setInputValue} />
-      <HStack gap={"space-16"}>
+      <HStack gap={'space-16'}>
         <Textarea
           label={'Ikon-svg'}
           maxRows={5}
@@ -81,7 +81,7 @@ export const EditableCategory = ({
         )}
       </HStack>
     </VStack>
-  );
+  )
 }
 
 const IsoModule = ({
@@ -104,8 +104,8 @@ const IsoModule = ({
   }
 
   return (
-    <VStack gap={"space-8"}>
-      <HStack gap={"space-4"} align={'end'}>
+    <VStack gap={'space-8'}>
+      <HStack gap={'space-4'} align={'end'}>
         <TextField
           label={'ISO-er'}
           value={isoFieldValue}
@@ -138,7 +138,7 @@ const IsoModule = ({
         ))}
       </Chips>
     </VStack>
-  );
+  )
 }
 
 type Options = {
@@ -199,7 +199,7 @@ const SubCategoriesModule = ({
   }
 
   return (
-    <VStack gap={"space-8"} maxWidth={'400px'}>
+    <VStack gap={'space-8'} maxWidth={'400px'}>
       <UNSAFE_Combobox
         label={'Underkategorier'}
         isMultiSelect
@@ -209,7 +209,7 @@ const SubCategoriesModule = ({
         selectedOptions={selectedOptions}
         onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
       />
-      <HStack gap={"space-8"}>
+      <HStack gap={'space-8'}>
         {selectedOptions?.map((option) => (
           <ChipsPopover
             key={option.value + '-chip'}
@@ -220,7 +220,7 @@ const SubCategoriesModule = ({
         ))}
       </HStack>
     </VStack>
-  );
+  )
 }
 
 const ChipsPopover = ({
@@ -239,18 +239,18 @@ const ChipsPopover = ({
     <>
       <Box
         ref={ref}
-        borderColor={"accent"}
+        borderColor={'accent'}
         borderRadius={'full'}
         borderWidth={'1'}
         width={'fit-content'}
         height={'fit-content'}
-        paddingInline={"space-12"}
-        paddingBlock={"space-4"}
+        paddingInline={'space-12'}
+        paddingBlock={'space-4'}
         onMouseOver={() => setPopoverOpen(true)}
         onMouseLeave={() => setPopoverOpen(false)}
         asChild
       >
-        <HStack gap={"space-4"} justify={'space-between'} align={'end'}>
+        <HStack gap={'space-4'} justify={'space-between'} align={'end'}>
           <Link as={NextLink} href={option.value} title={'Gå til redigering'}>
             {option.label}
           </Link>
@@ -265,7 +265,7 @@ const ChipsPopover = ({
       </Box>
       <Popover anchorEl={ref.current} open={popoverOpen} onClose={() => setPopoverOpen(false)}>
         <Popover.Content>
-          <VStack gap={"space-8"} width={'400px'}>
+          <VStack gap={'space-8'} width={'400px'}>
             <BodyShort weight={'semibold'}>{category?.title}</BodyShort>
             <BodyShort>{category?.data.description}</BodyShort>
             {category?.data.subCategories && category?.data.subCategories.length > 0 && (
@@ -284,5 +284,5 @@ const ChipsPopover = ({
         </Popover.Content>
       </Popover>
     </>
-  );
+  )
 }
