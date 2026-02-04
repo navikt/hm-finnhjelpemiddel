@@ -18,7 +18,16 @@ export const CategoryCard = ({ title, link, description, icon }: Props) => {
       {icon && (
         <VStack justify="center" height="100%" asChild>
           <LinkCard.Icon>
-            {<Image width={30} height={30} alt={'ikon'} src={`data:image/svg+xml;utf8,${encodeURIComponent(icon)}`} />}
+            {
+              <Image
+                width={30}
+                height={30}
+                alt={'ikon'}
+                src={`data:image/svg+xml;utf8,${encodeURIComponent(icon)}`}
+                draggable={false}
+                className={styles.iconImage}
+              />
+            }
           </LinkCard.Icon>
         </VStack>
       )}
