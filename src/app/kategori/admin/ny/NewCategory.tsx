@@ -17,6 +17,7 @@ export const NewCategory = () => {
       description: '',
       subCategories: [],
       isos: [],
+      filters: [],
       icon: '',
     },
   })
@@ -26,7 +27,7 @@ export const NewCategory = () => {
   }
 
   return (
-    <VStack gap={"space-8"}>
+    <VStack gap={'space-8'}>
       <Link as={NextLink} href={'/kategori/admin'} style={{ width: 'fit-content' }}>
         <ArrowLeftIcon aria-hidden />
         Tilbake til oversikt
@@ -37,5 +38,5 @@ export const NewCategory = () => {
         Lagre
       </Button>
     </VStack>
-  );
+  )
 }
