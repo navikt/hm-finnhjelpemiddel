@@ -45,10 +45,20 @@ export type SearchFiltersKategori = {
   Setehoyde?: string
 }
 
+export type CategoryFilter = {
+  fieldName: string
+}
+
+export const categoryFilters: CategoryFilter[] = [
+  { fieldName: 'Setebredde' },
+  { fieldName: 'Setedybde' },
+  { fieldName: 'Setehøyde' },
+]
+
 export type SearchDataKategori = {
   isoCode?: string
   sortOrder?: SortOrder
-  filters?: SearchFiltersKategori
+  filterValues?: SearchFiltersKategori
 }
 
 type FetchProps = {
@@ -65,7 +75,7 @@ export const fetchProductsKategori = async ({
   searchData,
   kategoriIsos,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
-  const { sortOrder, filters } = searchData
+  const { sortOrder, filterValues } = searchData
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
   const visTilbDeler = false
@@ -73,22 +83,30 @@ export const fetchProductsKategori = async ({
   const queryFilters: Array<any> = []
   const postFilters: Array<any> = []
 
-  if (filters && filters.isos) {
-    postFilters.push(filterPrefixIsoKode(filters.isos))
+  const relevantFilters = ['Setebredde', 'Setedybde', 'Setehøyde']
+
+  if (filterValues?.isos) {
+    postFilters.push(filterPrefixIsoKode(filterValues.isos))
   }
 
-  if (filters && filters.suppliers) {
-    postFilters.push(filterLeverandor(filters.suppliers))
+  if (filterValues?.suppliers) {
+    postFilters.push(filterLeverandor(filterValues.suppliers))
   }
 
-  if (filters && filters.Setebredde) {
-    postFilters.push(filterMinMax({ setebreddeMinCM: filters.Setebredde }, { setebreddeMaksCM: filters.Setebredde }))
+  if (relevantFilters.includes('Setebredde') && filterValues?.Setebredde) {
+    postFilters.push(
+      filterMinMax({ setebreddeMinCM: filterValues.Setebredde }, { setebreddeMaksCM: filterValues.Setebredde })
+    )
   }
-  if (filters && filters.Setedybde && filters.Setedybde) {
-    postFilters.push(filterMinMax({ setedybdeMinCM: filters.Setedybde }, { setedybdeMaksCM: filters.Setedybde }))
+  if (relevantFilters.includes('Setedybde') && filterValues?.Setedybde) {
+    postFilters.push(
+      filterMinMax({ setedybdeMinCM: filterValues.Setedybde }, { setedybdeMaksCM: filterValues.Setedybde })
+    )
   }
-  if (filters && filters.Setehoyde && filters.Setehoyde) {
-    postFilters.push(filterMinMax({ setehoydeMinCM: filters.Setehoyde }, { setehoydeMaksCM: filters.Setehoyde }))
+  if (relevantFilters.includes('Setehøyde') && filterValues?.Setehoyde) {
+    postFilters.push(
+      filterMinMax({ setehoydeMinCM: filterValues.Setehoyde }, { setehoydeMaksCM: filterValues.Setehoyde })
+    )
   }
 
   if (kategoriIsos.length > 0) {
@@ -163,12 +181,12 @@ export const fetchProductsKategori = async ({
       },
       supplierPostFilters
     ),
-    ...termAggs('setebreddeMinCM', 'filters.setebreddeMinCM'),
-    ...termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM'),
-    ...termAggs('setedybdeMinCM', 'filters.setedybdeMinCM'),
-    ...termAggs('setedybdeMaksCM', 'filters.setedybdeMaksCM'),
-    ...termAggs('setehoydeMinCM', 'filters.setehoydeMinCM'),
-    ...termAggs('setehoydeMaksCM', 'filters.setehoydeMaksCM'),
+    ...(relevantFilters.includes('Setebredde') ? termAggs('setebreddeMinCM', 'filters.setebreddeMinCM') : []),
+    ...(relevantFilters.includes('Setebredde') ? termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM') : []),
+    ...(relevantFilters.includes('Setedybde') ? termAggs('setedybdeMinCM', 'filters.setedybdeMinCM') : []),
+    ...(relevantFilters.includes('Setedybde') ? termAggs('setedybdeMaksCM', 'filters.setedybdeMaksCM') : []),
+    ...(relevantFilters.includes('Setehøyde') ? termAggs('setehoydeMinCM', 'filters.setehoydeMinCM') : []),
+    ...(relevantFilters.includes('Setehøyde') ? termAggs('setehoydeMaksCM', 'filters.setehoydeMaksCM') : []),
   }
 
   const body: QueryObject = {
@@ -267,7 +285,10 @@ const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): Measurement
 
   const ferdig = {}
 
-  if (setebreddeMinCM.values.buckets.length > 0 || setebreddeMaksCM.values.buckets.length > 0) {
+  if (
+    (setebreddeMinCM !== undefined && setebreddeMinCM.values.buckets.length > 0) ||
+    (setebreddeMaksCM !== undefined && setebreddeMaksCM.values.buckets.length > 0)
+  ) {
     Object.assign(ferdig, {
       ['Setebredde']: {
         key: 'Setebredde',
@@ -276,7 +297,10 @@ const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): Measurement
     })
   }
 
-  if (setedybdeMinCM.values.buckets.length > 0 || setedybdeMaksCM.values.buckets.length > 0) {
+  if (
+    (setedybdeMinCM !== undefined && setedybdeMinCM.values.buckets.length > 0) ||
+    (setedybdeMaksCM !== undefined && setedybdeMaksCM.values.buckets.length > 0)
+  ) {
     Object.assign(ferdig, {
       ['Setedybde']: {
         key: 'Setedybde',
@@ -285,7 +309,10 @@ const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): Measurement
     })
   }
 
-  if (setehoydeMinCM.values.buckets.length > 0 || setehoydeMaksCM.values.buckets.length > 0) {
+  if (
+    (setehoydeMinCM !== undefined && setehoydeMinCM.values.buckets.length > 0) ||
+    (setehoydeMaksCM !== undefined && setehoydeMaksCM.values.buckets.length > 0)
+  ) {
     Object.assign(ferdig, {
       ['Setehøyde']: {
         key: 'Setehoyde',

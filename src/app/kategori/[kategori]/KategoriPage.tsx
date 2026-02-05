@@ -53,7 +53,7 @@ export const KategoriPage = ({ category }: Props) => {
     return {
       sortOrder,
       isoCode,
-      filters,
+      filterValues: filters,
     }
   }
 
@@ -62,7 +62,6 @@ export const KategoriPage = ({ category }: Props) => {
   useEffect(() => {
     mapSearchParamsKategori(searchParams)
   }, [searchParams])
-
 
   const {
     data: productsData,
@@ -111,7 +110,6 @@ export const KategoriPage = ({ category }: Props) => {
 
   const filters: Filters = { isos, suppliers, measurementFilters }
 
-
   const onChange = (filterName: string, value: string | string[]) => {
     const singleValue = Array.isArray(value) ? value[0] : value
     const paramKeyMap: Record<string, string> = {
@@ -141,17 +139,17 @@ export const KategoriPage = ({ category }: Props) => {
     <KategoriPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
-        <HGrid columns={'374px 4'} gap={"space-16"}>
-          <VStack gap={"space-16"}>
+        <HGrid columns={'374px 4'} gap={'space-16'}>
+          <VStack gap={'space-16'}>
             <Heading level="2" size="medium">
-              {isLoading ?
-                /* <Skeleton variant="text" width="10rem" />*/
+              {isLoading
+                ? /* <Skeleton variant="text" width="10rem" />*/
                   'Viser første '
                 : products
                   ? `Viser første ${products.length}`
                   : `Ingen treff`}
             </Heading>
-            <HStack justify={'space-between'} gap={"space-8"} align={'end'}>
+            <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
               {/*<SortKategoriResults />*/}
             </HStack>
@@ -161,5 +159,5 @@ export const KategoriPage = ({ category }: Props) => {
         </HGrid>
       </>
     </KategoriPageLayout>
-  );
+  )
 }
