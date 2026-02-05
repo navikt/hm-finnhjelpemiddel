@@ -243,9 +243,9 @@ const SubCategoriesModule = ({
 }
 
 const FilterModule = ({
-                        inputValue,
-                        setInputValue,
-                      }: {
+  inputValue,
+  setInputValue,
+}: {
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
 }) => {
@@ -265,11 +265,9 @@ const FilterModule = ({
   }
 
   const removeFilter = (optionValue: string) => {
-    const newSelected = selectedOptions.filter((option) => option !== optionValue)
-    setSelectedOptions(newSelected)
     setInputValue({
       ...inputValue,
-      data: { ...inputValue.data, filters: newSelected.flatMap((option) => option) },
+      data: { ...inputValue.data, filters: [...(inputValue.data.filters ?? []).filter((i) => i != optionValue)] },
     })
   }
 
