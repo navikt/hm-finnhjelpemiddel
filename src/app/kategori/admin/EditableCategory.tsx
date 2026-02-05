@@ -55,6 +55,7 @@ export const EditableCategory = ({
         <SubCategoriesModule categories={categories} inputValue={inputValue} setInputValue={setInputValue} id={id} />
       )}
       <IsoModule inputValue={inputValue} setInputValue={setInputValue} />
+      <FilterModule inputValue={inputValue} setInputValue={setInputValue} />
       <HStack gap={'space-16'}>
         <Textarea
           label={'Ikon-svg'}
@@ -238,6 +239,57 @@ const SubCategoriesModule = ({
         </Switch>
       )}
     </HStack>
+  )
+}
+
+const FilterModule = ({
+  inputValue,
+  setInputValue,
+}: {
+  inputValue: EditableCategoryDTO
+  setInputValue: (value: EditableCategoryDTO) => void
+}) => {
+  const options = ['Setebredde', 'Setedybde', 'Setehøyde']
+
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+    options.filter((option) => inputValue.data.subCategories?.includes(option))
+  )
+
+  const addFilter = (optionValue: string) => {
+    const newSelected = [...selectedOptions, options.filter((option) => option === optionValue)[0]]
+    setSelectedOptions(newSelected)
+    setInputValue({
+      ...inputValue,
+      data: { ...inputValue.data, filters: newSelected.flatMap((option) => option) },
+    })
+  }
+
+  const removeFilter = (optionValue: string) => {
+    setInputValue({
+      ...inputValue,
+      data: { ...inputValue.data, filters: [...(inputValue.data.filters ?? []).filter((i) => i != optionValue)] },
+    })
+  }
+
+  return (
+    <VStack gap={'space-8'} maxWidth={'400px'}>
+      <UNSAFE_Combobox
+        label={'Filtere'}
+        isMultiSelect
+        shouldAutocomplete
+        shouldShowSelectedOptions={false}
+        options={options}
+        selectedOptions={selectedOptions}
+        onToggleSelected={(option, isSelected) => (isSelected ? addFilter(option) : removeFilter(option))}
+      />
+      <Chips>
+        {inputValue.data.filters?.map((filter) => (
+          <Chips.Removable key={filter + '-chip'} onClick={() => removeFilter(filter)}>
+            {filter}
+          </Chips.Removable>
+        ))}
+      </Chips>
+    </VStack>
   )
 }
 

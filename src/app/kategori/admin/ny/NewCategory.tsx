@@ -17,6 +17,7 @@ export const NewCategory = () => {
       description: '',
       subCategories: [],
       isos: [],
+      filters: [],
       icon: '',
       showSubCategoryIcons: true,
     },
