@@ -19,6 +19,7 @@ export const NewCategory = () => {
       isos: [],
       filters: [],
       icon: '',
+      showSubCategoryIcons: true,
     },
   })
 

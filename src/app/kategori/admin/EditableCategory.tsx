@@ -9,6 +9,7 @@ import {
   Link,
   Popover,
   Skeleton,
+  Switch,
   Textarea,
   TextField,
   UNSAFE_Combobox,
@@ -200,34 +201,51 @@ const SubCategoriesModule = ({
   }
 
   return (
-    <VStack gap={'space-8'} maxWidth={'400px'}>
-      <UNSAFE_Combobox
-        label={'Underkategorier'}
-        isMultiSelect
-        shouldAutocomplete
-        shouldShowSelectedOptions={false}
-        options={options}
-        selectedOptions={selectedOptions}
-        onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
-      />
-      <HStack gap={'space-8'}>
-        {selectedOptions?.map((option) => (
-          <ChipsPopover
-            key={option.value + '-chip'}
-            option={option}
-            removeSubCategory={removeSubCategory}
-            categories={categories}
-          />
-        ))}
-      </HStack>
-    </VStack>
+    <HStack gap={'space-32'} align={'start'}>
+      <VStack gap={'space-8'} maxWidth={'400px'}>
+        <UNSAFE_Combobox
+          label={'Underkategorier'}
+          isMultiSelect
+          shouldAutocomplete
+          shouldShowSelectedOptions={false}
+          options={options}
+          selectedOptions={selectedOptions}
+          onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
+        />
+        <HStack gap={'space-8'}>
+          {selectedOptions?.map((option) => (
+            <ChipsPopover
+              key={option.value + '-chip'}
+              option={option}
+              removeSubCategory={removeSubCategory}
+              categories={categories}
+            />
+          ))}
+        </HStack>
+      </VStack>
+      {selectedOptions && selectedOptions.length > 0 && (
+        <Switch
+          checked={inputValue.data.showSubCategoryIcons || true}
+          onChange={(event) =>
+            setInputValue({
+              ...inputValue,
+              data: { ...inputValue.data, showSubCategoryIcons: event.currentTarget.checked },
+            })
+          }
+          size={'small'}
+          style={{ width: 'fit-content' }}
+        >
+          Vis ikoner på underkategori-kort
+        </Switch>
+      )}
+    </HStack>
   )
 }
 
 const FilterModule = ({
-  inputValue,
-  setInputValue,
-}: {
+                        inputValue,
+                        setInputValue,
+                      }: {
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
 }) => {
