@@ -8,6 +8,7 @@ import ProductImage from '@/components/ProductImage'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 import styles from './ProductCardKategori.module.scss'
+import { productCardTitleMaxLength, truncateText } from '@/utils/string-util'
 
 export const ProductCardKategori = ({
   product,
@@ -29,10 +30,10 @@ export const ProductCardKategori = ({
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: "space-8", md: "space-16" }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack justify={'space-between'} height={'100%'} gap={"space-8"}>
+    <Box padding={{ xs: 'space-8', md: 'space-16' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
+      <VStack justify={'space-between'} height={'100%'} gap={'space-8'}>
         <VStack>
-          <HStack paddingBlock={{ xs: "space-0", md: "space-0 space-16" }} align={'center'} justify={'space-between'}>
+          <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
               <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>
             ) : (
@@ -45,15 +46,19 @@ export const ProductCardKategori = ({
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
           <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
-            <BodyShort weight="semibold">{product.title}</BodyShort>
+            <BodyShort weight="semibold">
+              {product.title.length > productCardTitleMaxLength
+                ? truncateText(product.title, productCardTitleMaxLength)
+                : product.title}
+            </BodyShort>
           </Link>
         </VStack>
 
-        <VStack gap={{ xs: "space-4", md: "space-16" }}>
+        <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
           <BodyShort size="small">{product.supplierName}</BodyShort>
           {variantCount > 1 && <BodyShort size={'small'}>{variantCount}</BodyShort>}
         </VStack>
       </VStack>
     </Box>
-  );
+  )
 }

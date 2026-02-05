@@ -69,3 +69,10 @@ export const formatAgreementPosts = (agreements: AgreementInfo[]): string => {
     .sort()
     .join(', ')
 }
+
+export const productCardTitleMaxLength: number = 37 //Max length for product titles in product cards
+export function truncateText(text: string, max: number): string {
+  const chars = Array.from(text)
+  if (chars.length <= max) return text
+  return chars.slice(0, max).join('') + '...'
+}

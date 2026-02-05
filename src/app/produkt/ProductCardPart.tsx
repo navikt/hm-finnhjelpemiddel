@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import styles from './ProductCardPart.module.scss'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+import { productCardTitleMaxLength, truncateText } from '@/utils/string-util'
 
 export const ProductCardPart = ({
   product,
@@ -26,12 +27,12 @@ export const ProductCardPart = ({
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: "space-8", md: "space-12" }} className={styles.container} width={{ xs: '100%', sm: '380px' }}>
+    <Box padding={{ xs: 'space-8', md: 'space-12' }} className={styles.container} width={{ xs: '100%', sm: '380px' }}>
       <HStack gap="space-12" align="start" wrap={false}>
         <Box className={styles.imageWrapper}>
           <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
         </Box>
-        <VStack gap={{ xs: "space-4", md: "space-8" }}>
+        <VStack gap={{ xs: 'space-4', md: 'space-8' }}>
           {onAgreement ? (
             <SuccessTag className={styles.agreementTag}>
               {currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}
@@ -41,7 +42,12 @@ export const ProductCardPart = ({
           )}
           <Box className={styles.productSummary}>
             <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
-              <BodyShort weight="semibold">{product.title}</BodyShort>
+              <BodyShort weight="semibold">
+                {' '}
+                {product.title.length > productCardTitleMaxLength
+                  ? truncateText(product.title, productCardTitleMaxLength)
+                  : product.title}
+              </BodyShort>
             </Link>
             <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>
             <BodyShort size="small">{product.supplierName}</BodyShort>
@@ -49,5 +55,5 @@ export const ProductCardPart = ({
         </VStack>
       </HStack>
     </Box>
-  );
+  )
 }
