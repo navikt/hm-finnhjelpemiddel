@@ -5,10 +5,11 @@ import {
   filterNotExpiredOnly,
   filterPrefixIsoKode,
 } from '@/utils/filter-util'
-import { SortOrder } from '@/utils/search-state-util'
+import { isValidSortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
+import { ReadonlyURLSearchParams } from 'next/navigation'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
@@ -47,48 +48,46 @@ export type SearchFiltersKategori = {
 
 export type CategoryFilter = {
   fieldName: string
+  searchParamName: string
   filterDataType: FilterDataType
   searchFields: string | MinMaxFields
 }
 
-export type MinMaxFields = {
+export interface MinMaxFields {
   min: string
   max: string
 }
 
 export enum FilterDataType {
-  singleValue,
+  singleField,
   minMax,
 }
 
 export const categoryFilters: CategoryFilter[] = [
   {
     fieldName: 'Setebredde',
+    searchParamName: 'Setebredde',
     filterDataType: FilterDataType.minMax,
     searchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaxCM' },
   },
   {
     fieldName: 'Setedybde',
+    searchParamName: 'Setedybde',
     filterDataType: FilterDataType.minMax,
     searchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaxCM' },
   },
   {
     fieldName: 'Setehøyde',
+    searchParamName: 'Setehoyde',
     filterDataType: FilterDataType.minMax,
     searchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaxCM' },
   },
 ]
 
-export type SearchDataKategori = {
-  isoCode?: string
-  sortOrder?: SortOrder
-  filterValues?: SearchFiltersKategori
-}
-
 type FetchProps = {
   from: number
   size: number
-  searchData: SearchDataKategori
+  searchParams: ReadonlyURLSearchParams
   kategoriIsos: string[]
   dontCollapse?: boolean
 }
@@ -96,10 +95,11 @@ type FetchProps = {
 export const fetchProductsKategori = async ({
   from,
   size,
-  searchData,
+  searchParams,
   kategoriIsos,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
-  const { sortOrder, filterValues } = searchData
+  const sortOrderStr = searchParams.get('sortering') || ''
+  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Rangering'
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
   const visTilbDeler = false
@@ -113,16 +113,42 @@ export const fetchProductsKategori = async ({
     filtersFromAdmin.includes(categoryFilter.fieldName)
   )
 
-  if (filterValues?.isos) {
-    postFilters.push(filterPrefixIsoKode(filterValues.isos))
+  if (searchParams.has('iso')) {
+    postFilters.push(filterPrefixIsoKode(searchParams.getAll('iso')))
   }
 
-  if (filterValues?.suppliers) {
-    postFilters.push(filterLeverandor(filterValues.suppliers))
+  if (searchParams.has('leverandor')) {
+    postFilters.push(filterLeverandor(searchParams.getAll('leverandor')))
   }
 
-  relevantFilters.forEach((filter) => {})
+  relevantFilters.forEach((filter) => {
+    if (searchParams.has(filter.searchParamName)) {
+      const searchValue = searchParams.get(filter.searchParamName) ?? ''
 
+      if (filter.filterDataType == FilterDataType.minMax) {
+        const searchFields = filter.searchFields as MinMaxFields
+
+        /*
+        postFilters.push(
+          filterMinMaxCategory(
+            { key: searchFields.min, value: searchValue },
+            { key: searchFields.max, value: searchValue }
+          )
+        )
+
+         */
+
+        postFilters.push(
+          filterMinMax(
+            { setehoydeMinCM: searchParams.get('Setehoyde')! },
+            { setehoydeMaksCM: searchParams.get('Setehoyde')! }
+          )
+        )
+      }
+    }
+  })
+
+  /*
   if (filtersFromAdmin.includes('Setebredde') && filterValues?.Setebredde) {
     postFilters.push(
       filterMinMax({ setebreddeMinCM: filterValues.Setebredde }, { setebreddeMaksCM: filterValues.Setebredde })
@@ -138,6 +164,8 @@ export const fetchProductsKategori = async ({
       filterMinMax({ setehoydeMinCM: filterValues.Setehoyde }, { setehoydeMaksCM: filterValues.Setehoyde })
     )
   }
+
+   */
 
   if (kategoriIsos.length > 0) {
     queryFilters.push(filterPrefixIsoKode(kategoriIsos))
@@ -352,4 +380,41 @@ const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): Measurement
   }
 
   return ferdig
+}
+
+const filterMinMaxCategory = (min: { key: string; value: string }, max: { key: string; value: string }) => {
+  const keyMin = min.key
+  const valueMin = min.value
+  const keyMax = max.key
+  const valueMax = max.value
+
+  if (!valueMin?.length && !valueMax?.length) return null
+
+  const mustClausesMin: any[] = []
+  const mustClausesMax: any[] = []
+  if (valueMin !== '') {
+    mustClausesMax.push({
+      range: {
+        [`filters.${keyMax}`]: {
+          gte: Number(valueMin),
+        },
+      },
+    })
+  }
+
+  if (valueMax !== '') {
+    mustClausesMin.push({
+      range: {
+        [`filters.${keyMin}`]: {
+          lte: Number(valueMax),
+        },
+      },
+    })
+  }
+
+  return {
+    bool: {
+      must: mustClausesMax.concat(mustClausesMin),
+    },
+  }
 }

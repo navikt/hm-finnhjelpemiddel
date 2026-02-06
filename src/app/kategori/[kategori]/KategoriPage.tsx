@@ -1,21 +1,14 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import React from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
-import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
+import { Heading, HGrid, HStack, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
-import {
-  fetchProductsKategori,
-  PAGE_SIZE,
-  ProductsWithIsoAggs,
-  SearchDataKategori,
-  SearchFiltersKategori,
-} from '@/app/kategori/utils/kategori-inngang-util'
-import { isValidSortOrder } from '@/utils/search-state-util'
+import { fetchProductsKategori, PAGE_SIZE, ProductsWithIsoAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
@@ -29,39 +22,11 @@ export const KategoriPage = ({ category }: Props) => {
   const searchParams = useSearchParams()
   const { createQueryStringAppendRemovePage, createQueryStringForMinMax } = useQueryString()
 
-  const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
-    const sortOrderStr = searchParams.get('sortering') || ''
-    const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Rangering'
-
-    const isoCode = searchParams.get('isoCode') ?? ''
-
-    const suppliers = searchParams.getAll('leverandor') ?? ''
-    const isos = searchParams.getAll('iso') ?? ''
-
-    const setebredde = searchParams.get('Setebredde') ?? ''
-    const setedybde = searchParams.get('Setedybde') ?? ''
-    const setehoyde = searchParams.get('Setehoyde') ?? ''
-
-    const filters: SearchFiltersKategori = {
-      suppliers,
-      isos,
-      Setehoyde: setehoyde,
-      Setedybde: setedybde,
-      Setebredde: setebredde,
-    }
-
-    return {
-      sortOrder,
-      isoCode,
-      filterValues: filters,
-    }
-  }
-
-  const searchData = mapSearchParamsKategori(searchParams)
-
+  /*
   useEffect(() => {
     mapSearchParamsKategori(searchParams)
   }, [searchParams])
+   */
 
   const {
     data: productsData,
@@ -77,7 +42,7 @@ export const KategoriPage = ({ category }: Props) => {
       return {
         from: index * PAGE_SIZE,
         size: PAGE_SIZE,
-        searchData,
+        searchParams,
         kategoriIsos: category.data.isos,
       }
     },
