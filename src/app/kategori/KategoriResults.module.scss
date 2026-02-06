@@ -1,0 +1,10 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  display: flex;
+  padding: 2% 0 0 38%;
+
+  @media (max-width: 768px) {
+    padding: 2% 0 0 25%;
+  }
+}
