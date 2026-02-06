@@ -1,5 +1,5 @@
 const FinnHjelpemiddelLogo = () => {
-  return samenesNasjonaldag
+  return vanligLogo
 }
 
 const vanligLogo = (
