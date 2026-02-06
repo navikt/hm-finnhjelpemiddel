@@ -9,7 +9,7 @@
   grid-template-areas: 'box1 box2';
   justify-content: space-between;
 
-  @media (max-width:$ax-breakpoint-md) {
+  @media (max-width: $ax-breakpoint-md) {
     grid-template-areas:
       'box2'
       'box1';
@@ -18,10 +18,10 @@
 
 .logoBox {
   position: relative;
-  top: 23px;
+  //top: 23px;
 
   justify-self: end;
-  @media (max-width:$ax-breakpoint-md) {
+  @media (max-width: $ax-breakpoint-md) {
     justify-self: center;
     top: 0;
   }
