@@ -47,12 +47,36 @@ export type SearchFiltersKategori = {
 
 export type CategoryFilter = {
   fieldName: string
+  filterDataType: FilterDataType
+  searchFields: string | MinMaxFields
+}
+
+export type MinMaxFields = {
+  min: string
+  max: string
+}
+
+export enum FilterDataType {
+  singleValue,
+  minMax,
 }
 
 export const categoryFilters: CategoryFilter[] = [
-  { fieldName: 'Setebredde' },
-  { fieldName: 'Setedybde' },
-  { fieldName: 'Setehøyde' },
+  {
+    fieldName: 'Setebredde',
+    filterDataType: FilterDataType.minMax,
+    searchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaxCM' },
+  },
+  {
+    fieldName: 'Setedybde',
+    filterDataType: FilterDataType.minMax,
+    searchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaxCM' },
+  },
+  {
+    fieldName: 'Setehøyde',
+    filterDataType: FilterDataType.minMax,
+    searchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaxCM' },
+  },
 ]
 
 export type SearchDataKategori = {
@@ -83,7 +107,11 @@ export const fetchProductsKategori = async ({
   const queryFilters: Array<any> = []
   const postFilters: Array<any> = []
 
-  const relevantFilters = ['Setebredde', 'Setedybde', 'Setehøyde']
+  const filtersFromAdmin = ['Setebredde', 'Setedybde', 'Setehøyde']
+
+  const relevantFilters = categoryFilters.filter((categoryFilter) =>
+    filtersFromAdmin.includes(categoryFilter.fieldName)
+  )
 
   if (filterValues?.isos) {
     postFilters.push(filterPrefixIsoKode(filterValues.isos))
@@ -93,17 +121,19 @@ export const fetchProductsKategori = async ({
     postFilters.push(filterLeverandor(filterValues.suppliers))
   }
 
-  if (relevantFilters.includes('Setebredde') && filterValues?.Setebredde) {
+  relevantFilters.forEach((filter) => {})
+
+  if (filtersFromAdmin.includes('Setebredde') && filterValues?.Setebredde) {
     postFilters.push(
       filterMinMax({ setebreddeMinCM: filterValues.Setebredde }, { setebreddeMaksCM: filterValues.Setebredde })
     )
   }
-  if (relevantFilters.includes('Setedybde') && filterValues?.Setedybde) {
+  if (filtersFromAdmin.includes('Setedybde') && filterValues?.Setedybde) {
     postFilters.push(
       filterMinMax({ setedybdeMinCM: filterValues.Setedybde }, { setedybdeMaksCM: filterValues.Setedybde })
     )
   }
-  if (relevantFilters.includes('Setehøyde') && filterValues?.Setehoyde) {
+  if (filtersFromAdmin.includes('Setehøyde') && filterValues?.Setehoyde) {
     postFilters.push(
       filterMinMax({ setehoydeMinCM: filterValues.Setehoyde }, { setehoydeMaksCM: filterValues.Setehoyde })
     )
@@ -181,12 +211,12 @@ export const fetchProductsKategori = async ({
       },
       supplierPostFilters
     ),
-    ...(relevantFilters.includes('Setebredde') ? termAggs('setebreddeMinCM', 'filters.setebreddeMinCM') : []),
-    ...(relevantFilters.includes('Setebredde') ? termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM') : []),
-    ...(relevantFilters.includes('Setedybde') ? termAggs('setedybdeMinCM', 'filters.setedybdeMinCM') : []),
-    ...(relevantFilters.includes('Setedybde') ? termAggs('setedybdeMaksCM', 'filters.setedybdeMaksCM') : []),
-    ...(relevantFilters.includes('Setehøyde') ? termAggs('setehoydeMinCM', 'filters.setehoydeMinCM') : []),
-    ...(relevantFilters.includes('Setehøyde') ? termAggs('setehoydeMaksCM', 'filters.setehoydeMaksCM') : []),
+    ...(filtersFromAdmin.includes('Setebredde') ? termAggs('setebreddeMinCM', 'filters.setebreddeMinCM') : []),
+    ...(filtersFromAdmin.includes('Setebredde') ? termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM') : []),
+    ...(filtersFromAdmin.includes('Setedybde') ? termAggs('setedybdeMinCM', 'filters.setedybdeMinCM') : []),
+    ...(filtersFromAdmin.includes('Setedybde') ? termAggs('setedybdeMaksCM', 'filters.setedybdeMaksCM') : []),
+    ...(filtersFromAdmin.includes('Setehøyde') ? termAggs('setehoydeMinCM', 'filters.setehoydeMinCM') : []),
+    ...(filtersFromAdmin.includes('Setehøyde') ? termAggs('setehoydeMaksCM', 'filters.setehoydeMaksCM') : []),
   }
 
   const body: QueryObject = {
