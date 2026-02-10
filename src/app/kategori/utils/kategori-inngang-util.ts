@@ -108,7 +108,7 @@ export const fetchProductsKategori = async ({
 
   const filtersFromAdmin = ['Setebredde', 'Setedybde', 'Setehøyde']
 
-  const relevantFilters = categoryFilters.filter((categoryFilter) =>
+  const perCategoryFilters = categoryFilters.filter((categoryFilter) =>
     filtersFromAdmin.includes(categoryFilter.fieldName)
   )
 
@@ -120,7 +120,7 @@ export const fetchProductsKategori = async ({
     postFilters.push(filterLeverandor(searchParams.getAll('leverandor')))
   }
 
-  relevantFilters.forEach((filter) => {
+  perCategoryFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
       const searchValue = searchParams.get(filter.searchParamName) ?? ''
 
@@ -184,6 +184,21 @@ export const fetchProductsKategori = async ({
     return !filterStr.includes('supplier.name')
   })
 
+  const perCategoryFilterAggs = Object.assign(
+    {},
+    ...perCategoryFilters
+      .map((filter) => {
+        if (filter.filterDataType == FilterDataType.minMax) {
+          const searchFields = filter.searchFields as MinMaxFields
+          return [
+            termAggs(searchFields.min, `filters.${searchFields.min}`),
+            termAggs(searchFields.max, `filters.${searchFields.max}`),
+          ]
+        }
+      })
+      .flat()
+  )
+
   const aggs = {
     ...aggsFilter(
       'iso',
@@ -209,12 +224,7 @@ export const fetchProductsKategori = async ({
       },
       supplierPostFilters
     ),
-    ...(filtersFromAdmin.includes('Setebredde') ? termAggs('setebreddeMinCM', 'filters.setebreddeMinCM') : []),
-    ...(filtersFromAdmin.includes('Setebredde') ? termAggs('setebreddeMaksCM', 'filters.setebreddeMaksCM') : []),
-    ...(filtersFromAdmin.includes('Setedybde') ? termAggs('setedybdeMinCM', 'filters.setedybdeMinCM') : []),
-    ...(filtersFromAdmin.includes('Setedybde') ? termAggs('setedybdeMaksCM', 'filters.setedybdeMaksCM') : []),
-    ...(filtersFromAdmin.includes('Setehøyde') ? termAggs('setehoydeMinCM', 'filters.setehoydeMinCM') : []),
-    ...(filtersFromAdmin.includes('Setehøyde') ? termAggs('setehoydeMaksCM', 'filters.setehoydeMaksCM') : []),
+    ...perCategoryFilterAggs,
   }
 
   const body: QueryObject = {
