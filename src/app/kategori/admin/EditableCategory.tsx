@@ -252,7 +252,7 @@ const FilterModule = ({
   const options = ['Setebredde', 'Setedybde', 'Setehøyde']
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
-    options.filter((option) => inputValue.data.subCategories?.includes(option))
+    options.filter((option) => inputValue.data.filters?.includes(option))
   )
 
   const addFilter = (optionValue: string) => {
@@ -265,6 +265,8 @@ const FilterModule = ({
   }
 
   const removeFilter = (optionValue: string) => {
+    const newSelected = selectedOptions.filter((option) => option !== optionValue)
+    setSelectedOptions(newSelected)
     setInputValue({
       ...inputValue,
       data: { ...inputValue.data, filters: [...(inputValue.data.filters ?? []).filter((i) => i != optionValue)] },
