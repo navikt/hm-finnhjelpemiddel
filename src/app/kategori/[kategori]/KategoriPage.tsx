@@ -58,6 +58,7 @@ export const KategoriPage = ({ category }: Props) => {
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
   const measurementFilters = productsData?.at(-1)?.measurementFilters ?? undefined
+  const techDataFilterAggs = productsData?.at(-1)?.techDataFilterAggs
 
   const isEmpty = productsData?.[0]?.products.length === 0
   const isReachingEnd = isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
@@ -73,7 +74,7 @@ export const KategoriPage = ({ category }: Props) => {
       }
     : undefined
 
-  const filters: Filters = { isos, suppliers, measurementFilters }
+  const filters: Filters = { isos, suppliers, measurementFilters, techDataFilterAggs }
 
   const onChange = (filterName: string, value: string | string[]) => {
     const singleValue = Array.isArray(value) ? value[0] : value

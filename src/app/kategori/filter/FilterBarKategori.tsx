@@ -1,10 +1,9 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
-import { KategoriToggleFilter } from '@/app/kategori/filter/KategoriToggleFilter'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { MinMaxFilter } from '@/app/kategori/filter/MinMaxFilter'
 import styles from './FilterBarKategori.module.scss'
-import { MeasurementInfo } from '@/app/kategori/utils/kategori-inngang-util'
+import { MeasurementInfo, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 
 export type Filters = {
@@ -14,6 +13,7 @@ export type Filters = {
     label: string
   }[]
   ['measurementFilters']?: MeasurementInfo
+  ['techDataFilterAggs']?: TechDataFilterAggs
 }
 
 type Props = {
@@ -31,7 +31,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   const isoFilters: FilterMenu = {
     name: { key: 'isos', label: 'Produktkategorier', paramKey: 'iso' },
 
-    options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label)})),
+    options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label) })),
   }
 
   return (
@@ -42,10 +42,10 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
       <HStack gap="space-8" maxWidth={'1214px'}>
         {filters.isos.length > 1 && <CheckboxFilterNew filterMenu={isoFilters} onChange={onChange} />}
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
-        {filters.measurementFilters &&
-          Object.entries(filters.measurementFilters).map(([key, value]) => (
-            <MinMaxFilter key={key} filterMenu={{ name: key, options: value }} />
-          ))}
+        {filters.techDataFilterAggs &&
+          filters.techDataFilterAggs
+            .entries()
+            .map(([key, value]) => <MinMaxFilter key={key} filterMenu={{ name: key, options: value }} />)}
         <div>
           <Button
             variant={'secondary'}

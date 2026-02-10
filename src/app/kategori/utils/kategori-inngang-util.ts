@@ -30,12 +30,15 @@ export type MeasurementInfo = {
   }
 }
 
+export type TechDataFilterAgg = { searchParamName: string; values: string[] }
+export type TechDataFilterAggs = Map<string, TechDataFilterAgg>
+
 export type ProductsWithIsoAggs = {
   products: Product[]
   iso: IsoInfo[]
   suppliers: SupplierInfo[]
   measurementFilters?: MeasurementInfo
-  measurementFilters2: Map<string, string[]>
+  techDataFilterAggs: TechDataFilterAggs
 }
 
 export type SearchFiltersKategori = {
@@ -259,7 +262,7 @@ export const fetchProductsKategori = async ({
         iso: mapIsoAggregations(data),
         suppliers: mapSupplierAggregations(data),
         measurementFilters: mapMinMaxAggregations(data),
-        measurementFilters2: mapTechDataFilterAggregations(data, techDataFilters),
+        techDataFilterAggs: mapTechDataFilterAggregations(data, techDataFilters),
       }
     })
 }
@@ -369,8 +372,8 @@ const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): Measurement
 const mapTechDataFilterAggregations = (
   data: ProductIsoAggregationResponse,
   perCategoryFilters: CategoryFilter[]
-): Map<string, string[]> => {
-  const map = new Map<string, string[]>()
+): TechDataFilterAggs => {
+  const map = new Map<string, { searchParamName: string; values: string[] }>()
 
   const aggMap = new Map(Object.entries(data.aggregations))
 
@@ -382,7 +385,7 @@ const mapTechDataFilterAggregations = (
       const maxValues = aggMap.get(searchFields.max)?.values.buckets.map((bucket) => bucket.key.toString())
 
       if (!!minValues || !!maxValues) {
-        map.set(filter.fieldName, [...minValues!, ...maxValues!])
+        map.set(filter.fieldName, { searchParamName: filter.searchParamName, values: [...minValues!, ...maxValues!] })
       }
     }
   })

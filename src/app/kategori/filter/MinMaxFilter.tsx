@@ -4,13 +4,11 @@ import React, { useRef, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import styles from './MinMaxFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
+import { TechDataFilterAgg } from '@/app/kategori/utils/kategori-inngang-util'
 
 export type MinMaxMenu = {
   name: string
-  options: {
-    key: string
-    value: number
-  }
+  options: TechDataFilterAgg
 }
 
 type Props = {
@@ -29,11 +27,11 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
 
   const filterLabel = name
 
-  const hasSearchParam = searchParams.get(options.key)
+  const hasSearchParam = searchParams.get(options.searchParamName)
   const [inputValue, setInputValue] = useState(hasSearchParam ?? '')
 
   const onChange = (value: string) => {
-    const newSearchParams = createQueryStringForMinMax(options.key, value)
+    const newSearchParams = createQueryStringForMinMax(options.searchParamName, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
@@ -66,7 +64,7 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
             Fjern filter
           </ActionMenu.Item>
         )}
-        <HStack gap={"space-8"}>
+        <HStack gap={'space-8'}>
           <TextField
             label={filterLabel}
             hideLabel
@@ -86,5 +84,5 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
         </HStack>
       </ActionMenu.Content>
     </ActionMenu>
-  );
+  )
 }
