@@ -1,6 +1,15 @@
 import { KategoriPage } from './KategoriPage'
 import { KategoriOversikt } from '@/app/kategori/KategoriOversikt'
 import { getCategoryByTitle } from '@/app/kategori/admin/category-admin-util'
+import type { Metadata } from 'next'
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
+
+  return {
+    title: normalizeKategori(params.kategori),
+  }
+}
 
 type Props = {
   params: Promise<{ kategori: string }>
