@@ -1,7 +1,6 @@
 import {
   filterLeverandor,
   filterMainProductsOnly,
-  filterMinMax,
   filterNotExpiredOnly,
   filterPrefixIsoKode,
 } from '@/utils/filter-util'
@@ -68,19 +67,19 @@ export const categoryFilters: CategoryFilter[] = [
     fieldName: 'Setebredde',
     searchParamName: 'Setebredde',
     filterDataType: FilterDataType.minMax,
-    searchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaxCM' },
+    searchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
   },
   {
     fieldName: 'Setedybde',
     searchParamName: 'Setedybde',
     filterDataType: FilterDataType.minMax,
-    searchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaxCM' },
+    searchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
   },
   {
     fieldName: 'Setehøyde',
     searchParamName: 'Setehoyde',
     filterDataType: FilterDataType.minMax,
-    searchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaxCM' },
+    searchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
   },
 ]
 
@@ -128,44 +127,15 @@ export const fetchProductsKategori = async ({
       if (filter.filterDataType == FilterDataType.minMax) {
         const searchFields = filter.searchFields as MinMaxFields
 
-        /*
         postFilters.push(
           filterMinMaxCategory(
             { key: searchFields.min, value: searchValue },
             { key: searchFields.max, value: searchValue }
           )
         )
-
-         */
-
-        postFilters.push(
-          filterMinMax(
-            { setehoydeMinCM: searchParams.get('Setehoyde')! },
-            { setehoydeMaksCM: searchParams.get('Setehoyde')! }
-          )
-        )
       }
     }
   })
-
-  /*
-  if (filtersFromAdmin.includes('Setebredde') && filterValues?.Setebredde) {
-    postFilters.push(
-      filterMinMax({ setebreddeMinCM: filterValues.Setebredde }, { setebreddeMaksCM: filterValues.Setebredde })
-    )
-  }
-  if (filtersFromAdmin.includes('Setedybde') && filterValues?.Setedybde) {
-    postFilters.push(
-      filterMinMax({ setedybdeMinCM: filterValues.Setedybde }, { setedybdeMaksCM: filterValues.Setedybde })
-    )
-  }
-  if (filtersFromAdmin.includes('Setehøyde') && filterValues?.Setehoyde) {
-    postFilters.push(
-      filterMinMax({ setehoydeMinCM: filterValues.Setehoyde }, { setehoydeMaksCM: filterValues.Setehoyde })
-    )
-  }
-
-   */
 
   if (kategoriIsos.length > 0) {
     queryFilters.push(filterPrefixIsoKode(kategoriIsos))
