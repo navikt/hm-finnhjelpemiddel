@@ -23,13 +23,6 @@ export type SupplierInfo = {
   name: string
 }
 
-export type MeasurementInfo = {
-  [key: string]: {
-    key: keyof SearchFiltersKategori
-    value: number
-  }
-}
-
 export type TechDataFilterAgg = { searchParamName: string; values: string[] }
 export type TechDataFilterAggs = Map<string, TechDataFilterAgg>
 
@@ -37,16 +30,7 @@ export type ProductsWithIsoAggs = {
   products: Product[]
   iso: IsoInfo[]
   suppliers: SupplierInfo[]
-  measurementFilters?: MeasurementInfo
   techDataFilterAggs: TechDataFilterAggs
-}
-
-export type SearchFiltersKategori = {
-  suppliers: string[]
-  isos: string[]
-  Setebredde?: string
-  Setedybde?: string
-  Setehoyde?: string
 }
 
 export type CategoryFilter = {
@@ -261,7 +245,6 @@ export const fetchProductsKategori = async ({
         products: mapProductsFromCollapse(data),
         iso: mapIsoAggregations(data),
         suppliers: mapSupplierAggregations(data),
-        measurementFilters: mapMinMaxAggregations(data),
         techDataFilterAggs: mapTechDataFilterAggregations(data, techDataFilters),
       }
     })
@@ -306,12 +289,6 @@ type ProductIsoAggregationResponse = {
   aggregations: {
     iso: IsoAggregation
     suppliers: SupplierAggregation
-    setebreddeMinCM: NewAggregation
-    setebreddeMaksCM: NewAggregation
-    setedybdeMinCM: NewAggregation
-    setedybdeMaksCM: NewAggregation
-    setehoydeMinCM: NewAggregation
-    setehoydeMaksCM: NewAggregation
   } & {
     [key: string]: NewAggregation
   }
@@ -322,51 +299,6 @@ const mapIsoAggregations = (data: ProductIsoAggregationResponse): IsoInfo[] => {
 }
 const mapSupplierAggregations = (data: ProductIsoAggregationResponse): SupplierInfo[] => {
   return data.aggregations.suppliers.values.buckets.map((bucket) => ({ name: bucket.key }))
-}
-
-const mapMinMaxAggregations = (data: ProductIsoAggregationResponse): MeasurementInfo => {
-  const { setebreddeMinCM, setebreddeMaksCM, setedybdeMinCM, setedybdeMaksCM, setehoydeMinCM, setehoydeMaksCM } =
-    data.aggregations
-
-  const ferdig = {}
-
-  if (
-    (setebreddeMinCM !== undefined && setebreddeMinCM.values.buckets.length > 0) ||
-    (setebreddeMaksCM !== undefined && setebreddeMaksCM.values.buckets.length > 0)
-  ) {
-    Object.assign(ferdig, {
-      ['Setebredde']: {
-        key: 'Setebredde',
-        value: data.aggregations.setebreddeMinCM.values.buckets.length ?? 0,
-      },
-    })
-  }
-
-  if (
-    (setedybdeMinCM !== undefined && setedybdeMinCM.values.buckets.length > 0) ||
-    (setedybdeMaksCM !== undefined && setedybdeMaksCM.values.buckets.length > 0)
-  ) {
-    Object.assign(ferdig, {
-      ['Setedybde']: {
-        key: 'Setedybde',
-        value: data.aggregations.setedybdeMinCM.values.buckets.length ?? 0,
-      },
-    })
-  }
-
-  if (
-    (setehoydeMinCM !== undefined && setehoydeMinCM.values.buckets.length > 0) ||
-    (setehoydeMaksCM !== undefined && setehoydeMaksCM.values.buckets.length > 0)
-  ) {
-    Object.assign(ferdig, {
-      ['Setehøyde']: {
-        key: 'Setehoyde',
-        value: data.aggregations.setehoydeMinCM.values.buckets.length ?? 0,
-      },
-    })
-  }
-
-  return ferdig
 }
 
 const mapTechDataFilterAggregations = (

@@ -57,7 +57,6 @@ export const KategoriPage = ({ category }: Props) => {
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
-  const measurementFilters = productsData?.at(-1)?.measurementFilters ?? undefined
   const techDataFilterAggs = productsData?.at(-1)?.techDataFilterAggs
 
   const isEmpty = productsData?.[0]?.products.length === 0
@@ -74,7 +73,7 @@ export const KategoriPage = ({ category }: Props) => {
       }
     : undefined
 
-  const filters: Filters = { isos, suppliers, measurementFilters, techDataFilterAggs }
+  const filters: Filters = { isos, suppliers, techDataFilterAggs }
 
   const onChange = (filterName: string, value: string | string[]) => {
     const singleValue = Array.isArray(value) ? value[0] : value

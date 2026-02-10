@@ -3,7 +3,7 @@ import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { MinMaxFilter } from '@/app/kategori/filter/MinMaxFilter'
 import styles from './FilterBarKategori.module.scss'
-import { MeasurementInfo, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
+import { TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 
 export type Filters = {
@@ -12,7 +12,6 @@ export type Filters = {
     key: string
     label: string
   }[]
-  ['measurementFilters']?: MeasurementInfo
   ['techDataFilterAggs']?: TechDataFilterAggs
 }
 
