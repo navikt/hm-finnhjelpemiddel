@@ -43,7 +43,7 @@ export const KategoriPage = ({ category }: Props) => {
         from: index * PAGE_SIZE,
         size: PAGE_SIZE,
         searchParams,
-        kategoriIsos: category.data.isos,
+        category: category,
       }
     },
     fetchProductsKategori,

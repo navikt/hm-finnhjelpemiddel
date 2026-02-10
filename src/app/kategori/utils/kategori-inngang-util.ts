@@ -9,6 +9,7 @@ import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 import { ReadonlyURLSearchParams } from 'next/navigation'
+import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
@@ -75,7 +76,7 @@ type FetchProps = {
   from: number
   size: number
   searchParams: ReadonlyURLSearchParams
-  kategoriIsos: string[]
+  category: CategoryDTO
   dontCollapse?: boolean
 }
 
@@ -83,7 +84,7 @@ export const fetchProductsKategori = async ({
   from,
   size,
   searchParams,
-  kategoriIsos,
+  category,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const sortOrderStr = searchParams.get('sortering') || ''
   const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Rangering'
@@ -91,10 +92,11 @@ export const fetchProductsKategori = async ({
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
   const visTilbDeler = false
 
+  const categoryIsos = category.data.isos ?? []
+  const filtersFromAdmin = category.data.filters ?? []
+
   const queryFilters: Array<any> = []
   const postFilters: Array<any> = []
-
-  const filtersFromAdmin = ['Setebredde', 'Setedybde', 'Setehøyde']
 
   const techDataFilters = categoryFilters.filter((categoryFilter) =>
     filtersFromAdmin.includes(categoryFilter.fieldName)
@@ -125,8 +127,8 @@ export const fetchProductsKategori = async ({
     }
   })
 
-  if (kategoriIsos.length > 0) {
-    queryFilters.push(filterPrefixIsoKode(kategoriIsos))
+  if (categoryIsos.length > 0) {
+    queryFilters.push(filterPrefixIsoKode(categoryIsos))
   }
 
   if (!visTilbDeler) {
