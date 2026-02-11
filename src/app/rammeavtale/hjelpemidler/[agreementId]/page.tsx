@@ -3,13 +3,14 @@ import { getAgreement } from '@/utils/api-util'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import AgreementPage from './AgreementPage'
+import { NotFound } from '@/app/[...not-found]/NotFound'
 
 type Props = {
   params: Promise<{ agreementId: string }>
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = await props.params
   const agreementId = params.agreementId
   const agreementResponse = await getAgreement(agreementId)
   const agreement = mapAgreementFromDoc(agreementResponse)
@@ -23,11 +24,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function Page(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const agreement = mapAgreementFromDoc(await getAgreement(params.agreementId))
-  return (
-    <Suspense>
-      <AgreementPage agreement={agreement} />
-    </Suspense>
-  )
+  const activeAgreement = agreement.published <= new Date() && agreement.expired >= new Date()
+  return <Suspense>{activeAgreement ? <AgreementPage agreement={agreement} /> : <NotFound />}</Suspense>
 }
