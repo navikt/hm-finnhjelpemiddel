@@ -34,7 +34,7 @@ export default async function AgreementPage(props: Props) {
   const params = await props.params
   const agreementResponse = await getAgreement(params.agreementId)
   const agreement = mapAgreementFromDoc(agreementResponse)
-  const activeAgreement = agreement.published < new Date() && agreement.expired > new Date()
+  const activeAgreement = agreement.published <= new Date() && agreement.expired >= new Date()
 
   return (
     <>
