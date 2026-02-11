@@ -27,11 +27,11 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
 
   const filterLabel = name
 
-  const hasSearchParam = searchParams.get(options.searchParamName)
+  const hasSearchParam = searchParams.get(options.filter.searchParamName)
   const [inputValue, setInputValue] = useState(hasSearchParam ?? '')
 
   const onChange = (value: string) => {
-    const newSearchParams = createQueryStringForMinMax(options.searchParamName, value)
+    const newSearchParams = createQueryStringForMinMax(options.filter.searchParamName, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 

@@ -21,6 +21,7 @@ import useSWR from 'swr'
 import NextLink from 'next/link'
 import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
 import Image from 'next/image'
+import { categoryFilters } from '@/app/kategori/utils/kategori-inngang-util'
 
 export const EditableCategory = ({
   inputValue,
@@ -249,7 +250,7 @@ const FilterModule = ({
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
 }) => {
-  const options = ['Setebredde', 'Setedybde', 'Setehøyde']
+  const options = categoryFilters.map((filter) => filter.fieldName)
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     options.filter((option) => inputValue.data.filters?.includes(option))
