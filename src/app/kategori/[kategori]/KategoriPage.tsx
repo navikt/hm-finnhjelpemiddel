@@ -20,13 +20,7 @@ export const KategoriPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { createQueryStringAppendRemovePage, createQueryStringForMinMax } = useQueryString()
-
-  /*
-  useEffect(() => {
-    mapSearchParamsKategori(searchParams)
-  }, [searchParams])
-   */
+  const { createQueryStringAppend } = useQueryString()
 
   const {
     data: productsData,
@@ -75,22 +69,13 @@ export const KategoriPage = ({ category }: Props) => {
 
   const filters: Filters = { isos, suppliers, techDataFilterAggs }
 
-  const onChange = (filterName: string, value: string | string[]) => {
-    const singleValue = Array.isArray(value) ? value[0] : value
+  const onChangeCheckBoxFilter = (filterName: string, value: string) => {
     const paramKeyMap: Record<string, string> = {
       suppliers: 'leverandor',
       isos: 'iso',
     }
     const paramKey = paramKeyMap[filterName] || filterName
-    let newSearchParams: string
-    if (filterName === 'suppliers' || filterName === 'isos') {
-      newSearchParams = createQueryStringAppendRemovePage(paramKey, singleValue)
-    } else {
-      newSearchParams = createQueryStringForMinMax(paramKey, singleValue)
-      const params = new URLSearchParams(newSearchParams)
-      params.delete('page')
-      newSearchParams = params.toString()
-    }
+    const newSearchParams = createQueryStringAppend(paramKey, value)
     setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
@@ -115,7 +100,7 @@ export const KategoriPage = ({ category }: Props) => {
                   : `Ingen treff`}
             </Heading>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
-              <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
+              <FilterBarKategori filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
               {/*<SortKategoriResults />*/}
             </HStack>
 

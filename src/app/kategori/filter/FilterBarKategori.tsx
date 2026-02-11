@@ -17,7 +17,7 @@ export type Filters = {
 
 type Props = {
   filters: Filters
-  onChange: (key: string, value: string | string[]) => void
+  onChange: (key: string, value: string) => void
   onReset: () => void
 }
 

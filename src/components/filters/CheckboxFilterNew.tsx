@@ -19,7 +19,7 @@ export type FilterMenu = {
 
 type Props = {
   filterMenu: FilterMenu
-  onChange: (key: string, value: string | string[]) => void
+  onChange: (key: string, value: string) => void
 }
 
 export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
@@ -28,9 +28,7 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const paramKey = name.paramKey ?? name.key
-  const normalizedOptions = options.map((opt) =>
-    typeof opt === 'string' ? { value: opt, label: opt } : opt
-  )
+  const normalizedOptions = options.map((opt) => (typeof opt === 'string' ? { value: opt, label: opt } : opt))
   const selectedFilters = normalizedOptions.filter((o) => searchParams.getAll(paramKey).includes(o.value))
   const filterLabel = selectedFilters.length > 0 ? name.label + `(${selectedFilters.length})` : name.label
 
