@@ -102,18 +102,18 @@ export const fetchProductsKategori = async ({
   const filtersFromAdmin = category.data.filters ?? []
 
   const queryFilters: Array<any> = []
-  const postFilters: Array<any> = []
+  const postFilters: Array<{ key: string; filter: any }> = []
 
   const techDataFilters = categoryFilters.filter((categoryFilter) =>
     filtersFromAdmin.includes(categoryFilter.fieldName)
   )
 
   if (searchParams.has('iso')) {
-    postFilters.push(filterPrefixIsoKode(searchParams.getAll('iso')))
+    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.getAll('iso')) })
   }
 
   if (searchParams.has('leverandor')) {
-    postFilters.push(filterLeverandor(searchParams.getAll('leverandor')))
+    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.getAll('leverandor')) })
   }
 
   techDataFilters.forEach((filter) => {
@@ -122,16 +122,17 @@ export const fetchProductsKategori = async ({
         const searchValue = searchParams.get(filter.searchParamName) ?? ''
         const searchFields = filter.searchFields as MinMaxFields
 
-        postFilters.push(
-          filterMinMaxCategory(
+        postFilters.push({
+          key: filter.fieldName,
+          filter: filterMinMaxCategory(
             { key: searchFields.min, value: searchValue },
             { key: searchFields.max, value: searchValue }
-          )
-        )
+          ),
+        })
       } else if (filter.filterDataType === FilterDataType.singleField) {
         const searchValue = searchParams.getAll(filter.searchParamName)
         const searchField = filter.searchFields as string
-        postFilters.push(filterSingleFieldCategory(searchField, searchValue))
+        postFilters.push({ key: filter.fieldName, filter: filterSingleFieldCategory(searchField, searchValue) })
       }
     }
   })
@@ -163,7 +164,7 @@ export const fetchProductsKategori = async ({
       aggs,
     },
   })
-  const termAggs = (key: string, field: string) => ({
+  const techDataAggs = (filterName: string, key: string, field: string) => ({
     ...aggsFilter(
       key,
       {
@@ -174,13 +175,8 @@ export const fetchProductsKategori = async ({
           },
         },
       },
-      postFilters
+      postFilters.filter(({ key }) => key !== filterName).map(({ filter }) => filter)
     ),
-  })
-
-  const supplierPostFilters = postFilters.filter((filter) => {
-    const filterStr = JSON.stringify(filter)
-    return !filterStr.includes('supplier.name')
   })
 
   const techDataFilterAggs = Object.assign(
@@ -190,12 +186,12 @@ export const fetchProductsKategori = async ({
         if (filter.filterDataType === FilterDataType.minMax) {
           const searchFields = filter.searchFields as MinMaxFields
           return [
-            termAggs(searchFields.min, `filters.${searchFields.min}`),
-            termAggs(searchFields.max, `filters.${searchFields.max}`),
+            techDataAggs(filter.fieldName, searchFields.min, `filters.${searchFields.min}`),
+            techDataAggs(filter.fieldName, searchFields.max, `filters.${searchFields.max}`),
           ]
         } else if (filter.filterDataType === FilterDataType.singleField) {
           const searchField = filter.searchFields as string
-          return [termAggs(searchField, `filters.${searchField}`)]
+          return [techDataAggs(filter.fieldName, searchField, `filters.${searchField}`)]
         }
       })
       .flat()
@@ -224,7 +220,7 @@ export const fetchProductsKategori = async ({
           },
         },
       },
-      supplierPostFilters
+      postFilters.filter(({ key }) => key !== 'leverandor').map(({ filter }) => filter)
     ),
     ...techDataFilterAggs,
   }
@@ -238,7 +234,7 @@ export const fetchProductsKategori = async ({
     aggs: { ...aggs },
     post_filter: {
       bool: {
-        filter: postFilters,
+        filter: postFilters.map(({ filter }) => filter),
       },
     },
     collapse: {
