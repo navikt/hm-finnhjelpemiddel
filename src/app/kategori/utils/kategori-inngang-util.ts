@@ -288,7 +288,7 @@ type SupplierAggregation = {
   }
 }
 
-type NewAggregation = {
+type TechDataAggregation = {
   doc_count: number
   values: {
     buckets: { key: string; doc_count: number }[]
@@ -304,7 +304,7 @@ type ProductIsoAggregationResponse = {
     iso: IsoAggregation
     suppliers: SupplierAggregation
   } & {
-    [key: string]: NewAggregation
+    [key: string]: TechDataAggregation
   }
 }
 
