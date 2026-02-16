@@ -6,13 +6,7 @@ import { SportOgAktivitetIkon } from '@/app/kategori/ikoner/SportOgAktivitetIkon
 import { SynIkon } from '@/app/kategori/ikoner/SynIkon'
 import { HørselIkon } from '@/app/kategori/ikoner/HorselIkon'
 
-export type FrontPageCategoryTitles =
-  | 'Bevegelse'
-  | 'Hygiene'
-  | 'Hjem og bolig'
-  | 'Sport og aktivitet'
-  | 'Syn'
-  | 'Hørsel'
+export type FrontPageCategoryTitles = 'Bevegelse' | 'Hygiene' | 'Bolig' | 'Sport og aktivitet' | 'Syn' | 'Hørsel'
 export type TopLevelCategoryTitles = FrontPageCategoryTitles | 'Alle'
 
 type TopLevelCategories = {
@@ -42,8 +36,8 @@ const hygiene: TopLevelCategory = {
   description: '',
   icon: <HygieneIkon />,
 }
-const hjemOgBolig: TopLevelCategory = {
-  title: 'Hjem og bolig',
+const bolig: TopLevelCategory = {
+  title: 'Bolig',
   description: '',
   icon: <HjemOgBoligIkon />,
 }
@@ -67,7 +61,7 @@ const hørsel: TopLevelCategory = {
 export const topLevelcategories: TopLevelCategories = {
   Bevegelse: bevegelse,
   Hygiene: hygiene,
-  'Hjem og bolig': hjemOgBolig,
+  Bolig: bolig,
   'Sport og aktivitet': sportOgAktivitet,
   Syn: syn,
   Hørsel: hørsel,
@@ -77,7 +71,7 @@ export const frontPageCategories: FrontPageCategories = {
   Hørsel: hørsel,
   Syn: syn,
   Bevegelse: bevegelse,
-  'Hjem og bolig': hjemOgBolig,
+  Bolig: bolig,
   Hygiene: hygiene,
   'Sport og aktivitet': sportOgAktivitet,
 }
@@ -85,13 +79,13 @@ export const frontPageCategories: FrontPageCategories = {
 export const topLevelCategoryTitles: TopLevelCategoryTitles[] = [
   'Bevegelse',
   'Hygiene',
-  'Hjem og bolig',
+  'Bolig',
   'Sport og aktivitet',
   'Alle',
 ]
 export const frontPageTitles: FrontPageCategoryTitles[] = [
   'Bevegelse',
-  'Hjem og bolig',
+  'Bolig',
   'Hygiene',
   'Sport og aktivitet',
   'Syn',
