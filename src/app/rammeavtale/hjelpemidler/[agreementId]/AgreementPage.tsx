@@ -48,7 +48,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         agreementId: agreement.id,
         selectedSupplier: undefined,
       }),
-    { keepPreviousData: true}
+    { keepPreviousData: true }
   )
 
   const avtalerMedIsoGruppering = [
@@ -135,14 +135,13 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
-  const harTjenester = tjenesterData && tjenesterData.totalHits > 0 || false
-
+  const harTjenester = (tjenesterData && tjenesterData.totalHits > 0) || false
 
   return (
     <>
       <AgreementPrintableVersion postWithProducts={posts} />
       <VStack gap={'space-40'} className="main-wrapper--large spacing-bottom--xlarge hide-print">
-        <TopBar agreement={agreement} harTjenester={harTjenester}/>
+        <TopBar agreement={agreement} harTjenester={harTjenester} />
 
         <CompareMenu />
 
@@ -207,7 +206,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   )
 }
 
-const TopBar = ({ agreement, harTjenester }: { agreement: Agreement, harTjenester: boolean }) => {
+const TopBar = ({ agreement, harTjenester }: { agreement: Agreement; harTjenester: boolean }) => {
   return (
     <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
       <VStack gap="space-16" align={'start'} paddingBlock={'space-48'} maxWidth={'800px'}>
@@ -240,14 +239,13 @@ const TopBar = ({ agreement, harTjenester }: { agreement: Agreement, harTjeneste
           Les om avtalen
         </Button>
 
-        <TopLinks agreementId={agreement.id} harTjenester={harTjenester}/>
+        <TopLinks agreementId={agreement.id} harTjenester={harTjenester} />
       </VStack>
     </Bleed>
   )
 }
 
-const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjenester: boolean }) => {
-
+const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjenester: boolean }) => {
   const featureFlags = useFeatureFlags()
 
   const visTjenesterFeatureFlag: boolean = featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') ?? false
@@ -265,7 +263,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjene
           as={NextLink}
           href={`/rammeavtale/${agreementId}/deler`}
           icon={<LayersPlusIcon aria-hidden />}
-          variant={'secondary'}
+          variant={'primary'}
           className={styles.bleedButton}
         >
           Tilbehør og reservedeler
@@ -276,14 +274,14 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string, harTjene
           as={NextLink}
           href={`/rammeavtale/${agreementId}/tjenester`}
           icon={<WrenchIcon aria-hidden />}
-          variant={'secondary'}
+          variant={'primary'}
           className={styles.bleedButton}
         >
           Tjenester
         </Button>
       )}
     </HStack>
-  );
+  )
 }
 
 export default AgreementPage

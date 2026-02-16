@@ -1,16 +1,7 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .bleedButton {
-  background-color: white;
   width: fit-content;
-
-  &:hover {
-    background-color: $ax-bg-accent-moderate-hover;
-  }
-
-  &:active {
-    background-color: $ax-bg-accent-moderate-pressed;
-  }
 }
 
 .divider {
