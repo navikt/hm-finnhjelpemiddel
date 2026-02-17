@@ -5,8 +5,16 @@ import { HjemOgBoligIkon } from '@/app/kategori/ikoner/HjemOgBoligIkon'
 import { SportOgAktivitetIkon } from '@/app/kategori/ikoner/SportOgAktivitetIkon'
 import { SynIkon } from '@/app/kategori/ikoner/SynIkon'
 import { HørselIkon } from '@/app/kategori/ikoner/HorselIkon'
+import { KognisjonIkon } from '@/app/kategori/ikoner/KognisjonIkon'
 
-export type FrontPageCategoryTitles = 'Bevegelse' | 'Hygiene' | 'Bolig' | 'Sport og aktivitet' | 'Syn' | 'Hørsel'
+export type FrontPageCategoryTitles =
+  | 'Bevegelse'
+  | 'Hygiene'
+  | 'Bolig'
+  | 'Sport og aktivitet'
+  | 'Syn'
+  | 'Hørsel'
+  | 'Kognisjon'
 export type TopLevelCategoryTitles = FrontPageCategoryTitles | 'Alle'
 
 type TopLevelCategories = {
@@ -58,6 +66,12 @@ const hørsel: TopLevelCategory = {
   icon: <HørselIkon />,
 }
 
+const kognisjon: TopLevelCategory = {
+  title: 'Kognisjon',
+  description: '',
+  icon: <KognisjonIkon />,
+}
+
 export const topLevelcategories: TopLevelCategories = {
   Bevegelse: bevegelse,
   Hygiene: hygiene,
@@ -66,6 +80,7 @@ export const topLevelcategories: TopLevelCategories = {
   Syn: syn,
   Hørsel: hørsel,
   Alle: alle,
+  Kognisjon: kognisjon,
 }
 export const frontPageCategories: FrontPageCategories = {
   Hørsel: hørsel,
@@ -74,13 +89,17 @@ export const frontPageCategories: FrontPageCategories = {
   Bolig: bolig,
   Hygiene: hygiene,
   'Sport og aktivitet': sportOgAktivitet,
+  Kognisjon: kognisjon,
 }
 
 export const topLevelCategoryTitles: TopLevelCategoryTitles[] = [
   'Bevegelse',
-  'Hygiene',
   'Bolig',
+  'Hygiene',
   'Sport og aktivitet',
+  'Syn',
+  'Hørsel',
+  'Kognisjon',
   'Alle',
 ]
 export const frontPageTitles: FrontPageCategoryTitles[] = [
@@ -90,4 +109,5 @@ export const frontPageTitles: FrontPageCategoryTitles[] = [
   'Sport og aktivitet',
   'Syn',
   'Hørsel',
+  'Kognisjon',
 ]
