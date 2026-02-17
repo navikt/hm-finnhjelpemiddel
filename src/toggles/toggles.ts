@@ -4,17 +4,12 @@ export const EXPECTED_TOGGLES = [
   'finnhjelpemiddel.vis-tilbehor-og-reservedel-lister',
   'finnhjelpemiddel.feilbanner',
   'paaskepynt',
-  'finnhjelpemiddel.link-seksualteknisk-avtale',
   'finnhjelpemiddel.vis-virker-sammen-med-products',
   'finnhjelpemiddel.vis-tjenester-for-avtale',
   'finnhjelpemiddel.avtale-side.komponenttype-gruppering',
 ] as const
 
 export const LOCAL_TOGGLES = [
-  {
-    name: 'finnhjelpemiddel.link-seksualteknisk-avtale',
-    enabled: true,
-  },
   {
     name: 'finnhjelpemiddel.vis-tilbehor-og-reservedel-lister',
     enabled: true,
