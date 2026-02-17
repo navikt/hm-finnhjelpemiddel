@@ -1,8 +1,6 @@
-import { Accordion, Heading, HGrid, HStack, Link, Loader, Show, VStack } from '@navikt/ds-react'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import { Accordion, Heading, HGrid, Link, Show, VStack } from '@navikt/ds-react'
 
 export const OtherAgreements = () => {
-  const { isEnabled, isLoading } = useFeatureFlags()
   const AccordionItems1 = () => {
     return (
       <>
@@ -50,14 +48,6 @@ export const OtherAgreements = () => {
           </Accordion.Content>
         </Accordion.Item>
       </>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <HStack justify="center" style={{ marginTop: '28px' }}>
-        <Loader size="xlarge" title="Laster..." />
-      </HStack>
     )
   }
 
