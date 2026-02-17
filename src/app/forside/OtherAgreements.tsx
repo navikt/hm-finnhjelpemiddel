@@ -37,10 +37,7 @@ export const OtherAgreements = () => {
         <Accordion.Item>
           <Accordion.Header>Høreapparater, ørepropper og tinnitusmaskerere</Accordion.Header>
           <Accordion.Content>
-            Her kan du lese mer om{' '}
-            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-              høreapparater, ørepropper og tinnitusmaskerere.
-            </Link>
+            Her kan du lese mer om <Link href="/horeapparat">høreapparater, ørepropper og tinnitusmaskerere.</Link>
           </Accordion.Content>
         </Accordion.Item>
         {isEnabled('finnhjelpemiddel.link-seksualteknisk-avtale') ? (
@@ -76,12 +73,12 @@ export const OtherAgreements = () => {
   }
 
   return (
-    <VStack paddingBlock={{ xs: "space-36", md: "space-48" }}>
+    <VStack paddingBlock={{ xs: 'space-36', md: 'space-48' }}>
       <Heading size={'medium'} level={'2'} spacing>
         Andre hjelpemiddelavtaler
       </Heading>
       <Show above={'lg'}>
-        <HGrid columns={'1fr 1fr'} gap={"space-32"}>
+        <HGrid columns={'1fr 1fr'} gap={'space-32'}>
           <Accordion>
             <AccordionItems1 />
           </Accordion>
@@ -97,5 +94,5 @@ export const OtherAgreements = () => {
         </Accordion>
       </Show>
     </VStack>
-  );
+  )
 }
