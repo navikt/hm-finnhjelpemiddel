@@ -250,7 +250,7 @@ const FilterModule = ({
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
 }) => {
-  const options = categoryFilters.map((filter) => filter.fieldName)
+  const options = categoryFilters.map((filter) => filter.identifier)
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     options.filter((option) => inputValue.data.filters?.includes(option))

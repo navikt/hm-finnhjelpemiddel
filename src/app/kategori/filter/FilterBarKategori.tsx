@@ -42,14 +42,14 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
         {filters.isos.length > 1 && <CheckboxFilterNew filterMenu={isoFilters} onChange={onChange} />}
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
         {filters.techDataFilterAggs &&
-          filters.techDataFilterAggs.entries().map(([key, value]) => {
+          Array.from(filters.techDataFilterAggs.entries()).map(([key, value]) => {
             const filter = value.filter
 
             if (filter.filterDataType === FilterDataType.minMax) {
-              return <MinMaxFilter key={key} filterMenu={{ name: key, options: value }} />
+              return <MinMaxFilter key={key} filterMenu={{ name: value.filter.fieldLabel, options: value }} />
             } else if (filter.filterDataType === FilterDataType.singleField) {
               const filterMenu = {
-                name: { key: filter.searchParamName, label: filter.fieldName, paramKey: filter.searchParamName },
+                name: { key: filter.searchParamName, label: filter.identifier, paramKey: filter.searchParamName },
                 options: value.values.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
               }
               return <CheckboxFilterNew key={key} filterMenu={filterMenu} onChange={onChange} />

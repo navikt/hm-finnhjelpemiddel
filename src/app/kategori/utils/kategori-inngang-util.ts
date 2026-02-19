@@ -35,10 +35,11 @@ export type ProductsWithIsoAggs = {
 }
 
 export type CategoryFilter = {
-  fieldName: string
+  identifier: string //identifier
+  fieldLabel: string
   searchParamName: string
   filterDataType: FilterDataType
-  searchFields: string | MinMaxFields
+  openSearchFields: string | MinMaxFields
 }
 
 export interface MinMaxFields {
@@ -51,30 +52,39 @@ export enum FilterDataType {
   minMax,
 }
 
+export enum FilterComponentType {
+  dropdown,
+  range,
+}
+
 export const categoryFilters: CategoryFilter[] = [
   {
-    fieldName: 'Setebredde',
+    identifier: 'Setebredde min/maks',
+    fieldLabel: 'Setebredde',
     searchParamName: 'Setebredde',
     filterDataType: FilterDataType.minMax,
-    searchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+    openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
   },
   {
-    fieldName: 'Setedybde',
+    identifier: 'Setedybde min/maks',
+    fieldLabel: 'Setedybde',
     searchParamName: 'Setedybde',
     filterDataType: FilterDataType.minMax,
-    searchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
+    openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
   },
   {
-    fieldName: 'Setehøyde',
+    identifier: 'Setehøyde min/maks',
+    fieldLabel: 'Setehøyde',
     searchParamName: 'Setehoyde',
     filterDataType: FilterDataType.minMax,
-    searchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
+    openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
   },
   {
-    fieldName: 'Brukervekt maks',
+    identifier: 'Brukervekt maks',
+    fieldLabel: 'Brukervekt maks',
     searchParamName: 'BrukervektMaks',
     filterDataType: FilterDataType.singleField,
-    searchFields: 'brukervektMaksKG',
+    openSearchFields: 'brukervektMaksKG',
   },
 ]
 
@@ -105,7 +115,7 @@ export const fetchProductsKategori = async ({
   const postFilters: Array<{ key: string; filter: any }> = []
 
   const techDataFilters = categoryFilters.filter((categoryFilter) =>
-    filtersFromAdmin.includes(categoryFilter.fieldName)
+    filtersFromAdmin.includes(categoryFilter.identifier)
   )
 
   if (searchParams.has('iso')) {
@@ -120,10 +130,10 @@ export const fetchProductsKategori = async ({
     if (searchParams.has(filter.searchParamName)) {
       if (filter.filterDataType === FilterDataType.minMax) {
         const searchValue = searchParams.get(filter.searchParamName) ?? ''
-        const searchFields = filter.searchFields as MinMaxFields
+        const searchFields = filter.openSearchFields as MinMaxFields
 
         postFilters.push({
-          key: filter.fieldName,
+          key: filter.identifier,
           filter: filterMinMaxCategory(
             { key: searchFields.min, value: searchValue },
             { key: searchFields.max, value: searchValue }
@@ -131,8 +141,8 @@ export const fetchProductsKategori = async ({
         })
       } else if (filter.filterDataType === FilterDataType.singleField) {
         const searchValue = searchParams.getAll(filter.searchParamName)
-        const searchField = filter.searchFields as string
-        postFilters.push({ key: filter.fieldName, filter: filterSingleFieldCategory(searchField, searchValue) })
+        const searchField = filter.openSearchFields as string
+        postFilters.push({ key: filter.identifier, filter: filterSingleFieldCategory(searchField, searchValue) })
       }
     }
   })
@@ -184,14 +194,14 @@ export const fetchProductsKategori = async ({
     ...techDataFilters
       .map((filter) => {
         if (filter.filterDataType === FilterDataType.minMax) {
-          const searchFields = filter.searchFields as MinMaxFields
+          const searchFields = filter.openSearchFields as MinMaxFields
           return [
-            techDataAggs(filter.fieldName, searchFields.min, `filters.${searchFields.min}`),
-            techDataAggs(filter.fieldName, searchFields.max, `filters.${searchFields.max}`),
+            techDataAggs(filter.identifier, searchFields.min, `filters.${searchFields.min}`),
+            techDataAggs(filter.identifier, searchFields.max, `filters.${searchFields.max}`),
           ]
         } else if (filter.filterDataType === FilterDataType.singleField) {
-          const searchField = filter.searchFields as string
-          return [techDataAggs(filter.fieldName, searchField, `filters.${searchField}`)]
+          const searchField = filter.openSearchFields as string
+          return [techDataAggs(filter.identifier, searchField, `filters.${searchField}`)]
         }
       })
       .flat()
@@ -321,20 +331,20 @@ const mapTechDataFilterAggregations = (
 
   techDataFilters.forEach((filter) => {
     if (filter.filterDataType === FilterDataType.minMax) {
-      const searchFields = filter.searchFields as MinMaxFields
+      const searchFields = filter.openSearchFields as MinMaxFields
 
       const minValues = aggMap.get(searchFields.min)?.values.buckets.map((bucket) => bucket.key.toString())
       const maxValues = aggMap.get(searchFields.max)?.values.buckets.map((bucket) => bucket.key.toString())
 
       if (!!minValues || !!maxValues) {
-        map.set(filter.fieldName, { filter: filter, values: [...minValues!, ...maxValues!] })
+        map.set(filter.identifier, { filter: filter, values: [...minValues!, ...maxValues!] })
       }
     } else if (filter.filterDataType === FilterDataType.singleField) {
-      const searchField = filter.searchFields as string
+      const searchField = filter.openSearchFields as string
       const values = aggMap.get(searchField)?.values.buckets.map((bucket) => bucket.key.toString())
 
       if (!!values) {
-        map.set(filter.fieldName, { filter: filter, values: values })
+        map.set(filter.identifier, { filter: filter, values: values })
       }
     }
   })
