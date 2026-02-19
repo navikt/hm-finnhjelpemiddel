@@ -95,17 +95,18 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
     >
       <>
         {showSearch && (
-          <Search
-            className="checkbox-filter__search"
-            label={`Søk etter filter i ${filterKey}`}
-            hideLabel
-            variant="simple"
-            size="small"
-            aria-controls="filters"
-            clearButton={true}
-            value={searchFilterTerm}
-            onChange={(value) => handleSearch(value)}
-          />
+          <div className="checkbox-filter__search">
+            <Search
+              label={`Søk etter filter i ${filterKey}`}
+              hideLabel
+              variant="simple"
+              size="small"
+              aria-controls="filters"
+              clearButton={true}
+              value={searchFilterTerm}
+              onChange={(value) => handleSearch(value)}
+            />
+          </div>
         )}
 
         <Controller
@@ -144,10 +145,10 @@ export const CheckboxFilter = ({ filter, showSearch = false, openByDefault = und
                   </>
                 )}
               </CheckboxGroup>
-            );
+            )
           }}
         />
       </>
     </ShowMore>
-  );
+  )
 }
