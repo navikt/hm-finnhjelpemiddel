@@ -39,6 +39,7 @@ export type CategoryFilter = {
   fieldLabel: string
   searchParamName: string
   filterDataType: FilterDataType
+  filterComponentType: FilterComponentType
   openSearchFields: string | MinMaxFields
 }
 
@@ -63,6 +64,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Setebredde',
     searchParamName: 'Setebredde',
     filterDataType: FilterDataType.minMax,
+    filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
   },
   {
@@ -70,6 +72,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Setedybde',
     searchParamName: 'Setedybde',
     filterDataType: FilterDataType.minMax,
+    filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
   },
   {
@@ -77,15 +80,19 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Setehøyde',
     searchParamName: 'Setehoyde',
     filterDataType: FilterDataType.minMax,
+    filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
   },
+  /*
   {
     identifier: 'Brukervekt maks',
     fieldLabel: 'Brukervekt maks',
     searchParamName: 'BrukervektMaks',
     filterDataType: FilterDataType.singleField,
+    filterComponentType: FilterComponentType.range,
     openSearchFields: 'brukervektMaksKG',
   },
+   */
 ]
 
 type FetchProps = {
