@@ -46,14 +46,14 @@ function FrontPage() {
   )
 
   return (
-    <VStack className={styles.container} paddingInline={{ xs: "space-16", md: "space-48" }} gap={{ xs: "space-48", md: "space-64" }}>
+    <VStack className={styles.container} paddingInline={{ xs: "space-16", md: "space-48" }} gap={{ xs: "space-24", md: "space-32" }}>
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <HGrid
           className={styles.heroContentContainer}
           columns={{ sm: 1, md: 2 }}
           align={'center'}
           gap={"space-32"}
-          marginBlock={{ xs: "space-40", md: "space-80" }}
+          marginBlock={{ xs: "space-20", md: "space-40" }}
         >
           <VStack gap={{ xs: "space-32", md: "space-44" }} maxWidth={'490px'} style={{ gridArea: 'box1' }}>
             <Heading level="1" size="large">
