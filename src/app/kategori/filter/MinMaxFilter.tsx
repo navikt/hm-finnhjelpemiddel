@@ -28,8 +28,10 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
   const filterLabel = name
 
   const hasSearchParam = searchParams.get(options.filter.searchParamName)
-  const [inputValueFrom, setInputValueFrom] = useState(hasSearchParam ?? '')
-  const [inputValueTo, setInputValueTo] = useState(hasSearchParam ?? '')
+  const searchParamFrom = hasSearchParam?.split(':')[0]
+  const searchParamTo = hasSearchParam?.split(':')[1]
+  const [inputValueFrom, setInputValueFrom] = useState(searchParamFrom ?? '')
+  const [inputValueTo, setInputValueTo] = useState(searchParamTo ?? '')
 
   const onChange = (valueFrom: string, valueTo: string) => {
     const fromToValue = valueFrom === '' && valueTo === '' ? '' : `${valueFrom}:${valueTo}`
