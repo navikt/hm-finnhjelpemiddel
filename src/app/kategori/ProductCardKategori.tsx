@@ -23,20 +23,20 @@ export const ProductCardKategori = ({
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   const searchParams = useSearchParams()
-  const linkToProduct = `/produkt/${product.id}?${searchParams}`
+  const linkToProduct = `/produkt/${product.id}`
 
   const currentRank = rank ? rank : minRank
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: "space-8", md: "space-16" }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack justify={'space-between'} height={'100%'} gap={"space-8"}>
+    <Box padding={{ xs: 'space-8', md: 'space-16' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
+      <VStack justify={'space-between'} height={'100%'} gap={'space-8'}>
         <VStack>
-          <HStack paddingBlock={{ xs: "space-0", md: "space-0 space-16" }} align={'center'} justify={'space-between'}>
+          <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
-                <SuccessTag>På avtale</SuccessTag>
-/*              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>*/
+              <SuccessTag>På avtale</SuccessTag>
             ) : (
+              /*              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>*/
               <NeutralTag>Ikke på avtale</NeutralTag>
             )}
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
@@ -50,11 +50,11 @@ export const ProductCardKategori = ({
           </Link>
         </VStack>
 
-        <VStack gap={{ xs: "space-4", md: "space-16" }}>
+        <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
           <BodyShort size="small">{product.supplierName}</BodyShort>
           {variantCount > 1 && <BodyShort size={'small'}>{variantCount}</BodyShort>}
         </VStack>
       </VStack>
     </Box>
-  );
+  )
 }
