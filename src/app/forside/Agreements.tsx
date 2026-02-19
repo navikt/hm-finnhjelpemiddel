@@ -1,12 +1,12 @@
 'use client'
-import { useMemo, useRef, useState, useEffect } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
 import { getAgreementLabels } from '@/utils/api-util'
 import { sortAlphabetically } from '@/utils/sort-util'
 import { logUmamiFavoriteAgreementEvent } from '@/utils/umami'
-import { StarFillIcon, StarIcon } from '@navikt/aksel-icons'
-import { Box, Heading, HGrid, HStack, Link, VStack, Tabs, Loader } from '@navikt/ds-react'
+import { StarFillIcon } from '@navikt/aksel-icons'
+import { Box, Heading, HGrid, HStack, Link, Loader, Tabs, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import styles from './Agreements.module.scss'
 import { useAgreementFavorites } from '@/hooks/useAgreementFavorites'
@@ -77,8 +77,8 @@ const Agreements = () => {
   return (
     <>
       <Toast message={toastMessage} icon={toastIcon} />
-      <VStack gap="space-16" paddingInline={{ lg: "space-24" }}>
-        <Heading level="2" size="medium">
+      <VStack gap="space-16" paddingInline={{ lg: 'space-24' }}>
+        <Heading level="2" size="large">
           Hjelpemidler på avtale med Nav
         </Heading>
 
@@ -184,7 +184,7 @@ const Agreements = () => {
         )}
       </VStack>
     </>
-  );
+  )
 }
 
 const AgreementRow = ({
@@ -223,7 +223,7 @@ const AgreementRow = ({
         </HStack>
       </HGrid>
     </Box>
-  );
+  )
 }
 
 export default Agreements
