@@ -249,7 +249,14 @@ const FilterModule = ({
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
 }) => {
-  const options = ['Setebredde', 'Setedybde', 'Setehøyde']
+  const options = [
+    'Setebredde',
+    'Setebredde min/maks',
+    'Setedybde',
+    'Setedybde min/maks',
+    'Setehøyde',
+    'Setehøyde min/maks',
+  ]
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     options.filter((option) => inputValue.data.filters?.includes(option))
