@@ -28,21 +28,24 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
   const filterLabel = name
 
   const hasSearchParam = searchParams.get(options.filter.searchParamName)
-  const [inputValue, setInputValue] = useState(hasSearchParam ?? '')
+  const [inputValueFrom, setInputValueFrom] = useState(hasSearchParam ?? '')
+  const [inputValueTo, setInputValueTo] = useState(hasSearchParam ?? '')
 
-  const onChange = (value: string) => {
-    const newSearchParams = createQueryStringForMinMax(options.filter.searchParamName, value)
+  const onChange = (valueFrom: string, valueTo: string) => {
+    const fromToValue = valueFrom === '' && valueTo === '' ? '' : `${valueFrom}:${valueTo}`
+    const newSearchParams = createQueryStringForMinMax(options.filter.searchParamName, fromToValue)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const setValue = () => {
     menuTriggerRef?.current?.click()
-    onChange(inputValue)
+    onChange(inputValueFrom, inputValueTo)
   }
 
   const onReset = () => {
-    setInputValue('')
-    onChange('')
+    setInputValueFrom('')
+    setInputValueTo('')
+    onChange('', '')
   }
 
   return (
@@ -66,13 +69,24 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
         )}
         <HStack gap={'space-8'}>
           <TextField
-            label={filterLabel}
-            hideLabel
+            label="Fra"
             inputMode={'numeric'}
             size={'small'}
             min={0}
-            defaultValue={inputValue}
-            onChange={(event) => setInputValue(event.currentTarget.value)}
+            defaultValue={inputValueFrom}
+            onChange={(event) => setInputValueFrom(event.currentTarget.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') setValue()
+            }}
+            style={{ width: '80px' }}
+          />
+          <TextField
+            label="Til"
+            inputMode={'numeric'}
+            size={'small'}
+            min={0}
+            defaultValue={inputValueTo}
+            onChange={(event) => setInputValueTo(event.currentTarget.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') setValue()
             }}

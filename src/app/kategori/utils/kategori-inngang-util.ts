@@ -136,14 +136,14 @@ export const fetchProductsKategori = async ({
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
       if (filter.filterDataType === FilterDataType.minMax) {
-        const searchValue = searchParams.get(filter.searchParamName) ?? ''
+        const searchValue = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
         const searchFields = filter.openSearchFields as MinMaxFields
 
         postFilters.push({
           key: filter.identifier,
           filter: filterMinMaxCategory(
-            { key: searchFields.min, value: searchValue },
-            { key: searchFields.max, value: searchValue }
+            { key: searchFields.min, value: searchValue[0] },
+            { key: searchFields.max, value: searchValue[1] }
           ),
         })
       } else if (filter.filterDataType === FilterDataType.singleField) {
