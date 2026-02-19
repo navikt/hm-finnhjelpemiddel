@@ -99,7 +99,7 @@ const IsoModule = ({
     if (isoFieldValue != '') {
       setInputValue({
         ...inputValue,
-        data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), isoFieldValue] },
+        data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), isoFieldValue.trim()] },
       })
       setIsoFieldValue('')
     }
