@@ -44,12 +44,6 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
     onChange(inputValueFrom, inputValueTo)
   }
 
-  const onReset = () => {
-    setInputValueFrom('')
-    setInputValueTo('')
-    onChange('', '')
-  }
-
   return (
     <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>
       <ActionMenu.Trigger ref={menuTriggerRef}>
@@ -64,12 +58,7 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
         </Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
-        {hasSearchParam && (
-          <ActionMenu.Item variant={'danger'} icon={<TrashIcon />} onSelect={onReset}>
-            Fjern filter
-          </ActionMenu.Item>
-        )}
-        <HStack gap={'space-8'}>
+        <HStack gap={'space-8'} align={'end'}>
           <TextField
             label="Fra"
             inputMode={'numeric'}
@@ -94,7 +83,7 @@ export const MinMaxFilter = ({ filterMenu }: Props) => {
             }}
             style={{ width: '80px' }}
           />
-          <Button variant={'tertiary'} size={'xsmall'} onClick={setValue}>
+          <Button variant={'primary'} size={'small'} onClick={setValue}>
             Bruk
           </Button>
         </HStack>
