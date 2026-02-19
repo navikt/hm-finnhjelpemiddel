@@ -34,7 +34,8 @@ export const ProductCardKategori = ({
         <VStack>
           <HStack paddingBlock={{ xs: "space-0", md: "space-0 space-16" }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
-              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>
+                <SuccessTag>På avtale</SuccessTag>
+/*              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>*/
             ) : (
               <NeutralTag>Ikke på avtale</NeutralTag>
             )}

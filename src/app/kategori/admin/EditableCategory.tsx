@@ -100,7 +100,7 @@ const IsoModule = ({
     if (isoFieldValue != '') {
       setInputValue({
         ...inputValue,
-        data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), isoFieldValue] },
+        data: { ...inputValue.data, isos: [...(inputValue.data.isos ?? []), isoFieldValue.trim()] },
       })
       setIsoFieldValue('')
     }
@@ -226,7 +226,7 @@ const SubCategoriesModule = ({
       </VStack>
       {selectedOptions && selectedOptions.length > 0 && (
         <Switch
-          checked={inputValue.data.showSubCategoryIcons || true}
+          checked={!!inputValue.data.showSubCategoryIcons}
           onChange={(event) =>
             setInputValue({
               ...inputValue,
@@ -250,7 +250,14 @@ const FilterModule = ({
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
 }) => {
-  const options = categoryFilters.map((filter) => filter.identifier)
+  const options = [
+    'Setebredde',
+    'Setebredde min/maks',
+    'Setedybde',
+    'Setedybde min/maks',
+    'Setehøyde',
+    'Setehøyde min/maks',
+  ]
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     options.filter((option) => inputValue.data.filters?.includes(option))

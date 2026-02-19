@@ -1,8 +1,6 @@
-import { Accordion, Heading, HGrid, HStack, Link, Loader, Show, VStack } from '@navikt/ds-react'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import { Accordion, Heading, HGrid, Link, Show, VStack } from '@navikt/ds-react'
 
 export const OtherAgreements = () => {
-  const { isEnabled, isLoading } = useFeatureFlags()
   const AccordionItems1 = () => {
     return (
       <>
@@ -37,51 +35,29 @@ export const OtherAgreements = () => {
         <Accordion.Item>
           <Accordion.Header>Høreapparater, ørepropper og tinnitusmaskerere</Accordion.Header>
           <Accordion.Content>
+            Her kan du lese mer om <Link href="/horeapparat">høreapparater, ørepropper og tinnitusmaskerere.</Link>
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item>
+          <Accordion.Header>Hjelpemidler for seksuallivet</Accordion.Header>
+          <Accordion.Content>
             Her kan du lese mer om{' '}
-            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-              høreapparater, ørepropper og tinnitusmaskerere.
+            <Link href={`/rammeavtale/hjelpemidler/768b68d7-9e3a-4865-983e-09b47ecc6a2c`}>
+              hjelpemidler for seksuallivet
             </Link>
           </Accordion.Content>
         </Accordion.Item>
-        {isEnabled('finnhjelpemiddel.link-seksualteknisk-avtale') ? (
-          <Accordion.Item>
-            <Accordion.Header>Hjelpemidler for seksuallivet</Accordion.Header>
-            <Accordion.Content>
-              Her kan du lese mer om{' '}
-              <Link href={`/rammeavtale/hjelpemidler/768b68d7-9e3a-4865-983e-09b47ecc6a2c`}>
-                hjelpemidler for seksuallivet
-              </Link>
-            </Accordion.Content>
-          </Accordion.Item>
-        ) : (
-          <Accordion.Item>
-            <Accordion.Header>Hjelpemidler for seksuallivet</Accordion.Header>
-            <Accordion.Content>
-              <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
-                hjelpemidler for seksuallivet
-              </Link>
-            </Accordion.Content>
-          </Accordion.Item>
-        )}
       </>
     )
   }
 
-  if (isLoading) {
-    return (
-      <HStack justify="center" style={{ marginTop: '28px' }}>
-        <Loader size="xlarge" title="Laster..." />
-      </HStack>
-    )
-  }
-
   return (
-    <VStack paddingBlock={{ xs: "space-36", md: "space-48" }}>
+    <VStack paddingBlock={{ xs: 'space-36', md: 'space-48' }}>
       <Heading size={'medium'} level={'2'} spacing>
         Andre hjelpemiddelavtaler
       </Heading>
       <Show above={'lg'}>
-        <HGrid columns={'1fr 1fr'} gap={"space-32"}>
+        <HGrid columns={'1fr 1fr'} gap={'space-32'}>
           <Accordion>
             <AccordionItems1 />
           </Accordion>
@@ -97,5 +73,5 @@ export const OtherAgreements = () => {
         </Accordion>
       </Show>
     </VStack>
-  );
+  )
 }

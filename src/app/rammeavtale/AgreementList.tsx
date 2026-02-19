@@ -88,7 +88,12 @@ const AgreementList = () => {
 
   return (
     <VStack gap="space-16">
-      <HGrid columns={{ xs: '1', lg: '4fr 1fr 1fr' }} gap="space-8" align="center" className="agreement-page__list-header">
+      <HGrid
+        columns={{ xs: '1', lg: '4fr 1fr 1fr' }}
+        gap="space-8"
+        align="center"
+        className="agreement-page__list-header"
+      >
         <Heading level="2" size="medium">
           På avtale med Nav
         </Heading>
@@ -189,19 +194,17 @@ const AgreementList = () => {
             <Link href="https://www.nav.no/servicehund">Servicehund</Link>
           </li>
           <li>
-            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8734&x_newstype=7">
-              Høreapparat, ørepropper og tinnitusmaskerere
-            </Link>
+            <Link href="/horeapparat">Høreapparat, ørepropper og tinnitusmaskerere</Link>
           </li>
           <li>
-            <Link href="https://www.hjelpemiddeldatabasen.no/news.asp?newsid=8669&x_newstype=7">
+            <Link href="/rammeavtale/hjelpemidler/768b68d7-9e3a-4865-983e-09b47ecc6a2c">
               Hjelpemidler for seksuallivet
             </Link>
           </li>
         </ul>
       </Alert>
     </VStack>
-  );
+  )
 }
 
 export default AgreementList

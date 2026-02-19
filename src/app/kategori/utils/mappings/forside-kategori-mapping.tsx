@@ -5,14 +5,18 @@ import { HjemOgBoligIkon } from '@/app/kategori/ikoner/HjemOgBoligIkon'
 import { SportOgAktivitetIkon } from '@/app/kategori/ikoner/SportOgAktivitetIkon'
 import { SynIkon } from '@/app/kategori/ikoner/SynIkon'
 import { HørselIkon } from '@/app/kategori/ikoner/HorselIkon'
+import { KognisjonIkon } from '@/app/kategori/ikoner/KognisjonIkon'
+import { KommunikasjonIkon } from '@/app/kategori/ikoner/KommunikasjonsIkon'
 
 export type FrontPageCategoryTitles =
   | 'Bevegelse'
   | 'Hygiene'
-  | 'Hjem og bolig'
+  | 'Bolig'
   | 'Sport og aktivitet'
   | 'Syn'
   | 'Hørsel'
+  | 'Kognisjon'
+  | 'Kommunikasjon'
 export type TopLevelCategoryTitles = FrontPageCategoryTitles | 'Alle'
 
 type TopLevelCategories = {
@@ -42,8 +46,8 @@ const hygiene: TopLevelCategory = {
   description: '',
   icon: <HygieneIkon />,
 }
-const hjemOgBolig: TopLevelCategory = {
-  title: 'Hjem og bolig',
+const bolig: TopLevelCategory = {
+  title: 'Bolig',
   description: '',
   icon: <HjemOgBoligIkon />,
 }
@@ -64,36 +68,57 @@ const hørsel: TopLevelCategory = {
   icon: <HørselIkon />,
 }
 
+const kognisjon: TopLevelCategory = {
+  title: 'Kognisjon',
+  description: '',
+  icon: <KognisjonIkon />,
+}
+
+const kommunikasjon: TopLevelCategory = {
+  title: 'Kommunikasjon',
+  description: '',
+  icon: <KommunikasjonIkon />,
+}
 export const topLevelcategories: TopLevelCategories = {
   Bevegelse: bevegelse,
   Hygiene: hygiene,
-  'Hjem og bolig': hjemOgBolig,
+  Bolig: bolig,
   'Sport og aktivitet': sportOgAktivitet,
   Syn: syn,
   Hørsel: hørsel,
   Alle: alle,
+  Kognisjon: kognisjon,
+  Kommunikasjon: kommunikasjon,
 }
 export const frontPageCategories: FrontPageCategories = {
   Hørsel: hørsel,
   Syn: syn,
   Bevegelse: bevegelse,
-  'Hjem og bolig': hjemOgBolig,
+  Bolig: bolig,
   Hygiene: hygiene,
   'Sport og aktivitet': sportOgAktivitet,
+  Kognisjon: kognisjon,
+  Kommunikasjon: kommunikasjon
 }
 
 export const topLevelCategoryTitles: TopLevelCategoryTitles[] = [
   'Bevegelse',
-  'Hygiene',
-  'Hjem og bolig',
-  'Sport og aktivitet',
-  'Alle',
-]
-export const frontPageTitles: FrontPageCategoryTitles[] = [
-  'Bevegelse',
-  'Hjem og bolig',
+  'Bolig',
   'Hygiene',
   'Sport og aktivitet',
   'Syn',
   'Hørsel',
+  'Kognisjon',
+  'Kommunikasjon',
+  'Alle',
+]
+export const frontPageTitles: FrontPageCategoryTitles[] = [
+  'Bevegelse',
+  'Bolig',
+  'Hygiene',
+  'Sport og aktivitet',
+  'Syn',
+  'Hørsel',
+  'Kognisjon',
+  'Kommunikasjon',
 ]

@@ -12,6 +12,7 @@ import AgreementDescription from './AgreementDescription'
 import DocumentExpansionCard from './DocumentExpansionCard'
 import { CalendarIcon, ChevronRightIcon, DocPencilIcon } from '@navikt/aksel-icons'
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
+import { NotFound } from '@/app/[...not-found]/NotFound'
 
 type Props = {
   params: Promise<{ agreementId: string }>
@@ -33,10 +34,11 @@ export default async function AgreementPage(props: Props) {
   const params = await props.params
   const agreementResponse = await getAgreement(params.agreementId)
   const agreement = mapAgreementFromDoc(agreementResponse)
+  const activeAgreement = agreement.published <= new Date() && agreement.expired >= new Date()
 
   return (
     <>
-      {agreement && (
+      {agreement && activeAgreement ? (
         <VStack
           marginInline={'auto'}
           marginBlock={'space-0'}
@@ -57,6 +59,8 @@ export default async function AgreementPage(props: Props) {
             ))}
           </VStack>
         </VStack>
+      ) : (
+        <NotFound />
       )}
     </>
   )

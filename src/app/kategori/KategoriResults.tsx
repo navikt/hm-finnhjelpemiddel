@@ -5,6 +5,8 @@ import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { ProductCardKategori } from '@/app/kategori/ProductCardKategori'
+import { ChevronDownIcon } from '@navikt/aksel-icons'
+import styles from '@/app/kategori/KategoriResults.module.scss'
 
 export const KategoriResults = ({
   products,
@@ -38,7 +40,7 @@ export const KategoriResults = ({
   return (
     <VStack gap="space-16">
       <HStack
-        gap={{ xs: "space-16", md: "space-20" }}
+        gap={{ xs: 'space-16', md: 'space-20' }}
         id="searchResults"
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
@@ -53,15 +55,18 @@ export const KategoriResults = ({
         ))}
       </HStack>
       {loadMore && !isLoading && (
-        <Button
-          variant="secondary"
-          onClick={() => {
-            loadMore()
-          }}
-        >
-          Vis flere treff
-        </Button>
+        <HStack className={styles.container}>
+          <Button
+            variant="tertiary"
+            size="medium"
+            icon={<ChevronDownIcon aria-hidden />}
+            iconPosition={'right'}
+            onClick={loadMore}
+          >
+            Vis flere treff
+          </Button>
+        </HStack>
       )}
     </VStack>
-  );
+  )
 }
