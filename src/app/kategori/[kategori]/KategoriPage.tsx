@@ -1,21 +1,14 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import React from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
-import { Heading, HGrid, HStack, Skeleton, VStack } from '@navikt/ds-react'
+import { Heading, HGrid, HStack, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
-import {
-  fetchProductsKategori,
-  PAGE_SIZE,
-  ProductsWithIsoAggs,
-  SearchDataKategori,
-  SearchFiltersKategori,
-} from '@/app/kategori/utils/kategori-inngang-util'
-import { isValidSortOrder } from '@/utils/search-state-util'
+import { fetchProductsKategori, PAGE_SIZE, ProductsWithIsoAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
@@ -27,42 +20,7 @@ export const KategoriPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const { createQueryStringAppendRemovePage, createQueryStringForMinMax } = useQueryString()
-
-  const mapSearchParamsKategori = (searchParams: ReadonlyURLSearchParams): SearchDataKategori => {
-    const sortOrderStr = searchParams.get('sortering') || ''
-    const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Rangering'
-
-    const isoCode = searchParams.get('isoCode') ?? ''
-
-    const suppliers = searchParams.getAll('leverandor') ?? ''
-    const isos = searchParams.getAll('iso') ?? ''
-
-    const setebredde = searchParams.get('Setebredde') ?? ''
-    const setedybde = searchParams.get('Setedybde') ?? ''
-    const setehoyde = searchParams.get('Setehoyde') ?? ''
-
-    const filters: SearchFiltersKategori = {
-      suppliers,
-      isos,
-      Setehoyde: setehoyde,
-      Setedybde: setedybde,
-      Setebredde: setebredde,
-    }
-
-    return {
-      sortOrder,
-      isoCode,
-      filters,
-    }
-  }
-
-  const searchData = mapSearchParamsKategori(searchParams)
-
-  useEffect(() => {
-    mapSearchParamsKategori(searchParams)
-  }, [searchParams])
-
+  const { createQueryStringAppend } = useQueryString()
 
   const {
     data: productsData,
@@ -78,8 +36,8 @@ export const KategoriPage = ({ category }: Props) => {
       return {
         from: index * PAGE_SIZE,
         size: PAGE_SIZE,
-        searchData,
-        kategoriIsos: category.data.isos,
+        searchParams,
+        category: category,
       }
     },
     fetchProductsKategori,
@@ -93,7 +51,7 @@ export const KategoriPage = ({ category }: Props) => {
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
-  const measurementFilters = productsData?.at(-1)?.measurementFilters ?? undefined
+  const techDataFilterAggs = productsData?.at(-1)?.techDataFilterAggs
 
   const isEmpty = productsData?.[0]?.products.length === 0
   const isReachingEnd = isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
@@ -109,25 +67,15 @@ export const KategoriPage = ({ category }: Props) => {
       }
     : undefined
 
-  const filters: Filters = { isos, suppliers, measurementFilters }
+  const filters: Filters = { isos, suppliers, techDataFilterAggs }
 
-
-  const onChange = (filterName: string, value: string | string[]) => {
-    const singleValue = Array.isArray(value) ? value[0] : value
+  const onChangeCheckBoxFilter = (filterName: string, value: string) => {
     const paramKeyMap: Record<string, string> = {
       suppliers: 'leverandor',
       isos: 'iso',
     }
     const paramKey = paramKeyMap[filterName] || filterName
-    let newSearchParams: string
-    if (filterName === 'suppliers' || filterName === 'isos') {
-      newSearchParams = createQueryStringAppendRemovePage(paramKey, singleValue)
-    } else {
-      newSearchParams = createQueryStringForMinMax(paramKey, singleValue)
-      const params = new URLSearchParams(newSearchParams)
-      params.delete('page')
-      newSearchParams = params.toString()
-    }
+    const newSearchParams = createQueryStringAppend(paramKey, value)
     setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
@@ -141,18 +89,18 @@ export const KategoriPage = ({ category }: Props) => {
     <KategoriPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
-        <HGrid columns={'374px 4'} gap={"space-16"}>
-          <VStack gap={"space-16"}>
+        <HGrid columns={'374px 4'} gap={'space-16'}>
+          <VStack gap={'space-16'}>
             <Heading level="2" size="medium">
-              {isLoading ?
-                /* <Skeleton variant="text" width="10rem" />*/
+              {isLoading
+                ? /* <Skeleton variant="text" width="10rem" />*/
                   'Viser første '
                 : products
                   ? `Viser første ${products.length}`
                   : `Ingen treff`}
             </Heading>
-            <HStack justify={'space-between'} gap={"space-8"} align={'end'}>
-              <FilterBarKategori filters={filters} onChange={onChange} onReset={onReset} />
+            <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
+              <FilterBarKategori filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
               {/*<SortKategoriResults />*/}
             </HStack>
 
@@ -161,5 +109,5 @@ export const KategoriPage = ({ category }: Props) => {
         </HGrid>
       </>
     </KategoriPageLayout>
-  );
+  )
 }

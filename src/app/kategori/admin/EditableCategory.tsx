@@ -21,6 +21,7 @@ import useSWR from 'swr'
 import NextLink from 'next/link'
 import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
 import Image from 'next/image'
+import { categoryFilters } from '@/app/kategori/utils/kategori-inngang-util'
 
 export const EditableCategory = ({
   inputValue,

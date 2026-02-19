@@ -1,10 +1,9 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
-import { KategoriToggleFilter } from '@/app/kategori/filter/KategoriToggleFilter'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { MinMaxFilter } from '@/app/kategori/filter/MinMaxFilter'
 import styles from './FilterBarKategori.module.scss'
-import { MeasurementInfo } from '@/app/kategori/utils/kategori-inngang-util'
+import { FilterDataType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 
 export type Filters = {
@@ -13,12 +12,12 @@ export type Filters = {
     key: string
     label: string
   }[]
-  ['measurementFilters']?: MeasurementInfo
+  ['techDataFilterAggs']?: TechDataFilterAggs
 }
 
 type Props = {
   filters: Filters
-  onChange: (key: string, value: string | string[]) => void
+  onChange: (key: string, value: string) => void
   onReset: () => void
 }
 
@@ -31,7 +30,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   const isoFilters: FilterMenu = {
     name: { key: 'isos', label: 'Produktkategorier', paramKey: 'iso' },
 
-    options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label)})),
+    options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label) })),
   }
 
   return (
@@ -42,10 +41,20 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
       <HStack gap="space-8" maxWidth={'1214px'}>
         {filters.isos.length > 1 && <CheckboxFilterNew filterMenu={isoFilters} onChange={onChange} />}
         <CheckboxFilterNew filterMenu={supplierFilters} onChange={onChange} />
-        {filters.measurementFilters &&
-          Object.entries(filters.measurementFilters).map(([key, value]) => (
-            <MinMaxFilter key={key} filterMenu={{ name: key, options: value }} />
-          ))}
+        {filters.techDataFilterAggs &&
+          Array.from(filters.techDataFilterAggs.entries()).map(([key, value]) => {
+            const filter = value.filter
+
+            if (filter.filterDataType === FilterDataType.minMax) {
+              return <MinMaxFilter key={key} filterMenu={{ name: value.filter.fieldLabel, options: value }} />
+            } else if (filter.filterDataType === FilterDataType.singleField) {
+              const filterMenu = {
+                name: { key: filter.searchParamName, label: filter.identifier, paramKey: filter.searchParamName },
+                options: value.values.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
+              }
+              return <CheckboxFilterNew key={key} filterMenu={filterMenu} onChange={onChange} />
+            }
+          })}
         <div>
           <Button
             variant={'secondary'}
