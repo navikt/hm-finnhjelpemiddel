@@ -1,9 +1,36 @@
 .container {
-  //box-shadow: var(--a-shadow-medium);
   height: 96px;
   border-radius: 8px;
 }
 
-.iconImage {
-  user-select: none;
+
+.topCardContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  align-items: center;
+}
+
+
+.bottomSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0.5rem 0.5rem 1rem;
+  width: 100%;
+}
+
+.arrowIcon {
+  color: black;
+  width: 1.8rem;
+  height: 1.7rem;
+  flex-shrink: 0;
+  transition: transform .18s ease;
+}
+
+
+.arrowIcon:hover {
+  transform: translateX(6px);
 }
