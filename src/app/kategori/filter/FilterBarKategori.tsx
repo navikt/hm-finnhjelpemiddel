@@ -1,9 +1,9 @@
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
-import { MinMaxFilter } from '@/app/kategori/filter/MinMaxFilter'
+import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
-import { FilterDataType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
+import { FilterComponentType, FilterDataType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 
 export type Filters = {
@@ -45,8 +45,8 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
           Array.from(filters.techDataFilterAggs.entries()).map(([key, value]) => {
             const filter = value.filter
 
-            if (filter.filterDataType === FilterDataType.minMax) {
-              return <MinMaxFilter key={key} filterMenu={{ name: value.filter.fieldLabel, options: value }} />
+            if (filter.filterComponentType === FilterComponentType.range) {
+              return <RangeFilter key={key} filterMenu={{ name: value.filter.fieldLabel, options: value }} />
             } else if (filter.filterDataType === FilterDataType.singleField) {
               const filterMenu = {
                 name: { key: filter.searchParamName, label: filter.identifier, paramKey: filter.searchParamName },

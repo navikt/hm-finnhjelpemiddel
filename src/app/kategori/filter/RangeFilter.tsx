@@ -1,7 +1,7 @@
 import { ActionMenu, Button, HStack, TextField } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useRef, useState } from 'react'
-import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
+import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import styles from './MinMaxFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
 import { TechDataFilterAgg } from '@/app/kategori/utils/kategori-inngang-util'
@@ -15,7 +15,7 @@ type Props = {
   filterMenu: MinMaxMenu
 }
 
-export const MinMaxFilter = ({ filterMenu }: Props) => {
+export const RangeFilter = ({ filterMenu }: Props) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()

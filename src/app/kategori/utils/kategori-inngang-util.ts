@@ -83,7 +83,7 @@ export const categoryFilters: CategoryFilter[] = [
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
   },
-  /*
+
   {
     identifier: 'Brukervekt maks',
     fieldLabel: 'Brukervekt maks',
@@ -92,7 +92,6 @@ export const categoryFilters: CategoryFilter[] = [
     filterComponentType: FilterComponentType.range,
     openSearchFields: 'brukervektMaksKG',
   },
-   */
 ]
 
 type FetchProps = {
@@ -136,20 +135,28 @@ export const fetchProductsKategori = async ({
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
       if (filter.filterDataType === FilterDataType.minMax) {
-        const searchValue = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
+        const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
         const searchFields = filter.openSearchFields as MinMaxFields
 
         postFilters.push({
           key: filter.identifier,
           filter: filterMinMaxCategory(
-            { key: searchFields.min, value: searchValue[0] },
-            { key: searchFields.max, value: searchValue[1] }
+            { key: searchFields.min, value: searchValues[0] },
+            { key: searchFields.max, value: searchValues[1] }
           ),
         })
       } else if (filter.filterDataType === FilterDataType.singleField) {
-        const searchValue = searchParams.getAll(filter.searchParamName)
         const searchField = filter.openSearchFields as string
-        postFilters.push({ key: filter.identifier, filter: filterSingleFieldCategory(searchField, searchValue) })
+        if (filter.filterComponentType === FilterComponentType.range) {
+          const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
+          postFilters.push({
+            key: filter.identifier,
+            filter: filterSingleFieldRangeCategory(searchField, searchValues[0], searchValues[1]),
+          })
+        } else {
+          const searchValue = searchParams.getAll(filter.searchParamName)
+          postFilters.push({ key: filter.identifier, filter: filterSingleFieldCategory(searchField, searchValue) })
+        }
       }
     }
   })
@@ -364,6 +371,34 @@ const filterSingleFieldCategory = (key: string, values: Array<string>) => ({
     should: values.map((value) => ({ term: { [`filters.${key}`]: value } })),
   },
 })
+
+const filterSingleFieldRangeCategory = (key: string, valueFrom: string, valueTo: string) => {
+  const clauses: any[] = []
+  if (valueFrom !== '') {
+    clauses.push({
+      range: {
+        [`filters.${key}`]: {
+          gte: Number(valueFrom),
+        },
+      },
+    })
+  }
+  if (valueTo !== '') {
+    clauses.push({
+      range: {
+        [`filters.${key}`]: {
+          lte: Number(valueTo),
+        },
+      },
+    })
+  }
+
+  return {
+    bool: {
+      must: clauses,
+    },
+  }
+}
 
 const filterMinMaxCategory = (min: { key: string; value: string }, max: { key: string; value: string }) => {
   const keyMin = min.key
