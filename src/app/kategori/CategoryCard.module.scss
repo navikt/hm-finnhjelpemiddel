@@ -7,18 +7,25 @@
 .topCardContainer {
   display: flex;
   flex-direction: column;
-  padding: 0.3rem;
+  padding: 0;
   border-radius: 0.5rem;
   align-items: center;
 }
 
+.iconSvg {
+  width: 50%; /* Adjust to desired smaller size */
+  height: 50%; /* Adjust to desired smaller size */
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
 
 .bottomSection {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0 0.5rem 0.5rem 1rem;
+  padding: 0.5rem;
   width: 100%;
 }
 
