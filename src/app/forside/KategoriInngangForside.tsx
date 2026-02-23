@@ -1,20 +1,10 @@
 'use client'
 
 import { Heading, HGrid, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
-import { getCookie } from '@/app/layoutProvider'
 import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
 import { frontPageCategories, frontPageTitles } from '@/app/kategori/utils/mappings/forside-kategori-mapping'
 
 export const KategoriInngangForside = () => {
-  const [consent] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      return getCookie('finnhjelpemiddel-consent')
-    } else {
-      return 'pending'
-    }
-  })
-
   return (
     <VStack gap={'space-16'}>
       <Heading level={'2'} size={'large'}>
