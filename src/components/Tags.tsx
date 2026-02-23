@@ -11,7 +11,7 @@ export const SuccessTag = ({ title, children, className }: Props) => {
     <Tag
       variant={'success-moderate'}
       size={'small'}
-      style={{ borderRadius: '0.25rem', backgroundColor: '#CCF1D6' }}
+      style={{ borderRadius: '0.25rem', backgroundColor: '#CCF1D6', height: 'fit-content' }}
       title={title}
       className={className}
     >
@@ -25,7 +25,7 @@ export const NeutralTag = ({ title, children }: Props) => {
     <Tag
       variant={'neutral-moderate'}
       size={'small'}
-      style={{ borderRadius: '0.25rem', backgroundColor: '#F0ECF4' }}
+      style={{ borderRadius: '0.25rem', backgroundColor: '#F0ECF4', height: 'fit-content' }}
       title={title}
     >
       {' '}

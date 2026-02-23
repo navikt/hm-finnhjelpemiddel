@@ -11,48 +11,51 @@ import styles from './ProductCardKategori.module.scss'
 
 export const ProductCardKategori = ({
   product,
-  rank,
-  variantCount,
   handleCompareClick,
 }: {
   product: Product
-  rank?: number
-  variantCount: number
   handleCompareClick?: () => void
 }) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
+  const minRankAgreement =
+    product.agreements.length > 0 ? product.agreements.sort((a, b) => a.rank - b.rank)[0] : undefined
+
   const searchParams = useSearchParams()
   const linkToProduct = `/produkt/${product.id}`
 
-  const currentRank = rank ? rank : minRank
-  const onAgreement = currentRank !== Infinity
+  const onAgreement = minRank !== Infinity
 
   return (
     <Box padding={{ xs: 'space-8', md: 'space-16' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack justify={'space-between'} height={'100%'} gap={'space-8'}>
+      <VStack height={'100%'} gap={'space-8'}>
         <VStack>
           <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
-            {onAgreement ? (
-              <SuccessTag>På avtale</SuccessTag>
-            ) : (
-              /*              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>*/
-              <NeutralTag>Ikke på avtale</NeutralTag>
-            )}
+            {onAgreement ? <SuccessTag>På avtale</SuccessTag> : <NeutralTag>Ikke på avtale</NeutralTag>}
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </HStack>
 
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
-          <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
-            <BodyShort weight="semibold">{product.title}</BodyShort>
-          </Link>
+          <VStack gap={'space-4'} paddingBlock={'space-0 space-8'}>
+            <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
+              <BodyShort weight="semibold">{product.title}</BodyShort>
+            </Link>
+            <BodyShort size="small">{product.supplierName}</BodyShort>
+          </VStack>
+          <BodyShort size="small" weight={'semibold'}>
+            {product.isoCategoryTitle}
+          </BodyShort>
         </VStack>
 
         <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
-          <BodyShort size="small">{product.supplierName}</BodyShort>
-          {variantCount > 1 && <BodyShort size={'small'}>{variantCount}</BodyShort>}
+          {minRankAgreement && (
+            <HStack gap={'space-8'} wrap={false} align={'start'}>
+              <SuccessTag>R{minRankAgreement.rank}</SuccessTag>
+              <BodyShort size="small">{minRankAgreement.postTitle}</BodyShort>
+            </HStack>
+          )}
         </VStack>
       </VStack>
     </Box>
