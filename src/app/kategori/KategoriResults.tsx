@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
+import React, { useState } from 'react'
+import { Alert, BodyLong, BodyShort, Button, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { ProductCardKategori } from '@/app/kategori/ProductCardKategori'
@@ -39,6 +39,14 @@ export const KategoriResults = ({
 
   return (
     <VStack gap="space-16">
+      <BodyShort>
+        {isLoading
+          ? /* <Skeleton variant="text" width="10rem" />*/
+            ' '
+          : loadMore
+            ? `Viser første ${products?.length} hjelpemidler`
+            : `Viser ${products?.length} hjelpemidler`}
+      </BodyShort>
       <HStack
         gap={{ xs: 'space-16', md: 'space-20' }}
         id="searchResults"

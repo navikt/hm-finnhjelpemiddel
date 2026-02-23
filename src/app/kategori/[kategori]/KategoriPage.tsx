@@ -3,7 +3,7 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
-import { Heading, HGrid, HStack, VStack } from '@navikt/ds-react'
+import { HGrid, HStack, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
@@ -91,14 +91,6 @@ export const KategoriPage = ({ category }: Props) => {
         <CompareMenu />
         <HGrid columns={'374px 4'} gap={'space-16'}>
           <VStack gap={'space-16'}>
-            <Heading level="2" size="medium">
-              {isLoading
-                ? /* <Skeleton variant="text" width="10rem" />*/
-                  'Viser første '
-                : products
-                  ? `Viser første ${products.length}`
-                  : `Ingen treff`}
-            </Heading>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
               {/*<SortKategoriResults />*/}
