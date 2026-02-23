@@ -18,7 +18,7 @@ export const NewsFeed = () => {
   if (!data || data.length === 0) return null
 
   return (
-    <VStack gap={'space-20'} className={styles.container} paddingInline={{ lg: 'space-24' }}>
+    <VStack gap={'space-20'} className={styles.container}>
       <Heading size={'large'} level={'2'}>
         Aktuelt
       </Heading>
