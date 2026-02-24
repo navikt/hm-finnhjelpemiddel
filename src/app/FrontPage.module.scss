@@ -4,12 +4,9 @@
   max-width: 1280px;
   margin: 0 auto;
 }
-.paddingCenter {
-  padding-inline: $ax-space-96;
-}
 
 .heroContentContainer {
-  @extend .paddingCenter;
+  padding-inline: $ax-space-96;
   grid-template-areas: 'box1 box2';
   justify-content: space-between;
 

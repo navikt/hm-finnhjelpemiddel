@@ -75,12 +75,7 @@ function FrontPage() {
         </HGrid>
       </Bleed>
       <KategoriInngangForside />
-      <HGrid
-        className={styles.paddingCenter}
-        columns={{ xs: 1, lg: '2fr 1fr' }}
-        gap={{ xs: 'space-32', lg: 'space-40' }}
-        align="start"
-      >
+      <HGrid columns={{ xs: 1, lg: '4fr 1fr' }} gap={'space-128'} align="start" paddingBlock={'space-56 space-0'}>
         <Agreements />
         <NewsFeed />
       </HGrid>
