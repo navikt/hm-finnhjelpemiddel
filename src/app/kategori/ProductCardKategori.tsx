@@ -39,7 +39,7 @@ export const ProductCardKategori = ({
           <BodyShort size="small" className={styles.secondaryUppercaseText}>
             {product.isoCategoryTitle}
           </BodyShort>
-          <VStack gap={'space-4'} paddingBlock={'space-0 space-8'}>
+          <VStack gap={'space-4'} paddingBlock={'space-8'}>
             <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
               <BodyShort weight="semibold">{product.title}</BodyShort>
             </Link>
