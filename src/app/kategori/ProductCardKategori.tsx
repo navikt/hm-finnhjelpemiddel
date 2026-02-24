@@ -3,7 +3,6 @@
 import { Product } from '@/utils/product-util'
 import { Bleed, BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
@@ -21,7 +20,6 @@ export const ProductCardKategori = ({
   const minRankAgreement =
     product.agreements.length > 0 ? product.agreements.sort((a, b) => a.rank - b.rank)[0] : undefined
 
-  const searchParams = useSearchParams()
   const linkToProduct = `/produkt/${product.id}`
 
   const onAgreement = minRank !== Infinity
@@ -38,7 +36,9 @@ export const ProductCardKategori = ({
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
-          <BodyShort className={styles.secondaryUppercaseText}>{product.isoCategoryTitle}</BodyShort>
+          <BodyShort size="small" className={styles.secondaryUppercaseText}>
+            {product.isoCategoryTitle}
+          </BodyShort>
           <VStack gap={'space-4'} paddingBlock={'space-0 space-8'}>
             <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
               <BodyShort weight="semibold">{product.title}</BodyShort>
@@ -49,13 +49,20 @@ export const ProductCardKategori = ({
         {minRankAgreement && (
           <Bleed
             className={styles.delKontrakt}
-            reflectivePadding
             marginInline={{ xs: 'space-8', md: 'space-16' }}
-            marginBlock={{ xs: 'space-8', md: 'space-16' }}
+            marginBlock={{ xs: 'space-0 space-8', md: 'space-0 space-16' }}
           >
-            <VStack align={'start'}>
-              <BodyShort className={styles.secondaryUppercaseText}>Rangering {minRankAgreement.rank}</BodyShort>
-              <BodyShort size="small">{minRankAgreement.postTitle}</BodyShort>
+            <VStack
+              align={'start'}
+              paddingBlock={{ xs: 'space-4 space-8', md: 'space-8 space-16' }}
+              paddingInline={{ xs: 'space-8', md: 'space-16' }}
+            >
+              <BodyShort size="small" className={styles.secondaryUppercaseText}>
+                Rangering {minRankAgreement.rank}
+              </BodyShort>
+              <BodyShort size="small" className={styles.secondaryLowercaseText}>
+                {minRankAgreement.postTitle}
+              </BodyShort>
             </VStack>
           </Bleed>
         )}
