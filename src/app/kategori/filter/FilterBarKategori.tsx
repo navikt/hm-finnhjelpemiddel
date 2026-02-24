@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
@@ -25,11 +27,7 @@ type Props = {
 export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
   const searchParams = useSearchParams()
 
-  const hasActiveFilter =
-    searchParams
-      .keys()
-      .filter((param) => param != 'page')
-      .toArray().length > 0
+  const hasActiveFilter = Array.from(searchParams.keys()).filter((param) => param != 'page').length > 0
 
   const supplierFilters: FilterMenu = {
     name: { key: 'suppliers', label: 'Leverandør', paramKey: 'leverandor' },
