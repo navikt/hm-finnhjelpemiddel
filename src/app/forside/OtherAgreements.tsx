@@ -52,7 +52,7 @@ export const OtherAgreements = () => {
   }
 
   return (
-    <VStack paddingBlock={{ xs: 'space-36', md: 'space-48' }}>
+    <VStack paddingBlock={{ md: 'space-48' }}>
       <Heading size={'medium'} level={'2'} spacing>
         Andre hjelpemiddelavtaler
       </Heading>

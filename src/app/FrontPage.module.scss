@@ -11,6 +11,7 @@
   justify-content: space-between;
 
   @media (max-width: $ax-breakpoint-md) {
+    padding-inline: 0;
     grid-template-areas:
       'box2'
       'box1';
@@ -26,5 +27,6 @@
   @media (max-width: $ax-breakpoint-md) {
     justify-self: center;
     top: 0;
+    left: 0;
   }
 }

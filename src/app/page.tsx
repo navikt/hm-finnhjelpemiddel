@@ -48,7 +48,7 @@ function FrontPage() {
     <VStack
       className={styles.container}
       paddingInline={{ xs: 'space-16', md: 'space-48' }}
-      gap={{ xs: 'space-24', md: 'space-32' }}
+      gap={{ xs: 'space-36', md: 'space-32' }}
     >
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <HGrid
@@ -75,7 +75,12 @@ function FrontPage() {
         </HGrid>
       </Bleed>
       <KategoriInngangForside />
-      <HGrid columns={{ xs: 1, lg: '4fr 1fr' }} gap={'space-128'} align="start" paddingBlock={'space-56 space-0'}>
+      <HGrid
+        columns={{ xs: 1, lg: '4fr 1fr' }}
+        gap={{ md: 'space-128' }}
+        align="start"
+        paddingBlock={{ md: 'space-56 space-0' }}
+      >
         <Agreements />
         <NewsFeed />
       </HGrid>
