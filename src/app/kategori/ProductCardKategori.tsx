@@ -1,6 +1,6 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
+import { AgreementInfo, Product } from '@/utils/product-util'
 import { Bleed, BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
@@ -15,13 +15,9 @@ export const ProductCardKategori = ({
   product: Product
   handleCompareClick?: () => void
 }) => {
-  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
-
-  const minRankAgreement =
-    product.agreements.length > 0 ? product.agreements.sort((a, b) => a.rank - b.rank)[0] : undefined
-
   const linkToProduct = `/produkt/${product.id}`
 
+  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
   const onAgreement = minRank !== Infinity
 
   return (
@@ -46,27 +42,45 @@ export const ProductCardKategori = ({
             <BodyShort size="small">{product.supplierName}</BodyShort>
           </VStack>
         </VStack>
-        {minRankAgreement && (
-          <Bleed
-            className={styles.delKontrakt}
-            marginInline={{ xs: 'space-8', md: 'space-16' }}
-            marginBlock={{ xs: 'space-0 space-8', md: 'space-0 space-16' }}
-          >
-            <VStack
-              align={'start'}
-              paddingBlock={{ xs: 'space-4 space-8', md: 'space-8 space-16' }}
-              paddingInline={{ xs: 'space-8', md: 'space-16' }}
-            >
-              <BodyShort size="small" className={styles.secondaryUppercaseText}>
-                Rangering {minRankAgreement.rank}
-              </BodyShort>
-              <BodyShort size="small" className={styles.secondaryLowercaseText}>
-                {minRankAgreement.postTitle}
-              </BodyShort>
-            </VStack>
-          </Bleed>
-        )}
+        {onAgreement && <DelkontraktRank agreements={product.agreements} />}
       </VStack>
     </Box>
+  )
+}
+
+const DelkontraktRank = ({ agreements }: { agreements: AgreementInfo[] }) => {
+  if (agreements.length === 0) {
+    return <></>
+  }
+
+  const minRankAgreement = agreements.sort((a, b) => a.rank - b.rank)[0]
+
+  return (
+    <Bleed
+      className={styles.delKontrakt}
+      marginInline={{ xs: 'space-8', md: 'space-16' }}
+      marginBlock={{ xs: 'space-0 space-8', md: 'space-0 space-16' }}
+    >
+      <VStack
+        align={'start'}
+        paddingBlock={{ xs: 'space-4 space-8', md: 'space-8 space-16' }}
+        paddingInline={{ xs: 'space-8', md: 'space-16' }}
+      >
+        {agreements.length > 1 ? (
+          <BodyShort size="small" className={styles.secondaryUppercaseText}>
+            På flere delkontrakter
+          </BodyShort>
+        ) : (
+          <>
+            <BodyShort size="small" className={styles.secondaryUppercaseText}>
+              Rangering {minRankAgreement.rank}
+            </BodyShort>
+            <BodyShort size="small" className={styles.secondaryLowercaseText}>
+              {minRankAgreement.postTitle}
+            </BodyShort>
+          </>
+        )}
+      </VStack>
+    </Bleed>
   )
 }
