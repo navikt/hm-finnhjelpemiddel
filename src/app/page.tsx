@@ -5,7 +5,6 @@ import { useCallback, useEffect } from 'react'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { Bleed, Box, Heading, HGrid, VStack } from '@navikt/ds-react'
-import KontaktOss from '@/app/forside/KontaktOss'
 import FinnHjelpemiddelLogo from '@/app/forside/FinnHjelpemiddelLogo'
 import Agreements from '@/app/forside/Agreements'
 import { NewsFeed } from '@/app/forside/NewsFeed'
@@ -46,16 +45,20 @@ function FrontPage() {
   )
 
   return (
-    <VStack className={styles.container} paddingInline={{ xs: "space-16", md: "space-48" }} gap={{ xs: "space-24", md: "space-32" }}>
+    <VStack
+      className={styles.container}
+      paddingInline={{ xs: 'space-16', md: 'space-48' }}
+      gap={{ xs: 'space-24', md: 'space-32' }}
+    >
       <Bleed marginInline="full" reflectivePadding style={{ backgroundColor: '#F5F9FF' }}>
         <HGrid
           className={styles.heroContentContainer}
           columns={{ sm: 1, md: 2 }}
           align={'center'}
-          gap={"space-32"}
-          marginBlock={{ xs: "space-20", md: "space-40" }}
+          gap={'space-32'}
+          marginBlock={{ xs: 'space-20', md: 'space-40' }}
         >
-          <VStack gap={{ xs: "space-32", md: "space-44" }} maxWidth={'490px'} style={{ gridArea: 'box1' }}>
+          <VStack gap={{ xs: 'space-32', md: 'space-44' }} maxWidth={'490px'} style={{ gridArea: 'box1' }}>
             <Heading level="1" size="large">
               Her kan du finne hjelpemidler på det norske markedet
             </Heading>
@@ -72,7 +75,7 @@ function FrontPage() {
         </HGrid>
       </Bleed>
       <KategoriInngangForside />
-      <HGrid columns={{ xs: 1, lg: '2fr 1fr' }} gap={{ xs: "space-32", lg: "space-40" }} align="start">
+      <HGrid columns={{ xs: 1, lg: '4fr 1fr' }} gap={'space-128'} align="start" paddingBlock={'space-56 space-0'}>
         <Agreements />
         <NewsFeed />
       </HGrid>
@@ -80,7 +83,7 @@ function FrontPage() {
         <OtherAgreements />
       </Bleed>
     </VStack>
-  );
+  )
 }
 
 export default FrontPage
