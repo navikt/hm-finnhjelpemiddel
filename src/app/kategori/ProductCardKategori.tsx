@@ -1,7 +1,7 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
+import { Bleed, BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
@@ -38,25 +38,27 @@ export const ProductCardKategori = ({
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
+          <BodyShort className={styles.secondaryUppercaseText}>{product.isoCategoryTitle}</BodyShort>
           <VStack gap={'space-4'} paddingBlock={'space-0 space-8'}>
             <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
               <BodyShort weight="semibold">{product.title}</BodyShort>
             </Link>
             <BodyShort size="small">{product.supplierName}</BodyShort>
           </VStack>
-          <BodyShort size="small" weight={'semibold'}>
-            {product.isoCategoryTitle}
-          </BodyShort>
         </VStack>
-
-        <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
-          {minRankAgreement && (
-            <HStack gap={'space-8'} wrap={false} align={'start'}>
-              <SuccessTag>R{minRankAgreement.rank}</SuccessTag>
+        {minRankAgreement && (
+          <Bleed
+            className={styles.delKontrakt}
+            reflectivePadding
+            marginInline={{ xs: 'space-8', md: 'space-16' }}
+            marginBlock={{ xs: 'space-8', md: 'space-16' }}
+          >
+            <VStack align={'start'}>
+              <BodyShort className={styles.secondaryUppercaseText}>Rangering {minRankAgreement.rank}</BodyShort>
               <BodyShort size="small">{minRankAgreement.postTitle}</BodyShort>
-            </HStack>
-          )}
-        </VStack>
+            </VStack>
+          </Bleed>
+        )}
       </VStack>
     </Box>
   )
