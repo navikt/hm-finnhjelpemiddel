@@ -5,6 +5,7 @@ import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
 import { FilterComponentType, FilterDataType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
+import { useSearchParams } from 'next/navigation'
 
 export type Filters = {
   ['suppliers']: string[]
@@ -22,6 +23,14 @@ type Props = {
 }
 
 export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
+  const searchParams = useSearchParams()
+
+  const hasActiveFilter =
+    searchParams
+      .keys()
+      .filter((param) => param != 'page')
+      .toArray().length > 0
+
   const supplierFilters: FilterMenu = {
     name: { key: 'suppliers', label: 'Leverandør', paramKey: 'leverandor' },
     options: filters.suppliers,
@@ -55,7 +64,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
               return <CheckboxFilterNew key={key} filterMenu={filterMenu} onChange={onChange} />
             }
           })}
-        <div>
+        {hasActiveFilter && (
           <Button
             variant={'secondary'}
             size={'small'}
@@ -67,7 +76,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
           >
             Nullstill
           </Button>
-        </div>
+        )}
       </HStack>
     </VStack>
   )

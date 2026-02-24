@@ -41,8 +41,7 @@ export const KategoriResults = ({
     <VStack gap="space-16">
       <BodyShort>
         {isLoading
-          ? /* <Skeleton variant="text" width="10rem" />*/
-            ' '
+          ? 'Viser '
           : loadMore
             ? `Viser første ${products?.length} hjelpemidler`
             : `Viser ${products?.length} hjelpemidler`}
