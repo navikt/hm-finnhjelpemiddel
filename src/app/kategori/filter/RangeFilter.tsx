@@ -61,7 +61,7 @@ export const RangeFilter = ({ filterMenu }: Props) => {
         </Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
-        <HStack gap={'space-8'} align={'end'}>
+        <HStack gap={'space-8'} align={'end'} padding={'space-8'}>
           <TextField
             label={fromLabel}
             inputMode={'numeric'}
