@@ -77,7 +77,7 @@ const Agreements = () => {
   return (
     <>
       <Toast message={toastMessage} icon={toastIcon} />
-      <VStack gap="space-16" paddingInline={{ lg: 'space-24' }}>
+      <VStack gap="space-16">
         <Heading level="2" size="large">
           Hjelpemidler på avtale med Nav
         </Heading>

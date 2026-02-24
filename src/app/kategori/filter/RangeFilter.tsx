@@ -2,7 +2,7 @@ import { ActionMenu, Button, HStack, TextField } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useRef, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import styles from './MinMaxFilter.module.scss'
+import styles from './RangeFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
 import { TechDataFilterAgg } from '@/app/kategori/utils/kategori-inngang-util'
 
@@ -44,6 +44,9 @@ export const RangeFilter = ({ filterMenu }: Props) => {
     onChange(inputValueFrom, inputValueTo)
   }
 
+  const fromLabel = options.filter.unit ? `Fra (${options.filter.unit})` : 'Fra'
+  const toLabel = options.filter.unit ? `Til (${options.filter.unit})` : 'Til'
+
   return (
     <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>
       <ActionMenu.Trigger ref={menuTriggerRef}>
@@ -58,9 +61,9 @@ export const RangeFilter = ({ filterMenu }: Props) => {
         </Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content className={styles.filterMenu}>
-        <HStack gap={'space-8'} align={'end'}>
+        <HStack gap={'space-8'} align={'end'} padding={'space-8'}>
           <TextField
-            label="Fra"
+            label={fromLabel}
             inputMode={'numeric'}
             size={'small'}
             min={0}
@@ -72,7 +75,7 @@ export const RangeFilter = ({ filterMenu }: Props) => {
             style={{ width: '80px' }}
           />
           <TextField
-            label="Til"
+            label={toLabel}
             inputMode={'numeric'}
             size={'small'}
             min={0}

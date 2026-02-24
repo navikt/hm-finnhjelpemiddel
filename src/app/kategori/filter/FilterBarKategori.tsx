@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
@@ -5,6 +7,7 @@ import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
 import { FilterComponentType, FilterDataType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
+import { useSearchParams } from 'next/navigation'
 
 export type Filters = {
   ['suppliers']: string[]
@@ -22,13 +25,17 @@ type Props = {
 }
 
 export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
+  const searchParams = useSearchParams()
+
+  const hasActiveFilter = Array.from(searchParams.keys()).filter((param) => param != 'page').length > 0
+
   const supplierFilters: FilterMenu = {
-    name: { key: 'suppliers', label: 'Leverandører', paramKey: 'leverandor' },
+    name: { key: 'suppliers', label: 'Leverandør', paramKey: 'leverandor' },
     options: filters.suppliers,
   }
 
   const isoFilters: FilterMenu = {
-    name: { key: 'isos', label: 'Produktkategorier', paramKey: 'iso' },
+    name: { key: 'isos', label: 'Kategori', paramKey: 'iso' },
 
     options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label) })),
   }
@@ -55,7 +62,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
               return <CheckboxFilterNew key={key} filterMenu={filterMenu} onChange={onChange} />
             }
           })}
-        <div>
+        {hasActiveFilter && (
           <Button
             variant={'secondary'}
             size={'small'}
@@ -67,7 +74,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
           >
             Nullstill
           </Button>
-        </div>
+        )}
       </HStack>
     </VStack>
   )

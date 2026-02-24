@@ -41,6 +41,7 @@ export type CategoryFilter = {
   filterDataType: FilterDataType
   filterComponentType: FilterComponentType
   openSearchFields: string | MinMaxFields
+  unit?: string
 }
 
 export interface MinMaxFields {
@@ -66,6 +67,7 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+    unit: 'cm',
   },
   {
     identifier: 'Setedybde min/maks',
@@ -74,6 +76,7 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
+    unit: 'cm',
   },
   {
     identifier: 'Setehøyde min/maks',
@@ -82,6 +85,7 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
+    unit: 'cm',
   },
 
   {
@@ -91,6 +95,7 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
     openSearchFields: 'brukervektMaksKG',
+    unit: 'kg',
   },
 ]
 

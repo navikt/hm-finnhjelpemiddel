@@ -20,7 +20,7 @@ export const CategoryCardFrontPage = ({ title, link, description, icon }: Props)
           <LinkCard.Icon>{icon}</LinkCard.Icon>
         </VStack>
       )}
-      <LinkCard.Title>
+      <LinkCard.Title style={{ textWrap: 'balance' }}>
         <LinkCard.Anchor asChild>
           <NextLink href={link}>{title}</NextLink>
         </LinkCard.Anchor>

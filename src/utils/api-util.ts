@@ -453,9 +453,28 @@ export const fetchProducts = ({
     })
   }
 
-  // "Probably" hmsArtNr (searchTerm is a number consisting of exactly 6 digits)
+  // "Probably" hmsArtNr OR levartNr (supplierRef) (searchTerm is a number consisting of exactly 6 digits)
   if (searchTerm.length === 6 && !isNaN(parseInt(searchTerm))) {
-    queryFilters.push({ match: { hmsArtNr: { query: searchTerm } } })
+    queryFilters.push({
+      bool: {
+        should: [
+          {
+            match: {
+              hmsArtNr: {
+                query: searchTerm,
+              },
+            },
+          },
+          {
+            match: {
+              supplierRef: {
+                query: searchTerm,
+              },
+            },
+          },
+        ],
+      },
+    })
   }
 
   const query = {
