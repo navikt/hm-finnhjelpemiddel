@@ -38,19 +38,24 @@
   }
 }
 
-.secondaryUppercaseText {
+.isoCategoryText {
   color: $ax-text-neutral-decoration;
   font-size: 14px;
   letter-spacing: 1.05px;
   text-transform: uppercase;
 }
 
-.secondaryLowercaseText {
-  color: $ax-text-neutral-decoration;
+.bleedUppercaseText {
+  font-size: 14px;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+}
+
+.bleedLowercaseText {
   font-size: 14px;
 }
 
-.delKontrakt {
+.delkontrakt {
   background-color: rgba(236, 237, 239, 0.24);
   height: 100%;
   border-radius: 0 0 8px 8px;

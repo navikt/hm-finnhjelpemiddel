@@ -32,7 +32,7 @@ export const ProductCardKategori = ({
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
-          <BodyShort size="small" className={styles.secondaryUppercaseText}>
+          <BodyShort size="small" className={styles.isoCategoryText}>
             {product.isoCategoryTitle}
           </BodyShort>
           <VStack gap={'space-4'} paddingBlock={'space-8'}>
@@ -57,7 +57,7 @@ const DelkontraktRank = ({ agreements }: { agreements: AgreementInfo[] }) => {
 
   return (
     <Bleed
-      className={styles.delKontrakt}
+      className={styles.delkontrakt}
       marginInline={{ xs: 'space-8', md: 'space-16' }}
       marginBlock={{ xs: 'space-0 space-8', md: 'space-0 space-16' }}
     >
@@ -67,15 +67,15 @@ const DelkontraktRank = ({ agreements }: { agreements: AgreementInfo[] }) => {
         paddingInline={{ xs: 'space-8', md: 'space-16' }}
       >
         {agreements.length > 1 ? (
-          <BodyShort size="small" className={styles.secondaryUppercaseText}>
+          <BodyShort size="small" className={styles.bleedUppercaseText}>
             På flere delkontrakter
           </BodyShort>
         ) : (
           <>
-            <BodyShort size="small" className={styles.secondaryUppercaseText}>
+            <BodyShort size="small" className={styles.bleedUppercaseText}>
               Rangering {minRankAgreement.rank}
             </BodyShort>
-            <BodyShort size="small" className={styles.secondaryLowercaseText}>
+            <BodyShort size="small" className={styles.bleedLowercaseText}>
               {minRankAgreement.postTitle}
             </BodyShort>
           </>
