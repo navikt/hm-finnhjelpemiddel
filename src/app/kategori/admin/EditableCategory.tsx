@@ -225,7 +225,7 @@ const SubCategoriesModule = ({
       </VStack>
       {selectedOptions && selectedOptions.length > 0 && (
         <Switch
-          checked={!!inputValue.data.showSubCategoryIcons}
+          checked={inputValue.data.showSubCategoryIcons === undefined ? true : inputValue.data.showSubCategoryIcons}
           onChange={(event) =>
             setInputValue({
               ...inputValue,
