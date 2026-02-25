@@ -1,9 +1,8 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
-import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
+import { AgreementInfo, Product } from '@/utils/product-util'
+import { Bleed, BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import ProductImage from '@/components/ProductImage'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
@@ -11,50 +10,77 @@ import styles from './ProductCardKategori.module.scss'
 
 export const ProductCardKategori = ({
   product,
-  rank,
-  variantCount,
   handleCompareClick,
 }: {
   product: Product
-  rank?: number
-  variantCount: number
   handleCompareClick?: () => void
 }) => {
-  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
-
-  const searchParams = useSearchParams()
   const linkToProduct = `/produkt/${product.id}`
 
-  const currentRank = rank ? rank : minRank
-  const onAgreement = currentRank !== Infinity
+  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
+  const onAgreement = minRank !== Infinity
 
   return (
     <Box padding={{ xs: 'space-8', md: 'space-16' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack justify={'space-between'} height={'100%'} gap={'space-8'}>
+      <VStack height={'100%'} gap={'space-8'}>
         <VStack>
           <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
-            {onAgreement ? (
-              <SuccessTag>På avtale</SuccessTag>
-            ) : (
-              /*              <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>*/
-              <NeutralTag>Ikke på avtale</NeutralTag>
-            )}
+            {onAgreement ? <SuccessTag>På avtale</SuccessTag> : <NeutralTag>Ikke på avtale</NeutralTag>}
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </HStack>
 
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
-          <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
-            <BodyShort weight="semibold">{product.title}</BodyShort>
-          </Link>
+          <BodyShort size="small" className={styles.isoCategoryText}>
+            {product.isoCategoryTitle}
+          </BodyShort>
+          <VStack gap={'space-4'} paddingBlock={'space-8'}>
+            <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
+              <BodyShort weight="semibold">{product.title}</BodyShort>
+            </Link>
+            <BodyShort size="small">{product.supplierName}</BodyShort>
+          </VStack>
         </VStack>
-
-        <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
-          <BodyShort size="small">{product.supplierName}</BodyShort>
-          {variantCount > 1 && <BodyShort size={'small'}>{variantCount}</BodyShort>}
-        </VStack>
+        {onAgreement && <DelkontraktRank agreements={product.agreements} />}
       </VStack>
     </Box>
+  )
+}
+
+const DelkontraktRank = ({ agreements }: { agreements: AgreementInfo[] }) => {
+  if (agreements.length === 0) {
+    return <></>
+  }
+
+  const minRankAgreement = agreements.sort((a, b) => a.rank - b.rank)[0]
+
+  return (
+    <Bleed
+      className={styles.delkontrakt}
+      marginInline={{ xs: 'space-8', md: 'space-16' }}
+      marginBlock={{ xs: 'space-0 space-8', md: 'space-0 space-16' }}
+    >
+      <VStack
+        align={'start'}
+        paddingBlock={{ xs: 'space-4 space-8', md: 'space-8 space-16' }}
+        paddingInline={{ xs: 'space-8', md: 'space-16' }}
+      >
+        {agreements.length > 1 ? (
+          <BodyShort size="small" className={styles.bleedUppercaseText}>
+            På flere delkontrakter
+          </BodyShort>
+        ) : (
+          <>
+            <BodyShort size="small" className={styles.bleedUppercaseText}>
+              Rangering {minRankAgreement.rank}
+            </BodyShort>
+            <BodyShort size="small" className={styles.bleedLowercaseText}>
+              {minRankAgreement.postTitle}
+            </BodyShort>
+          </>
+        )}
+      </VStack>
+    </Bleed>
   )
 }

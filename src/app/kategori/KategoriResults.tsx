@@ -53,12 +53,7 @@ export const KategoriResults = ({
         justify={{ xs: 'start', md: 'start' }}
       >
         {products?.map((product) => (
-          <ProductCardKategori
-            key={product.id}
-            product={product}
-            variantCount={product.variantCount}
-            handleCompareClick={handleCompareClick}
-          />
+          <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
         ))}
       </HStack>
       {loadMore && !isLoading && (
