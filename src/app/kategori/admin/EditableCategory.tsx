@@ -257,6 +257,12 @@ const FilterModule = ({
     'Setehøyde',
     'Setehøyde min/maks',
     'Brukervekt maks',
+    'Innendørs bruk',
+    'Utendørs bruk',
+    'Rammetype',
+    'Totalbredde',
+    'Totallengde',
+    'Terskelhøyde min/maks',
   ]
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
