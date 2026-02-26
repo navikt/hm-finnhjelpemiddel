@@ -7,7 +7,7 @@ export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
   return (
     <KategoriPageLayout title={category.title} description={category.data.description}>
       {category.subCategories?.length && (
-        <HGrid gap={'space-16'} columns={{ xs: 1, md: 2 }} paddingBlock={'space-48 space-96'}>
+        <HGrid gap={'space-16'} columns={{ xs: 1, md: 2 }} paddingBlock={'space-0 space-96'}>
           {category.subCategories
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((subCategory) => (

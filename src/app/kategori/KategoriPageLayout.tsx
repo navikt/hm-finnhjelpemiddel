@@ -12,12 +12,12 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
   if (error) console.debug(error)
   return (
     <VStack
-      gap={"space-48"}
-      paddingBlock={"space-64 space-64"}
-      paddingInline={"space-16"}
+      gap={'space-48'}
+      paddingBlock={'space-64 space-64'}
+      paddingInline={'space-16'}
       marginInline={'auto'}
-      marginBlock={"space-0"}
-      maxWidth={'1440px'}
+      marginBlock={'space-0'}
+      maxWidth={'1280px'}
     >
       <VStack gap="space-16">
         <Heading level="1" size="large">
@@ -35,5 +35,5 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
         children
       )}
     </VStack>
-  );
+  )
 }
