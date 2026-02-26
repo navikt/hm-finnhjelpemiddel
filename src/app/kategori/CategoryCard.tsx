@@ -22,8 +22,8 @@ export const CategoryCard = ({ title, link, description, icon, showSubCategoryIc
           <LinkCard.Icon>
             {
               <Image
-                width={30}
-                height={30}
+                width={56}
+                height={56}
                 alt={'ikon'}
                 src={`data:image/svg+xml;utf8,${encodeURIComponent(icon)}`}
                 draggable={false}
