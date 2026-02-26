@@ -67,7 +67,12 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
   }
 
   return (
-    <HGrid gap={{ xs: "space-12", md: "space-16" }} columns={{ xs: 1, md: 2 }} marginBlock="space-28 space-12" align="end">
+    <HGrid
+      gap={{ xs: 'space-12', md: 'space-16' }}
+      columns={{ xs: 1, md: 2 }}
+      marginBlock="space-28 space-12"
+      align="end"
+    >
       <Search
         value={inputValue}
         label="Søk"
@@ -76,6 +81,7 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
         onChange={handleChange}
         onKeyUp={handleKeyUp}
         onClear={handleClear}
+        onSearchClick={() => pushSearch(inputValue)}
         placeholder={'Søk etter del, HMS-nummer eller lev-artnr.'}
       />
       {showSupplierSelect && (
@@ -86,5 +92,5 @@ export const PartsSearchBar = ({ id, showSupplierSelect }: { id: string; showSup
         />
       )}
     </HGrid>
-  );
+  )
 }
