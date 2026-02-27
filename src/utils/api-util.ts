@@ -1233,6 +1233,7 @@ export const fetchParts = ({
       operator: 'and',
       fields: ['title', 'hmsArtNr', 'supplierRef', 'supplier.name'],
       lenient: true,
+      analyzer: 'standard',
     },
   }
   const compatibleWithSeriesQuery = {
