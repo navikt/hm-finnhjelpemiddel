@@ -248,7 +248,7 @@ const TopBar = ({ agreement, harTjenester }: { agreement: Agreement; harTjeneste
 const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjenester: boolean }) => {
   const featureFlags = useFeatureFlags()
 
-  const visTjenesterFeatureFlag: boolean = featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') && avtalerMedNyTjenesteSide.includes(agreementId) ?? false
+  const visTjenesterFeatureFlag: boolean = (featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') && avtalerMedNyTjenesteSide.includes(agreementId)) ?? false
 
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
