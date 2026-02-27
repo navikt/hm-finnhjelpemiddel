@@ -1,6 +1,6 @@
-import { ActionMenu, Button, HStack, TextField } from '@navikt/ds-react'
+import { Button, HStack, Popover, TextField } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useRef, useState } from 'react'
+import React, { useId, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import styles from './RangeFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
@@ -21,9 +21,11 @@ export const RangeFilter = ({ filterMenu }: Props) => {
   const router = useRouter()
   const { createQueryStringForMinMax } = useQueryString()
 
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const popoverId = useId()
+
   const { options, name } = filterMenu
   const [menuOpen, setMenuOpen] = useState(false)
-  const menuTriggerRef = useRef<HTMLButtonElement>(null)
 
   const filterLabel = name
 
@@ -40,7 +42,7 @@ export const RangeFilter = ({ filterMenu }: Props) => {
   }
 
   const setValue = () => {
-    menuTriggerRef?.current?.click()
+    anchorEl?.click()
     onChange(inputValueFrom, inputValueTo)
   }
 
@@ -48,49 +50,60 @@ export const RangeFilter = ({ filterMenu }: Props) => {
   const toLabel = options.filter.unit ? `Til (${options.filter.unit})` : 'Til'
 
   return (
-    <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>
-      <ActionMenu.Trigger ref={menuTriggerRef}>
-        <Button
-          variant={'secondary'}
-          size={'small'}
-          icon={menuOpen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-          iconPosition={'right'}
-          className={hasSearchParam ? styles.filterButtonActive : styles.filterButton}
-        >
-          {filterLabel}
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content className={styles.filterMenu}>
-        <HStack gap={'space-8'} align={'end'} padding={'space-8'}>
-          <TextField
-            label={fromLabel}
-            inputMode={'numeric'}
-            size={'small'}
-            min={0}
-            defaultValue={inputValueFrom}
-            onChange={(event) => setInputValueFrom(event.currentTarget.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') setValue()
-            }}
-            style={{ width: '80px' }}
-          />
-          <TextField
-            label={toLabel}
-            inputMode={'numeric'}
-            size={'small'}
-            min={0}
-            defaultValue={inputValueTo}
-            onChange={(event) => setInputValueTo(event.currentTarget.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') setValue()
-            }}
-            style={{ width: '80px' }}
-          />
-          <Button variant={'primary'} size={'small'} onClick={setValue}>
-            Bruk
-          </Button>
-        </HStack>
-      </ActionMenu.Content>
-    </ActionMenu>
+    <div>
+      <Button
+        variant={'secondary'}
+        size={'small'}
+        icon={menuOpen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+        iconPosition={'right'}
+        className={hasSearchParam ? styles.filterButtonActive : styles.filterButton}
+        onClick={() => setMenuOpen(!menuOpen)}
+        ref={setAnchorEl}
+        aria-expanded={menuOpen}
+        aria-controls={menuOpen ? popoverId : undefined}
+      >
+        {filterLabel}
+      </Button>
+      <Popover
+        id={popoverId}
+        anchorEl={anchorEl}
+        open={menuOpen}
+        onClose={() => setMenuOpen(!menuOpen)}
+        placement={'bottom'}
+        onClick={() => setMenuOpen(true)}
+      >
+        <Popover.Content>
+          <HStack gap={'space-8'} align={'end'} padding={'space-8'}>
+            <TextField
+              label={fromLabel}
+              inputMode={'numeric'}
+              size={'small'}
+              min={0}
+              defaultValue={inputValueFrom}
+              onChange={(event) => setInputValueFrom(event.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') setValue()
+              }}
+              style={{ width: '80px' }}
+            />
+            <TextField
+              label={toLabel}
+              inputMode={'numeric'}
+              size={'small'}
+              min={0}
+              defaultValue={inputValueTo}
+              onChange={(event) => setInputValueTo(event.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') setValue()
+              }}
+              style={{ width: '80px' }}
+            />
+            <Button variant={'primary'} size={'small'} onClick={setValue}>
+              Bruk
+            </Button>
+          </HStack>
+        </Popover.Content>
+      </Popover>
+    </div>
   )
 }
