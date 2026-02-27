@@ -36,13 +36,13 @@ export const RangeFilter = ({ filterMenu }: Props) => {
   const [inputValueTo, setInputValueTo] = useState(searchParamTo ?? '')
 
   const onChange = (valueFrom: string, valueTo: string) => {
+    setMenuOpen(false)
     const fromToValue = valueFrom === '' && valueTo === '' ? '' : `${valueFrom}:${valueTo}`
     const newSearchParams = createQueryStringForMinMax(options.filter.searchParamName, fromToValue)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const setValue = () => {
-    anchorEl?.click()
     onChange(inputValueFrom, inputValueTo)
   }
 
@@ -70,7 +70,10 @@ export const RangeFilter = ({ filterMenu }: Props) => {
         open={menuOpen}
         onClose={() => setMenuOpen(!menuOpen)}
         placement={'bottom'}
-        onClick={() => setMenuOpen(true)}
+        onClick={(event) => {
+          // for å holde menyen åpen når man klikker på inputfelt :)
+          event.stopPropagation()
+        }}
       >
         <Popover.Content>
           <HStack gap={'space-8'} align={'end'} padding={'space-8'}>
