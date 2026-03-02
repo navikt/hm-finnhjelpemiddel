@@ -29,7 +29,6 @@ export default function AlternativeProductsPage() {
     'Sogn og Fjordane',
     'Møre og Romsdal',
     'Sør-Trøndelag',
-    'Nord-Trøndelag',
     'Nordland',
     'Troms',
     'Finnmark',
