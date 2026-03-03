@@ -6,7 +6,6 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-
 import { Product } from '@/utils/product-util'
 import { ProductCardKategori } from '@/app/kategori/ProductCardKategori'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
-import styles from '@/app/kategori/KategoriResults.module.scss'
 
 export const KategoriResults = ({
   products,
@@ -29,45 +28,36 @@ export const KategoriResults = ({
 
   if (products && products.length === 0) {
     return (
-      <div id="searchResults">
-        <Alert variant="info">
-          <BodyLong>Obs! Fant ingen hjelpemidler. Har du sjekket filtrene dine?</BodyLong>
-        </Alert>
-      </div>
+      <Alert variant="info">
+        <BodyLong>Obs! Fant ingen hjelpemidler. Har du sjekket filtrene dine?</BodyLong>
+      </Alert>
     )
   }
 
   return (
-    <VStack gap="space-16">
-      <BodyShort>
+    <VStack gap="space-16" align={'center'}>
+      <BodyShort style={{ alignSelf: 'start' }}>
         {isLoading
           ? 'Viser '
           : loadMore
             ? `Viser første ${products?.length} hjelpemidler`
             : `Viser ${products?.length} hjelpemidler`}
       </BodyShort>
-      <HStack
-        gap={{ xs: 'space-16', md: 'space-20' }}
-        id="searchResults"
-        className="search-results"
-        justify={{ xs: 'start', md: 'start' }}
-      >
+      <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
         {products?.map((product) => (
           <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
         ))}
       </HStack>
       {loadMore && !isLoading && (
-        <HStack className={styles.container}>
-          <Button
-            variant="tertiary"
-            size="medium"
-            icon={<ChevronDownIcon aria-hidden />}
-            iconPosition={'right'}
-            onClick={loadMore}
-          >
-            Vis flere treff
-          </Button>
-        </HStack>
+        <Button
+          variant="tertiary"
+          size="medium"
+          icon={<ChevronDownIcon aria-hidden />}
+          iconPosition={'right'}
+          onClick={loadMore}
+        >
+          Vis flere treff
+        </Button>
       )}
     </VStack>
   )
