@@ -87,7 +87,6 @@ export const categoryFilters: CategoryFilter[] = [
     openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
     unit: 'cm',
   },
-
   {
     identifier: 'Brukervekt maks',
     fieldLabel: 'Brukervekt maks',
@@ -96,6 +95,22 @@ export const categoryFilters: CategoryFilter[] = [
     filterComponentType: FilterComponentType.range,
     openSearchFields: 'brukervektMaksKG',
     unit: 'kg',
+  },
+  {
+    identifier: 'Innendørs bruk',
+    fieldLabel: 'Innendørs bruk',
+    searchParamName: 'InnendorsBruk',
+    filterDataType: FilterDataType.singleField,
+    filterComponentType: FilterComponentType.dropdown,
+    openSearchFields: 'innendorsBruk',
+  },
+  {
+    identifier: 'Utendørs bruk',
+    fieldLabel: 'Utendørs bruk',
+    searchParamName: 'UtendorsBruk',
+    filterDataType: FilterDataType.singleField,
+    filterComponentType: FilterComponentType.dropdown,
+    openSearchFields: 'utendorsBruk',
   },
 ]
 
