@@ -120,6 +120,24 @@ export const categoryFilters: CategoryFilter[] = [
     filterComponentType: FilterComponentType.dropdown,
     openSearchFields: 'rammetype',
   },
+  {
+    identifier: 'Totallengde',
+    fieldLabel: 'Totallengde',
+    searchParamName: 'Totallengde',
+    filterDataType: FilterDataType.singleField,
+    filterComponentType: FilterComponentType.range,
+    openSearchFields: 'totallengdeCM',
+    unit: 'cm',
+  },
+  {
+    identifier: 'Totalbredde',
+    fieldLabel: 'Totalbredde',
+    searchParamName: 'Totalbredde',
+    filterDataType: FilterDataType.singleField,
+    filterComponentType: FilterComponentType.range,
+    openSearchFields: 'totalbreddeCM',
+    unit: 'cm',
+  },
 ]
 
 type FetchProps = {
