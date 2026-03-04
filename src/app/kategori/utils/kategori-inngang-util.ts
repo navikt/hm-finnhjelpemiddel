@@ -112,6 +112,14 @@ export const categoryFilters: CategoryFilter[] = [
     filterComponentType: FilterComponentType.dropdown,
     openSearchFields: 'utendorsBruk',
   },
+  {
+    identifier: 'Rammetype',
+    fieldLabel: 'Rammetype',
+    searchParamName: 'rammetype',
+    filterDataType: FilterDataType.singleField,
+    filterComponentType: FilterComponentType.dropdown,
+    openSearchFields: 'rammetype',
+  },
 ]
 
 type FetchProps = {
