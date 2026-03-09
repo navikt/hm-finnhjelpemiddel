@@ -264,8 +264,8 @@ const FilterModule = ({
     'Totallengde',
     'Terskelhøyde min/maks',
     'Skrittlengde min/maks',
-    'Madrasslengde min/maks',
-    'Madrassbredde min/maks',
+    'Madrasslengde',
+    'Madrassbredde',
     'Ryggstøttebredde',
   ]
 
