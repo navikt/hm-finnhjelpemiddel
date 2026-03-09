@@ -41,7 +41,13 @@ export type CategoryFilter = {
   filterDataType: FilterDataType
   filterComponentType: FilterComponentType
   openSearchFields: string | MinMaxFields
+  openSearchFields2: OpenSearchField[]
   unit?: string
+}
+
+export type OpenSearchField = {
+  filterDataType: FilterDataType
+  openSearchFields: string | MinMaxFields
 }
 
 export interface MinMaxFields {
@@ -67,6 +73,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.minMax,
+        openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+      },
+    ],
     unit: 'cm',
   },
   {
@@ -76,6 +88,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.minMax,
+        openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
+      },
+    ],
     unit: 'cm',
   },
   {
@@ -85,6 +103,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
     openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.minMax,
+        openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
+      },
+    ],
     unit: 'cm',
   },
   {
@@ -94,6 +118,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
     openSearchFields: 'brukervektMaksKG',
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'brukervektMaksKG',
+      },
+    ],
     unit: 'kg',
   },
   {
@@ -103,6 +133,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
     openSearchFields: 'innendorsBruk',
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'innendorsBruk',
+      },
+    ],
   },
   {
     identifier: 'Utendørs bruk',
@@ -111,6 +147,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
     openSearchFields: 'utendorsBruk',
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'utendorsBruk',
+      },
+    ],
   },
   {
     identifier: 'Rammetype',
@@ -119,6 +161,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
     openSearchFields: 'rammetype',
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'rammetype',
+      },
+    ],
   },
   {
     identifier: 'Totallengde',
@@ -127,6 +175,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
     openSearchFields: 'totallengdeCM',
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'totallengdeCM',
+      },
+    ],
     unit: 'cm',
   },
   {
@@ -136,6 +190,12 @@ export const categoryFilters: CategoryFilter[] = [
     filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
     openSearchFields: 'totalbreddeCM',
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'totalbreddeCM',
+      },
+    ],
     unit: 'cm',
   },
 ]
@@ -180,28 +240,36 @@ export const fetchProductsKategori = async ({
 
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
-      if (filter.filterDataType === FilterDataType.minMax) {
-        const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
-        const searchFields = filter.openSearchFields as MinMaxFields
-
-        postFilters.push({
-          key: filter.identifier,
-          filter: filterMinMaxCategory(
-            { key: searchFields.min, value: searchValues[0] },
-            { key: searchFields.max, value: searchValues[1] }
-          ),
-        })
-      } else if (filter.filterDataType === FilterDataType.singleField) {
-        const searchField = filter.openSearchFields as string
-        if (filter.filterComponentType === FilterComponentType.range) {
+      const equivalentFieldClauses: Array<any> = []
+      filter.openSearchFields2.forEach((opensearchField) => {
+        if (opensearchField.filterDataType === FilterDataType.minMax) {
           const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
-          postFilters.push({
-            key: filter.identifier,
-            filter: filterSingleFieldRangeCategory(searchField, searchValues[0], searchValues[1]),
-          })
-        } else {
-          const searchValue = searchParams.getAll(filter.searchParamName)
-          postFilters.push({ key: filter.identifier, filter: filterSingleFieldCategory(searchField, searchValue) })
+          const searchFields = opensearchField.openSearchFields as MinMaxFields
+
+          equivalentFieldClauses.push(
+            filterMinMaxCategory(
+              { key: searchFields.min, value: searchValues[0] },
+              { key: searchFields.max, value: searchValues[1] }
+            )
+          )
+        } else if (filter.filterDataType === FilterDataType.singleField) {
+          const searchField = opensearchField.openSearchFields as string
+          if (filter.filterComponentType === FilterComponentType.range) {
+            const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
+            equivalentFieldClauses.push(filterSingleFieldRangeCategory(searchField, searchValues[0], searchValues[1]))
+          } else {
+            const searchValue = searchParams.getAll(filter.searchParamName)
+            equivalentFieldClauses.push(filterSingleFieldCategory(searchField, searchValue))
+          }
+        }
+      })
+      if (equivalentFieldClauses.length === 1) {
+        postFilters.push({ key: filter.identifier, filter: equivalentFieldClauses[0] })
+      } else if (equivalentFieldClauses.length > 1) {
+        return {
+          bool: {
+            should: [equivalentFieldClauses],
+          },
         }
       }
     }
