@@ -2,15 +2,12 @@ import { HGrid } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import Script from 'next/script'
+import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 
 export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
   return (
     <KategoriPageLayout title={category.title} description={category.data.description}>
-      <div>
-        <div data-uxsignals-embed="panel-p9bmli1xkl" style={{ maxWidth: '620px' }} />
-        <Script src="https://widget.uxsignals.com/embed.js"></Script>
-      </div>
+      <UXSignalsSurvey />
 
       {category.subCategories?.length && (
         <HGrid gap={'space-16'} columns={{ xs: 1, md: 2 }} paddingBlock={'space-0 space-96'}>
