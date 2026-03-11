@@ -198,6 +198,21 @@ export const categoryFilters: CategoryFilter[] = [
     ],
     unit: 'cm',
   },
+  {
+    identifier: 'Madrassbredde',
+    fieldLabel: 'Madrassbredde',
+    searchParamName: 'Madrassbredde',
+    filterDataType: FilterDataType.minMax,
+    filterComponentType: FilterComponentType.range,
+    openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.minMax,
+        openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+      },
+    ],
+    unit: 'cm',
+  },
 ]
 
 type FetchProps = {
