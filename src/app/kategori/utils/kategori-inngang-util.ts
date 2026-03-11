@@ -204,11 +204,15 @@ export const categoryFilters: CategoryFilter[] = [
     searchParamName: 'Madrassbredde',
     filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+    openSearchFields: { min: 'madrassbreddeMinCM', max: 'madrassbreddeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
-        openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+        openSearchFields: { min: 'madrassbreddeMinCM', max: 'madrassbreddeMaksCM' },
+      },
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'madrassbreddeCM',
       },
     ],
     unit: 'cm',
@@ -267,7 +271,7 @@ export const fetchProductsKategori = async ({
               { key: searchFields.max, value: searchValues[1] }
             )
           )
-        } else if (filter.filterDataType === FilterDataType.singleField) {
+        } else if (opensearchField.filterDataType === FilterDataType.singleField) {
           const searchField = opensearchField.openSearchFields as string
           if (filter.filterComponentType === FilterComponentType.range) {
             const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
