@@ -11,10 +11,12 @@ export const KategoriResults = ({
   products,
   loadMore,
   isLoading,
+  isReachingEnd,
 }: {
+  products?: Product[] | undefined
   loadMore?: (() => void) | undefined
   isLoading: boolean
-  products?: Product[] | undefined
+  isReachingEnd?: boolean
 }) => {
   const { setCompareMenuState } = useHydratedCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
@@ -39,19 +41,16 @@ export const KategoriResults = ({
       <BodyShort>
         {isLoading
           ? 'Viser '
-          : loadMore
+          : !isReachingEnd
             ? `Viser første ${products?.length} hjelpemidler`
             : `Viser ${products?.length} hjelpemidler`}
       </BodyShort>
-      <HStack
-        gap={{ xs: 'space-16', md: 'space-20' }}
-        key={Math.random()} //rerender-issue quickfix, problemer med swrinfinite
-      >
+      <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
         {products?.map((product) => (
           <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
         ))}
       </HStack>
-      {loadMore && !isLoading && (
+      {!isReachingEnd && !isLoading && (
         <Button
           variant="tertiary"
           size="medium"

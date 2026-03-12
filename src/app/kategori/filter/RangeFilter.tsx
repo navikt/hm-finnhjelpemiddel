@@ -1,9 +1,8 @@
 import { Button, HStack, Popover, TextField } from '@navikt/ds-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import React, { useId, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import styles from './RangeFilter.module.scss'
-import useQueryString from '@/utils/search-params-util'
 import { TechDataFilterAgg } from '@/app/kategori/utils/kategori-inngang-util'
 
 export type MinMaxMenu = {
@@ -13,13 +12,11 @@ export type MinMaxMenu = {
 
 type Props = {
   filterMenu: MinMaxMenu
+  onChange: (key: string, value: string) => void
 }
 
-export const RangeFilter = ({ filterMenu }: Props) => {
+export const RangeFilter = ({ filterMenu, onChange }: Props) => {
   const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
-  const { createQueryStringForMinMax } = useQueryString()
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const popoverId = useId()
@@ -35,15 +32,10 @@ export const RangeFilter = ({ filterMenu }: Props) => {
   const [inputValueFrom, setInputValueFrom] = useState(searchParamFrom ?? '')
   const [inputValueTo, setInputValueTo] = useState(searchParamTo ?? '')
 
-  const onChange = (valueFrom: string, valueTo: string) => {
-    setMenuOpen(false)
-    const fromToValue = valueFrom === '' && valueTo === '' ? '' : `${valueFrom}:${valueTo}`
-    const newSearchParams = createQueryStringForMinMax(options.filter.searchParamName, fromToValue)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
-  }
-
   const setValue = () => {
-    onChange(inputValueFrom, inputValueTo)
+    setMenuOpen(false)
+    const fromToValue = inputValueFrom === '' && inputValueTo === '' ? '' : `${inputValueFrom}:${inputValueTo}`
+    onChange(options.filter.searchParamName, fromToValue)
   }
 
   const fromLabel = options.filter.unit ? `Fra (${options.filter.unit})` : 'Fra'

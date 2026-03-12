@@ -75,7 +75,7 @@ export default function useQueryString() {
     [searchParams]
   )
 
-  const createQueryStringForMinMax = useCallback(
+  const createQueryStringForMinMaxRemovePage = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
 
@@ -84,6 +84,7 @@ export default function useQueryString() {
       } else {
         params.set(name, value)
       }
+      params.delete('page')
 
       return params.toString()
     },
@@ -102,7 +103,7 @@ export default function useQueryString() {
     createQueryStringAppend,
     createQueryStringAppendRemovePage,
     createQueryStringMultiple,
-    createQueryStringForMinMax,
+    createQueryStringForMinMaxRemovePage,
     searchParamKeys,
   }
 }

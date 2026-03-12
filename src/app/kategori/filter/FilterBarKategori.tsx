@@ -22,9 +22,10 @@ type Props = {
   filters: Filters
   onChange: (key: string, value: string) => void
   onReset: () => void
+  onChangeRange: (key: string, value: string) => void
 }
 
-export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
+export const FilterBarKategori = ({ filters, onChange, onReset, onChangeRange }: Props) => {
   const searchParams = useSearchParams()
 
   const hasActiveFilter = Array.from(searchParams.keys()).filter((param) => param != 'page').length > 0
@@ -53,7 +54,13 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
             const filter = value.filter
 
             if (filter.filterComponentType === FilterComponentType.range) {
-              return <RangeFilter key={key} filterMenu={{ name: value.filter.fieldLabel, options: value }} />
+              return (
+                <RangeFilter
+                  key={key}
+                  filterMenu={{ name: value.filter.fieldLabel, options: value }}
+                  onChange={onChangeRange}
+                />
+              )
             } else if (filter.filterDataType === FilterDataType.singleField) {
               const filterMenu = {
                 name: { key: filter.searchParamName, label: filter.identifier, paramKey: filter.searchParamName },
