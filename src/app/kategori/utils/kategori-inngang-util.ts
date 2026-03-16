@@ -37,9 +37,9 @@ export type CategoryFilter = {
   identifier: string //identifier
   fieldLabel: string
   searchParamName: string
-  filterDataType: FilterDataType
+  //filterDataType: FilterDataType
   filterComponentType: FilterComponentType
-  openSearchFields: string | MinMaxFields
+  //openSearchFields?: string | MinMaxFields
   openSearchFields2: OpenSearchField[]
   unit?: string
 }
@@ -69,9 +69,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Setebredde min/maks',
     fieldLabel: 'Setebredde',
     searchParamName: 'Setebredde',
-    filterDataType: FilterDataType.minMax,
+    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
+    //openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -84,9 +84,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Setedybde min/maks',
     fieldLabel: 'Setedybde',
     searchParamName: 'Setedybde',
-    filterDataType: FilterDataType.minMax,
+    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
+    //openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -99,9 +99,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Setehøyde min/maks',
     fieldLabel: 'Setehøyde',
     searchParamName: 'Setehoyde',
-    filterDataType: FilterDataType.minMax,
+    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
+    //openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -114,9 +114,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Brukervekt maks',
     fieldLabel: 'Brukervekt maks',
     searchParamName: 'BrukervektMaks',
-    filterDataType: FilterDataType.singleField,
+    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: 'brukervektMaksKG',
+    //openSearchFields: 'brukervektMaksKG',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -129,9 +129,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Innendørs bruk',
     fieldLabel: 'Innendørs bruk',
     searchParamName: 'InnendorsBruk',
-    filterDataType: FilterDataType.singleField,
+    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
-    openSearchFields: 'innendorsBruk',
+    //openSearchFields: 'innendorsBruk',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -143,9 +143,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Utendørs bruk',
     fieldLabel: 'Utendørs bruk',
     searchParamName: 'UtendorsBruk',
-    filterDataType: FilterDataType.singleField,
+    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
-    openSearchFields: 'utendorsBruk',
+    //openSearchFields: 'utendorsBruk',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -157,9 +157,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Rammetype',
     fieldLabel: 'Rammetype',
     searchParamName: 'rammetype',
-    filterDataType: FilterDataType.singleField,
+    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
-    openSearchFields: 'rammetype',
+    //openSearchFields: 'rammetype',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -171,9 +171,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Totallengde',
     fieldLabel: 'Totallengde',
     searchParamName: 'Totallengde',
-    filterDataType: FilterDataType.singleField,
+    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: 'totallengdeCM',
+    //openSearchFields: 'totallengdeCM',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -186,9 +186,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Totalbredde',
     fieldLabel: 'Totalbredde',
     searchParamName: 'Totalbredde',
-    filterDataType: FilterDataType.singleField,
+    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: 'totalbreddeCM',
+    //openSearchFields: 'totalbreddeCM',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -201,9 +201,9 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Madrassbredde',
     fieldLabel: 'Madrassbredde',
     searchParamName: 'Madrassbredde',
-    filterDataType: FilterDataType.minMax,
+    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    openSearchFields: { min: 'madrassbreddeMinCM', max: 'madrassbreddeMaksCM' },
+    //openSearchFields: { min: 'madrassbreddeMinCM', max: 'madrassbreddeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -337,16 +337,20 @@ export const fetchProductsKategori = async ({
     {},
     ...techDataFilters
       .map((filter) => {
-        if (filter.filterDataType === FilterDataType.minMax) {
-          const searchFields = filter.openSearchFields as MinMaxFields
-          return [
-            techDataAggs(filter.identifier, searchFields.min, `filters.${searchFields.min}`),
-            techDataAggs(filter.identifier, searchFields.max, `filters.${searchFields.max}`),
-          ]
-        } else if (filter.filterDataType === FilterDataType.singleField) {
-          const searchField = filter.openSearchFields as string
-          return [techDataAggs(filter.identifier, searchField, `filters.${searchField}`)]
-        }
+        filter.openSearchFields2
+          .map((openSearchFieldConfig) => {
+            if (openSearchFieldConfig.filterDataType === FilterDataType.minMax) {
+              const searchFields = openSearchFieldConfig.openSearchFields as MinMaxFields
+              return [
+                techDataAggs(filter.identifier, searchFields.min, `filters.${searchFields.min}`),
+                techDataAggs(filter.identifier, searchFields.max, `filters.${searchFields.max}`),
+              ]
+            } else if (openSearchFieldConfig.filterDataType === FilterDataType.singleField) {
+              const searchField = openSearchFieldConfig.openSearchFields as string
+              return [techDataAggs(filter.identifier, searchField, `filters.${searchField}`)]
+            }
+          })
+          .flat()
       })
       .flat()
   )
@@ -474,23 +478,31 @@ const mapTechDataFilterAggregations = (
   const aggMap = new Map(Object.entries(data.aggregations))
 
   techDataFilters.forEach((filter) => {
-    if (filter.filterDataType === FilterDataType.minMax) {
-      const searchFields = filter.openSearchFields as MinMaxFields
+    map.set(filter.identifier, {
+      filter: filter,
+      values: filter.openSearchFields2
+        .map((openSearchFieldConfig) => {
+          if (openSearchFieldConfig.filterDataType === FilterDataType.minMax) {
+            const searchFields = openSearchFieldConfig.openSearchFields as MinMaxFields
 
-      const minValues = aggMap.get(searchFields.min)?.values.buckets.map((bucket) => bucket.key.toString())
-      const maxValues = aggMap.get(searchFields.max)?.values.buckets.map((bucket) => bucket.key.toString())
+            const minValues = aggMap.get(searchFields.min)?.values.buckets.map((bucket) => bucket.key.toString())
+            const maxValues = aggMap.get(searchFields.max)?.values.buckets.map((bucket) => bucket.key.toString())
 
-      if (!!minValues || !!maxValues) {
-        map.set(filter.identifier, { filter: filter, values: [...minValues!, ...maxValues!] })
-      }
-    } else if (filter.filterDataType === FilterDataType.singleField) {
-      const searchField = filter.openSearchFields as string
-      const values = aggMap.get(searchField)?.values.buckets.map((bucket) => bucket.key.toString())
+            if (!!minValues || !!maxValues) {
+              return [...minValues!, ...maxValues!]
+            }
+          } else if (openSearchFieldConfig.filterDataType === FilterDataType.singleField) {
+            const searchField = openSearchFieldConfig.openSearchFields as string
+            const values = aggMap.get(searchField)?.values.buckets.map((bucket) => bucket.key.toString())
 
-      if (!!values) {
-        map.set(filter.identifier, { filter: filter, values: values })
-      }
-    }
+            if (!!values) {
+              map.set(filter.identifier, { filter: filter, values: values })
+            }
+          }
+          return []
+        })
+        .flat(),
+    })
   })
 
   return map
