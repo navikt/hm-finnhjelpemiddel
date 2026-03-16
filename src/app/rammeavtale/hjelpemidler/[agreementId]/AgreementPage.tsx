@@ -48,13 +48,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
         agreementId: agreement.id,
         selectedSupplier: undefined,
       }),
-    { keepPreviousData: true },
+    { keepPreviousData: true }
   )
 
   const avtalerMedIsoGruppering = [
     '9d8ff31e-c536-4f4d-9b2f-75cc527c727f',
     'b9a48c54-3004-4f94-ab65-b38deec78ed3',
-    '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96',
+    '47105bc7-10a2-48fc-9ff2-95d6e7bb6b96', //Hørselshjelpemidler
+    '7eab246b-aa2a-4bdd-b3e7-741967aa9bb7', //Sittemoduler
   ]
 
   const avtalerMedKomponenttypeGruppering = ['7ef2ab32-34bd-4eec-92a8-2b5c47b77c78']
@@ -79,7 +80,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     getProductsOnAgreement,
     {
       keepPreviousData: true,
-    },
+    }
   )
 
   const { data: filtersFromData } = useSWRImmutable<FilterData>(
@@ -87,7 +88,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
     getFiltersAgreement,
     {
       keepPreviousData: true,
-    },
+    }
   )
 
   if (!postBuckets || !unfilteredPostBuckets || !filtersFromData) {
@@ -101,14 +102,14 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const postsContainingProducts = new Set(
     unfilteredPostBuckets
       .flatMap((bucket) => bucket.products.flatMap((hit) => (hit._source as ProductSourceResponse).agreements))
-      .map((agreement) => agreement.postIdentifier),
+      .map((agreement) => agreement.postIdentifier)
   )
 
   const postFilters = agreement.posts
     .filter((post) => post.nr != 99 && post.title.length > 0)
     .filter(
       //Skjul tomme delkontrakter for rammeavtalene i listen splitAgreementsWithEmptyPosts
-      (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || postsContainingProducts.has(post.identifier),
+      (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || postsContainingProducts.has(post.identifier)
     )
     .sort((a, b) => a.nr - b.nr)
     .map((post) => post.title)
@@ -121,7 +122,7 @@ const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   }
 
   const posts = mapAgreementProducts(postBuckets, agreement, searchData.filters).filter(
-    (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0,
+    (post) => !splitAgreementsWithEmptyPosts.includes(agreement.id) || post.products.length > 0
   )
 
   const totalProducts =
@@ -248,7 +249,10 @@ const TopBar = ({ agreement, harTjenester }: { agreement: Agreement; harTjeneste
 const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjenester: boolean }) => {
   const featureFlags = useFeatureFlags()
 
-  const visTjenesterFeatureFlag: boolean = (featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') && avtalerMedNyTjenesteSide.includes(agreementId)) ?? false
+  const visTjenesterFeatureFlag: boolean =
+    (featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') &&
+      avtalerMedNyTjenesteSide.includes(agreementId)) ??
+    false
 
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
@@ -283,7 +287,6 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjene
     </HStack>
   )
 }
-
 
 const avtalerMedNyTjenesteSide = ['7eab246b-aa2a-4bdd-b3e7-741967aa9bb7']
 
