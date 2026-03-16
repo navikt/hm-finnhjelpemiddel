@@ -4,10 +4,9 @@ import {
   filterNotExpiredOnly,
   filterPrefixIsoKode,
 } from '@/utils/filter-util'
-import { isValidSortOrder } from '@/utils/search-state-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
-import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
+import { makeSearchTermQuery, QueryObject } from '@/utils/api-util'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
@@ -233,9 +232,7 @@ export const fetchProductsKategori = async ({
   searchParams,
   category,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
-  const sortOrderStr = searchParams.get('sortering') || ''
-  const sortOrder = isValidSortOrder(sortOrderStr) ? sortOrderStr : 'Rangering'
-  const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Rangering']
+  const sortOrderOpenSearch = [{ 'agreements.rank': 'asc' }, { seriesId: 'desc' }]
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
   const visTilbDeler = false
 
