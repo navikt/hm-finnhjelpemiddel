@@ -282,11 +282,14 @@ export const fetchProductsKategori = async ({
       if (equivalentFieldClauses.length === 1) {
         postFilters.push({ key: filter.identifier, filter: equivalentFieldClauses[0] })
       } else if (equivalentFieldClauses.length > 1) {
-        return {
-          bool: {
-            should: [equivalentFieldClauses],
+        postFilters.push({
+          key: filter.identifier,
+          filter: {
+            bool: {
+              should: equivalentFieldClauses,
+            },
           },
-        }
+        })
       }
     }
   })
