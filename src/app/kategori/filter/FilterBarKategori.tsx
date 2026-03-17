@@ -31,13 +31,15 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
 
   const supplierFilters: FilterMenu = {
     name: { key: 'suppliers', label: 'Leverandør', paramKey: 'leverandor' },
-    options: filters.suppliers,
+    options: filters.suppliers.sort(),
   }
 
   const isoFilters: FilterMenu = {
     name: { key: 'isos', label: 'Kategori', paramKey: 'iso' },
 
-    options: filters.isos.map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label) })),
+    options: filters.isos
+      .map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label) }))
+      .sort((a, b) => a.label.localeCompare(b.label)),
   }
 
   return (
