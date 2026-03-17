@@ -338,22 +338,20 @@ export const fetchProductsKategori = async ({
     {},
     ...techDataFilters
       .map((filter) => {
-        filter.openSearchFields2
-          .map((openSearchFieldConfig) => {
-            if (openSearchFieldConfig.filterDataType === FilterDataType.minMax) {
-              const searchFields = openSearchFieldConfig.openSearchFields as MinMaxFields
-              return [
-                techDataAggs(filter.identifier, searchFields.min, `filters.${searchFields.min}`),
-                techDataAggs(filter.identifier, searchFields.max, `filters.${searchFields.max}`),
-              ]
-            } else if (openSearchFieldConfig.filterDataType === FilterDataType.singleField) {
-              const searchField = openSearchFieldConfig.openSearchFields as string
-              return [techDataAggs(filter.identifier, searchField, `filters.${searchField}`)]
-            }
-          })
-          .flat()
+        return filter.openSearchFields2.map((openSearchFieldConfig) => {
+          if (openSearchFieldConfig.filterDataType === FilterDataType.minMax) {
+            const searchFields = openSearchFieldConfig.openSearchFields as MinMaxFields
+            return [
+              techDataAggs(filter.identifier, searchFields.min, `filters.${searchFields.min}`),
+              techDataAggs(filter.identifier, searchFields.max, `filters.${searchFields.max}`),
+            ]
+          } else if (openSearchFieldConfig.filterDataType === FilterDataType.singleField) {
+            const searchField = openSearchFieldConfig.openSearchFields as string
+            return [techDataAggs(filter.identifier, searchField, `filters.${searchField}`)]
+          }
+        })
       })
-      .flat()
+      .flat(2)
   )
 
   const aggs = {
