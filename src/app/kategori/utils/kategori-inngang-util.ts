@@ -251,13 +251,13 @@ export const fetchProductsKategori = async ({
 
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
-      const equivalentFieldClauses: Array<any> = []
+      const filterGroupClauses: Array<any> = []
       filter.openSearchFields.forEach((opensearchField) => {
         if (opensearchField.filterDataType === FilterDataType.minMax) {
           const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
           const searchFields = opensearchField.openSearchFields as MinMaxFields
 
-          equivalentFieldClauses.push(
+          filterGroupClauses.push(
             filterMinMaxCategory(
               { key: searchFields.min, value: searchValues[0] },
               { key: searchFields.max, value: searchValues[1] }
@@ -267,22 +267,22 @@ export const fetchProductsKategori = async ({
           const searchField = opensearchField.openSearchFields as string
           if (filter.filterComponentType === FilterComponentType.range) {
             const searchValues = searchParams.get(filter.searchParamName)?.split(':') ?? ['', '']
-            equivalentFieldClauses.push(filterSingleFieldRangeCategory(searchField, searchValues[0], searchValues[1]))
+            filterGroupClauses.push(filterSingleFieldRangeCategory(searchField, searchValues[0], searchValues[1]))
           } else {
             const searchValue = searchParams.getAll(filter.searchParamName)
-            equivalentFieldClauses.push(filterSingleFieldCategory(searchField, searchValue))
+            filterGroupClauses.push(filterSingleFieldCategory(searchField, searchValue))
           }
         }
       })
 
-      if (equivalentFieldClauses.length === 1) {
-        postFilters.push({ key: filter.identifier, filter: equivalentFieldClauses[0] })
-      } else if (equivalentFieldClauses.length > 1) {
+      if (filterGroupClauses.length === 1) {
+        postFilters.push({ key: filter.identifier, filter: filterGroupClauses[0] })
+      } else if (filterGroupClauses.length > 1) {
         postFilters.push({
           key: filter.identifier,
           filter: {
             bool: {
-              should: equivalentFieldClauses,
+              should: filterGroupClauses,
             },
           },
         })
