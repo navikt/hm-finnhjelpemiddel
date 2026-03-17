@@ -69,9 +69,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Setebredde min/maks',
     fieldLabel: 'Setebredde',
     searchParamName: 'Setebredde',
-    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -84,9 +82,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Setedybde min/maks',
     fieldLabel: 'Setedybde',
     searchParamName: 'Setedybde',
-    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -99,9 +95,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Setehøyde min/maks',
     fieldLabel: 'Setehøyde',
     searchParamName: 'Setehoyde',
-    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -114,9 +108,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Brukervekt maks',
     fieldLabel: 'Brukervekt maks',
     searchParamName: 'BrukervektMaks',
-    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: 'brukervektMaksKG',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -129,9 +121,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Innendørs bruk',
     fieldLabel: 'Innendørs bruk',
     searchParamName: 'InnendorsBruk',
-    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
-    //openSearchFields: 'innendorsBruk',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -143,9 +133,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Utendørs bruk',
     fieldLabel: 'Utendørs bruk',
     searchParamName: 'UtendorsBruk',
-    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
-    //openSearchFields: 'utendorsBruk',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -157,9 +145,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Rammetype',
     fieldLabel: 'Rammetype',
     searchParamName: 'rammetype',
-    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.dropdown,
-    //openSearchFields: 'rammetype',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -171,9 +157,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Totallengde',
     fieldLabel: 'Totallengde',
     searchParamName: 'Totallengde',
-    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: 'totallengdeCM',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -186,9 +170,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Totalbredde',
     fieldLabel: 'Totalbredde',
     searchParamName: 'Totalbredde',
-    //filterDataType: FilterDataType.singleField,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: 'totalbreddeCM',
     openSearchFields2: [
       {
         filterDataType: FilterDataType.singleField,
@@ -201,9 +183,7 @@ export const categoryFilters: CategoryFilter[] = [
     identifier: 'Madrassbredde',
     fieldLabel: 'Madrassbredde',
     searchParamName: 'Madrassbredde',
-    //filterDataType: FilterDataType.minMax,
     filterComponentType: FilterComponentType.range,
-    //openSearchFields: { min: 'madrassbreddeMinCM', max: 'madrassbreddeMaksCM' },
     openSearchFields2: [
       {
         filterDataType: FilterDataType.minMax,
@@ -212,6 +192,23 @@ export const categoryFilters: CategoryFilter[] = [
       {
         filterDataType: FilterDataType.singleField,
         openSearchFields: 'madrassbreddeCM',
+      },
+    ],
+    unit: 'cm',
+  },
+  {
+    identifier: 'Madrasslengde',
+    fieldLabel: 'Madrasslengde',
+    searchParamName: 'Madrasslengde',
+    filterComponentType: FilterComponentType.range,
+    openSearchFields2: [
+      {
+        filterDataType: FilterDataType.minMax,
+        openSearchFields: { min: 'madrasslengdeMinCM', max: 'madrasslengdeMaksCM' },
+      },
+      {
+        filterDataType: FilterDataType.singleField,
+        openSearchFields: 'madrasslengdeCM',
       },
     ],
     unit: 'cm',
@@ -279,6 +276,7 @@ export const fetchProductsKategori = async ({
           }
         }
       })
+
       if (equivalentFieldClauses.length === 1) {
         postFilters.push({ key: filter.identifier, filter: equivalentFieldClauses[0] })
       } else if (equivalentFieldClauses.length > 1) {
