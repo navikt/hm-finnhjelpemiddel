@@ -30,7 +30,11 @@ export const CheckboxFilterNew = ({ filterMenu, onChange }: Props) => {
   const paramKey = name.paramKey ?? name.key
   const normalizedOptions = options.map((opt) => (typeof opt === 'string' ? { value: opt, label: opt } : opt))
   const selectedFilters = normalizedOptions.filter((o) => searchParams.getAll(paramKey).includes(o.value))
-  const filterLabel = selectedFilters.length > 0 ? name.label + `(${selectedFilters.length})` : name.label
+  const filterLabel = name.label
+
+  if (normalizedOptions.length <= 1 && selectedFilters.length === 0) {
+    return <></>
+  }
 
   return (
     <ActionMenu onOpenChange={(open) => setMenuOpen(open)}>

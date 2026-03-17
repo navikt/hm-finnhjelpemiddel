@@ -49,6 +49,10 @@ export const RangeFilter = ({ filterMenu }: Props) => {
   const fromLabel = options.filter.unit ? `Fra (${options.filter.unit})` : 'Fra'
   const toLabel = options.filter.unit ? `Til (${options.filter.unit})` : 'Til'
 
+  if (filterMenu.options.values.length <= 1 && !hasSearchParam) {
+    return <></>
+  }
+
   return (
     <div>
       <Button
