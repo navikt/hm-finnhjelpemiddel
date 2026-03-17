@@ -495,7 +495,7 @@ const mapTechDataFilterAggregations = (
             const values = aggMap.get(searchField)?.values.buckets.map((bucket) => bucket.key.toString())
 
             if (!!values) {
-              map.set(filter.identifier, { filter: filter, values: values })
+              return values
             }
           }
           return []
