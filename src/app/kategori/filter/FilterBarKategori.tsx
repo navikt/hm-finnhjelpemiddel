@@ -68,7 +68,7 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
             size={'small'}
             onClick={onReset}
             className={styles.filterButton}
-            data-color={'danger'}
+            data-color={'neutral'}
             icon={<XMarkIcon aria-hidden />}
             iconPosition={'right'}
           >

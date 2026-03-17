@@ -1,7 +1,7 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .filterButton {
-  box-shadow: inset 0 0 0 1px var(--ax-bg-danger-strong);
+  box-shadow: inset 0 0 0 1px var(--ax-border-neutral);
   border-radius: var(--ax-radius-full);
 
   span {
