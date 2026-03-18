@@ -409,31 +409,35 @@ const mapTechDataFilterAggregations = (
   const aggMap = new Map(Object.entries(data.aggregations))
 
   techDataFilters.forEach((filter) => {
-    map.set(filter.identifier, {
-      filter: filter,
-      values: filter.openSearchFieldGroups
-        .map((openSearchFieldGroup) => {
-          if (filter.filterFunctionType === FilterFunctionType.range) {
-            const searchFields = openSearchFieldGroup as MinMaxFields
+    const values = filter.openSearchFieldGroups
+      .map((openSearchFieldGroup) => {
+        if (filter.filterFunctionType === FilterFunctionType.range) {
+          const searchFields = openSearchFieldGroup as MinMaxFields
 
-            const minValues = aggMap.get(searchFields.fromField)?.values.buckets.length ?? 0
-            const maxValues = aggMap.get(searchFields.toField)?.values.buckets.length ?? 0
+          const minValues = aggMap.get(searchFields.fromField)?.values.buckets.length ?? 0
+          const maxValues = aggMap.get(searchFields.toField)?.values.buckets.length ?? 0
 
-            if (minValues > 1 || maxValues > 1) {
-              return ['en', 'to']
-            }
-          } else if (filter.filterFunctionType === FilterFunctionType.singleField) {
-            const searchField = openSearchFieldGroup as string
-            const values = aggMap.get(searchField)?.values.buckets.map((bucket) => bucket.key.toString())
-
-            if (!!values) {
-              return values
-            }
+          if (minValues > 1 || maxValues > 1) {
+            return ['en', 'to']
           }
-          return []
-        })
-        .flat(),
-    })
+        } else if (filter.filterFunctionType === FilterFunctionType.singleField) {
+          const searchField = openSearchFieldGroup as string
+          const values = aggMap.get(searchField)?.values.buckets.map((bucket) => bucket.key.toString())
+
+          if (!!values) {
+            return values
+          }
+        }
+        return []
+      })
+      .flat()
+
+    if (values.length > 1) {
+      map.set(filter.identifier, {
+        filter: filter,
+        values: values,
+      })
+    }
   })
 
   return map
