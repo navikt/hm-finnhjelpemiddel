@@ -5,7 +5,7 @@ import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
-import { FilterComponentType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
+import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 import { useSearchParams } from 'next/navigation'
 
@@ -54,9 +54,9 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
           Array.from(filters.techDataFilterAggs.entries()).map(([key, value]) => {
             const filter = value.filter
 
-            if (filter.filterComponentType === FilterComponentType.range) {
+            if (filter.filterFunctionType === FilterFunctionType.range) {
               return <RangeFilter key={key} filterMenu={{ name: value.filter.fieldLabel, options: value }} />
-            } else if (filter.filterComponentType === FilterComponentType.dropdown) {
+            } else if (filter.filterFunctionType === FilterFunctionType.singleField) {
               const filterMenu = {
                 name: { key: filter.searchParamName, label: filter.identifier, paramKey: filter.searchParamName },
                 options: value.values.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })),
