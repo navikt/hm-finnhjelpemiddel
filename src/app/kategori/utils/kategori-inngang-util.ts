@@ -38,11 +38,11 @@ export type CategoryFilter = {
   fieldLabel: string
   searchParamName: string
   filterFunctionType: FilterFunctionType
-  openSearchFields: OpenSearchField[]
+  openSearchFieldGroups: OpenSearchFieldGroup[]
   unit?: string
 }
 
-export type OpenSearchField = {
+export type OpenSearchFieldGroup = {
   filterTechDataType: FilterTechDataType
   openSearchFields: string | MinMaxFields
 }
@@ -68,7 +68,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Setebredde',
     searchParamName: 'Setebredde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.minMax,
         openSearchFields: { min: 'setebreddeMinCM', max: 'setebreddeMaksCM' },
@@ -81,7 +81,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Setedybde',
     searchParamName: 'Setedybde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.minMax,
         openSearchFields: { min: 'setedybdeMinCM', max: 'setedybdeMaksCM' },
@@ -94,7 +94,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Setehøyde',
     searchParamName: 'Setehoyde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.minMax,
         openSearchFields: { min: 'setehoydeMinCM', max: 'setehoydeMaksCM' },
@@ -107,7 +107,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Brukervekt maks',
     searchParamName: 'BrukervektMaks',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.singleField,
         openSearchFields: 'brukervektMaksKG',
@@ -120,7 +120,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Innendørs bruk',
     searchParamName: 'InnendorsBruk',
     filterFunctionType: FilterFunctionType.singleField,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.singleField,
         openSearchFields: 'innendorsBruk',
@@ -132,7 +132,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Utendørs bruk',
     searchParamName: 'UtendorsBruk',
     filterFunctionType: FilterFunctionType.singleField,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.singleField,
         openSearchFields: 'utendorsBruk',
@@ -144,7 +144,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Rammetype',
     searchParamName: 'rammetype',
     filterFunctionType: FilterFunctionType.singleField,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.singleField,
         openSearchFields: 'rammetype',
@@ -156,7 +156,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Totallengde',
     searchParamName: 'Totallengde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.singleField,
         openSearchFields: 'totallengdeCM',
@@ -169,7 +169,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Totalbredde',
     searchParamName: 'Totalbredde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.singleField,
         openSearchFields: 'totalbreddeCM',
@@ -182,7 +182,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Madrassbredde',
     searchParamName: 'Madrassbredde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.minMax,
         openSearchFields: { min: 'madrassbreddeMinCM', max: 'madrassbreddeMaksCM' },
@@ -199,7 +199,7 @@ export const categoryFilters: CategoryFilter[] = [
     fieldLabel: 'Madrasslengde',
     searchParamName: 'Madrasslengde',
     filterFunctionType: FilterFunctionType.range,
-    openSearchFields: [
+    openSearchFieldGroups: [
       {
         filterTechDataType: FilterTechDataType.minMax,
         openSearchFields: { min: 'madrasslengdeMinCM', max: 'madrasslengdeMaksCM' },
@@ -251,7 +251,7 @@ export const fetchProductsKategori = async ({
 
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
-      const filterGroupClauses = filter.openSearchFields.map((opensearchField) => {
+      const filterGroupClauses = filter.openSearchFieldGroups.map((opensearchField) => {
         const searchValues = searchParams.getAll(filter.searchParamName)
 
         return {
@@ -335,7 +335,7 @@ export const fetchProductsKategori = async ({
     {},
     ...techDataFilters
       .map((filter) => {
-        return filter.openSearchFields.map((openSearchFieldConfig) => {
+        return filter.openSearchFieldGroups.map((openSearchFieldConfig) => {
           if (openSearchFieldConfig.filterTechDataType === FilterTechDataType.minMax) {
             const searchFields = openSearchFieldConfig.openSearchFields as MinMaxFields
             return [
@@ -476,7 +476,7 @@ const mapTechDataFilterAggregations = (
   techDataFilters.forEach((filter) => {
     map.set(filter.identifier, {
       filter: filter,
-      values: filter.openSearchFields
+      values: filter.openSearchFieldGroups
         .map((openSearchFieldConfig) => {
           if (openSearchFieldConfig.filterTechDataType === FilterTechDataType.minMax) {
             const searchFields = openSearchFieldConfig.openSearchFields as MinMaxFields
