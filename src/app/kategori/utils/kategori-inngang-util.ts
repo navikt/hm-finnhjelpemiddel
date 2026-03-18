@@ -251,11 +251,10 @@ export const fetchProductsKategori = async ({
 
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
-      const filterGroupClauses: Array<any> = []
-      filter.openSearchFields.forEach((opensearchField) => {
+      const filterGroupClauses = filter.openSearchFields.map((opensearchField) => {
         const searchValues = searchParams.getAll(filter.searchParamName)
 
-        const filterGroupClause = {
+        return {
           bool: {
             should: searchValues.map((searchValue) => {
               if (filter.filterFunctionType === FilterFunctionType.range) {
@@ -277,7 +276,6 @@ export const fetchProductsKategori = async ({
             }),
           },
         }
-        filterGroupClauses.push(filterGroupClause)
       })
 
       postFilters.push({
