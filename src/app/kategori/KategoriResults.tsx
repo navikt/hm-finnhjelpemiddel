@@ -33,34 +33,7 @@ export const KategoriResults = ({
       </Alert>
     )
   }
-
-  const productsByDelkonktrakt: {
-    [key: string]: Product[]
-  } = {}
-
-  products?.forEach((product) => {
-    if (product.agreements.length === 0) {
-      if (!productsByDelkonktrakt['Ikke på avtale']) {
-        productsByDelkonktrakt['Ikke på avtale'] = []
-      }
-
-      productsByDelkonktrakt['Ikke på avtale'].push(product)
-    }
-
-    product.agreements.forEach((agreement) => {
-      const delkontrakt = agreement.postTitle!
-
-      if (delkontrakt !== null) {
-        if (!productsByDelkonktrakt[delkontrakt]) {
-          productsByDelkonktrakt[delkontrakt] = []
-        }
-
-        productsByDelkonktrakt[delkontrakt].push(product)
-      }
-    })
-  })
-
-  console.log(productsByDelkonktrakt)
+  const delkontraktGroups = groupByDelkontrakt(products)
 
   return (
     <VStack gap="space-16">
@@ -72,17 +45,17 @@ export const KategoriResults = ({
             : `Viser ${products?.length} hjelpemidler`}
       </BodyShort>
 
-      {Object.entries(productsByDelkonktrakt)
+      {Object.entries(delkontraktGroups)
         .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-        .map(([delkontraktName, delkonktraktProducts]) => {
+        .map(([delkontraktName, delkontraktGroup]) => {
           return (
             <VStack key={delkontraktName} gap={'space-4'}>
-              <Heading size={'small'}>{delkontraktName}</Heading>
+              <Heading size={'small'}>{delkontraktGroup.title}</Heading>
               <HStack
                 gap={{ xs: 'space-16', md: 'space-20' }}
                 key={Math.random()} //rerender-issue quickfix, problemer med swrinfinite
               >
-                {delkonktraktProducts?.map((product) => (
+                {delkontraktGroup.products.map((product) => (
                   <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
                 ))}
               </HStack>
@@ -104,4 +77,41 @@ export const KategoriResults = ({
       )}
     </VStack>
   )
+}
+
+type ProductsDelkontrakt = {
+  [key: string]: {
+    nr: number
+    title: string
+    products: Product[]
+  }
+}
+
+const groupByDelkontrakt = (products: Product[] | undefined): ProductsDelkontrakt => {
+  const productsByDelkonktrakt: ProductsDelkontrakt = {}
+
+  products?.forEach((product) => {
+    if (product.agreements.length === 0) {
+      if (!productsByDelkonktrakt['Ikke på avtale']) {
+        productsByDelkonktrakt['Ikke på avtale'] = { nr: 0, title: 'Ikke på avtale', products: [] }
+      }
+
+      productsByDelkonktrakt['Ikke på avtale'].products.push(product)
+    }
+
+    product.agreements.forEach((agreement) => {
+      const delkontrakt = agreement.postTitle!
+      const normalizedTitle = delkontrakt.split(/[):.]\s*/)
+
+      if (delkontrakt !== null) {
+        if (!productsByDelkonktrakt[delkontrakt]) {
+          productsByDelkonktrakt[delkontrakt] = { nr: agreement.postNr, title: normalizedTitle[1], products: [] }
+        }
+
+        productsByDelkonktrakt[delkontrakt].products.push(product)
+      }
+    })
+  })
+
+  return productsByDelkonktrakt
 }
