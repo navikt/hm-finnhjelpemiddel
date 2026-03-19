@@ -50,7 +50,7 @@ export const KategoriResults = ({
           .map(([delkontraktName, delkontraktGroup]) => {
             return (
               <VStack key={delkontraktName} gap={'space-16'}>
-                <HStack gap={'space-8'}>
+                <HStack gap={'space-8'} align={'center'}>
                   {delkontraktGroup.refNr !== '0' && (
                     <Tag size={'medium'} data-color={'neutral'} variant={'moderate'}>
                       Delkontrakt {delkontraktGroup.refNr}
