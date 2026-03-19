@@ -297,7 +297,7 @@ export const fetchProductsKategori = async ({
           },
         },
       },
-      queryFilters
+      postFilters.filter(({ key }) => key !== 'iso').map(({ filter }) => filter)
     ),
     ...aggsFilter(
       'suppliers',
