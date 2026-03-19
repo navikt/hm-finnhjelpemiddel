@@ -432,12 +432,10 @@ const mapTechDataFilterAggregations = (
       })
       .flat()
 
-    if (values.length > 1) {
-      map.set(filter.identifier, {
-        filter: filter,
-        values: values,
-      })
-    }
+    map.set(filter.identifier, {
+      filter: filter,
+      values: values,
+    })
   })
 
   return map
