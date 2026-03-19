@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Alert, BodyLong, BodyShort, Button, HStack, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Heading, HStack, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { ProductCardKategori } from '@/app/kategori/ProductCardKategori'
@@ -34,6 +34,34 @@ export const KategoriResults = ({
     )
   }
 
+  const productsByDelkonktrakt: {
+    [key: string]: Product[]
+  } = {}
+
+  products?.forEach((product) => {
+    if (product.agreements.length === 0) {
+      if (!productsByDelkonktrakt['Ikke på avtale']) {
+        productsByDelkonktrakt['Ikke på avtale'] = []
+      }
+
+      productsByDelkonktrakt['Ikke på avtale'].push(product)
+    }
+
+    product.agreements.forEach((agreement) => {
+      const delkontrakt = agreement.postTitle!
+
+      if (delkontrakt !== null) {
+        if (!productsByDelkonktrakt[delkontrakt]) {
+          productsByDelkonktrakt[delkontrakt] = []
+        }
+
+        productsByDelkonktrakt[delkontrakt].push(product)
+      }
+    })
+  })
+
+  console.log(productsByDelkonktrakt)
+
   return (
     <VStack gap="space-16">
       <BodyShort>
@@ -43,14 +71,25 @@ export const KategoriResults = ({
             ? `Viser første ${products?.length} hjelpemidler`
             : `Viser ${products?.length} hjelpemidler`}
       </BodyShort>
-      <HStack
-        gap={{ xs: 'space-16', md: 'space-20' }}
-        key={Math.random()} //rerender-issue quickfix, problemer med swrinfinite
-      >
-        {products?.map((product) => (
-          <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
-        ))}
-      </HStack>
+
+      {Object.entries(productsByDelkonktrakt)
+        .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+        .map(([delkontraktName, delkonktraktProducts]) => {
+          return (
+            <VStack key={delkontraktName} gap={'space-4'}>
+              <Heading size={'small'}>{delkontraktName}</Heading>
+              <HStack
+                gap={{ xs: 'space-16', md: 'space-20' }}
+                key={Math.random()} //rerender-issue quickfix, problemer med swrinfinite
+              >
+                {delkonktraktProducts?.map((product) => (
+                  <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
+                ))}
+              </HStack>
+            </VStack>
+          )
+        })}
+
       {loadMore && !isLoading && (
         <Button
           variant="tertiary"
