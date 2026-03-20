@@ -12,15 +12,12 @@ function ToSuppliers() {
             Hva er et hjelpemiddel?
           </Heading>
           <BodyLong spacing>
-            FinnHjelpemiddel forholder seg til folketrygdens definisjon av et hjelpemiddel. Hjelpemidlene som
-            presenteres er spesiallaget for personer med funksjonsnedsettelse. For mer informasjon om hva som defineres
-            som et hjelpemiddel, se{' '}
-            <Link href="https://lovdata.no/nav/rundskriv/r10-07acd/KAPITTEL_1-1-2.#KAPITTEL_1-1-2">
-              rundskriv til folketrygdloven § 10-7
-            </Link>
-            .
+            FinnHjelpemiddel presenterer hjelpemidler på det norske markedet. Det er ikke automatisk samsvar mellom
+            folketrygdlovens definisjon av et hjelpemiddel og det som ligger i FinnHjelpemiddel. Det kan derfor finnes
+            produkter i FinnHjelpemiddel som Nav ikke kan gi stønad til. I slike tilfeller må kostnadene til produktet
+            dekkes av brukeren selv.
           </BodyLong>
-          <BodyLong>Produkter som klart faller utenfor hjelpemiddelbegrepet i denne sammenhengen er:</BodyLong>
+          <BodyLong>Produkter som klart faller utenfor hjelpemiddelbegrepet i folketrygdloven er:</BodyLong>
           <ul>
             <li>Vanlige møbler</li>
             <li>Brune- og hvitevarer</li>
