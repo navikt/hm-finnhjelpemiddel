@@ -43,10 +43,7 @@ export const KategoriResults = ({
             ? `Viser første ${products?.length} hjelpemidler`
             : `Viser ${products?.length} hjelpemidler`}
       </BodyShort>
-      <HStack
-        gap={{ xs: 'space-16', md: 'space-20' }}
-        key={Math.random()} //rerender-issue quickfix, problemer med swrinfinite
-      >
+      <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
         {products?.map((product) => (
           <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
         ))}
