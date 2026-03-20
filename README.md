@@ -36,7 +36,7 @@ First time:
 To get products locally from 8080:  
 `kubectl port-forward $(kubectl get pods -l app=hm-grunndata-search -o custom-columns=:metadata.name) 8080`
 
-#### To get alternative products from port 1338
+#### To get alternative products from port 8081
 
 Follow the guide to acquire an On Behalf Of-token (obo) in dev in the [nais-docs](https://doc.nais.io/auth/entra-id/how-to/generate/).
 
