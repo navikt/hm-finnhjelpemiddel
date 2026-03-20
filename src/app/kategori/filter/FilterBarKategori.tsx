@@ -5,9 +5,9 @@ import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
-import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-inngang-util'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 import { useSearchParams } from 'next/navigation'
+import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-types'
 
 export type Filters = {
   ['suppliers']: string[]

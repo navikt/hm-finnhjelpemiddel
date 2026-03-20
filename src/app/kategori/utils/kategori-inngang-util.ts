@@ -4,152 +4,25 @@ import {
   filterNotExpiredOnly,
   filterPrefixIsoKode,
 } from '@/utils/filter-util'
-import { mapProductsFromCollapse, Product } from '@/utils/product-util'
-import { Hit } from '@/utils/response-types'
+import { mapProductsFromCollapse } from '@/utils/product-util'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
+import { ProductIsoAggregationResponse } from '@/app/kategori/utils/kategori-response-types'
+import {
+  CategoryFilter,
+  FilterFunctionType,
+  IsoInfo,
+  MinMaxFields,
+  ProductsWithIsoAggs,
+  SupplierInfo,
+  TechDataFilterAggs,
+} from '@/app/kategori/utils/kategori-types'
+import { categoryFilters } from '@/app/kategori/utils/kategori-filter-utils'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 export const PAGE_SIZE = 24
-
-export type IsoInfo = {
-  code: string
-  name: string
-}
-
-export type SupplierInfo = {
-  name: string
-}
-
-export type TechDataFilterAgg = { filter: CategoryFilter; values: string[] }
-export type TechDataFilterAggs = Map<string, TechDataFilterAgg>
-
-export type ProductsWithIsoAggs = {
-  products: Product[]
-  iso: IsoInfo[]
-  suppliers: SupplierInfo[]
-  techDataFilterAggs: TechDataFilterAggs
-}
-
-export type CategoryFilter = {
-  identifier: string //identifier
-  fieldLabel: string
-  searchParamName: string
-  filterFunctionType: FilterFunctionType
-  openSearchFieldGroups: (string | MinMaxFields)[]
-  unit?: string
-}
-
-export interface MinMaxFields {
-  fromField: string
-  toField: string
-}
-
-export enum FilterTechDataType {
-  singleField,
-  minMax,
-}
-
-export enum FilterFunctionType {
-  singleField,
-  range,
-}
-
-export const categoryFilters: CategoryFilter[] = [
-  {
-    identifier: 'Setebredde min/maks',
-    fieldLabel: 'Setebredde',
-    searchParamName: 'Setebredde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'setebreddeMinCM', toField: 'setebreddeMaksCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Setedybde min/maks',
-    fieldLabel: 'Setedybde',
-    searchParamName: 'Setedybde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'setedybdeMinCM', toField: 'setedybdeMaksCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Setehøyde min/maks',
-    fieldLabel: 'Setehøyde',
-    searchParamName: 'Setehoyde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'setehoydeMinCM', toField: 'setehoydeMaksCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Brukervekt maks',
-    fieldLabel: 'Brukervekt maks',
-    searchParamName: 'BrukervektMaks',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'brukervektMaksKG', toField: 'brukervektMaksKG' }],
-    unit: 'kg',
-  },
-  {
-    identifier: 'Innendørs bruk',
-    fieldLabel: 'Innendørs bruk',
-    searchParamName: 'InnendorsBruk',
-    filterFunctionType: FilterFunctionType.singleField,
-    openSearchFieldGroups: ['innendorsBruk'],
-  },
-  {
-    identifier: 'Utendørs bruk',
-    fieldLabel: 'Utendørs bruk',
-    searchParamName: 'UtendorsBruk',
-    filterFunctionType: FilterFunctionType.singleField,
-    openSearchFieldGroups: ['utendorsBruk'],
-  },
-  {
-    identifier: 'Rammetype',
-    fieldLabel: 'Rammetype',
-    searchParamName: 'rammetype',
-    filterFunctionType: FilterFunctionType.singleField,
-    openSearchFieldGroups: ['rammetype'],
-  },
-  {
-    identifier: 'Totallengde',
-    fieldLabel: 'Totallengde',
-    searchParamName: 'Totallengde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'totallengdeCM', toField: 'totallengdeCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Totalbredde',
-    fieldLabel: 'Totalbredde',
-    searchParamName: 'Totalbredde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'totalbreddeCM', toField: 'totalbreddeCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Madrassbredde',
-    fieldLabel: 'Madrassbredde',
-    searchParamName: 'Madrassbredde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [
-      { fromField: 'madrassbreddeMinCM', toField: 'madrassbreddeMaksCM' },
-      { fromField: 'madrassbreddeCM', toField: 'madrassbreddeCM' },
-    ],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Madrasslengde',
-    fieldLabel: 'Madrasslengde',
-    searchParamName: 'Madrasslengde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [
-      { fromField: 'madrasslengdeMinCM', toField: 'madrasslengdeMaksCM' },
-      { fromField: 'madrasslengdeCM', toField: 'madrasslengdeCM' },
-    ],
-    unit: 'cm',
-  },
-]
 
 type FetchProps = {
   from: number
@@ -347,50 +220,6 @@ export const fetchProductsKategori = async ({
         techDataFilterAggs: mapTechDataFilterAggregations(data, techDataFilters),
       }
     })
-}
-
-type IsoBucket = {
-  key: string[]
-  doc_count: number
-}
-
-type IsoAggregation = {
-  doc_count: number
-  values: {
-    buckets: IsoBucket[]
-  }
-}
-
-type SupplierBucket = {
-  key: string
-  doc_count: number
-}
-
-type SupplierAggregation = {
-  doc_count: number
-  values: {
-    buckets: SupplierBucket[]
-  }
-}
-
-type TechDataAggregation = {
-  doc_count: number
-  values: {
-    buckets: { key: string; doc_count: number }[]
-  }
-}
-
-type ProductIsoAggregationResponse = {
-  hits: {
-    total: object
-    hits: Hit[]
-  }
-  aggregations: {
-    iso: IsoAggregation
-    suppliers: SupplierAggregation
-  } & {
-    [key: string]: TechDataAggregation
-  }
 }
 
 const mapIsoAggregations = (data: ProductIsoAggregationResponse): IsoInfo[] => {
