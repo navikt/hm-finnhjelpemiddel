@@ -357,9 +357,9 @@ const removeReservedChars = (searchTerm: string) => {
 }
 
 export const sortOptionsOpenSearch = {
-  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }],
-  Best_soketreff: [{ _score: { order: 'desc' } }],
-  Rangering: [{ 'agreements.rank': 'asc' }],
+  Delkontrakt_rangering: [{ 'agreements.postNr': 'asc' }, { 'agreements.rank': 'asc' }, { seriesId: 'desc' }],
+  Best_soketreff: [{ _score: { order: 'desc' } }, { seriesId: 'desc' }],
+  Rangering: [{ 'agreements.rank': 'asc' }, { seriesId: 'desc' }],
 }
 
 export type QueryObject = {

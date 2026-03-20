@@ -6,7 +6,7 @@ import {
 } from '@/utils/filter-util'
 import { mapProductsFromCollapse, Product } from '@/utils/product-util'
 import { Hit } from '@/utils/response-types'
-import { makeSearchTermQuery, QueryObject } from '@/utils/api-util'
+import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
@@ -165,7 +165,7 @@ export const fetchProductsKategori = async ({
   searchParams,
   category,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
-  const sortOrderOpenSearch = [{ 'agreements.rank': 'asc' }, { seriesId: 'desc' }]
+  const sortOrderOpenSearch = sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
   const visTilbDeler = false
 
