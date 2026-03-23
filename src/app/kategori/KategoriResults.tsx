@@ -49,10 +49,10 @@ export const KategoriResults = ({
           .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
           .map(([delkontraktName, delkontraktGroup]) => {
             return (
-              <VStack key={delkontraktName} gap={'space-16'}>
-                <HStack gap={'space-8'} align={'center'}>
+              <VStack key={delkontraktName} gap={'space-16'} style={{ borderTop: '1px solid #CFD3D8' }}>
+                <HStack gap={'space-8'} align={'center'} paddingBlock={'space-16 space-0'}>
                   {delkontraktGroup.refNr !== '0' && (
-                    <Tag size={'medium'} data-color={'neutral'} variant={'moderate'}>
+                    <Tag size={'medium'} data-color={'info'} variant={'moderate'}>
                       Delkontrakt {delkontraktGroup.refNr}
                     </Tag>
                   )}
