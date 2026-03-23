@@ -22,7 +22,7 @@ import { categoryFilters } from '@/app/kategori/utils/kategori-filter-utils'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
-export const PAGE_SIZE = 24
+export const PAGE_SIZE = 72
 
 type FetchProps = {
   from: number
