@@ -8,9 +8,10 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { KategoriResults } from '../KategoriResults'
 import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
 import useQueryString from '@/utils/search-params-util'
-import { fetchProductsKategori, PAGE_SIZE, ProductsWithIsoAggs } from '@/app/kategori/utils/kategori-inngang-util'
+import { fetchProductsKategori, PAGE_SIZE } from '@/app/kategori/utils/kategori-inngang-util'
 import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
+import { ProductsWithIsoAggs } from '@/app/kategori/utils/kategori-types'
 
 type Props = {
   category: CategoryDTO
