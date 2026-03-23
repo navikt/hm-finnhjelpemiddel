@@ -44,7 +44,7 @@ export const KategoriResults = ({
             ? `Viser første ${products?.length} hjelpemidler`
             : `Viser ${products?.length} hjelpemidler`}
       </BodyShort>
-      <VStack gap={'space-48'}>
+      <VStack gap={'space-40'}>
         {Object.entries(delkontraktGroups)
           .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
           .map(([delkontraktName, delkontraktGroup]) => {
@@ -58,10 +58,7 @@ export const KategoriResults = ({
                   )}
                   <Heading size={'small'}>{delkontraktGroup.title}</Heading>
                 </HStack>
-                <HStack
-                  gap={{ xs: 'space-16', md: 'space-20' }}
-                  key={Math.random()} //rerender-issue quickfix, problemer med swrinfinite
-                >
+                <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
                   {delkontraktGroup.products.map((product) => (
                     <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
                   ))}
