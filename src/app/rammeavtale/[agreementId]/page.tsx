@@ -34,11 +34,14 @@ export default async function AgreementPage(props: Props) {
   const params = await props.params
   const agreementResponse = await getAgreement(params.agreementId)
   const agreement = mapAgreementFromDoc(agreementResponse)
+
   const activeAgreement = agreement.published <= new Date() && agreement.expired >= new Date()
+
+  const showAgreement = agreement && (activeAgreement || agreement.id === 'd73b510b-0043-4c9e-92ac-25b4ace236c9') //vis høreapparat selv om avtalen er utløpt
 
   return (
     <>
-      {agreement && activeAgreement ? (
+      {showAgreement ? (
         <VStack
           marginInline={'auto'}
           marginBlock={'space-0'}

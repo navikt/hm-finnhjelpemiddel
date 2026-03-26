@@ -35,7 +35,10 @@ export const OtherAgreements = () => {
         <Accordion.Item>
           <Accordion.Header>Høreapparater, ørepropper og tinnitusmaskerere</Accordion.Header>
           <Accordion.Content>
-            Her kan du lese mer om <Link href="/horeapparat">høreapparater, ørepropper og tinnitusmaskerere.</Link>
+            Her kan du lese mer om{' '}
+            <Link href={'/rammeavtale/d73b510b-0043-4c9e-92ac-25b4ace236c9'}>
+              høreapparater, ørepropper og tinnitusmaskerere.
+            </Link>
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item>
