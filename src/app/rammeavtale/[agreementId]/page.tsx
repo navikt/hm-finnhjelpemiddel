@@ -37,11 +37,9 @@ export default async function AgreementPage(props: Props) {
 
   const activeAgreement = agreement.published <= new Date() && agreement.expired >= new Date()
 
-  const showAgreement = agreement && (activeAgreement || agreement.id === 'd73b510b-0043-4c9e-92ac-25b4ace236c9') //vis høreapparat selv om avtalen er utløpt
-
   return (
     <>
-      {showAgreement ? (
+      {agreement && activeAgreement ? (
         <VStack
           marginInline={'auto'}
           marginBlock={'space-0'}
