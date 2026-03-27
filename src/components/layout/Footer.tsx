@@ -3,17 +3,17 @@ import { Bleed, BodyShort, Heading, HStack, Link, VStack } from '@navikt/ds-reac
 import Image from 'next/image'
 import NextLink from 'next/link'
 import styles from './Footer.module.scss'
-import { ArrowUpIcon, TabsAddIcon } from '@navikt/aksel-icons'
+import { ArrowUpIcon } from '@navikt/aksel-icons'
 
 const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) => (
   <footer className="main-wrapper--xlarge" style={{ width: '100%' }}>
     <Bleed marginInline="full" asChild reflectivePadding>
-      <VStack gap={"space-56"} className="nav-bunn nav-bunn__info">
-        <HStack as={Link} href="#" gap={"space-8"}>
+      <VStack gap={'space-56'} className="nav-bunn nav-bunn__info">
+        <HStack as={Link} href="#" gap={'space-8'}>
           <ArrowUpIcon fontSize={24} aria-hidden /> <BodyShort size="large">Til toppen</BodyShort>
         </HStack>
         <div className={styles.footerLinks}>
-          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
+          <VStack gap={'space-16'} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Kontakt
             </Heading>
@@ -21,7 +21,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             <Link href="https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral">Finn din hjelpemiddelsentral</Link>
           </VStack>
 
-          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
+          <VStack gap={'space-16'} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Søke om hjelpemiddel
             </Heading>
@@ -29,7 +29,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             <Link href="https://www.nav.no/soknader">Søknad og skjema for hjelpemidler</Link>
           </VStack>
 
-          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
+          <VStack gap={'space-16'} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Om FinnHjelpemiddel
             </Heading>
@@ -55,12 +55,18 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             </Link>
             <Link onClick={() => setCookieConsent(null)}>Endre samtykke for informasjonskapsler</Link>
           </VStack>
-          <VStack gap={"space-16"} className={styles.footerLinkGroup}>
+          <VStack gap={'space-16'} className={styles.footerLinkGroup}>
             <Heading level="2" size="small" className={styles.heading}>
               Annet
             </Heading>
             <Link href="https://www.kunnskapsbanken.net/" target="_blank">
               Kunnskapsbanken - fagstoff og kurs om hjelpemidler og tilrettelegging
+            </Link>
+            <Link
+              href="https://pub.dialogapi.no/s/MTc4Mjk6N2E4YjFjMDQtYjM5YS00NGY3LTliMzEtNzM3MjBlNGFhZjMz"
+              target="_blank"
+            >
+              Abonner på nyhetbrev fra Nav hjelpemidler og tilrettelegging
             </Link>
           </VStack>
         </div>
