@@ -64,6 +64,20 @@ export const categoryFilters: CategoryFilter[] = [
     openSearchFieldGroups: ['rammetype'],
   },
   {
+    identifier: 'Materiale i trekk',
+    fieldLabel: 'Materiale i trekk',
+    searchParamName: 'MaterialeTrekk',
+    filterFunctionType: FilterFunctionType.singleField,
+    openSearchFieldGroups: ['materialeTrekk'],
+  },
+  {
+    identifier: 'Fyllmateriale',
+    fieldLabel: 'Fyllmateriale',
+    searchParamName: 'Fyllmateriale',
+    filterFunctionType: FilterFunctionType.singleField,
+    openSearchFieldGroups: ['fyllmateriale'],
+  },
+  {
     identifier: 'Totallengde',
     fieldLabel: 'Totallengde',
     searchParamName: 'Totallengde',

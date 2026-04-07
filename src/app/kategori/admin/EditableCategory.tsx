@@ -267,7 +267,7 @@ const FilterModule = ({
     'Bredde',
     'Lengde',
     'Dybde',
-    'Trekk',
+    'Materiale i trekk',
     'Fyllmateriale',
   ]
 
