@@ -8,7 +8,7 @@ import { buildNewsPreview } from '@/utils/news-html-util'
 import { dateToString } from '@/utils/string-util'
 
 export const NewsFeed = () => {
-  const { data, isLoading } = useSWR<News[]>('/news/_search', () => getNews(3), {
+  const { data, isLoading } = useSWR<News[]>('/news/_search', () => getNews(4), {
     keepPreviousData: true,
   })
 
