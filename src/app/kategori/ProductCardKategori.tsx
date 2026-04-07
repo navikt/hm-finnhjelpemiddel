@@ -25,7 +25,11 @@ export const ProductCardKategori = ({
       <VStack height={'100%'} gap={'space-8'}>
         <VStack>
           <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
-            {onAgreement ? <SuccessTag>Rangering {minRank}</SuccessTag> : <NeutralTag>Ikke på avtale</NeutralTag>}
+            {onAgreement ? (
+              <SuccessTag>{minRank === 99 ? 'På avtale' : `Rangering ${minRank}`}</SuccessTag>
+            ) : (
+              <NeutralTag>Ikke på avtale</NeutralTag>
+            )}
             <CompareButton product={product} handleCompareClick={handleCompareClick} />
           </HStack>
 
