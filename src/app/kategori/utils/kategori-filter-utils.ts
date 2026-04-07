@@ -100,4 +100,28 @@ export const categoryFilters: CategoryFilter[] = [
     openSearchFieldGroups: [{ fromField: 'skrittlengdeMinCM', toField: 'skrittlengdeMaksCM' }],
     unit: 'cm',
   },
+  {
+    identifier: 'Bredde',
+    fieldLabel: 'Bredde',
+    searchParamName: 'Bredde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [{ fromField: 'breddeCM', toField: 'breddeCM' }],
+    unit: 'cm',
+  },
+  {
+    identifier: 'Lengde',
+    fieldLabel: 'Lengde',
+    searchParamName: 'Lengde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [{ fromField: 'lengdeCM', toField: 'lengdeCM' }],
+    unit: 'cm',
+  },
+  {
+    identifier: 'Dybde',
+    fieldLabel: 'Dybde',
+    searchParamName: 'Dybde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [{ fromField: 'dybdeCM', toField: 'dybdeCM' }],
+    unit: 'cm',
+  },
 ]
