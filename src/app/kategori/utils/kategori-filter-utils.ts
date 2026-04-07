@@ -2,30 +2,6 @@ import { CategoryFilter, FilterFunctionType } from '@/app/kategori/utils/kategor
 
 export const categoryFilters: CategoryFilter[] = [
   {
-    identifier: 'Setebredde min/maks',
-    fieldLabel: 'Setebredde',
-    searchParamName: 'Setebredde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'setebreddeMinCM', toField: 'setebreddeMaksCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Setedybde min/maks',
-    fieldLabel: 'Setedybde',
-    searchParamName: 'Setedybde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'setedybdeMinCM', toField: 'setedybdeMaksCM' }],
-    unit: 'cm',
-  },
-  {
-    identifier: 'Setehøyde min/maks',
-    fieldLabel: 'Setehøyde',
-    searchParamName: 'Setehoyde',
-    filterFunctionType: FilterFunctionType.range,
-    openSearchFieldGroups: [{ fromField: 'setehoydeMinCM', toField: 'setehoydeMaksCM' }],
-    unit: 'cm',
-  },
-  {
     identifier: 'Setebredde',
     fieldLabel: 'Setebredde',
     searchParamName: 'Setebredde',

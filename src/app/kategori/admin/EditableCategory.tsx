@@ -251,11 +251,8 @@ const FilterModule = ({
 }) => {
   const options = [
     'Setebredde',
-    'Setebredde min/maks',
     'Setedybde',
-    'Setedybde min/maks',
     'Setehøyde',
-    'Setehøyde min/maks',
     'Brukervekt maks',
     'Innendørs bruk',
     'Utendørs bruk',
