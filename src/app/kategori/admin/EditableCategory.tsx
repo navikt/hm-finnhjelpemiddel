@@ -267,6 +267,8 @@ const FilterModule = ({
     'Bredde',
     'Lengde',
     'Dybde',
+    'Trekk',
+    'Fyllmateriale',
   ]
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
