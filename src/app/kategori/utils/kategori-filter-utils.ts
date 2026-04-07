@@ -92,4 +92,12 @@ export const categoryFilters: CategoryFilter[] = [
     ],
     unit: 'cm',
   },
+  {
+    identifier: 'Skrittlengde',
+    fieldLabel: 'Skrittlengde',
+    searchParamName: 'Skrittlengde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [{ fromField: 'skrittlengdeMinCM', toField: 'skrittlengdeMaksCM' }],
+    unit: 'cm',
+  },
 ]
