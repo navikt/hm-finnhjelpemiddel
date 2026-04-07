@@ -269,6 +269,13 @@ const FilterModule = ({
     'Dybde',
     'Materiale i trekk',
     'Fyllmateriale',
+    'Høyderegulering elektrisk',
+    'Høyderegulering hydraulisk',
+    'Løftehøyde',
+    'Veggmontert',
+    'Gulvmontert',
+    'Rettløft',
+    'Skråløft',
   ]
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
