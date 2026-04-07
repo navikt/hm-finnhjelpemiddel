@@ -26,6 +26,39 @@ export const categoryFilters: CategoryFilter[] = [
     unit: 'cm',
   },
   {
+    identifier: 'Setebredde',
+    fieldLabel: 'Setebredde',
+    searchParamName: 'Setebredde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [
+      { fromField: 'setebreddeMinCM', toField: 'setebreddeMaksCM' },
+      { fromField: 'setebreddeCM', toField: 'setebreddeCM' },
+    ],
+    unit: 'cm',
+  },
+  {
+    identifier: 'Setedybde',
+    fieldLabel: 'Setedybde',
+    searchParamName: 'Setedybde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [
+      { fromField: 'setedybdeMinCM', toField: 'setedybdeMaksCM' },
+      { fromField: 'setedybdeCM', toField: 'setedybdeCM' },
+    ],
+    unit: 'cm',
+  },
+  {
+    identifier: 'Setehøyde',
+    fieldLabel: 'Setehøyde',
+    searchParamName: 'Setehoyde',
+    filterFunctionType: FilterFunctionType.range,
+    openSearchFieldGroups: [
+      { fromField: 'setehoydeMinCM', toField: 'setehoydeMaksCM' },
+      { fromField: 'setehoydeCM', toField: 'setehoydeCM' },
+    ],
+    unit: 'cm',
+  },
+  {
     identifier: 'Brukervekt maks',
     fieldLabel: 'Brukervekt maks',
     searchParamName: 'BrukervektMaks',
