@@ -262,11 +262,14 @@ const FilterModule = ({
     'Rammetype',
     'Totalbredde',
     'Totallengde',
-    'Terskelhøyde min/maks',
-    'Skrittlengde min/maks',
+    'Terskelhøyde',
+    'Skrittlengde',
     'Madrasslengde',
     'Madrassbredde',
     'Ryggstøttebredde',
+    'Bredde',
+    'Lengde',
+    'Dybde',
   ]
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
