@@ -2,7 +2,7 @@
 
 import { LinkCard, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import styles from './CategoryCard.module.scss'
+import styles from './CategoryCardFrontPage.module.scss'
 import { ReactNode } from 'react'
 
 type Props = {

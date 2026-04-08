@@ -20,7 +20,7 @@ export type CategoryAdminDTO = {
 export type CategoryDTO = {
   id: string
   title: string
-  subCategories?: { id: string; title: string; icon: string }[]
+  subCategories?: { id: string; title: string; icon: string; description: string }[]
   data: Category
 }
 

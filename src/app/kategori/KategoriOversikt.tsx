@@ -10,7 +10,7 @@ export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
       <UXSignalsSurvey />
 
       {category.subCategories?.length && (
-        <HGrid gap={'space-16'} columns={{ xs: 1, md: 2 }} paddingBlock={'space-0 space-96'}>
+        <HGrid gap={'space-40'} columns={{ xs: 1, md: 2, lg: 3 }} paddingBlock={'space-0 space-96'}>
           {category.subCategories
             .sort((a, b) => a.title.localeCompare(b.title))
             .map((subCategory) => (
@@ -20,6 +20,7 @@ export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
                 link={subCategory.title}
                 key={subCategory.title}
                 showSubCategoryIcons={category.data.showSubCategoryIcons}
+                description={subCategory.description}
               />
             ))}
         </HGrid>

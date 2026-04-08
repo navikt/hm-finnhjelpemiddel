@@ -1,5 +1,6 @@
-import { Alert, BodyLong, Heading, HStack, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, HStack, ReadMore, VStack } from '@navikt/ds-react'
 import { ReactNode } from 'react'
+import NextLink from 'next/link'
 
 type Props = {
   title: string
@@ -12,19 +13,35 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
   if (error) console.debug(error)
   return (
     <VStack
-      gap={'space-48'}
-      paddingBlock={'space-64 space-64'}
-      paddingInline={'space-16'}
+      gap={'space-32'}
+      paddingBlock={'space-80 space-64'}
       marginInline={'auto'}
       marginBlock={'space-0'}
-      maxWidth={'1280px'}
+      maxWidth={'1024px'}
     >
-      <VStack gap="space-16">
-        <Heading level="1" size="large">
+      <VStack gap="space-8">
+        <Heading level="1" size="xlarge">
           {title}
         </Heading>
-        <BodyLong style={{ maxWidth: '735px' }}>{description}</BodyLong>
+        <BodyLong size={'large'} style={{ maxWidth: '735px' }}>
+          {description}
+        </BodyLong>
       </VStack>
+      <ReadMore variant={'moderate'} size={'large'} header={'Hvordan kan du få hjelpemidler?'}>
+        Dersom du har en varig og vesentlig nedsatt funksjon på grunn av sykdom, skade eller annen tilstand, kan du søke
+        om hjelpemidler fra Nav.
+        <br />
+        <br />
+        I mange tilfeller er det nyttig å samarbeide med en fagperson i kommunen for å komme frem til det til det mest
+        hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
+        <br />
+        <br />
+        Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no
+        <NextLink href={'https://www.nav.no/om-hjelpemidler#hvordan'}>
+          Informasjon om hjelpemidler og tilrettelegging - nav.no
+        </NextLink>
+        .
+      </ReadMore>
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Alert variant="error" title="Error med lasting av produkter">

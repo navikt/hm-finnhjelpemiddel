@@ -16,28 +16,28 @@ type Props = {
 export const CategoryCard = ({ title, link, description, icon, showSubCategoryIcons }: Props) => {
   const showIcon = (showSubCategoryIcons === undefined || showSubCategoryIcons) && icon !== undefined
   return (
-    <LinkCard arrow={true} className={styles.container}>
+    <LinkCard arrow={false} data-color={'accent'} className={styles.container}>
       {showIcon && (
-        <VStack justify="center" height="100%" asChild>
-          <LinkCard.Icon>
-            {
-              <Image
-                width={56}
-                height={56}
-                alt={'ikon'}
-                src={`data:image/svg+xml;utf8,${encodeURIComponent(icon)}`}
-                draggable={false}
-                className={styles.iconImage}
-              />
-            }
-          </LinkCard.Icon>
-        </VStack>
+        <LinkCard.Image aspectRatio={'16/9'}>
+          {
+            <Image
+              fill
+              alt={'ikon'}
+              src={`data:image/svg+xml;utf8,${encodeURIComponent(icon)}`}
+              draggable={false}
+              className={styles.iconImage}
+            />
+          }
+        </LinkCard.Image>
       )}
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
-          <NextLink href={link}>{title}</NextLink>
+          <NextLink href={link} className={styles.linkText}>
+            {title}
+          </NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
+      <LinkCard.Description>{description}</LinkCard.Description>
     </LinkCard>
   )
 }
