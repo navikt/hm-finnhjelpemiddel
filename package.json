@@ -16,7 +16,7 @@
     "@navikt/ds-css": "^8.9.0",
     "@navikt/ds-react": "^8.9.0",
     "@navikt/ds-tokens": "^8.0.1",
-    "@navikt/next-logger": "^4.5.0",
+    "@navikt/next-logger": "^5.0.0",
     "@navikt/oasis": "^4.1.0",
     "@types/js-cookie": "^3.0.6",
     "@types/umami": "^2.10.1",
