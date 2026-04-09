@@ -1,9 +1,12 @@
-import { Accordion, Heading, HGrid, Link, Show, VStack } from '@navikt/ds-react'
-
+import { Accordion, Box, Heading, HGrid, Link, VStack } from '@navikt/ds-react'
+import styles from './OtherAgreements.module.scss'
 export const OtherAgreements = () => {
-  const AccordionItems1 = () => {
-    return (
-      <>
+  return (
+    <VStack paddingBlock={{ md: 'space-48' }}>
+      <Heading size={'medium'} level={'2'} spacing>
+        Andre hjelpemiddelavtaler
+      </Heading>
+      <Accordion className={styles.container}>
         <Accordion.Item>
           <Accordion.Header>Bil og bilombygg</Accordion.Header>
           <Accordion.Content>
@@ -25,13 +28,7 @@ export const OtherAgreements = () => {
             <Link href="https://www.nav.no/servicehund">servicehund</Link>.
           </Accordion.Content>
         </Accordion.Item>
-      </>
-    )
-  }
 
-  const AccordionItems2 = () => {
-    return (
-      <>
         <Accordion.Item>
           <Accordion.Header>Høreapparater, ørepropper og tinnitusmaskerere</Accordion.Header>
           <Accordion.Content>
@@ -50,31 +47,7 @@ export const OtherAgreements = () => {
             </Link>
           </Accordion.Content>
         </Accordion.Item>
-      </>
-    )
-  }
-
-  return (
-    <VStack paddingBlock={{ md: 'space-48' }}>
-      <Heading size={'medium'} level={'2'} spacing>
-        Andre hjelpemiddelavtaler
-      </Heading>
-      <Show above={'lg'}>
-        <HGrid columns={'1fr 1fr'} gap={'space-32'}>
-          <Accordion>
-            <AccordionItems1 />
-          </Accordion>
-          <Accordion>
-            <AccordionItems2 />
-          </Accordion>
-        </HGrid>
-      </Show>
-      <Show below={'lg'}>
-        <Accordion>
-          <AccordionItems1 />
-          <AccordionItems2 />
-        </Accordion>
-      </Show>
+      </Accordion>
     </VStack>
   )
 }

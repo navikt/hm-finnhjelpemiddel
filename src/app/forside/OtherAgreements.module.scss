@@ -1,0 +1,37 @@
+@use "@navikt/ds-tokens/dist/tokens" as *;
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 50px);
+  grid-auto-flow: column;
+  column-gap: 32px;
+
+  & div {
+    position: relative;
+  }
+
+  & div[data-expanded="false"] {
+  }
+
+  & :nth-child(3) {
+    &::after {
+      content: "";
+      border-bottom: 1px solid var(--ax-border-neutral-subtleA);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    &:hover::after,
+    &:focus-visible::after,
+    &[data-expanded="true"]::after {
+      display: none;
+    }
+
+    &[data-expanded="true"] {
+      border-bottom: 1px solid var(--ax-border-neutral-subtleA);
+    }
+  }
+}
