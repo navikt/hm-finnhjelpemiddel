@@ -66,7 +66,7 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
               href="https://pub.dialogapi.no/s/MTc4Mjk6N2E4YjFjMDQtYjM5YS00NGY3LTliMzEtNzM3MjBlNGFhZjMz"
               target="_blank"
             >
-              Abonner på nyhetbrev fra Nav hjelpemidler og tilrettelegging
+              Abonner på nyhetsbrev fra Nav hjelpemidler og tilrettelegging
             </Link>
           </VStack>
         </div>
