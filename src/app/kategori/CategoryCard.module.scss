@@ -1,5 +1,9 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
 .container {
-  width: 312px;
+  @media (min-width: $ax-breakpoint-sm) {
+    width: 312px;
+  }
 }
 
 .iconImage {

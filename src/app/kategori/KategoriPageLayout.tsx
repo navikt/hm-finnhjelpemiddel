@@ -13,7 +13,8 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
   return (
     <VStack
       gap={'space-32'}
-      paddingBlock={'space-80 space-64'}
+      paddingBlock={{ xs: 'space-16', md: 'space-80 space-64' }}
+      paddingInline={{ xs: 'space-16', lg: 'space-0' }}
       marginInline={'auto'}
       marginBlock={'space-0'}
       maxWidth={'1024px'}
