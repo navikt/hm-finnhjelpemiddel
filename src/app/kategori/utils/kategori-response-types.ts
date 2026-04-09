@@ -24,6 +24,18 @@ type SupplierAggregation = {
   }
 }
 
+export type SingleValueBucket = {
+  key: string
+  doc_count: number
+}
+
+export type SingleValueAggregation = {
+  doc_count: number
+  values: {
+    buckets: SingleValueBucket[]
+  }
+}
+
 type TechDataAggregation = {
   doc_count: number
   values: {
@@ -39,6 +51,8 @@ export type ProductIsoAggregationResponse = {
   aggregations: {
     iso: IsoAggregation
     suppliers: SupplierAggregation
+    digitalSoknad: SingleValueAggregation
+    bestillingsordning: SingleValueAggregation
   } & {
     [key: string]: TechDataAggregation
   }

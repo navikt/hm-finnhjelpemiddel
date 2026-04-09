@@ -52,6 +52,8 @@ export const KategoriPage = ({ category }: Props) => {
   const products = productsData?.map((d) => d.products).flat()
   const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
+  const digitalSoknad = productsData?.at(-1)?.digitalSoknad ?? []
+  const bestillingsordning = productsData?.at(-1)?.bestillingsordning ?? []
   const techDataFilterAggs = productsData?.at(-1)?.techDataFilterAggs
 
   const isEmpty = productsData?.[0]?.products.length === 0
@@ -68,7 +70,13 @@ export const KategoriPage = ({ category }: Props) => {
       }
     : undefined
 
-  const filters: Filters = { isos, suppliers, techDataFilterAggs }
+  const filters: Filters = {
+    suppliers: suppliers,
+    digitalSoknad: digitalSoknad,
+    bestillingsordning: bestillingsordning,
+    isos: isos,
+    techDataFilterAggs: techDataFilterAggs,
+  }
 
   const onChangeCheckBoxFilter = (filterName: string, value: string) => {
     const paramKeyMap: Record<string, string> = {
@@ -94,7 +102,6 @@ export const KategoriPage = ({ category }: Props) => {
           <VStack gap={'space-16'}>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
               <FilterBarKategori filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
-              {/*<SortKategoriResults />*/}
             </HStack>
 
             <KategoriResults products={products} loadMore={loadMore} isLoading={isLoading} />

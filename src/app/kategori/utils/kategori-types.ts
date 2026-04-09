@@ -16,6 +16,8 @@ export type ProductsWithIsoAggs = {
   products: Product[]
   iso: IsoInfo[]
   suppliers: SupplierInfo[]
+  digitalSoknad: boolean[]
+  bestillingsordning: boolean[]
   techDataFilterAggs: TechDataFilterAggs
 }
 
@@ -31,11 +33,6 @@ export type CategoryFilter = {
 export interface MinMaxFields {
   fromField: string
   toField: string
-}
-
-export enum FilterTechDataType {
-  singleField,
-  minMax,
 }
 
 export enum FilterFunctionType {

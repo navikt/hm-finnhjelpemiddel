@@ -8,9 +8,12 @@ import styles from './FilterBarKategori.module.scss'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 import { useSearchParams } from 'next/navigation'
 import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-types'
+import { ToggleFilter, ToggleFilterMenu } from '@/app/kategori/filter/ToggleFilter'
 
 export type Filters = {
   ['suppliers']: string[]
+  ['digitalSoknad']: boolean[]
+  ['bestillingsordning']: boolean[]
   ['isos']: {
     key: string
     label: string
@@ -40,6 +43,16 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
     options: filters.isos
       .map((iso) => ({ value: iso.key, label: getIsoLabel(iso.key, iso.label) }))
       .sort((a, b) => a.label.localeCompare(b.label)),
+  }
+
+  const digitalSoknadFilters: ToggleFilterMenu = {
+    name: { key: 'På digital behovsmelding', label: 'Digital behovsmelding' },
+    options: filters.digitalSoknad,
+  }
+
+  const bestillingsordningFilters: ToggleFilterMenu = {
+    name: { key: 'På bestillingsordning', label: 'Bestillingsordning' },
+    options: filters.bestillingsordning,
   }
 
   return (
@@ -77,6 +90,10 @@ export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
             Nullstill
           </Button>
         )}
+      </HStack>
+      <HStack gap="space-8" maxWidth={'1214px'}>
+        <ToggleFilter filterMenu={digitalSoknadFilters} />
+        <ToggleFilter filterMenu={bestillingsordningFilters} />
       </HStack>
     </VStack>
   )

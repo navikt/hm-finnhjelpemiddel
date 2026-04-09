@@ -6,13 +6,13 @@ import styles from './RangeFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
 import { TechDataFilterAgg } from '@/app/kategori/utils/kategori-types'
 
-export type MinMaxMenu = {
+export type RangeFilterMenu = {
   name: string
   options: TechDataFilterAgg
 }
 
 type Props = {
-  filterMenu: MinMaxMenu
+  filterMenu: RangeFilterMenu
 }
 
 export const RangeFilter = ({ filterMenu }: Props) => {

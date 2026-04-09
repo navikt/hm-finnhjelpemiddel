@@ -4,11 +4,11 @@ import {
   filterNotExpiredOnly,
   filterPrefixIsoKode,
 } from '@/utils/filter-util'
-import { mapProductsFromCollapse } from '@/utils/product-util'
+import { mapProductWithVariants, Product } from '@/utils/product-util'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { ProductIsoAggregationResponse } from '@/app/kategori/utils/kategori-response-types'
+import { ProductIsoAggregationResponse, SingleValueAggregation } from '@/app/kategori/utils/kategori-response-types'
 import {
   CategoryFilter,
   FilterFunctionType,
@@ -19,6 +19,7 @@ import {
   TechDataFilterAggs,
 } from '@/app/kategori/utils/kategori-types'
 import { categoryFilters } from '@/app/kategori/utils/kategori-filter-utils'
+import { Hit, ProductSourceResponse } from '@/utils/response-types'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
@@ -58,6 +59,28 @@ export const fetchProductsKategori = async ({
 
   if (searchParams.has('leverandor')) {
     postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.getAll('leverandor')) })
+  }
+
+  if (searchParams.has('På digital behovsmelding')) {
+    postFilters.push({
+      key: 'digitalSoknad',
+      filter: {
+        bool: {
+          should: { term: { 'attributes.digitalSoknad': searchParams.get('På digital behovsmelding') } },
+        },
+      },
+    })
+  }
+
+  if (searchParams.has('På bestillingsordning')) {
+    postFilters.push({
+      key: 'bestillingsordning',
+      filter: {
+        bool: {
+          should: { term: { 'attributes.bestillingsordning': searchParams.get('På bestillingsordning') } },
+        },
+      },
+    })
   }
 
   techDataFilters.forEach((filter) => {
@@ -184,6 +207,30 @@ export const fetchProductsKategori = async ({
       },
       postFilters.filter(({ key }) => key !== 'leverandor').map(({ filter }) => filter)
     ),
+    ...aggsFilter(
+      'digitalSoknad',
+      {
+        values: {
+          terms: {
+            field: 'attributes.digitalSoknad',
+            size: 10,
+          },
+        },
+      },
+      postFilters.filter(({ key }) => key !== 'digitalSoknad').map(({ filter }) => filter)
+    ),
+    ...aggsFilter(
+      'bestillingsordning',
+      {
+        values: {
+          terms: {
+            field: 'attributes.bestillingsordning',
+            size: 10,
+          },
+        },
+      },
+      postFilters.filter(({ key }) => key !== 'bestillingsordning').map(({ filter }) => filter)
+    ),
     ...techDataFilterAggs,
   }
 
@@ -212,14 +259,20 @@ export const fetchProductsKategori = async ({
     body: JSON.stringify(body),
   })
     .then((res) => res.json())
-    .then((data) => {
+    .then((data: ProductIsoAggregationResponse) => {
       return {
-        products: mapProductsFromCollapse(data),
+        products: mapProducts(data),
         iso: mapIsoAggregations(data),
         suppliers: mapSupplierAggregations(data),
         techDataFilterAggs: mapTechDataFilterAggregations(data, techDataFilters),
+        digitalSoknad: mapBooleanAggregations(data.aggregations.digitalSoknad),
+        bestillingsordning: mapBooleanAggregations(data.aggregations.bestillingsordning),
       }
     })
+}
+
+const mapProducts = (data: ProductIsoAggregationResponse): Product[] => {
+  return data.hits.hits.map((hit: Hit) => mapProductWithVariants(Array(hit._source as ProductSourceResponse)))
 }
 
 const mapIsoAggregations = (data: ProductIsoAggregationResponse): IsoInfo[] => {
@@ -227,6 +280,10 @@ const mapIsoAggregations = (data: ProductIsoAggregationResponse): IsoInfo[] => {
 }
 const mapSupplierAggregations = (data: ProductIsoAggregationResponse): SupplierInfo[] => {
   return data.aggregations.suppliers.values.buckets.map((bucket) => ({ name: bucket.key }))
+}
+
+const mapBooleanAggregations = (agg: SingleValueAggregation): boolean[] => {
+  return agg.values.buckets.map((bucket) => !!bucket.key)
 }
 
 const mapTechDataFilterAggregations = (
