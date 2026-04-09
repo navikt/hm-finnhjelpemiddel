@@ -1,9 +1,18 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
 .container {
-  //box-shadow: var(--a-shadow-medium);
-  height: 96px;
-  border-radius: 8px;
+  @media (min-width: $ax-breakpoint-sm) {
+    width: 312px;
+  }
 }
 
 .iconImage {
   user-select: none;
+  background-color: #FBF3F6;
+  object-fit: contain;
+  padding: 50px 50px;
+}
+
+.linkText {
+  text-decoration: none;
 }

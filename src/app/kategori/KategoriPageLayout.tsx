@@ -12,18 +12,20 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
   if (error) console.debug(error)
   return (
     <VStack
-      gap={'space-48'}
-      paddingBlock={'space-64 space-64'}
-      paddingInline={'space-16'}
+      gap={'space-32'}
+      paddingBlock={{ xs: 'space-16', md: 'space-80 space-64' }}
+      paddingInline={{ xs: 'space-16', lg: 'space-0' }}
       marginInline={'auto'}
       marginBlock={'space-0'}
-      maxWidth={'1280px'}
+      maxWidth={'1024px'}
     >
-      <VStack gap="space-16">
-        <Heading level="1" size="large">
+      <VStack gap="space-8">
+        <Heading level="1" size="xlarge">
           {title}
         </Heading>
-        <BodyLong style={{ maxWidth: '735px' }}>{description}</BodyLong>
+        <BodyLong size={'large'} style={{ maxWidth: '735px' }}>
+          {description}
+        </BodyLong>
       </VStack>
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
