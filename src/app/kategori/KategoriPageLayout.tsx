@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading, HStack, Link, ReadMore, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, HStack, VStack } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 
 type Props = {
@@ -27,20 +27,6 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
           {description}
         </BodyLong>
       </VStack>
-      <ReadMore variant={'moderate'} size={'large'} header={'Hvordan kan du få hjelpemidler?'}>
-        Dersom du har en varig og vesentlig nedsatt funksjon på grunn av sykdom, skade eller annen tilstand, kan du søke
-        om hjelpemidler fra Nav.
-        <br />
-        <br />
-        I mange tilfeller er det nyttig å samarbeide med en fagperson i kommunen for å komme frem til det til det mest
-        hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
-        <br />
-        <br />
-        Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
-        <Link href={'https://www.nav.no/om-hjelpemidler#hvordan'}>
-          Informasjon om hjelpemidler og tilrettelegging - nav.no.
-        </Link>
-      </ReadMore>
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Alert variant="error" title="Error med lasting av produkter">
