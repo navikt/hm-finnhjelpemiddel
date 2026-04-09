@@ -38,9 +38,8 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
         <br />
         Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
         <Link href={'https://www.nav.no/om-hjelpemidler#hvordan'}>
-          Informasjon om hjelpemidler og tilrettelegging - nav.no
+          Informasjon om hjelpemidler og tilrettelegging - nav.no.
         </Link>
-        .
       </ReadMore>
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
