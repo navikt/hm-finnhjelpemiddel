@@ -1,6 +1,5 @@
-import { Alert, BodyLong, Heading, HStack, ReadMore, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, HStack, Link, ReadMore, VStack } from '@navikt/ds-react'
 import { ReactNode } from 'react'
-import NextLink from 'next/link'
 
 type Props = {
   title: string
@@ -36,10 +35,10 @@ export const KategoriPageLayout = ({ title, description, error, children }: Prop
         hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
         <br />
         <br />
-        Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no
-        <NextLink href={'https://www.nav.no/om-hjelpemidler#hvordan'}>
+        Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
+        <Link href={'https://www.nav.no/om-hjelpemidler#hvordan'}>
           Informasjon om hjelpemidler og tilrettelegging - nav.no
-        </NextLink>
+        </Link>
         .
       </ReadMore>
       {error ? (
