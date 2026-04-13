@@ -1,5 +1,5 @@
 import { CategoryPage } from './CategoryPage'
-import { SubCategoryPage } from '@/app/kategori/SubCategoryPage'
+import { SubCategoryPage } from '@/app/kategori/[kategori]/SubCategoryPage'
 import { getCategoryByTitle } from '@/app/kategori/admin/category-admin-util'
 import type { Metadata } from 'next'
 
