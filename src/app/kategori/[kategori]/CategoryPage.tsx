@@ -3,7 +3,7 @@
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
-import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import { Box, HGrid, HStack, ReadMore, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { CategoryResults } from '../CategoryResults'
 import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
@@ -99,6 +99,24 @@ export const CategoryPage = ({ category }: Props) => {
       <>
         <CompareMenu />
         <HGrid columns={'374px 4'} gap={'space-16'}>
+          <Box maxWidth={'500px'}>
+            <ReadMore variant={'moderate'} size={'large'} header={'Hva betyr delkontrakt og rangering?'}>
+              Alle hjelpemidlene på FinnHjelpemiddel som er på avtale er markert med «På avtale». I tillegg er de
+              markert med «Delkontrakt» og «Rangering». I mange tilfeller er det nyttig å samarbeide med en fagperson i
+              kommunen for å komme frem til det til det mest hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
+              <ul>
+                <li>
+                  Delkontrakt: Avtalene inndeles i delkontrakter ut ifra hjelpemidlenes egenskaper. Å lese teksten i
+                  delkontrakten kan gjøre det lettere for deg å finne det du er ute etter.
+                </li>
+                <li>
+                  Rangering: En delkontrakt omfatter som regel flere hjelpemidler. Disse er inndelt i rangeringer. Du må
+                  alltid starte med å vurdere om hjelpemidlet som er markert med «Rangering 1» dekker ditt behov. Dersom
+                  det ikke gjøre det må det begrunnes i søknaden.
+                </li>
+              </ul>
+            </ReadMore>
+          </Box>
           <VStack gap={'space-16'}>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
               <FilterBarCategory filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
