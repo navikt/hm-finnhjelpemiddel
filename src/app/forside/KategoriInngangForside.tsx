@@ -2,7 +2,7 @@
 
 import { Heading, HGrid, VStack } from '@navikt/ds-react'
 import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
-import { frontPageCategories, frontPageTitles } from '@/app/kategori/utils/mappings/forside-kategori-mapping'
+import { frontPageCategories, frontPageTitles } from '@/app/kategori/utils/mappings/frontpage-category-mapping'
 
 export const KategoriInngangForside = () => {
   return (

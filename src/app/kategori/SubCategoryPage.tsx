@@ -1,13 +1,13 @@
 import { Box, HGrid, ReadMore } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
-import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 import Link from 'next/link'
 
-export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
+export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
   return (
-    <KategoriPageLayout title={category.title} description={category.data.description}>
+    <CategoryPageLayout title={category.title} description={category.data.description}>
       <Box maxWidth={'500px'}>
         <ReadMore variant={'moderate'} size={'large'} header={'Hvordan kan du få hjelpemidler?'}>
           Dersom du har en varig og vesentlig nedsatt funksjon på grunn av sykdom, skade eller annen tilstand, kan du
@@ -42,6 +42,6 @@ export const KategoriOversikt = ({ category }: { category: CategoryDTO }) => {
             ))}
         </HGrid>
       )}
-    </KategoriPageLayout>
+    </CategoryPageLayout>
   )
 }

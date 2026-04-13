@@ -1,11 +1,11 @@
-import { topLevelcategories, topLevelCategoryTitles } from '@/app/kategori/utils/mappings/forside-kategori-mapping'
+import { topLevelcategories, topLevelCategoryTitles } from '@/app/kategori/utils/mappings/frontpage-category-mapping'
 import { HGrid } from '@navikt/ds-react'
-import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
 
 export default async function Page() {
   return (
-    <KategoriPageLayout title={'Her er alle kategoriene'} description={''}>
+    <CategoryPageLayout title={'Her er alle kategoriene'} description={''}>
       <HGrid gap={'space-8'} columns={'repeat(2, 600px)'} paddingBlock={'space-48'}>
         {topLevelCategoryTitles.map((kategori) => (
           <CategoryCardFrontPage
@@ -17,6 +17,6 @@ export default async function Page() {
           />
         ))}
       </HGrid>
-    </KategoriPageLayout>
+    </CategoryPageLayout>
   )
 }

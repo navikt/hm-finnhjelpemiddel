@@ -4,7 +4,7 @@ import React, { useId, useState } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import styles from './RangeFilter.module.scss'
 import useQueryString from '@/utils/search-params-util'
-import { TechDataFilterAgg } from '@/app/kategori/utils/kategori-types'
+import { TechDataFilterAgg } from '@/app/kategori/utils/category-types'
 
 export type RangeFilterMenu = {
   name: string

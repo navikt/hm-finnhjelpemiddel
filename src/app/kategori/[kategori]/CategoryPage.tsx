@@ -5,19 +5,19 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import useSWRInfinite from 'swr/infinite'
 import { HGrid, HStack, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
-import { KategoriResults } from '../KategoriResults'
-import { FilterBarKategori, Filters } from '@/app/kategori/filter/FilterBarKategori'
+import { CategoryResults } from '../CategoryResults'
+import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
 import useQueryString from '@/utils/search-params-util'
-import { fetchProductsKategori, PAGE_SIZE } from '@/app/kategori/utils/kategori-inngang-util'
-import { KategoriPageLayout } from '@/app/kategori/KategoriPageLayout'
+import { fetchProductsCategory, PAGE_SIZE } from '@/app/kategori/utils/kategori-inngang-util'
+import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { ProductsWithIsoAggs } from '@/app/kategori/utils/kategori-types'
+import { ProductsWithIsoAggs } from '@/app/kategori/utils/category-types'
 
 type Props = {
   category: CategoryDTO
 }
 
-export const KategoriPage = ({ category }: Props) => {
+export const CategoryPage = ({ category }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -41,7 +41,7 @@ export const KategoriPage = ({ category }: Props) => {
         category: category,
       }
     },
-    fetchProductsKategori,
+    fetchProductsCategory,
     {
       initialSize: Number(searchParams.get('page') || '1'),
       keepPreviousData: true,
@@ -95,19 +95,19 @@ export const KategoriPage = ({ category }: Props) => {
   }
 
   return (
-    <KategoriPageLayout title={category.title} description={category.data.description} error={error}>
+    <CategoryPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
         <HGrid columns={'374px 4'} gap={'space-16'}>
           <VStack gap={'space-16'}>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
-              <FilterBarKategori filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
+              <FilterBarCategory filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
             </HStack>
 
-            <KategoriResults products={products} loadMore={loadMore} isLoading={isLoading} />
+            <CategoryResults products={products} loadMore={loadMore} isLoading={isLoading} />
           </VStack>
         </HGrid>
       </>
-    </KategoriPageLayout>
+    </CategoryPageLayout>
   )
 }

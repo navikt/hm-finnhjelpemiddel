@@ -8,7 +8,7 @@ import { mapProductWithVariants, Product } from '@/utils/product-util'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
 import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { ProductIsoAggregationResponse, SingleValueAggregation } from '@/app/kategori/utils/kategori-response-types'
+import { ProductIsoAggregationResponse, SingleValueAggregation } from '@/app/kategori/utils/category-response-types'
 import {
   CategoryFilter,
   FilterFunctionType,
@@ -17,8 +17,8 @@ import {
   ProductsWithIsoAggs,
   SupplierInfo,
   TechDataFilterAggs,
-} from '@/app/kategori/utils/kategori-types'
-import { categoryFilters } from '@/app/kategori/utils/kategori-filter-utils'
+} from '@/app/kategori/utils/category-types'
+import { categoryFilters } from '@/app/kategori/utils/category-filter-utils'
 import { Hit, ProductSourceResponse } from '@/utils/response-types'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
@@ -33,7 +33,7 @@ type FetchProps = {
   dontCollapse?: boolean
 }
 
-export const fetchProductsKategori = async ({
+export const fetchProductsCategory = async ({
   from,
   size,
   searchParams,
@@ -41,7 +41,7 @@ export const fetchProductsKategori = async ({
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const sortOrderOpenSearch = sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
-  const visTilbDeler = false
+  const showAccessoriesParts = false
 
   const categoryIsos = category.data.isos ?? []
   const filtersFromAdmin = category.data.filters ?? []
@@ -119,7 +119,7 @@ export const fetchProductsKategori = async ({
     queryFilters.push(filterPrefixIsoKode(categoryIsos))
   }
 
-  if (!visTilbDeler) {
+  if (!showAccessoriesParts) {
     queryFilters.push(filterMainProductsOnly())
   }
 

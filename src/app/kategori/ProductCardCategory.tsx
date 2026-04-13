@@ -6,9 +6,9 @@ import NextLink from 'next/link'
 import ProductImage from '@/components/ProductImage'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
-import styles from './ProductCardKategori.module.scss'
+import styles from './ProductCardCategory.module.scss'
 
-export const ProductCardKategori = ({
+export const ProductCardCategory = ({
   product,
   handleCompareClick,
 }: {

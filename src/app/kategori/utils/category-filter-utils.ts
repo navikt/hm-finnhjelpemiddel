@@ -1,4 +1,4 @@
-import { CategoryFilter, FilterFunctionType } from '@/app/kategori/utils/kategori-types'
+import { CategoryFilter, FilterFunctionType } from '@/app/kategori/utils/category-types'
 
 export const categoryFilters: CategoryFilter[] = [
   {

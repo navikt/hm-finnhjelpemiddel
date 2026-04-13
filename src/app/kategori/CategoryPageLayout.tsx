@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode
 }
 
-export const KategoriPageLayout = ({ title, description, error, children }: Props) => {
+export const CategoryPageLayout = ({ title, description, error, children }: Props) => {
   if (error) console.debug(error)
   return (
     <VStack

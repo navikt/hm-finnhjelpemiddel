@@ -1,5 +1,5 @@
-import { KategoriPage } from './KategoriPage'
-import { KategoriOversikt } from '@/app/kategori/KategoriOversikt'
+import { CategoryPage } from './CategoryPage'
+import { SubCategoryPage } from '@/app/kategori/SubCategoryPage'
 import { getCategoryByTitle } from '@/app/kategori/admin/category-admin-util'
 import type { Metadata } from 'next'
 
@@ -7,7 +7,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
 
   return {
-    title: normalizeKategori(params.kategori),
+    title: normalizeCategoryTitle(params.kategori),
   }
 }
 
@@ -16,17 +16,17 @@ type Props = {
 }
 
 export default async function Page(props: Props) {
-  const kategori = normalizeKategori((await props.params).kategori)
+  const normalizedCategory = normalizeCategoryTitle((await props.params).kategori)
 
-  const category = await getCategoryByTitle(kategori)
+  const category = await getCategoryByTitle(normalizedCategory)
 
   if (category.data.isos?.length) {
-    return <KategoriPage category={category} />
+    return <CategoryPage category={category} />
   }
 
-  return <KategoriOversikt category={category} />
+  return <SubCategoryPage category={category} />
 }
 
-const normalizeKategori = (kategori: string) => {
-  return decodeURIComponent(kategori.charAt(0).toUpperCase() + kategori.slice(1))
+const normalizeCategoryTitle = (categoryTitle: string) => {
+  return decodeURIComponent(categoryTitle.charAt(0).toUpperCase() + categoryTitle.slice(1))
 }

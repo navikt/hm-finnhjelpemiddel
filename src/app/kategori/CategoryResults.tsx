@@ -4,10 +4,10 @@ import React, { useState } from 'react'
 import { Alert, BodyLong, BodyShort, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { ProductCardKategori } from '@/app/kategori/ProductCardKategori'
+import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 
-export const KategoriResults = ({
+export const CategoryResults = ({
   products,
   loadMore,
   isLoading,
@@ -60,7 +60,7 @@ export const KategoriResults = ({
                 </HStack>
                 <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
                   {delkontraktGroup.products.map((product) => (
-                    <ProductCardKategori key={product.id} product={product} handleCompareClick={handleCompareClick} />
+                    <ProductCardCategory key={product.id} product={product} handleCompareClick={handleCompareClick} />
                   ))}
                 </HStack>
               </VStack>

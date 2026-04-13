@@ -7,7 +7,7 @@ import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 import { useSearchParams } from 'next/navigation'
-import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/kategori-types'
+import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/category-types'
 import { ToggleFilter, ToggleFilterMenu } from '@/app/kategori/filter/ToggleFilter'
 
 export type Filters = {
@@ -27,7 +27,7 @@ type Props = {
   onReset: () => void
 }
 
-export const FilterBarKategori = ({ filters, onChange, onReset }: Props) => {
+export const FilterBarCategory = ({ filters, onChange, onReset }: Props) => {
   const searchParams = useSearchParams()
 
   const hasActiveFilter = Array.from(searchParams.keys()).filter((param) => param != 'page').length > 0

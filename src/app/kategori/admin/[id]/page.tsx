@@ -5,7 +5,7 @@ type Props = {
 }
 
 export default async function Page(props: Props) {
-  const kategori = (await props.params).id
+  const category = (await props.params).id
 
-  return <EditCategoryPage id={kategori} />
+  return <EditCategoryPage id={category} />
 }
