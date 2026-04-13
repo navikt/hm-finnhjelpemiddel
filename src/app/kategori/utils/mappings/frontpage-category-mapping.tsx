@@ -1,12 +1,12 @@
 import { JSX } from 'react'
-import { BevegelseIkon } from '@/app/kategori/ikoner/BevegelseIkon'
-import { HygieneIkon } from '@/app/kategori/ikoner/HygieneIkon'
-import { HjemOgBoligIkon } from '@/app/kategori/ikoner/HjemOgBoligIkon'
-import { SportOgAktivitetIkon } from '@/app/kategori/ikoner/SportOgAktivitetIkon'
-import { SynIkon } from '@/app/kategori/ikoner/SynIkon'
-import { HørselIkon } from '@/app/kategori/ikoner/HorselIkon'
-import { KognisjonIkon } from '@/app/kategori/ikoner/KognisjonIkon'
-import { KommunikasjonIkon } from '@/app/kategori/ikoner/KommunikasjonsIkon'
+import { BevegelseIkon } from '@/app/kategori/icons/BevegelseIkon'
+import { HygieneIkon } from '@/app/kategori/icons/HygieneIkon'
+import { HjemOgBoligIkon } from '@/app/kategori/icons/HjemOgBoligIkon'
+import { SportOgAktivitetIkon } from '@/app/kategori/icons/SportOgAktivitetIkon'
+import { SynIkon } from '@/app/kategori/icons/SynIkon'
+import { HørselIkon } from '@/app/kategori/icons/HorselIkon'
+import { KognisjonIkon } from '@/app/kategori/icons/KognisjonIkon'
+import { KommunikasjonIkon } from '@/app/kategori/icons/KommunikasjonsIkon'
 
 export type FrontPageCategoryTitles =
   | 'Bevegelse'
@@ -98,7 +98,7 @@ export const frontPageCategories: FrontPageCategories = {
   Hygiene: hygiene,
   'Sport og aktivitet': sportOgAktivitet,
   Kognisjon: kognisjon,
-  Kommunikasjon: kommunikasjon
+  Kommunikasjon: kommunikasjon,
 }
 
 export const topLevelCategoryTitles: TopLevelCategoryTitles[] = [
