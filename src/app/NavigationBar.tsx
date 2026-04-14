@@ -175,6 +175,7 @@ const NavigationBar = () => {
                   variant="tertiary"
                   onClick={() => setMenuOpen(!menuOpen)}
                   aria-expanded={menuOpen}
+                  aria-label="Meny"
                 >
                   Meny
                 </Button>
@@ -185,6 +186,7 @@ const NavigationBar = () => {
                   variant="tertiary"
                   onClick={() => setMenuOpen(!menuOpen)}
                   aria-expanded={menuOpen}
+                  aria-label="Meny"
                 />
               </Show>
             </>
