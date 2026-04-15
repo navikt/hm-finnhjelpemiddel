@@ -74,6 +74,22 @@ export async function getCategoryByTitle(title: string): Promise<CategoryDTO> {
   return res.json()
 }
 
+export async function getCategoriesByIds(ids: string[]): Promise<CategoryDTO[]> {
+  const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/category/ids/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(ids),
+  })
+
+  if (!res.ok) {
+    throw new CustomError(res.statusText, res.status)
+  }
+
+  return res.json()
+}
+
 export async function createCategory(category: EditableCategoryDTO): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, 'POST', category)
 }
