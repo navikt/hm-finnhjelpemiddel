@@ -23,7 +23,7 @@ export default function Page() {
   )
 
   return (
-    <CategoryPageLayout title={'Kategorier'} description={''}>
+    <CategoryPageLayout title={'Hjelpemiddelkategorier'} description={''}>
       <HGrid gap={'space-40'} columns={{ xs: 1, md: 2, lg: 3 }} paddingBlock={'space-0 space-96'}>
         {categories?.map((category) => (
           <CategoryCard
