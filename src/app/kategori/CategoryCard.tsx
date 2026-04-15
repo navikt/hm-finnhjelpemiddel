@@ -22,7 +22,8 @@ export const CategoryCard = ({ title, link, description, icon, showSubCategoryIc
           {
             <Image
               fill
-              alt={'ikon'}
+              alt={'Ikon for ' + title}
+              aria-hidden={true}
               src={`data:image/svg+xml;utf8,${encodeURIComponent(icon)}`}
               draggable={false}
               className={styles.iconImage}
