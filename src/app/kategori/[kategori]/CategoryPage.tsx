@@ -12,6 +12,7 @@ import { fetchProductsCategory, PAGE_SIZE } from '@/app/kategori/utils/kategori-
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { ProductsWithIsoAggs } from '@/app/kategori/utils/category-types'
+import { logUmamiClickButton } from '@/utils/umami'
 
 type Props = {
   category: CategoryDTO
@@ -93,14 +94,21 @@ export const CategoryPage = ({ category }: Props) => {
     setPage(1)
     router.replace(pathname)
   }
-
+  const lastSubcategoryText = 'Hva betyr delkontrakt og rangering?'
   return (
     <CategoryPageLayout title={category.title} description={category.data.description} error={error}>
       <>
         <CompareMenu />
         <HGrid columns={'374px 4'} gap={'space-16'}>
           <Box maxWidth={'500px'}>
-            <ReadMore variant={'moderate'} size={'large'} header={'Hva betyr delkontrakt og rangering?'}>
+            <ReadMore
+              variant={'moderate'}
+              size={'large'}
+              header={lastSubcategoryText}
+              onOpenChange={(open) => {
+                logUmamiClickButton(`${lastSubcategoryText}`, 'lastSubcategory-readmore', `${open}`)
+              }}
+            >
               Alle hjelpemidlene på FinnHjelpemiddel som er på avtale er markert med «På avtale». I tillegg er de
               markert med «Delkontrakt» og «Rangering». I mange tilfeller er det nyttig å samarbeide med en fagperson i
               kommunen for å komme frem til det til det mest hensiktsmessige hjelpemidlet, og å skrive selve søknaden.

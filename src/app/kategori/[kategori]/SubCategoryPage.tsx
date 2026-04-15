@@ -1,15 +1,26 @@
+'use client'
 import { Box, HGrid, ReadMore } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 import Link from 'next/link'
+import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
 export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
+  const subCategoryHelpText = 'Hvordan kan du få hjelpemidler?'
+  const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
   return (
     <CategoryPageLayout title={category.title} description={category.data.description}>
       <Box maxWidth={'500px'}>
-        <ReadMore variant={'moderate'} size={'large'} header={'Hvordan kan du få hjelpemidler?'}>
+        <ReadMore
+          variant={'moderate'}
+          size={'large'}
+          header={subCategoryHelpText}
+          onOpenChange={(open) => {
+            logUmamiClickButton(`${subCategoryHelpText}`, 'subcategory-readmore', `${open}`)
+          }}
+        >
           Dersom du har en varig og vesentlig nedsatt funksjon på grunn av sykdom, skade eller annen tilstand, kan du
           søke om hjelpemidler fra Nav.
           <br />
@@ -19,7 +30,13 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
           <br />
           <br />
           Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
-          <Link href={'https://www.nav.no/om-hjelpemidler#hvordan'}>
+          <Link
+            href={linkToNavHowToApply}
+            aria-label={`Gå til ${subCategoryHelpText}`}
+            onClick={() => {
+              logUmamiNavigationEvent('subcategory-readmore', linkToNavHowToApply, subCategoryHelpText)
+            }}
+          >
             Informasjon om hjelpemidler og tilrettelegging - nav.no.
           </Link>
         </ReadMore>
