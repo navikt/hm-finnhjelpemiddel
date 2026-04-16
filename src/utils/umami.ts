@@ -30,11 +30,12 @@ export const initUmami = (hostname: string) => {
     return
   }
   const script = document.createElement('script')
-  script.src = 'https://cdn.nav.no/team-researchops/sporing/sporing.js'
   script.defer = true
+  script.src = 'https://cdn.nav.no/team-researchops/sporing/sporing.js'
   script.setAttribute('data-host-url', `${UMAMI_DATA_DOMAIN}`)
   script.setAttribute('data-website-id', `${UMAMI_WEBSITE_ID}`)
   script.setAttribute('data-auto-track', 'true')
+  script.setAttribute('data-opt-out-filters', 'true')
   document.head.appendChild(script)
   console.debug(`Umami er initialisert med website ID: ${UMAMI_WEBSITE_ID} og data_domain: ${UMAMI_DATA_DOMAIN}`)
 }
