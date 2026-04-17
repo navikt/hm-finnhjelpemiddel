@@ -35,7 +35,7 @@ export const initUmami = (hostname: string) => {
   script.setAttribute('data-host-url', `${UMAMI_DATA_DOMAIN}`)
   script.setAttribute('data-website-id', `${UMAMI_WEBSITE_ID}`)
   script.setAttribute('data-auto-track', 'true')
-  script.setAttribute('data-opt-out-filters', 'true')
+  script.setAttribute('data-opt-out-filters', 'uuid')
   document.head.appendChild(script)
   console.debug(`Umami er initialisert med website ID: ${UMAMI_WEBSITE_ID} og data_domain: ${UMAMI_DATA_DOMAIN}`)
 }
