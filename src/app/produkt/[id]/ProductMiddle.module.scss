@@ -9,8 +9,8 @@
 
   @media (max-width:$ax-breakpoint-md) {
     grid-template-areas: 
-    "box1"
     "box2"
+    "box1"
     "box3";
   }
 }
