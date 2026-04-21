@@ -53,7 +53,7 @@ export const CategoryResults = ({
                 <HStack gap={'space-8'} align={'center'} paddingBlock={'space-16 space-0'}>
                   {delkontraktGroup.refNr !== '0' && (
                     <Tag size={'medium'} data-color={'info'} variant={'moderate'}>
-                      Delkontrakt {delkontraktGroup.refNr}
+                      På avtale
                     </Tag>
                   )}
                   <Heading size={'small'}>{delkontraktGroup.title}</Heading>

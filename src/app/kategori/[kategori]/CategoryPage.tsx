@@ -94,7 +94,7 @@ export const CategoryPage = ({ category }: Props) => {
     setPage(1)
     router.replace(pathname)
   }
-  const lastSubcategoryText = 'Hva betyr delkontrakt og rangering?'
+  const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
   return (
     <CategoryPageLayout title={category.title} description={category.data.description} error={error}>
       <>
