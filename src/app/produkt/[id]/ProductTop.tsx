@@ -11,6 +11,8 @@ import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 import useSWR from 'swr'
+import { useSearchParams } from 'next/navigation'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -25,11 +27,29 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   const { data: compatibleWithProducts } = useSWR(product.id, fetchCompatibleProducts, { keepPreviousData: true })
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
+  const searchParams = useSearchParams()
+  const searchData = mapSearchParams(searchParams)
+  /*  const termFilterLabel = searchParams.get('term')*/
+  const searchTermMatchesHms = product.variants
+    .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+  const searchTermMatchesSupplierRef = product.variants
+    .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+
+
+  // New: Determine relevant agreements based on search context
+  const matchingVariant = searchTermMatchesHms
+    ? product.variants.find((v) => v.hmsArtNr?.toLowerCase() === searchData.searchTerm?.toLowerCase())
+    : searchTermMatchesSupplierRef
+      ? product.variants.find((v) => v.supplierRef?.toLowerCase() === searchData.searchTerm?.toLowerCase())
+      : null
+  const relevantAgreements = matchingVariant ? matchingVariant.agreements : product.agreements
 
   return (
     <VStack gap={'space-32'}>
       <TagRow
-        productAgreements={product.agreements}
+        productAgreements={relevantAgreements}
         accessory={product.accessory}
         sparePart={product.sparePart}
         isExpired={isExpired}
@@ -102,7 +122,6 @@ const TagRow = ({
       </>
     )
   }
-
   return (
     <HStack justify={'start'} gap={'space-12'}>
       {accessory || sparePart ? (
