@@ -23,7 +23,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
             <HGrid
               columns={{ xs: 1, md: 2, lg: 3 }}
               gap={{ xs: 'space-32', md: 'space-32' }}
-              padding={{ xs: 'space-16', md: 'space-96' }}
+              padding={{ xs: 'space-16', md: 'space-48', lg: 'space-96' }}
             >
               <VStack gap={{ xs: 'space-4', md: 'space-4' }}>
                 <Heading level="2" size="small">
