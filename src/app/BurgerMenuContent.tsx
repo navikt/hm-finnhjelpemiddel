@@ -68,7 +68,7 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
 
               <VStack gap={{ xs: 'space-4', md: 'space-4' }}>
                 <Heading level="2" size="small">
-                  Kontakt
+                  Snarveier
                 </Heading>
                 <VStack as={'ul'} gap={{ xs: 'space-16' }}>
                   <li>
@@ -152,24 +152,20 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
               </VStack>
 
               <VStack gap={{ xs: 'space-4', md: 'space-8' }}>
-                <Heading level="2" size="small">
-                  Snarveier
-                </Heading>
-
                 <VStack as={'ul'} gap={{ xs: 'space-16' }}>
                   <li>
                     <LinkCardMenu
                       title="Avtaler med Nav"
                       link={baseUrl + '/rammeavtale'}
-                      icon={<BevegelseIkon />}
+                      icon={<TasklistIcon fontSize={'56px'} color={'#B65681'} />}
                       setMenuOpen={setMenuOpen}
                     />
                   </li>
                   <li>
                     <LinkCardMenu
-                      title="Alle hjelpemiddelkategorier"
+                      title="Alle kategorier"
                       link={baseUrl + '/kategori'}
-                      icon={<TasklistIcon fontSize={'56px'} color={'#B65681'} />}
+                      icon={<BevegelseIkon />}
                       setMenuOpen={setMenuOpen}
                     />
                   </li>
