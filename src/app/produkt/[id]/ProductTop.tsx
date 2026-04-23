@@ -29,7 +29,6 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
-  /*  const termFilterLabel = searchParams.get('term')*/
   const searchTermMatchesHms = product.variants
     .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
@@ -37,8 +36,6 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
     .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
     .includes(searchData.searchTerm?.toLowerCase())
 
-
-  // New: Determine relevant agreements based on search context
   const matchingVariant = searchTermMatchesHms
     ? product.variants.find((v) => v.hmsArtNr?.toLowerCase() === searchData.searchTerm?.toLowerCase())
     : searchTermMatchesSupplierRef
@@ -46,13 +43,15 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
       : null
   const relevantAgreements = matchingVariant ? matchingVariant.agreements : product.agreements
 
+  const isExpiredRefined = matchingVariant ? new Date(matchingVariant.expired).getTime() <= Date.now() : isExpired
+
   return (
     <VStack gap={'space-32'}>
       <TagRow
         productAgreements={relevantAgreements}
         accessory={product.accessory}
         sparePart={product.sparePart}
-        isExpired={isExpired}
+        isExpired={isExpiredRefined}
       />
       <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
@@ -156,7 +155,7 @@ const TagRow = ({
           {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}
         </>
       ) : (
-        <NeutralTag>Ikke på avtale</NeutralTag>
+        !isExpired && <NeutralTag>Ikke på avtale</NeutralTag>
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
     </HStack>
