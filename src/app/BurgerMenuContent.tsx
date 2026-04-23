@@ -1,11 +1,10 @@
 import NextLink from 'next/link'
-import { useMemo } from 'react'
-import useSWR from 'swr'
+import React, { ReactNode } from 'react'
+import { Heading, HGrid, Link, LinkCard, VStack } from '@navikt/ds-react'
+import { BevegelseIkon } from '@/app/kategori/icons/BevegelseIkon'
 
-import { agreementHasNoProducts, AgreementLabel, agreementProductsLink } from '@/utils/agreement-util'
-import { getAgreementLabels } from '@/utils/api-util'
-import { sortAlphabetically } from '@/utils/sort-util'
-import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
+import { TasklistIcon } from '@navikt/aksel-icons'
+import styles from './BurgerMenu.module.scss'
 
 interface Props {
   menuOpen: boolean
@@ -13,20 +12,6 @@ interface Props {
 }
 
 const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
-  const { data: agreements } = useSWR<AgreementLabel[]>('/agreements/_search', getAgreementLabels, {
-    keepPreviousData: true,
-    revalidateOnFocus: false,
-  })
-
-  const sortedAgreements = useMemo(() => {
-    if (!agreements) return []
-    const filteredData = agreements.filter((agreement) => !agreementHasNoProducts(agreement.identifier))
-    // Create a copy of data to avoid modifying it in place
-    filteredData.sort((a, b) => sortAlphabetically(a.title, b.title))
-
-    return filteredData
-  }, [agreements])
-
   //spesifiser prod-ingress for å ikke linke til ansatt-forside fra gjenbrukssiden
   const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
 
@@ -34,74 +19,111 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
     <>
       {menuOpen && (
         <div className="burgermenu-container">
-          <div className="burgermenu-container__content main-wrapper--large">
-            <HGrid columns={{ xs: 1, md: '4fr 3fr' }} gap={{ xs: "space-32", md: "space-64" }}>
-              <VStack gap={{ xs: "space-4", md: "space-4" }}>
+          <div className="burgermenu-container__content">
+            <HGrid
+              columns={{ xs: 1, md: 2, lg: 3 }}
+              gap={{ xs: 'space-32', md: 'space-32' }}
+              padding={{ xs: 'space-16', md: 'space-48', lg: 'space-96' }}
+            >
+              <VStack gap={{ xs: 'space-4', md: 'space-4' }}>
                 <Heading level="2" size="small">
-                  AVTALER
+                  Søke om hjelpemiddel
                 </Heading>
-                <ol className="burgermenu-container__category-list">
-                  {sortedAgreements.map((agreement) => (
-                    <li key={agreement.id}>
-                      <Link
-                        as={NextLink}
-                        href={baseUrl + agreementProductsLink(agreement.id)}
-                        onClick={() => {
-                          setMenuOpen(false)
-                        }}
-                      >
-                        {agreement.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ol>
-
-                {/* <ul className="burgermenu-container__category-list">
-                  {categories.map((category) => (
-                    <li key={category.name}>
-                      <HGrid gap="6" columns={'50px auto'}>
-                        <div className="burgermenu-container__category-icon">{category.icon}</div>
-                        <Link
-                          as={NextLink}
-                          href={category.link}
-                          onClick={() => {
-                            setMenuOpen(false)
-                            logNavigationEvent('meny', 'rammeavtale', 'Avtaler med Nav')
-                          }}
-                        >
-                          {category.name}
-                        </Link>
-                      </HGrid>
-                    </li>
-                  ))}
-                </ul> */}
-              </VStack>
-
-              <VStack gap={{ xs: "space-4", md: "space-8" }}>
-                <Heading level="2" size="small">
-                  SNARVEIER
-                </Heading>
-                <VStack as={'ul'} gap={{ xs: "space-16", md: "space-24" }}>
+                <VStack as={'ul'} gap={{ xs: 'space-16' }}>
                   <li>
                     <Link
                       as={NextLink}
-                      href={baseUrl + '/rammeavtale'}
+                      href={'https://www.nav.no/om-hjelpemidler#hvordan'}
                       onClick={() => {
                         setMenuOpen(false)
                       }}
                     >
-                      Avtaler med Nav
+                      Hvordan søke om hjelpemiddel
                     </Link>
                   </li>
                   <li>
                     <Link
                       as={NextLink}
-                      href={baseUrl + '/rammeavtale#se-at-et-hjelpemiddel-er-på-avtale'}
+                      href={'https://www.nav.no/soknader'}
                       onClick={() => {
                         setMenuOpen(false)
                       }}
                     >
-                      Slik kan du se at et hjelpemiddel er på avtale med Nav
+                      Søknad og skjema for hjelpemidler
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href={baseUrl + '/om-nettstedet'}
+                      onClick={() => {
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Om Finnhjelpemiddel
+                    </Link>
+                  </li>
+                </VStack>
+              </VStack>
+
+              <VStack gap={{ xs: 'space-4', md: 'space-4' }}>
+                <Heading level="2" size="small">
+                  Snarveier
+                </Heading>
+                <VStack as={'ul'} gap={{ xs: 'space-16' }}>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href={'https://www.nav.no/kontaktoss'}
+                      onClick={() => {
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Kontakt Nav
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href={'https://www.nav.no/kontaktoss#finn-hjelpemiddelsentral'}
+                      onClick={() => {
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Finn din hjelpemiddelsentral
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href={'https://www.kunnskapsbanken.net/'}
+                      onClick={() => {
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Kunnskapsbanken
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href={baseUrl + '/gjenbruksprodukter'}
+                      onClick={() => {
+                        setMenuOpen(false)
+                      }}
+                    >
+                      For Nav-ansatte: Alternativer på lager
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      as={NextLink}
+                      href={baseUrl + '/til-leverandorer'}
+                      onClick={() => {
+                        setMenuOpen(false)
+                      }}
+                    >
+                      For leverandører
                     </Link>
                   </li>
                   <li>
@@ -123,19 +145,29 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
                         setMenuOpen(false)
                       }}
                     >
-                      Innlogging leverandør
+                      Leverandør innlogging
                     </Link>
                   </li>
+                </VStack>
+              </VStack>
+
+              <VStack gap={{ xs: 'space-4', md: 'space-8' }}>
+                <VStack as={'ul'} gap={{ xs: 'space-16' }}>
                   <li>
-                    <Link
-                      as={NextLink}
-                      href="/gjenbruksprodukter"
-                      onClick={() => {
-                        setMenuOpen(false)
-                      }}
-                    >
-                      For Nav-ansatte: Alternativer på lager
-                    </Link>
+                    <LinkCardMenu
+                      title="Avtaler med Nav"
+                      link={baseUrl + '/rammeavtale'}
+                      icon={<TasklistIcon fontSize={'56px'} color={'#B65681'} />}
+                      setMenuOpen={setMenuOpen}
+                    />
+                  </li>
+                  <li>
+                    <LinkCardMenu
+                      title="Alle kategorier"
+                      link={baseUrl + '/kategori'}
+                      icon={<BevegelseIkon />}
+                      setMenuOpen={setMenuOpen}
+                    />
                   </li>
                 </VStack>
               </VStack>
@@ -144,7 +176,43 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
         </div>
       )}
     </>
-  );
+  )
+}
+
+const LinkCardMenu = ({
+  title,
+  link,
+  icon,
+  setMenuOpen,
+}: {
+  title: string
+  link: string
+  description?: string
+  icon?: ReactNode | undefined
+  setMenuOpen: (open: boolean) => void
+}) => {
+  return (
+    <LinkCard
+      arrow={false}
+      data-color={'accent'}
+      onClick={() => {
+        setMenuOpen(false)
+      }}
+    >
+      {icon && (
+        <VStack justify="center" height="100%" asChild>
+          <LinkCard.Icon>{icon}</LinkCard.Icon>
+        </VStack>
+      )}
+      <LinkCard.Title>
+        <LinkCard.Anchor asChild>
+          <NextLink href={link} className={styles.linkText}>
+            {title}
+          </NextLink>
+        </LinkCard.Anchor>
+      </LinkCard.Title>
+    </LinkCard>
+  )
 }
 
 export default BurgerMenuContent
