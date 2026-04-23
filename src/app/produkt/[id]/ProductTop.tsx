@@ -1,6 +1,6 @@
 'use client'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 import { Alert, BodyLong, BodyShort, Button, CopyButton, HelpText, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
@@ -83,7 +83,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           {product.isoCategoryTitle}
         </div>
       </VStack>
-      <CopyHms product={product} />
+      <CopyHms product={product} matchingVariant={matchingVariant} />
       <HStack gap={'space-24'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
@@ -162,8 +162,9 @@ const TagRow = ({
   )
 }
 
-const CopyHms = ({ product }: { product: Product }) => {
-  const hmsArtNumbers = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
+const CopyHms = ({ product, matchingVariant }: { product: Product; matchingVariant?: ProductVariant | null }) => {
+  const variantsToUse = matchingVariant ? [matchingVariant] : product.variants
+  const hmsArtNumbers = new Set(variantsToUse.map((p) => p.hmsArtNr).filter((hms) => hms))
 
   if (hmsArtNumbers.size === 0) {
     return <></>
