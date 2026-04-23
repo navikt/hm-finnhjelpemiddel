@@ -57,7 +57,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         {product.supplierName}
       </Link>
       <Heading level="1" size="large">
-        {hmsartnr ? product.variants[0].articleName : product.title}
+        {hmsartnr ? product.variants[0].articleName : matchingVariant ? matchingVariant.articleName : product.title}
       </Heading>
       {EXCLUDED_ISO_CATEGORIES.includes(product.isoCategory) && (
         <Alert variant="warning" size="small">
