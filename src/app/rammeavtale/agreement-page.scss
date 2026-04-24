@@ -4,8 +4,6 @@
 @use 'src/styles/_variables' as *;
 
 .agreement-page {
-  background-color: #faefee;
-
   &__heading {
     max-width: 790px;
     color: $ny-nav-purple-dark;
@@ -20,21 +18,21 @@
   &__content {
     display: flex;
     flex-direction: column;
-    gap:$ax-space-32;
-    padding-top:$ax-space-16;
-    padding-bottom:$ax-space-16;
+    gap: $ax-space-32;
+    padding-top: $ax-space-16;
+    padding-bottom: $ax-space-16;
 
     @include mixins.for-size(tablet-up) {
-      padding-top:$ax-space-32;
-      padding-bottom:$ax-space-32;
+      padding-top: $ax-space-32;
+      padding-bottom: $ax-space-32;
     }
     @include mixins.for-size(desktop-up) {
-      padding:$ax-space-56 0;
+      padding: $ax-space-56 0;
     }
   }
 
   &__link-to-search {
-    margin:$ax-space-8 0;
+    margin: $ax-space-8 0;
     align-self: flex-start;
   }
 
@@ -42,12 +40,12 @@
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    gap:$ax-space-16;
-    padding:$ax-space-24$ax-space-16;
-    border-radius:$ax-radius-8;
+    gap: $ax-space-16;
+    padding: $ax-space-24$ax-space-16;
+    border-radius: $ax-radius-8;
 
     @include mixins.for-size(tablet-up) {
-      padding:$ax-space-40$ax-space-48;
+      padding: $ax-space-40$ax-space-48;
     }
 
     p {
@@ -58,14 +56,14 @@
   &__description {
     display: flex;
     flex-direction: column;
-    gap:$ax-space-8;
+    gap: $ax-space-8;
   }
 
   &__list-header {
     p {
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color:$ax-text-neutral-subtle;
+      color: $ax-text-neutral-subtle;
     }
   }
 
@@ -91,7 +89,7 @@
 
   &__alert-info {
     .navds-link {
-      color:$ax-accent-800;
+      color: $ax-accent-800;
     }
   }
 
@@ -115,7 +113,7 @@
 
   &__list-item {
     border-bottom: 1px solid #e2e8f0;
-    padding:$ax-space-8;
+    padding: $ax-space-8;
 
     @include mixins.for-size(tablet-up) {
       padding: 0;
@@ -128,7 +126,7 @@
   }
 
   &__sort-selected {
-    background-color:$ax-bg-accent-soft;
+    background-color: $ax-bg-accent-soft;
   }
 
   &__filter-form {
