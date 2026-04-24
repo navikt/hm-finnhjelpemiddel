@@ -41,9 +41,19 @@ const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[];
   const groupedPosts = groupProductsByIsoCategory(posts)
 
   return (
-    <VStack as="ol" gap={{ xs: "space-32", md: "space-48" }} className="agreement-search-results" id="agreementSearchResults">
+    <VStack
+      as="ol"
+      gap={{ xs: 'space-32', md: 'space-48' }}
+      className="agreement-search-results"
+      id="agreementSearchResults"
+    >
       {groupedPosts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: "space-16", md: "space-32" }} className={'agreement-post spacing-top--small'}>
+        <VStack
+          as="li"
+          key={post.nr}
+          gap={{ xs: 'space-16', md: 'space-32' }}
+          className={'agreement-post spacing-top--small'}
+        >
           <HStack gap="space-16" align={'center'}>
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
@@ -58,28 +68,30 @@ const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[];
           {post.products.length === 0 && !postLoading && (
             <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>
           )}
-          {Object.entries(post.productsByIsoCategory).map(([isoCategory, products]) => (
-            <VStack key={isoCategory} gap="space-16">
-              <Heading level="3" size="small">
-                {isoCategory}
-              </Heading>
-              <HStack gap={"space-16"}>
-                {products.map((productWithRank) => (
-                  <ProductCardAgreement
-                    key={`${productWithRank.product.id} + ${productWithRank.rank}`}
-                    product={productWithRank.product}
-                    rank={productWithRank.rank}
-                    variantCount={productWithRank.variantCount ?? 0}
-                    handleCompareClick={handleCompareClick}
-                  />
-                ))}
-              </HStack>
-            </VStack>
-          ))}
+          {Object.entries(post.productsByIsoCategory)
+            .sort(([isoA], [isoB]) => isoA.localeCompare(isoB))
+            .map(([isoCategory, products]) => (
+              <VStack key={isoCategory} gap="space-16">
+                <Heading level="3" size="small">
+                  {isoCategory}
+                </Heading>
+                <HStack gap={'space-16'}>
+                  {products.map((productWithRank) => (
+                    <ProductCardAgreement
+                      key={`${productWithRank.product.id} + ${productWithRank.rank}`}
+                      product={productWithRank.product}
+                      rank={productWithRank.rank}
+                      variantCount={productWithRank.variantCount ?? 0}
+                      handleCompareClick={handleCompareClick}
+                    />
+                  ))}
+                </HStack>
+              </VStack>
+            ))}
         </VStack>
       ))}
     </VStack>
-  );
+  )
 }
 
 export default PostsListIsoGroups
