@@ -1,6 +1,6 @@
 'use client'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 import { Alert, BodyLong, BodyShort, Button, CopyButton, HelpText, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
@@ -11,6 +11,8 @@ import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 import useSWR from 'swr'
+import { useSearchParams } from 'next/navigation'
+import { mapSearchParams } from '@/utils/mapSearchParams'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -25,20 +27,37 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
   const { data: compatibleWithProducts } = useSWR(product.id, fetchCompatibleProducts, { keepPreviousData: true })
   const qrId = hmsartnr ? hmsartnr : product.variants.length === 1 ? product.variants[0].id : product.id
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
+  const searchParams = useSearchParams()
+  const searchData = mapSearchParams(searchParams)
+  const searchTermMatchesHms = product.variants
+    .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+  const searchTermMatchesSupplierRef = product.variants
+    .flatMap((variant) => [variant.supplierRef?.toLocaleLowerCase()])
+    .includes(searchData.searchTerm?.toLowerCase())
+
+  const matchingVariant = searchTermMatchesHms
+    ? product.variants.find((v) => v.hmsArtNr?.toLowerCase() === searchData.searchTerm?.toLowerCase())
+    : searchTermMatchesSupplierRef
+      ? product.variants.find((v) => v.supplierRef?.toLowerCase() === searchData.searchTerm?.toLowerCase())
+      : null
+  const relevantAgreements = matchingVariant ? matchingVariant.agreements : product.agreements
+
+  const isExpiredRefined = matchingVariant ? new Date(matchingVariant.expired).getTime() <= Date.now() : isExpired
 
   return (
     <VStack gap={'space-32'}>
       <TagRow
-        productAgreements={product.agreements}
+        productAgreements={relevantAgreements}
         accessory={product.accessory}
         sparePart={product.sparePart}
-        isExpired={isExpired}
+        isExpired={isExpiredRefined}
       />
       <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
       </Link>
       <Heading level="1" size="large">
-        {hmsartnr ? product.variants[0].articleName : product.title}
+        {hmsartnr ? product.variants[0].articleName : matchingVariant ? matchingVariant.articleName : product.title}
       </Heading>
       {EXCLUDED_ISO_CATEGORIES.includes(product.isoCategory) && (
         <Alert variant="warning" size="small">
@@ -64,7 +83,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
           {product.isoCategoryTitle}
         </div>
       </VStack>
-      <CopyHms product={product} />
+      <CopyHms product={product} matchingVariant={matchingVariant} />
       <HStack gap={'space-24'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
@@ -102,7 +121,6 @@ const TagRow = ({
       </>
     )
   }
-
   return (
     <HStack justify={'start'} gap={'space-12'}>
       {accessory || sparePart ? (
@@ -137,15 +155,16 @@ const TagRow = ({
           {topRank === 99 && <SuccessTag>På avtale</SuccessTag>}
         </>
       ) : (
-        <NeutralTag>Ikke på avtale</NeutralTag>
+        !isExpired && <NeutralTag>Ikke på avtale</NeutralTag>
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
     </HStack>
   )
 }
 
-const CopyHms = ({ product }: { product: Product }) => {
-  const hmsArtNumbers = new Set(product.variants.map((p) => p.hmsArtNr).filter((hms) => hms))
+const CopyHms = ({ product, matchingVariant }: { product: Product; matchingVariant?: ProductVariant | null }) => {
+  const variantsToUse = matchingVariant ? [matchingVariant] : product.variants
+  const hmsArtNumbers = new Set(variantsToUse.map((p) => p.hmsArtNr).filter((hms) => hms))
 
   if (hmsArtNumbers.size === 0) {
     return <></>
