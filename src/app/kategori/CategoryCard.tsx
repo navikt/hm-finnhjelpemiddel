@@ -31,7 +31,7 @@ export const CategoryCard = ({ title, link, description, icon, showSubCategoryIc
           }
         </LinkCard.Image>
       )}
-      <LinkCard.Title>
+      <LinkCard.Title style={{ textWrap: 'balance' }}>
         <LinkCard.Anchor asChild>
           <NextLink href={link} className={styles.linkText}>
             {title}
