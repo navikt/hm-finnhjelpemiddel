@@ -46,7 +46,7 @@ export const PAGE_SIZE = 24
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 
 // ISO categories that must always be excluded / filtered out (e.g. from autocomplete) and optionally from general search
-export const EXCLUDED_ISO_CATEGORIES = ['09540601', '09540901', '09540301']
+export const EXCLUDED_ISO_CATEGORIES = ['09540601', '09540901', '09540301', '09541201']
 
 export type Bucket = {
   key: number | string
