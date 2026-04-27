@@ -47,6 +47,7 @@ export interface TechDataRange {
 
 export interface ProductVariant {
   id: string
+  seriesId?: string
   status: 'INACTIVE' | 'ACTIVE'
   hmsArtNr: string | null
   supplierRef: string
@@ -359,6 +360,7 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
 export const mapProductVariant = (source: ProductSourceResponse): ProductVariant => {
   return {
     id: source.id,
+    seriesId: source.seriesId,
     status: source.status,
     hmsArtNr: source.hmsArtNr,
     supplierRef: source.supplierRef,

@@ -1,7 +1,8 @@
 import { ProductVariant } from '@/utils/product-util'
-import { CopyButton, Hide, Skeleton, Table } from '@navikt/ds-react'
+import { CopyButton, Hide, Link, Skeleton, Table } from '@navikt/ds-react'
 import styles from './PartsTable.module.scss'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
+import NextLink from 'next/link'
 
 export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
   return products ? (
@@ -31,7 +32,15 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
                 className={styles.copyButton}
               />
             </Table.DataCell>
-            <Table.DataCell>{product.articleName}</Table.DataCell>
+            <Table.DataCell>
+              <Link
+                as={NextLink}
+                href={`/produkt/${product.seriesId}`}
+                className={styles.link}
+              >
+                {product.articleName}
+              </Link>
+            </Table.DataCell>
             <Hide below={'md'} asChild>
               <Table.DataCell>{product.supplierName}</Table.DataCell>
             </Hide>

@@ -84,6 +84,10 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </div>
       </VStack>
       <CopyHms product={product} matchingVariant={matchingVariant} />
+      {/*      <VStack gap={'space-16'}>{(product.accessory || product.sparePart) && <Heading size={'xsmall'} level={'2'}> Leverandørs artikkel nummer: </Heading>}</VStack>*/}
+      {(product.accessory || product.sparePart) && (
+        <CopyLevart product={product} matchingVariant={matchingVariant}/>
+      )}
       <HStack gap={'space-24'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
@@ -182,6 +186,42 @@ const CopyHms = ({ product, matchingVariant }: { product: Product; matchingVaria
             className={styles.copyButton}
             copyText={[...hmsArtNumbers.values()][0] || ''}
             text={[...hmsArtNumbers.values()][0] || ''}
+            activeText="kopiert"
+            variant="action"
+            activeIcon={<ThumbUpIcon aria-hidden />}
+            iconPosition="right"
+          />
+        ) : (
+          <HStack as={Link} href="#variants-table">
+            <BodyShort>Se tabell med varianter</BodyShort> <ArrowDownIcon aria-hidden fontSize={'24'} />
+          </HStack>
+        )}
+      </VStack>
+    </>
+  )
+}
+
+
+const CopyLevart = ({ product, matchingVariant }: { product: Product; matchingVariant?: ProductVariant | null }) => {
+  const variantsToUse = matchingVariant ? [matchingVariant] : product.variants
+  const levArtNumbers = new Set(variantsToUse.map((p) => p.supplierRef).filter((levArt) => levArt))
+
+  if (levArtNumbers.size === 0) {
+    return <></>
+  }
+
+  return (
+    <>
+      <VStack gap={'space-8'} align={'start'}>
+        <Heading level="3" size="xsmall">
+          LevArt-nummer
+        </Heading>
+        {levArtNumbers.size === 1 ? (
+          <CopyButton
+            size="medium"
+            className={styles.copyButton}
+            copyText={[...levArtNumbers.values()][0] || ''}
+            text={[...levArtNumbers.values()][0] || ''}
             activeText="kopiert"
             variant="action"
             activeIcon={<ThumbUpIcon aria-hidden />}
