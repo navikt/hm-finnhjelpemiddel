@@ -84,7 +84,6 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </div>
       </VStack>
       <CopyHms product={product} matchingVariant={matchingVariant} />
-      {/*      <VStack gap={'space-16'}>{(product.accessory || product.sparePart) && <Heading size={'xsmall'} level={'2'}> Leverandørs artikkel nummer: </Heading>}</VStack>*/}
       {(product.accessory || product.sparePart) && (
         <CopyLevart product={product} matchingVariant={matchingVariant}/>
       )}
