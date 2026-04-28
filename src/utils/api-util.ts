@@ -430,18 +430,26 @@ export const fetchProducts = ({
     rammeavtale: filterRammeavtale(rammeavtale),
   }
 
-  const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => ({
-    [filterKey]: {
-      filter: {
-        bool: {
-          filter: Object.entries(filterKeyToAggsFilter)
-            .filter(([key, v]) => key !== filterKey && v != null)
-            .map(([_, v]) => v),
+  const aggsFilter = (filterKey: FilterCategoryKeyServer, aggs: {}) => {
+    const filters = Object.entries(filterKeyToAggsFilter)
+      .filter(([key, v]) => key !== filterKey && v != null)
+      .map(([_, v]) => v)
+
+    if (vis && vis.length > 0) {
+      filters.push(...filterVis(vis))
+    }
+
+    return {
+      [filterKey]: {
+        filter: {
+          bool: {
+            filter: filters,
+          },
         },
+        aggs,
       },
-      aggs,
-    },
-  })
+    }
+  }
 
   const queryFilters: Array<any> = []
 
