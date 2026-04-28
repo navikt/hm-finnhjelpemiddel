@@ -28,7 +28,8 @@ const NavigationBar = () => {
   const path = usePathname()
 
   const outerContainerRef = useRef<HTMLElement>(null)
-
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  
   useOnClickOutside(outerContainerRef, () => {
     setMenuOpen(false)
   })
@@ -171,6 +172,7 @@ const NavigationBar = () => {
             <>
               <Hide below="md">
                 <Button
+                  ref={menuButtonRef}
                   icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
                   variant="tertiary"
                   onClick={() => setMenuOpen(!menuOpen)}
@@ -182,6 +184,7 @@ const NavigationBar = () => {
               </Hide>
               <Show below="md" asChild>
                 <Button
+                  ref={menuButtonRef}
                   icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
                   variant="tertiary"
                   onClick={() => setMenuOpen(!menuOpen)}
@@ -192,7 +195,7 @@ const NavigationBar = () => {
             </>
           </div>
         </div>
-        <BurgerMenuContent menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <BurgerMenuContent menuOpen={menuOpen} setMenuOpen={setMenuOpen} menuButtonRef={menuButtonRef} />
       </div>
     </nav>
   )
