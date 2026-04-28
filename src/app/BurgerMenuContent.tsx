@@ -17,36 +17,29 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen, menuButtonRef }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null)
   //spesifiser prod-ingress for å ikke linke til ansatt-forside fra gjenbrukssiden
   const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
-  useEffect(() => {
-    if (menuOpen) {
-      const focusableElements = containerRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-      if (focusableElements && focusableElements.length > 0) {
-        focusableElements[0].focus()
-      }
-    }
-  }, [menuOpen])
 
   useEffect(() => {
+    if (!menuOpen) return
+
+    // Focus first item when menu opens
+    requestAnimationFrame(() => {
+      const first = containerRef.current?.querySelector<HTMLElement>('a[href], button')
+      first?.focus()
+    })
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Tab' || e.shiftKey) return
-      const focusableElements = containerRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-      if (!focusableElements || focusableElements.length === 0) return
-      const last = focusableElements[focusableElements.length - 1]
-      if (document.activeElement === last) {
+      const focusable = containerRef.current?.querySelectorAll<HTMLElement>('a[href], button')
+      if (!focusable?.length) return
+      if (document.activeElement === focusable[focusable.length - 1]) {
         e.preventDefault()
         setMenuOpen(false)
-        // Focus the button directly, synchronously before re-render removes the menu
-        menuButtonRef.current?.focus()
+        requestAnimationFrame(() => menuButtonRef.current?.focus())
       }
     }
-    if (menuOpen) {
-      document.addEventListener('keydown', handleKeyDown)
-      return () => document.removeEventListener('keydown', handleKeyDown)
-    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [menuOpen, setMenuOpen, menuButtonRef])
 
   return (
