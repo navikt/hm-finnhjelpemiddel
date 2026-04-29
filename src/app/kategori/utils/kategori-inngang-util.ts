@@ -24,6 +24,7 @@ import { Hit, ProductSourceResponse } from '@/utils/response-types'
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
 export const PAGE_SIZE = 24
+export const MINIMUM_NON_AGREEMENT_SIZE = 6
 
 type FetchProps = {
   from: number

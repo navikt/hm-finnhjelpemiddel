@@ -8,7 +8,11 @@ import CompareMenu from '@/components/layout/CompareMenu'
 import { CategoryResults } from '../CategoryResults'
 import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
 import useQueryString from '@/utils/search-params-util'
-import { fetchProductsCategory, PAGE_SIZE } from '@/app/kategori/utils/kategori-inngang-util'
+import {
+  fetchProductsCategory,
+  MINIMUM_NON_AGREEMENT_SIZE,
+  PAGE_SIZE,
+} from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { ProductsWithIsoAggs, SupplierInfo } from '@/app/kategori/utils/category-types'
@@ -25,43 +29,11 @@ export const CategoryPage = ({ category }: Props) => {
   const searchParams = useSearchParams()
   const { createQueryStringAppend } = useQueryString()
 
-  /*
   const {
-    data: productsData,
-    size: page,
-    setSize: setPage,
+    data: productsOnAgreement,
     error,
     isLoading,
-  } = useSWRInfinite<ProductsWithIsoAggs>(
-    (index, previousPageData?: ProductsWithIsoAggs) => {
-      // Stop paginating when previous page has no products
-      if (previousPageData && previousPageData.products.length === 0) return null
-
-      return {
-        from: 0,
-        size: 1000,
-        searchParams,
-        category: category,
-        onAgreement: true,
-      }
-    },
-    fetchProductsCategory,
-    {
-      initialSize: Number(searchParams.get('page') || '1'),
-      keepPreviousData: true,
-      revalidateFirstPage: false,
-    }
-  )
-
-   */
-
-  const {
-    data: productsData,
-    //size: page,
-    //setSize: setPage,
-    error,
-    isLoading,
-  } = useSWRImmutable<ProductsWithIsoAggs>('asdasd', () =>
+  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams], () =>
     fetchProductsCategory({
       from: 0,
       size: 1000,
@@ -71,7 +43,10 @@ export const CategoryPage = ({ category }: Props) => {
     })
   )
 
-  const initialNotOnAgreementSize = Math.max(24 - (productsData?.products.length ?? 0), 6)
+  const initialNotOnAgreementSize = Math.max(
+    PAGE_SIZE - (productsOnAgreement?.products.length ?? 0),
+    MINIMUM_NON_AGREEMENT_SIZE
+  )
 
   const {
     data: productsNotOnAgreement,
@@ -100,18 +75,18 @@ export const CategoryPage = ({ category }: Props) => {
     }
   )
 
-  console.log(productsNotOnAgreement?.at(-1)?.products)
-
   const mergedProductsData = {
-    products: productsData?.products.concat(productsNotOnAgreement?.at(-1)?.products ?? []),
-    isos: productsData?.iso.concat(productsNotOnAgreement?.at(-1)?.iso ?? []),
-    suppliers: productsData?.suppliers.concat(productsNotOnAgreement?.at(-1)?.suppliers ?? []),
-    digitalSoknad: productsData?.digitalSoknad.concat(productsNotOnAgreement?.at(-1)?.digitalSoknad ?? []),
-    bestillingsordning: productsData?.bestillingsordning.concat(
+    products: productsOnAgreement?.products.concat(productsNotOnAgreement?.at(-1)?.products ?? []),
+    isos: productsOnAgreement?.iso.concat(productsNotOnAgreement?.at(-1)?.iso ?? []),
+    suppliers: productsOnAgreement?.suppliers.concat(productsNotOnAgreement?.at(-1)?.suppliers ?? []),
+    digitalSoknad: productsOnAgreement?.digitalSoknad.concat(productsNotOnAgreement?.at(-1)?.digitalSoknad ?? []),
+    bestillingsordning: productsOnAgreement?.bestillingsordning.concat(
       productsNotOnAgreement?.at(-1)?.bestillingsordning ?? []
     ),
-    techDataFilterAggs: new Map([...productsData?.techDataFilterAggs ?? new Map(), ...productsNotOnAgreement?.at(-1)?.techDataFilterAggs ?? new Map())
-    ,
+    techDataFilterAggs: new Map([
+      ...(productsOnAgreement?.techDataFilterAggs ?? new Map()),
+      ...(productsNotOnAgreement?.at(-1)?.techDataFilterAggs ?? new Map()),
+    ]),
   }
 
   const products = mergedProductsData?.products
@@ -124,7 +99,8 @@ export const CategoryPage = ({ category }: Props) => {
   const isEmpty = productsNotOnAgreement?.[0]?.products.length === 0
   const isReachingEnd =
     isEmpty ||
-    (productsNotOnAgreement && productsNotOnAgreement[productsNotOnAgreement.length - 1]?.products.length < PAGE_SIZE)
+    (productsNotOnAgreement &&
+      productsNotOnAgreement[productsNotOnAgreement.length - 1]?.products.length % MINIMUM_NON_AGREEMENT_SIZE !== 0)
 
   const loadMore = !isReachingEnd
     ? () => {
