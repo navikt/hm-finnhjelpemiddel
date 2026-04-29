@@ -49,11 +49,11 @@ export const CategoryPage = ({ category }: Props) => {
   )
 
   const {
-    data: productsNotOnAgreement,
+    data: productsNonAgreement,
     size: page,
     setSize: setPage,
     //error,
-    //isLoading,
+    isLoading: isLoadingNonAgreement,
   } = useSWRInfinite<ProductsWithIsoAggs>(
     (index, previousPageData?: ProductsWithIsoAggs) => {
       // Stop paginating when previous page has no products
@@ -77,19 +77,19 @@ export const CategoryPage = ({ category }: Props) => {
     }
   )
 
-  console.log(productsNotOnAgreement)
+  console.log(productsNonAgreement)
 
   const mergedProductsData = {
-    products: productsOnAgreement?.products.concat(productsNotOnAgreement?.map((d) => d.products).flat() ?? []),
-    isos: productsOnAgreement?.iso.concat(productsNotOnAgreement?.at(-1)?.iso ?? []),
-    suppliers: productsOnAgreement?.suppliers.concat(productsNotOnAgreement?.at(-1)?.suppliers ?? []),
-    digitalSoknad: productsOnAgreement?.digitalSoknad.concat(productsNotOnAgreement?.at(-1)?.digitalSoknad ?? []),
+    products: productsOnAgreement?.products.concat(productsNonAgreement?.map((d) => d.products).flat() ?? []),
+    isos: productsOnAgreement?.iso.concat(productsNonAgreement?.at(-1)?.iso ?? []),
+    suppliers: productsOnAgreement?.suppliers.concat(productsNonAgreement?.at(-1)?.suppliers ?? []),
+    digitalSoknad: productsOnAgreement?.digitalSoknad.concat(productsNonAgreement?.at(-1)?.digitalSoknad ?? []),
     bestillingsordning: productsOnAgreement?.bestillingsordning.concat(
-      productsNotOnAgreement?.at(-1)?.bestillingsordning ?? []
+      productsNonAgreement?.at(-1)?.bestillingsordning ?? []
     ),
     techDataFilterAggs: new Map([
       ...(productsOnAgreement?.techDataFilterAggs ?? new Map()),
-      ...(productsNotOnAgreement?.at(-1)?.techDataFilterAggs ?? new Map()),
+      ...(productsNonAgreement?.at(-1)?.techDataFilterAggs ?? new Map()),
     ]),
   }
 
@@ -100,11 +100,11 @@ export const CategoryPage = ({ category }: Props) => {
   const bestillingsordning = mergedProductsData?.bestillingsordning ?? []
   const techDataFilterAggs = mergedProductsData?.techDataFilterAggs
 
-  const isEmpty = productsNotOnAgreement?.[0]?.products.length === 0
+  const isEmpty = productsNonAgreement?.[0]?.products.length === 0
   const isReachingEnd =
     isEmpty ||
-    (productsNotOnAgreement &&
-      productsNotOnAgreement[productsNotOnAgreement.length - 1]?.products.length % MINIMUM_NON_AGREEMENT_SIZE !== 0)
+    (productsNonAgreement &&
+      productsNonAgreement[productsNonAgreement.length - 1]?.products.length % MINIMUM_NON_AGREEMENT_SIZE !== 0)
 
   const loadMore = !isReachingEnd
     ? () => {
@@ -113,7 +113,7 @@ export const CategoryPage = ({ category }: Props) => {
         newParams.set('page', `${nextPage}`)
         const searchQueryString = newParams.toString()
         router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-        setPage(nextPage)
+        //setPage(nextPage)
       }
     : undefined
 
@@ -132,12 +132,12 @@ export const CategoryPage = ({ category }: Props) => {
     }
     const paramKey = paramKeyMap[filterName] || filterName
     const newSearchParams = createQueryStringAppend(paramKey, value)
-    setPage(1)
+    //setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const onReset = () => {
-    setPage(1)
+    //setPage(1)
     router.replace(pathname)
   }
   const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
@@ -176,7 +176,7 @@ export const CategoryPage = ({ category }: Props) => {
               <FilterBarCategory filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
             </HStack>
 
-            <CategoryResults products={products} loadMore={loadMore} isLoading={isLoading} />
+            <CategoryResults products={products} loadMore={loadMore} isLoading={isLoading || isLoadingNonAgreement} />
           </VStack>
         </HGrid>
       </>
