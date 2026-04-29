@@ -59,8 +59,10 @@ export const CategoryPage = ({ category }: Props) => {
       // Stop paginating when previous page has no products
       if (previousPageData && previousPageData.products.length === 0) return null
 
+      if (isLoading || !productsOnAgreement) return null
+
       return {
-        from: index > 0 ? index * PAGE_SIZE + initialNotOnAgreementSize : 0,
+        from: index > 0 ? (index - 1) * PAGE_SIZE + initialNotOnAgreementSize : 0,
         size: index > 0 ? PAGE_SIZE : initialNotOnAgreementSize,
         searchParams,
         category: category,
@@ -76,7 +78,7 @@ export const CategoryPage = ({ category }: Props) => {
   )
 
   const mergedProductsData = {
-    products: productsOnAgreement?.products.concat(productsNotOnAgreement?.at(-1)?.products ?? []),
+    products: productsOnAgreement?.products.concat(productsNotOnAgreement?.map((d) => d.products).flat() ?? []),
     isos: productsOnAgreement?.iso.concat(productsNotOnAgreement?.at(-1)?.iso ?? []),
     suppliers: productsOnAgreement?.suppliers.concat(productsNotOnAgreement?.at(-1)?.suppliers ?? []),
     digitalSoknad: productsOnAgreement?.digitalSoknad.concat(productsNotOnAgreement?.at(-1)?.digitalSoknad ?? []),
