@@ -15,7 +15,7 @@ import {
 } from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { ProductsWithIsoAggs, SupplierInfo } from '@/app/kategori/utils/category-types'
+import { ProductsWithIsoAggs } from '@/app/kategori/utils/category-types'
 import { logUmamiClickButton } from '@/utils/umami'
 import useSWRImmutable from 'swr/immutable'
 
@@ -49,7 +49,7 @@ export const CategoryPage = ({ category }: Props) => {
   )
 
   const {
-    data: productsNonAgreement,
+    data: productsNotOnAgreement,
     size: page,
     setSize: setPage,
     //error,
@@ -77,21 +77,38 @@ export const CategoryPage = ({ category }: Props) => {
     }
   )
 
-  console.log(productsNonAgreement)
-
   const mergedProductsData = {
-    products: productsOnAgreement?.products.concat(productsNonAgreement?.map((d) => d.products).flat() ?? []),
-    isos: productsOnAgreement?.iso.concat(productsNonAgreement?.at(-1)?.iso ?? []),
-    suppliers: productsOnAgreement?.suppliers.concat(productsNonAgreement?.at(-1)?.suppliers ?? []),
-    digitalSoknad: productsOnAgreement?.digitalSoknad.concat(productsNonAgreement?.at(-1)?.digitalSoknad ?? []),
-    bestillingsordning: productsOnAgreement?.bestillingsordning.concat(
-      productsNonAgreement?.at(-1)?.bestillingsordning ?? []
+    products: productsOnAgreement?.products.concat(productsNotOnAgreement?.map((d) => d.products).flat() ?? []),
+
+    isos: mergeArraysNoDuplicates(
+      productsOnAgreement?.iso ?? [],
+      productsNotOnAgreement?.at(-1)?.iso ?? [],
+      (a, b) => a.code === b.code
     ),
+
+    suppliers: mergeArraysNoDuplicates(
+      productsOnAgreement?.suppliers ?? [],
+      productsNotOnAgreement?.at(-1)?.suppliers ?? [],
+      (a, b) => a.name === b.name
+    ),
+
+    digitalSoknad: mergeArraysNoDuplicates(
+      productsOnAgreement?.digitalSoknad ?? [],
+      productsNotOnAgreement?.at(-1)?.digitalSoknad ?? []
+    ),
+
+    bestillingsordning: mergeArraysNoDuplicates(
+      productsOnAgreement?.bestillingsordning ?? [],
+      productsNotOnAgreement?.at(-1)?.bestillingsordning ?? []
+    ),
+
     techDataFilterAggs: new Map([
       ...(productsOnAgreement?.techDataFilterAggs ?? new Map()),
-      ...(productsNonAgreement?.at(-1)?.techDataFilterAggs ?? new Map()),
+      ...(productsNotOnAgreement?.at(-1)?.techDataFilterAggs ?? new Map()),
     ]),
   }
+
+  console.log('merged ', mergedProductsData)
 
   const products = mergedProductsData?.products
   const isos = mergedProductsData?.isos?.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
@@ -100,11 +117,11 @@ export const CategoryPage = ({ category }: Props) => {
   const bestillingsordning = mergedProductsData?.bestillingsordning ?? []
   const techDataFilterAggs = mergedProductsData?.techDataFilterAggs
 
-  const isEmpty = productsNonAgreement?.[0]?.products.length === 0
+  const isEmpty = productsNotOnAgreement?.[0]?.products.length === 0
   const isReachingEnd =
     isEmpty ||
-    (productsNonAgreement &&
-      productsNonAgreement[productsNonAgreement.length - 1]?.products.length % MINIMUM_NON_AGREEMENT_SIZE !== 0)
+    (productsNotOnAgreement &&
+      productsNotOnAgreement[productsNotOnAgreement.length - 1]?.products.length % MINIMUM_NON_AGREEMENT_SIZE !== 0)
 
   const loadMore = !isReachingEnd
     ? () => {
@@ -182,4 +199,11 @@ export const CategoryPage = ({ category }: Props) => {
       </>
     </CategoryPageLayout>
   )
+}
+
+const mergeArraysNoDuplicates = (a: any, b: any, predicate = (a: any, b: any) => a === b) => {
+  const temp = [...a]
+
+  b.forEach((bItem: never) => (temp.some((cItem) => predicate(bItem, cItem)) ? null : temp.push(bItem)))
+  return temp
 }
