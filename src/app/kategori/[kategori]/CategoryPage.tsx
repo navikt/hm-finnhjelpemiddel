@@ -44,7 +44,8 @@ export const CategoryPage = ({ category }: Props) => {
   )
 
   //Hvis det finnes mindre enn PAGE_SIZE avtale-produkter:
-  //Hent ikke-avtale-produkter slik at vi viser minst PAGE_SIZE kombinert, rundet opp til nærmeste multiple av 6.
+  //Hent ikke-avtale-produkter slik at vi viser minst PAGE_SIZE kombinert, rundet opp til nærmeste multiple av MINIMUM_NON_AGREEMENT_SIZE.
+  //Ellers hent MINIMUM_NON_AGREEMENT_SIZE
   const initialNotOnAgreementSize =
     Math.ceil(
       Math.max(PAGE_SIZE - (productsOnAgreement?.products.length ?? 0), MINIMUM_NON_AGREEMENT_SIZE) /
