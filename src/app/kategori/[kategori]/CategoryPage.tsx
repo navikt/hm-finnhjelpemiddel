@@ -108,8 +108,6 @@ export const CategoryPage = ({ category }: Props) => {
     ]),
   }
 
-  console.log('merged ', mergedProductsData)
-
   const products = mergedProductsData?.products
   const isos = mergedProductsData?.isos?.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
   const suppliers = mergedProductsData?.suppliers?.map((supplier) => supplier.name) ?? []
