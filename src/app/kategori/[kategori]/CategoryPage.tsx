@@ -33,7 +33,7 @@ export const CategoryPage = ({ category }: Props) => {
     data: productsOnAgreement,
     error,
     isLoading,
-  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams], () =>
+  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, createQueryStringAppend('page', '')], () =>
     fetchProductsCategory({
       from: 0,
       size: 1000,
@@ -77,6 +77,8 @@ export const CategoryPage = ({ category }: Props) => {
     }
   )
 
+  console.log(productsNotOnAgreement)
+
   const mergedProductsData = {
     products: productsOnAgreement?.products.concat(productsNotOnAgreement?.map((d) => d.products).flat() ?? []),
     isos: productsOnAgreement?.iso.concat(productsNotOnAgreement?.at(-1)?.iso ?? []),
@@ -111,7 +113,7 @@ export const CategoryPage = ({ category }: Props) => {
         newParams.set('page', `${nextPage}`)
         const searchQueryString = newParams.toString()
         router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-        //setPage(nextPage)
+        setPage(nextPage)
       }
     : undefined
 
@@ -130,12 +132,12 @@ export const CategoryPage = ({ category }: Props) => {
     }
     const paramKey = paramKeyMap[filterName] || filterName
     const newSearchParams = createQueryStringAppend(paramKey, value)
-    //setPage(1)
+    setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const onReset = () => {
-    //setPage(1)
+    setPage(1)
     router.replace(pathname)
   }
   const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
