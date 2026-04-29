@@ -43,10 +43,13 @@ export const CategoryPage = ({ category }: Props) => {
     })
   )
 
-  const initialNotOnAgreementSize = Math.max(
-    PAGE_SIZE - (productsOnAgreement?.products.length ?? 0),
-    MINIMUM_NON_AGREEMENT_SIZE
-  )
+  //Hvis det finnes mindre enn PAGE_SIZE avtale-produkter:
+  //Hent ikke-avtale-produkter slik at vi viser minst PAGE_SIZE kombinert, rundet opp til nærmeste multiple av 6.
+  const initialNotOnAgreementSize =
+    Math.ceil(
+      Math.max(PAGE_SIZE - (productsOnAgreement?.products.length ?? 0), MINIMUM_NON_AGREEMENT_SIZE) /
+        MINIMUM_NON_AGREEMENT_SIZE
+    ) * MINIMUM_NON_AGREEMENT_SIZE
 
   const {
     data: productsNotOnAgreement,
@@ -115,7 +118,7 @@ export const CategoryPage = ({ category }: Props) => {
   const bestillingsordning = mergedProductsData?.bestillingsordning ?? []
   const techDataFilterAggs = mergedProductsData?.techDataFilterAggs
 
-  const isEmpty = productsNotOnAgreement?.[0]?.products.length === 0
+  const isEmpty = productsNotOnAgreement?.at(-1)?.products.length === 0
   const isReachingEnd =
     isEmpty ||
     (productsNotOnAgreement &&
