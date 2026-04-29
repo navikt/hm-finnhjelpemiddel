@@ -11,8 +11,9 @@ import useQueryString from '@/utils/search-params-util'
 import { fetchProductsCategory, PAGE_SIZE } from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { ProductsWithIsoAggs } from '@/app/kategori/utils/category-types'
+import { ProductsWithIsoAggs, SupplierInfo } from '@/app/kategori/utils/category-types'
 import { logUmamiClickButton } from '@/utils/umami'
+import useSWRImmutable from 'swr/immutable'
 
 type Props = {
   category: CategoryDTO
@@ -24,6 +25,7 @@ export const CategoryPage = ({ category }: Props) => {
   const searchParams = useSearchParams()
   const { createQueryStringAppend } = useQueryString()
 
+  /*
   const {
     data: productsData,
     size: page,
@@ -36,10 +38,11 @@ export const CategoryPage = ({ category }: Props) => {
       if (previousPageData && previousPageData.products.length === 0) return null
 
       return {
-        from: index * PAGE_SIZE,
-        size: PAGE_SIZE,
+        from: 0,
+        size: 1000,
         searchParams,
         category: category,
+        onAgreement: true,
       }
     },
     fetchProductsCategory,
@@ -50,15 +53,78 @@ export const CategoryPage = ({ category }: Props) => {
     }
   )
 
-  const products = productsData?.map((d) => d.products).flat()
-  const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
-  const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
-  const digitalSoknad = productsData?.at(-1)?.digitalSoknad ?? []
-  const bestillingsordning = productsData?.at(-1)?.bestillingsordning ?? []
-  const techDataFilterAggs = productsData?.at(-1)?.techDataFilterAggs
+   */
 
-  const isEmpty = productsData?.[0]?.products.length === 0
-  const isReachingEnd = isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
+  const {
+    data: productsData,
+    //size: page,
+    //setSize: setPage,
+    error,
+    isLoading,
+  } = useSWRImmutable<ProductsWithIsoAggs>('asdasd', () =>
+    fetchProductsCategory({
+      from: 0,
+      size: 1000,
+      searchParams,
+      category: category,
+      onAgreement: true,
+    })
+  )
+
+  const initialNotOnAgreementSize = Math.max(24 - (productsData?.products.length ?? 0), 6)
+
+  const {
+    data: productsNotOnAgreement,
+    size: page,
+    setSize: setPage,
+    //error,
+    //isLoading,
+  } = useSWRInfinite<ProductsWithIsoAggs>(
+    (index, previousPageData?: ProductsWithIsoAggs) => {
+      // Stop paginating when previous page has no products
+      if (previousPageData && previousPageData.products.length === 0) return null
+
+      return {
+        from: index > 0 ? index * PAGE_SIZE + initialNotOnAgreementSize : 0,
+        size: index > 0 ? PAGE_SIZE : initialNotOnAgreementSize,
+        searchParams,
+        category: category,
+        onAgreement: false,
+      }
+    },
+    fetchProductsCategory,
+    {
+      initialSize: Number(searchParams.get('page') || '1'),
+      keepPreviousData: true,
+      revalidateFirstPage: false,
+    }
+  )
+
+  console.log(productsNotOnAgreement?.at(-1)?.products)
+
+  const mergedProductsData = {
+    products: productsData?.products.concat(productsNotOnAgreement?.at(-1)?.products ?? []),
+    isos: productsData?.iso.concat(productsNotOnAgreement?.at(-1)?.iso ?? []),
+    suppliers: productsData?.suppliers.concat(productsNotOnAgreement?.at(-1)?.suppliers ?? []),
+    digitalSoknad: productsData?.digitalSoknad.concat(productsNotOnAgreement?.at(-1)?.digitalSoknad ?? []),
+    bestillingsordning: productsData?.bestillingsordning.concat(
+      productsNotOnAgreement?.at(-1)?.bestillingsordning ?? []
+    ),
+    techDataFilterAggs: new Map([...productsData?.techDataFilterAggs ?? new Map(), ...productsNotOnAgreement?.at(-1)?.techDataFilterAggs ?? new Map())
+    ,
+  }
+
+  const products = mergedProductsData?.products
+  const isos = mergedProductsData?.isos?.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
+  const suppliers = mergedProductsData?.suppliers?.map((supplier) => supplier.name) ?? []
+  const digitalSoknad = mergedProductsData?.digitalSoknad ?? []
+  const bestillingsordning = mergedProductsData?.bestillingsordning ?? []
+  const techDataFilterAggs = mergedProductsData?.techDataFilterAggs
+
+  const isEmpty = productsNotOnAgreement?.[0]?.products.length === 0
+  const isReachingEnd =
+    isEmpty ||
+    (productsNotOnAgreement && productsNotOnAgreement[productsNotOnAgreement.length - 1]?.products.length < PAGE_SIZE)
 
   const loadMore = !isReachingEnd
     ? () => {
@@ -67,7 +133,7 @@ export const CategoryPage = ({ category }: Props) => {
         newParams.set('page', `${nextPage}`)
         const searchQueryString = newParams.toString()
         router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-        setPage(nextPage)
+        //setPage(nextPage)
       }
     : undefined
 
@@ -86,12 +152,12 @@ export const CategoryPage = ({ category }: Props) => {
     }
     const paramKey = paramKeyMap[filterName] || filterName
     const newSearchParams = createQueryStringAppend(paramKey, value)
-    setPage(1)
+    //setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const onReset = () => {
-    setPage(1)
+    //setPage(1)
     router.replace(pathname)
   }
   const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'

@@ -23,14 +23,14 @@ import { Hit, ProductSourceResponse } from '@/utils/response-types'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
-export const PAGE_SIZE = 72
+export const PAGE_SIZE = 24
 
 type FetchProps = {
   from: number
   size: number
   searchParams: ReadonlyURLSearchParams
   category: CategoryDTO
-  dontCollapse?: boolean
+  onAgreement: boolean
 }
 
 export const fetchProductsCategory = async ({
@@ -38,6 +38,7 @@ export const fetchProductsCategory = async ({
   size,
   searchParams,
   category,
+  onAgreement,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const sortOrderOpenSearch = sortOptionsOpenSearch['Rangering']
   const searchTermQuery = makeSearchTermQuery({ searchTerm: '' })
@@ -52,6 +53,15 @@ export const fetchProductsCategory = async ({
   const techDataFilters = categoryFilters.filter((categoryFilter) =>
     filtersFromAdmin.includes(categoryFilter.identifier)
   )
+
+  postFilters.push({
+    key: 'agreement',
+    filter: {
+      bool: {
+        should: { term: { hasAgreement: onAgreement } },
+      },
+    },
+  })
 
   if (searchParams.has('iso')) {
     postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.getAll('iso')) })
