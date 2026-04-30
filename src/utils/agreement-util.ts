@@ -93,7 +93,7 @@ const excludedAgreementsDev: Record<string, string> = {
   Biler: '970d867a-d095-42a8-9f0a-495e42f301cb',
   Servicehunder: '744ca191-ed99-4a09-90f0-29f3733885f5',
   Høreapparater: '67196a0e-d1db-4c74-87ce-9d84da279c0a',
-  Seksuallivet: '768b68d7-9e3a-4865-983e-09b47ecc6a2c',
+  Seksuallivet: '5f00d54d-0604-4ae9-859e-8296c2d98ca1',
 }
 
 const excludedAgreementsProd: Record<string, string> = {
@@ -101,7 +101,7 @@ const excludedAgreementsProd: Record<string, string> = {
   Biler: 'f082242e-e3c1-4f73-bbf6-9e06f3be9721',
   Servicehunder: '8d55f208-9a78-4952-a4d1-cbb706bd7d9c',
   Høreapparater: 'd73b510b-0043-4c9e-92ac-25b4ace236c9',
-  Seksuallivet: '768b68d7-9e3a-4865-983e-09b47ecc6a2c',
+  Seksuallivet: '5f00d54d-0604-4ae9-859e-8296c2d98ca1',
 }
 
 export const mapAgreementLabels = (data: SearchResponse): AgreementLabel[] => {

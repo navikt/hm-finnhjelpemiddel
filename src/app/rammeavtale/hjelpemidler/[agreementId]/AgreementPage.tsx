@@ -256,7 +256,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjene
 
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
-  const isSeksualtekniskAvtale = agreementId === '768b68d7-9e3a-4865-983e-09b47ecc6a2c'
+  const isSeksualtekniskAvtale = agreementId === '5f00d54d-0604-4ae9-859e-8296c2d98ca1'
   const isOmgivelseskontrollAvtale = agreementId === 'f5cb315b-76f1-4c9a-aa83-6b0c60fda8b0'
 
   const showAccessoriesAndSparePartsButtons =

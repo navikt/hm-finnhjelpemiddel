@@ -197,7 +197,7 @@ const AgreementList = () => {
             <Link href="/horeapparat">Høreapparat, ørepropper og tinnitusmaskerere</Link>
           </li>
           <li>
-            <Link href="/rammeavtale/hjelpemidler/768b68d7-9e3a-4865-983e-09b47ecc6a2c">
+            <Link href="/rammeavtale/hjelpemidler/5f00d54d-0604-4ae9-859e-8296c2d98ca1">
               Hjelpemidler for seksuallivet
             </Link>
           </li>
