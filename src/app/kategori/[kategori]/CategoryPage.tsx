@@ -2,17 +2,17 @@
 
 import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import useSWRInfinite from 'swr/infinite'
 import { Box, HGrid, HStack, ReadMore, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { CategoryResults } from '../CategoryResults'
 import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
 import useQueryString from '@/utils/search-params-util'
-import { fetchProductsCategory, PAGE_SIZE } from '@/app/kategori/utils/kategori-inngang-util'
+import { fetchProductsCategory } from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { ProductsWithIsoAggs } from '@/app/kategori/utils/category-types'
 import { logUmamiClickButton } from '@/utils/umami'
+import useSWRImmutable from 'swr/immutable'
 
 type Props = {
   category: CategoryDTO
@@ -26,50 +26,23 @@ export const CategoryPage = ({ category }: Props) => {
 
   const {
     data: productsData,
-    size: page,
-    setSize: setPage,
     error,
     isLoading,
-  } = useSWRInfinite<ProductsWithIsoAggs>(
-    (index, previousPageData?: ProductsWithIsoAggs) => {
-      // Stop paginating when previous page has no products
-      if (previousPageData && previousPageData.products.length === 0) return null
-
-      return {
-        from: index * PAGE_SIZE,
-        size: PAGE_SIZE,
-        searchParams,
-        category: category,
-      }
-    },
-    fetchProductsCategory,
-    {
-      initialSize: Number(searchParams.get('page') || '1'),
-      keepPreviousData: true,
-      revalidateFirstPage: false,
-    }
+  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams], () =>
+    fetchProductsCategory({
+      from: 0,
+      size: 1000,
+      searchParams,
+      category: category,
+    })
   )
 
-  const products = productsData?.map((d) => d.products).flat()
-  const isos = productsData?.at(-1)?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
-  const suppliers = productsData?.at(-1)?.suppliers.map((supplier) => supplier.name) ?? []
-  const digitalSoknad = productsData?.at(-1)?.digitalSoknad ?? []
-  const bestillingsordning = productsData?.at(-1)?.bestillingsordning ?? []
-  const techDataFilterAggs = productsData?.at(-1)?.techDataFilterAggs
-
-  const isEmpty = productsData?.[0]?.products.length === 0
-  const isReachingEnd = isEmpty || (productsData && productsData[productsData.length - 1]?.products.length < PAGE_SIZE)
-
-  const loadMore = !isReachingEnd
-    ? () => {
-        const nextPage = page + 1
-        const newParams = new URLSearchParams(searchParams)
-        newParams.set('page', `${nextPage}`)
-        const searchQueryString = newParams.toString()
-        router.replace(`${pathname}?${searchQueryString}`, { scroll: false })
-        setPage(nextPage)
-      }
-    : undefined
+  const products = productsData?.products
+  const isos = productsData?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
+  const suppliers = productsData?.suppliers.map((supplier) => supplier.name) ?? []
+  const digitalSoknad = productsData?.digitalSoknad ?? []
+  const bestillingsordning = productsData?.bestillingsordning ?? []
+  const techDataFilterAggs = productsData?.techDataFilterAggs
 
   const filters: Filters = {
     suppliers: suppliers,
@@ -86,12 +59,10 @@ export const CategoryPage = ({ category }: Props) => {
     }
     const paramKey = paramKeyMap[filterName] || filterName
     const newSearchParams = createQueryStringAppend(paramKey, value)
-    setPage(1)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
 
   const onReset = () => {
-    setPage(1)
     router.replace(pathname)
   }
   const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
@@ -130,7 +101,7 @@ export const CategoryPage = ({ category }: Props) => {
               <FilterBarCategory filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
             </HStack>
 
-            <CategoryResults products={products} loadMore={loadMore} isLoading={isLoading} />
+            <CategoryResults products={products} isLoading={isLoading} />
           </VStack>
         </HGrid>
       </>
