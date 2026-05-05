@@ -28,7 +28,7 @@ export const CategoryPage = ({ category }: Props) => {
     data: productsData,
     error,
     isLoading,
-  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams], () =>
+  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams.toString()], () =>
     fetchProductsCategory({
       from: 0,
       size: 1000,
