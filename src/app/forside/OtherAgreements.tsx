@@ -45,9 +45,7 @@ export const OtherAgreements = () => {
           <Accordion.Header>Hjelpemidler for seksuallivet</Accordion.Header>
           <Accordion.Content>
             Her kan du lese mer om{' '}
-            <Link href={`/rammeavtale/hjelpemidler/5f00d54d-0604-4ae9-859e-8296c2d98ca1`}>
-              hjelpemidler for seksuallivet
-            </Link>
+            <Link href={`/rammeavtale/5f00d54d-0604-4ae9-859e-8296c2d98ca1`}>hjelpemidler for seksuallivet</Link>
           </Accordion.Content>
         </Accordion.Item>
       </>
