@@ -28,7 +28,7 @@ export const PAGE_SIZE = 72
 type FetchProps = {
   from: number
   size: number
-  searchParams: ReadonlyURLSearchParams
+  searchParams: { [key: string]: string | string[] | undefined }
   category: CategoryDTO
   dontCollapse?: boolean
 }

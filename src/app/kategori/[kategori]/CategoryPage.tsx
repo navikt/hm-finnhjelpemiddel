@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Box, HGrid, HStack, ReadMore, VStack } from '@navikt/ds-react'
 import CompareMenu from '@/components/layout/CompareMenu'
 import { CategoryResults } from '../CategoryResults'
@@ -16,13 +16,15 @@ import useSWRImmutable from 'swr/immutable'
 
 type Props = {
   category: CategoryDTO
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export const CategoryPage = ({ category }: Props) => {
+export const CategoryPage = ({ category, searchParams }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
+  //const searchParams = useSearchParams()
   const { createQueryStringAppend } = useQueryString()
+
 
   const {
     data: productsData,

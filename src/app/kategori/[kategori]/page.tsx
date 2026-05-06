@@ -13,6 +13,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 type Props = {
   params: Promise<{ kategori: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function Page(props: Props) {
@@ -21,7 +22,7 @@ export default async function Page(props: Props) {
   const category = await getCategoryByTitle(normalizedCategory)
 
   if (category.data.isos?.length) {
-    return <CategoryPage category={category} />
+    return <CategoryPage category={category} sprms={await props.searchParams} />
   }
 
   return <SubCategoryPage category={category} />
