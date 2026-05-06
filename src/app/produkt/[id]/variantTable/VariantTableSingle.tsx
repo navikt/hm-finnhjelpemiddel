@@ -4,7 +4,7 @@ import { Product } from '@/utils/product-util'
 import { customSort } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { formatAgreementPosts, toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, CopyButton, Heading, Table } from '@navikt/ds-react'
+import { Box, CopyButton, Heading, Table } from '@navikt/ds-react'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTable.module.scss'
 import { viewAgreementRanks } from '@/components/AgreementIcon'
@@ -50,39 +50,31 @@ export const VariantTableSingle = ({ product }: { product: Product }) => {
             <Table.Row>
               <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
               <Table.DataCell>
-                {variant.hmsArtNr ? (
-                  <CopyButton
-                    size="small"
-                    className={productTop.copyButton}
-                    copyText={variant.hmsArtNr ?? ''}
-                    text={variant.hmsArtNr ?? ''}
-                    activeText="kopiert"
-                    variant="action"
-                    activeIcon={<ThumbUpIcon aria-hidden />}
-                    iconPosition="right"
-                  />
-                ) : (
-                  <BodyShort align={'center'}>-</BodyShort>
-                )}
+                <CopyButton
+                  size="small"
+                  className={productTop.copyButton}
+                  copyText={variant.hmsArtNr ?? ''}
+                  text={variant.hmsArtNr ?? ''}
+                  activeText="kopiert"
+                  variant="action"
+                  activeIcon={<ThumbUpIcon aria-hidden />}
+                  iconPosition="right"
+                />
               </Table.DataCell>
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
               <Table.DataCell>
-                {variant.supplierRef ? (
-                  <CopyButton
-                    size="small"
-                    className={productTop.copyButton}
-                    copyText={variant.supplierRef}
-                    text={variant.supplierRef}
-                    activeText="kopiert"
-                    variant="action"
-                    activeIcon={<ThumbUpIcon aria-hidden />}
-                    iconPosition="right"
-                  />
-                ) : (
-                  <BodyShort align={'center'}>-</BodyShort>
-                )}
+                <CopyButton
+                  size="small"
+                  className={productTop.copyButton}
+                  copyText={variant.supplierRef}
+                  text={variant.supplierRef}
+                  activeText="kopiert"
+                  variant="action"
+                  activeIcon={<ThumbUpIcon aria-hidden />}
+                  iconPosition="right"
+                />
               </Table.DataCell>
             </Table.Row>
             {rankSet.size > 1 && (

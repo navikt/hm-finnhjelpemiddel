@@ -7,7 +7,7 @@ import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
+import { Alert, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTable.module.scss'
@@ -167,12 +167,12 @@ export const VariantTable = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <VStack gap={'space-16'}>
+        <VStack gap={"space-16"}>
           <Heading size={'medium'} level={'2'} spacing>
             Andre egenskaper
           </Heading>
 
-          <VStack gap={'space-16'}>
+          <VStack gap={"space-16"}>
             <FilterRow
               variants={product.variants}
               filterConfigs={filters}
@@ -209,7 +209,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
                       className={selectedColumn === i ? styles.selectedColumn : ''}
                       onClick={() => handleColumnClick(i)}
                     >
-                      {variant.hmsArtNr ? (
+                      {variant.hmsArtNr && (
                         <CopyButton
                           size="small"
                           className={productTop.copyButton}
@@ -220,8 +220,6 @@ export const VariantTable = ({ product }: { product: Product }) => {
                           activeIcon={<ThumbUpIcon aria-hidden />}
                           iconPosition="right"
                         />
-                      ) : (
-                        <BodyShort align={'center'}>-</BodyShort>
                       )}
                     </Table.DataCell>
                   ))}
@@ -235,20 +233,16 @@ export const VariantTable = ({ product }: { product: Product }) => {
                     className={selectedColumn === i ? styles.selectedColumn : ''}
                     onClick={() => handleColumnClick(i)}
                   >
-                    {variant.supplierRef ? (
-                      <CopyButton
-                        size="small"
-                        className={productTop.copyButton}
-                        copyText={variant.supplierRef}
-                        text={variant.supplierRef}
-                        activeText="kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
-                        iconPosition="right"
-                      />
-                    ) : (
-                      <BodyShort align={'center'}>-</BodyShort>
-                    )}
+                    <CopyButton
+                      size="small"
+                      className={productTop.copyButton}
+                      copyText={variant.supplierRef}
+                      text={variant.supplierRef}
+                      activeText="kopiert"
+                      variant="action"
+                      activeIcon={<ThumbUpIcon aria-hidden />}
+                      iconPosition="right"
+                    />
                   </Table.DataCell>
                 ))}
               </Table.Row>
@@ -317,5 +311,5 @@ export const VariantTable = ({ product }: { product: Product }) => {
         </div>
       )}
     </Box>
-  )
+  );
 }
