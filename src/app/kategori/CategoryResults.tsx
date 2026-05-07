@@ -6,6 +6,7 @@ import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-
 import { Product } from '@/utils/product-util'
 import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
+import CompareMenu from '@/components/layout/CompareMenu'
 
 export const CategoryResults = ({
   products,
@@ -37,6 +38,7 @@ export const CategoryResults = ({
 
   return (
     <VStack gap="space-16">
+      <CompareMenu />
       <BodyShort>
         {isLoading
           ? 'Viser '

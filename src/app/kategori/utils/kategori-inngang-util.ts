@@ -28,7 +28,6 @@ export const PAGE_SIZE = 72
 type FetchProps = {
   from: number
   size: number
-  searchParams: ReadonlyURLSearchParams
   searchParams2: Map<string, string[]>
   category: CategoryDTO
   dontCollapse?: boolean
@@ -37,7 +36,6 @@ type FetchProps = {
 export const fetchProductsCategory = async ({
   from,
   size,
-  searchParams,
   searchParams2,
   category,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {

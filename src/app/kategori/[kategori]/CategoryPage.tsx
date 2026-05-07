@@ -1,36 +1,32 @@
-'use client'
+//'use client'
 
 import React from 'react'
-import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Box, HGrid, HStack, ReadMore, VStack } from '@navikt/ds-react'
-import CompareMenu from '@/components/layout/CompareMenu'
 import { CategoryResults } from '../CategoryResults'
 import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
-import useQueryString from '@/utils/search-params-util'
 import { fetchProductsCategory } from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { ProductsWithIsoAggs } from '@/app/kategori/utils/category-types'
 import { logUmamiClickButton } from '@/utils/umami'
-import useSWRImmutable from 'swr/immutable'
 
 type Props = {
   category: CategoryDTO
   searchParams2: Map<string, string[]>
 }
 
-export const CategoryPage = ({ category, searchParams2 }: Props) => {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const { createQueryStringAppend } = useQueryString()
+export const CategoryPage = async ({ category, searchParams2 }: Props) => {
+  //const router = useRouter()
+  //const pathname = usePathname()
+  //const searchParams = useSearchParams()
+  //const { createQueryStringAppend } = useQueryString()
 
   console.log(searchParams2)
 
+  /*
   const {
     data: productsData,
-    error,
-    isLoading,
+    //error,
+    //isLoading,
   } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams.toString()], () =>
     fetchProductsCategory({
       from: 0,
@@ -40,6 +36,16 @@ export const CategoryPage = ({ category, searchParams2 }: Props) => {
       category: category,
     })
   )
+
+   */
+
+  const productsData = await fetchProductsCategory({
+    from: 0,
+    size: 1000,
+    //searchParams,
+    searchParams2,
+    category: category,
+  })
 
   const products = productsData?.products
   const isos = productsData?.iso.map((iso) => ({ key: iso.code, label: iso.name })) ?? []
@@ -56,33 +62,19 @@ export const CategoryPage = ({ category, searchParams2 }: Props) => {
     techDataFilterAggs: techDataFilterAggs,
   }
 
-  const onChangeCheckBoxFilter = (filterName: string, value: string) => {
-    const paramKeyMap: Record<string, string> = {
-      suppliers: 'leverandor',
-      isos: 'iso',
-    }
-    const paramKey = paramKeyMap[filterName] || filterName
-    const newSearchParams = createQueryStringAppend(paramKey, value)
-    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
-  }
-
-  const onReset = () => {
-    router.replace(pathname)
-  }
   const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
   return (
-    <CategoryPageLayout title={category.title} description={category.data.description} error={error}>
+    <CategoryPageLayout title={category.title} description={category.data.description} error={false}>
       <>
-        <CompareMenu />
         <HGrid columns={'374px 4'} gap={'space-16'}>
           <Box maxWidth={'500px'}>
             <ReadMore
               variant={'moderate'}
               size={'large'}
               header={lastSubcategoryText}
-              onOpenChange={(open) => {
-                logUmamiClickButton(`${lastSubcategoryText}`, 'lastSubcategory-readmore', `${open}`)
-              }}
+              //onOpenChange={(open) => {
+              //  logUmamiClickButton(`${lastSubcategoryText}`, 'lastSubcategory-readmore', `${open}`)
+              //}}
             >
               Alle hjelpemidlene på FinnHjelpemiddel som er på avtale er markert med «På avtale». I tillegg er de
               markert med «Delkontrakt» og «Rangering». I mange tilfeller er det nyttig å samarbeide med en fagperson i
@@ -102,10 +94,10 @@ export const CategoryPage = ({ category, searchParams2 }: Props) => {
           </Box>
           <VStack gap={'space-16'}>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
-              <FilterBarCategory filters={filters} onChange={onChangeCheckBoxFilter} onReset={onReset} />
+              <FilterBarCategory filters={filters} />
             </HStack>
 
-            <CategoryResults products={products} isLoading={isLoading} />
+            <CategoryResults products={products} isLoading={false} />
           </VStack>
         </HGrid>
       </>
