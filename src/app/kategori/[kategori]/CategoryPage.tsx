@@ -1,7 +1,7 @@
 //'use client'
 
 import React from 'react'
-import { Box, HGrid, HStack, ReadMore, VStack } from '@navikt/ds-react'
+import { HGrid, HStack, VStack } from '@navikt/ds-react'
 import { CategoryResults } from '../CategoryResults'
 import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
 import { fetchProductsCategory } from '@/app/kategori/utils/kategori-inngang-util'
@@ -18,7 +18,6 @@ export const CategoryPage = async ({ category, searchParams }: Props) => {
   const productsData = await fetchProductsCategory({
     from: 0,
     size: 1000,
-    //searchParams,
     searchParams,
     category: category,
   })
