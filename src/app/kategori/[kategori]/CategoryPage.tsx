@@ -7,43 +7,18 @@ import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCateg
 import { fetchProductsCategory } from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { logUmamiClickButton } from '@/utils/umami'
 
 type Props = {
   category: CategoryDTO
-  searchParams2: Map<string, string[]>
+  searchParams: Map<string, (string | undefined)[]>
 }
 
-export const CategoryPage = async ({ category, searchParams2 }: Props) => {
-  //const router = useRouter()
-  //const pathname = usePathname()
-  //const searchParams = useSearchParams()
-  //const { createQueryStringAppend } = useQueryString()
-
-  console.log(searchParams2)
-
-  /*
-  const {
-    data: productsData,
-    //error,
-    //isLoading,
-  } = useSWRImmutable<ProductsWithIsoAggs>([pathname, searchParams.toString()], () =>
-    fetchProductsCategory({
-      from: 0,
-      size: 1000,
-      searchParams,
-      searchParams2,
-      category: category,
-    })
-  )
-
-   */
-
+export const CategoryPage = async ({ category, searchParams }: Props) => {
   const productsData = await fetchProductsCategory({
     from: 0,
     size: 1000,
     //searchParams,
-    searchParams2,
+    searchParams,
     category: category,
   })
 

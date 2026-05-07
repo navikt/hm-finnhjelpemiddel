@@ -28,7 +28,7 @@ export const PAGE_SIZE = 72
 type FetchProps = {
   from: number
   size: number
-  searchParams2: Map<string, string[]>
+  searchParams: Map<string, (string | undefined)[]>
   category: CategoryDTO
   dontCollapse?: boolean
 }
@@ -36,7 +36,7 @@ type FetchProps = {
 export const fetchProductsCategory = async ({
   from,
   size,
-  searchParams2,
+  searchParams,
   category,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const sortOrderOpenSearch = sortOptionsOpenSearch['Rangering']
@@ -53,40 +53,40 @@ export const fetchProductsCategory = async ({
     filtersFromAdmin.includes(categoryFilter.identifier)
   )
 
-  if (searchParams2.has('iso')) {
-    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams2.get('iso')!) })
+  if (searchParams.has('iso')) {
+    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.get('iso')!) })
   }
 
-  if (searchParams2.has('leverandor')) {
-    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams2.get('leverandor')!) })
+  if (searchParams.has('leverandor')) {
+    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.get('leverandor')!) })
   }
 
-  if (searchParams2.has('På digital behovsmelding')) {
+  if (searchParams.has('På digital behovsmelding')) {
     postFilters.push({
       key: 'digitalSoknad',
       filter: {
         bool: {
-          should: { term: { 'attributes.digitalSoknad': searchParams2.get('På digital behovsmelding')?.[0] } },
+          should: { term: { 'attributes.digitalSoknad': searchParams.get('På digital behovsmelding')?.[0] } },
         },
       },
     })
   }
 
-  if (searchParams2.has('På bestillingsordning')) {
+  if (searchParams.has('På bestillingsordning')) {
     postFilters.push({
       key: 'bestillingsordning',
       filter: {
         bool: {
-          should: { term: { 'attributes.bestillingsordning': searchParams2.get('På bestillingsordning')?.[0] } },
+          should: { term: { 'attributes.bestillingsordning': searchParams.get('På bestillingsordning')?.[0] } },
         },
       },
     })
   }
 
   techDataFilters.forEach((filter) => {
-    if (searchParams2.has(filter.searchParamName)) {
+    if (searchParams.has(filter.searchParamName)) {
       const filterGroupClauses = filter.openSearchFieldGroups.map((opensearchFieldGroup) => {
-        const searchValues = searchParams2.get(filter.searchParamName)!
+        const searchValues = searchParams.get(filter.searchParamName)!
 
         return {
           bool: {
