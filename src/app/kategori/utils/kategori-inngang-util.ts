@@ -6,7 +6,6 @@ import {
 } from '@/utils/filter-util'
 import { mapProductWithVariants, Product } from '@/utils/product-util'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
-import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { ProductIsoAggregationResponse, SingleValueAggregation } from '@/app/kategori/utils/category-response-types'
 import {
@@ -54,11 +53,11 @@ export const fetchProductsCategory = async ({
   )
 
   if (searchParams.has('iso')) {
-    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.get('iso')!) })
+    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.get('iso') as string[]) })
   }
 
   if (searchParams.has('leverandor')) {
-    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.get('leverandor')!) })
+    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.get('leverandor') as string[]) })
   }
 
   if (searchParams.has('På digital behovsmelding')) {
@@ -92,7 +91,7 @@ export const fetchProductsCategory = async ({
           bool: {
             should: searchValues.map((searchValue) => {
               if (filter.filterFunctionType === FilterFunctionType.range) {
-                const [fromSearchField, toSearchField] = searchValue.split(':')
+                const [fromSearchField, toSearchField] = searchValue?.split(':') ?? []
                 const openSearchFields = opensearchFieldGroup as MinMaxFields
                 return rangeClause(fromSearchField, toSearchField, openSearchFields.fromField, openSearchFields.toField)
               } else {
