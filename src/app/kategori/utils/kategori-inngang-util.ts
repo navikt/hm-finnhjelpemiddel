@@ -6,7 +6,6 @@ import {
 } from '@/utils/filter-util'
 import { mapProductWithVariants, Product } from '@/utils/product-util'
 import { makeSearchTermQuery, QueryObject, sortOptionsOpenSearch } from '@/utils/api-util'
-import { ReadonlyURLSearchParams } from 'next/navigation'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 import { ProductIsoAggregationResponse, SingleValueAggregation } from '@/app/kategori/utils/category-response-types'
 import {
@@ -28,7 +27,7 @@ export const PAGE_SIZE = 72
 type FetchProps = {
   from: number
   size: number
-  searchParams: ReadonlyURLSearchParams
+  searchParams: Map<string, (string | undefined)[]>
   category: CategoryDTO
   dontCollapse?: boolean
 }
@@ -54,11 +53,11 @@ export const fetchProductsCategory = async ({
   )
 
   if (searchParams.has('iso')) {
-    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.getAll('iso')) })
+    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.get('iso') as string[]) })
   }
 
   if (searchParams.has('leverandor')) {
-    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.getAll('leverandor')) })
+    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.get('leverandor') as string[]) })
   }
 
   if (searchParams.has('På digital behovsmelding')) {
@@ -66,7 +65,7 @@ export const fetchProductsCategory = async ({
       key: 'digitalSoknad',
       filter: {
         bool: {
-          should: { term: { 'attributes.digitalSoknad': searchParams.get('På digital behovsmelding') } },
+          should: { term: { 'attributes.digitalSoknad': searchParams.get('På digital behovsmelding')?.[0] } },
         },
       },
     })
@@ -77,7 +76,7 @@ export const fetchProductsCategory = async ({
       key: 'bestillingsordning',
       filter: {
         bool: {
-          should: { term: { 'attributes.bestillingsordning': searchParams.get('På bestillingsordning') } },
+          should: { term: { 'attributes.bestillingsordning': searchParams.get('På bestillingsordning')?.[0] } },
         },
       },
     })
@@ -86,13 +85,13 @@ export const fetchProductsCategory = async ({
   techDataFilters.forEach((filter) => {
     if (searchParams.has(filter.searchParamName)) {
       const filterGroupClauses = filter.openSearchFieldGroups.map((opensearchFieldGroup) => {
-        const searchValues = searchParams.getAll(filter.searchParamName)
+        const searchValues = searchParams.get(filter.searchParamName)!
 
         return {
           bool: {
             should: searchValues.map((searchValue) => {
               if (filter.filterFunctionType === FilterFunctionType.range) {
-                const [fromSearchField, toSearchField] = searchValue.split(':')
+                const [fromSearchField, toSearchField] = searchValue?.split(':') ?? []
                 const openSearchFields = opensearchFieldGroup as MinMaxFields
                 return rangeClause(fromSearchField, toSearchField, openSearchFields.fromField, openSearchFields.toField)
               } else {

@@ -6,9 +6,10 @@ import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilt
 import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/category-types'
 import { ToggleFilter, ToggleFilterMenu } from '@/app/kategori/filter/ToggleFilter'
+import useQueryString from '@/utils/search-params-util'
 
 export type Filters = {
   ['suppliers']: string[]
@@ -23,11 +24,14 @@ export type Filters = {
 
 type Props = {
   filters: Filters
-  onChange: (key: string, value: string) => void
-  onReset: () => void
 }
 
-export const FilterBarCategory = ({ filters, onChange, onReset }: Props) => {
+export const FilterBarCategory = ({ filters }: Props) => {
+  const router = useRouter()
+  const pathname = usePathname()
+  //const searchParams = useSearchParams()
+  const { createQueryStringAppend } = useQueryString()
+
   const searchParams = useSearchParams()
 
   const hasActiveFilter = Array.from(searchParams.keys()).filter((param) => param != 'page').length > 0
@@ -53,6 +57,20 @@ export const FilterBarCategory = ({ filters, onChange, onReset }: Props) => {
   const bestillingsordningFilters: ToggleFilterMenu = {
     name: { key: 'På bestillingsordning', label: 'Bestillingsordning' },
     options: filters.bestillingsordning,
+  }
+
+  const onChange = (filterName: string, value: string) => {
+    const paramKeyMap: Record<string, string> = {
+      suppliers: 'leverandor',
+      isos: 'iso',
+    }
+    const paramKey = paramKeyMap[filterName] || filterName
+    const newSearchParams = createQueryStringAppend(paramKey, value)
+    router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
+  }
+
+  const onReset = () => {
+    router.replace(pathname)
   }
 
   return (
