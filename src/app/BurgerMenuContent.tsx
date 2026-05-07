@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import NextLink from 'next/link'
 import React, { ReactNode } from 'react'
 import { Heading, HGrid, Link, LinkCard, VStack } from '@navikt/ds-react'
@@ -9,16 +10,42 @@ import styles from './BurgerMenu.module.scss'
 interface Props {
   menuOpen: boolean
   setMenuOpen: (open: boolean) => void
+  menuButtonRef: React.RefObject<HTMLButtonElement | null>
 }
 
-const BurgerMenuContent = ({ menuOpen, setMenuOpen }: Props) => {
+const BurgerMenuContent = ({ menuOpen, setMenuOpen, menuButtonRef }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null)
   //spesifiser prod-ingress for å ikke linke til ansatt-forside fra gjenbrukssiden
   const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    // Focus first item when menu opens
+    requestAnimationFrame(() => {
+      const first = containerRef.current?.querySelector<HTMLElement>('a[href], button')
+      first?.focus()
+    })
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || e.shiftKey) return
+      const focusable = containerRef.current?.querySelectorAll<HTMLElement>('a[href], button')
+      if (!focusable?.length) return
+      if (document.activeElement === focusable[focusable.length - 1]) {
+        e.preventDefault()
+        setMenuOpen(false)
+        requestAnimationFrame(() => menuButtonRef.current?.focus())
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [menuOpen, setMenuOpen, menuButtonRef])
 
   return (
     <>
       {menuOpen && (
-        <div className="burgermenu-container">
+        <div className="burgermenu-container" ref={containerRef}>
           <div className="burgermenu-container__content">
             <HGrid
               columns={{ xs: 1, md: 2, lg: 3 }}
