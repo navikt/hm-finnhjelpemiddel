@@ -7,6 +7,7 @@ import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCateg
 import { fetchProductsCategory } from '@/app/kategori/utils/kategori-inngang-util'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
+import { CategoryReadMore } from '@/app/kategori/[kategori]/CategoryReadMore'
 
 type Props = {
   category: CategoryDTO
@@ -37,36 +38,11 @@ export const CategoryPage = async ({ category, searchParams }: Props) => {
     techDataFilterAggs: techDataFilterAggs,
   }
 
-  const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
   return (
     <CategoryPageLayout title={category.title} description={category.data.description} error={false}>
       <>
         <HGrid columns={'374px 4'} gap={'space-16'}>
-          <Box maxWidth={'500px'}>
-            <ReadMore
-              variant={'moderate'}
-              size={'large'}
-              header={lastSubcategoryText}
-              //onOpenChange={(open) => {
-              //  logUmamiClickButton(`${lastSubcategoryText}`, 'lastSubcategory-readmore', `${open}`)
-              //}}
-            >
-              Alle hjelpemidlene på FinnHjelpemiddel som er på avtale er markert med «På avtale». I tillegg er de
-              markert med «Delkontrakt» og «Rangering». I mange tilfeller er det nyttig å samarbeide med en fagperson i
-              kommunen for å komme frem til det til det mest hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
-              <ul>
-                <li>
-                  Delkontrakt: Avtalene inndeles i delkontrakter ut ifra hjelpemidlenes egenskaper. Å lese teksten i
-                  delkontrakten kan gjøre det lettere for deg å finne det du er ute etter.
-                </li>
-                <li>
-                  Rangering: En delkontrakt omfatter som regel flere hjelpemidler. Disse er inndelt i rangeringer. Du må
-                  alltid starte med å vurdere om hjelpemidlet som er markert med «Rangering 1» dekker ditt behov. Dersom
-                  det ikke gjøre det må det begrunnes i søknaden.
-                </li>
-              </ul>
-            </ReadMore>
-          </Box>
+          <CategoryReadMore />
           <VStack gap={'space-16'}>
             <HStack justify={'space-between'} gap={'space-8'} align={'end'}>
               <FilterBarCategory filters={filters} />
