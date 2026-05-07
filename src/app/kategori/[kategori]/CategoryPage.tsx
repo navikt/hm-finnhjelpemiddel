@@ -72,7 +72,7 @@ export const CategoryPage = async ({ category, searchParams }: Props) => {
               <FilterBarCategory filters={filters} />
             </HStack>
 
-            <CategoryResults products={products} isLoading={false} />
+            <CategoryResults products={products} />
           </VStack>
         </HGrid>
       </>
