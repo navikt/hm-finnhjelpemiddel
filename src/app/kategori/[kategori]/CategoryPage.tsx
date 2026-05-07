@@ -16,15 +16,16 @@ import useSWRImmutable from 'swr/immutable'
 
 type Props = {
   category: CategoryDTO
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams2: Map<string, string[]>
 }
 
-export const CategoryPage = ({ category, searchParams }: Props) => {
+export const CategoryPage = ({ category, searchParams2 }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
-  //const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   const { createQueryStringAppend } = useQueryString()
 
+  console.log(searchParams2)
 
   const {
     data: productsData,
@@ -35,6 +36,7 @@ export const CategoryPage = ({ category, searchParams }: Props) => {
       from: 0,
       size: 1000,
       searchParams,
+      searchParams2,
       category: category,
     })
   )

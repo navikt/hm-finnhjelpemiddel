@@ -13,7 +13,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 type Props = {
   params: Promise<{ kategori: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  searchParams: Promise<{ [key: string]: string[] | undefined }>
 }
 
 export default async function Page(props: Props) {
@@ -21,8 +21,20 @@ export default async function Page(props: Props) {
 
   const category = await getCategoryByTitle(normalizedCategory)
 
+  const entries = new Map<string, string | string[] | undefined>(Object.entries(await props.searchParams))
+
+  // @ts-expect-error
+  const entries2 = new Map<string, string[]>(
+    Object.entries(await props.searchParams).map(([key, value]) => {
+      if (!Array.isArray(value)) {
+        return [key, [value]]
+      }
+      return [key, value]
+    })
+  )
+
   if (category.data.isos?.length) {
-    return <CategoryPage category={category} sprms={await props.searchParams} />
+    return <CategoryPage category={category} searchParams2={entries2} />
   }
 
   return <SubCategoryPage category={category} />

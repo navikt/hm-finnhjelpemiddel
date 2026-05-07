@@ -28,7 +28,8 @@ export const PAGE_SIZE = 72
 type FetchProps = {
   from: number
   size: number
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: ReadonlyURLSearchParams
+  searchParams2: Map<string, string[]>
   category: CategoryDTO
   dontCollapse?: boolean
 }
@@ -37,6 +38,7 @@ export const fetchProductsCategory = async ({
   from,
   size,
   searchParams,
+  searchParams2,
   category,
 }: FetchProps): Promise<ProductsWithIsoAggs> => {
   const sortOrderOpenSearch = sortOptionsOpenSearch['Rangering']
@@ -53,40 +55,40 @@ export const fetchProductsCategory = async ({
     filtersFromAdmin.includes(categoryFilter.identifier)
   )
 
-  if (searchParams.has('iso')) {
-    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams.getAll('iso')) })
+  if (searchParams2.has('iso')) {
+    postFilters.push({ key: 'iso', filter: filterPrefixIsoKode(searchParams2.get('iso')!) })
   }
 
-  if (searchParams.has('leverandor')) {
-    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams.getAll('leverandor')) })
+  if (searchParams2.has('leverandor')) {
+    postFilters.push({ key: 'leverandor', filter: filterLeverandor(searchParams2.get('leverandor')!) })
   }
 
-  if (searchParams.has('På digital behovsmelding')) {
+  if (searchParams2.has('På digital behovsmelding')) {
     postFilters.push({
       key: 'digitalSoknad',
       filter: {
         bool: {
-          should: { term: { 'attributes.digitalSoknad': searchParams.get('På digital behovsmelding') } },
+          should: { term: { 'attributes.digitalSoknad': searchParams2.get('På digital behovsmelding')?.[0] } },
         },
       },
     })
   }
 
-  if (searchParams.has('På bestillingsordning')) {
+  if (searchParams2.has('På bestillingsordning')) {
     postFilters.push({
       key: 'bestillingsordning',
       filter: {
         bool: {
-          should: { term: { 'attributes.bestillingsordning': searchParams.get('På bestillingsordning') } },
+          should: { term: { 'attributes.bestillingsordning': searchParams2.get('På bestillingsordning')?.[0] } },
         },
       },
     })
   }
 
   techDataFilters.forEach((filter) => {
-    if (searchParams.has(filter.searchParamName)) {
+    if (searchParams2.has(filter.searchParamName)) {
       const filterGroupClauses = filter.openSearchFieldGroups.map((opensearchFieldGroup) => {
-        const searchValues = searchParams.getAll(filter.searchParamName)
+        const searchValues = searchParams2.get(filter.searchParamName)!
 
         return {
           bool: {
