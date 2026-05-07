@@ -36,6 +36,10 @@ export const CategoryResults = ({
   }
   const delkontraktGroups = groupByDelkontrakt(products)
 
+  const ikkePåAvtale = delkontraktGroups['Ikke på avtale']
+
+  console.log(ikkePåAvtale)
+
   return (
     <VStack gap="space-16">
       <CompareMenu />
@@ -49,25 +53,20 @@ export const CategoryResults = ({
       <VStack gap={'space-40'}>
         {Object.entries(delkontraktGroups)
           .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-          .map(([delkontraktName, delkontraktGroup]) => {
-            return (
-              <VStack key={delkontraktName} gap={'space-16'} style={{ borderTop: '1px solid #CFD3D8' }}>
-                <HStack gap={'space-8'} align={'center'} paddingBlock={'space-16 space-0'}>
-                  {delkontraktGroup.refNr !== '0' && (
-                    <Tag size={'medium'} data-color={'info'} variant={'moderate'}>
-                      På avtale
-                    </Tag>
-                  )}
-                  <Heading size={'small'}>{delkontraktGroup.title}</Heading>
-                </HStack>
-                <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
-                  {delkontraktGroup.products.map((product) => (
-                    <ProductCardCategory key={product.id} product={product} handleCompareClick={handleCompareClick} />
-                  ))}
-                </HStack>
-              </VStack>
-            )
-          })}
+          .filter(([delkontraktName]) => delkontraktName !== 'Ikke på avtale')
+          .map(([delkontraktName, delkontraktGroup]) => (
+            <DelkontraktGroup
+              delkontraktName={delkontraktName}
+              delkontraktGroup={delkontraktGroup}
+              handleCompareClick={handleCompareClick}
+              key={delkontraktName}
+            />
+          ))}
+        <DelkontraktGroup
+          delkontraktName={ikkePåAvtale.title}
+          delkontraktGroup={ikkePåAvtale}
+          handleCompareClick={handleCompareClick}
+        />
       </VStack>
       {loadMore && !isLoading && (
         <Button
@@ -81,6 +80,38 @@ export const CategoryResults = ({
           Vis flere treff
         </Button>
       )}
+    </VStack>
+  )
+}
+
+const DelkontraktGroup = ({
+  delkontraktName,
+  delkontraktGroup,
+  handleCompareClick,
+}: {
+  delkontraktName: string
+  delkontraktGroup: {
+    refNr: string
+    title: string
+    products: Product[]
+  }
+  handleCompareClick: () => void
+}) => {
+  return (
+    <VStack key={delkontraktName} gap={'space-16'} style={{ borderTop: '1px solid #CFD3D8' }}>
+      <HStack gap={'space-8'} align={'center'} paddingBlock={'space-16 space-0'}>
+        {delkontraktGroup.refNr !== '0' && (
+          <Tag size={'medium'} data-color={'info'} variant={'moderate'}>
+            På avtale
+          </Tag>
+        )}
+        <Heading size={'small'}>{delkontraktGroup.title}</Heading>
+      </HStack>
+      <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
+        {delkontraktGroup.products.map((product) => (
+          <ProductCardCategory key={product.id} product={product} handleCompareClick={handleCompareClick} />
+        ))}
+      </HStack>
     </VStack>
   )
 }
