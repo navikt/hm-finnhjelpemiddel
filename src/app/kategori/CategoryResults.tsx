@@ -8,18 +8,19 @@ import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import CompareMenu from '@/components/layout/CompareMenu'
 
-const SHOW_MORE_SIZE = 12
-
 export const CategoryResults = ({ products }: { products: Product[] }) => {
   const { setCompareMenuState } = useHydratedCompareStore()
   const [firstCompareClick, setFirstCompareClick] = useState(true)
 
   const delkontraktGroups = groupByDelkontrakt(products)
   const nonAgreementGroup = delkontraktGroups['Ikke på avtale']
-  const totalNonAgreementProducts = nonAgreementGroup?.products.length ?? 0
+  const productsTotalCount = products.length
+  const nonAgreementProductsCount = nonAgreementGroup?.products.length ?? 0
+  const agreementProductsCount = productsTotalCount - nonAgreementProductsCount
 
-  const [nonAgreementShowCount, setNonAgreementShowCount] = useState(
-    products.length - totalNonAgreementProducts > 24 ? 6 : 12
+  //viser færre ikke-avtale-produkter hvis det er mange på avtale, for lettere kognitiv last
+  const [visibleNonAgreementProductsCount, setvisibleNonAgreementProductsCount] = useState(
+    agreementProductsCount > 24 ? 6 : 12 //tall vi har bare funnet på
   )
 
   const handleCompareClick = () => {
@@ -29,7 +30,7 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
     setFirstCompareClick(false)
   }
 
-  if (products && products.length === 0) {
+  if (products && productsTotalCount === 0) {
     return (
       <Alert variant="info">
         <BodyLong>Obs! Fant ingen hjelpemidler. Har du sjekket filtrene dine?</BodyLong>
@@ -37,16 +38,17 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
     )
   }
 
-  const shownNonAgreementProducts = nonAgreementGroup?.products.slice(0, nonAgreementShowCount) ?? []
+  const visibleNonAgreementProducts = nonAgreementGroup?.products.slice(0, visibleNonAgreementProductsCount) ?? []
 
-  const showMoreAvailableCount = Math.min(SHOW_MORE_SIZE, totalNonAgreementProducts - nonAgreementShowCount)
+  const VIEW_MORE_MAX_BATCH_SIZE = 12
+  const nextBatchSize = Math.min(VIEW_MORE_MAX_BATCH_SIZE, nonAgreementProductsCount - visibleNonAgreementProductsCount)
 
-  const totalVisibleProducts = products.length - totalNonAgreementProducts + shownNonAgreementProducts.length
+  const visibleProductsCount = agreementProductsCount + visibleNonAgreementProducts.length
 
   return (
     <VStack gap="space-16">
       <CompareMenu />
-      <BodyShort>{`Viser ${totalVisibleProducts} av ${products.length} hjelpemidler`}</BodyShort>
+      <BodyShort>{`Viser ${visibleProductsCount} av ${productsTotalCount} hjelpemidler`}</BodyShort>
       <VStack gap={'space-40'}>
         {Object.entries(delkontraktGroups)
           .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
@@ -64,21 +66,21 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
           <DelkontraktGroup
             title={nonAgreementGroup.title}
             refNr={nonAgreementGroup.refNr}
-            products={nonAgreementGroup.products.slice(0, nonAgreementShowCount)}
+            products={nonAgreementGroup.products.slice(0, visibleNonAgreementProductsCount)}
             handleCompareClick={handleCompareClick}
           />
         )}
       </VStack>
-      {nonAgreementShowCount < totalNonAgreementProducts && (
+      {visibleNonAgreementProductsCount < nonAgreementProductsCount && (
         <Button
           variant="tertiary"
           size="medium"
           icon={<ChevronDownIcon aria-hidden />}
           iconPosition={'right'}
-          onClick={() => setNonAgreementShowCount((prev) => prev + showMoreAvailableCount)}
+          onClick={() => setvisibleNonAgreementProductsCount((prev) => prev + nextBatchSize)}
           style={{ alignSelf: 'center' }}
         >
-          Vis {showMoreAvailableCount} flere treff
+          Vis {nextBatchSize} flere treff
         </Button>
       )}
     </VStack>

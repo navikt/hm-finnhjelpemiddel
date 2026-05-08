@@ -22,10 +22,8 @@ import { Hit, ProductSourceResponse } from '@/utils/response-types'
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
-export const PAGE_SIZE = 72
 
 type FetchProps = {
-  from: number
   size: number
   searchParams: Map<string, (string | undefined)[]>
   category: CategoryDTO
@@ -33,7 +31,6 @@ type FetchProps = {
 }
 
 export const fetchProductsCategory = async ({
-  from,
   size,
   searchParams,
   category,
@@ -234,7 +231,7 @@ export const fetchProductsCategory = async ({
   }
 
   const body: QueryObject = {
-    from,
+    from: 0,
     size,
     track_scores: true,
     sort: sortOrderOpenSearch,

@@ -1,5 +1,3 @@
-//'use client'
-
 import React from 'react'
 import { HGrid, HStack, VStack } from '@navikt/ds-react'
 import { CategoryResults } from '../CategoryResults'
@@ -16,8 +14,7 @@ type Props = {
 
 export const CategoryPage = async ({ category, searchParams }: Props) => {
   const productsData = await fetchProductsCategory({
-    from: 0,
-    size: 1000,
+    size: 1000, //for å hente alle i kategorien
     searchParams,
     category: category,
   })
