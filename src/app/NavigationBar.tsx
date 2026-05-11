@@ -3,7 +3,7 @@ import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { useMenuStore } from '@/utils/global-state-util'
 import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Button, Hide, HStack, Show, VStack } from '@navikt/ds-react'
+import { Button, Hide, HStack, Show } from '@navikt/ds-react'
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -28,8 +28,16 @@ const NavigationBar = () => {
   const path = usePathname()
 
   const outerContainerRef = useRef<HTMLElement>(null)
-  const menuButtonRef = useRef<HTMLButtonElement>(null)
-  
+
+  const desktopMenuButtonRef = useRef<HTMLButtonElement>(null)
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null)
+  const restoreMenuFocusRef = useRef(false)
+
+  const closeMenuAndRestoreFocus = useCallback(() => {
+    restoreMenuFocusRef.current = true
+    setMenuOpen(false)
+  }, [])
+
   useOnClickOutside(outerContainerRef, () => {
     setMenuOpen(false)
   })
@@ -54,6 +62,18 @@ const NavigationBar = () => {
     },
     [router, path]
   )
+
+  useEffect(() => {
+    if (!menuOpen && restoreMenuFocusRef.current) {
+      requestAnimationFrame(() => {
+        const desktopVisible =
+          desktopMenuButtonRef.current && window.getComputedStyle(desktopMenuButtonRef.current).display !== 'none'
+        const target = desktopVisible ? desktopMenuButtonRef.current : mobileMenuButtonRef.current
+        target?.focus()
+        restoreMenuFocusRef.current = false
+      })
+    }
+  }, [menuOpen])
 
   useEffect(() => {
     setMenuOpenGlobalState(menuOpen)
@@ -172,7 +192,7 @@ const NavigationBar = () => {
             <>
               <Hide below="md">
                 <Button
-                  ref={menuButtonRef}
+                  ref={desktopMenuButtonRef}
                   icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
                   variant="tertiary"
                   onClick={() => setMenuOpen(!menuOpen)}
@@ -184,7 +204,7 @@ const NavigationBar = () => {
               </Hide>
               <Show below="md" asChild>
                 <Button
-                  ref={menuButtonRef}
+                  ref={mobileMenuButtonRef}
                   icon={menuOpen ? <XMarkIcon aria-hidden /> : <MenuHamburgerIcon aria-hidden />}
                   variant="tertiary"
                   onClick={() => setMenuOpen(!menuOpen)}
@@ -195,7 +215,11 @@ const NavigationBar = () => {
             </>
           </div>
         </div>
-        <BurgerMenuContent menuOpen={menuOpen} setMenuOpen={setMenuOpen} menuButtonRef={menuButtonRef} />
+        <BurgerMenuContent
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
+          closeMenuAndRestoreFocus={closeMenuAndRestoreFocus}
+        />
       </div>
     </nav>
   )
