@@ -140,7 +140,7 @@ const TagRow = ({
                   Delkontrakt {productAgreements[0].refNr} - rangering {productAgreements[0].rank}
                 </SuccessTag>
               )}
-              {productAgreements[1].rank != 99 && productAgreements.length === 2 && (
+              {productAgreements[1]?.rank != 99 && productAgreements.length === 2 && (
                 <SuccessTag>
                   Delkontrakt {productAgreements[1].refNr} - rangering {productAgreements[1].rank}
                 </SuccessTag>
