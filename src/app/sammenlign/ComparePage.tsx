@@ -20,6 +20,7 @@ import { BodyLong, ChevronRightIcon, Heading, Link, Loader, Table } from '@/comp
 import ProductCard from '@/components/ProductCard'
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
 import { useEffect, useState } from 'react'
+import { Description } from '@/app/produkt/[id]/GeneralProductInformation'
 
 export default function ComparePage() {
   const { productsToCompare, setCompareMenuState } = useHydratedCompareStore()
@@ -170,6 +171,16 @@ const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) =
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            <Table.Row>
+              <Table.HeaderCell className="side_header">Beskrivelse</Table.HeaderCell>
+              {productsToCompare.map((product) => {
+                return (
+                  <Table.DataCell key={product.id}>
+                    {<Description description={product.attributes.text} />}
+                  </Table.DataCell>
+                )
+              })}
+            </Table.Row>
             <Table.Row>
               <Table.HeaderCell className="side_header">Rangering</Table.HeaderCell>
               {productsToCompare.map((product) => {
