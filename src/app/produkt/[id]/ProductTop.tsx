@@ -84,9 +84,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         </div>
       </VStack>
       <CopyHms product={product} matchingVariant={matchingVariant} />
-      {(product.accessory || product.sparePart) && (
-        <CopyLevart product={product} matchingVariant={matchingVariant}/>
-      )}
+      {(product.accessory || product.sparePart) && <CopyLevart product={product} matchingVariant={matchingVariant} />}
       <HStack gap={'space-24'}>
         {compatibleWithProducts && compatibleWithProducts.length > 0 && <AccessoriesAndParts productId={product.id} />}
         <QrCodeButton id={qrId} />
@@ -142,7 +140,7 @@ const TagRow = ({
                   Delkontrakt {productAgreements[0].refNr} - rangering {productAgreements[0].rank}
                 </SuccessTag>
               )}
-              {productAgreements.length === 2 && (
+              {productAgreements[1].rank != 99 && productAgreements.length === 2 && (
                 <SuccessTag>
                   Delkontrakt {productAgreements[1].refNr} - rangering {productAgreements[1].rank}
                 </SuccessTag>
@@ -199,7 +197,6 @@ const CopyHms = ({ product, matchingVariant }: { product: Product; matchingVaria
     </>
   )
 }
-
 
 const CopyLevart = ({ product, matchingVariant }: { product: Product; matchingVariant?: ProductVariant | null }) => {
   const variantsToUse = matchingVariant ? [matchingVariant] : product.variants
