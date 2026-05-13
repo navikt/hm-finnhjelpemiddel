@@ -15,7 +15,9 @@ type Props = {
 export default async function Page(props: Props) {
   const ids = ((await props.searchParams)['id'] as string[]) ?? []
 
-  const productsToCompareWithVariants: Product[] = (ids && (await fetchProductsWithVariants(ids)).products) ?? []
+  const productsToCompareWithVariants: Product[] =
+    (ids && (await fetchProductsWithVariants(Array.isArray(ids) ? ids : [ids])).products) ?? []
+
   const sortedProductsToCompare =
     productsToCompareWithVariants && sortProductsOnAgreementPostAndRank(productsToCompareWithVariants)
 
