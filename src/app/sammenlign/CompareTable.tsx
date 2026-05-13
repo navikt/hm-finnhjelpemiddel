@@ -1,4 +1,4 @@
-'use client'
+//'use client'
 
 import { Product } from '@/utils/product-util'
 import {
@@ -11,6 +11,14 @@ import {
 import { Heading, Table } from '@/components/aksel-client'
 import ProductCardCompare from '@/components/ProductCardCompare'
 import { Description } from '@/app/produkt/[id]/GeneralProductInformation'
+import {
+  TableBody,
+  TableColumnHeader,
+  TableDataCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+} from '@navikt/ds-react/Table'
 
 export const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
   //const router = useRouter()
@@ -64,77 +72,75 @@ export const CompareTable = ({ productsToCompare }: { productsToCompare: Product
   return (
     <div className="compare-table-container">
       <Table zebraStripes>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader className="common_headercell"></Table.ColumnHeader>
+        <TableHeader>
+          <TableRow>
+            <TableColumnHeader className="common_headercell"></TableColumnHeader>
             {productsToCompare.map((product) => (
-              <Table.ColumnHeader className="header" key={'id-' + product.id}>
+              <TableColumnHeader className="header" key={'id-' + product.id}>
                 <ProductCardCompare product={product} type="removable" />
-              </Table.ColumnHeader>
+              </TableColumnHeader>
             ))}
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">Beskrivelse</Table.HeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableHeaderCell className="side_header">Beskrivelse</TableHeaderCell>
             {productsToCompare.map((product) => {
               return (
-                <Table.DataCell key={product.id}>
-                  {<Description description={product.attributes.text} />}
-                </Table.DataCell>
+                <TableDataCell key={product.id}>{<Description description={product.attributes.text} />}</TableDataCell>
               )
             })}
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">Rangering</Table.HeaderCell>
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell className="side_header">Rangering</TableHeaderCell>
             {productsToCompare.map((product) => {
-              return <Table.DataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</Table.DataCell>
+              return <TableDataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</TableDataCell>
             })}
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">Delkontrakt</Table.HeaderCell>
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell className="side_header">Delkontrakt</TableHeaderCell>
             {productsToCompare.map((product) => {
-              return <Table.DataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</Table.DataCell>
+              return <TableDataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</TableDataCell>
             })}
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">Antall varianter</Table.HeaderCell>
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell className="side_header">Antall varianter</TableHeaderCell>
             {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.variantCount}</Table.DataCell>
+              <TableDataCell key={product.id}>{product.variantCount}</TableDataCell>
             ))}
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">HMS-nummer</Table.HeaderCell>
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell className="side_header">HMS-nummer</TableHeaderCell>
             {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>
+              <TableDataCell key={product.id}>
                 {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
-              </Table.DataCell>
+              </TableDataCell>
             ))}
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">Leverandør</Table.HeaderCell>
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell className="side_header">Leverandør</TableHeaderCell>
             {productsToCompare.map((product) => (
-              <Table.DataCell key={product.id}>{product.supplierName}</Table.DataCell>
+              <TableDataCell key={product.id}>{product.supplierName}</TableDataCell>
             ))}
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell className="side_header">
+          </TableRow>
+          <TableRow>
+            <TableHeaderCell className="side_header">
               <Heading level="2" size="medium">
                 Tekniske egenskaper
               </Heading>
-            </Table.HeaderCell>
-            {productsToCompare.length > 1 && <Table.DataCell colSpan={productsToCompare.length + 1}></Table.DataCell>}
-          </Table.Row>
+            </TableHeaderCell>
+            {productsToCompare.length > 1 && <TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
+          </TableRow>
 
           {allDataKeysVariants.map((key, i) => (
-            <Table.Row key={i}>
-              <Table.HeaderCell className="side_header">{key}</Table.HeaderCell>
+            <TableRow key={i}>
+              <TableHeaderCell className="side_header">{key}</TableHeaderCell>
               {productsToCompare.map((product) => (
-                <Table.DataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</Table.DataCell>
+                <TableDataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</TableDataCell>
               ))}
-            </Table.Row>
+            </TableRow>
           ))}
-        </Table.Body>
+        </TableBody>
       </Table>
     </div>
   )
