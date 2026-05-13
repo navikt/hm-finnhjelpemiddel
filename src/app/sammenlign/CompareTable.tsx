@@ -125,7 +125,7 @@ export const CompareTable = ({ productsToCompare }: { productsToCompare: Product
                 Tekniske egenskaper
               </Heading>
             </TableHeaderCell>
-            {productsToCompare.length > 1 && <TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
+            {<TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
           </TableRow>
 
           {allDataKeysVariants.map((key, i) => (
