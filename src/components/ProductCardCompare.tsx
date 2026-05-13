@@ -5,10 +5,19 @@ import { Product } from '@/utils/product-util'
 import { MultiplyIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import ProductImage from './ProductImage'
+import useQueryString from '@/utils/search-params-util'
 
-const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; product: Product; rank?: number }) => {
+const ProductCardCompare = ({
+  type,
+  product,
+  rank,
+}: {
+  type: 'removable' | 'plain'
+  product: Product
+  rank?: number
+}) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
   const searchParams = useSearchParams()
@@ -48,20 +57,26 @@ const ProductCard = ({ type, product, rank }: { type: 'removable' | 'plain'; pro
         <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
       </VStack>
     </Box>
-  );
+  )
 }
 
 const RemoveButton = ({ product }: { product: Product }) => {
+  const router = useRouter()
+  const pathname = usePathname()
   const { removeProduct } = useHydratedCompareStore()
+  const { createQueryStringAppend } = useQueryString()
 
   return (
     <Button
       variant="tertiary-neutral"
       className="product-card__remove-button"
-      onClick={() => removeProduct(product.id)}
+      onClick={() => {
+        removeProduct(product.id)
+        router.replace(`${pathname}?${createQueryStringAppend('id', product.id)}`, { scroll: false })
+      }}
       icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
     />
   )
 }
 
-export default ProductCard
+export default ProductCardCompare
