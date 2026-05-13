@@ -1,5 +1,3 @@
-//'use client'
-
 import { Product } from '@/utils/product-util'
 import {
   findUniqueStringValues,
@@ -21,8 +19,6 @@ import {
 } from '@navikt/ds-react/Table'
 
 export const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
-  //const router = useRouter()
-
   const allDataKeysVariants = [
     ...new Set(
       productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
