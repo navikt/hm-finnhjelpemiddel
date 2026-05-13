@@ -73,6 +73,7 @@ const RemoveButton = ({ product }: { product: Product }) => {
       onClick={() => {
         removeProduct(product.id)
         router.replace(`${pathname}?${createQueryStringAppend('id', product.id)}`, { scroll: false })
+        router.refresh() //Hacky fix på https://github.com/vercel/next.js/issues/92152 i next 16.2
       }}
       icon={<MultiplyIcon title="Fjern produkt fra sammenligning" />}
     />
