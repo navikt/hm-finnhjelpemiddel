@@ -17,8 +17,8 @@ const WORKS_WITH_CONFIG = {
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
 }
 
-const groupTechData = (variants: ProductVariant[]): Map<string, string[]> => {
-  const map = new Map<string, string[]>()
+const groupTechData = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
+  const groups: { title: string; keys: string[] }[] = []
 
   const allDataLabels = new Map(
     variants.flatMap((variant) => {
@@ -37,37 +37,30 @@ const groupTechData = (variants: ProductVariant[]): Map<string, string[]> => {
   const diverse: string[] = []
 
   allDataLabels.forEach(function (label, key) {
-    /*if (['cm', 'tommer', 'kg'].includes(label.unit.toLowerCase())) {
-      målOgVekt.push(key)
-    }
-
-     */
-    console.log(key)
-
     if (/sete/i.test(key)) {
       console.log('aaaa')
       seteting.push(key)
     } else if (/armlene/i.test(key)) {
       armleneting.push(key)
-    } else if (/batteri/i.test(key)) {
-      batteriting.push(key)
     } else if (/rygg/i.test(key)) {
       ryggting.push(key)
     } else if (['cm', 'tommer', 'kg'].includes(label.unit.toLowerCase())) {
       målOgVekt.push(key)
+    } else if (/batteri/i.test(key)) {
+      batteriting.push(key)
     } else {
       diverse.push(key)
     }
   })
 
-  map.set('Mål og vekt', målOgVekt)
-  map.set('Diverse', diverse)
-  map.set('Seteting', seteting)
-  map.set('Armleneting', armleneting)
-  map.set('Ryggting', ryggting)
-  map.set('Batteriting', batteriting)
+  groups.push({ title: 'Sete', keys: seteting })
+  groups.push({ title: 'Armlene', keys: armleneting })
+  groups.push({ title: 'Rygg', keys: ryggting })
+  groups.push({ title: 'Batteri', keys: batteriting })
+  groups.push({ title: 'Mål og vekt', keys: målOgVekt })
+  groups.push({ title: 'Diverse', keys: diverse })
 
-  return map
+  return groups
 }
 
 const TechDataTable = ({
@@ -149,36 +142,9 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
       </VStack>
       <div style={{ gridArea: 'box3' }}>
         <>
-          <TechDataTable
-            title={'Sete'}
-            dataKeys={groupedTechData.get('Seteting')?.sort() ?? []}
-            variants={product.variants}
-          />
-          <TechDataTable
-            title={'Armlene'}
-            dataKeys={groupedTechData.get('Armleneting')?.sort() ?? []}
-            variants={product.variants}
-          />
-          <TechDataTable
-            title={'Rygg'}
-            dataKeys={groupedTechData.get('Ryggting')?.sort() ?? []}
-            variants={product.variants}
-          />
-          <TechDataTable
-            title={'Batteri'}
-            dataKeys={groupedTechData.get('Batteriting')?.sort() ?? []}
-            variants={product.variants}
-          />
-          <TechDataTable
-            title={'Mål og vekt'}
-            dataKeys={groupedTechData.get('Mål og vekt')?.sort() ?? []}
-            variants={product.variants}
-          />
-          <TechDataTable
-            title={'Diverse'}
-            dataKeys={groupedTechData.get('Diverse')?.sort() ?? []}
-            variants={product.variants}
-          />
+          {groupedTechData.map(({ title, keys }) => (
+            <TechDataTable key={title} title={title} dataKeys={keys?.sort() ?? []} variants={product.variants} />
+          ))}
         </>
       </div>
     </HGrid>
