@@ -44,7 +44,7 @@ const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: s
       armleneting.push(key)
     } else if (/rygg/i.test(key)) {
       ryggting.push(key)
-    } else if (['cm', 'tommer', 'kg'].includes(label.unit.toLowerCase())) {
+    } else if (['cm', 'tommer', 'kg', 'gram'].includes(label.unit.toLowerCase())) {
       målOgVekt.push(key)
     } else if (/batteri/i.test(key)) {
       batteriting.push(key)
