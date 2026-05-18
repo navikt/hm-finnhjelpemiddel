@@ -30,7 +30,9 @@ const groupTechData = (variants: ProductVariant[]): Map<string, string[]> => {
 
   const målOgVekt: string[] = []
   const seteting: string[] = []
+  const batteriting: string[] = []
   const armleneting: string[] = []
+  const ryggting: string[] = []
 
   const diverse: string[] = []
 
@@ -47,6 +49,10 @@ const groupTechData = (variants: ProductVariant[]): Map<string, string[]> => {
       seteting.push(key)
     } else if (/armlene/i.test(key)) {
       armleneting.push(key)
+    } else if (/batteri/i.test(key)) {
+      batteriting.push(key)
+    } else if (/rygg/i.test(key)) {
+      ryggting.push(key)
     } else if (['cm', 'tommer', 'kg'].includes(label.unit.toLowerCase())) {
       målOgVekt.push(key)
     } else {
@@ -58,6 +64,8 @@ const groupTechData = (variants: ProductVariant[]): Map<string, string[]> => {
   map.set('Diverse', diverse)
   map.set('Seteting', seteting)
   map.set('Armleneting', armleneting)
+  map.set('Ryggting', ryggting)
+  map.set('Batteriting', batteriting)
 
   return map
 }
@@ -142,13 +150,23 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
       <div style={{ gridArea: 'box3' }}>
         <>
           <TechDataTable
-            title={'Seteting'}
+            title={'Sete'}
             dataKeys={groupedTechData.get('Seteting')?.sort() ?? []}
             variants={product.variants}
           />
           <TechDataTable
-            title={'Armeleneting'}
+            title={'Armlene'}
             dataKeys={groupedTechData.get('Armleneting')?.sort() ?? []}
+            variants={product.variants}
+          />
+          <TechDataTable
+            title={'Rygg'}
+            dataKeys={groupedTechData.get('Ryggting')?.sort() ?? []}
+            variants={product.variants}
+          />
+          <TechDataTable
+            title={'Batteri'}
+            dataKeys={groupedTechData.get('Batteriting')?.sort() ?? []}
             variants={product.variants}
           />
           <TechDataTable
