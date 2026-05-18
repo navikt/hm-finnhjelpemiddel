@@ -168,7 +168,6 @@ const NavigationBar = () => {
                   aria-label={'Fjern'}
                   variant="tertiary"
                   onClick={() => {
-                    console.log('aaaaaa')
                     removeSearchTerm()
                   }}
                   aria-expanded={searchOpen}

@@ -4,7 +4,7 @@ import { BodyShort, Button } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
 import classNames from 'classnames'
-import ProductCard from '@/components/ProductCard'
+import ProductCardCompare from '@/components/ProductCardCompare'
 import NextLink from 'next/link'
 
 const CompareMenu = () => {
@@ -17,6 +17,8 @@ const CompareMenu = () => {
   if (productsToCompare.length == 0) {
     return <></>
   }
+
+  const compareUrl = `/sammenlign?${reversedProductsToCompare.map((p) => `id=${p.id}`).join('&')}`
 
   return (
     <div
@@ -59,14 +61,14 @@ const CompareMenu = () => {
               <ul className="compare-menu__chosen-products">
                 {reversedProductsToCompare.map((product) => (
                   <li key={'compare-' + product.id}>
-                    <ProductCard product={product} type="removable" />
+                    <ProductCardCompare product={product} type="removable" />
                   </li>
                 ))}
               </ul>
 
               {productsToCompare.length > 1 && (
                 <div className="compare-menu__buttons">
-                  <NextLink href="/sammenlign" passHref>
+                  <NextLink href={compareUrl} passHref>
                     <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
                       Sammenlign
                     </Button>
