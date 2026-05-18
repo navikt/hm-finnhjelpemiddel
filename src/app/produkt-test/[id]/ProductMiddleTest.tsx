@@ -17,8 +17,8 @@ const WORKS_WITH_CONFIG = {
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
 }
 
-const groupTechData = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
-  const groups: { title: string; keys: string[] }[] = []
+const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
+  const KeyGroups: { title: string; keys: string[] }[] = []
 
   const allDataLabels = new Map(
     variants.flatMap((variant) => {
@@ -53,14 +53,14 @@ const groupTechData = (variants: ProductVariant[]): { title: string; keys: strin
     }
   })
 
-  groups.push({ title: 'Sete', keys: seteting })
-  groups.push({ title: 'Armlene', keys: armleneting })
-  groups.push({ title: 'Rygg', keys: ryggting })
-  groups.push({ title: 'Batteri', keys: batteriting })
-  groups.push({ title: 'Mål og vekt', keys: målOgVekt })
-  groups.push({ title: 'Diverse', keys: diverse })
+  KeyGroups.push({ title: 'Sete', keys: seteting })
+  KeyGroups.push({ title: 'Armlene', keys: armleneting })
+  KeyGroups.push({ title: 'Rygg', keys: ryggting })
+  KeyGroups.push({ title: 'Batteri', keys: batteriting })
+  KeyGroups.push({ title: 'Mål og vekt', keys: målOgVekt })
+  KeyGroups.push({ title: 'Diverse', keys: diverse })
 
-  return groups
+  return KeyGroups
 }
 
 const TechDataTable = ({
@@ -121,9 +121,7 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
 
   const worksWithShowConstrain = worksWithFeatureFlag && shouldShowSection
 
-  const groupedTechData = groupTechData(product.variants)
-
-  console.log(groupedTechData)
+  const groupedTechData = groupTechDataKeys(product.variants)
 
   return (
     <HGrid
