@@ -38,7 +38,6 @@ const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: s
 
   allDataLabels.forEach(function (label, key) {
     if (/sete/i.test(key)) {
-      console.log('aaaa')
       seteting.push(key)
     } else if (/armlene/i.test(key)) {
       armleneting.push(key)
