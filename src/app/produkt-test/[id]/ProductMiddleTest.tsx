@@ -9,7 +9,7 @@ import styles from './ProductMiddleTest.module.scss'
 import { useMemo } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { WorksWith } from '@/app/produkt/[id]/WorksWith'
-import { toValueAndUnit } from '@/utils/string-util'
+import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -62,6 +62,26 @@ const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: s
   return KeyGroups
 }
 
+const findValueRangeForProductRowKey = (values: string[]) => {
+  if (values.length === 0) return ''
+
+  if (values.some((value) => isNaN(tryParseNumber(value)))) {
+    return findUniqueStringValues(values)
+  }
+
+  const numberList = values.map(tryParseNumber)
+  const min = Math.min(...numberList)
+  const max = Math.max(...numberList)
+  if (min === max) return String(min)
+  return `${min} - ${max}`
+}
+
+const toSummarizedValue = (key: string, variants: ProductVariant[]): string => {
+  const values = variants.map((variant) => variant.techData[key].value)
+
+  return findValueRangeForProductRowKey(values)
+}
+
 const TechDataTable = ({
   title,
   dataKeys,
@@ -74,7 +94,7 @@ const TechDataTable = ({
   const dataRows: { [key: string]: string } = Object.assign(
     {},
     ...dataKeys.map((key) => ({
-      [key]: toValueAndUnit(variants[0].techData[key].value, variants[0].techData[key].unit),
+      [key]: toValueAndUnit(toSummarizedValue(key, variants), variants[0].techData[key].unit),
     }))
   )
 
