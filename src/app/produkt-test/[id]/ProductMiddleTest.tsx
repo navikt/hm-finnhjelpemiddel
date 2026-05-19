@@ -158,11 +158,11 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
         {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
       </VStack>
       <div style={{ gridArea: 'box3' }}>
-        <>
+        <VStack gap={'space-8'}>
           {groupedTechData.map(({ title, keys }) => (
             <TechDataTable key={title} title={title} dataKeys={keys?.sort() ?? []} variants={product.variants} />
           ))}
-        </>
+        </VStack>
       </div>
     </HGrid>
   )

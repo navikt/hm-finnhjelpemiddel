@@ -2,10 +2,10 @@ import { fetchProductsWithVariants, getProductWithVariants } from '@/utils/api-u
 import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
-import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 import ProductMiddleTest from '@/app/produkt-test/[id]/ProductMiddleTest'
+import { VariantTableTest } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -36,7 +36,7 @@ export default async function ProduktPage(props: Props) {
     <ProductPageLayout>
       <ProductTop product={product} />
       <ProductMiddleTest product={product} />
-      {product.variants.length > 1 && <VariantTable product={product} />}
+      {product.variants.length > 1 && <VariantTableTest product={product} />}
     </ProductPageLayout>
   )
 }
