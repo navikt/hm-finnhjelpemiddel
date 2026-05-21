@@ -53,5 +53,9 @@
     "sass": "^1.99.0",
     "sharp": "^0.34.1",
     "typescript": "5.9.2"
+  },
+  "overrides": {
+    "postcss": "8.5.10",
+    "protobufjs": "8.2.0"
   }
 }
