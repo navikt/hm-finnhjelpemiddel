@@ -168,9 +168,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
           return {
             key: key,
             values: productVariantsToShow.map((variant) =>
-              variant.techData[key] !== undefined
-                ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
-                : '-'
+              variant.techData[key] !== undefined ? variant.techData[key].value : '-'
             ),
             isCommonField: product.variants.every(
               (variant) =>
@@ -317,7 +315,50 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   )
 }
 
+const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
+  return min.map((minValue, index) => {
+    const maksValue = maks[index]
+    if (minValue === maksValue) {
+      return minValue
+    } else {
+      return minValue + `-${maks[index]}`
+    }
+  })
+}
+
 const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+  const rowsMerged: TechDataRow[] = []
+
+  const allRowKeys = new Set(techDataRows.map(({ key }) => key))
+
+  techDataRows.forEach((techDataRow) => {
+    if (techDataRow.key.endsWith(' min')) {
+      const baseKey = techDataRow.key.split(' min')[0]
+      const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
+
+      if (maksRow !== undefined) {
+        rowsMerged.push({
+          isCommonField: techDataRow.isCommonField,
+          key: baseKey,
+          unit: techDataRow.unit,
+          values: mergeMinMaksValues(techDataRow.values, maksRow.values),
+        })
+      } else {
+        rowsMerged.push(techDataRow)
+      }
+    } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {
+      //er slått sammen med min-raden
+    } else if (allRowKeys.has(`${techDataRow.key} min`)) {
+      //for å slippe f.eks duplikat setedybde på Arbeidsstoler med manuell seteløfter
+    } else {
+      rowsMerged.push(techDataRow)
+    }
+  })
+
+  if (rowsMerged.length < 1) {
+    return <></>
+  }
+
   return (
     <>
       <TableRow className={styles.techDataGroupHeader}>
@@ -326,19 +367,18 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
             {title}
           </Heading>
         </TableHeaderCell>
-        {<TableDataCell colSpan={techDataRows.length + 1}></TableDataCell>}
+        {<TableDataCell colSpan={rowsMerged[0].values.length + 1}></TableDataCell>}
       </TableRow>
-      {techDataRows.length > 0 &&
-        techDataRows.map(({ key, values, isCommonField }) => {
-          return (
-            <Table.Row key={key + 'row'}>
-              <Table.HeaderCell>{key}</Table.HeaderCell>
-              {values.map((value, i) => (
-                <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
-              ))}
-            </Table.Row>
-          )
-        })}
+      {rowsMerged.map(({ key, values, unit }) => {
+        return (
+          <Table.Row key={key + 'row'}>
+            <Table.HeaderCell>{key}</Table.HeaderCell>
+            {values.map((value, i) => (
+              <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+            ))}
+          </Table.Row>
+        )
+      })}
     </>
   )
 }
