@@ -7,13 +7,15 @@ import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, CopyButton, Table, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
 import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStatusRowNew'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
+import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
+import { TableDataCell, TableHeaderCell, TableRow } from '@navikt/ds-react/Table'
 
 export type SortColumns = {
   orderBy: string | null
@@ -142,7 +144,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       ? [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
       : [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
-  const techDataRows: TechDataRow[] = allDataKeys.map((key) => {
+  const techDataRowsAll: TechDataRow[] = allDataKeys.map((key) => {
     return {
       key: key,
       values: productVariantsToShow.map((variant) =>
@@ -157,6 +159,30 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     }
   })
 
+  const groupedTechData = groupTechDataKeys(product.variants)
+  const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
+    ({ title, keys }) => {
+      return {
+        title: title,
+        techDataRows: keys.map((key) => {
+          return {
+            key: key,
+            values: productVariantsToShow.map((variant) =>
+              variant.techData[key] !== undefined ? variant.techData[key].value : '-'
+            ),
+            isCommonField: product.variants.every(
+              (variant) =>
+                variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
+            ),
+            unit: productVariantsToShow.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+          }
+        }),
+      }
+    }
+  )
+
+  console.log(groupedTechDataRows)
+
   const rankSet = new Set(product.agreements.map((agr) => agr.rank))
   const postSet = new Set(product.agreements.map((agr) => agr.postNr))
 
@@ -167,15 +193,13 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <VStack gap={'space-16'}>
-          <VStack gap={'space-16'}>
-            <FilterRow
-              variants={product.variants}
-              filterConfigs={filters}
-              techDataRows={techDataRows}
-              numberOfVariantsToShow={productVariantsToShow.length}
-            />
-          </VStack>
+        <VStack paddingBlock={'space-0 space-32'}>
+          <FilterRow
+            variants={product.variants}
+            filterConfigs={filters}
+            techDataRows={techDataRowsAll}
+            numberOfVariantsToShow={productVariantsToShow.length}
+          />
         </VStack>
       )}
       {productVariantsToShow.length === 0 && (
@@ -184,33 +208,59 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
         </Alert>
       )}
       {productVariantsToShow.length > 0 && (
-        <div className={styles.variantsTable} id="variants-table">
-          <Table zebraStripes>
-            <Table.Header>
-              <VariantStatusRowNew variants={columnsSortedByKey} />
-              <Table.Row>
-                <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
-                {columnsSortedByKey.map((variant) => (
-                  <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
-                ))}
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {hasHmsNumber && (
+        <VStack>
+          <Heading size={'medium'} level={'2'} spacing>
+            Spesifikasjoner
+          </Heading>
+          <div className={styles.variantsTable} id="variants-table">
+            <Table>
+              <Table.Header>
+                <VariantStatusRowNew variants={columnsSortedByKey} />
                 <Table.Row>
-                  <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                  <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
+                  {columnsSortedByKey.map((variant) => (
+                    <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
+                  ))}
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {hasHmsNumber && (
+                  <Table.Row>
+                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                    {columnsSortedByKey.map((variant, i) => (
+                      <Table.DataCell key={'hms-' + variant.id}>
+                        {variant.hmsArtNr ? (
+                          <CopyButton
+                            size="small"
+                            className={productTop.copyButton}
+                            copyText={variant.hmsArtNr ?? ''}
+                            text={variant.hmsArtNr ?? ''}
+                            activeText="kopiert"
+                            variant="action"
+                            activeIcon={<ThumbUpIcon aria-hidden />}
+                            iconPosition="right"
+                          />
+                        ) : (
+                          <BodyShort align={'center'}>-</BodyShort>
+                        )}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )}
+                <Table.Row>
+                  <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
                   {columnsSortedByKey.map((variant, i) => (
                     <Table.DataCell
-                      key={'hms-' + variant.id}
+                      key={'levart-' + variant.id}
                       className={selectedColumn === i ? styles.selectedColumn : ''}
                       onClick={() => handleColumnClick(i)}
                     >
-                      {variant.hmsArtNr ? (
+                      {variant.supplierRef ? (
                         <CopyButton
                           size="small"
                           className={productTop.copyButton}
-                          copyText={variant.hmsArtNr ?? ''}
-                          text={variant.hmsArtNr ?? ''}
+                          copyText={variant.supplierRef}
+                          text={variant.supplierRef}
                           activeText="kopiert"
                           variant="action"
                           activeIcon={<ThumbUpIcon aria-hidden />}
@@ -222,96 +272,116 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                     </Table.DataCell>
                   ))}
                 </Table.Row>
-              )}
-              <Table.Row>
-                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                {columnsSortedByKey.map((variant, i) => (
-                  <Table.DataCell
-                    key={'levart-' + variant.id}
-                    className={selectedColumn === i ? styles.selectedColumn : ''}
-                    onClick={() => handleColumnClick(i)}
-                  >
-                    {variant.supplierRef ? (
-                      <CopyButton
-                        size="small"
-                        className={productTop.copyButton}
-                        copyText={variant.supplierRef}
-                        text={variant.supplierRef}
-                        activeText="kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
-                        iconPosition="right"
-                      />
-                    ) : (
-                      <BodyShort align={'center'}>-</BodyShort>
-                    )}
-                  </Table.DataCell>
+                {rankSet.size > 1 && (
+                  <VariantRankRow
+                    variants={columnsSortedByKey}
+                    selectedColumn={selectedColumn}
+                    handleColumnClick={handleColumnClick}
+                  />
+                )}
+                {postSet.size > 1 && (
+                  <VariantPostRow
+                    variants={columnsSortedByKey}
+                    selectedColumn={selectedColumn}
+                    handleColumnClick={handleColumnClick}
+                  />
+                )}
+                {bestillingsordningVaries && (
+                  <Table.Row>
+                    <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+                    {columnsSortedByKey.map((variant, i) => (
+                      <Table.DataCell key={'bestillingsordning-' + variant.id}>
+                        {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )}
+                {digitalSoknadVaries && (
+                  <Table.Row>
+                    <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                    {columnsSortedByKey.map((variant, i) => (
+                      <Table.DataCell key={'behovsmelding-' + variant.id}>
+                        {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )}
+                {groupedTechDataRows.map(({ title, techDataRows }) => (
+                  <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
                 ))}
-              </Table.Row>
-              {rankSet.size > 1 && (
-                <VariantRankRow
-                  variants={columnsSortedByKey}
-                  selectedColumn={selectedColumn}
-                  handleColumnClick={handleColumnClick}
-                />
-              )}
-              {postSet.size > 1 && (
-                <VariantPostRow
-                  variants={columnsSortedByKey}
-                  selectedColumn={selectedColumn}
-                  handleColumnClick={handleColumnClick}
-                />
-              )}
-              {bestillingsordningVaries && (
-                <Table.Row>
-                  <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                  {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell
-                      key={'bestillingsordning-' + variant.id}
-                      className={selectedColumn === i ? styles.selectedColumn : ''}
-                      onClick={() => handleColumnClick(i)}
-                    >
-                      {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
-              )}
-              {digitalSoknadVaries && (
-                <Table.Row>
-                  <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                  {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell
-                      key={'behovsmelding-' + variant.id}
-                      className={selectedColumn === i ? styles.selectedColumn : ''}
-                      onClick={() => handleColumnClick(i)}
-                    >
-                      {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
-              )}
-              {techDataRows.length > 0 &&
-                techDataRows.map(({ key, values, isCommonField }) => {
-                  if (isCommonField) return null
-                  return (
-                    <Table.Row key={key + 'row'}>
-                      <Table.HeaderCell>{key}</Table.HeaderCell>
-                      {values.map((value, i) => (
-                        <Table.DataCell
-                          key={key + '-' + i}
-                          className={selectedColumn === i ? styles.selectedColumn : ''}
-                          onClick={() => handleColumnClick(i)}
-                        >
-                          {value}
-                        </Table.DataCell>
-                      ))}
-                    </Table.Row>
-                  )
-                })}
-            </Table.Body>
-          </Table>
-        </div>
+              </Table.Body>
+            </Table>
+          </div>
+        </VStack>
       )}
     </Box>
+  )
+}
+
+const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
+  return min.map((minValue, index) => {
+    const maksValue = maks[index]
+    if (minValue === maksValue) {
+      return minValue
+    } else {
+      return minValue + `-${maks[index]}`
+    }
+  })
+}
+
+const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+  const rowsMerged: TechDataRow[] = []
+
+  const allRowKeys = new Set(techDataRows.map(({ key }) => key))
+
+  techDataRows.forEach((techDataRow) => {
+    if (techDataRow.key.endsWith(' min')) {
+      const baseKey = techDataRow.key.split(' min')[0]
+      const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
+
+      if (maksRow !== undefined) {
+        rowsMerged.push({
+          isCommonField: techDataRow.isCommonField,
+          key: baseKey,
+          unit: techDataRow.unit,
+          values: mergeMinMaksValues(techDataRow.values, maksRow.values),
+        })
+      } else {
+        rowsMerged.push(techDataRow)
+      }
+    } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {
+      //er slått sammen med min-raden
+    } else if (allRowKeys.has(`${techDataRow.key} min`)) {
+      //for å slippe f.eks duplikat setedybde på Arbeidsstoler med manuell seteløfter
+    } else {
+      rowsMerged.push(techDataRow)
+    }
+  })
+
+  if (rowsMerged.length < 1) {
+    return <></>
+  }
+
+  return (
+    <>
+      <TableRow className={styles.techDataGroupHeader}>
+        <TableHeaderCell>
+          <Heading level="2" size="medium">
+            {title}
+          </Heading>
+        </TableHeaderCell>
+        {<TableDataCell colSpan={rowsMerged[0].values.length + 1}></TableDataCell>}
+      </TableRow>
+      {rowsMerged.map(({ key, values, unit }) => {
+        return (
+          <Table.Row key={key + 'row'}>
+            <Table.HeaderCell>{key}</Table.HeaderCell>
+            {values.map((value, i) => (
+              <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+            ))}
+          </Table.Row>
+        )
+      })}
+    </>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, HGrid, Link, Table, VStack } from '@navikt/ds-react'
+import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
 import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
 import NextLink from 'next/link'
@@ -9,7 +9,6 @@ import styles from './ProductMiddleTest.module.scss'
 import { useMemo } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { WorksWith } from '@/app/produkt/[id]/WorksWith'
-import { findUniqueStringValues, toValueAndUnit, tryParseNumber } from '@/utils/string-util'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -17,7 +16,7 @@ const WORKS_WITH_CONFIG = {
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
 }
 
-const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
+export const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
   const KeyGroups: { title: string; keys: string[] }[] = []
 
   const allDataLabels = new Map(
@@ -59,69 +58,7 @@ const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: s
   KeyGroups.push({ title: 'Mål og vekt', keys: målOgVekt })
   KeyGroups.push({ title: 'Diverse', keys: diverse })
 
-  return KeyGroups
-}
-
-const findValueRangeForProductRowKey = (values: string[]) => {
-  if (values.length === 0) return ''
-
-  if (values.some((value) => isNaN(tryParseNumber(value)))) {
-    return findUniqueStringValues(values)
-  }
-
-  const numberList = values.map(tryParseNumber)
-  const min = Math.min(...numberList)
-  const max = Math.max(...numberList)
-  if (min === max) return String(min)
-  return `${min} - ${max}`
-}
-
-const toSummarizedValue = (key: string, variants: ProductVariant[]): string => {
-  const values = variants.map((variant) => variant.techData[key].value)
-
-  return findValueRangeForProductRowKey(values)
-}
-
-const TechDataTable = ({
-  title,
-  dataKeys,
-  variants,
-}: {
-  title: string
-  dataKeys: string[]
-  variants: ProductVariant[]
-}) => {
-  const dataRows: { [key: string]: string } = Object.assign(
-    {},
-    ...dataKeys.map((key) => ({
-      [key]: toValueAndUnit(toSummarizedValue(key, variants), variants[0].techData[key].unit),
-    }))
-  )
-
-  if (Object.keys(dataRows).length === 0) {
-    return <></>
-  }
-  return (
-    <VStack>
-      <Heading level="2" size="medium">
-        {title}
-      </Heading>
-      <Box paddingBlock="space-16">
-        <Table className={styles.commonAttributes}>
-          <Table.Body>
-            {Object.entries(dataRows).map(([key, row]) => {
-              return (
-                <Table.Row key={key}>
-                  <Table.HeaderCell>{key}</Table.HeaderCell>
-                  <Table.DataCell>{row}</Table.DataCell>
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
-      </Box>
-    </VStack>
-  )
+  return KeyGroups.filter(({ keys }) => keys.length > 0)
 }
 
 const ProductMiddleTest = ({ product }: { product: Product }) => {
@@ -140,8 +77,6 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
 
   const worksWithShowConstrain = worksWithFeatureFlag && shouldShowSection
 
-  const groupedTechData = groupTechDataKeys(product.variants)
-
   return (
     <HGrid
       gap={'space-80 space-32'}
@@ -157,13 +92,6 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
 
         {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
       </VStack>
-      <div style={{ gridArea: 'box3' }}>
-        <VStack gap={'space-8'}>
-          {groupedTechData.map(({ title, keys }) => (
-            <TechDataTable key={title} title={title} dataKeys={keys?.sort() ?? []} variants={product.variants} />
-          ))}
-        </VStack>
-      </div>
     </HGrid>
   )
 }

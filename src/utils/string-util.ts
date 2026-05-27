@@ -3,7 +3,11 @@ import { AgreementInfo } from './product-util'
 export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
 // Rules from Språkrådet: https://www.sprakradet.no/sprakhjelp/Skriveregler/Mellomrom/
-export const toValueAndUnit = (value: string, unit: string) => {
+export const toValueAndUnit = (value: string, unit: string | undefined) => {
+  if (unit === undefined) {
+    return value
+  }
+
   if (unit === '"' || unit === "'" || unit === '°') {
     return value + unit
   }
