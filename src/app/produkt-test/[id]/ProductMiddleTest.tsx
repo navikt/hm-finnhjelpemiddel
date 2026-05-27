@@ -17,7 +17,7 @@ const WORKS_WITH_CONFIG = {
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
 }
 
-const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
+export const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
   const KeyGroups: { title: string; keys: string[] }[] = []
 
   const allDataLabels = new Map(
@@ -59,7 +59,7 @@ const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: s
   KeyGroups.push({ title: 'Mål og vekt', keys: målOgVekt })
   KeyGroups.push({ title: 'Diverse', keys: diverse })
 
-  return KeyGroups
+  return KeyGroups.filter(({ keys }) => keys.length > 0)
 }
 
 const findValueRangeForProductRowKey = (values: string[]) => {
@@ -157,13 +157,6 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
 
         {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
       </VStack>
-      <div style={{ gridArea: 'box3' }}>
-        <VStack gap={'space-8'}>
-          {groupedTechData.map(({ title, keys }) => (
-            <TechDataTable key={title} title={title} dataKeys={keys?.sort() ?? []} variants={product.variants} />
-          ))}
-        </VStack>
-      </div>
     </HGrid>
   )
 }

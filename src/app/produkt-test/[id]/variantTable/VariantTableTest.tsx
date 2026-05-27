@@ -7,13 +7,15 @@ import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, CopyButton, Table, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
 import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStatusRowNew'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
+import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
+import { TableDataCell, TableHeaderCell, TableRow } from '@navikt/ds-react/Table'
 
 export type SortColumns = {
   orderBy: string | null
@@ -142,7 +144,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       ? [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
       : [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
-  const techDataRows: TechDataRow[] = allDataKeys.map((key) => {
+  const techDataRowsAll: TechDataRow[] = allDataKeys.map((key) => {
     return {
       key: key,
       values: productVariantsToShow.map((variant) =>
@@ -156,6 +158,32 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       unit: productVariantsToShow.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
     }
   })
+
+  const groupedTechData = groupTechDataKeys(product.variants)
+  const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
+    ({ title, keys }) => {
+      return {
+        title: title,
+        techDataRows: keys.map((key) => {
+          return {
+            key: key,
+            values: productVariantsToShow.map((variant) =>
+              variant.techData[key] !== undefined
+                ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
+                : '-'
+            ),
+            isCommonField: product.variants.every(
+              (variant) =>
+                variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
+            ),
+            unit: productVariantsToShow.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+          }
+        }),
+      }
+    }
+  )
+
+  console.log(groupedTechDataRows)
 
   const rankSet = new Set(product.agreements.map((agr) => agr.rank))
   const postSet = new Set(product.agreements.map((agr) => agr.postNr))
@@ -172,7 +200,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
             <FilterRow
               variants={product.variants}
               filterConfigs={filters}
-              techDataRows={techDataRows}
+              techDataRows={techDataRowsAll}
               numberOfVariantsToShow={productVariantsToShow.length}
             />
           </VStack>
@@ -185,7 +213,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       )}
       {productVariantsToShow.length > 0 && (
         <div className={styles.variantsTable} id="variants-table">
-          <Table zebraStripes>
+          <Table>
             <Table.Header>
               <VariantStatusRowNew variants={columnsSortedByKey} />
               <Table.Row>
@@ -200,11 +228,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 <Table.Row>
                   <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
                   {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell
-                      key={'hms-' + variant.id}
-                      className={selectedColumn === i ? styles.selectedColumn : ''}
-                      onClick={() => handleColumnClick(i)}
-                    >
+                    <Table.DataCell key={'hms-' + variant.id}>
                       {variant.hmsArtNr ? (
                         <CopyButton
                           size="small"
@@ -266,11 +290,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 <Table.Row>
                   <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
                   {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell
-                      key={'bestillingsordning-' + variant.id}
-                      className={selectedColumn === i ? styles.selectedColumn : ''}
-                      onClick={() => handleColumnClick(i)}
-                    >
+                    <Table.DataCell key={'bestillingsordning-' + variant.id}>
                       {variant.bestillingsordning ? 'Ja' : 'Nei'}
                     </Table.DataCell>
                   ))}
@@ -280,38 +300,45 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 <Table.Row>
                   <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
                   {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell
-                      key={'behovsmelding-' + variant.id}
-                      className={selectedColumn === i ? styles.selectedColumn : ''}
-                      onClick={() => handleColumnClick(i)}
-                    >
+                    <Table.DataCell key={'behovsmelding-' + variant.id}>
                       {variant.digitalSoknad ? 'Ja' : 'Nei'}
                     </Table.DataCell>
                   ))}
                 </Table.Row>
               )}
-              {techDataRows.length > 0 &&
-                techDataRows.map(({ key, values, isCommonField }) => {
-                  if (isCommonField) return null
-                  return (
-                    <Table.Row key={key + 'row'}>
-                      <Table.HeaderCell>{key}</Table.HeaderCell>
-                      {values.map((value, i) => (
-                        <Table.DataCell
-                          key={key + '-' + i}
-                          className={selectedColumn === i ? styles.selectedColumn : ''}
-                          onClick={() => handleColumnClick(i)}
-                        >
-                          {value}
-                        </Table.DataCell>
-                      ))}
-                    </Table.Row>
-                  )
-                })}
+              {groupedTechDataRows.map(({ title, techDataRows }) => (
+                <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
+              ))}
             </Table.Body>
           </Table>
         </div>
       )}
     </Box>
+  )
+}
+
+const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+  return (
+    <>
+      <TableRow className={styles.techDataGroupHeader}>
+        <TableHeaderCell>
+          <Heading level="2" size="medium">
+            {title}
+          </Heading>
+        </TableHeaderCell>
+        {<TableDataCell colSpan={techDataRows.length + 1}></TableDataCell>}
+      </TableRow>
+      {techDataRows.length > 0 &&
+        techDataRows.map(({ key, values, isCommonField }) => {
+          return (
+            <Table.Row key={key + 'row'}>
+              <Table.HeaderCell>{key}</Table.HeaderCell>
+              {values.map((value, i) => (
+                <Table.DataCell key={key + '-' + i}>{value}</Table.DataCell>
+              ))}
+            </Table.Row>
+          )
+        })}
+    </>
   )
 }

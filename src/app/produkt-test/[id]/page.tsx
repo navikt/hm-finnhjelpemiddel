@@ -36,7 +36,7 @@ export default async function ProduktPage(props: Props) {
     <ProductPageLayout>
       <ProductTop product={product} />
       <ProductMiddleTest product={product} />
-      {product.variants.length > 1 && <VariantTableTest product={product} />}
+      {<VariantTableTest product={product} />}
     </ProductPageLayout>
   )
 }
