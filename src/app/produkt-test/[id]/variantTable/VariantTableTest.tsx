@@ -372,16 +372,18 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
         </TableHeaderCell>
         {<TableDataCell colSpan={rowsMerged[0].values.length + 1}></TableDataCell>}
       </TableRow>
-      {rowsMerged.map(({ key, values, unit }) => {
-        return (
-          <Table.Row key={key + 'row'}>
-            <Table.HeaderCell>{key}</Table.HeaderCell>
-            {values.map((value, i) => (
-              <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
-            ))}
-          </Table.Row>
-        )
-      })}
+      {rowsMerged
+        .sort((a, b) => a.key.localeCompare(b.key))
+        .map(({ key, values, unit }) => {
+          return (
+            <Table.Row key={key + 'row'}>
+              <Table.HeaderCell>{key}</Table.HeaderCell>
+              {values.map((value, i) => (
+                <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+              ))}
+            </Table.Row>
+          )
+        })}
     </>
   )
 }
