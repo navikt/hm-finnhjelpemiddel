@@ -193,15 +193,13 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <VStack gap={'space-16'}>
-          <VStack gap={'space-16'}>
-            <FilterRow
-              variants={product.variants}
-              filterConfigs={filters}
-              techDataRows={techDataRowsAll}
-              numberOfVariantsToShow={productVariantsToShow.length}
-            />
-          </VStack>
+        <VStack paddingBlock={'space-0 space-32'}>
+          <FilterRow
+            variants={product.variants}
+            filterConfigs={filters}
+            techDataRows={techDataRowsAll}
+            numberOfVariantsToShow={productVariantsToShow.length}
+          />
         </VStack>
       )}
       {productVariantsToShow.length === 0 && (
@@ -210,29 +208,59 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
         </Alert>
       )}
       {productVariantsToShow.length > 0 && (
-        <div className={styles.variantsTable} id="variants-table">
-          <Table>
-            <Table.Header>
-              <VariantStatusRowNew variants={columnsSortedByKey} />
-              <Table.Row>
-                <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
-                {columnsSortedByKey.map((variant) => (
-                  <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
-                ))}
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {hasHmsNumber && (
+        <VStack>
+          <Heading size={'medium'} level={'2'} spacing>
+            Spesifikasjoner
+          </Heading>
+          <div className={styles.variantsTable} id="variants-table">
+            <Table>
+              <Table.Header>
+                <VariantStatusRowNew variants={columnsSortedByKey} />
                 <Table.Row>
-                  <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                  <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
+                  {columnsSortedByKey.map((variant) => (
+                    <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
+                  ))}
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {hasHmsNumber && (
+                  <Table.Row>
+                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                    {columnsSortedByKey.map((variant, i) => (
+                      <Table.DataCell key={'hms-' + variant.id}>
+                        {variant.hmsArtNr ? (
+                          <CopyButton
+                            size="small"
+                            className={productTop.copyButton}
+                            copyText={variant.hmsArtNr ?? ''}
+                            text={variant.hmsArtNr ?? ''}
+                            activeText="kopiert"
+                            variant="action"
+                            activeIcon={<ThumbUpIcon aria-hidden />}
+                            iconPosition="right"
+                          />
+                        ) : (
+                          <BodyShort align={'center'}>-</BodyShort>
+                        )}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )}
+                <Table.Row>
+                  <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
                   {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell key={'hms-' + variant.id}>
-                      {variant.hmsArtNr ? (
+                    <Table.DataCell
+                      key={'levart-' + variant.id}
+                      className={selectedColumn === i ? styles.selectedColumn : ''}
+                      onClick={() => handleColumnClick(i)}
+                    >
+                      {variant.supplierRef ? (
                         <CopyButton
                           size="small"
                           className={productTop.copyButton}
-                          copyText={variant.hmsArtNr ?? ''}
-                          text={variant.hmsArtNr ?? ''}
+                          copyText={variant.supplierRef}
+                          text={variant.supplierRef}
                           activeText="kopiert"
                           variant="action"
                           activeIcon={<ThumbUpIcon aria-hidden />}
@@ -244,72 +272,47 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                     </Table.DataCell>
                   ))}
                 </Table.Row>
-              )}
-              <Table.Row>
-                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                {columnsSortedByKey.map((variant, i) => (
-                  <Table.DataCell
-                    key={'levart-' + variant.id}
-                    className={selectedColumn === i ? styles.selectedColumn : ''}
-                    onClick={() => handleColumnClick(i)}
-                  >
-                    {variant.supplierRef ? (
-                      <CopyButton
-                        size="small"
-                        className={productTop.copyButton}
-                        copyText={variant.supplierRef}
-                        text={variant.supplierRef}
-                        activeText="kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
-                        iconPosition="right"
-                      />
-                    ) : (
-                      <BodyShort align={'center'}>-</BodyShort>
-                    )}
-                  </Table.DataCell>
+                {rankSet.size > 1 && (
+                  <VariantRankRow
+                    variants={columnsSortedByKey}
+                    selectedColumn={selectedColumn}
+                    handleColumnClick={handleColumnClick}
+                  />
+                )}
+                {postSet.size > 1 && (
+                  <VariantPostRow
+                    variants={columnsSortedByKey}
+                    selectedColumn={selectedColumn}
+                    handleColumnClick={handleColumnClick}
+                  />
+                )}
+                {bestillingsordningVaries && (
+                  <Table.Row>
+                    <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+                    {columnsSortedByKey.map((variant, i) => (
+                      <Table.DataCell key={'bestillingsordning-' + variant.id}>
+                        {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )}
+                {digitalSoknadVaries && (
+                  <Table.Row>
+                    <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                    {columnsSortedByKey.map((variant, i) => (
+                      <Table.DataCell key={'behovsmelding-' + variant.id}>
+                        {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )}
+                {groupedTechDataRows.map(({ title, techDataRows }) => (
+                  <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
                 ))}
-              </Table.Row>
-              {rankSet.size > 1 && (
-                <VariantRankRow
-                  variants={columnsSortedByKey}
-                  selectedColumn={selectedColumn}
-                  handleColumnClick={handleColumnClick}
-                />
-              )}
-              {postSet.size > 1 && (
-                <VariantPostRow
-                  variants={columnsSortedByKey}
-                  selectedColumn={selectedColumn}
-                  handleColumnClick={handleColumnClick}
-                />
-              )}
-              {bestillingsordningVaries && (
-                <Table.Row>
-                  <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                  {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell key={'bestillingsordning-' + variant.id}>
-                      {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
-              )}
-              {digitalSoknadVaries && (
-                <Table.Row>
-                  <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                  {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell key={'behovsmelding-' + variant.id}>
-                      {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
-              )}
-              {groupedTechDataRows.map(({ title, techDataRows }) => (
-                <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
-              ))}
-            </Table.Body>
-          </Table>
-        </div>
+              </Table.Body>
+            </Table>
+          </div>
+        </VStack>
       )}
     </Box>
   )
