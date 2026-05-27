@@ -4,7 +4,7 @@ export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.sli
 
 // Rules from Språkrådet: https://www.sprakradet.no/sprakhjelp/Skriveregler/Mellomrom/
 export const toValueAndUnit = (value: string, unit: string | undefined) => {
-  if (unit === undefined) {
+  if (unit === undefined || value === '-') {
     return value
   }
 
