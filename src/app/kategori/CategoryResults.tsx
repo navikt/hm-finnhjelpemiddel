@@ -55,18 +55,19 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
           .filter(([delkontraktName]) => delkontraktName !== 'Ikke på avtale')
           .map(([delkontraktName, delkontraktGroup]) => (
             <DelkontraktGroup
-              title={delkontraktGroup.title}
-              refNr={delkontraktGroup.refNr}
-              products={delkontraktGroup.products}
+              delkontraktProducts={delkontraktGroup}
               handleCompareClick={handleCompareClick}
               key={delkontraktName}
             />
           ))}
         {nonAgreementGroup && (
           <DelkontraktGroup
-            title={nonAgreementGroup.title}
-            refNr={nonAgreementGroup.refNr}
-            products={nonAgreementGroup.products.slice(0, visibleNonAgreementProductsCount)}
+            delkontraktProducts={{
+              refNr: nonAgreementGroup.refNr,
+              postTitle: nonAgreementGroup.postTitle,
+              normalizedTitle: nonAgreementGroup.normalizedTitle,
+              products: nonAgreementGroup.products.slice(0, visibleNonAgreementProductsCount),
+            }}
             handleCompareClick={handleCompareClick}
           />
         )}
@@ -88,51 +89,70 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
 }
 
 const DelkontraktGroup = ({
-  title,
-  refNr,
-  products,
+  delkontraktProducts,
   handleCompareClick,
 }: {
-  title: string
-  refNr: string
-  products: Product[]
-
+  delkontraktProducts: DelkontraktProducts
   handleCompareClick: () => void
 }) => {
   return (
     <VStack gap={'space-16'} style={{ borderTop: '1px solid #CFD3D8' }}>
       <HStack gap={'space-8'} align={'center'} paddingBlock={'space-16 space-0'}>
-        {refNr !== '0' && (
+        {delkontraktProducts.refNr !== '0' && (
           <Tag size={'medium'} data-color={'info'} variant={'moderate'}>
             På avtale
           </Tag>
         )}
-        <Heading size={'small'}>{title}</Heading>
+        <Heading size={'small'}>{delkontraktProducts.normalizedTitle}</Heading>
       </HStack>
       <HStack gap={{ xs: 'space-16', md: 'space-20' }}>
-        {products.map((product) => (
-          <ProductCardCategory key={product.id} product={product} handleCompareClick={handleCompareClick} />
-        ))}
+        {delkontraktProducts.products
+          .sort((a, b) => {
+            if (delkontraktProducts.postTitle === '') {
+              return 0
+            }
+
+            return (
+              (a.agreements.find((agreement) => agreement.postTitle === delkontraktProducts.postTitle)?.rank ?? 0) -
+              (b.agreements.find((agreement) => agreement.postTitle === delkontraktProducts.postTitle)?.rank ?? 0)
+            )
+          })
+          .map((product) => (
+            <ProductCardCategory
+              key={product.id}
+              product={product}
+              postTitle={delkontraktProducts.postTitle}
+              handleCompareClick={handleCompareClick}
+            />
+          ))}
       </HStack>
     </VStack>
   )
 }
 
-type ProductsDelkontrakt = {
-  [key: string]: {
-    refNr: string
-    title: string
-    products: Product[]
-  }
+type ProductsByDelkontrakt = {
+  [key: string]: DelkontraktProducts
 }
 
-const groupByDelkontrakt = (products: Product[] | undefined): ProductsDelkontrakt => {
-  const productsByDelkonktrakt: ProductsDelkontrakt = {}
+type DelkontraktProducts = {
+  refNr: string
+  postTitle: string
+  normalizedTitle: string
+  products: Product[]
+}
+
+const groupByDelkontrakt = (products: Product[] | undefined): ProductsByDelkontrakt => {
+  const productsByDelkonktrakt: ProductsByDelkontrakt = {}
 
   products?.forEach((product) => {
     if (product.agreements.length === 0) {
       if (!productsByDelkonktrakt['Ikke på avtale']) {
-        productsByDelkonktrakt['Ikke på avtale'] = { refNr: '0', title: 'Ikke på avtale', products: [] }
+        productsByDelkonktrakt['Ikke på avtale'] = {
+          refNr: '0',
+          postTitle: '',
+          normalizedTitle: 'Ikke på avtale',
+          products: [],
+        }
       }
 
       productsByDelkonktrakt['Ikke på avtale'].products.push(product)
@@ -144,7 +164,12 @@ const groupByDelkontrakt = (products: Product[] | undefined): ProductsDelkontrak
 
       if (delkontrakt !== null) {
         if (!productsByDelkonktrakt[delkontrakt]) {
-          productsByDelkonktrakt[delkontrakt] = { refNr: agreement.refNr!, title: normalizedTitle[1], products: [] }
+          productsByDelkonktrakt[delkontrakt] = {
+            refNr: agreement.refNr!,
+            postTitle: agreement.postTitle ?? '',
+            normalizedTitle: normalizedTitle[1],
+            products: [],
+          }
         }
 
         productsByDelkonktrakt[delkontrakt].products.push(product)

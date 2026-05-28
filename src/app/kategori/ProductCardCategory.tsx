@@ -10,15 +10,17 @@ import styles from './ProductCardCategory.module.scss'
 
 export const ProductCardCategory = ({
   product,
+  postTitle,
   handleCompareClick,
 }: {
   product: Product
+  postTitle: string
   handleCompareClick?: () => void
 }) => {
   const linkToProduct = `/produkt/${product.id}`
 
-  const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
-  const onAgreement = minRank !== Infinity
+  const rank = product.agreements && product.agreements.find((agreement) => agreement.postTitle === postTitle)?.rank
+  const onAgreement = rank !== undefined
 
   return (
     <Box padding={{ xs: 'space-8', md: 'space-16' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
@@ -26,7 +28,7 @@ export const ProductCardCategory = ({
         <VStack>
           <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
-              <SuccessTag>{minRank === 99 ? 'På avtale' : `Rangering ${minRank}`}</SuccessTag>
+              <SuccessTag>{rank === 99 ? 'På avtale' : `Rangering ${rank}`}</SuccessTag>
             ) : (
               <NeutralTag>Ikke på avtale</NeutralTag>
             )}
