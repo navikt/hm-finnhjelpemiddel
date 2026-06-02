@@ -246,14 +246,14 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
               variant="tertiary"
               onClick={() => updateVariantCursor(-spaceNrvariants)}
               icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
-              //disabled={nextBtnDisabled}
+              disabled={variantCursor === 0}
             />
             <Button
               aria-label="Vis neste"
               variant="tertiary"
               onClick={() => updateVariantCursor(spaceNrvariants)}
               icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
-              //disabled={nextBtnDisabled}
+              disabled={variantCursor >= productVariantsToShow.length - spaceNrvariants}
             />
           </HStack>
           <div className={styles.variantsTable} id="variants-table">
