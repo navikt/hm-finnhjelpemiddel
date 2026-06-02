@@ -17,7 +17,7 @@
 }
 
 .variantsTable {
-  overflow: auto;
+  //overflow: auto;
 
   @include mixins.for-size(tablet-up) {
     table {
