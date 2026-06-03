@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
-import { ChevronLeftIcon, ChevronRightIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
@@ -407,11 +407,22 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
 
   return (
     <Box className={styles.techDataGroup}>
-      <Box padding={'space-8'} width={'100%'} asChild>
-        <Button variant="tertiary" onClick={() => setShowTable((value) => !value)}>
-          <BodyShort weight={'semibold'}>{title}</BodyShort>
-        </Button>
-      </Box>
+      <Button
+        variant="tertiary"
+        data-color={'neutral'}
+        onClick={() => setShowTable((value) => !value)}
+        className={styles.expandTableButton}
+        icon={
+          showTable ? (
+            <ChevronUpIcon fontSize={'24px'} aria-hidden />
+          ) : (
+            <ChevronDownIcon fontSize={'24px'} aria-hidden />
+          )
+        }
+        iconPosition={'right'}
+      >
+        <BodyShort weight={'semibold'}>{title}</BodyShort>
+      </Button>
       {showTable && (
         <Table zebraStripes width={'100%'}>
           <Table.Body>

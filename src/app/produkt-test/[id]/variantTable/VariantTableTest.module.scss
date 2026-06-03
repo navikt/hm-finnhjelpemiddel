@@ -21,6 +21,15 @@
   border-bottom: 0;
 }
 
+.expandTableButton {
+  width: 100%;
+  padding: 8px;
+  border-bottom: 1px solid $ax-border-neutral-subtleA;
+  border-radius: 0;
+  justify-content: start;
+  color: black;
+}
+
 .variantsTable {
   @include mixins.for-size(tablet-up) {
     table {
