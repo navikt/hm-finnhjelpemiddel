@@ -1,13 +1,13 @@
 'use client'
 
 import { Product, ProductVariant } from '@/utils/product-util'
-import { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
-import { ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, CopyButton, Heading, Table, VStack } from '@navikt/ds-react'
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
@@ -15,7 +15,6 @@ import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStat
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
-import { TableDataCell, TableHeaderCell, TableRow } from '@navikt/ds-react/Table'
 
 export type SortColumns = {
   orderBy: string | null
@@ -41,11 +40,29 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
-  const [selectedColumn, setSelectedColumn] = useState<number | null>(null)
 
-  const handleColumnClick = (columnKey: number) => {
-    setSelectedColumn(columnKey)
-  }
+  const [variantCursor, setVariantCursor] = useState<number>(0)
+  const VARIANT_PAGE_MAX_SIZE = 5
+
+  const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const updateNrVariants = () => {
+      if (typeof window !== 'undefined') {
+        const innerWidth = window.innerWidth
+        const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 200), VARIANT_PAGE_MAX_SIZE))
+        setSpaceNrvariants(nrVariants)
+      }
+    }
+
+    updateNrVariants()
+
+    window.addEventListener('resize', updateNrVariants)
+  }, [])
 
   const searchTermMatchesHms = product.variants
     .flatMap((variant) => [variant.hmsArtNr?.toLocaleLowerCase()])
@@ -138,16 +155,20 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     return filters.every((filter) => filter.predicate(variant, filter.fieldName))
   })
 
-  const columnsSortedByKey = sortColumnsByRowKey(productVariantsToShow, sortColumns)
+  const productVariantsSorted = sortColumnsByRowKey(productVariantsToShow, sortColumns).slice(
+    variantCursor,
+    variantCursor + spaceNrvariants
+  )
+
   const allDataKeys =
     product.isoCategory === '18301505'
-      ? [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
-      : [...new Set(columnsSortedByKey.flatMap((variant) => Object.keys(variant.techData)))].sort()
+      ? [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
+      : [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort()
 
   const techDataRowsAll: TechDataRow[] = allDataKeys.map((key) => {
     return {
       key: key,
-      values: productVariantsToShow.map((variant) =>
+      values: productVariantsSorted.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
@@ -155,7 +176,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       isCommonField: product.variants.every(
         (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
       ),
-      unit: productVariantsToShow.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+      unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
     }
   })
 
@@ -167,21 +188,19 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
         techDataRows: keys.map((key) => {
           return {
             key: key,
-            values: productVariantsToShow.map((variant) =>
+            values: productVariantsSorted.map((variant) =>
               variant.techData[key] !== undefined ? variant.techData[key].value : '-'
             ),
             isCommonField: product.variants.every(
               (variant) =>
                 variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
             ),
-            unit: productVariantsToShow.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+            unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
           }
         }),
       }
     }
   )
-
-  console.log(groupedTechDataRows)
 
   const rankSet = new Set(product.agreements.map((agr) => agr.rank))
   const postSet = new Set(product.agreements.map((agr) => agr.postNr))
@@ -189,6 +208,14 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
   const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
+
+  const updateVariantCursor = (delta: number) => {
+    setVariantCursor((prevState) => {
+      const newValue = prevState + delta
+
+      return Math.min(productVariantsToShow.length - spaceNrvariants, Math.max(0, newValue))
+    })
+  }
 
   return (
     <Box>
@@ -202,23 +229,39 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
           />
         </VStack>
       )}
-      {productVariantsToShow.length === 0 && (
+      {productVariantsSorted.length === 0 && (
         <Alert variant="warning" className="spacing-top--small">
           Ingen av variantene passer med filteret ditt
         </Alert>
       )}
-      {productVariantsToShow.length > 0 && (
+      {productVariantsSorted.length > 0 && (
         <VStack>
           <Heading size={'medium'} level={'2'} spacing>
             Spesifikasjoner
           </Heading>
+          <HStack>
+            <Button
+              aria-label="Vis forrige"
+              variant="tertiary"
+              onClick={() => updateVariantCursor(-spaceNrvariants)}
+              icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
+              disabled={variantCursor === 0}
+            />
+            <Button
+              aria-label="Vis neste"
+              variant="tertiary"
+              onClick={() => updateVariantCursor(spaceNrvariants)}
+              icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
+              disabled={variantCursor >= productVariantsToShow.length - spaceNrvariants}
+            />
+          </HStack>
           <div className={styles.variantsTable} id="variants-table">
             <Table>
               <Table.Header>
-                <VariantStatusRowNew variants={columnsSortedByKey} />
+                <VariantStatusRowNew variants={productVariantsSorted} />
                 <Table.Row>
                   <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
-                  {columnsSortedByKey.map((variant) => (
+                  {productVariantsSorted.map((variant) => (
                     <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
                   ))}
                 </Table.Row>
@@ -227,7 +270,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 {hasHmsNumber && (
                   <Table.Row>
                     <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                    {columnsSortedByKey.map((variant, i) => (
+                    {productVariantsSorted.map((variant, i) => (
                       <Table.DataCell key={'hms-' + variant.id}>
                         {variant.hmsArtNr ? (
                           <CopyButton
@@ -249,12 +292,8 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 )}
                 <Table.Row>
                   <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                  {columnsSortedByKey.map((variant, i) => (
-                    <Table.DataCell
-                      key={'levart-' + variant.id}
-                      className={selectedColumn === i ? styles.selectedColumn : ''}
-                      onClick={() => handleColumnClick(i)}
-                    >
+                  {productVariantsSorted.map((variant, i) => (
+                    <Table.DataCell key={'levart-' + variant.id}>
                       {variant.supplierRef ? (
                         <CopyButton
                           size="small"
@@ -274,22 +313,22 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 </Table.Row>
                 {rankSet.size > 1 && (
                   <VariantRankRow
-                    variants={columnsSortedByKey}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
+                    variants={productVariantsSorted}
+                    selectedColumn={null}
+                    handleColumnClick={() => null}
                   />
                 )}
                 {postSet.size > 1 && (
                   <VariantPostRow
-                    variants={columnsSortedByKey}
-                    selectedColumn={selectedColumn}
-                    handleColumnClick={handleColumnClick}
+                    variants={productVariantsSorted}
+                    selectedColumn={null}
+                    handleColumnClick={() => null}
                   />
                 )}
                 {bestillingsordningVaries && (
                   <Table.Row>
                     <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                    {columnsSortedByKey.map((variant, i) => (
+                    {productVariantsSorted.map((variant, i) => (
                       <Table.DataCell key={'bestillingsordning-' + variant.id}>
                         {variant.bestillingsordning ? 'Ja' : 'Nei'}
                       </Table.DataCell>
@@ -299,18 +338,20 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 {digitalSoknadVaries && (
                   <Table.Row>
                     <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                    {columnsSortedByKey.map((variant, i) => (
+                    {productVariantsSorted.map((variant, i) => (
                       <Table.DataCell key={'behovsmelding-' + variant.id}>
                         {variant.digitalSoknad ? 'Ja' : 'Nei'}
                       </Table.DataCell>
                     ))}
                   </Table.Row>
                 )}
-                {groupedTechDataRows.map(({ title, techDataRows }) => (
-                  <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
-                ))}
               </Table.Body>
             </Table>
+            <VStack gap={'space-32'} paddingBlock={'space-32 space-0'}>
+              {groupedTechDataRows.map(({ title, techDataRows }) => (
+                <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
+              ))}
+            </VStack>
           </div>
         </VStack>
       )}
@@ -330,6 +371,8 @@ const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
 }
 
 const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+  const [showTable, setShowTable] = useState(true)
+
   const rowsMerged: TechDataRow[] = []
 
   const allRowKeys = new Set(techDataRows.map(({ key }) => key))
@@ -363,27 +406,41 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
   }
 
   return (
-    <>
-      <TableRow className={styles.techDataGroupHeader}>
-        <TableHeaderCell>
-          <Heading level="2" size="medium">
-            {title}
-          </Heading>
-        </TableHeaderCell>
-        {<TableDataCell colSpan={rowsMerged[0].values.length + 1}></TableDataCell>}
-      </TableRow>
-      {rowsMerged
-        .sort((a, b) => a.key.localeCompare(b.key))
-        .map(({ key, values, unit }) => {
-          return (
-            <Table.Row key={key + 'row'}>
-              <Table.HeaderCell>{key}</Table.HeaderCell>
-              {values.map((value, i) => (
-                <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
-              ))}
-            </Table.Row>
+    <Box className={styles.techDataGroup}>
+      <Button
+        variant="tertiary"
+        data-color={'neutral'}
+        onClick={() => setShowTable((value) => !value)}
+        className={styles.expandTableButton}
+        icon={
+          showTable ? (
+            <ChevronUpIcon fontSize={'24px'} aria-hidden />
+          ) : (
+            <ChevronDownIcon fontSize={'24px'} aria-hidden />
           )
-        })}
-    </>
+        }
+        iconPosition={'right'}
+      >
+        <BodyShort weight={'semibold'}>{title}</BodyShort>
+      </Button>
+      {showTable && (
+        <Table zebraStripes width={'100%'}>
+          <Table.Body>
+            {rowsMerged
+              .sort((a, b) => a.key.localeCompare(b.key))
+              .map(({ key, values, unit }) => {
+                return (
+                  <Table.Row key={key + 'row'}>
+                    <Table.HeaderCell>{key}</Table.HeaderCell>
+                    {values.map((value, i) => (
+                      <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )
+              })}
+          </Table.Body>
+        </Table>
+      )}
+    </Box>
   )
 }
