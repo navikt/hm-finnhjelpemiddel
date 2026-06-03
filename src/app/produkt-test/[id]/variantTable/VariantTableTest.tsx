@@ -15,7 +15,6 @@ import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStat
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
-import { TableDataCell, TableHeaderCell, TableRow } from '@navikt/ds-react/Table'
 
 export type SortColumns = {
   orderBy: string | null
@@ -346,11 +345,13 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                     ))}
                   </Table.Row>
                 )}
-                {groupedTechDataRows.map(({ title, techDataRows }) => (
-                  <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
-                ))}
               </Table.Body>
             </Table>
+            <VStack gap={'space-32'} paddingBlock={'space-32 space-0'}>
+              {groupedTechDataRows.map(({ title, techDataRows }) => (
+                <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
+              ))}
+            </VStack>
           </div>
         </VStack>
       )}
@@ -370,6 +371,8 @@ const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
 }
 
 const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+  const [showTable, setShowTable] = useState(true)
+
   const rowsMerged: TechDataRow[] = []
 
   const allRowKeys = new Set(techDataRows.map(({ key }) => key))
@@ -403,27 +406,30 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
   }
 
   return (
-    <>
-      <TableRow className={styles.techDataGroupHeader}>
-        <TableHeaderCell>
-          <Heading level="2" size="medium">
-            {title}
-          </Heading>
-        </TableHeaderCell>
-        {<TableDataCell colSpan={rowsMerged[0].values.length + 1}></TableDataCell>}
-      </TableRow>
-      {rowsMerged
-        .sort((a, b) => a.key.localeCompare(b.key))
-        .map(({ key, values, unit }) => {
-          return (
-            <Table.Row key={key + 'row'}>
-              <Table.HeaderCell>{key}</Table.HeaderCell>
-              {values.map((value, i) => (
-                <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
-              ))}
-            </Table.Row>
-          )
-        })}
-    </>
+    <Box className={styles.techDataGroup}>
+      <Box padding={'space-8'} width={'100%'} asChild>
+        <Button variant="tertiary" onClick={() => setShowTable((value) => !value)}>
+          <BodyShort weight={'semibold'}>{title}</BodyShort>
+        </Button>
+      </Box>
+      {showTable && (
+        <Table zebraStripes width={'100%'}>
+          <Table.Body>
+            {rowsMerged
+              .sort((a, b) => a.key.localeCompare(b.key))
+              .map(({ key, values, unit }) => {
+                return (
+                  <Table.Row key={key + 'row'}>
+                    <Table.HeaderCell>{key}</Table.HeaderCell>
+                    {values.map((value, i) => (
+                      <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                    ))}
+                  </Table.Row>
+                )
+              })}
+          </Table.Body>
+        </Table>
+      )}
+    </Box>
   )
 }
