@@ -347,7 +347,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 )}
               </Table.Body>
             </Table>
-            <VStack gap={'space-32'} paddingBlock={'space-32 space-0'}>
+            <VStack paddingBlock={'space-32 space-0'}>
               {groupedTechDataRows.map(({ title, techDataRows }) => (
                 <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
               ))}

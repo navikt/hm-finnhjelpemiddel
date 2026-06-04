@@ -21,6 +21,10 @@
   border-bottom: 0;
 }
 
+.techDataGroup + .techDataGroup {
+  border-top: none;
+}
+
 .expandTableButton {
   width: 100%;
   padding: 8px;
