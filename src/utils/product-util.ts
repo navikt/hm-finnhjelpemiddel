@@ -81,7 +81,7 @@ export interface Document {
 }
 
 export interface TechData {
-  [key: string]: { value: string; unit: string }
+  [key: string]: { value: string; unit: string; type: string }
 }
 
 interface Attributes {
@@ -463,7 +463,9 @@ const mapTechDataDict = (data: Array<TechDataResponse>): TechData => {
     {},
     ...data
       .filter((data: TechDataResponse) => data.key && data.value)
-      .map((data: TechDataResponse) => ({ [data.key]: { value: capitalize(data.value), unit: data.unit } }))
+      .map((data: TechDataResponse) => ({
+        [data.key]: { value: capitalize(data.value), unit: data.unit, type: data.type },
+      }))
   )
 }
 

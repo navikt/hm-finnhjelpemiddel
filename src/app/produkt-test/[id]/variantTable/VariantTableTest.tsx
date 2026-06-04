@@ -21,7 +21,13 @@ export type SortColumns = {
   direction: 'ascending' | 'descending'
 }
 
-export type TechDataRow = { key: string; values: string[]; isCommonField: boolean; unit: string | undefined }
+export type TechDataRow = {
+  key: string
+  values: string[]
+  isCommonField: boolean
+  unit: string | undefined
+  type: string
+}
 
 export enum FilterType {
   DROPDOWN,
@@ -177,6 +183,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
         (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
       ),
       unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+      type: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
     }
   })
 
@@ -196,6 +203,8 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                 variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
             ),
             unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+            type:
+              productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
           }
         }),
       }
@@ -388,6 +397,7 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
           key: baseKey,
           unit: techDataRow.unit,
           values: mergeMinMaksValues(techDataRow.values, maksRow.values),
+          type: techDataRow.type,
         })
       } else {
         rowsMerged.push(techDataRow)
@@ -403,6 +413,34 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
 
   if (rowsMerged.length < 1) {
     return <></>
+  }
+
+  const sortRows = (a: TechDataRow, b: TechDataRow) => {
+    const unitOrder = new Map<string, number>([
+      ['cm', 35],
+      ['mm', 34],
+      ['"', 9],
+      ['°', 8],
+      ['%', 7],
+      ['', 6],
+    ])
+
+    const typeOrder = new Map<string, number>([
+      ['N', 3],
+      ['C', 2],
+      ['L', 1],
+      ['', 0],
+    ])
+
+    if (a.type !== b.type) {
+      return (typeOrder.get(b.type) ?? 0) - (typeOrder.get(a.type) ?? 0)
+    }
+
+    if (a.unit !== b.unit) {
+      return (unitOrder.get(b.unit ?? '') ?? 0) - (unitOrder.get(a.unit ?? '') ?? 0)
+    }
+
+    return a.key.localeCompare(b.key)
   }
 
   return (
@@ -426,18 +464,16 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
       {showTable && (
         <Table zebraStripes width={'100%'}>
           <Table.Body>
-            {rowsMerged
-              .sort((a, b) => a.key.localeCompare(b.key))
-              .map(({ key, values, unit }) => {
-                return (
-                  <Table.Row key={key + 'row'}>
-                    <Table.HeaderCell>{key}</Table.HeaderCell>
-                    {values.map((value, i) => (
-                      <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )
-              })}
+            {rowsMerged.sort(sortRows).map(({ key, values, unit }) => {
+              return (
+                <Table.Row key={key + 'row'}>
+                  <Table.HeaderCell>{key}</Table.HeaderCell>
+                  {values.map((value, i) => (
+                    <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                  ))}
+                </Table.Row>
+              )
+            })}
           </Table.Body>
         </Table>
       )}

@@ -68,7 +68,12 @@ export interface Hit {
   _type: string | null
   _id: string
   _score: string
-  _source: ProductSourceResponse | AgreementsSourceResponse | AgreementLabelResponse | SupplierInfoResponse | ServiceJobSourceResponse
+  _source:
+    | ProductSourceResponse
+    | AgreementsSourceResponse
+    | AgreementLabelResponse
+    | SupplierInfoResponse
+    | ServiceJobSourceResponse
 }
 
 export interface ProductSourceResponse {
@@ -104,7 +109,6 @@ export interface ProductSourceResponse {
   agreements: AgreementInfoResponse[]
   hasAgreement: boolean
 }
-
 
 export interface ServiceJobSourceResponse {
   id: string
@@ -165,7 +169,7 @@ export interface WorksWithResponse {
 }
 
 export interface DocumentUrlResponse {
-  url: string,
+  url: string
   title: string
 }
 
@@ -173,6 +177,7 @@ export interface TechDataResponse {
   key: string
   value: string
   unit: string
+  type: string
 }
 
 export interface MediaResponse {
