@@ -57,8 +57,8 @@
     background: white;
   }
 
-  thead tr > th:first-child {
-    background-color: white;
+  th {
+    font-weight: normal;
   }
 
   tr > th:first-child,
@@ -72,15 +72,6 @@
   tr > th:nth-child(n + 1),
   tr > td {
     width: 200px;
-  }
-
-  //Need to set background to white to avoid the header to be transparent
-  tbody tr th {
-    background-color: white;
-  }
-
-  tbody th {
-    border-right: 1px solid$ax-bg-neutral-soft;
   }
 
   table thead th:first-child {
