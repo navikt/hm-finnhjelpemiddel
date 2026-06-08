@@ -26,7 +26,7 @@ export const groupTechDataKeys = (variants: ProductVariant[]): { title: string; 
       })
     })
   )
-
+  const hasBarteri = Array.from(allDataLabels.keys()).some((key) => /batteri/i.test(key))
   const målOgVekt: string[] = []
   const seteting: string[] = []
   const batteriting: string[] = []
@@ -45,6 +45,8 @@ export const groupTechDataKeys = (variants: ProductVariant[]): { title: string; 
     } else if (['cm', 'tommer', 'kg', 'gram'].includes(label.unit.toLowerCase())) {
       målOgVekt.push(key)
     } else if (/batteri/i.test(key)) {
+      batteriting.push(key)
+    } else if (hasBarteri && ['volt', 'v', 't', 'Ah'].includes(label.unit.toLowerCase())) {
       batteriting.push(key)
     } else {
       diverse.push(key)
