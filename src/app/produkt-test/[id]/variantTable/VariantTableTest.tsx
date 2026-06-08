@@ -389,7 +389,8 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
 
   techDataRows.forEach((techDataRow) => {
     if (techDataRow.key.endsWith(' min')) {
-      const baseKey = techDataRow.key.split(' min')[0]
+/*      const baseKey = techDataRow.key.split(' min')[0]*/
+      const baseKey = techDataRow.key.slice(0, -4)
       const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
 
       if (maksRow !== undefined) {
@@ -403,7 +404,8 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
       } else {
         rowsMerged.push(techDataRow)
       }
-    } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {
+/*        } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {*/
+    } else if (techDataRow.key.endsWith(' maks') && allRowKeys.has(`${techDataRow.key.slice(0, -5)} min`)) {
       //er slått sammen med min-raden
     } else if (allRowKeys.has(`${techDataRow.key} min`)) {
       //for å slippe f.eks duplikat setedybde på Arbeidsstoler med manuell seteløfter
