@@ -47,6 +47,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const searchData = mapSearchParams(searchParams)
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
 
+  const [pageState, setPageState] = useState<number>(1)
   const [variantCursor, setVariantCursor] = useState<number>(0)
   const VARIANT_PAGE_MAX_SIZE = 5
 
@@ -450,6 +451,7 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
         data-color={'neutral'}
         onClick={() => setShowTable((value) => !value)}
         className={styles.expandTableButton}
+        aria-expanded={showTable}
         icon={
           showTable ? (
             <ChevronUpIcon fontSize={'24px'} aria-hidden />
