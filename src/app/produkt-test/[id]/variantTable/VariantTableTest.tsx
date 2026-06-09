@@ -6,8 +6,8 @@ import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Table, VStack } from '@navikt/ds-react'
+import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Box, Button, CopyButton, Heading, Pagination, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
@@ -48,7 +48,6 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
 
   const [pageState, setPageState] = useState<number>(1)
-  const [variantCursor, setVariantCursor] = useState<number>(0)
   const VARIANT_PAGE_MAX_SIZE = 5
 
   const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
@@ -62,6 +61,15 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       if (typeof window !== 'undefined') {
         const innerWidth = window.innerWidth
         const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 200), VARIANT_PAGE_MAX_SIZE))
+
+        /*
+        if (nrVariants !== spaceNrvariants) {
+          console.log(nrVariants, spaceNrvariants)
+          setPageState(1)
+        }
+         */
+
+        setPageState(1)
         setSpaceNrvariants(nrVariants)
       }
     }
@@ -163,8 +171,8 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   })
 
   const productVariantsSorted = sortColumnsByRowKey(productVariantsToShow, sortColumns).slice(
-    variantCursor,
-    variantCursor + spaceNrvariants
+    (pageState - 1) * spaceNrvariants,
+    (pageState - 1) * spaceNrvariants + spaceNrvariants
   )
 
   const allDataKeys =
@@ -219,14 +227,6 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
   const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
-  const updateVariantCursor = (delta: number) => {
-    setVariantCursor((prevState) => {
-      const newValue = prevState + delta
-
-      return Math.min(productVariantsToShow.length - spaceNrvariants, Math.max(0, newValue))
-    })
-  }
-
   return (
     <Box>
       {product.variants.length > 1 && (
@@ -249,22 +249,16 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
           <Heading size={'medium'} level={'2'} spacing>
             Spesifikasjoner
           </Heading>
-          <HStack>
-            <Button
-              aria-label="Vis forrige"
-              variant="tertiary"
-              onClick={() => updateVariantCursor(-spaceNrvariants)}
-              icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
-              disabled={variantCursor === 0}
-            />
-            <Button
-              aria-label="Vis neste"
-              variant="tertiary"
-              onClick={() => updateVariantCursor(spaceNrvariants)}
-              icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
-              disabled={variantCursor >= productVariantsToShow.length - spaceNrvariants}
-            />
-          </HStack>
+
+          <Pagination
+            page={pageState}
+            onPageChange={setPageState}
+            count={Math.ceil(productVariantsToShow.length / spaceNrvariants)}
+            boundaryCount={1}
+            siblingCount={0}
+            size={'small'}
+            style={{ alignSelf: 'end' }}
+          />
           <div className={styles.variantsTable} id="variants-table">
             <Table>
               <Table.Header>
@@ -389,7 +383,7 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
 
   techDataRows.forEach((techDataRow) => {
     if (techDataRow.key.endsWith(' min')) {
-/*      const baseKey = techDataRow.key.split(' min')[0]*/
+      /*      const baseKey = techDataRow.key.split(' min')[0]*/
       const baseKey = techDataRow.key.slice(0, -4)
       const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
 
@@ -404,7 +398,7 @@ const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRow
       } else {
         rowsMerged.push(techDataRow)
       }
-/*        } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {*/
+      /*        } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {*/
     } else if (techDataRow.key.endsWith(' maks') && allRowKeys.has(`${techDataRow.key.slice(0, -5)} min`)) {
       //er slått sammen med min-raden
     } else if (allRowKeys.has(`${techDataRow.key} min`)) {
