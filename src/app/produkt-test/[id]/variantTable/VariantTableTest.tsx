@@ -47,10 +47,10 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const searchData = mapSearchParams(searchParams)
   const variantNameElementRef = useRef<HTMLTableCellElement>(null)
 
+  const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
+
   const [pageState, setPageState] = useState<number>(1)
   const VARIANT_PAGE_MAX_SIZE = 5
-
-  const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -175,6 +175,8 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     (pageState - 1) * spaceNrvariants + spaceNrvariants
   )
 
+  const currentMaxPageCount = Math.ceil(productVariantsToShow.length / spaceNrvariants)
+
   const allDataKeys =
     product.isoCategory === '18301505'
       ? [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
@@ -250,15 +252,17 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
             Spesifikasjoner
           </Heading>
 
-          <Pagination
-            page={pageState}
-            onPageChange={setPageState}
-            count={Math.ceil(productVariantsToShow.length / spaceNrvariants)}
-            boundaryCount={1}
-            siblingCount={0}
-            size={'small'}
-            style={{ alignSelf: 'end' }}
-          />
+          {currentMaxPageCount > 1 && (
+            <Pagination
+              page={pageState}
+              onPageChange={setPageState}
+              count={currentMaxPageCount}
+              boundaryCount={1}
+              siblingCount={0}
+              size={'small'}
+              style={{ alignSelf: 'end' }}
+            />
+          )}
           <div className={styles.variantsTable} id="variants-table">
             <Table>
               <Table.Header>
