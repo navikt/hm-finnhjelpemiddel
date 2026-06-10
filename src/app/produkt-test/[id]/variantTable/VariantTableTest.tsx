@@ -1,7 +1,7 @@
 'use client'
 
 import { Product, ProductVariant } from '@/utils/product-util'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
@@ -11,10 +11,10 @@ import { Alert, BodyShort, Box, Button, CopyButton, Heading, Pagination, Table, 
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
-import { VariantStatusRowNew } from '@/app/produkt/[id]/variantTable/VariantStatusRowNew'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 export type SortColumns = {
   orderBy: string | null
@@ -254,6 +254,38 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
           )}
           <div className={styles.variantsTable} id="variants-table">
             <VStack paddingBlock={'space-32 space-0'}>
+              <Table>
+                <Table.Body>
+                  <Table.Row>
+                    <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+                    {productVariantsSorted.map((variant) => (
+                      <Table.DataCell key={'artname-' + variant.id}>{variant.articleName}</Table.DataCell>
+                    ))}
+                  </Table.Row>
+
+                  <Table.Row>
+                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                    {productVariantsSorted.map((variant) => (
+                      <Table.DataCell key={'hms-' + variant.id}>
+                        {variant.hmsArtNr ? (
+                          <CopyButton
+                            size="small"
+                            className={productTop.copyButton}
+                            copyText={variant.hmsArtNr ?? ''}
+                            text={variant.hmsArtNr ?? ''}
+                            activeText="kopiert"
+                            variant="action"
+                            activeIcon={<ThumbUpIcon aria-hidden />}
+                            iconPosition="right"
+                          />
+                        ) : (
+                          <BodyShort align={'center'}>-</BodyShort>
+                        )}
+                      </Table.DataCell>
+                    ))}
+                  </Table.Row>
+                </Table.Body>
+              </Table>
               <MetaDataTable product={product} productVariants={productVariantsSorted} />
               {groupedTechDataRows.map(({ title, techDataRows }) => (
                 <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
@@ -285,113 +317,83 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
 
   const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
-  const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
+  //const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
   return (
-    <Box className={styles.techDataGroup}>
-      <Button
-        variant="tertiary"
-        data-color={'neutral'}
-        onClick={() => setShowTable((value) => !value)}
-        className={styles.expandTableButton}
-        aria-expanded={showTable}
-        icon={
-          showTable ? (
-            <ChevronUpIcon fontSize={'24px'} aria-hidden />
-          ) : (
-            <ChevronDownIcon fontSize={'24px'} aria-hidden />
-          )
-        }
-        iconPosition={'right'}
-      >
-        <BodyShort weight={'semibold'}>{'Egenskaper'}</BodyShort>
-      </Button>
-      {showTable && (
-        <Table zebraStripes>
-          <Table.Header>
-            <VariantStatusRowNew variants={productVariants} />
-            <Table.Row>
-              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
-              {productVariants.map((variant) => (
-                <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
-              ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {hasHmsNumber && (
+    <VStack>
+      <Box className={styles.techDataGroup}>
+        <Button
+          variant="tertiary"
+          data-color={'neutral'}
+          onClick={() => setShowTable((value) => !value)}
+          className={styles.expandTableButton}
+          aria-expanded={showTable}
+          icon={
+            showTable ? (
+              <ChevronUpIcon fontSize={'24px'} aria-hidden />
+            ) : (
+              <ChevronDownIcon fontSize={'24px'} aria-hidden />
+            )
+          }
+          iconPosition={'right'}
+        >
+          <BodyShort weight={'semibold'}>{'Egenskaper'}</BodyShort>
+        </Button>
+        {showTable && (
+          <Table zebraStripes>
+            <Table.Body>
               <Table.Row>
-                <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                {productVariants.map((variant) => (
-                  <Table.DataCell key={'hms-' + variant.id}>
-                    {variant.hmsArtNr ? (
-                      <CopyButton
-                        size="small"
-                        className={productTop.copyButton}
-                        copyText={variant.hmsArtNr ?? ''}
-                        text={variant.hmsArtNr ?? ''}
-                        activeText="kopiert"
-                        variant="action"
-                        activeIcon={<ThumbUpIcon aria-hidden />}
-                        iconPosition="right"
-                      />
+                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+                {productVariants.map((variant, i) => (
+                  <Table.DataCell key={'levart-' + variant.id}>{variant.supplierRef ?? '-'}</Table.DataCell>
+                ))}
+              </Table.Row>
+              <Table.Row>
+                <Table.HeaderCell>På avtale</Table.HeaderCell>
+                {productVariants.map((variant, i) => (
+                  <Table.DataCell key={'på avtale-' + variant.id}>
+                    {variant.status === 'INACTIVE' ? (
+                      <NeutralTag>Utgått</NeutralTag>
+                    ) : variant.hasAgreement ? (
+                      <SuccessTag>På avtale</SuccessTag>
                     ) : (
-                      <BodyShort align={'center'}>-</BodyShort>
+                      <NeutralTag>Ikke på avtale</NeutralTag>
                     )}
                   </Table.DataCell>
                 ))}
               </Table.Row>
-            )}
-            <Table.Row>
-              <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-              {productVariants.map((variant, i) => (
-                <Table.DataCell key={'levart-' + variant.id}>
-                  {variant.supplierRef ? (
-                    <CopyButton
-                      size="small"
-                      className={productTop.copyButton}
-                      copyText={variant.supplierRef}
-                      text={variant.supplierRef}
-                      activeText="kopiert"
-                      variant="action"
-                      activeIcon={<ThumbUpIcon aria-hidden />}
-                      iconPosition="right"
-                    />
-                  ) : (
-                    <BodyShort align={'center'}>-</BodyShort>
-                  )}
-                </Table.DataCell>
-              ))}
-            </Table.Row>
-            {rankSet.size > 1 && (
-              <VariantRankRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
-            )}
-            {postSet.size > 1 && (
-              <VariantPostRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
-            )}
-            {bestillingsordningVaries && (
-              <Table.Row>
-                <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                {productVariants.map((variant, i) => (
-                  <Table.DataCell key={'bestillingsordning-' + variant.id}>
-                    {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
-            )}
-            {digitalSoknadVaries && (
-              <Table.Row>
-                <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                {productVariants.map((variant, i) => (
-                  <Table.DataCell key={'behovsmelding-' + variant.id}>
-                    {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                  </Table.DataCell>
-                ))}
-              </Table.Row>
-            )}
-          </Table.Body>
-        </Table>
-      )}
-    </Box>
+
+              {rankSet.size > 1 && (
+                <VariantRankRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
+              )}
+              {postSet.size > 1 && (
+                <VariantPostRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
+              )}
+              {bestillingsordningVaries && (
+                <Table.Row>
+                  <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+                  {productVariants.map((variant, i) => (
+                    <Table.DataCell key={'bestillingsordning-' + variant.id}>
+                      {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
+              {digitalSoknadVaries && (
+                <Table.Row>
+                  <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                  {productVariants.map((variant, i) => (
+                    <Table.DataCell key={'behovsmelding-' + variant.id}>
+                      {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
+            </Table.Body>
+          </Table>
+        )}
+      </Box>
+    </VStack>
   )
 }
 

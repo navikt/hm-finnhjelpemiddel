@@ -18,12 +18,15 @@
 
 .techDataGroup {
   border: 1px solid $ax-border-neutral-subtleA;
-  border-bottom: 0;
+  border-bottom: none;
+  border-top: none;
 }
 
+/*
 .techDataGroup + .techDataGroup {
   border-top: none;
 }
+ */
 
 .expandTableButton {
   width: 100%;
