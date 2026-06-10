@@ -241,51 +241,53 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
             Spesifikasjoner
           </Heading>
 
-          {currentMaxPageCount > 1 && (
-            <Pagination
-              page={pageState}
-              onPageChange={setPageState}
-              count={currentMaxPageCount}
-              boundaryCount={1}
-              siblingCount={0}
-              size={'small'}
-              style={{ alignSelf: 'end' }}
-            />
-          )}
           <div className={styles.variantsTable} id="variants-table">
             <VStack>
-              <Table className={styles.stickyTable}>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.HeaderCell>Navn på variant</Table.HeaderCell>
-                    {productVariantsSorted.map((variant) => (
-                      <Table.DataCell key={'artname-' + variant.id}>{variant.articleName}</Table.DataCell>
-                    ))}
-                  </Table.Row>
+              <VStack className={styles.stickyTable} paddingBlock={'space-4 space-0'}>
+                {currentMaxPageCount > 1 && (
+                  <Pagination
+                    page={pageState}
+                    onPageChange={setPageState}
+                    count={currentMaxPageCount}
+                    boundaryCount={1}
+                    siblingCount={0}
+                    size={'small'}
+                    style={{ alignSelf: 'end' }}
+                  />
+                )}
+                <Table>
+                  <Table.Body>
+                    <Table.Row>
+                      <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+                      {productVariantsSorted.map((variant) => (
+                        <Table.DataCell key={'artname-' + variant.id}>{variant.articleName}</Table.DataCell>
+                      ))}
+                    </Table.Row>
 
-                  <Table.Row>
-                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                    {productVariantsSorted.map((variant) => (
-                      <Table.DataCell key={'hms-' + variant.id}>
-                        {variant.hmsArtNr ? (
-                          <CopyButton
-                            size="small"
-                            className={productTop.copyButton}
-                            copyText={variant.hmsArtNr ?? ''}
-                            text={variant.hmsArtNr ?? ''}
-                            activeText="kopiert"
-                            variant="action"
-                            activeIcon={<ThumbUpIcon aria-hidden />}
-                            iconPosition="right"
-                          />
-                        ) : (
-                          <BodyShort align={'center'}>-</BodyShort>
-                        )}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                </Table.Body>
-              </Table>
+                    <Table.Row>
+                      <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                      {productVariantsSorted.map((variant) => (
+                        <Table.DataCell key={'hms-' + variant.id}>
+                          {variant.hmsArtNr ? (
+                            <CopyButton
+                              size="small"
+                              className={productTop.copyButton}
+                              copyText={variant.hmsArtNr ?? ''}
+                              text={variant.hmsArtNr ?? ''}
+                              activeText="kopiert"
+                              variant="action"
+                              activeIcon={<ThumbUpIcon aria-hidden />}
+                              iconPosition="right"
+                            />
+                          ) : (
+                            <BodyShort align={'center'}>-</BodyShort>
+                          )}
+                        </Table.DataCell>
+                      ))}
+                    </Table.Row>
+                  </Table.Body>
+                </Table>
+              </VStack>
               <MetaDataTable product={product} productVariants={productVariantsSorted} />
               {groupedTechDataRows.map(({ title, techDataRows }) => (
                 <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
