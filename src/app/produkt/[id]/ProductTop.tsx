@@ -13,6 +13,10 @@ import { NeutralTag, SuccessTag } from '@/components/Tags'
 import useSWR from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
+import React, { useState } from 'react'
+import CompareMenu from '@/components/layout/CompareMenu'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -52,6 +56,7 @@ const ProductSummary = ({ product, hmsartnr }: { product: Product; hmsartnr?: st
         accessory={product.accessory}
         sparePart={product.sparePart}
         isExpired={isExpiredRefined}
+        product={product}
       />
       <Link href={`/leverandorer#${product.supplierId}`} className={styles.supplierLink}>
         {product.supplierName}
@@ -98,12 +103,17 @@ const TagRow = ({
   accessory,
   sparePart,
   isExpired,
+  product,
 }: {
   productAgreements: AgreementInfo[] | undefined
   accessory: boolean | undefined
   sparePart: boolean | undefined
   isExpired: boolean
+  product: Product
 }) => {
+  const { setCompareMenuState } = useHydratedCompareStore()
+  const [firstCompareClick, setFirstCompareClick] = useState(true)
+
   const topRank =
     productAgreements &&
     productAgreements?.length > 0 &&
@@ -122,6 +132,13 @@ const TagRow = ({
       </>
     )
   }
+  const handleCompareClick = () => {
+    if (firstCompareClick) {
+      setCompareMenuState(CompareMenuState.Open)
+    }
+    setFirstCompareClick(false)
+  }
+
   return (
     <HStack justify={'start'} gap={'space-12'}>
       {accessory || sparePart ? (
@@ -159,6 +176,8 @@ const TagRow = ({
         !isExpired && <NeutralTag>Ikke på avtale</NeutralTag>
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
+      <CompareButton product={product} handleCompareClick={handleCompareClick} />
+      <CompareMenu />
     </HStack>
   )
 }
