@@ -45,7 +45,6 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   const sortColumns: SortColumns = { orderBy: 'Expired', direction: 'ascending' }
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
-  const variantNameElementRef = useRef<HTMLTableCellElement>(null)
 
   const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
 
@@ -62,15 +61,12 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
         const innerWidth = window.innerWidth
         const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 200), VARIANT_PAGE_MAX_SIZE))
 
-        /*
-        if (nrVariants !== spaceNrvariants) {
-          console.log(nrVariants, spaceNrvariants)
-          setPageState(1)
-        }
-         */
-
-        setPageState(1)
-        setSpaceNrvariants(nrVariants)
+        setSpaceNrvariants((prevState) => {
+          if (prevState !== nrVariants) {
+            setPageState(1)
+          }
+          return nrVariants
+        })
       }
     }
 
@@ -222,13 +218,6 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     }
   )
 
-  const rankSet = new Set(product.agreements.map((agr) => agr.rank))
-  const postSet = new Set(product.agreements.map((agr) => agr.postNr))
-
-  const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
-  const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
-  const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
-
   return (
     <Box>
       {product.variants.length > 1 && (
@@ -264,100 +253,10 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
             />
           )}
           <div className={styles.variantsTable} id="variants-table">
-            <Table>
-              <Table.Header>
-                <VariantStatusRowNew variants={productVariantsSorted} />
-                <Table.Row>
-                  <Table.ColumnHeader ref={variantNameElementRef}>Navn på variant</Table.ColumnHeader>
-                  {productVariantsSorted.map((variant) => (
-                    <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
-                  ))}
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {hasHmsNumber && (
-                  <Table.Row>
-                    <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                    {productVariantsSorted.map((variant, i) => (
-                      <Table.DataCell key={'hms-' + variant.id}>
-                        {variant.hmsArtNr ? (
-                          <CopyButton
-                            size="small"
-                            className={productTop.copyButton}
-                            copyText={variant.hmsArtNr ?? ''}
-                            text={variant.hmsArtNr ?? ''}
-                            activeText="kopiert"
-                            variant="action"
-                            activeIcon={<ThumbUpIcon aria-hidden />}
-                            iconPosition="right"
-                          />
-                        ) : (
-                          <BodyShort align={'center'}>-</BodyShort>
-                        )}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )}
-                <Table.Row>
-                  <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                  {productVariantsSorted.map((variant, i) => (
-                    <Table.DataCell key={'levart-' + variant.id}>
-                      {variant.supplierRef ? (
-                        <CopyButton
-                          size="small"
-                          className={productTop.copyButton}
-                          copyText={variant.supplierRef}
-                          text={variant.supplierRef}
-                          activeText="kopiert"
-                          variant="action"
-                          activeIcon={<ThumbUpIcon aria-hidden />}
-                          iconPosition="right"
-                        />
-                      ) : (
-                        <BodyShort align={'center'}>-</BodyShort>
-                      )}
-                    </Table.DataCell>
-                  ))}
-                </Table.Row>
-                {rankSet.size > 1 && (
-                  <VariantRankRow
-                    variants={productVariantsSorted}
-                    selectedColumn={null}
-                    handleColumnClick={() => null}
-                  />
-                )}
-                {postSet.size > 1 && (
-                  <VariantPostRow
-                    variants={productVariantsSorted}
-                    selectedColumn={null}
-                    handleColumnClick={() => null}
-                  />
-                )}
-                {bestillingsordningVaries && (
-                  <Table.Row>
-                    <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                    {productVariantsSorted.map((variant, i) => (
-                      <Table.DataCell key={'bestillingsordning-' + variant.id}>
-                        {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )}
-                {digitalSoknadVaries && (
-                  <Table.Row>
-                    <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                    {productVariantsSorted.map((variant, i) => (
-                      <Table.DataCell key={'behovsmelding-' + variant.id}>
-                        {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                      </Table.DataCell>
-                    ))}
-                  </Table.Row>
-                )}
-              </Table.Body>
-            </Table>
             <VStack paddingBlock={'space-32 space-0'}>
+              <MetaDataTable product={product} productVariants={productVariantsSorted} />
               {groupedTechDataRows.map(({ title, techDataRows }) => (
-                <TechDataGroupRows title={title} techDataRows={techDataRows} key={title} />
+                <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
               ))}
             </VStack>
           </div>
@@ -378,7 +277,125 @@ const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
   })
 }
 
-const TechDataGroupRows = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+const MetaDataTable = ({ product, productVariants }: { product: Product; productVariants: ProductVariant[] }) => {
+  const [showTable, setShowTable] = useState(true)
+
+  const rankSet = new Set(product.agreements.map((agr) => agr.rank))
+  const postSet = new Set(product.agreements.map((agr) => agr.postNr))
+
+  const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
+  const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
+  const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
+
+  return (
+    <Box className={styles.techDataGroup}>
+      <Button
+        variant="tertiary"
+        data-color={'neutral'}
+        onClick={() => setShowTable((value) => !value)}
+        className={styles.expandTableButton}
+        aria-expanded={showTable}
+        icon={
+          showTable ? (
+            <ChevronUpIcon fontSize={'24px'} aria-hidden />
+          ) : (
+            <ChevronDownIcon fontSize={'24px'} aria-hidden />
+          )
+        }
+        iconPosition={'right'}
+      >
+        <BodyShort weight={'semibold'}>{'Egenskaper'}</BodyShort>
+      </Button>
+      {showTable && (
+        <Table zebraStripes>
+          <Table.Header>
+            <VariantStatusRowNew variants={productVariants} />
+            <Table.Row>
+              <Table.ColumnHeader>Navn på variant</Table.ColumnHeader>
+              {productVariants.map((variant) => (
+                <Table.ColumnHeader key={'artname-' + variant.id}>{variant.articleName}</Table.ColumnHeader>
+              ))}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {hasHmsNumber && (
+              <Table.Row>
+                <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                {productVariants.map((variant) => (
+                  <Table.DataCell key={'hms-' + variant.id}>
+                    {variant.hmsArtNr ? (
+                      <CopyButton
+                        size="small"
+                        className={productTop.copyButton}
+                        copyText={variant.hmsArtNr ?? ''}
+                        text={variant.hmsArtNr ?? ''}
+                        activeText="kopiert"
+                        variant="action"
+                        activeIcon={<ThumbUpIcon aria-hidden />}
+                        iconPosition="right"
+                      />
+                    ) : (
+                      <BodyShort align={'center'}>-</BodyShort>
+                    )}
+                  </Table.DataCell>
+                ))}
+              </Table.Row>
+            )}
+            <Table.Row>
+              <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+              {productVariants.map((variant, i) => (
+                <Table.DataCell key={'levart-' + variant.id}>
+                  {variant.supplierRef ? (
+                    <CopyButton
+                      size="small"
+                      className={productTop.copyButton}
+                      copyText={variant.supplierRef}
+                      text={variant.supplierRef}
+                      activeText="kopiert"
+                      variant="action"
+                      activeIcon={<ThumbUpIcon aria-hidden />}
+                      iconPosition="right"
+                    />
+                  ) : (
+                    <BodyShort align={'center'}>-</BodyShort>
+                  )}
+                </Table.DataCell>
+              ))}
+            </Table.Row>
+            {rankSet.size > 1 && (
+              <VariantRankRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
+            )}
+            {postSet.size > 1 && (
+              <VariantPostRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
+            )}
+            {bestillingsordningVaries && (
+              <Table.Row>
+                <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
+                {productVariants.map((variant, i) => (
+                  <Table.DataCell key={'bestillingsordning-' + variant.id}>
+                    {variant.bestillingsordning ? 'Ja' : 'Nei'}
+                  </Table.DataCell>
+                ))}
+              </Table.Row>
+            )}
+            {digitalSoknadVaries && (
+              <Table.Row>
+                <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
+                {productVariants.map((variant, i) => (
+                  <Table.DataCell key={'behovsmelding-' + variant.id}>
+                    {variant.digitalSoknad ? 'Ja' : 'Nei'}
+                  </Table.DataCell>
+                ))}
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table>
+      )}
+    </Box>
+  )
+}
+
+const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
   const [showTable, setShowTable] = useState(true)
 
   const rowsMerged: TechDataRow[] = []
