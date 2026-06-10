@@ -45,12 +45,7 @@
 }
 
 .variantsTable {
-  table,
-  thead,
-  tbody,
-  tr {
-    width: 100%;
-  }
+  width: fit-content;
 
   table {
     border-collapse: separate;
