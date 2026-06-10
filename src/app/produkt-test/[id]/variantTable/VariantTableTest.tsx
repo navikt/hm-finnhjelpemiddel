@@ -253,8 +253,8 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
             />
           )}
           <div className={styles.variantsTable} id="variants-table">
-            <VStack paddingBlock={'space-32 space-0'}>
-              <Table>
+            <VStack>
+              <Table className={styles.stickyTable}>
                 <Table.Body>
                   <Table.Row>
                     <Table.HeaderCell>Navn på variant</Table.HeaderCell>
@@ -343,12 +343,6 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
           <Table zebraStripes>
             <Table.Body>
               <Table.Row>
-                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                {productVariants.map((variant, i) => (
-                  <Table.DataCell key={'levart-' + variant.id}>{variant.supplierRef ?? '-'}</Table.DataCell>
-                ))}
-              </Table.Row>
-              <Table.Row>
                 <Table.HeaderCell>På avtale</Table.HeaderCell>
                 {productVariants.map((variant, i) => (
                   <Table.DataCell key={'på avtale-' + variant.id}>
@@ -369,6 +363,12 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
               {postSet.size > 1 && (
                 <VariantPostRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
               )}
+              <Table.Row>
+                <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
+                {productVariants.map((variant, i) => (
+                  <Table.DataCell key={'levart-' + variant.id}>{variant.supplierRef ?? '-'}</Table.DataCell>
+                ))}
+              </Table.Row>
               {bestillingsordningVaries && (
                 <Table.Row>
                   <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
