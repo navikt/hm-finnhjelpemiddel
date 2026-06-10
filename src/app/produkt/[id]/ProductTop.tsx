@@ -177,7 +177,9 @@ const TagRow = ({
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
       <CompareButton product={product} handleCompareClick={handleCompareClick} />
-      <CompareMenu />
+      <span className={styles.compareMenuWrapper}>
+        <CompareMenu />
+      </span>
     </HStack>
   )
 }
