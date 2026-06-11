@@ -7,7 +7,7 @@ import { mapSearchParams } from '@/utils/mapSearchParams'
 import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, CopyButton, Heading, Pagination, Table, VStack } from '@navikt/ds-react'
+import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Pagination, Table, VStack } from '@navikt/ds-react'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
@@ -330,18 +330,13 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
           onClick={() => setShowTable((value) => !value)}
           className={styles.expandTableButton}
           aria-expanded={showTable}
-          icon={
-            showTable ? (
-              <ChevronUpIcon fontSize={'24px'} aria-hidden />
-            ) : (
-              <ChevronDownIcon fontSize={'24px'} aria-hidden />
-            )
-          }
-          iconPosition={'right'}
         >
-          <Heading size={'medium'} style={{ fontSize: '24px' }}>
-            {'Egenskaper'}
-          </Heading>
+          <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
+            <Heading size={'medium'} style={{ fontSize: '24px' }}>
+              {'Egenskaper'}
+            </Heading>
+            {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+          </HStack>
         </Button>
         {showTable && (
           <Table zebraStripes>
@@ -475,18 +470,13 @@ const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRo
         onClick={() => setShowTable((value) => !value)}
         className={styles.expandTableButton}
         aria-expanded={showTable}
-        icon={
-          showTable ? (
-            <ChevronUpIcon fontSize={'24px'} aria-hidden />
-          ) : (
-            <ChevronDownIcon fontSize={'24px'} aria-hidden />
-          )
-        }
-        iconPosition={'right'}
       >
-        <Heading size={'medium'} style={{ fontSize: '24px' }}>
-          {title}
-        </Heading>
+        <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
+          <Heading size={'medium'} style={{ fontSize: '24px' }}>
+            {title}
+          </Heading>
+          {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+        </HStack>
       </Button>
       {showTable && (
         <Table zebraStripes width={'100%'}>

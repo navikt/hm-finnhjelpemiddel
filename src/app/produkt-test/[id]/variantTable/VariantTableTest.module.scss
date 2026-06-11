@@ -42,6 +42,13 @@
   border-radius: 0;
   justify-content: start;
   color: black;
+  span {
+    width: 100%;
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .variantsTable {
