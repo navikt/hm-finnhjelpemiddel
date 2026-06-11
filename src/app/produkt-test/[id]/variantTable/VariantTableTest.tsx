@@ -339,7 +339,9 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
           }
           iconPosition={'right'}
         >
-          <BodyShort weight={'semibold'}>{'Egenskaper'}</BodyShort>
+          <Heading size={'medium'} style={{ fontSize: '24px' }}>
+            {'Egenskaper'}
+          </Heading>
         </Button>
         {showTable && (
           <Table zebraStripes>
@@ -482,7 +484,9 @@ const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRo
         }
         iconPosition={'right'}
       >
-        <BodyShort weight={'semibold'}>{title}</BodyShort>
+        <Heading size={'medium'} style={{ fontSize: '24px' }}>
+          {title}
+        </Heading>
       </Button>
       {showTable && (
         <Table zebraStripes width={'100%'}>
