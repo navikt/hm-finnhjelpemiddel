@@ -53,7 +53,7 @@ type BestillingsordningBehovsmeldingProps = {
   helpText: string
   sett: Set<boolean | boolean>
 }
-const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: BestillingsordningBehovsmeldingProps) => {
+export const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: BestillingsordningBehovsmeldingProps) => {
   const bestillingsordning =
     sett.size > 1 ? (
       <div>
@@ -85,7 +85,7 @@ type ISOCategoryProps = {
   isoCategoryTitle: string
   isoCategoryTitleInternational: string
 }
-const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInternational }: ISOCategoryProps) => {
+export const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInternational }: ISOCategoryProps) => {
   return (
     <div>
       <Heading size={'xsmall'} level={'4'}>
