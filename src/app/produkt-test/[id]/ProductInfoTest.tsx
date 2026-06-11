@@ -11,6 +11,7 @@ import { usePathname } from 'next/navigation'
 import { QRCodeCanvas } from 'qrcode.react'
 import { Videos } from '@/app/produkt/[id]/Videos'
 import { Documents } from '@/app/produkt/[id]/Documents'
+import styles from './ProductInfo.module.scss'
 
 export const ProductInfoTest = ({ product }: { product: Product }) => {
   return (
@@ -30,17 +31,17 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
         <Tabs defaultValue={'info'}>
           <Tabs.List>
             <Tabs.Tab value={'info'} label={'Informasjon'} />
-            <Tabs.Tab value={'video'} label={'Videoer'} />
             <Tabs.Tab value={'docs'} label={'Dokumenter'} />
+            <Tabs.Tab value={'video'} label={'Videoer'} />
           </Tabs.List>
-          <Tabs.Panel value={'info'}>
+          <Tabs.Panel value={'info'} className={styles.tabPanel}>
             <InfoTab product={product} />
           </Tabs.Panel>
-          <Tabs.Panel value={'video'}>
-            <Videos videos={product.videos} />
-          </Tabs.Panel>
-          <Tabs.Panel value={'docs'}>
+          <Tabs.Panel value={'docs'} className={styles.tabPanel}>
             <Documents documents={product.documents} documentUrls={product.attributes.documentUrls ?? []} />
+          </Tabs.Panel>
+          <Tabs.Panel value={'video'} className={styles.tabPanel}>
+            <Videos videos={product.videos} />
           </Tabs.Panel>
         </Tabs>
       </VStack>
@@ -162,37 +163,37 @@ const TagRow = ({
   return (
     <HGrid columns={2} gap={'space-12'} height={'fit-content'}>
       {accessoryOrSparePart ? (
-        <Tag variant={'info'} size={'xsmall'}>
+        <Tag variant={'success'} size={'xsmall'}>
           {accessory ? 'Tilbehør' : 'Reservedel'}
         </Tag>
       ) : topRank ? (
         topRank === 99 ? (
-          <Tag variant={'info'} size={'xsmall'}>
+          <Tag variant={'success'} size={'xsmall'}>
             På avtale
           </Tag>
         ) : productAgreements.length == 1 ? (
           <>
-            <Tag variant={'info'} size={'xsmall'}>
+            <Tag variant={'success'} size={'xsmall'}>
               Delkontrakt {productAgreements[0].refNr}
             </Tag>
-            <Tag variant={'info'} size={'xsmall'}>
+            <Tag variant={'success'} size={'xsmall'}>
               Rangering {productAgreements[0].rank}
             </Tag>
           </>
         ) : (
           <>
-            <Tag variant={'info'} size={'xsmall'}>
+            <Tag variant={'success'} size={'xsmall'}>
               Flere delkontrakter og rangeringer
             </Tag>
             <HelpText placement="right">{helpTextTopLabels()}</HelpText>
           </>
         )
       ) : isExpired ? (
-        <Tag variant={'info'} size={'xsmall'}>
+        <Tag variant={'success'} size={'xsmall'}>
           Utgått
         </Tag>
       ) : (
-        <Tag variant={'info'} size={'xsmall'}>
+        <Tag variant={'success'} size={'xsmall'}>
           Ikke på avtale
         </Tag>
       )}
