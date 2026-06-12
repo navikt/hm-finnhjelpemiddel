@@ -397,7 +397,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
 }
 
 const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
-  const [showTable, setShowTable] = useState(true)
+  const [showTable, setShowTable] = useState(false)
 
   const rowsMerged: TechDataRow[] = []
 
