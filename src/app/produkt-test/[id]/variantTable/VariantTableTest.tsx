@@ -332,8 +332,8 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
           aria-expanded={showTable}
         >
           <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
-            <Heading size={'medium'} style={{ fontSize: '24px' }}>
-              {'Egenskaper'}
+            <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
+              {'Avtaleinfo'}
             </Heading>
             {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
           </HStack>
@@ -472,7 +472,7 @@ const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRo
         aria-expanded={showTable}
       >
         <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
-          <Heading size={'medium'} style={{ fontSize: '24px' }}>
+          <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
             {title}
           </Heading>
           {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
