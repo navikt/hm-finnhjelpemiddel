@@ -12,8 +12,11 @@ import { QRCodeCanvas } from 'qrcode.react'
 import { Videos } from '@/app/produkt/[id]/Videos'
 import { Documents } from '@/app/produkt/[id]/Documents'
 import styles from './ProductInfo.module.scss'
+import { WorksWith } from '@/app/produkt/[id]/WorksWith'
 
 export const ProductInfoTest = ({ product }: { product: Product }) => {
+  const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
+
   return (
     <HGrid columns={{ xs: 1, md: 2 }} gap={'space-8'}>
       {product.photos && <ImageCarousel images={product.photos} />}
@@ -33,6 +36,7 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
             <Tabs.Tab value={'info'} label={'Informasjon'} />
             <Tabs.Tab value={'docs'} label={'Dokumenter'} />
             <Tabs.Tab value={'video'} label={'Videoer'} />
+            {worksWithSeriesIds && <Tabs.Tab value={'works'} label={'Virker sammen med'} />}
           </Tabs.List>
           <Tabs.Panel value={'info'} className={styles.tabPanel}>
             <InfoTab product={product} />
@@ -43,6 +47,11 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
           <Tabs.Panel value={'video'} className={styles.tabPanel}>
             <Videos videos={product.videos} />
           </Tabs.Panel>
+          {worksWithSeriesIds && (
+            <Tabs.Panel value={'works'} className={styles.tabPanel}>
+              <WorksWith worksWithSeriesIds={worksWithSeriesIds} />
+            </Tabs.Panel>
+          )}
         </Tabs>
       </VStack>
     </HGrid>
