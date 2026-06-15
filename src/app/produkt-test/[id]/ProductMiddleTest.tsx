@@ -1,9 +1,8 @@
 'use client'
 
-import { Heading, HGrid, Link, VStack } from '@navikt/ds-react'
-import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
+import { HGrid, VStack } from '@navikt/ds-react'
+import { Product, ProductVariant } from '@/utils/product-util'
 import { ProductInformation } from '@/app/produkt/[id]/ProductInformation'
-import NextLink from 'next/link'
 import styles from './ProductMiddleTest.module.scss'
 
 import { useMemo } from 'react'
@@ -90,39 +89,9 @@ const ProductMiddleTest = ({ product }: { product: Product }) => {
         <ProductInformation product={product} />
       </div>
       <VStack gap={'space-24'} style={{ gridArea: 'box2' }}>
-        {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
-
         {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
       </VStack>
     </HGrid>
-  )
-}
-
-const showOtherProductsOnAgreement = ({ agreement, index }: { agreement: AgreementInfo; index: number }) => {
-  return (
-    <VStack gap={'space-8'} paddingBlock={'space-8 space-16'} key={index}>
-      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
-        {agreement.postTitle}
-      </Link>
-    </VStack>
-  )
-}
-
-const OtherProductsOnPost = ({ agreements }: { agreements: AgreementInfo[] }) => {
-  const sortedAgreements = [...agreements].sort((a, b) => {
-    return b.postNr !== a.postNr ? a.postNr - b.postNr : !a.refNr ? -1 : !b.refNr ? 1 : b.refNr.localeCompare(a.refNr)
-  })
-
-  return (
-    <VStack gap={'space-8'} paddingInline={'space-8 space-0'}>
-      <Heading size={'medium'} level={'2'}>
-        Andre hjelpemidler på delkontrakt:
-      </Heading>
-      {sortedAgreements.length > 0 &&
-        sortedAgreements.map((agreement, index) => {
-          return showOtherProductsOnAgreement({ agreement: agreement, index })
-        })}
-    </VStack>
   )
 }
 

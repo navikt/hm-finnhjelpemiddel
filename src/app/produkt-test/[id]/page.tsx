@@ -5,6 +5,9 @@ import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 import { VariantTableTest } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
 import { ProductInfoTest } from '@/app/produkt-test/[id]/ProductInfoTest'
+import { VStack } from '@navikt/ds-react'
+
+import { OtherProductsOnPost } from '@/app/produkt-test/[id]/OtherProductsOnPost'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -35,6 +38,9 @@ export default async function ProduktPage(props: Props) {
     <ProductPageLayout>
       <ProductInfoTest product={product} />
       {<VariantTableTest product={product} />}
+      <VStack gap={'space-24'} style={{ gridArea: 'box2' }}>
+        {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
+      </VStack>
     </ProductPageLayout>
   )
 }
