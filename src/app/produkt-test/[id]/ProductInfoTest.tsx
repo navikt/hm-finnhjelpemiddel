@@ -32,7 +32,7 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
         </Link>
 
         <Tabs defaultValue={'info'}>
-          <Tabs.List>
+          <Tabs.List style={{ whiteSpace: 'nowrap' }}>
             <Tabs.Tab value={'info'} label={'Informasjon'} />
             <Tabs.Tab value={'docs'} label={'Dokumenter'} />
             <Tabs.Tab value={'video'} label={'Videoer'} />
@@ -72,7 +72,7 @@ const InfoTab = ({ product }: { product: Product }) => {
 
   return (
     <VStack gap={'space-8'}>
-      <HStack gap={'space-20'} justify={'space-between'}>
+      <HStack gap={'space-20'} justify={'space-between'} style={{ flexWrap: 'wrap-reverse' }} align={'start'}>
         <div>
           <BestillingsordningBehovsmelding
             heading={'Bestillingsordning'}
