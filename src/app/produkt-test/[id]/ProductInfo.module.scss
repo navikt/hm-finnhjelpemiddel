@@ -1,3 +1,8 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
 .tabPanel {
-  padding-top: 24px;
+
+  margin-top:24px;
+  border-left: 2px solid var(--ax-border-neutral-subtleA);
+  padding-left: 32px;
 }

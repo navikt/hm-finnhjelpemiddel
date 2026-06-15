@@ -1,12 +1,12 @@
 'use client'
 
 import { AgreementInfo, Product } from '@/utils/product-util'
-import { BodyLong, Button, Heading, HelpText, HGrid, HStack, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
+import { Button, Heading, HelpText, HGrid, HStack, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
 import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
 import NextLink from 'next/link'
-import { LinkIcon } from '@navikt/aksel-icons'
+import { Density2Icon, FolderFileIcon, LinkIcon } from '@navikt/aksel-icons'
 import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { QRCodeCanvas } from 'qrcode.react'
 import { Videos } from '@/app/produkt/[id]/Videos'
@@ -72,7 +72,7 @@ const InfoTab = ({ product }: { product: Product }) => {
 
   return (
     <VStack gap={'space-8'}>
-      <HStack gap={'space-20'}>
+      <HStack gap={'space-20'} justify={'space-between'}>
         <div>
           <BestillingsordningBehovsmelding
             heading={'Bestillingsordning'}
@@ -147,20 +147,24 @@ const TagRow = ({
   sparePart: boolean | undefined
   isExpired: boolean
 }) => {
-  const helpTextTopLabels = () => {
-    return (
-      <>
-        <Heading size="small">Flere delkontrakter og (flere) rangeringer</Heading>
-        <BodyLong>
-          Hjelpemiddelet er på avtale med Nav. Det er på flere delkontrakter og har flere rangeringer.
-          <br />
-          <br />
-          For mer info se gjeldende delkontrakt/er som er listet opp her på siden under tittel: &ldquo;Andre
-          hjelpemidler på delkontrakt&rdquo;.
-        </BodyLong>
-      </>
-    )
-  }
+  const helpHvaEr = (
+    <>
+      Alle hjelpemidlene på FinnHjelpemiddel som er på avtale er markert med «På avtale». I tillegg er de markert med
+      «Delkontrakt» og «Rangering». I mange tilfeller er det nyttig å samarbeide med en fagperson i kommunen for å komme
+      frem til det til det mest hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
+      <ul>
+        <li>
+          Delkontrakt: Avtalene inndeles i delkontrakter ut ifra hjelpemidlenes egenskaper. Å lese teksten i
+          delkontrakten kan gjøre det lettere for deg å finne det du er ute etter.
+        </li>
+        <li>
+          Rangering: En delkontrakt omfatter som regel flere hjelpemidler. Disse er inndelt i rangeringer. Du må alltid
+          starte med å vurdere om hjelpemidlet som er markert med «Rangering 1» dekker ditt behov. Dersom det ikke gjøre
+          det må det begrunnes i søknaden.
+        </li>
+      </ul>
+    </>
+  )
 
   const topRank =
     productAgreements &&
@@ -170,7 +174,7 @@ const TagRow = ({
   const accessoryOrSparePart = accessory || sparePart
 
   return (
-    <HGrid columns={2} gap={'space-12'} height={'fit-content'}>
+    <HStack gap={'space-12'} height={'fit-content'}>
       {accessoryOrSparePart ? (
         <Tag variant={'success'} size={'xsmall'}>
           {accessory ? 'Tilbehør' : 'Reservedel'}
@@ -181,21 +185,18 @@ const TagRow = ({
             På avtale
           </Tag>
         ) : productAgreements.length == 1 ? (
-          <>
-            <Tag variant={'success'} size={'xsmall'}>
+          <VStack gap={'space-2'} align={'start'}>
+            <Tag variant={'success'} size={'xsmall'} icon={<FolderFileIcon aria-hidden />}>
               Delkontrakt {productAgreements[0].refNr}
             </Tag>
-            <Tag variant={'success'} size={'xsmall'}>
+            <Tag variant={'success'} size={'xsmall'} icon={<Density2Icon aria-hidden />}>
               Rangering {productAgreements[0].rank}
             </Tag>
-          </>
+          </VStack>
         ) : (
-          <>
-            <Tag variant={'success'} size={'xsmall'}>
-              Flere delkontrakter og rangeringer
-            </Tag>
-            <HelpText placement="right">{helpTextTopLabels()}</HelpText>
-          </>
+          <Tag variant={'success'} size={'xsmall'}>
+            Flere delkontrakter
+          </Tag>
         )
       ) : isExpired ? (
         <Tag variant={'success'} size={'xsmall'}>
@@ -206,6 +207,9 @@ const TagRow = ({
           Ikke på avtale
         </Tag>
       )}
-    </HGrid>
+      <HelpText placement={'right'} style={{ padding: 0 }}>
+        {helpHvaEr}
+      </HelpText>
+    </HStack>
   )
 }
