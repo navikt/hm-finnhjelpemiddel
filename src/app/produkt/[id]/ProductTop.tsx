@@ -1,7 +1,7 @@
 'use client'
 
 import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
-import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
+import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
 import { Alert, BodyLong, BodyShort, Button, CopyButton, HelpText, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
 import { Heading } from '@/components/aksel-client'
 import NextLink from 'next/link'

@@ -2,7 +2,7 @@
 
 import { AgreementInfo, Product } from '@/utils/product-util'
 import { Button, Heading, HelpText, HGrid, HStack, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
-import ImageCarousel from '@/app/produkt/imageCarousel/ImageCarousel'
+import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
 import NextLink from 'next/link'
 import { Density2Icon, FolderFileIcon, LinkIcon } from '@navikt/aksel-icons'
 import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
