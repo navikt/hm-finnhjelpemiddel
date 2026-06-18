@@ -167,7 +167,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <VStack gap={'space-16'}>
+        <VStack gap={'space-16'} id="variants-table">
           <Heading size={'medium'} level={'2'} spacing>
             Andre egenskaper
           </Heading>
@@ -188,7 +188,7 @@ export const VariantTable = ({ product }: { product: Product }) => {
         </Alert>
       )}
       {productVariantsToShow.length > 0 && (
-        <div className={styles.variantsTable} id="variants-table">
+        <div className={styles.variantsTable} id="variants-table2">
           <Table zebraStripes>
             <Table.Header>
               <VariantStatusRowNew variants={columnsSortedByKey} />

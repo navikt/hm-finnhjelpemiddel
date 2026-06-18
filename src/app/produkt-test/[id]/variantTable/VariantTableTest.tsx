@@ -221,7 +221,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   return (
     <Box>
       {product.variants.length > 1 && (
-        <VStack paddingBlock={'space-0 space-32'}>
+        <VStack paddingBlock={'space-0 space-32'} id="variants-table">
           <FilterRow
             variants={product.variants}
             filterConfigs={filters}
@@ -241,7 +241,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
             Spesifikasjoner
           </Heading>
 
-          <div className={styles.variantsTable} id="variants-table">
+          <div className={styles.variantsTable}>
             <VStack>
               <VStack className={styles.stickyTable} paddingBlock={'space-4 space-0'}>
                 {currentMaxPageCount > 1 && (
