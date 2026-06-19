@@ -44,7 +44,7 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
         </button>
       </div>
 
-      {emblaMainApi && (
+      {emblaMainApi && images.length > 1 && (
         <ThumbnailBar
           images={images}
           emblaApi={emblaMainApi}
@@ -106,14 +106,16 @@ const ImageDialog = ({
           <VStack gap={'space-16'} className={styles.modalContainer}>
             <BigImage emblaMainRef={emblaDialogRef} images={images} />
 
-            <ThumbnailBar
-              images={images}
-              emblaApi={emblaDialogApi}
-              selectedIndex={selectedIndex}
-              setSelectedIndex={setSelectedIndex}
-              isModal={true}
-              setModalIsOpen={setModalIsOpen}
-            />
+            {images.length > 1 && (
+              <ThumbnailBar
+                images={images}
+                emblaApi={emblaDialogApi}
+                selectedIndex={selectedIndex}
+                setSelectedIndex={setSelectedIndex}
+                isModal={true}
+                setModalIsOpen={setModalIsOpen}
+              />
+            )}
           </VStack>
         </Dialog.Body>
       </Dialog.Popup>
