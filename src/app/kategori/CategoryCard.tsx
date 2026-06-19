@@ -1,6 +1,6 @@
 'use client'
 
-import { LinkCard, VStack } from '@navikt/ds-react'
+import { LinkCard } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import styles from './CategoryCard.module.scss'
 import Image from 'next/image'

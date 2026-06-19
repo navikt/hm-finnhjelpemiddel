@@ -275,7 +275,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                               copyText={variant.hmsArtNr ?? ''}
                               text={variant.hmsArtNr ?? ''}
                               activeText="kopiert"
-                              variant="action"
+                              data-color={'accent'}
                               activeIcon={<ThumbUpIcon aria-hidden />}
                               iconPosition="right"
                             />
@@ -343,7 +343,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
             <Table.Body>
               <Table.Row>
                 <Table.HeaderCell>På avtale</Table.HeaderCell>
-                {productVariants.map((variant, i) => (
+                {productVariants.map((variant, _) => (
                   <Table.DataCell key={'på avtale-' + variant.id}>
                     {variant.status === 'INACTIVE' ? (
                       <NeutralTag>Utgått</NeutralTag>
@@ -364,14 +364,14 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
               )}
               <Table.Row>
                 <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
-                {productVariants.map((variant, i) => (
+                {productVariants.map((variant, _) => (
                   <Table.DataCell key={'levart-' + variant.id}>{variant.supplierRef ?? '-'}</Table.DataCell>
                 ))}
               </Table.Row>
               {bestillingsordningVaries && (
                 <Table.Row>
                   <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
-                  {productVariants.map((variant, i) => (
+                  {productVariants.map((variant, _) => (
                     <Table.DataCell key={'bestillingsordning-' + variant.id}>
                       {variant.bestillingsordning ? 'Ja' : 'Nei'}
                     </Table.DataCell>
@@ -381,7 +381,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
               {digitalSoknadVaries && (
                 <Table.Row>
                   <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
-                  {productVariants.map((variant, i) => (
+                  {productVariants.map((variant, _) => (
                     <Table.DataCell key={'behovsmelding-' + variant.id}>
                       {variant.digitalSoknad ? 'Ja' : 'Nei'}
                     </Table.DataCell>

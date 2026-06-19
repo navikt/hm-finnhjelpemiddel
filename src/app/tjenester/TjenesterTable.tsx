@@ -1,4 +1,4 @@
-import { CopyButton, Hide, Skeleton, Table } from '@navikt/ds-react'
+import { CopyButton, Hide, Table } from '@navikt/ds-react'
 import styles from './TjenesterTable.module.scss'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import { ServiceJob } from '@/utils/servicejob-util'
@@ -24,7 +24,7 @@ export const TjenesterTable = ({ tjenester }: { tjenester: ServiceJob[] }) => {
                 copyText={tjeneste.hmsArtNr ?? ''}
                 text={tjeneste.hmsArtNr ?? ''}
                 activeText="Kopiert"
-                variant="action"
+                data-color={'accent'}
                 activeIcon={<ThumbUpIcon aria-hidden />}
                 iconPosition="right"
                 className={styles.copyButton}

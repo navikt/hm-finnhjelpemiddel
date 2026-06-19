@@ -1,4 +1,3 @@
-import { AgreementInfo } from '@/utils/product-util'
 import { SearchResponse, ServiceAgreementInfoResponse, ServiceJobSourceResponse } from '@/utils/response-types'
 
 export interface ServiceJob {
@@ -37,7 +36,7 @@ export const mapServicejobs = (data: SearchResponse): ServiceJob[] => {
   })
 }
 
-const mapServiceJobFromSource = (source: ServiceJobSourceResponse, agreements: AgreementInfo[] = []): ServiceJob => {
+const mapServiceJobFromSource = (source: ServiceJobSourceResponse): ServiceJob => {
   return {
     id: source.id,
     title: source.title,

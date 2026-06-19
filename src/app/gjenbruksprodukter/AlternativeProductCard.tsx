@@ -44,17 +44,17 @@ const ProductInfo = ({
 }: {
   alternativeProduct: AlternativeProduct
   selectedWarehouseStock: WarehouseStock | undefined
-  setOpenWarehouseStock: (value: boolean) => any
+  setOpenWarehouseStock: (value: boolean) => void
   openWarehouseStock: boolean
   handleCompareClick?: () => void
 }) => {
   const numberInStock = selectedWarehouseStock ? selectedWarehouseStock.available : undefined
 
   return (
-    <VStack justify="space-between" padding={"space-20"} gap={"space-8"} className={styles.productContainer}>
+    <VStack justify="space-between" padding={'space-20'} gap={'space-8'} className={styles.productContainer}>
       <HStack justify="space-between">
-        <VStack gap={"space-4"} className={styles.productProperties}>
-          <HStack gap={"space-8"} align={'center'}>
+        <VStack gap={'space-4'} className={styles.productProperties}>
+          <HStack gap={'space-8'} align={'center'}>
             {alternativeProduct.onAgreement ? (
               <Label size="small" className={styles.headerColor}>
                 NAV - Rangering {alternativeProduct.highestRank}
@@ -87,9 +87,9 @@ const ProductInfo = ({
           <ProductImage src={alternativeProduct.imageUri} productTitle={'produktbilde'}></ProductImage>
         </Box>
       </HStack>
-      <HStack align={'end'} justify={'space-between'} gap={"space-8"} wrap={false}>
+      <HStack align={'end'} justify={'space-between'} gap={'space-8'} wrap={false}>
         {alternativeProduct.warehouseStock === undefined && (
-          <HStack gap={"space-8"}>
+          <HStack gap={'space-8'}>
             <NeutralTag>Ukjent lagerstatus</NeutralTag>
             <HelpText>Vi har ikke fått lagerstatus for dette produktet fra OeBS enda</HelpText>
           </HStack>
@@ -101,9 +101,9 @@ const ProductInfo = ({
 
         {alternativeProduct.inStockAnyWarehouse && alternativeProduct.warehouseStock && (
           <>
-            <VStack gap={"space-8"}>
+            <VStack gap={'space-8'}>
               {selectedWarehouseStock && (
-                <HStack gap={"space-8"}>
+                <HStack gap={'space-8'}>
                   <b>{selectedWarehouseStock.location}:</b>
                   {numberInStock !== undefined && <StockTag amount={numberInStock} />}
                 </HStack>
@@ -126,7 +126,7 @@ const ProductInfo = ({
         <CompareButton product={alternativeProduct} handleCompareClick={handleCompareClick} />
       </HStack>
     </VStack>
-  );
+  )
 }
 
 const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) => {
@@ -138,16 +138,16 @@ const WarehouseStatus = ({ stocks }: { stocks: WarehouseStock[] | undefined }) =
           <LocationInfo stock={stock} key={stock.location} />
         ))}
     </HGrid>
-  );
+  )
 }
 
 const LocationInfo = ({ stock }: { stock: WarehouseStock }) => {
   return (
-    <VStack className={styles.locationInfo} gap={"space-8"}>
+    <VStack className={styles.locationInfo} gap={'space-8'}>
       <Label>{stock.location}</Label>
       {<StockTag amount={stock.available} />}
     </VStack>
-  );
+  )
 }
 
 const StockTag = ({ amount }: { amount: number }) => {
@@ -167,7 +167,7 @@ const CompareButton = ({
     useHydratedAlternativeProductsCompareStore()
 
   const toggleCompareProduct = () => {
-    handleCompareClick && handleCompareClick()
+    if (handleCompareClick) handleCompareClick()
 
     const foundProductInCompareList =
       alternativeProductsToCompare.filter((procom: AlternativeProduct) => product.variantId === procom.variantId)

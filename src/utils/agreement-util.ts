@@ -207,7 +207,7 @@ export const mapAgreementProducts = (
           const obj = seen[product.id]
           if (obj) {
             obj.count += 1
-            hmsNr && obj.hmsNumbers.push(hmsNr)
+            if (hmsNr) obj.hmsNumbers.push(hmsNr)
           }
         } else {
           seen[product.id] = {
@@ -258,9 +258,7 @@ export const mapAgreementProducts = (
 
   // Viser kun de delkontraktene som ikke har produkter dersom det enten kun er filtrert på delkontrakter
   // eller om det ikke er filtrert på noe
-  if (
-    isFilteredOnDelkontrakt && !isFilteredOnAnythingElse
-  ) {
+  if (isFilteredOnDelkontrakt && !isFilteredOnAnythingElse) {
     return allPostsWithEmpty.filter((post) => filters.delkontrakt.includes(post.title))
   } else if (!isFilteredOnDelkontrakt && !isFilteredOnAnythingElse) {
     return allPostsWithEmpty

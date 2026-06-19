@@ -4,7 +4,6 @@ import useSWR from 'swr'
 import { News } from '@/utils/news-util'
 import { getNews } from '@/utils/api-util'
 import NextLink from 'next/link'
-import { buildNewsPreview } from '@/utils/news-html-util'
 import { dateToString } from '@/utils/string-util'
 
 export const NewsFeed = () => {
@@ -31,16 +30,11 @@ export const NewsFeed = () => {
   )
 }
 
-// Reduced preview limit for shorter cards. Adjust here if needed.
-const PREVIEW_CHAR_LIMIT = 160
-
 const NewsCard = ({ news }: { news: News }) => {
   const split = news.title.split(':')
   const hasSub = split.length > 1
   const mainTitle = hasSub ? split[0] : news.title
   const subTitle = hasSub ? split.slice(1).join(':').trim() : ''
-
-  const { previewHtml, truncated } = buildNewsPreview(news.text, PREVIEW_CHAR_LIMIT)
 
   return (
     <Box paddingInline={'space-24'} paddingBlock={'space-16'} className={styles.newsCard}>

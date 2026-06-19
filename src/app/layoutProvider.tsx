@@ -57,7 +57,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
   const visFeilbanner = featureFlags.isEnabled('finnhjelpemiddel.feilbanner')
 
   useEffect(() => {
-    document.activeElement instanceof HTMLElement && document.activeElement.blur()
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
   }, [pathname])
 
   useEffect(() => {
@@ -111,7 +111,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
         </HStack>
       )}
       <header>
-        <Link href={'#hovedinnhold'} variant="subtle" className="skiplink">
+        <Link href={'#hovedinnhold'} data-color={'neutral'} className="skiplink">
           Hopp til hovedinnhold
         </Link>
         <NavigationBar />
@@ -128,7 +128,7 @@ function LayoutProvider({ children }: { children: React.ReactNode }) {
       )}
       <Footer setCookieConsent={setConsent} />
     </Suspense>
-  );
+  )
 }
 
 reportAccessibility(React)

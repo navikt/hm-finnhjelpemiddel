@@ -88,7 +88,6 @@ export function logUmamiFilterChangeEvent(component: string, filterType: string,
   })
 }
 
-
 export function logUmamiClickButton(buttonName: string, buttonType: string, buttonVariant: string) {
   logUmamiCustomEvent(umami_customevents.KLIKK, {
     buttonName: buttonName,
@@ -110,7 +109,6 @@ export function logUmamiHMSNrOppslagSokEvent(hmsNr: string) {
   })
 }
 
-
 export function logUmamiVisit(url: string, pageTitle: string, pageType: string) {
   logUmamiEvent(umami_customevents.BESØK, {
     url: url,
@@ -124,8 +122,6 @@ export function logUmamiErrorOnUrl(url: string) {
     url: url,
   })
 }
-
-
 
 /*
 export function logUmamiShowMoreResult(component: string, extraInfo?: string) {

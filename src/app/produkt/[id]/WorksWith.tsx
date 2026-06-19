@@ -1,4 +1,4 @@
-import { Accordion, BodyLong, BodyShort, Box, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react'
+import { Accordion, BodyLong, BodyShort, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react'
 import styles from '@/app/produkt/[id]/WorksWith.module.scss'
 import { useEffect, useMemo, useState } from 'react'
 import useSWRImmutable from 'swr/immutable'

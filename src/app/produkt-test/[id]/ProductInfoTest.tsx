@@ -101,8 +101,6 @@ const InfoTab = ({ product }: { product: Product }) => {
     </VStack>
   )
 }
-const VideoTab = ({ product }: { product: Product }) => {}
-const DocsTab = ({ product }: { product: Product }) => {}
 
 export const QrCodeButtonSmall = ({ id }: { id: string }) => {
   const [qrUrl, setQrUrl] = useState('')

@@ -77,7 +77,8 @@ const CompareMenu = () => {
                     variant="tertiary"
                     icon={<TrashIcon aria-hidden />}
                     onClick={() => {
-                      ;(resetProductToCompare(), setCompareMenuState(CompareMenuState.Minimized))
+                      resetProductToCompare()
+                      setCompareMenuState(CompareMenuState.Minimized)
                     }}
                   >
                     Nullstill

@@ -102,7 +102,7 @@ const FilterView = ({ filters }: { filters?: FilterData }) => {
         <CheckboxFilter filter={{ key: 'leverandor', data: filters?.leverandor }} showSearch={true} />
       </VStack>
     </VStack>
-  );
+  )
 }
 
 export default FilterView
@@ -120,7 +120,7 @@ export const getAvailableAndSelectedFiltersSetedimensjoner = (
     if (filter) selectedFiltersSetedimensjoner.set(filter.name, filter)
   })
 
-  filtersFromServer &&
+  if (filtersFromServer) {
     Object.entries(filtersFromServer).forEach(([filterKeyStr, filterValue]) => {
       const filterKey = filterKeyStr as FilterCategoryKeyServer
       const filter = minMaxFilterKeyMapSete['setedimensjoner'].find((f) => f.min === filterKey || f.max === filterKey)
@@ -128,6 +128,7 @@ export const getAvailableAndSelectedFiltersSetedimensjoner = (
       const onlyOneValue = filterValue.values.length === 1
       if (filter && !isEmpty && !onlyOneValue) selectedFiltersSetedimensjoner.set(filter.name, filter)
     })
+  }
   const validFiltersArray = Array.from(selectedFiltersSetedimensjoner.values())
 
   validFiltersArray.sort((a, b) => a.name.localeCompare(b.name))
@@ -148,7 +149,7 @@ export const getAvailableAndSelectedFiltersMålOgVekt = (
     if (filter) selectedFiltersMålOgVekt.set(filter.name, filter)
   })
 
-  filtersFromServer &&
+  if (filtersFromServer) {
     Object.entries(filtersFromServer).forEach(([filterKeyStr, filterValue]) => {
       const filterKey = filterKeyStr as FilterCategoryKeyServer
       const filter = minMaxFilterKeyMapMålOgVekt['målOgVekt'].find(
@@ -158,6 +159,7 @@ export const getAvailableAndSelectedFiltersMålOgVekt = (
       const onlyOneValue = filterValue.values.length === 1
       if (filter && !isEmpty && !onlyOneValue) selectedFiltersMålOgVekt.set(filter.name, filter)
     })
+  }
 
   const validFiltersArray = Array.from(selectedFiltersMålOgVekt.values())
 

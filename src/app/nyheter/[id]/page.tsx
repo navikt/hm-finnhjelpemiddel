@@ -1,11 +1,12 @@
 import styles from '@/app/nyheter/NewsArticle.module.scss'
 import { getNewsById } from '@/utils/api-util'
 import { News } from '@/utils/news-util'
-import { BodyLong, Heading, Link, Tag, VStack } from '@navikt/ds-react'
+import { Heading, Link, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { sanitize } from '@/utils/news-html-util'
 import NextLink from 'next/link'
+
 function splitTitle(full: string): { main: string; sub?: string } {
   const parts = full.split(':')
   if (parts.length < 2) return { main: full }

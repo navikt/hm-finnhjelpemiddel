@@ -12,7 +12,7 @@ type Props = {
   icon?: ReactNode | undefined
 }
 
-export const CategoryCardFrontPage = ({ title, link, description, icon }: Props) => {
+export const CategoryCardFrontPage = ({ title, link, icon }: Props) => {
   return (
     <LinkCard arrow={true} className={styles.container}>
       {icon && (

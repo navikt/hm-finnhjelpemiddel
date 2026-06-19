@@ -18,7 +18,7 @@ function FrontPage() {
   const router = useRouter()
 
   useEffect(() => {
-    typeof window !== 'undefined' && logUmamiVisit(window.location.href, window.document.title, 'forside')
+    if (typeof window !== 'undefined') logUmamiVisit(window.location.href, window.document.title, 'forside')
   }, [])
 
   const onSearch = useCallback(
