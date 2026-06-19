@@ -21,15 +21,21 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
     <HGrid columns={{ xs: 1, md: 2 }} gap={'space-8'}>
       {product.photos && <ImageCarousel images={product.photos} />}
 
-      <VStack gap={'space-8'}>
-        <Heading size={'xlarge'}>{product.title}</Heading>
-        <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
-          {product.supplierName}
-        </Link>
-        <Description description={product.attributes.text} />
-        <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
-          Tilbehør og reservedeler <LinkIcon aria-hidden />
-        </Link>
+      <VStack gap={'space-24'}>
+        <VStack gap={'space-20'}>
+          <VStack gap={'space-0'}>
+            <Heading size={'xlarge'}>{product.title}</Heading>
+            <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
+              {product.supplierName}
+            </Link>
+          </VStack>
+          <VStack gap={'space-2'}>
+            <Description description={product.attributes.text} />
+            <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
+              Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
+            </Link>
+          </VStack>
+        </VStack>
 
         <Tabs defaultValue={'info'}>
           <Tabs.List style={{ whiteSpace: 'nowrap' }}>
