@@ -71,9 +71,9 @@ const InfoTab = ({ product }: { product: Product }) => {
     '        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.'
 
   return (
-    <VStack gap={'space-8'}>
+    <VStack gap={'space-24'}>
       <HStack gap={'space-20'} justify={'space-between'} style={{ flexWrap: 'wrap-reverse' }} align={'start'}>
-        <div>
+        <VStack gap={'space-8'}>
           <BestillingsordningBehovsmelding
             heading={'Bestillingsordning'}
             helpText={helpTextBestilling}
@@ -84,7 +84,7 @@ const InfoTab = ({ product }: { product: Product }) => {
             helpText={helpTextSoknad}
             sett={digitalsoknad}
           />
-        </div>
+        </VStack>
         <TagRow
           productAgreements={product.agreements}
           accessory={product.accessory}
@@ -120,7 +120,12 @@ export const QrCodeButtonSmall = ({ id }: { id: string }) => {
   return (
     <Button
       size="xsmall"
-      style={{ border: '1px dashed var(--Border-Action, #0067C5)', borderRadius: '4px', maxWidth: 'fit-content' }}
+      style={{
+        border: '1px dashed var(--Border-Action, #0067C5)',
+        borderRadius: '4px',
+        maxWidth: 'fit-content',
+        textDecoration: 'underline',
+      }}
       variant={'tertiary'}
       as="a"
       href={qrUrl}
@@ -172,7 +177,7 @@ const TagRow = ({
   const accessoryOrSparePart = accessory || sparePart
 
   return (
-    <HStack gap={'space-12'} height={'fit-content'}>
+    <HStack gap={'space-8'} height={'fit-content'}>
       {accessoryOrSparePart ? (
         <Tag variant={'success'} size={'xsmall'}>
           {accessory ? 'Tilbehør' : 'Reservedel'}
@@ -183,7 +188,7 @@ const TagRow = ({
             På avtale
           </Tag>
         ) : productAgreements.length == 1 ? (
-          <VStack gap={'space-2'} align={'start'}>
+          <VStack gap={'space-8'} align={'start'}>
             <Tag variant={'success'} size={'xsmall'} icon={<FolderFileIcon aria-hidden />}>
               Delkontrakt {productAgreements[0].refNr}
             </Tag>

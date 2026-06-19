@@ -1,5 +1,5 @@
 import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, Heading, HelpText, HStack, Link, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, HelpText, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 
 export const GeneralProductInformation = ({ product }: { product: Product }) => {
@@ -56,27 +56,26 @@ type BestillingsordningBehovsmeldingProps = {
 export const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: BestillingsordningBehovsmeldingProps) => {
   const bestillingsordning =
     sett.size > 1 ? (
-      <div>
-        <BodyShort>Noen varianter.</BodyShort>
+      <BodyShort>
+        Noen varianter.
+        <br />
         <Link as={NextLink} href="#variants-table">
           Se tabell nedenfor.
         </Link>
-      </div>
+      </BodyShort>
     ) : sett.has(true) ? (
       <BodyShort>Ja</BodyShort>
     ) : (
       <BodyShort>Nei</BodyShort>
     )
   return (
-    <div>
+    <VStack gap={'space-2'}>
       <HStack gap={'space-8'}>
-        <Heading size={'xsmall'} level={'3'}>
-          {heading}
-        </Heading>
+        <BodyShort weight={'semibold'}>{heading}</BodyShort>
         <HelpText placement="right">{helpText}</HelpText>
       </HStack>
       {bestillingsordning}
-    </div>
+    </VStack>
   )
 }
 
@@ -87,10 +86,8 @@ type ISOCategoryProps = {
 }
 export const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInternational }: ISOCategoryProps) => {
   return (
-    <div>
-      <Heading size={'xsmall'} level={'4'}>
-        ISO-kategori (kode)
-      </Heading>
+    <VStack gap={'space-2'}>
+      <BodyShort weight={'semibold'}>ISO-kategori (kode)</BodyShort>
       <HStack gap={'space-4'}>
         <BodyShort>Nivå 3:</BodyShort>
         <BodyShort size="medium">{isoCategoryTitleInternational + ' (' + isoCategory.slice(0, 6) + ')'}</BodyShort>
@@ -99,6 +96,6 @@ export const ISOCategory = ({ isoCategory, isoCategoryTitle, isoCategoryTitleInt
         <BodyShort>Nivå 4:</BodyShort>
         <BodyShort size="medium"> {isoCategoryTitle + ' (' + isoCategory + ')'}</BodyShort>
       </HStack>
-    </div>
+    </VStack>
   )
 }
