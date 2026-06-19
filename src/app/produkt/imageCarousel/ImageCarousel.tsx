@@ -24,7 +24,7 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
   }
 
   return (
-    <VStack gap={'space-16'} className={styles.embla}>
+    <VStack gap={'space-16'} className={styles.embla} aria-label={'Produktbilder'}>
       <ImageDialog
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
@@ -33,16 +33,9 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
         setSelectedIndex={setSelectedIndex}
       />
 
-      <div style={{ position: 'relative' }}>
-        <button
-          aria-label="Gå til fullskjermmodus"
-          onClick={() => setModalIsOpen(true)}
-          className={styles.fullscreenButtonKeyboard}
-        />
-        <button aria-label="Gå til fullskjermmodus" onClick={() => setModalIsOpen(true)} className={styles.imageButton}>
-          <SelectedImage emblaMainRef={emblaMainRef} images={images} />
-        </button>
-      </div>
+      <button aria-label="Gå til fullskjermmodus" onClick={() => setModalIsOpen(true)} className={styles.imageButton}>
+        <SelectedImage emblaMainRef={emblaMainRef} images={images} />
+      </button>
 
       {emblaMainApi && images.length > 1 && (
         <ThumbnailBar
