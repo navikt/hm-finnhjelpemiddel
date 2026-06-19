@@ -40,7 +40,7 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
           className={styles.fullscreenButtonKeyboard}
         />
         <button aria-label="Gå til fullskjermmodus" onClick={() => setModalIsOpen(true)} className={styles.imageButton}>
-          <BigImage emblaMainRef={emblaMainRef} images={images} />
+          <SelectedImage emblaMainRef={emblaMainRef} images={images} />
         </button>
       </div>
 
@@ -58,7 +58,7 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
   )
 }
 
-const BigImage = ({ emblaMainRef, images }: { emblaMainRef: EmblaViewportRefType; images: Photo[] }) => {
+const SelectedImage = ({ emblaMainRef, images }: { emblaMainRef: EmblaViewportRefType; images: Photo[] }) => {
   return (
     <div className={styles.embla__viewport} ref={emblaMainRef}>
       <div className={styles.embla__container}>
@@ -104,7 +104,7 @@ const ImageDialog = ({
         <Dialog.Header withClosebutton />
         <Dialog.Body>
           <VStack gap={'space-16'} className={styles.modalContainer}>
-            <BigImage emblaMainRef={emblaDialogRef} images={images} />
+            <SelectedImage emblaMainRef={emblaDialogRef} images={images} />
 
             {images.length > 1 && (
               <ThumbnailBar
