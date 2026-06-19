@@ -1,13 +1,13 @@
 'use client'
 
-import type { SVGProps } from 'react'
+import type { Ref, SVGProps } from 'react'
 import * as React from 'react'
 import { forwardRef } from 'react'
 
 interface SVGRProps {
   active: boolean
 }
-export const Pepperkakemann = forwardRef(({ active }: SVGProps<SVGSVGElement> & SVGRProps) => (
+export const Pepperkakemann = forwardRef(({ active }: SVGProps<SVGSVGElement> & SVGRProps, ref: Ref<SVGSVGElement>) => (
   <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 900" width="2em" height="2em">
     <path
       fill={active ? '#d09242' : '#d9b78b'}
