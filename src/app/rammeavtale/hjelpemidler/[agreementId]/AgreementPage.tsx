@@ -247,12 +247,7 @@ const TopBar = ({ agreement, harTjenester }: { agreement: Agreement; harTjeneste
 }
 
 const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjenester: boolean }) => {
-  const featureFlags = useFeatureFlags()
-
-  const visTjenesterFeatureFlag: boolean =
-    (featureFlags.isEnabled('finnhjelpemiddel.vis-tjenester-for-avtale') &&
-      avtalerMedNyTjenesteSide.includes(agreementId)) ??
-    false
+  const visTjenesterInngang: boolean = avtalerMedNyTjenesteSide.includes(agreementId)
 
   const isKjøreposeRegncapeAvtale =
     agreementId === '90c59ae1-033f-435e-bb06-f8a3f81cdd99' || agreementId === '7f6e11d4-b807-4bff-94cf-b0b0701654e8'
@@ -273,7 +268,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjene
           Tilbehør og reservedeler
         </Button>
       )}
-      {visTjenesterFeatureFlag && harTjenester && (
+      {visTjenesterInngang && harTjenester && (
         <Button
           as={NextLink}
           href={`/rammeavtale/${agreementId}/tjenester`}
@@ -288,6 +283,9 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjene
   )
 }
 
-const avtalerMedNyTjenesteSide = ['7eab246b-aa2a-4bdd-b3e7-741967aa9bb7']
+const avtalerMedNyTjenesteSide = [
+  '7eab246b-aa2a-4bdd-b3e7-741967aa9bb7', //Moduloppbygde sittesystemer, formstøp og bilseter for barn
+  '0875c2c5-f14a-4131-b244-640093abc6e3', //Hygienehjelpemidler og støttestang
+]
 
 export default AgreementPage
