@@ -35,6 +35,10 @@ const nextConfig = {
         destination: process.env.HM_FINNHJELPEMIDDEL_BFF_URL + '/category/:path*',
       },
       {
+        source: '/news/:path*',
+        destination: process.env.HM_FINNHJELPEMIDDEL_NEWS_URL + '/:path*',
+      },
+      {
         source: '/alternativprodukter',
         destination: '/gjenbruksprodukter',
       },
