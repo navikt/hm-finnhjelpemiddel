@@ -8,13 +8,13 @@ import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable
 import { toValueAndUnit } from '@/utils/string-util'
 import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Pagination, Table, VStack } from '@navikt/ds-react'
-import { FilterRow } from '@/app/produkt/[id]/variantTable/FilterRow'
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 import styles from './VariantTableTest.module.scss'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/FilterRowTest'
 
 export type SortColumns = {
   orderBy: string | null
@@ -222,7 +222,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     <Box>
       {product.variants.length > 1 && (
         <VStack paddingBlock={'space-0 space-32'} id="variants-table">
-          <FilterRow
+          <FilterRowTest
             variants={product.variants}
             filterConfigs={filters}
             techDataRows={techDataRowsAll}
