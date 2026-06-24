@@ -12,23 +12,22 @@ export default function NewsGridPage({ news }: NewsProps) {
   return (
     <Page>
       <Page.Block as="main" gutters>
-        <VStack justify={'center'}>
-          <Heading size="large" level="1">
-            Nyheter
-          </Heading>
-          <HStack justify="center">
-            <HGrid
-              position={'relative'}
-              gap={'space-20'}
-              columns={{ xs: 'repeat(auto-fit, minmax(10rem, 1fr))', md: 3 }}
-            >
-              {news?.map((news) => (
-                <NewsCard news={news} key={news.id} />
-              ))}
-              {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
-            </HGrid>
-          </HStack>
-        </VStack>
+        <HStack justify={"center"} padding={'space-16'}>
+          <VStack gap={'space-8'}>
+            <Heading size="large" level="1">
+              Nyheter
+            </Heading>
+              <HGrid
+                gap={'space-20'}
+                columns={{ xs: 1,sm: 2, md: 3 }}
+              >
+                {news?.map((news) => (
+                  <NewsCard news={news} key={news.id} />
+                ))}
+                {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
+              </HGrid>
+          </VStack>
+        </HStack>
       </Page.Block>
     </Page>
   )
