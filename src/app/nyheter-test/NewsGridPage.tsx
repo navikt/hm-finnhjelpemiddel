@@ -4,12 +4,11 @@ import { BodyLong, Heading, HGrid, HStack, LinkCard, VStack } from '@navikt/ds-r
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import NewsCard from '@/app/nyheter-test/NewsCard'
 
-type Props = {
+type NewsProps = {
   news?: NewsDTO[]
 }
 
-export default function NewsStack({ news }: Props) {
-
+export default function NewsGridPage({ news }: NewsProps) {
   return (
     <VStack gap="space-8" margin="space-20">
       <HStack justify="space-between" align="center">
