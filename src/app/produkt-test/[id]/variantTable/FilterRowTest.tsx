@@ -11,7 +11,6 @@ type Props = {
   variants: ProductVariant[]
   filterConfigs: Filter[]
   techDataRows: TechDataRow[]
-  numberOfVariantsToShow: number
 }
 
 type SelectFilterContents = {
@@ -23,7 +22,7 @@ type SelectFilterContents = {
   unit: string | undefined
 }
 
-export const FilterRowTest = ({ variants, filterConfigs, techDataRows, numberOfVariantsToShow }: Props) => {
+export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -185,9 +184,6 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows, numberOfV
           <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
           <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
         </HStack>
-        <Heading level="3" size="small">
-          {`${numberOfVariantsToShow} av ${variants.length} varianter`}
-        </Heading>
       </VStack>
     </Box>
   )

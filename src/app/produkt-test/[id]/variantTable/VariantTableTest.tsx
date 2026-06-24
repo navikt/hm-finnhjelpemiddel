@@ -220,14 +220,12 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
 
   return (
     <Box>
+      <Heading size={'medium'} level={'2'} spacing>
+        Spesifikasjoner
+      </Heading>
       {product.variants.length > 1 && (
         <VStack paddingBlock={'space-0 space-32'} id="variants-table">
-          <FilterRowTest
-            variants={product.variants}
-            filterConfigs={filters}
-            techDataRows={techDataRowsAll}
-            numberOfVariantsToShow={productVariantsToShow.length}
-          />
+          <FilterRowTest variants={product.variants} filterConfigs={filters} techDataRows={techDataRowsAll} />
         </VStack>
       )}
       {productVariantsSorted.length === 0 && (
@@ -237,24 +235,24 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       )}
       {productVariantsSorted.length > 0 && (
         <VStack>
-          <Heading size={'medium'} level={'2'} spacing>
-            Spesifikasjoner
-          </Heading>
-
           <div className={styles.variantsTable}>
             <VStack>
               <VStack className={styles.stickyTable} paddingBlock={'space-4 space-0'}>
-                {currentMaxPageCount > 1 && (
-                  <Pagination
-                    page={pageState}
-                    onPageChange={setPageState}
-                    count={currentMaxPageCount}
-                    boundaryCount={1}
-                    siblingCount={0}
-                    size={'small'}
-                    style={{ alignSelf: 'end' }}
-                  />
-                )}
+                <HStack justify={'space-between'} align={'end'}>
+                  <BodyShort>
+                    Viser {productVariantsSorted.length} av {productVariantsToShow.length}
+                  </BodyShort>
+                  {currentMaxPageCount > 1 && (
+                    <Pagination
+                      page={pageState}
+                      onPageChange={setPageState}
+                      count={currentMaxPageCount}
+                      boundaryCount={1}
+                      siblingCount={0}
+                      size={'small'}
+                    />
+                  )}
+                </HStack>
                 <Table>
                   <Table.Body>
                     <Table.Row>
