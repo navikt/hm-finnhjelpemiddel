@@ -32,20 +32,6 @@ export async function getNews(size: number = 4): Promise<NewsDTO[]> {
   return res.json()
 }
 
-export async function getNewsById(id: string): Promise<NewsDTO | null> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  if (!res.ok) {
-    throw new CustomError(res.statusText, res.status)
-  }
-  const data = await res.json()
-  console.log(data)
-  return data}
-
 
 export interface NewsDTO {
   id: string
@@ -56,4 +42,5 @@ export interface NewsDTO {
   updated: string
   publishedFrom: string
   publishedTo: string
+  tags: string[]
 }
