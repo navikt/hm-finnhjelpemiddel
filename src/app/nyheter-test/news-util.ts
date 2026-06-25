@@ -56,6 +56,4 @@ export interface NewsDTO {
   updated: string
   publishedFrom: string
   publishedTo: string
-  imageUrl: string
-  tags: string[]
 }
