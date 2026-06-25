@@ -8,6 +8,4 @@ export default async function Page() {
 
   //return <NewsStack news={news}/>
   return <NewsGridPage news={news} />
-
-
 }

@@ -1,4 +1,4 @@
-import { LinkCard, Tag, Box } from '@navikt/ds-react'
+import { LinkCard, Tag, Box, HStack } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import Image from 'next/image'
 import { NewspaperIcon } from '@navikt/aksel-icons'
@@ -31,11 +31,14 @@ export default function NewsCard({ news }: NewsProps){
           overflow: 'hidden',
         }}>{news.description}</LinkCard.Description>
         <LinkCard.Footer>
-          <Box paddingBlock={'space-0 space-16'}>
-          <Tag size="small" variant="info-moderate">
-            Ny rammeavtale
-          </Tag>
-       </Box>
+          <HStack gap={"space-4"} wrap>
+            {news.tags?.map((tag) => (
+              <Tag key={tag} size={'small'} variant={"moderate"} data-color={"neutral"}>
+                {tag}
+              </Tag>
+            ))}
+
+          </HStack>
         </LinkCard.Footer>
       </LinkCard>
   )
