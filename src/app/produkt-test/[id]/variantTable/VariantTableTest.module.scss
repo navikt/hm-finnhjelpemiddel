@@ -22,12 +22,6 @@
   border-top: none;
 }
 
-/*
-.techDataGroup + .techDataGroup {
-  border-top: none;
-}
- */
-
 .stickyTable {
   position: sticky;
   top: 0;
@@ -52,7 +46,7 @@
 }
 
 .variantsTable {
-  width: fit-content;
+  //width: 100%;
 
   table {
     border-collapse: separate;
@@ -63,17 +57,19 @@
     font-weight: normal;
   }
 
-  tr > th:first-child,
-  tr > td:first-child {
-    position: sticky;
-    left: 0;
-    width: 250px;
-    z-index: 1;
-  }
-
   tr > th:nth-child(n + 1),
   tr > td {
-    width: 200px;
+    width: 190px;
+    //display: inline-block;
+  }
+
+  tr {
+    display: flex;
+    //align-items: stretch;
+  }
+
+  tr > td:last-child {
+    flex: 1;
   }
 
   table thead th:first-child {
