@@ -60,7 +60,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     const updateNrVariants = () => {
       if (typeof window !== 'undefined') {
         const innerWidth = window.innerWidth
-        const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 190), VARIANT_PAGE_MAX_SIZE))
+        const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 180), VARIANT_PAGE_MAX_SIZE))
 
         setSpaceNrvariants((prevState) => {
           if (prevState !== nrVariants) {
@@ -220,12 +220,12 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   )
 
   return (
-    <Box>
+    <Box background={'info-soft'} padding={'space-32'}>
       <Heading size={'medium'} level={'2'} spacing>
         Spesifikasjoner
       </Heading>
       {product.variants.length > 1 && (
-        <VStack paddingBlock={'space-0 space-32'} id="variants-table">
+        <VStack paddingBlock={'space-12 space-32'} id="variants-table">
           <FilterRowTest variants={product.variants} filterConfigs={filters} techDataRows={techDataRowsAll} />
         </VStack>
       )}
@@ -238,12 +238,12 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
         <VStack>
           <div className={styles.variantsTable}>
             <VStack>
-              <VStack className={styles.stickyTable} paddingBlock={'space-4 space-0'}>
-                <HStack justify={'space-between'} align={'end'}>
-                  <BodyShort>
-                    Viser {productVariantsSorted.length} av {productVariantsToShow.length}
-                  </BodyShort>
-                  {currentMaxPageCount > 1 && (
+              <VStack gap={'space-8'} paddingBlock={'space-4 space-0'} className={styles.stickyTop}>
+                {currentMaxPageCount > 1 && (
+                  <HStack justify={'space-between'} align={'end'}>
+                    <BodyShort>
+                      Viser {productVariantsSorted.length} av {productVariantsToShow.length}
+                    </BodyShort>
                     <Pagination
                       page={pageState}
                       onPageChange={setPageState}
@@ -252,9 +252,9 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
                       siblingCount={0}
                       size={'small'}
                     />
-                  )}
-                </HStack>
-                <Table>
+                  </HStack>
+                )}
+                <Table className={styles.stickyTable}>
                   <Table.Body>
                     <Table.Row>
                       <Table.HeaderCell>Navn på variant</Table.HeaderCell>
@@ -310,7 +310,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
   //const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
   return (
-    <VStack>
+    <VStack paddingBlock={'space-48'}>
       <Box className={styles.techDataGroup}>
         <Button
           variant="tertiary"

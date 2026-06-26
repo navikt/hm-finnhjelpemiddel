@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyShort, Box, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
+import { BodyShort, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
@@ -178,14 +178,12 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
   const toggleFilters = filters.filter((filter) => filter.type === FilterType.TOGGLE)
 
   return (
-    <Box asChild paddingBlock={'space-32 space-24'} paddingInline={'space-32'} className={styles.wrapper}>
-      <VStack gap={'space-16'}>
-        <HStack gap={{ xs: 'space-32', md: 'space-80' }} width={'fit-content'} align={'end'}>
-          <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
-          <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
-        </HStack>
-      </VStack>
-    </Box>
+    <VStack gap={'space-16'}>
+      <HStack gap={{ xs: 'space-32', md: 'space-80' }} width={'fit-content'} align={'end'}>
+        <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
+        <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
+      </HStack>
+    </VStack>
   )
 }
 
@@ -236,9 +234,7 @@ const SelectFilters = ({
               label={
                 <VStack>
                   {label}
-                  {valueRange && (
-                    <BodyShort>intervall: {valueRange.map((value) => value + (unit ?? '')).join(' - ')}</BodyShort>
-                  )}
+                  {valueRange && <BodyShort>{valueRange.map((value) => value + (unit ?? '')).join(' - ')}</BodyShort>}
                 </VStack>
               }
               onChange={(event) => onFilterChange(name, event.target.value)}

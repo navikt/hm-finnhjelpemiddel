@@ -19,14 +19,24 @@
 .techDataGroup {
   border: 1px solid $ax-border-neutral-subtleA;
   border-bottom: none;
+  background: white;
+}
+
+.techDataGroup + .techDataGroup {
   border-top: none;
 }
 
-.stickyTable {
+.stickyTop {
   position: sticky;
   top: 0;
   z-index: 3;
+  background-color: $ax-bg-info-soft;
+}
+
+.stickyTable {
   background: white;
+  border: 1px solid $ax-border-neutral-subtleA;
+  border-bottom: none;
 }
 
 .expandTableButton {
@@ -59,7 +69,7 @@
 
   tr > th:nth-child(n + 1),
   tr > td {
-    width: 190px;
+    width: 180px;
     //display: inline-block;
   }
 

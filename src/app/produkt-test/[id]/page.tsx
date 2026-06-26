@@ -2,7 +2,6 @@ import { fetchProductsWithVariants, getProductWithVariants } from '@/utils/api-u
 import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
-import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 import { VariantTableTest } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
 import { ProductInfoTest } from '@/app/produkt-test/[id]/ProductInfoTest'
 import { VStack } from '@navikt/ds-react'
@@ -35,12 +34,19 @@ export default async function ProduktPage(props: Props) {
   return isAccessoryOrSparePart ? (
     <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
   ) : (
-    <ProductPageLayout>
+    <VStack
+      gap={'space-56'}
+      paddingBlock={'space-64'}
+      //paddingInline={'space-16'}
+      marginInline={'auto'}
+      marginBlock={'space-0'}
+      maxWidth={'1200px'}
+    >
       <ProductInfoTest product={product} />
       {<VariantTableTest product={product} />}
-      <VStack gap={'space-24'} style={{ gridArea: 'box2' }}>
+      <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
       </VStack>
-    </ProductPageLayout>
+    </VStack>
   )
 }
