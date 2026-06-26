@@ -14,7 +14,7 @@ import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
-import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/FilterRowTest'
+import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 import { TechDataGroupTable } from '@/app/produkt-test/[id]/variantTable/TechDataGroupTable'
 
 export type SortColumns = {

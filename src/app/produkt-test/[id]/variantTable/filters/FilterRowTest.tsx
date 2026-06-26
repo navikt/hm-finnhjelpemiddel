@@ -1,11 +1,12 @@
 'use client'
 
-import { BodyShort, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
+import { Heading, HStack, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
 import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
-import styles from './FilterRowTest.module.scss'
+import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
+import { ChipFilters } from '@/app/produkt-test/[id]/variantTable/filters/ChipFilters'
 
 type Props = {
   variants: ProductVariant[]
@@ -13,7 +14,7 @@ type Props = {
   techDataRows: TechDataRow[]
 }
 
-type SelectFilterContents = {
+export type FilterContent = {
   name: string
   label: string
   type: FilterType
@@ -90,7 +91,7 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
     return []
   }
 
-  const filters: SelectFilterContents[] = filterConfigs
+  const filters: FilterContent[] = filterConfigs
     .filter(
       ({ fieldName, type }) =>
         (type === FilterType.DROPDOWN && isRelevantDropdownFilter(fieldName)) ||
@@ -184,75 +185,5 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
         <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
       </HStack>
     </VStack>
-  )
-}
-
-const ChipFilters = ({
-  filters,
-  onFilterChange,
-}: {
-  filters: SelectFilterContents[]
-  onFilterChange: (name: string, value: string) => void
-}) => {
-  const searchParams = useSearchParams()
-
-  return (
-    <Chips className={styles.chipsRow}>
-      {filters.map(({ name, label, values }) => {
-        return (
-          <Chips.Toggle
-            selected={searchParams.has(name)}
-            checkmark={true}
-            key={name}
-            onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
-            disabled={values.length < 2}
-            className={values.length < 2 ? styles.disabledChip : styles.enabledChip}
-          >
-            {label}
-          </Chips.Toggle>
-        )
-      })}
-    </Chips>
-  )
-}
-
-const SelectFilters = ({
-  filters,
-  onFilterChange,
-}: {
-  filters: SelectFilterContents[]
-  onFilterChange: (name: string, value: string) => void
-}) => {
-  const searchParams = useSearchParams()
-  return (
-    <HStack gap={'space-32'}>
-      {filters.map(({ name, label, values, valueRange, unit }, index) => {
-        return (
-          values.length > 0 && (
-            <Select
-              key={index + 1}
-              label={
-                <VStack>
-                  {label}
-                  {valueRange && <BodyShort>{valueRange.map((value) => value + (unit ?? '')).join(' - ')}</BodyShort>}
-                </VStack>
-              }
-              onChange={(event) => onFilterChange(name, event.target.value)}
-              value={searchParams.get(name) ?? ''}
-              style={{ minWidth: '290px' }}
-            >
-              <option key="" value="">
-                Alle
-              </option>
-              {values.map((value, i) => (
-                <option key={i + 1} label={value + (unit ? ` ${unit}` : '')}>
-                  {value}
-                </option>
-              ))}
-            </Select>
-          )
-        )
-      })}
-    </HStack>
   )
 }
