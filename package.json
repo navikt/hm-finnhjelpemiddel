@@ -42,7 +42,7 @@
     "@next/eslint-plugin-next": "16.2.3",
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@types/deep-equal": "^1.0.4",
-    "@types/node": "24.13.0",
+    "@types/node": "26.0.0",
     "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
     "@types/react-transition-group": "^4.4.12",
