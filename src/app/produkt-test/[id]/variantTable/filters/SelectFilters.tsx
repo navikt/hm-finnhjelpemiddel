@@ -12,7 +12,7 @@ export const SelectFilters = ({
 }) => {
   const searchParams = useSearchParams()
   return (
-    <HStack gap={'space-32'}>
+    <HStack gap={'space-16'}>
       {filters.map(({ name, label, values, valueRange, unit }, index) => {
         return (
           values.length > 0 && (

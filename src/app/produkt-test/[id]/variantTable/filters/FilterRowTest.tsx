@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, HStack, VStack } from '@navikt/ds-react'
+import { Heading, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
@@ -180,10 +180,10 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
 
   return (
     <VStack gap={'space-16'}>
-      <HStack gap={{ xs: 'space-32', md: 'space-80' }} width={'fit-content'} align={'end'}>
+      <VStack gap={'space-16'} width={'fit-content'}>
         <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
         <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
-      </HStack>
+      </VStack>
     </VStack>
   )
 }
