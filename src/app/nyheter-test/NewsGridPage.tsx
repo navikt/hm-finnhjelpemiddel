@@ -1,14 +1,17 @@
 'use client'
 
-import { BodyLong, Heading, HGrid, HStack, LinkCard, VStack, Page } from '@navikt/ds-react'
+import { BodyLong, Heading, HGrid, HStack, VStack, Page } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import NewsCard from '@/app/nyheter-test/NewsCard'
+import NewsPagination from '@/app/nyheter-test/NewsPagination'
 
 type NewsProps = {
   news?: NewsDTO[]
+  totalPages: number,
+  currentPage: number
 }
 
-export default function NewsGridPage({ news }: NewsProps) {
+export default function NewsGridPage({ news, currentPage, totalPages }: NewsProps) {
   return (
     <Page>
       <Page.Block as="main" gutters>
@@ -23,6 +26,9 @@ export default function NewsGridPage({ news }: NewsProps) {
               ))}
               {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
             </HGrid>
+            <HStack justify={"center"} paddingBlock={'space-16'}>
+              <NewsPagination currentPage={currentPage} totalPages={totalPages}></NewsPagination>
+            </HStack>
           </VStack>
         </HStack>
       </Page.Block>

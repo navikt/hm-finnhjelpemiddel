@@ -14,7 +14,8 @@ export async function getAllNews(): Promise<NewsDTO[]> {
     throw new CustomError(res.statusText, res.status)
   }
 
-  return res.json()
+  const data = await res.json()
+  return data.content ?? data
 }
 
 export async function getNews(size: number = 4): Promise<NewsDTO[]> {
@@ -46,6 +47,20 @@ export async function getNewsById(id: string): Promise<NewsDTO | null> {
   console.log(data)
   return data}
 
+export async function getNewsPaginated(page: number=0, size: number=9): Promise<NewsPageDTO> {
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news?page=${page}&size=${size}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+
+  if (!res.ok) {
+    throw new CustomError(res.statusText, res.status)
+  }
+
+  return res.json()
+}
 
 export interface NewsDTO {
   id: string
@@ -58,4 +73,13 @@ export interface NewsDTO {
   publishedTo: string
   imageUrl: string
   tags: string[]
+}
+
+export interface NewsPageDTO {
+  content: NewsDTO[]
+  totalSize: number,
+  pageable: {
+    number: number,
+    size: number
+  }
 }
