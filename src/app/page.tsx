@@ -1,48 +1,19 @@
-'use client'
-
-import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect } from 'react'
-
-import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { Bleed, Box, Heading, HGrid, VStack } from '@navikt/ds-react'
 import FinnHjelpemiddelLogo from '@/app/forside/FinnHjelpemiddelLogo'
 import Agreements from '@/app/forside/Agreements'
-import { NewsFeed } from '@/app/forside/NewsFeed'
 import styles from './FrontPage.module.scss'
 import { OtherAgreements } from '@/app/forside/OtherAgreements'
-import { logUmamiNavigationEvent, logUmamiVisit } from '@/utils/umami'
 import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
+import { FrontPageSearch } from '@/app/FrontPageSearch'
+import NewsFeed from '@/app/forside/NewsFeed'
 
 function FrontPage() {
-  const path = usePathname()
-  const router = useRouter()
-
+  /*
   useEffect(() => {
     if (typeof window !== 'undefined') logUmamiVisit(window.location.href, window.document.title, 'forside')
   }, [])
 
-  const onSearch = useCallback(
-    (searchTerm: string) => {
-      const qWithFilters = new URLSearchParams(window.location.search)
-      const qNoFilters = new URLSearchParams()
-
-      qWithFilters.set('term', searchTerm.trim())
-      qNoFilters.set('term', searchTerm.trim())
-      if (path.includes('sok')) {
-        logUmamiNavigationEvent('søk', 'søk', 'Søk på søkesiden')
-        router.push('/sok?' + qWithFilters.toString())
-      } else if (path === '/') {
-        logUmamiNavigationEvent('forside', 'søk', 'Søk på forsiden')
-        router.push('/sok?' + qWithFilters.toString())
-      } else if (path.includes('produkt')) {
-        router.push('/sok?' + qNoFilters.toString())
-      } else {
-        logUmamiNavigationEvent('annet', 'søk', 'Søk fra annen side')
-        router.push('/sok?' + qWithFilters.toString())
-      }
-    },
-    [router, path]
-  )
+   */
 
   return (
     <VStack
@@ -62,9 +33,7 @@ function FrontPage() {
             <Heading level="1" size="large">
               Her kan du finne hjelpemidler på det norske markedet
             </Heading>
-            <Box>
-              <AutocompleteSearch onSearch={onSearch} placeholder={'Søk etter hjelpemiddel eller HMS-nummer'} />
-            </Box>
+            <FrontPageSearch />
           </VStack>
 
           <Box className={styles.logoBox} style={{ gridArea: 'box2' }}>
