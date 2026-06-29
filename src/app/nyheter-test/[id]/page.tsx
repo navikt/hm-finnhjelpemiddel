@@ -36,24 +36,26 @@ export default async function NewsArticlePage({
   const title = news.title
   const sanitizedBody = sanitize(news.body)
   const publised = new Date(news.created).toLocaleDateString('nb-NO')
-
+  const updated = news.updated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
     <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'}>
       <VStack gap={'space-32'} paddingBlock={'space-32'}>
         <article>
           <VStack gap={'space-16'}>
-            <Bleed marginInline={"space-64"}>
-              <Box
-                style={{ width: '100%', aspectRatio: '16/9', position: 'relative', overflow: 'hidden'}}
-                borderRadius={'12'}
-              >
-                <NewsImage imageUrl={news.imageUrl} alt={news.title} fontSize="5rem" />
-              </Box>
-            </Bleed>
+            {news.imageUrl && (
+              <Bleed marginInline={"space-64"}>
+                <Box
+                  style={{ width: '100%', aspectRatio: '16/9', position: 'relative', overflow: 'hidden'}}
+                  borderRadius={'12'}
+                >
+                  <NewsImage imageUrl={news.imageUrl} alt={news.title} fontSize="5rem" />
+                </Box>
+              </Bleed>
+            )}
             <Heading size={'large'} level={'1'}>
               {title}
             </Heading>
-            <time>Publisert: {publised}</time>
+            <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${publised}`}</time>
             <BodyLong size="large">{news.description}</BodyLong>
             <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
 
