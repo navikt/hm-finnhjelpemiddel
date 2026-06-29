@@ -1,3 +1,5 @@
+'use client'
+
 import { Accordion, Heading, HGrid, Link, Show, VStack } from '@navikt/ds-react'
 
 export const OtherAgreements = () => {
