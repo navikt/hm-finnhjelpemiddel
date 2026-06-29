@@ -1,16 +1,9 @@
-import { getNewsPaginated } from '@/app/nyheter-test/news-util'
-import NewsGridPage from '@/app/nyheter-test/NewsGridPage'
+import NewsStack from '@/app/nyheter-test/NewsStack'
+import { getNews } from '@/app/nyheter-test/news-util'
 
-export default async function Page({
-  searchParams
-                                   }: {
-  searchParams: Promise<{ page?: string}>
-}) {
-  const {page} = await searchParams
-  const currentPage = Number(page ?? 1) - 1
-  const {content, totalSize, pageable} = await getNewsPaginated(currentPage)
-  const totalPages = Math.ceil(totalSize / pageable.size)
 
-  //return <NewsStack news={news}/>
-  return <NewsGridPage news={content} totalPages={totalPages} currentPage={currentPage+1} />
+export default async function Page() {
+  const news = await getNews(3)
+
+  return <NewsStack news={news} />
 }

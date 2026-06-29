@@ -12,6 +12,7 @@ import styles from './FrontPage.module.scss'
 import { OtherAgreements } from '@/app/forside/OtherAgreements'
 import { logUmamiNavigationEvent, logUmamiVisit } from '@/utils/umami'
 import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
+import NewsStackWrapper from '@/app/nyheter-test/NewsStackWrapper'
 
 function FrontPage() {
   const path = usePathname()
@@ -82,7 +83,7 @@ function FrontPage() {
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
-        <NewsFeed />
+        <NewsStackWrapper />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />
