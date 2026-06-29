@@ -8,13 +8,6 @@ import { FrontPageSearch } from '@/app/FrontPageSearch'
 import NewsFeed from '@/app/forside/NewsFeed'
 
 function FrontPage() {
-  /*
-  useEffect(() => {
-    if (typeof window !== 'undefined') logUmamiVisit(window.location.href, window.document.title, 'forside')
-  }, [])
-
-   */
-
   return (
     <VStack
       className={styles.container}

@@ -1,14 +1,18 @@
 'use client'
 
 import AutocompleteSearch from '@/components/AutocompleteSearch'
-import { logUmamiNavigationEvent } from '@/utils/umami'
+import { logUmamiNavigationEvent, logUmamiVisit } from '@/utils/umami'
 import { Box } from '@navikt/ds-react'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 
 export const FrontPageSearch = () => {
   const path = usePathname()
   const router = useRouter()
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') logUmamiVisit(window.location.href, window.document.title, 'forside')
+  }, [])
 
   const onSearch = useCallback(
     (searchTerm: string) => {
