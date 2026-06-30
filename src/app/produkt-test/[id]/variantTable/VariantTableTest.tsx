@@ -14,7 +14,8 @@ import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
-import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/FilterRowTest'
+import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
+import { TechDataGroupTable } from '@/app/produkt-test/[id]/variantTable/TechDataGroupTable'
 
 export type SortColumns = {
   orderBy: string | null
@@ -59,7 +60,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     const updateNrVariants = () => {
       if (typeof window !== 'undefined') {
         const innerWidth = window.innerWidth
-        const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 200), VARIANT_PAGE_MAX_SIZE))
+        const nrVariants = Math.max(1, Math.min(Math.floor((innerWidth - 250) / 180), VARIANT_PAGE_MAX_SIZE))
 
         setSpaceNrvariants((prevState) => {
           if (prevState !== nrVariants) {
@@ -219,15 +220,13 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   )
 
   return (
-    <Box>
+    <Box background={'info-soft'} padding={'space-32'}>
+      <Heading size={'medium'} level={'2'} spacing>
+        Spesifikasjoner
+      </Heading>
       {product.variants.length > 1 && (
-        <VStack paddingBlock={'space-0 space-32'} id="variants-table">
-          <FilterRowTest
-            variants={product.variants}
-            filterConfigs={filters}
-            techDataRows={techDataRowsAll}
-            numberOfVariantsToShow={productVariantsToShow.length}
-          />
+        <VStack paddingBlock={'space-12 space-32'} id="variants-table">
+          <FilterRowTest variants={product.variants} filterConfigs={filters} techDataRows={techDataRowsAll} />
         </VStack>
       )}
       {productVariantsSorted.length === 0 && (
@@ -237,25 +236,25 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       )}
       {productVariantsSorted.length > 0 && (
         <VStack>
-          <Heading size={'medium'} level={'2'} spacing>
-            Spesifikasjoner
-          </Heading>
-
           <div className={styles.variantsTable}>
             <VStack>
-              <VStack className={styles.stickyTable} paddingBlock={'space-4 space-0'}>
+              <VStack gap={'space-8'} paddingBlock={'space-4 space-0'} className={styles.stickyTop}>
                 {currentMaxPageCount > 1 && (
-                  <Pagination
-                    page={pageState}
-                    onPageChange={setPageState}
-                    count={currentMaxPageCount}
-                    boundaryCount={1}
-                    siblingCount={0}
-                    size={'small'}
-                    style={{ alignSelf: 'end' }}
-                  />
+                  <HStack justify={'space-between'} align={'end'}>
+                    <BodyShort>
+                      Viser {productVariantsSorted.length} av {productVariantsToShow.length}
+                    </BodyShort>
+                    <Pagination
+                      page={pageState}
+                      onPageChange={setPageState}
+                      count={currentMaxPageCount}
+                      boundaryCount={1}
+                      siblingCount={0}
+                      size={'small'}
+                    />
+                  </HStack>
                 )}
-                <Table>
+                <Table className={styles.stickyTable}>
                   <Table.Body>
                     <Table.Row>
                       <Table.HeaderCell>Navn på variant</Table.HeaderCell>
@@ -300,17 +299,6 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   )
 }
 
-const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
-  return min.map((minValue, index) => {
-    const maksValue = maks[index]
-    if (minValue === maksValue) {
-      return minValue
-    } else {
-      return minValue + `-${maks[index]}`
-    }
-  })
-}
-
 const MetaDataTable = ({ product, productVariants }: { product: Product; productVariants: ProductVariant[] }) => {
   const [showTable, setShowTable] = useState(true)
 
@@ -322,7 +310,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
   //const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
 
   return (
-    <VStack>
+    <VStack paddingBlock={'space-48'}>
       <Box className={styles.techDataGroup}>
         <Button
           variant="tertiary"
@@ -393,107 +381,5 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
         )}
       </Box>
     </VStack>
-  )
-}
-
-const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
-  const [showTable, setShowTable] = useState(false)
-
-  const rowsMerged: TechDataRow[] = []
-
-  const allRowKeys = new Set(techDataRows.map(({ key }) => key))
-
-  techDataRows.forEach((techDataRow) => {
-    if (techDataRow.key.endsWith(' min')) {
-      /*      const baseKey = techDataRow.key.split(' min')[0]*/
-      const baseKey = techDataRow.key.slice(0, -4)
-      const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
-
-      if (maksRow !== undefined) {
-        rowsMerged.push({
-          isCommonField: techDataRow.isCommonField,
-          key: baseKey,
-          unit: techDataRow.unit,
-          values: mergeMinMaksValues(techDataRow.values, maksRow.values),
-          type: techDataRow.type,
-        })
-      } else {
-        rowsMerged.push(techDataRow)
-      }
-      /*        } else if (techDataRow.key.endsWith(' maks') && `${allRowKeys.has(techDataRow.key.split(' maks')[0])} min`) {*/
-    } else if (techDataRow.key.endsWith(' maks') && allRowKeys.has(`${techDataRow.key.slice(0, -5)} min`)) {
-      //er slått sammen med min-raden
-    } else if (allRowKeys.has(`${techDataRow.key} min`)) {
-      //for å slippe f.eks duplikat setedybde på Arbeidsstoler med manuell seteløfter
-    } else {
-      rowsMerged.push(techDataRow)
-    }
-  })
-
-  if (rowsMerged.length < 1) {
-    return <></>
-  }
-
-  const sortRows = (a: TechDataRow, b: TechDataRow) => {
-    const unitOrder = new Map<string, number>([
-      ['cm', 35],
-      ['mm', 34],
-      ['"', 9],
-      ['°', 8],
-      ['%', 7],
-      ['', 6],
-    ])
-
-    const typeOrder = new Map<string, number>([
-      ['N', 3],
-      ['C', 2],
-      ['L', 1],
-      ['', 0],
-    ])
-
-    if (a.type !== b.type) {
-      return (typeOrder.get(b.type) ?? 0) - (typeOrder.get(a.type) ?? 0)
-    }
-
-    if (a.unit !== b.unit) {
-      return (unitOrder.get(b.unit ?? '') ?? 0) - (unitOrder.get(a.unit ?? '') ?? 0)
-    }
-
-    return a.key.localeCompare(b.key)
-  }
-
-  return (
-    <Box className={styles.techDataGroup}>
-      <Button
-        variant="tertiary"
-        data-color={'neutral'}
-        onClick={() => setShowTable((value) => !value)}
-        className={styles.expandTableButton}
-        aria-expanded={showTable}
-      >
-        <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
-          <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
-            {title}
-          </Heading>
-          {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-        </HStack>
-      </Button>
-      {showTable && (
-        <Table zebraStripes width={'100%'}>
-          <Table.Body>
-            {rowsMerged.sort(sortRows).map(({ key, values, unit }) => {
-              return (
-                <Table.Row key={key + 'row'}>
-                  <Table.HeaderCell>{key}</Table.HeaderCell>
-                  {values.map((value, i) => (
-                    <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
-                  ))}
-                </Table.Row>
-              )
-            })}
-          </Table.Body>
-        </Table>
-      )}
-    </Box>
   )
 }

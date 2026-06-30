@@ -18,7 +18,7 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
 
   return (
-    <HGrid columns={{ xs: 1, md: 2 }} gap={'space-8'}>
+    <HGrid columns={{ xs: 1, md: 2 }} gap={'space-8'} paddingInline={'space-16'}>
       {product.photos && <ImageCarousel images={product.photos} />}
 
       <VStack gap={'space-24'}>
