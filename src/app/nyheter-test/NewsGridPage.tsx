@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyLong, Heading, HGrid, HStack, VStack, Page, Search } from '@navikt/ds-react'
+import { BodyLong, Heading, HGrid, HStack, VStack, Page, Search, Chips } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import NewsCard from '@/app/nyheter-test/NewsCard'
 import NewsPagination from '@/app/nyheter-test/NewsPagination'
@@ -17,21 +17,44 @@ export default function NewsGridPage({ news, currentPage, totalPages }: NewsProp
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const searchTerm = searchParams.get('term') ?? ''
+  const selectedTags = searchParams.getAll('tag')
 
-  const updateSearch = (term: string) => {
+  const allTags = Array.from(new Set(news?.flatMap((item) => item.tags) ?? []))
+
+  const updateParams = (updates: { term?: string; tags?: string[] }) => {
     const params = new URLSearchParams(searchParams.toString())
-    if (term) {
-      params.set('term', term)
-    } else {
-      params.delete('term')
+
+    if ('term' in updates) {
+      if (updates.term) params.set('term', updates.term)
+      else params.delete('term')
     }
+
+    if ('tags' in updates) {
+      params.delete('tag')
+      updates.tags?.forEach((tag) => params.append('tag', tag))
+    }
+
     router.replace(`${pathname}?${params.toString()}`)
   }
 
-  const filteredNews = news?.filter((item) =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const toggleTag = (tag: string) => {
+    const next = selectedTags.includes(tag)
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag]
+    updateParams({ tags: next })
+  }
+
+  const filteredNews = news?.filter((item) => {
+    const matchesTerm =
+      searchTerm === '' ||
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesTags =
+      selectedTags.length === 0 || selectedTags.every((tag) => item.tags.includes(tag))
+
+    return matchesTerm && matchesTags
+  })
 
   return (
     <Page>
@@ -46,9 +69,22 @@ export default function NewsGridPage({ news, currentPage, totalPages }: NewsProp
               variant="secondary"
               hideLabel={false}
               value={searchTerm}
-              onChange={updateSearch}
-              onClear={() => updateSearch('')}
+              onChange={(term) => updateParams({ term })}
+              onClear={() => updateParams({ term: '' })}
             />
+            {allTags.length > 0 && (
+              <Chips>
+                {allTags.map((tag) => (
+                  <Chips.Toggle
+                    key={tag}
+                    selected={selectedTags.includes(tag)}
+                    onClick={() => toggleTag(tag)}
+                  >
+                    {tag}
+                  </Chips.Toggle>
+                ))}
+              </Chips>
+            )}
             <HGrid gap={'space-20'} columns={{ xs: 1, sm: 2, md: 3 }}>
               {filteredNews?.map((item) => (
                 <NewsCard news={item} key={item.id} />
