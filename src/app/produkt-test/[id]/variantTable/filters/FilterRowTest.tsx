@@ -1,20 +1,20 @@
 'use client'
 
-import { BodyShort, Box, Chips, Heading, HStack, Select, VStack } from '@navikt/ds-react'
+import { Heading, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
 import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
-import styles from './FilterRowTest.module.scss'
+import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
+import { ChipFilters } from '@/app/produkt-test/[id]/variantTable/filters/ChipFilters'
 
 type Props = {
   variants: ProductVariant[]
   filterConfigs: Filter[]
   techDataRows: TechDataRow[]
-  numberOfVariantsToShow: number
 }
 
-type SelectFilterContents = {
+export type FilterContent = {
   name: string
   label: string
   type: FilterType
@@ -23,7 +23,7 @@ type SelectFilterContents = {
   unit: string | undefined
 }
 
-export const FilterRowTest = ({ variants, filterConfigs, techDataRows, numberOfVariantsToShow }: Props) => {
+export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -91,7 +91,7 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows, numberOfV
     return []
   }
 
-  const filters: SelectFilterContents[] = filterConfigs
+  const filters: FilterContent[] = filterConfigs
     .filter(
       ({ fieldName, type }) =>
         (type === FilterType.DROPDOWN && isRelevantDropdownFilter(fieldName)) ||
@@ -179,88 +179,11 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows, numberOfV
   const toggleFilters = filters.filter((filter) => filter.type === FilterType.TOGGLE)
 
   return (
-    <Box asChild paddingBlock={'space-32 space-24'} paddingInline={'space-32'} className={styles.wrapper}>
-      <VStack gap={'space-16'}>
-        <HStack gap={{ xs: 'space-32', md: 'space-80' }} width={'fit-content'} align={'end'}>
-          <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
-          <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
-        </HStack>
-        <Heading level="3" size="small">
-          {`${numberOfVariantsToShow} av ${variants.length} varianter`}
-        </Heading>
+    <VStack gap={'space-16'}>
+      <VStack gap={'space-16'} width={'fit-content'}>
+        <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
+        <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
       </VStack>
-    </Box>
-  )
-}
-
-const ChipFilters = ({
-  filters,
-  onFilterChange,
-}: {
-  filters: SelectFilterContents[]
-  onFilterChange: (name: string, value: string) => void
-}) => {
-  const searchParams = useSearchParams()
-
-  return (
-    <Chips className={styles.chipsRow}>
-      {filters.map(({ name, label, values }) => {
-        return (
-          <Chips.Toggle
-            selected={searchParams.has(name)}
-            checkmark={true}
-            key={name}
-            onClick={() => onFilterChange(name, searchParams.has(name) ? '' : 'true')}
-            disabled={values.length < 2}
-            className={values.length < 2 ? styles.disabledChip : styles.enabledChip}
-          >
-            {label}
-          </Chips.Toggle>
-        )
-      })}
-    </Chips>
-  )
-}
-
-const SelectFilters = ({
-  filters,
-  onFilterChange,
-}: {
-  filters: SelectFilterContents[]
-  onFilterChange: (name: string, value: string) => void
-}) => {
-  const searchParams = useSearchParams()
-  return (
-    <HStack gap={'space-32'}>
-      {filters.map(({ name, label, values, valueRange, unit }, index) => {
-        return (
-          values.length > 0 && (
-            <Select
-              key={index + 1}
-              label={
-                <VStack>
-                  {label}
-                  {valueRange && (
-                    <BodyShort>intervall: {valueRange.map((value) => value + (unit ?? '')).join(' - ')}</BodyShort>
-                  )}
-                </VStack>
-              }
-              onChange={(event) => onFilterChange(name, event.target.value)}
-              value={searchParams.get(name) ?? ''}
-              style={{ minWidth: '290px' }}
-            >
-              <option key="" value="">
-                Alle
-              </option>
-              {values.map((value, i) => (
-                <option key={i + 1} label={value + (unit ? ` ${unit}` : '')}>
-                  {value}
-                </option>
-              ))}
-            </Select>
-          )
-        )
-      })}
-    </HStack>
+    </VStack>
   )
 }

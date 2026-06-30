@@ -19,20 +19,24 @@
 .techDataGroup {
   border: 1px solid $ax-border-neutral-subtleA;
   border-bottom: none;
-  border-top: none;
+  background: white;
 }
 
-/*
 .techDataGroup + .techDataGroup {
   border-top: none;
 }
- */
 
-.stickyTable {
+.stickyTop {
   position: sticky;
   top: 0;
   z-index: 3;
+  background-color: $ax-bg-info-soft;
+}
+
+.stickyTable {
   background: white;
+  border: 1px solid $ax-border-neutral-subtleA;
+  border-bottom: none;
 }
 
 .expandTableButton {
@@ -52,7 +56,7 @@
 }
 
 .variantsTable {
-  width: fit-content;
+  //width: 100%;
 
   table {
     border-collapse: separate;
@@ -63,17 +67,19 @@
     font-weight: normal;
   }
 
-  tr > th:first-child,
-  tr > td:first-child {
-    position: sticky;
-    left: 0;
-    width: 250px;
-    z-index: 1;
-  }
-
   tr > th:nth-child(n + 1),
   tr > td {
-    width: 200px;
+    width: 180px;
+    //display: inline-block;
+  }
+
+  tr {
+    display: flex;
+    //align-items: stretch;
+  }
+
+  tr > td:last-child {
+    flex: 1;
   }
 
   table thead th:first-child {

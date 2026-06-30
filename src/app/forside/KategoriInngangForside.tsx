@@ -1,5 +1,3 @@
-'use client'
-
 import { Heading, HGrid, VStack } from '@navikt/ds-react'
 import { CategoryCardFrontPage } from '@/app/kategori/CategoryCardFrontPage'
 import { frontPageCategories, frontPageTitles } from '@/app/kategori/utils/mappings/frontpage-category-mapping'

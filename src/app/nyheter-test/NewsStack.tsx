@@ -1,8 +1,10 @@
 'use client'
 
-import { BodyLong, Heading, HGrid, HStack, LinkCard, VStack } from '@navikt/ds-react'
+import { BodyLong, Heading, HGrid, HStack, Page, VStack, Button } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import NewsCard from '@/app/nyheter-test/NewsCard'
+import { ArrowRightIcon } from '@navikt/aksel-icons'
+import NextLink from 'next/link'
 
 type Props = {
   news?: NewsDTO[]
@@ -11,19 +13,20 @@ type Props = {
 export default function NewsStack({ news }: Props) {
 
   return (
-    <VStack gap="space-8" margin="space-20">
-      <HStack justify="space-between" align="center">
-        <Heading size="large" level="1">
-          Nyheter
-        </Heading>
-      </HStack>
-
-      <HGrid gap="space-12" columns={{ xs: 'repeat(auto-fit, minmax(10rem, 1fr))', md: 3 }}>
-        {news?.map((news) => (
-          <NewsCard news={news} key={news.id} />
-        ))}
-        {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
-      </HGrid>
-    </VStack>
+        <HStack justify={'center'} padding={'space-16'}>
+          <VStack gap={'space-8'} style={{ width: '100%', maxWidth: '1200px' }}>
+            <Heading size="large" level="1">
+              Aktuelt
+            </Heading>
+            <HGrid gap={'space-20'} columns={{ xs: 1, sm: 2, md: 3 }}>
+              {news?.map((news) => (
+                <NewsCard news={news} key={news.id} />
+              ))}
+              {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
+            </HGrid>
+            <Button as={NextLink} href='/nyheter-test/aktuelt' variant={'tertiary'} icon={<ArrowRightIcon />} style={{ alignSelf: 'flex-start' }}
+            >Flere saker</Button>
+          </VStack>
+        </HStack>
   )
 }

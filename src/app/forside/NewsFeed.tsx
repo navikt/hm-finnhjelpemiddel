@@ -1,3 +1,5 @@
+'use client'
+
 import { BodyShort, Box, Heading, HStack, Link, Loader, VStack } from '@navikt/ds-react'
 import styles from './NewsFeed.module.scss'
 import useSWR from 'swr'

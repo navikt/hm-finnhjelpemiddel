@@ -1,0 +1,12 @@
+.selectFilter {
+  min-width: 290px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  select {
+    background-color: white;
+    max-height: 48px;
+  }
+}
