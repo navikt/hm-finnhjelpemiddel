@@ -71,7 +71,7 @@ export interface NewsDTO {
   updated: string
   publishedFrom: string
   publishedTo: string
-  imageUrl: string
+  image_url: string
   tags: string[]
 }
 
