@@ -1,7 +1,5 @@
-import { LinkCard, Tag, Box, HStack } from '@navikt/ds-react'
+import { LinkCard, Tag, HStack } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
-import Image from 'next/image'
-import { NewspaperIcon } from '@navikt/aksel-icons'
 import NextLink from 'next/link'
 import NewsImage from '@/app/nyheter-test/NewsImage'
 
@@ -15,7 +13,7 @@ export default function NewsCard({ news }: NewsProps){
       <LinkCard key={news.id} style={{minHeight: "490px"}}>
         <LinkCard.Image aspectRatio="16/9">
           {/*<Image fill src="/assets/supreme_glorious_leader.png" alt="Alt-tekst for bilde"/> */}
-          <NewsImage fontSize={"5rem"}></NewsImage>
+          <NewsImage fontSize={"5rem"} imageUrl={news.image_url}></NewsImage>
         </LinkCard.Image>
         <LinkCard.Title>
           <LinkCard.Anchor asChild>

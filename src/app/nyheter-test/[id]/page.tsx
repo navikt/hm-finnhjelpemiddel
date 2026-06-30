@@ -1,10 +1,9 @@
-import { Bleed, BodyLong, Box, Button, Heading, Page, Tag, VStack } from '@navikt/ds-react'
+import { BodyLong, Box, Heading, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import { getNewsById } from '@/app/nyheter-test/news-util'
 import { notFound } from 'next/navigation'
 import { sanitize } from '@/utils/news-html-util'
-import { ArrowLeftIcon } from '@navikt/aksel-icons'
-import NewsImage from '@/app/nyheter-test/NewsImage'
+import NewsArticleImage from '@/app/nyheter-test/[id]/NewsArticleImage'
 
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -42,15 +41,8 @@ export default async function NewsArticlePage({
       <VStack gap={'space-32'} paddingBlock={'space-32'}>
         <article>
           <VStack gap={'space-16'}>
-            {news.imageUrl && (
-              <Bleed marginInline={"space-64"}>
-                <Box
-                  style={{ width: '100%', aspectRatio: '16/9', position: 'relative', overflow: 'hidden'}}
-                  borderRadius={'12'}
-                >
-                  <NewsImage imageUrl={news.imageUrl} alt={news.title} fontSize="5rem" />
-                </Box>
-              </Bleed>
+            {news.image_url && (
+              <NewsArticleImage imageUrl={news.image_url} alt={news.title} />
             )}
             <Heading size={'large'} level={'1'}>
               {title}
