@@ -9,7 +9,7 @@ type NewsProps = {
 
 export default function SmallNewsCard({ news}: NewsProps) {
   return (
-    <LinkCard key={news.id} size={'small'} style={{ minWidth: '490px', height: '140px', paddingInlineStart: '140px' }}>
+    <LinkCard key={news.id} size={'small'} style={{ height: '160px', paddingInlineStart: '140px' }}>
       <Box style={{
         position:'absolute',
         overflow: 'hidden',
@@ -18,9 +18,10 @@ export default function SmallNewsCard({ news}: NewsProps) {
         left: 0,
         top: 0,
         bottom: 0,
-        width: '130px'
+        width: '130px',
+        height: '158px'
       }}>
-        <NewsImage fontSize={'5rem'}></NewsImage>
+        <NewsImage imageUrl={news.image_url} fontSize={'5rem'}></NewsImage>
       </Box>
       <LinkCard.Title
         style={{
