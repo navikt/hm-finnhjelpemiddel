@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyLong, Heading, HGrid, HStack, Page, VStack, Button } from '@navikt/ds-react'
+import { BodyLong, Heading, HGrid, HStack, VStack, Button } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import NewsCard from '@/app/nyheter-test/NewsCard'
 import { ArrowRightIcon } from '@navikt/aksel-icons'

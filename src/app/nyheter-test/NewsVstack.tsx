@@ -1,4 +1,5 @@
 'use client'
+
 import { BodyLong, Button, Heading, VStack } from '@navikt/ds-react'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 import SmallNewsCard from '@/app/nyheter-test/SmallNewsCard'
@@ -12,7 +13,7 @@ type Props = {
 export default function NewsVstack({ news }: Props) {
   return (
     <VStack gap="space-16"  maxWidth={'600px'} width={'100%'} paddingBlock="space-24">
-      <Heading size={'medium'}>Aktuelt</Heading>
+      <Heading level={'2'} size={'large'}>Aktuelt</Heading>
       {news?.map((news) => (
         <SmallNewsCard news={news} key={news.id} />
       ))}

@@ -1,5 +1,5 @@
 import NewsImage from '@/app/nyheter-test/NewsImage'
-import { Box, LinkCard, Tag, VStack } from '@navikt/ds-react'
+import { Box, LinkCard, Tag } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { NewsDTO } from '@/app/nyheter-test/news-util'
 
@@ -7,7 +7,7 @@ type NewsProps = {
   news: NewsDTO
 }
 
-export default function SmallNewsCard({ news}: NewsProps) {
+export default function SmallNewsCard({ news }: NewsProps) {
   return (
     <LinkCard key={news.id} size={'small'} style={{ minHeight: '160px', paddingInlineStart: '140px' }}>
       <Box style={{

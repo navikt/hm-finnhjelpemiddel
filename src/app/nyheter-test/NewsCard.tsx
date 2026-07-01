@@ -12,7 +12,6 @@ export default function NewsCard({ news }: NewsProps){
   return (
       <LinkCard key={news.id} style={{minHeight: "490px"}}>
         <LinkCard.Image aspectRatio="16/9">
-          {/*<Image fill src="/assets/supreme_glorious_leader.png" alt="Alt-tekst for bilde"/> */}
           <NewsImage fontSize={"5rem"} imageUrl={news.image_url}></NewsImage>
         </LinkCard.Image>
         <LinkCard.Title>
@@ -35,7 +34,6 @@ export default function NewsCard({ news }: NewsProps){
                 {tag}
               </Tag>
             ))}
-
           </HStack>
         </LinkCard.Footer>
       </LinkCard>

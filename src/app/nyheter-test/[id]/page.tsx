@@ -1,4 +1,4 @@
-import { BodyLong, Box, Heading, Tag, VStack } from '@navikt/ds-react'
+import { BodyLong, Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import { getNewsById } from '@/app/nyheter-test/news-util'
 import { notFound } from 'next/navigation'
@@ -34,34 +34,31 @@ export default async function NewsArticlePage({
 
   const title = news.title
   const sanitizedBody = sanitize(news.body)
-  const publised = new Date(news.created).toLocaleDateString('nb-NO')
+  const published = new Date(news.created).toLocaleDateString('nb-NO')
   const updated = news.updated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
     <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'}>
       <VStack gap={'space-32'} paddingBlock={'space-32'}>
         <article>
-          <VStack gap={'space-16'}>
-            {news.image_url && (
-              <NewsArticleImage imageUrl={news.image_url} alt={news.title} />
-            )}
+          <VStack gap={'space-4'}>
+            {news.image_url && <NewsArticleImage imageUrl={news.image_url} alt={news.title} />}
             <Heading size={'large'} level={'1'}>
               {title}
             </Heading>
-            <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${publised}`}</time>
-            <BodyLong size="large">{news.description}</BodyLong>
+            <HStack gap={'space-16'} align={'center'}>
+              <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
+                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
+                  {news.tags?.map((tag) => (
+                    <li key={tag}>
+                      <Tag variant={'moderate'} data-color={'neutral'}>
+                        {tag}
+                      </Tag>
+                    </li>
+                  ))}
+                </ul>
+            </HStack>
+            <BodyLong size="medium" weight="semibold">{news.description}</BodyLong>
             <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
-
-            <footer>
-              <ul style={{listStyle: 'none', padding: 0, display: 'flex', gap:'0.5rem', flexWrap:'wrap'}}>
-                {news.tags?.map((tag) => (
-                  <li key={tag}>
-                    <Tag variant={"moderate"} data-color={'neutral'}>
-                      {tag}
-                    </Tag>
-                  </li>
-                ))}
-              </ul>
-            </footer>
           </VStack>
         </article>
       </VStack>
