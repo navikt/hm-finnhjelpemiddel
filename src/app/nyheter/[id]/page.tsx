@@ -75,11 +75,9 @@ export default async function NewsArticlePage({
             <div className={styles.metaRow}>
               <time dateTime={publishedISO}>Publisert: {publishedStr}</time>
               {isExpired && (
-                <span className={styles.statusTagWrapper}>
-                  <Tag size="small" variant="neutral-moderate">
-                    Utgått
-                  </Tag>
-                </span>
+                <Tag size="xsmall" variant="neutral-moderate">
+                  Utgått
+                </Tag>
               )}
             </div>
           </VStack>
