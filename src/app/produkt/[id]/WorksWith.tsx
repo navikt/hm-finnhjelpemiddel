@@ -1,4 +1,4 @@
-import { Accordion, BodyLong, BodyShort, Button, Chips, HelpText, HStack, VStack } from '@navikt/ds-react'
+import { BodyShort, Button, Chips, ReadMore, VStack } from '@navikt/ds-react'
 import styles from '@/app/produkt/[id]/WorksWith.module.scss'
 import { useEffect, useMemo, useState } from 'react'
 import useSWRImmutable from 'swr/immutable'
@@ -18,35 +18,20 @@ const WORKS_WITH_CONFIG = {
 export const WorksWith = ({ worksWithSeriesIds }: Props) => {
   const { data } = useSWRImmutable<FetchSeriesResponse>(worksWithSeriesIds, fetchWorkWithProducts)
   const worksWithProducts = data?.products
-
-  const helpTextWorksWith = (
-    <BodyLong>
-      Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt sammen.
-      <br />
-      <br />
-      Man trenger ikke å velge alle hjelpemidler fra lista. Det kan være flere alternativer av samme type, der man kun
-      trenger å velge én.
-    </BodyLong>
-  )
-
   return (
     worksWithProducts &&
     worksWithProducts.length > 0 && (
-      <Accordion size={'small'} indent={false}>
-        <Accordion.Item defaultOpen className={styles.accordionLast}>
-          <Accordion.Header className={styles.accordion}>
-            <HStack gap="space-8" align="center">
-              Virker sammen med
-              <HelpText onClick={(event) => event.stopPropagation()} placement="right">
-                {helpTextWorksWith}
-              </HelpText>
-            </HStack>
-          </Accordion.Header>
-          <Accordion.Content>
-            <WorksWithSection products={worksWithProducts} />
-          </Accordion.Content>
-        </Accordion.Item>
-      </Accordion>
+      <VStack gap={'space-16'}>
+        <ReadMore variant="moderate" header="Hva betyr dette?" size="small">
+          Hjelpemiddelet virker sammen med disse opplistede hjelpemidlene som leverandører og fageksperter har satt
+          sammen.
+          <br />
+          <br />
+          Man trenger ikke å velge alle hjelpemidler fra lista. Det kan være flere alternativer av samme type, der man
+          kun trenger å velge én.
+        </ReadMore>
+        <WorksWithSection products={worksWithProducts} />
+      </VStack>
     )
   )
 }
