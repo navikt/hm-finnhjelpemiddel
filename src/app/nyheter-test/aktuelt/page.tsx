@@ -1,11 +1,15 @@
-import { getNewsPaginated } from '@/app/nyheter-test/news-util'
+import { getAllTags, getNewsPaginated } from '@/app/nyheter-test/news-util'
 import NewsGridPage from '@/app/nyheter-test/NewsGridPage'
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
-  const { page } = await searchParams
+export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string; tag?: string | string[]; search?: string }> }) {
+  const { page, tag, search } = await searchParams
   const currentPage = Number(page ?? 1) - 1
-  const { content, totalSize, pageable } = await getNewsPaginated(currentPage)
+  const selectedTags = Array.isArray(tag) ? tag : tag ? [tag] : []
+  const [{ content, totalSize, pageable }, allTags] = await Promise.all([
+    getNewsPaginated(currentPage, 9, selectedTags, search ?? ''),
+    getAllTags()
+  ])
   const totalPages = Math.ceil(totalSize / pageable.size)
 
-  return <NewsGridPage news={content} totalPages={totalPages} currentPage={currentPage + 1} />
+  return <NewsGridPage news={content} totalPages={totalPages} currentPage={currentPage + 1} allTags={allTags}/>
 }

@@ -43,16 +43,23 @@ export async function getNewsById(id: string): Promise<NewsDTO | null> {
   if (!res.ok) {
     throw new CustomError(res.statusText, res.status)
   }
-  const data = await res.json()
-  console.log(data)
-  return data}
+  return res.json()
+}
 
-export async function getNewsPaginated(page: number=0, size: number=9): Promise<NewsPageDTO> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news?page=${page}&size=${size}`, {
+export async function getNewsPaginated(
+  page: number = 0,
+  size: number = 9,
+  tag: string[] = [],
+  search: string = ''
+): Promise<NewsPageDTO> {
+  const params = new URLSearchParams({ page: String(page), size: String(size) })
+  tag.forEach((t) => params.append('tag', t))
+  if (search) params.set('search', search)
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news?${params}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
   })
 
   if (!res.ok) {
@@ -60,6 +67,21 @@ export async function getNewsPaginated(page: number=0, size: number=9): Promise<
   }
 
   return res.json()
+}
+
+export async function getAllTags(): Promise<string[]> {
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/admin/tags/`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  if (!res.ok) {
+    throw new CustomError(res.statusText, res.status)
+  }
+  const data: { tag: string }[] = await res.json()
+  return data.map(t => t.tag)
 }
 
 export interface NewsDTO {

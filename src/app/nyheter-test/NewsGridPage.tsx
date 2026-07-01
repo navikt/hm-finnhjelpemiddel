@@ -5,37 +5,39 @@ import { NewsDTO } from '@/app/nyheter-test/news-util'
 import NewsCard from '@/app/nyheter-test/NewsCard'
 import NewsPagination from '@/app/nyheter-test/NewsPagination'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-
-const SEARCH_STORAGE_KEY = 'news-search-term'
+import { useEffect, useState } from 'react'
 
 type NewsProps = {
   news?: NewsDTO[]
-  totalPages: number,
+  totalPages: number
   currentPage: number
+  allTags: string[]
 }
 
-export default function NewsGridPage({ news, currentPage, totalPages }: NewsProps) {
+export default function NewsGridPage({ news, currentPage, totalPages, allTags }: NewsProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const selectedTags = searchParams.getAll('tag')
+  const [inputValue, setInputValue] = useState(searchParams.get('search') ?? '')
 
-  const [inputValue, setInputValue] = useState<string>(() =>
-    typeof window !== 'undefined' ? (sessionStorage.getItem(SEARCH_STORAGE_KEY) ?? '') : ''
-  )
-
-  const handleSearch = (value: string) => {
-    setInputValue(value)
-    sessionStorage.setItem(SEARCH_STORAGE_KEY, value)
-  }
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.delete('page')
+      if (inputValue) {
+        params.set('search', inputValue)
+      } else {
+        params.delete('search')
+      }
+      router.replace(`${pathname}?${params.toString()}`)
+    }, 300)
+    return () => clearTimeout(timeout)
+  }, [inputValue])
 
   const handleClear = () => {
     setInputValue('')
-    sessionStorage.removeItem(SEARCH_STORAGE_KEY)
   }
-
-  const allTags = Array.from(new Set(news?.flatMap((item) => item.tags) ?? []))
 
   const toggleTag = (tag: string) => {
     const next = selectedTags.includes(tag)
@@ -43,21 +45,10 @@ export default function NewsGridPage({ news, currentPage, totalPages }: NewsProp
       : [...selectedTags, tag]
     const params = new URLSearchParams(searchParams.toString())
     params.delete('tag')
+    params.delete('page')
     next.forEach((t) => params.append('tag', t))
     router.replace(`${pathname}?${params.toString()}`)
   }
-
-  const filteredNews = news?.filter((item) => {
-    const matchesTerm =
-      inputValue === '' ||
-      item.title.toLowerCase().includes(inputValue.toLowerCase()) ||
-      item.description.toLowerCase().includes(inputValue.toLowerCase())
-
-    const matchesTags =
-      selectedTags.length === 0 || selectedTags.every((tag) => item.tags.includes(tag))
-
-    return matchesTerm && matchesTags
-  })
 
   return (
     <Page>
@@ -72,7 +63,7 @@ export default function NewsGridPage({ news, currentPage, totalPages }: NewsProp
               variant="secondary"
               hideLabel={false}
               value={inputValue}
-              onChange={handleSearch}
+              onChange={setInputValue}
               onClear={handleClear}
             />
             {allTags.length > 0 && (
@@ -89,10 +80,10 @@ export default function NewsGridPage({ news, currentPage, totalPages }: NewsProp
               </Chips>
             )}
             <HGrid gap={'space-20'} columns={{ xs: 1, sm: 2, md: 3 }}>
-              {filteredNews?.map((item) => (
+              {news?.map((item) => (
                 <NewsCard news={item} key={item.id} />
               ))}
-              {filteredNews && filteredNews.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
+              {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
             </HGrid>
             <HStack justify={"center"} paddingBlock={'space-16'}>
               <NewsPagination currentPage={currentPage} totalPages={totalPages}></NewsPagination>
