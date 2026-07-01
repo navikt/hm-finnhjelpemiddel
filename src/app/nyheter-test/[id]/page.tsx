@@ -34,7 +34,7 @@ export default async function NewsArticlePage({
 
   const title = news.title
   const sanitizedBody = sanitize(news.body)
-  const publised = new Date(news.created).toLocaleDateString('nb-NO')
+  const published = new Date(news.created).toLocaleDateString('nb-NO')
   const updated = news.updated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
     <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'}>
@@ -47,7 +47,7 @@ export default async function NewsArticlePage({
             <Heading size={'large'} level={'1'}>
               {title}
             </Heading>
-            <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${publised}`}</time>
+            <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
             <BodyLong size="large">{news.description}</BodyLong>
             <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
 

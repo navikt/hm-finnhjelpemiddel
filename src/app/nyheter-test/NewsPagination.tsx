@@ -8,7 +8,7 @@ type Props = {
   totalPages: number
 }
 
-export default function NewsPagination({ currentPage, totalPages}: Props) {
+export default function NewsPagination({ currentPage, totalPages }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
