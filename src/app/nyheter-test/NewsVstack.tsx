@@ -12,7 +12,7 @@ type Props = {
 
 export default function NewsVstack({ news }: Props) {
   return (
-    <VStack gap="space-16"  maxWidth={'600px'} width={'100%'} paddingBlock="space-24">
+    <VStack gap="space-16"  maxWidth={'600px'} width={'100%'}>
       <Heading level={'2'} size={'large'}>Aktuelt</Heading>
       {news?.map((news) => (
         <SmallNewsCard news={news} key={news.id} />
