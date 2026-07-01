@@ -9,7 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@axe-core/react": "^4.11.0",
+    "@axe-core/react": "^4.12.1",
     "@grafana/faro-web-sdk": "^2.7.0",
     "@grafana/faro-web-tracing": "^2.7.0",
     "@navikt/aksel-icons": "^8.13.0",
@@ -29,7 +29,7 @@
     "query-string": "^9.4.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-hook-form": "^7.79.0",
+    "react-hook-form": "^7.80.0",
     "react-intersection-observer": "^10.0.0",
     "react-player": "^3.4.0",
     "react-snowfall": "^2.4.0",
