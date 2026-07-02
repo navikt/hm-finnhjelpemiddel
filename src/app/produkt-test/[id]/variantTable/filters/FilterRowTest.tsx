@@ -6,7 +6,7 @@ import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
 import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
-import { ChipFilters } from '@/app/produkt-test/[id]/variantTable/filters/ChipFilters'
+import { AgreementCheckbox } from '@/app/produkt-test/[id]/variantTable/filters/CheckboxFilters'
 
 type Props = {
   variants: ProductVariant[]
@@ -182,7 +182,7 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
     <VStack gap={'space-16'}>
       <VStack gap={'space-16'} width={'fit-content'}>
         <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
-        <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
+        <AgreementCheckbox filters={toggleFilters} onFilterChange={onFilterChange} />
       </VStack>
     </VStack>
   )
