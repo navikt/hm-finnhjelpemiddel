@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
@@ -14,7 +14,7 @@ const CompareMenu = () => {
 
   const reversedProductsToCompare = productsToCompare.slice().reverse()
 
-  if (productsToCompare.length == 0) {
+  if (productsToCompare.length < 2) {
     return <></>
   }
 
@@ -51,47 +51,30 @@ const CompareMenu = () => {
 
       {compareMenuState === CompareMenuState.Open && (
         <div key="content" className="compare-menu__container">
-          {productsToCompare.length === 0 && (
-            <div className="compare-menu__placeholder compare-menu__placeholder__empty">
-              <BodyShort>Ingen produkter er lagt til for sammenligning.</BodyShort>
-            </div>
-          )}
-          {productsToCompare.length !== 0 && (
-            <>
-              <ul className="compare-menu__chosen-products">
-                {reversedProductsToCompare.map((product) => (
-                  <li key={'compare-' + product.id}>
-                    <ProductCardCompare product={product} type="removable" />
-                  </li>
-                ))}
-              </ul>
-
-              {productsToCompare.length > 1 && (
-                <div className="compare-menu__buttons">
-                  <NextLink href={compareUrl} passHref>
-                    <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
-                      Sammenlign
-                    </Button>
-                  </NextLink>
-                  <Button
-                    variant="tertiary"
-                    icon={<TrashIcon aria-hidden />}
-                    onClick={() => {
-                      resetProductToCompare()
-                      setCompareMenuState(CompareMenuState.Minimized)
-                    }}
-                  >
-                    Nullstill
-                  </Button>
-                </div>
-              )}
-              {productsToCompare.length === 1 && (
-                <div className="compare-menu__placeholder compare-menu__placeholder__one-more">
-                  <BodyShort>Velg minst ett produkt til for å gå til sammenligning.</BodyShort>
-                </div>
-              )}
-            </>
-          )}
+          <ul className="compare-menu__chosen-products">
+            {reversedProductsToCompare.map((product) => (
+              <li key={'compare-' + product.id}>
+                <ProductCardCompare product={product} type="removable" />
+              </li>
+            ))}
+          </ul>
+          <div className="compare-menu__buttons">
+            <NextLink href={compareUrl} passHref>
+              <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
+                Sammenlign
+              </Button>
+            </NextLink>
+            <Button
+              variant="tertiary"
+              icon={<TrashIcon aria-hidden />}
+              onClick={() => {
+                resetProductToCompare()
+                setCompareMenuState(CompareMenuState.Minimized)
+              }}
+            >
+              Nullstill
+            </Button>
+          </div>
         </div>
       )}
     </div>
