@@ -2,8 +2,6 @@ import { useSearchParams } from 'next/navigation'
 import { Checkbox } from '@navikt/ds-react'
 import { FilterContent } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 
-// TODO: se kommentar fra Atle for resterende fix
-
 export const AgreementCheckbox = ({
   filters,
   onFilterChange,
