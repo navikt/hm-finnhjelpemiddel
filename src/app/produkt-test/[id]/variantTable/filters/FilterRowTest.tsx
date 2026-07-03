@@ -6,7 +6,7 @@ import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
 import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
-import { AgreementCheckbox } from '@/app/produkt-test/[id]/variantTable/filters/CheckboxFilters'
+import { AgreementCheckbox } from '@/app/produkt-test/[id]/variantTable/filters/AgreementCheckbox'
 
 type Props = {
   variants: ProductVariant[]
