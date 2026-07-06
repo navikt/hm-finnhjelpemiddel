@@ -18,6 +18,10 @@ const CompareMenu = () => {
   useEffect(() => {
     if (productsToCompare.length === 2) {
       setCompareMenuState(CompareMenuState.Open)
+      console.log(productsToCompare)
+    }
+    if (productsToCompare.length === 1) {
+      setCompareMenuState(CompareMenuState.Minimized)
     }
   }, [productsToCompare.length])
 
