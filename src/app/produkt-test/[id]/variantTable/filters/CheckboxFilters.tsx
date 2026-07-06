@@ -2,7 +2,7 @@ import { useSearchParams } from 'next/navigation'
 import { Checkbox, CheckboxGroup, HStack } from '@navikt/ds-react'
 import { FilterContent } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 
-export const AgreementCheckbox = ({
+export const CheckboxFilters = ({
   filters,
   onFilterChange,
 }: {
