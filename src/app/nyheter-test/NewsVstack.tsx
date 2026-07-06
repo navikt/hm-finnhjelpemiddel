@@ -17,7 +17,7 @@ export default function NewsVstack({ news }: Props) {
       {news?.map((news) => (
         <SmallNewsCard news={news} key={news.id} />
       ))}
-      {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
+      {news && news.length === 0 && <BodyLong>Ingen saker matchet søket ditt.</BodyLong>}
       <Button
         as={NextLink}
         href="/nyheter-test/aktuelt"

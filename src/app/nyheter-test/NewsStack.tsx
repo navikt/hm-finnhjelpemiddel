@@ -22,7 +22,7 @@ export default function NewsStack({ news }: Props) {
               {news?.map((news) => (
                 <NewsCard news={news} key={news.id} />
               ))}
-              {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
+              {news && news.length === 0 && <BodyLong>Ingen saker matchet søket ditt.</BodyLong>}
             </HGrid>
             <Button as={NextLink} href='/nyheter-test/aktuelt' variant={'tertiary'} icon={<ArrowRightIcon />} style={{ alignSelf: 'flex-start' }}
             >Flere saker</Button>
