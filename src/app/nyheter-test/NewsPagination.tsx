@@ -38,6 +38,7 @@ export default function NewsPagination({ currentPage, totalPages }: Props) {
         siblingCount={0}
         boundaryCount={1}
         size={isMobile ? 'small' : 'medium'}
+        data-color={'accent'}
       />
   )
 }

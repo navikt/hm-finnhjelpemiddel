@@ -39,9 +39,8 @@ export default async function NewsArticlePage({
   const isUpdated = news.updated && news.updated !== news.created
   const updated = isUpdated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
-    <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'} style={{ wordWrap: 'break-word' }}
+    <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'} paddingBlock={'space-16'} style={{ wordWrap: 'break-word' }}
     >
-      //TODO: BackButton placement
         <BackButton />
         <VStack gap={'space-32'} paddingBlock={'space-32'}>
           <article>
