@@ -38,35 +38,39 @@ export default async function NewsArticlePage({
   const published = new Date(news.created).toLocaleDateString('nb-NO')
   const updated = news.updated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
-    <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'}>
-      //TODO: BackButton placement
-        <BackButton />
-        <VStack gap={'space-32'} paddingBlock={'space-32'}>
-          <article>
-            <VStack gap={'space-4'}>
-              {news.image_url && <NewsArticleImage imageUrl={news.image_url} alt={news.title} />}
-              <Heading size={'large'} level={'1'}>
-                {title}
-              </Heading>
-              <HStack gap={'space-16'} align={'center'}>
-                <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
-                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
-                  {news.tags?.map((tag) => (
-                    <li key={tag}>
-                      <Tag variant={'moderate'} data-color={'neutral'}>
-                        {tag}
-                      </Tag>
-                    </li>
-                  ))}
-                </ul>
-              </HStack>
-              <BodyLong size="medium" weight="semibold">
-                {news.description}
-              </BodyLong>
-              <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
-            </VStack>
-          </article>
-        </VStack>
+    <Box
+      maxWidth={'700px'}
+      marginInline={'auto'}
+      paddingInline={'space-16'}
+      style={{ wordWrap: 'break-word' }}
+    >
+      <BackButton />
+      <VStack gap={'space-32'} paddingBlock={'space-32'}>
+        <article>
+          <VStack gap={'space-4'}>
+            {news.image_url && <NewsArticleImage imageUrl={news.image_url} alt={news.title} />}
+            <Heading size={'large'} level={'1'}>
+              {title}
+            </Heading>
+            <HStack gap={'space-16'} align={'center'}>
+              <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
+                {news.tags?.map((tag) => (
+                  <li key={tag}>
+                    <Tag variant={'moderate'} data-color={'neutral'}>
+                      {tag}
+                    </Tag>
+                  </li>
+                ))}
+              </ul>
+            </HStack>
+            <BodyLong size="medium" weight="semibold">
+              {news.description}
+            </BodyLong>
+            <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
+          </VStack>
+        </article>
+      </VStack>
     </Box>
   )
 }
