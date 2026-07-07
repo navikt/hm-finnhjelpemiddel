@@ -35,7 +35,8 @@ export default async function NewsArticlePage({
   const title = news.title
   const sanitizedBody = sanitize(news.body)
   const published = new Date(news.created).toLocaleDateString('nb-NO')
-  const updated = news.updated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
+  const isUpdated = news.updated && news.updated !== news.created
+  const updated = isUpdated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
     <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'}>
       <VStack gap={'space-32'} paddingBlock={'space-32'}>
