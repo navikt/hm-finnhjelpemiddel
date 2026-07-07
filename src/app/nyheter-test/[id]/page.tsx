@@ -45,7 +45,7 @@ export default async function NewsArticlePage({
         <VStack gap={'space-32'} paddingBlock={'space-32'}>
           <article>
             <VStack gap={'space-4'}>
-              {news.image_url && <NewsArticleImage imageUrl={news.image_url} alt={news.title} />}
+              <NewsArticleImage imageUrl={news.image_url} alt={news.title} tags={news.tags} />
               <Heading size={'large'} level={'1'}>
                 {title}
               </Heading>
