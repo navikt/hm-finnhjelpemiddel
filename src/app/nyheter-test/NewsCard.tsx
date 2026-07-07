@@ -12,7 +12,7 @@ export default function NewsCard({ news }: NewsProps){
   return (
       <LinkCard key={news.id} style={{minHeight: "490px"}}>
         <LinkCard.Image aspectRatio="16/9">
-          <NewsImage fontSize={"5rem"} imageUrl={news.image_url} alt={news.imageDescription} loaderSize={'large'}></NewsImage>
+          <NewsImage fontSize={"5rem"} imageUrl={news.image_url} alt={news.imageDescription} tags={news.tags} loaderSize={'large'}></NewsImage>
         </LinkCard.Image>
         <LinkCard.Title>
           <LinkCard.Anchor asChild>
