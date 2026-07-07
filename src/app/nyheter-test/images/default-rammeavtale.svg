@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#F5DADA"/>
+  <!-- subtle grid pattern -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ECC8C8" stroke-width="0.8"/>
+  </pattern>
+  <rect width="800" height="450" fill="url(#grid)"/>
+  <!-- document/contract icon centered -->
+  <g transform="translate(400,215)" opacity="0.35">
+    <rect x="-60" y="-80" width="120" height="150" rx="8" fill="none" stroke="#B94040" stroke-width="7"/>
+    <line x1="-35" y1="-40" x2="35" y2="-40" stroke="#B94040" stroke-width="6" stroke-linecap="round"/>
+    <line x1="-35" y1="-10" x2="35" y2="-10" stroke="#B94040" stroke-width="6" stroke-linecap="round"/>
+    <line x1="-35" y1="20" x2="10" y2="20" stroke="#B94040" stroke-width="6" stroke-linecap="round"/>
+    <!-- top-right corner fold -->
+    <polyline points="20,-80 60,-40 60,-40 20,-40 20,-80" fill="#F5DADA" stroke="#B94040" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+  <!-- label -->
+  <text x="400" y="330" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#B94040" opacity="0.5" letter-spacing="2">RAMMEAVTALE</text>
+</svg>
