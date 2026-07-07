@@ -6,12 +6,9 @@ import { OtherAgreements } from '@/app/forside/OtherAgreements'
 import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
 import { FrontPageSearch } from '@/app/FrontPageSearch'
 import NewsFeed from '@/app/forside/NewsFeed'
-import { getNews, getNewsPaginated } from '@/app/nyheter-test/news-util'
 import NewsVstack from '@/app/nyheter-test/NewsVstack'
 
-async function FrontPage() {
-  const data = await getNewsPaginated(0,4)
-  const news = data.content
+function FrontPage() {
   return (
     <VStack
       className={styles.container}
@@ -48,7 +45,7 @@ async function FrontPage() {
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
-        <NewsVstack news={news} />
+        <NewsVstack />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />

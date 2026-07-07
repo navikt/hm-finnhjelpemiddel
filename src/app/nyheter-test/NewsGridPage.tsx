@@ -54,31 +54,29 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
     <Page>
       <Page.Block as="main" gutters>
         <HStack justify={'center'} padding={'space-16'}>
-          <VStack gap={'space-8'} style={{ width: '100%', maxWidth: '1200px' }}>
+          <VStack gap={'space-32'} style={{ width: '100%', maxWidth: '1200px' }}>
             <Heading size="large" level="1">
               Aktuelt
             </Heading>
-            <Search
-              label="Søk etter saker"
-              variant="secondary"
-              hideLabel={false}
-              value={inputValue}
-              onChange={setInputValue}
-              onClear={handleClear}
-            />
-            {allTags.length > 0 && (
-              <Chips>
-                {allTags.map((tag) => (
-                  <Chips.Toggle
-                    key={tag}
-                    selected={selectedTags.includes(tag)}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag}
-                  </Chips.Toggle>
-                ))}
-              </Chips>
-            )}
+            <VStack gap={'space-16'} style={{ width: '100%', maxWidth: '1200px' }}>
+              <Search
+                label="Søk etter saker"
+                variant="secondary"
+                hideLabel={false}
+                value={inputValue}
+                onChange={setInputValue}
+                onClear={handleClear}
+              />
+              {allTags.length > 0 && (
+                <Chips>
+                  {allTags.map((tag) => (
+                    <Chips.Toggle key={tag} selected={selectedTags.includes(tag)} onClick={() => toggleTag(tag)}>
+                      {tag}
+                    </Chips.Toggle>
+                  ))}
+                </Chips>
+              )}
+            </VStack>
             <HGrid gap={'space-20'} columns={{ xs: 1, sm: 2, md: 3 }}>
               {news?.map((item) => (
                 <NewsCard news={item} key={item.id} searchQuery={searchParams.toString()} />
