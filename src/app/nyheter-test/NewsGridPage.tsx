@@ -81,7 +81,7 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
             )}
             <HGrid gap={'space-20'} columns={{ xs: 1, sm: 2, md: 3 }}>
               {news?.map((item) => (
-                <NewsCard news={item} key={item.id} />
+                <NewsCard news={item} key={item.id} searchQuery={searchParams.toString()} />
               ))}
               {news && news.length === 0 && <BodyLong>Ingen saker matchet søket ditt.</BodyLong>}
             </HGrid>

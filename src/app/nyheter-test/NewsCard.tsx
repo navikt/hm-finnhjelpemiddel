@@ -5,9 +5,10 @@ import NewsImage from '@/app/nyheter-test/NewsImage'
 
 type NewsProps = {
   news: NewsDTO
+  searchQuery?: string
 }
 
-export default function NewsCard({ news }: NewsProps){
+export default function NewsCard({ news, searchQuery }: NewsProps){
 
   return (
       <LinkCard key={news.id} style={{minHeight: "490px"}}>
@@ -16,7 +17,7 @@ export default function NewsCard({ news }: NewsProps){
         </LinkCard.Image>
         <LinkCard.Title>
           <LinkCard.Anchor asChild>
-            <NextLink href={`/nyheter-test/${news.id}`}>
+            <NextLink href={`/nyheter-test/${news.id}${searchQuery ? `?${searchQuery}` : ''}`}>
               {news.title}
             </NextLink>
           </LinkCard.Anchor>
