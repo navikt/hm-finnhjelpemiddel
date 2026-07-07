@@ -4,6 +4,7 @@ import { getNewsById } from '@/app/nyheter-test/news-util'
 import { notFound } from 'next/navigation'
 import { sanitize } from '@/utils/news-html-util'
 import NewsArticleImage from '@/app/nyheter-test/[id]/NewsArticleImage'
+import BackButton from '@/app/nyheter-test/[id]/BackButton'
 
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -39,15 +40,17 @@ export default async function NewsArticlePage({
   const updated = isUpdated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
     <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'}>
-      <VStack gap={'space-32'} paddingBlock={'space-32'}>
-        <article>
-          <VStack gap={'space-4'}>
-            {news.image_url && <NewsArticleImage imageUrl={news.image_url} alt={news.title} />}
-            <Heading size={'large'} level={'1'}>
-              {title}
-            </Heading>
-            <HStack gap={'space-16'} align={'center'}>
-              <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
+      //TODO: BackButton placement
+        <BackButton />
+        <VStack gap={'space-32'} paddingBlock={'space-32'}>
+          <article>
+            <VStack gap={'space-4'}>
+              {news.image_url && <NewsArticleImage imageUrl={news.image_url} alt={news.title} />}
+              <Heading size={'large'} level={'1'}>
+                {title}
+              </Heading>
+              <HStack gap={'space-16'} align={'center'}>
+                <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
                 <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
                   {news.tags?.map((tag) => (
                     <li key={tag}>
@@ -57,12 +60,14 @@ export default async function NewsArticlePage({
                     </li>
                   ))}
                 </ul>
-            </HStack>
-            <BodyLong size="medium" weight="semibold">{news.description}</BodyLong>
-            <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
-          </VStack>
-        </article>
-      </VStack>
+              </HStack>
+              <BodyLong size="medium" weight="semibold">
+                {news.description}
+              </BodyLong>
+              <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
+            </VStack>
+          </article>
+        </VStack>
     </Box>
   )
 }

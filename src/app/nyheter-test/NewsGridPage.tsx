@@ -56,10 +56,10 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
         <HStack justify={'center'} padding={'space-16'}>
           <VStack gap={'space-8'} style={{ width: '100%', maxWidth: '1200px' }}>
             <Heading size="large" level="1">
-              Nyheter
+              Aktuelt
             </Heading>
             <Search
-              label="Søk etter nyheter"
+              label="Søk etter saker"
               variant="secondary"
               hideLabel={false}
               value={inputValue}
@@ -83,7 +83,7 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
               {news?.map((item) => (
                 <NewsCard news={item} key={item.id} />
               ))}
-              {news && news.length === 0 && <BodyLong>Ingen nyheter matchet søket ditt.</BodyLong>}
+              {news && news.length === 0 && <BodyLong>Ingen saker matchet søket ditt.</BodyLong>}
             </HGrid>
             <HStack justify={"center"} paddingBlock={'space-16'}>
               <NewsPagination currentPage={currentPage} totalPages={totalPages}></NewsPagination>
