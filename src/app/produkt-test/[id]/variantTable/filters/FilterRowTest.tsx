@@ -12,6 +12,7 @@ type Props = {
   variants: ProductVariant[]
   filterConfigs: Filter[]
   techDataRows: TechDataRow[]
+  resetPageState: () => void
 }
 
 export type FilterContent = {
@@ -23,7 +24,7 @@ export type FilterContent = {
   unit: string | undefined
 }
 
-export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) => {
+export const FilterRowTest = ({ variants, filterConfigs, techDataRows, resetPageState }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -161,6 +162,7 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
   )
 
   const onFilterChange = (name: string, value: string) => {
+    resetPageState()
     const newSearchParams = createQueryString(name, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
