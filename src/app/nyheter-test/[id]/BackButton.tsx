@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 export default function BackButton() {
   const router = useRouter()
   return (
-    <Bleed marginInline={{xs: 'space-16', sm: 'space-28', md: 'space-64' }} asChild>
+    <Bleed marginInline={{md: 'space-64' }} asChild>
       <Button variant="tertiary" icon={<ArrowLeftIcon />} onClick={() => router.back()}>
         Tilbake
       </Button>

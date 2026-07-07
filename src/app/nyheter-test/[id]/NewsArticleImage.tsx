@@ -31,7 +31,7 @@ export default function NewsArticleImage({ imageUrl, alt, tags }: { imageUrl?: s
   if (error && !defaultImage) return null
 
   return (
-    <Bleed marginInline={"space-64"}>
+    <Bleed marginInline={{ md: 'space-64'}}>
       <Box
         style={{ width: '100%', aspectRatio: '16/9', position: 'relative', overflow: 'hidden' }}
         borderRadius={'12'}
