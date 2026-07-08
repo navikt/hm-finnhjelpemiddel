@@ -226,7 +226,12 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
       </Heading>
       {product.variants.length > 1 && (
         <VStack paddingBlock={'space-12 space-32'} id="variants-table">
-          <FilterRowTest variants={product.variants} filterConfigs={filters} techDataRows={techDataRowsAll} />
+          <FilterRowTest
+            variants={product.variants}
+            filterConfigs={filters}
+            techDataRows={techDataRowsAll}
+            resetPageState={() => setPageState(1)}
+          />
         </VStack>
       )}
       {productVariantsSorted.length === 0 && (

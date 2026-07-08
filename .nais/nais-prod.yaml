@@ -19,6 +19,7 @@ spec:
         - application: hm-grunndata-alternativprodukter
         - application: hm-grunndata-db
         - application: hm-finnhjelpemiddel-bff
+        - application: hm-finnhjelpemiddel-news
   env:
     - name: RUNTIME_ENVIRONMENT
       value: prod

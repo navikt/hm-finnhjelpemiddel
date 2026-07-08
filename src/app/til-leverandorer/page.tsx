@@ -1,4 +1,10 @@
 import { BodyLong, Heading, Link } from '@/components/aksel-client'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'For leverandører',
+  description: 'Informasjon til leverandører',
+}
 
 function ToSuppliers() {
   return (
