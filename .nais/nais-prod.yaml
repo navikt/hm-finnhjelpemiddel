@@ -23,6 +23,8 @@ spec:
   env:
     - name: RUNTIME_ENVIRONMENT
       value: prod
+    - name: HM_FINNHJELPEMIDDEL_NEWS_URL
+      value: http://hm-finnhjelpemiddel-news
   filesFrom:
     - emptyDir:
         medium: Memory

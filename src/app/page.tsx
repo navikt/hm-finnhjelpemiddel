@@ -6,6 +6,7 @@ import { OtherAgreements } from '@/app/forside/OtherAgreements'
 import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
 import { FrontPageSearch } from '@/app/FrontPageSearch'
 import NewsFeed from '@/app/forside/NewsFeed'
+import NewsVerticalFeed from '@/app/aktuelt/NewsVerticalFeed'
 
 function FrontPage() {
   return (
@@ -38,12 +39,13 @@ function FrontPage() {
       </Bleed>
       <KategoriInngangForside />
       <HGrid
-        columns={{ xs: 1, lg: '4fr 1fr' }}
+        columns={{ xs: 1, lg: '3fr 2fr' }}
         gap={{ md: 'space-128' }}
         align="start"
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
+        {/*<NewsVerticalFeed />*/}
         <NewsFeed />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>

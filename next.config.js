@@ -36,7 +36,7 @@ const nextConfig = {
       },
       {
         source: '/news/:path*',
-        destination: process.env.HM_FINNHJELPEMIDDEL_NEWS_URL + '/:path*',
+        destination: process.env.HM_FINNHJELPEMIDDEL_NEWS_URL + '/news/:path*',
       },
       {
         source: '/alternativprodukter',
