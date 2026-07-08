@@ -47,7 +47,7 @@ export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, load
     const defaultImage = getDefaultImage(tags)
     if (defaultImage) {
       return (
-        <Image src={defaultImage} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} />
+        <Image src={defaultImage} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} unoptimized/>
       )
     }
 
