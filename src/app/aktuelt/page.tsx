@@ -1,5 +1,5 @@
-import { getAllTags, getNewsPaginated } from '@/app/nyheter-test/news-util'
-import NewsGridPage from '@/app/nyheter-test/NewsGridPage'
+import { getAllTags, getNewsPaginated } from '@/app/aktuelt/news-util'
+import NewsGridPage from '@/app/aktuelt/NewsGridPage'
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string; tag?: string | string[]; search?: string }> }) {
   const { page, tag, search } = await searchParams

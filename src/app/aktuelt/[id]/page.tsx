@@ -1,10 +1,10 @@
 import { BodyLong, Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
-import { getNewsById } from '@/app/nyheter-test/news-util'
+import { getNewsById } from '@/app/aktuelt/news-util'
 import { notFound } from 'next/navigation'
 import { sanitize } from '@/utils/news-html-util'
-import NewsArticleImage from '@/app/nyheter-test/[id]/NewsArticleImage'
-import BackButton from '@/app/nyheter-test/[id]/BackButton'
+import NewsArticleImage from '@/app/aktuelt/[id]/NewsArticleImage'
+import BackButton from '@/app/aktuelt/[id]/BackButton'
 
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {

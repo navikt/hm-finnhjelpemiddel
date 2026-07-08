@@ -6,7 +6,7 @@ import { OtherAgreements } from '@/app/forside/OtherAgreements'
 import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
 import { FrontPageSearch } from '@/app/FrontPageSearch'
 import NewsFeed from '@/app/forside/NewsFeed'
-import NewsVstack from '@/app/nyheter-test/NewsVstack'
+import NewsVerticalFeed from '@/app/aktuelt/NewsVerticalFeed'
 
 function FrontPage() {
   return (
@@ -45,7 +45,7 @@ function FrontPage() {
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
-        <NewsVstack />
+        <NewsVerticalFeed />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />

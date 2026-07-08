@@ -1,13 +1,13 @@
 'use client'
 
 import { BodyLong, Button, Heading, Loader, VStack } from '@navikt/ds-react'
-import { getNews } from '@/app/nyheter-test/news-util'
-import SmallNewsCard from '@/app/nyheter-test/SmallNewsCard'
+import { getNews } from '@/app/aktuelt/news-util'
+import SmallNewsCard from '@/app/aktuelt/SmallNewsCard'
 import NextLink from 'next/link'
 import { ArrowRightIcon } from '@navikt/aksel-icons'
 import useSWR from 'swr'
 
-export default function NewsVstack() {
+export default function NewsVerticalFeed() {
   const { data: news, isLoading } = useSWR('news-vstack', () => getNews(4), { keepPreviousData: true })
 
   return (
@@ -20,7 +20,7 @@ export default function NewsVstack() {
       {news && news.length === 0 && <BodyLong>Ingen aktuelle saker tilgjengelig</BodyLong>}
       <Button
         as={NextLink}
-        href="/nyheter-test/aktuelt"
+        href="/aktuelt"
         variant={'tertiary'}
         icon={<ArrowRightIcon />}
         style={{ alignSelf: 'flex-start' }}

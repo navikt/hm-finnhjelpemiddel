@@ -1,9 +1,9 @@
 'use client'
 
 import { BodyLong, Heading, HGrid, HStack, VStack, Page, Search, Chips } from '@navikt/ds-react'
-import { NewsDTO } from '@/app/nyheter-test/news-util'
-import NewsCard from '@/app/nyheter-test/NewsCard'
-import NewsPagination from '@/app/nyheter-test/NewsPagination'
+import { NewsDTO } from '@/app/aktuelt/news-util'
+import NewsCard from '@/app/aktuelt/NewsCard'
+import NewsPagination from '@/app/aktuelt/NewsPagination'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -52,7 +52,7 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
 
   return (
     <Page>
-      <Page.Block as="main" gutters>
+      <Page.Block gutters>
         <HStack justify={'center'} padding={'space-16'}>
           <VStack gap={'space-32'} style={{ width: '100%', maxWidth: '1200px' }}>
             <Heading size="large" level="1">
