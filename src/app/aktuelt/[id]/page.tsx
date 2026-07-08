@@ -1,4 +1,4 @@
-import { BodyLong, Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
 import { getNewsById } from '@/app/aktuelt/news-util'
 import { notFound } from 'next/navigation'
@@ -39,35 +39,45 @@ export default async function NewsArticlePage({
   const isUpdated = news.updated && news.updated !== news.created
   const updated = isUpdated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
   return (
-    <Box maxWidth={'700px'} marginInline={'auto'} paddingInline={'space-16'} paddingBlock={'space-16'} style={{ wordWrap: 'break-word' }}
+    <Box
+      maxWidth={'700px'}
+      marginInline={'auto'}
+      paddingInline={'space-16'}
+      paddingBlock={'space-16'}
+      style={{ wordWrap: 'break-word' }}
     >
-        <BackButton />
-        <VStack gap={'space-32'} paddingBlock={'space-32'}>
-          <article>
-            <VStack gap={'space-4'}>
-              <NewsArticleImage imageUrl={news.image_url} alt={news.title} />
-              <Heading size={'large'} level={'1'}>
-                {title}
-              </Heading>
-              <HStack gap={'space-16'} align={'center'}>
-                <time>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</time>
-                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
-                  {news.tags?.map((tag) => (
-                    <li key={tag}>
-                      <Tag variant={'moderate'} data-color={'neutral'}>
-                        {tag}
-                      </Tag>
-                    </li>
-                  ))}
-                </ul>
-              </HStack>
-              <BodyLong size="medium" weight="semibold">
-                {news.description}
-              </BodyLong>
-              <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
-            </VStack>
-          </article>
-        </VStack>
+      <BackButton />
+      <VStack gap={'space-32'} paddingBlock={'space-32'}>
+        <article>
+          <VStack gap={'space-4'}>
+            <NewsArticleImage imageUrl={news.image_url} alt={news.title} />
+            <Heading size={'large'} level={'1'} spacing>
+              {title}
+            </Heading>
+            <BodyLong size="large">{news.description}</BodyLong>
+            <HStack
+              gap={'space-16'}
+              align={'center'}
+              style={{ borderBottom: '1px solid var(--ax-border-neutral-subtle)' }}
+            >
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
+                {news.tags?.map((tag) => (
+                  <li key={tag}>
+                    <Tag variant={'moderate'} data-color={'neutral'}>
+                      {tag}
+                    </Tag>
+                  </li>
+                ))}
+              </ul>
+              <BodyShort size={'medium'}>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</BodyShort>
+            </HStack>
+            {/*<BodyLong size="medium" weight="semibold" >*/}
+            {/*  {news.description}*/}
+            {/*</BodyLong>*/}
+            <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
+          </VStack>
+        </article>
+      </VStack>
     </Box>
   )
 }

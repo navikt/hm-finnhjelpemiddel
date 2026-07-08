@@ -12,7 +12,7 @@ export default function BackButton() {
     <Bleed marginInline={{ md: 'space-64' }} asChild>
       <Button
         as={NextLink}
-        href={`/nyheter-test/aktuelt${searchParams.size ? `?${searchParams.toString()}` : ''}`}
+        href={`/aktuelt${searchParams.size ? `?${searchParams.toString()}` : ''}`}
         variant="tertiary"
         icon={<ArrowLeftIcon />}
       >

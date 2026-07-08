@@ -45,7 +45,8 @@ function FrontPage() {
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
-        <NewsVerticalFeed />
+        {/*<NewsVerticalFeed />*/}
+        <NewsFeed />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />
