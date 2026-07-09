@@ -12,13 +12,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const id = resolved.id
   const news = await getNewsById(id)
   if (!news) return notFound()
-  const plain = news.body
-    .replace(/<[^>]*>/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
   return {
     title: news.title,
-    description: plain.slice(0, 160),
   }
 }
 
