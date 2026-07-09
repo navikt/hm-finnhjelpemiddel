@@ -46,7 +46,7 @@ function FrontPage() {
       >
         <Agreements />
         {/*<NewsVerticalFeed />*/}
-        <NewsFeed />
+        <NewsVerticalFeed/>
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />

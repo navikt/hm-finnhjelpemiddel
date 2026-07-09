@@ -19,7 +19,7 @@ export async function getAllNews(): Promise<NewsDTO[]> {
 }
 
 export async function getNews(size: number = 4): Promise<NewsDTO[]> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/list?size=${size}`, {
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/?size=4`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +30,8 @@ export async function getNews(size: number = 4): Promise<NewsDTO[]> {
     throw new CustomError(res.statusText, res.status)
   }
 
-  return res.json()
+  const data = await res.json()
+  return data.content ?? data
 }
 
 export async function getNewsById(id: string): Promise<NewsDTO | null> {
