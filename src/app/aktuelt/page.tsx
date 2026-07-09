@@ -1,5 +1,10 @@
 import { getAllTags, getNewsPaginated } from '@/app/aktuelt/news-util'
 import NewsGridPage from '@/app/aktuelt/NewsGridPage'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Aktuelt',
+}
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string; tag?: string | string[]; search?: string }> }) {
   const { page, tag, search } = await searchParams
