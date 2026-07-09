@@ -8,7 +8,7 @@ type NewsProps = {
 }
 
 export default function SmallNewsCard({ news }: NewsProps) {
-  const date = new Date(news.created).toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const date = new Date(news.publishedFrom).toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
   return (
     <LinkCard key={news.id} size={'small'} style={{ minHeight: '160px', paddingInlineStart: '140px' }}>
