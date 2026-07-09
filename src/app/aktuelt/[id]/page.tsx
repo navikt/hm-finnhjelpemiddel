@@ -30,9 +30,15 @@ export default async function NewsArticlePage({
 
   const title = news.title
   const sanitizedBody = sanitize(news.body)
-  const published = new Date(news.created).toLocaleDateString('nb-NO')
-  const isUpdated = news.updated && news.updated !== news.created
-  const updated = isUpdated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
+  const published = new Date(news.publishedFrom).toLocaleDateString('nb-NO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })
+  /*const isUpdated = news.updated && news.updated !== news.created
+    const updated = isUpdated
+    ? new Date(news.updated).toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : null*/
   return (
     <Box
       maxWidth={'700px'}
@@ -64,7 +70,7 @@ export default async function NewsArticlePage({
                   </li>
                 ))}
               </ul>
-              <BodyShort size={'medium'}>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</BodyShort>
+              <BodyShort size={'medium'}>{`Publisert: ${published}`}</BodyShort>
             </HStack>
             {/*<BodyLong size="medium" weight="semibold" >*/}
             {/*  {news.description}*/}
