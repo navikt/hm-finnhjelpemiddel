@@ -18,6 +18,7 @@ export default function NewsVerticalFeed() {
         <SmallNewsCard news={news} key={news.id} />
       ))}
       {news && news.length === 0 && <BodyLong>Ingen aktuelle saker tilgjengelig</BodyLong>}
+      {!news && <BodyLong>Kan ikke vise aktuelle saker</BodyLong>}
       <Button
         as={NextLink}
         href="/aktuelt"
