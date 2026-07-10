@@ -69,6 +69,9 @@ export async function getAllTags(): Promise<string[]> {
   return data.map(t => t.tag)
 }
 
+export const formatPublishedDate = (dateString: string): string =>
+  new Date(dateString).toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' })
+
 export interface NewsDTO {
   id: string
   title: string
