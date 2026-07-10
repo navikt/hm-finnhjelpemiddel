@@ -45,6 +45,7 @@ export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, load
     const [error, setError] = useState(false)
 
     if (imageUrl && !error) {
+      console.log('NewsImage src:', loaders[loaderSize]({ src: imageUrl, width: 400, quality: 75 }))
       return (
           <Image loader={loaders[loaderSize]} src={imageUrl} alt={alt ?? ''} fill sizes={'(max-width: 768px) 100vw, '} style={{ objectFit: 'cover' }} onError={() => setError(true)} />
       )
