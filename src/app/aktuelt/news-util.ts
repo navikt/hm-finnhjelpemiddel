@@ -2,22 +2,6 @@ import { CustomError } from '@/utils/api-util'
 
 const HM_FINNHJELPEMIDDEL_NEWS_URL = process.env.HM_FINNHJELPEMIDDEL_NEWS_URL || ''
 
-export async function getAllNews(): Promise<NewsDTO[]> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!res.ok) {
-    throw new CustomError(res.statusText, res.status)
-  }
-
-  const data = await res.json()
-  return data.content ?? data
-}
-
 export async function getNews(size: number = 4): Promise<NewsDTO[]> {
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/?size=4`, {
     method: 'GET',
