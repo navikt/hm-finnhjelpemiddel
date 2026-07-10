@@ -16,7 +16,7 @@ export default function SmallNewsCard({ news }: NewsProps) {
         style={{
           position: 'absolute',
           overflow: 'hidden',
-          borderTopLeftRadius: 'calc(var(--ax-radius-12) - 1px',
+          borderTopLeftRadius: 'calc(var(--ax-radius-12) - 1px)',
           borderBottomLeftRadius: 'calc(var(--ax-radius-12) - 1px)',
           left: 0,
           top: 0,

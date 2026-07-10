@@ -56,7 +56,7 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
             <Heading size="large" level="1">
               Aktuelt
             </Heading>
-            <VStack gap={'space-16'} style={{ width: '100%', maxWidth: '1200px' }}>
+            <VStack gap={'space-16'}>
               <form onSubmit={(e) => { e.preventDefault(); handleSearch(inputValue) }}>
                 <Search
                   label="Søk etter saker"

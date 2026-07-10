@@ -12,7 +12,7 @@ export default function NewsCard({ news, searchQuery }: NewsProps){
   const date = new Date(news.publishedFrom).toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
   return (
-    <LinkCard key={news.id} style={{ minHeight: '490px' }}>
+    <LinkCard style={{ minHeight: '490px' }}>
       <LinkCard.Image aspectRatio="16/9">
         <NewsImage
           fontSize={'5rem'}

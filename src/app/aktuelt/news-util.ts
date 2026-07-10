@@ -3,11 +3,8 @@ import { CustomError } from '@/utils/api-util'
 const HM_FINNHJELPEMIDDEL_NEWS_URL = process.env.HM_FINNHJELPEMIDDEL_NEWS_URL || ''
 
 export async function getNews(size: number = 4): Promise<NewsDTO[]> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/?size=4`, {
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/?size=${size}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {
@@ -21,9 +18,6 @@ export async function getNews(size: number = 4): Promise<NewsDTO[]> {
 export async function getNewsById(id: string): Promise<NewsDTO | null> {
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/${id}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   if (!res.ok) {
     throw new CustomError(res.statusText, res.status)
@@ -42,9 +36,6 @@ export async function getNewsPaginated(
   if (search) params.set('search', search)
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news?${params}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {
@@ -58,9 +49,6 @@ export async function getAllTags(): Promise<string[]> {
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/admin/tags/`,
     {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     })
   if (!res.ok) {
     throw new CustomError(res.statusText, res.status)

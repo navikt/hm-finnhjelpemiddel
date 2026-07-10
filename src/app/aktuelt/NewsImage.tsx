@@ -65,8 +65,6 @@ export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, load
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-    }}>
-      <NewspaperIcon fontSize={fontSize} aria-hidden opacity={"5%"}/>
-    </Box>
+    }} />
     )
 }
