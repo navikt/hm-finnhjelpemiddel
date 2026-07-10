@@ -16,7 +16,7 @@ export default function NewsCard({ news, searchQuery }: NewsProps){
       <LinkCard.Image aspectRatio="16/9">
         <NewsImage
           fontSize={'5rem'}
-          imageUrl={news.image_url}
+          imageUrl={news.imageUrl}
           alt={news.imageDescription}
           tags={news.tags}
           loaderSize={'large'}
