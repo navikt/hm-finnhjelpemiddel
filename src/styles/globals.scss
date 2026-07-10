@@ -18,6 +18,11 @@ nextjs-portal {
   display: none;
 }
 
+#aktuelt-article-body a,
+#aktuelt-article-body a:visited {
+  color: #005bb6;
+}
+
 html,
 body {
   display: flex;

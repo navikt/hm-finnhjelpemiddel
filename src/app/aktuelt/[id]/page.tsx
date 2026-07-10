@@ -68,7 +68,7 @@ export default async function NewsArticlePage({
               </ul>
               <BodyShort size={'medium'}>{`Publisert: ${published}`}</BodyShort>
             </HStack>
-            <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
+            <div id="aktuelt-article-body" dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
           </VStack>
         </article>
       </VStack>
