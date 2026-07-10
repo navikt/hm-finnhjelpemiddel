@@ -83,9 +83,11 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
               ))}
               {news && news.length === 0 && <BodyLong>Ingen saker matchet søket ditt.</BodyLong>}
             </HGrid>
-            <HStack justify={"center"} paddingBlock={'space-16'}>
-              <NewsPagination currentPage={currentPage} totalPages={totalPages}></NewsPagination>
-            </HStack>
+            {totalPages > 1 && (
+              <HStack justify="center">
+                <NewsPagination currentPage={currentPage} totalPages={totalPages} />
+              </HStack>
+            )}
           </VStack>
         </HStack>
       </Page.Block>
