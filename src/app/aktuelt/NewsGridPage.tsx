@@ -5,7 +5,7 @@ import { NewsDTO } from '@/app/aktuelt/news-util'
 import NewsCard from '@/app/aktuelt/NewsCard'
 import NewsPagination from '@/app/aktuelt/NewsPagination'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 type NewsProps = {
   news?: NewsDTO[]
@@ -21,22 +21,20 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
   const selectedTags = searchParams.getAll('tag')
   const [inputValue, setInputValue] = useState(searchParams.get('search') ?? '')
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.delete('page')
-      if (inputValue) {
-        params.set('search', inputValue)
-      } else {
-        params.delete('search')
-      }
-      router.replace(`${pathname}?${params.toString()}`)
-    }, 300)
-    return () => clearTimeout(timeout)
-  }, [inputValue])
+  const handleSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('page')
+    if (value) {
+      params.set('search', value)
+    } else {
+      params.delete('search')
+    }
+    router.replace(`${pathname}?${params.toString()}`)
+  }
 
   const handleClear = () => {
     setInputValue('')
+    handleSearch('')
   }
 
   const toggleTag = (tag: string) => {
@@ -59,14 +57,17 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
               Aktuelt
             </Heading>
             <VStack gap={'space-16'} style={{ width: '100%', maxWidth: '1200px' }}>
-              <Search
-                label="Søk etter saker"
-                variant="secondary"
-                hideLabel={false}
-                value={inputValue}
-                onChange={setInputValue}
-                onClear={handleClear}
-              />
+              <form onSubmit={(e) => { e.preventDefault(); handleSearch(inputValue) }}>
+                <Search
+                  label="Søk etter saker"
+                  variant="secondary"
+                  hideLabel={false}
+                  value={inputValue}
+                  onChange={setInputValue}
+                  onClear={handleClear}
+                  onSearchClick={() => handleSearch(inputValue)}
+                />
+              </form>
               {allTags.length > 0 && (
                 <Chips>
                   {allTags.map((tag) => (
