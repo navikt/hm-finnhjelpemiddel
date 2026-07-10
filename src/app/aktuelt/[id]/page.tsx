@@ -1,6 +1,6 @@
 import { BodyLong, BodyShort, Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
 import { Metadata } from 'next'
-import { getNewsById } from '@/app/aktuelt/news-util'
+import { getNewsById, formatPublishedDate } from '@/app/aktuelt/news-util'
 import { notFound } from 'next/navigation'
 import { sanitize } from '@/utils/news-html-util'
 import NewsArticleImage from '@/app/aktuelt/[id]/NewsArticleImage'
@@ -30,11 +30,7 @@ export default async function NewsArticlePage({
 
   const title = news.title
   const sanitizedBody = sanitize(news.body)
-  const published = new Date(news.publishedFrom).toLocaleDateString('nb-NO', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
+  const published = formatPublishedDate(news.publishedFrom)
   return (
     <Box
       maxWidth={'700px'}

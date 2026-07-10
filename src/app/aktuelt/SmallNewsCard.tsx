@@ -1,14 +1,14 @@
 import NewsImage from '@/app/aktuelt/NewsImage'
 import { BodyShort, Box, HStack, LinkCard, Tag } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { NewsDTO } from '@/app/aktuelt/news-util'
+import { NewsDTO, formatPublishedDate } from '@/app/aktuelt/news-util'
 
 type NewsProps = {
   news: NewsDTO
 }
 
 export default function SmallNewsCard({ news }: NewsProps) {
-  const date = new Date(news.publishedFrom).toLocaleDateString('nb-NO', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const date = formatPublishedDate(news.publishedFrom)
 
   return (
     <LinkCard key={news.id} size={'small'} style={{ minHeight: '160px', paddingInlineStart: '140px' }}>
