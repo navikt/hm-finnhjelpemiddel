@@ -2,8 +2,8 @@ import { CustomError } from '@/utils/api-util'
 
 const HM_FINNHJELPEMIDDEL_NEWS_URL = process.env.HM_FINNHJELPEMIDDEL_NEWS_URL || ''
 
-export async function getAllNews(): Promise<NewsDTO[]> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news`, {
+export async function getNews(size: number = 4): Promise<NewsDTO[]> {
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/?size=4`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -16,21 +16,6 @@ export async function getAllNews(): Promise<NewsDTO[]> {
 
   const data = await res.json()
   return data.content ?? data
-}
-
-export async function getNews(size: number = 4): Promise<NewsDTO[]> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news/list?size=${size}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!res.ok) {
-    throw new CustomError(res.statusText, res.status)
-  }
-
-  return res.json()
 }
 
 export async function getNewsById(id: string): Promise<NewsDTO | null> {
@@ -93,7 +78,7 @@ export interface NewsDTO {
   updated: string
   publishedFrom: string
   publishedTo: string
-  image_url: string
+  imageUrl: string
   imageDescription: string
   tags: string[]
 }

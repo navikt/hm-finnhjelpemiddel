@@ -30,9 +30,11 @@ export default async function NewsArticlePage({
 
   const title = news.title
   const sanitizedBody = sanitize(news.body)
-  const published = new Date(news.created).toLocaleDateString('nb-NO')
-  const isUpdated = news.updated && news.updated !== news.created
-  const updated = isUpdated ? new Date(news.updated).toLocaleDateString('nb-NO') : null
+  const published = new Date(news.publishedFrom).toLocaleDateString('nb-NO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })
   return (
     <Box
       maxWidth={'700px'}
@@ -45,7 +47,7 @@ export default async function NewsArticlePage({
       <VStack gap={'space-32'} paddingBlock={'space-32'}>
         <article>
           <VStack gap={'space-4'}>
-            <NewsArticleImage imageUrl={news.image_url} alt={news.title} />
+            <NewsArticleImage imageUrl={news.imageUrl} alt={news.title} />
             <Heading size={'large'} level={'1'} spacing>
               {title}
             </Heading>
@@ -64,11 +66,8 @@ export default async function NewsArticlePage({
                   </li>
                 ))}
               </ul>
-              <BodyShort size={'medium'}>{updated ? `Oppdatert: ${updated}` : `Publisert: ${published}`}</BodyShort>
+              <BodyShort size={'medium'}>{`Publisert: ${published}`}</BodyShort>
             </HStack>
-            {/*<BodyLong size="medium" weight="semibold" >*/}
-            {/*  {news.description}*/}
-            {/*</BodyLong>*/}
             <div dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
           </VStack>
         </article>

@@ -6,7 +6,11 @@ import Image, { StaticImageData } from 'next/image'
 import { smallImageLoader, largeImageLoader } from '@/utils/image-util'
 import { useState } from 'react'
 import defaultNyhetsbrev from './images/default-nyhetsbrev.svg'
+import defaultNyhetsbrevLiten from './images/default-nyhetsbrev-liten.svg'
 import defaultRammeavtale from './images/default-rammeavtale.svg'
+import defaultRammeavtaleLiten from './images/default-rammeavtale-liten.svg'
+import defaultFunksjonalitet from './images/default-funksjonalitet.svg'
+import defaultFunksjonalitetLiten from './images/default-funksjonalitet-liten.svg'
 
 type NewsImageProps = {
   imageUrl?: string
@@ -14,6 +18,7 @@ type NewsImageProps = {
   fontSize?: string
   alt?: string
   loaderSize?: 'small' | 'large'
+  variant?: 'small' | 'large'
 }
 
 const loaders = {
@@ -21,21 +26,22 @@ const loaders = {
   large: largeImageLoader,
 }
 
-const tagDefaultImages: Record<string, StaticImageData> = {
-  nyhetsbrev: defaultNyhetsbrev,
-  rammeavtale: defaultRammeavtale,
+const tagDefaultImages: Record<string, { large: StaticImageData; small: StaticImageData }> = {
+  nyhetsbrev: { large: defaultNyhetsbrev, small: defaultNyhetsbrevLiten },
+  rammeavtale: { large: defaultRammeavtale, small: defaultRammeavtaleLiten },
+  funksjonalitet: { large: defaultFunksjonalitet, small: defaultFunksjonalitetLiten },
 }
 
-function getDefaultImage(tags?: string[]): StaticImageData | null {
+function getDefaultImage(tags?: string[], variant: 'small' | 'large' = 'large'): StaticImageData | null {
   if (!tags) return null
   for (const tag of tags) {
-    const img = tagDefaultImages[tag.toLowerCase()]
-    if (img) return img
+    const imgs = tagDefaultImages[tag.toLowerCase()]
+    if (imgs) return imgs[variant]
   }
   return null
 }
 
-export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, loaderSize = 'large' }: NewsImageProps) {
+export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, loaderSize = 'large', variant = 'large' }: NewsImageProps) {
     const [error, setError] = useState(false)
 
     if (imageUrl && !error) {
@@ -44,7 +50,7 @@ export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, load
       )
     }
 
-    const defaultImage = getDefaultImage(tags)
+    const defaultImage = getDefaultImage(tags, variant)
     if (defaultImage) {
       return (
         <Image src={defaultImage} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} unoptimized/>
