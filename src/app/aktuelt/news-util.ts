@@ -25,15 +25,22 @@ export async function getNewsById(id: string): Promise<NewsDTO | null> {
   return res.json()
 }
 
+export enum PublishingState {
+  ACTIVE = 'ACTIVE',
+  EXPIRED = 'EXPIRED',
+}
+
 export async function getNewsPaginated(
   page: number = 0,
   size: number = 9,
   tag: string[] = [],
-  search: string = ''
+  search: string = '',
+  publishingState: PublishingState[] = []
 ): Promise<NewsPageDTO> {
   const params = new URLSearchParams({ page: String(page), size: String(size) })
   tag.forEach((t) => params.append('tag', t))
   if (search) params.set('search', search)
+  publishingState.forEach((s) => params.append('publishingState', s))
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/news?${params}`, {
     method: 'GET',
   })
