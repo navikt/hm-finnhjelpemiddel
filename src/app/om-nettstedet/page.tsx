@@ -51,11 +51,11 @@ function AboutUs() {
             Mer om hjelpemidler på avtale med Nav
           </Heading>
           <BodyLong spacing>
-            Nav inngår avtaler med leverandører gjennom offentlige anskaffelser. Hver avtale deles inn i delkontrakter.
-            En delkontrakt kan inneholde flere hjelpemidler som er inndelt i ulike rangeringer. Hjelpemidler som er
-            rangert som nr. 1 skal vurderes først. Dersom det er nødvendig med et hjelpemiddel som er rangert som nr. 2,
-            3 osv. må dette begrunnes. Noen delkontrakter har ikke rangering. Informasjon om dette står i de aktuelle
-            avtalene.
+            Nav inngår avtaler med leverandører gjennom offentlige anskaffelser. Hver avtale deles inn i{' '}
+            <b>delkontrakter</b>. En delkontrakt kan inneholde flere hjelpemidler som er inndelt i ulike{' '}
+            <b>rangeringer</b>. Hjelpemidler som er rangert som nr. 1 skal vurderes først. Dersom det er nødvendig med
+            et hjelpemiddel som er rangert som nr. 2, 3 osv. må dette begrunnes. Noen delkontrakter har ikke rangering.
+            Informasjon om dette står i de aktuelle avtalene.
           </BodyLong>
           <BodyLong spacing>
             Et hjelpemiddel kan komme i flere varianter, for eksempel ulike størrelser eller farger. Noen varianter er
@@ -73,7 +73,7 @@ function AboutUs() {
           <Heading level="2" size="small" spacing>
             Hvem kan få hjelpemidler fra Nav?
           </Heading>
-          <BodyShort spacing>For å få hjelpemidler gjennom Nav må enkelte vilkår være oppfylt.</BodyShort>
+          <BodyShort>For å få hjelpemidler gjennom Nav må enkelte vilkår være oppfylt.</BodyShort>
           <br />
           <BodyShort>De viktigste vilkårene er:</BodyShort>
           <ul>
@@ -90,12 +90,13 @@ function AboutUs() {
             </li>
           </ul>
           <BodyShort>Har du behov for kortvarig utlån av hjelpemidler, må du ta kontakt med din kommune.</BodyShort>
-          <BodyShort spacing>
+          <BodyShort>
             Du finner{' '}
             <Link href="https://www.nav.no/om-hjelpemidler">
               mer informasjon om hjelpemidler og tilrettelegging på nav.no.
             </Link>
           </BodyShort>
+          <br/>
 
           <Heading level="2" size="small" spacing>
             Trenger du informasjon om et hjelpemiddel?
