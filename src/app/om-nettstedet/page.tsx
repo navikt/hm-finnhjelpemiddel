@@ -1,5 +1,6 @@
 import { BodyLong, Heading, Link } from '@/components/aksel-client'
 import { Metadata } from 'next'
+import { BodyShort } from '@navikt/ds-react'
 
 export const metadata: Metadata = {
   title: 'Om nettstedet',
@@ -18,61 +19,116 @@ function AboutUs() {
             Et nettsted fra Nav
           </Heading>
           <BodyLong spacing>
-            {`FinnHjelpemiddel utvikles og driftes av Nav Hjelpemidler og tilrettelegging. Hjelpemidlene som presenteres er
-               både hjelpemidler på avtale med Nav og uten avtale. Generell informasjon om alle avtalene presenteres også.`}
+            FinnHjelpemiddel er et nettsted for alle som ønsker informasjon om hjelpemidler og Navs avtaler med
+            leverandører. Nettstedet utvikles og driftes av Nav hjelpemidler og tilrettelegging.
+          </BodyLong>
+          <Heading level="2" size="small" spacing>
+            Hva er et hjelpemiddel?
+          </Heading>
+          <BodyLong spacing>
+            Et hjelpemiddel er et produkt som er spesiallaget for personer med nedsatt funksjon. Hjelpemidlene skal
+            kunne hjelpe personer med å håndtere daglige utfordringer og delta i samfunnet. De kan kompensere for
+            praktiske problemer som oppstår på grunn av funksjonsnedsettelse.
           </BodyLong>
           <BodyLong spacing>
-            Hjelpemidlene som presenteres er spesiallaget for personer med funksjonsnedsettelse og tilgjengelige på det
-            norske markedet.
-            <Link href="/til-leverandorer#hva-er-et-hjelpemiddel" className="spacing-top--small">
-              Klikk her for mer informasjon om hva et hjelpemiddel er.
+            Hjelpemidler som er vanlige for alle, eller som kan kjøpes i vanlig handel er ikke hjelpemidler i denne
+            sammenhengen. Hva som til enhver tid anses som et hjelpemiddel ut ifra folketrygdloven kan endre seg.
+          </BodyLong>
+          <Heading level="2" size="small" spacing>
+            Hvilke hjelpemidler finnes på FinnHjelpemiddel?
+          </Heading>
+          <BodyShort>FinnHjelpemiddel inneholder:</BodyShort>
+          <ul>
+            <li>hjelpemidler som er på avtale med Nav (markert med «på avtale»)</li>
+            <li>hjelpemidler som ikke er på avtale med Nav (markert med «ikke på avtale»)</li>
+          </ul>
+          <BodyLong spacing>
+            Derfor kan du finne produkter på nettstedet som ikke dekkes av folketrygden. Formålet er å gi en bred
+            oversikt over ulike løsninger og produkter på markedet, også for personer som ønsker å kjøpe hjelpemidler
+            selv.
+          </BodyLong>
+          <Heading level="3" size="small" spacing>
+            Mer om hjelpemidler på avtale med Nav
+          </Heading>
+          <BodyLong spacing>
+            Nav inngår avtaler med leverandører gjennom offentlige anskaffelser. Hver avtale deles inn i delkontrakter.
+            En delkontrakt kan inneholde flere hjelpemidler som er inndelt i ulike rangeringer. Hjelpemidler som er
+            rangert som nr. 1 skal vurderes først. Dersom det er nødvendig med et hjelpemiddel som er rangert som nr. 2,
+            3 osv. må dette begrunnes. Noen delkontrakter har ikke rangering. Informasjon om dette står i de aktuelle
+            avtalene.
+          </BodyLong>
+          <BodyLong spacing>
+            Et hjelpemiddel kan komme i flere varianter, for eksempel ulike størrelser eller farger. Noen varianter er
+            på avtale, mens andre ikke er det. Dette står i oversikten over spesifikasjonene til hver variant.
+          </BodyLong>
+          <Heading level="2" size="small" spacing>
+            Hvem bestemmer hva som presenteres?
+          </Heading>
+          <BodyLong spacing>
+            Nav bestemmer hvilke hjelpemidler som skal presenteres på FinnHjelpemiddel. All informasjonen som for
+            eksempel bilder, brosjyrer og spesifikasjoner registreres av leverandørene. Innholdsredaksjonen for
+            FinnHjelpemiddel kvalitetssikrer informasjonen før den publiseres.
+          </BodyLong>
+
+          <Heading level="2" size="small" spacing>
+            Hvem kan få hjelpemidler fra Nav?
+          </Heading>
+          <BodyShort spacing>For å få hjelpemidler gjennom Nav må enkelte vilkår være oppfylt.</BodyShort>
+          <br />
+          <BodyShort>De viktigste vilkårene er:</BodyShort>
+          <ul>
+            <li>Funksjonsvanskene må være varige. Det vil si at vanskene har en varighet på over to år.</li>
+            <br />
+            <li>Hjelpemiddelet skal kompensere for funksjonstap uavhengig av alder.</li>
+            <br />
+            <li>
+              Man må ha{' '}
+              <Link href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-norge/relatert-informasjon/medlemskap-i-folketrygden">
+                medlemskap i folketrygden (nav.no)
+              </Link>
+              .
+            </li>
+          </ul>
+          <BodyShort>Har du behov for kortvarig utlån av hjelpemidler, må du ta kontakt med din kommune.</BodyShort>
+          <BodyShort spacing>
+            Du finner{' '}
+            <Link href="https://www.nav.no/om-hjelpemidler">
+              mer informasjon om hjelpemidler og tilrettelegging på nav.no.
             </Link>
+          </BodyShort>
+
+          <Heading level="2" size="small" spacing>
+            Trenger du informasjon om et hjelpemiddel?
+          </Heading>
+          <BodyLong spacing>
+            For spørsmål om hjelpemidler fra Nav eller hjelpemidler på dette nettstedet, kontakt din kommune.
           </BodyLong>
 
           <Heading level="2" size="small" spacing>
-            Hjelpemidler på avtale med Nav
+            Innspill til innholdet på FinnHjelpemiddel
           </Heading>
           <BodyLong spacing>
-            Nav følger regelverket for offentlige anskaffelser og har avtaler med leverandører av ulike
-            hjelpemiddelområder. Dette kan for eksempel være hjelpemidler for varsling, synstekniske hjelpemidler og
-            manuelle rullestoler.
-          </BodyLong>
-          <BodyLong spacing>
-            Avtalene deles inn i delkontrakter ut ifra hjelpemidlenes egenskaper. En delkontrakt kan omfatte flere
-            hjelpemidler som er inndelt i ulike rangeringer. Hjelpemidler som er rangert som nr. 1 skal velges først.
-            Dersom det er nødvendig med et hjelpemiddel som er rangert lavere må dette begrunnes. Det finnes noen få
-            delkontrakter hvor man ikke forholder seg til rangeringer. Informasjon om rutiner for disse finnes i de
-            aktuelle avtaledokumentene.
-          </BodyLong>
-          <BodyLong spacing>
-            {`Hjelpemidler som kommer i flere varianter (for eksempel størrelser og/eller farger), kan ha noen varianter
-              på avtale og noen som ikke er på avtale. Dette synliggjøres i tabellen under egenskaper.`}
+            Tilbakemeldinger og innspill sendes til{' '}
+            <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
           </BodyLong>
 
           <Heading level="2" size="small" spacing>
-            Målgrupper
+            Er du leverandør og ønsker å registrere hjelpemidler?
           </Heading>
-          <BodyLong spacing>
-            FinnHjelpemiddel er laget for ansatte i kommuner, ansatte i helseforetakene, innbyggere, ansatte ved
-            hjelpemiddelsentralene og andre som trenger informasjon om hjelpemidler og om avtalene med Nav.
-          </BodyLong>
-          <Heading level="2" size="small" spacing>
-            Spørsmål om et hjelpemiddel
-          </Heading>
-          <BodyLong spacing>
-            Hvis du har spørsmål om et hjelpemiddel som du har fått fra Nav eller et du har sett på FinnHjelpemiddel må
-            du ta kontakt med kommunen din.
-          </BodyLong>
-          <BodyLong spacing>
-            På nav.no/hjelpemidler finner du mer informasjon om regelverk og hvordan man søker om hjelpemidler.
-          </BodyLong>
-          <Heading level="2" size="small" spacing>
-            Innspill og tilbakemeldinger om FinnHjelpemiddel
-          </Heading>
+          <BodyShort spacing>
+            Leverandører som ønsker å registrere hjelpemidler på FinnHjelpemiddel må blant annet:
+          </BodyShort>
+          <ul>
+            <li>være norsk leverandør, eller ha norske underleverandører</li>
+            <li>levere hjelpemidler som er spesiallaget for personer med nedsatt funksjon</li>
+            <li>ha ferdig utviklede produkter med nødvendig dokumentasjon</li>
+            <li>
+              kunne klassifiseres produktene etter NS-EN ISO 9999 – «Hjelpemidler – klassifisering og terminologi»
+            </li>
+          </ul>
           <BodyLong className="spacing-bottom--small">
-            Tilbakemeldinger om tekniske feil og mangler på nettsiden sendes til{' '}
-            <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>. Hvis du leser dette på en PC,
-            kan du gi oss tilbakemelding ved å klikke på &quot;Tilbakemelding&quot;-knappen.
+            Henvendelser om å opprette registreringstilgang sendes til{' '}
+            <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
           </BodyLong>
         </article>
       </div>
