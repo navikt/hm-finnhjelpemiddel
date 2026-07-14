@@ -1,4 +1,6 @@
 import { CustomError } from '@/utils/api-util'
+import { SparklesIcon, DocPencilIcon, NewsletterIcon } from '@navikt/aksel-icons'
+import type { TagProps } from '@navikt/ds-react'
 
 const HM_FINNHJELPEMIDDEL_NEWS_URL = process.env.HM_FINNHJELPEMIDDEL_NEWS_URL || ''
 
@@ -28,6 +30,18 @@ export async function getNewsById(id: string): Promise<NewsDTO | null> {
 export enum PublishingState {
   ACTIVE = 'ACTIVE',
   EXPIRED = 'EXPIRED',
+}
+
+export enum NewsTag {
+  NYHETSBREV = 'nyhetsbrev',
+  RAMMEAVTALE = 'rammeavtale',
+  NY_FUNKSJON = 'ny funksjon',
+}
+
+export const newsTagMeta: Record<NewsTag, { icon: typeof DocPencilIcon; color: TagProps['data-color'] }> = {
+  [NewsTag.NYHETSBREV]: { icon: NewsletterIcon, color: 'info' },
+  [NewsTag.RAMMEAVTALE]: { icon: DocPencilIcon, color: 'danger' },
+  [NewsTag.NY_FUNKSJON]: { icon: SparklesIcon, color: 'warning' },
 }
 
 export async function getNewsPaginated(

@@ -1,7 +1,8 @@
 import NewsImage from '@/app/aktuelt/NewsImage'
 import { BodyShort, Box, HStack, LinkCard, Tag } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { NewsDTO, formatPublishedDate } from '@/app/aktuelt/news-util'
+import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
+import { DocPencilIcon } from '@navikt/aksel-icons'
 
 type NewsProps = {
   news: NewsDTO
@@ -50,11 +51,16 @@ export default function SmallNewsCard({ news }: NewsProps) {
       </LinkCard.Description>
       <LinkCard.Footer>
         <HStack justify={'space-between'} width={'100%'}>
-          {news.tags?.map((tag) => (
-            <Tag key={tag} size={'small'} variant={'moderate'} data-color={'neutral'}>
-              {tag}
-            </Tag>
-          ))}
+          {news.tags?.map((tag) => {
+            const meta = newsTagMeta[tag.toLowerCase() as keyof typeof newsTagMeta]
+            const Icon = meta?.icon ?? DocPencilIcon
+            return (
+              <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.color ?? 'neutral'}>
+                <Icon aria-hidden />
+                {tag}
+              </Tag>
+            )
+          })}
           <BodyShort size={'medium'} style={{ color: 'var(--ax-text-neutral-decoration)' }}>
             {date}
           </BodyShort>
