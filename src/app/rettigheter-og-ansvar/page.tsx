@@ -12,14 +12,14 @@ function RightsResponsibilities() {
       <div className="about-us-page__container">
         <article>
           <Heading level="1" size="medium" spacing>
-            Rettigheter og ansvar
+            Rettigheter, ansvar og klassifisering
           </Heading>
           <Heading level="2" size="small" spacing>
-            Finnhjelpemiddel: Eierskap og ansvar
+            Opphavsrett og bruk av innhold
           </Heading>
           <BodyLong spacing>
-            Innholdet på FinnHjelpemiddel er beskyttet av opphavsrett som vil si at det ikke reproduseres, endres,
-            overføres eller publiseres uten samtykke fra Nav.
+            Innholdet på FinnHjelpemiddel er beskyttet av opphavsrett. Det kan ikke kopieres, endres, deles eller
+            publiseres uten samtykke fra Nav.
           </BodyLong>
           <BodyLong>
             Varemerker, logoer og andre kjennetegn tilhører Nav eller tredjepart. Det er ikke tillatt å kopiere eller
