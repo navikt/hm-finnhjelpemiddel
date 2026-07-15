@@ -1,7 +1,8 @@
 import { LinkCard, Tag, HStack, BodyShort } from '@navikt/ds-react'
-import { NewsDTO, formatPublishedDate } from '@/app/aktuelt/news-util'
+import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
 import NextLink from 'next/link'
 import NewsImage from '@/app/aktuelt/NewsImage'
+import { DocPencilIcon } from '@navikt/aksel-icons'
 
 type NewsProps = {
   news: NewsDTO
@@ -15,12 +16,10 @@ export default function NewsCard({ news, searchQuery }: NewsProps){
     <LinkCard style={{ minHeight: '490px' }}>
       <LinkCard.Image aspectRatio="16/9">
         <NewsImage
-          fontSize={'5rem'}
           imageUrl={news.imageUrl}
           alt={news.imageDescription}
-          tags={news.tags}
           loaderSize={'large'}
-        ></NewsImage>
+        />
       </LinkCard.Image>
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
@@ -39,11 +38,16 @@ export default function NewsCard({ news, searchQuery }: NewsProps){
       </LinkCard.Description>
       <LinkCard.Footer>
         <HStack gap={'space-4'} wrap justify={'space-between'} width={'100%'}>
-          {news.tags?.map((tag) => (
-            <Tag key={tag} size={'small'} variant={'moderate'} data-color={'neutral'}>
-              {tag}
-            </Tag>
-          ))}
+          {news.tags?.map((tag) => {
+            const meta = newsTagMeta[tag.toLowerCase() as keyof typeof newsTagMeta]
+            const Icon = meta?.icon ?? DocPencilIcon
+            return (
+              <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.color ?? 'neutral'}>
+                <Icon aria-hidden />
+                {tag}
+              </Tag>
+            )
+          })}
           <BodyShort size={'medium'} style={{ color: 'var(--ax-text-neutral-decoration)' }}>
             {`Publisert: ${date}`}
           </BodyShort>
