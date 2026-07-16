@@ -39,9 +39,6 @@ const Footer = ({ setCookieConsent }: { setCookieConsent: (_: null) => void }) =
             <Link as={NextLink} href="/rettigheter-og-ansvar">
               Rettigheter og ansvar
             </Link>
-            <Link as={NextLink} href="/til-leverandorer">
-              For leverandører
-            </Link>
             <Link
               as={NextLink}
               href="https://uustatus.no/nb/erklaringer/publisert/d760f748-feec-4cdb-b1cb-9535f1219060"
