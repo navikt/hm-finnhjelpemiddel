@@ -1,24 +1,15 @@
 'use client'
 
-import { Box } from '@navikt/ds-react'
-import { NewspaperIcon } from '@navikt/aksel-icons'
-import Image, { StaticImageData } from 'next/image'
+import Image from 'next/image'
 import { smallImageLoader, largeImageLoader } from '@/utils/image-util'
 import { useState } from 'react'
-import defaultNyhetsbrev from './images/default-nyhetsbrev.svg'
-import defaultNyhetsbrevLiten from './images/default-nyhetsbrev-liten.svg'
-import defaultRammeavtale from './images/default-rammeavtale.svg'
-import defaultRammeavtaleLiten from './images/default-rammeavtale-liten.svg'
-import defaultFunksjonalitet from './images/default-funksjonalitet.svg'
-import defaultFunksjonalitetLiten from './images/default-funksjonalitet-liten.svg'
+import { newsTagMeta, NewsTag } from '@/app/aktuelt/news-util'
 
 type NewsImageProps = {
   imageUrl?: string
-  tags?: string[]
-  fontSize?: string
   alt?: string
   loaderSize?: 'small' | 'large'
-  variant?: 'small' | 'large'
+  tags?: string[]
 }
 
 const loaders = {
@@ -26,45 +17,19 @@ const loaders = {
   large: largeImageLoader,
 }
 
-const tagDefaultImages: Record<string, { large: StaticImageData; small: StaticImageData }> = {
-  nyhetsbrev: { large: defaultNyhetsbrev, small: defaultNyhetsbrevLiten },
-  rammeavtale: { large: defaultRammeavtale, small: defaultRammeavtaleLiten },
-  funksjonalitet: { large: defaultFunksjonalitet, small: defaultFunksjonalitetLiten },
-}
+export default function NewsImage({ alt, imageUrl, loaderSize = 'large', tags}: NewsImageProps) {
+  const [error, setError] = useState(false)
 
-function getDefaultImage(tags?: string[], variant: 'small' | 'large' = 'large'): StaticImageData | null {
-  if (!tags) return null
-  for (const tag of tags) {
-    const imgs = tagDefaultImages[tag.toLowerCase()]
-    if (imgs) return imgs[variant]
-  }
-  return null
-}
-
-export default function NewsImage({ fontSize = '5rem', alt, imageUrl, tags, loaderSize = 'large', variant = 'large' }: NewsImageProps) {
-    const [error, setError] = useState(false)
-
-    if (imageUrl && !error) {
-      return (
-          <Image loader={loaders[loaderSize]} src={imageUrl} alt={alt ?? ''} fill sizes={'(max-width: 768px) 100vw, '} style={{ objectFit: 'cover' }} onError={() => setError(true)} />
-      )
-    }
-
-    const defaultImage = getDefaultImage(tags, variant)
-    if (defaultImage) {
-      return (
-        <Image src={defaultImage} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} unoptimized/>
-      )
-    }
-
+  if (imageUrl && !error) {
     return (
-    <Box style={{
-      backgroundColor: 'var(--ax-bg-neutral-soft)',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }} />
+      <Image loader={loaders[loaderSize]} src={imageUrl} alt={alt ?? ''} fill sizes="(max-width: 768px) 100vw" style={{ objectFit: 'cover' }} onError={() => setError(true)} />
     )
+  }
+
+  const tag = tags?.[0]?.toLowerCase() as NewsTag | undefined
+  const tagImage = tag && newsTagMeta[tag]?.image
+
+  if (!tagImage) return null
+
+  return <Image src={tagImage} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} unoptimized />
 }
