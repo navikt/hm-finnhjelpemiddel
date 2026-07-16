@@ -19,6 +19,7 @@ export default function NewsCard({ news, searchQuery }: NewsProps){
           imageUrl={news.imageUrl}
           alt={news.imageDescription}
           loaderSize={'large'}
+          tags={news.tags}
         />
       </LinkCard.Image>
       <LinkCard.Title>

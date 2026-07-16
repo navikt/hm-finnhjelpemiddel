@@ -1,6 +1,10 @@
 import { CustomError } from '@/utils/api-util'
 import { SparklesIcon, DocPencilIcon, NewsletterIcon } from '@navikt/aksel-icons'
 import type { TagProps } from '@navikt/ds-react'
+import type { StaticImageData } from 'next/image'
+import nyhetsbrevImage from '@/app/aktuelt/images/nyhetsbrev.svg'
+import rammeavtaleImage from '@/app/aktuelt/images/rammeavtale.svg'
+import nyFunksjonImage from '@/app/aktuelt/images/ny-funksjon.svg'
 
 const HM_FINNHJELPEMIDDEL_NEWS_URL = process.env.HM_FINNHJELPEMIDDEL_NEWS_URL || ''
 
@@ -38,10 +42,10 @@ export enum NewsTag {
   NY_FUNKSJON = 'ny funksjon',
 }
 
-export const newsTagMeta: Record<NewsTag, { icon: typeof DocPencilIcon; color: TagProps['data-color'] }> = {
-  [NewsTag.NYHETSBREV]: { icon: NewsletterIcon, color: 'info' },
-  [NewsTag.RAMMEAVTALE]: { icon: DocPencilIcon, color: 'danger' },
-  [NewsTag.NY_FUNKSJON]: { icon: SparklesIcon, color: 'warning' },
+export const newsTagMeta: Record<NewsTag, { icon: typeof DocPencilIcon; color: TagProps['data-color']; image: StaticImageData }> = {
+  [NewsTag.NYHETSBREV]: { icon: NewsletterIcon, color: 'info', image: nyhetsbrevImage },
+  [NewsTag.RAMMEAVTALE]: { icon: DocPencilIcon, color: 'danger', image: rammeavtaleImage },
+  [NewsTag.NY_FUNKSJON]: { icon: SparklesIcon, color: 'warning', image: nyFunksjonImage },
 }
 
 export async function getNewsPaginated(

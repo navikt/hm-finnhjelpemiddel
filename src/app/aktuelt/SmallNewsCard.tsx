@@ -25,7 +25,7 @@ export default function SmallNewsCard({ news }: NewsProps) {
           width: '130px',
         }}
       >
-        <NewsImage imageUrl={news.imageUrl} loaderSize={'small'} />
+        <NewsImage imageUrl={news.imageUrl} loaderSize={'small'} tags={news.tags} />
       </Box>
       <LinkCard.Title
         style={{

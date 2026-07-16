@@ -3,12 +3,13 @@
 import Image from 'next/image'
 import { smallImageLoader, largeImageLoader } from '@/utils/image-util'
 import { useState } from 'react'
-import defaultBilde from './images/default-bilde.svg'
+import { newsTagMeta, NewsTag } from '@/app/aktuelt/news-util'
 
 type NewsImageProps = {
   imageUrl?: string
   alt?: string
   loaderSize?: 'small' | 'large'
+  tags?: string[]
 }
 
 const loaders = {
@@ -16,7 +17,7 @@ const loaders = {
   large: largeImageLoader,
 }
 
-export default function NewsImage({ alt, imageUrl, loaderSize = 'large' }: NewsImageProps) {
+export default function NewsImage({ alt, imageUrl, loaderSize = 'large', tags}: NewsImageProps) {
   const [error, setError] = useState(false)
 
   if (imageUrl && !error) {
@@ -25,7 +26,10 @@ export default function NewsImage({ alt, imageUrl, loaderSize = 'large' }: NewsI
     )
   }
 
-  return (
-    <Image src={defaultBilde} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} unoptimized />
-  )
+  const tag = tags?.[0]?.toLowerCase() as NewsTag | undefined
+  const tagImage = tag && newsTagMeta[tag]?.image
+
+  if (!tagImage) return null
+
+  return <Image src={tagImage} alt={alt ?? ''} fill style={{ objectFit: 'cover' }} unoptimized />
 }
