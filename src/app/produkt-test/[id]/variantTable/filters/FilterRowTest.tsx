@@ -4,9 +4,9 @@ import { Heading, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
 import { CheckboxFilters } from '@/app/produkt-test/[id]/variantTable/filters/CheckboxFilters'
+import { Filter, FilterType, TechDataRow } from '../VariantTableTest'
 
 type Props = {
   variants: ProductVariant[]
@@ -41,8 +41,13 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows, resetPage
       .includes(searchParams.get('term')!.toLowerCase())
 
   const isRelevantDropdownFilter = (name: string) => {
-    return techDataRows.some(
-      ({ key, isCommonField }) => [name, `${name} min`, `${name} maks`].some((field) => field === key) && !isCommonField
+    const relevantRows = techDataRows.filter(({ key }) =>
+      [name, `${name} min`, `${name} maks`].some((field) => field === key)
+    )
+
+    return (
+      relevantRows.length > 0 &&
+      relevantRows.some((row) => new Set(row.values.filter((value) => value != '-')).size > 1)
     )
   }
 

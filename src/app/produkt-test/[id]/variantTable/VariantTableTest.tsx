@@ -4,7 +4,7 @@ import { Product, ProductVariant } from '@/utils/product-util'
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { mapSearchParams } from '@/utils/mapSearchParams'
-import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
+import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 import { toValueAndUnit } from '@/utils/string-util'
 import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Pagination, Table, VStack } from '@navikt/ds-react'
@@ -25,7 +25,6 @@ export type SortColumns = {
 export type TechDataRow = {
   key: string
   values: string[]
-  isCommonField: boolean
   unit: string | undefined
   type: string
 }
@@ -174,24 +173,17 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
 
   const currentMaxPageCount = Math.ceil(productVariantsToShow.length / spaceNrvariants)
 
-  const allDataKeys =
-    product.isoCategory === '18301505'
-      ? [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
-      : [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort()
-
+  const allDataKeys = [...new Set(product.variants.flatMap((variant) => Object.keys(variant.techData)))].sort()
   const techDataRowsAll: TechDataRow[] = allDataKeys.map((key) => {
     return {
       key: key,
-      values: productVariantsSorted.map((variant) =>
+      values: product.variants.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
       ),
-      isCommonField: product.variants.every(
-        (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
-      ),
-      unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
-      type: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
+      unit: product.variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+      type: product.variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
     }
   })
 

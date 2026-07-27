@@ -20,7 +20,6 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
 
       if (maksRow !== undefined) {
         rowsMerged.push({
-          isCommonField: techDataRow.isCommonField,
           key: baseKey,
           unit: techDataRow.unit,
           values: mergeMinMaksValues(techDataRow.values, maksRow.values),
