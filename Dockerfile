@@ -1,26 +1,27 @@
-# Base on offical Node.js Alpine image
-FROM node:20-alpine AS builder
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-dev AS base
+
+FROM base AS deps
+
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
 RUN npm config set @navikt:registry=https://npm.pkg.github.com
 
-RUN addgroup --system --gid 1069 nodejs
-RUN adduser --system --uid 1069 nextjs
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
 
-# Set working directory
+FROM base AS builder
+
 WORKDIR /app
 
-ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=deps /app/node_modules ./node_modules
 
 # Copy package.json and package-lock.json before other files
 # Utilise Docker cache to save re-installing dependencies if unchanged
-COPY package*.json ./
-
-# Copy all files
 COPY . .
-
-# Copy hidden files
 COPY .env.production .
+
+ENV NEXT_TELEMETRY_DISABLED=1
 
 ARG BUILD_ENV
 ENV BUILD_ENV=${BUILD_ENV}
@@ -46,26 +47,22 @@ ENV ALTERNATIVER_BACKEND_AUDIENCE=${ALTERNATIVER_BACKEND_AUDIENCE}
 ARG BFF_AUDIENCE
 ENV BFF_AUDIENCE=${BFF_AUDIENCE}
 
-# Build app
-RUN npm ci
 RUN npm run build
 
-FROM gcr.io/distroless/nodejs20-debian12 AS runtime
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-slim AS runtime
+
 WORKDIR /app
 
 # Copy only needed files for next app
 # see: https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=1069:1069 /app/public ./public
 
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=1069:1069 /app/.next/standalone ./
+COPY --from=builder --chown=1069:1069 /app/.next/static ./.next/static
 
-USER nextjs
-
-# Expose the listening port
 EXPOSE 3000
 
 CMD ["server.js"]
