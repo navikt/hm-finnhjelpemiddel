@@ -1,7 +1,7 @@
 FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-dev  AS builder
 
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
+    'npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)'
 RUN npm config set @navikt:registry=https://npm.pkg.github.com
 
 WORKDIR /app
