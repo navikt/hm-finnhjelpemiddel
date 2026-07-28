@@ -1,18 +1,16 @@
 FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:26-dev  AS builder
 
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)
-RUN npm config set @navikt:registry=https://npm.pkg.github.com
-
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
-
-# Copy package.json and package-lock.json before other files
-# Utilise Docker cache to save re-installing dependencies if unchanged
 COPY . .
 COPY .env.production .
+
+RUN npm config set @navikt:registry=https://npm.pkg.github.com
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN,env=NODE_AUTH_TOKEN \
+    npm config set //npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN && \
+    npm ci --ignore-scripts && \
+    npm config delete //npm.pkg.github.com/:_authToken
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
