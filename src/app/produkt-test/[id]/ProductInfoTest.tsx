@@ -12,7 +12,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import { Videos } from '@/app/produkt/[id]/Videos'
 import { Documents } from '@/app/produkt/[id]/Documents'
 import styles from './ProductInfo.module.scss'
-import { WorksWith } from '@/app/produkt/[id]/WorksWith'
+import { WorksWith } from '@/app/produkt-test/[id]/WorksWith'
 
 export const ProductInfoTest = ({ product }: { product: Product }) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
