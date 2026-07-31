@@ -208,11 +208,11 @@ const TagRow = ({
           </Tag>
         )
       ) : isExpired ? (
-        <Tag variant={'success'} size={'xsmall'}>
+        <Tag variant={'neutral'} size={'xsmall'}>
           Utgått
         </Tag>
       ) : (
-        <Tag variant={'success'} size={'xsmall'}>
+        <Tag variant={'neutral'} size={'xsmall'}>
           Ikke på avtale
         </Tag>
       )}
