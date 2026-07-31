@@ -25,13 +25,13 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
         <VStack gap={'space-20'}>
           <VStack gap={'space-0'}>
             <Heading size={'xlarge'}>{product.title}</Heading>
-            <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
+            <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} style={{ width: 'fit-content' }}>
               {product.supplierName}
             </Link>
           </VStack>
           <VStack gap={'space-2'}>
             <Description description={product.attributes.text} />
-            <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
+            <Link as={NextLink} href={`/produkt/${product.id}/deler`} style={{ width: 'fit-content' }}>
               Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
             </Link>
           </VStack>
