@@ -236,19 +236,21 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
           <div className={styles.variantsTable}>
             <VStack>
               <VStack gap={'space-8'} paddingBlock={'space-4 space-0'} className={styles.stickyTop}>
-                {currentMaxPageCount > 1 && (
+                {product.variants.length > 1 && (
                   <HStack justify={'space-between'} align={'end'}>
                     <BodyShort>
-                      Viser {productVariantsSorted.length} av {productVariantsToShow.length}
+                      {productVariantsToShow.length} av {product.variants.length} varianter
                     </BodyShort>
-                    <Pagination
-                      page={pageState}
-                      onPageChange={setPageState}
-                      count={currentMaxPageCount}
-                      boundaryCount={1}
-                      siblingCount={0}
-                      size={'small'}
-                    />
+                    {currentMaxPageCount > 1 && (
+                      <Pagination
+                        page={pageState}
+                        onPageChange={setPageState}
+                        count={currentMaxPageCount}
+                        boundaryCount={1}
+                        siblingCount={0}
+                        size={'small'}
+                      />
+                    )}
                   </HStack>
                 )}
                 <Table className={styles.stickyTable}>
