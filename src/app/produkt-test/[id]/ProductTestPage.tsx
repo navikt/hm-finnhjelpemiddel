@@ -1,28 +1,77 @@
 'use client'
 
 import { Product } from '@/utils/product-util'
-import { VStack } from '@navikt/ds-react'
+import { Box, HStack, Link, VStack } from '@navikt/ds-react'
 import { ProductInfoTest } from '@/app/produkt-test/[id]/ProductInfoTest'
 import { VariantTableTest } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
 import { OtherProductsOnPost } from '@/app/produkt-test/[id]/OtherProductsOnPost'
 import { FeedbackBlock } from '@/app/produkt-test/[id]/FeedbackBlock'
+import { useEffect, useState } from 'react'
+import ProductTop from '@/app/produkt/[id]/ProductTop'
+import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
+import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
+import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
 
+export const localStorageProductPageBeta = 'enabledProductPageBeta'
 export const ProductTestPage = ({ product }: { product: Product }) => {
-  return (
-    <VStack
-      gap={'space-56'}
-      paddingBlock={'space-64'}
-      //paddingInline={'space-16'}
-      marginInline={'auto'}
-      marginBlock={'space-0'}
-      maxWidth={'1200px'}
-    >
-      <FeedbackBlock />
-      <ProductInfoTest product={product} />
-      {<VariantTableTest product={product} />}
-      <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
-        {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
+  const [betaEnabled, setBetaEnabled] = useState<string | undefined>()
+
+  useEffect(() => {
+    setBetaEnabled(localStorage?.getItem(localStorageProductPageBeta) ?? 'false')
+  }, [])
+
+  if (betaEnabled === undefined) {
+    return <></>
+  }
+
+  if (betaEnabled === 'true') {
+    return (
+      <VStack
+        gap={'space-56'}
+        paddingBlock={'space-64'}
+        //paddingInline={'space-16'}
+        marginInline={'auto'}
+        marginBlock={'space-0'}
+        maxWidth={'1200px'}
+      >
+        <FeedbackBlock setBetaEnabled={setBetaEnabled} />
+        <ProductInfoTest product={product} />
+        {<VariantTableTest product={product} />}
+        <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
+          {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
+        </VStack>
       </VStack>
-    </VStack>
-  )
+    )
+  } else {
+    return (
+      <ProductPageLayout>
+        <Box
+          as={VStack}
+          gap={'space-24'}
+          paddingBlock={'space-12'}
+          paddingInline={'space-24'}
+          background={'warning-soft'}
+          width={{ xs: '100%', sm: '500px' }}
+          style={{ alignSelf: 'center' }}
+        >
+          <HStack gap={'space-24'} justify={'space-between'}>
+            Vil du teste en ny versjon av denne siden?
+            <Link
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem(localStorageProductPageBeta, 'true')
+                  setBetaEnabled('true')
+                }
+              }}
+            >
+              Se ny versjon
+            </Link>
+          </HStack>
+        </Box>
+        <ProductTop product={product} />
+        <ProductMiddle product={product} />
+        {product.variants.length > 1 && <VariantTable product={product} />}
+      </ProductPageLayout>
+    )
+  }
 }

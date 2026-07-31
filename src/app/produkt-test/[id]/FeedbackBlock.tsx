@@ -1,7 +1,14 @@
+'use client'
+
 import { useState } from 'react'
 import { Box, HStack, Link, VStack } from '@navikt/ds-react'
+import { localStorageProductPageBeta } from '@/app/produkt-test/[id]/ProductTestPage'
 
-export const FeedbackBlock = () => {
+interface FeedbackBlockProps {
+  setBetaEnabled: (value: string) => void
+}
+
+export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
   const [expandFeedback, setExpandFeedback] = useState(false)
 
   return (
@@ -16,7 +23,16 @@ export const FeedbackBlock = () => {
     >
       <HStack gap={'space-24'} justify={'space-between'}>
         <Link onClick={() => setExpandFeedback((value) => !value)}>Gi tilbakemelding</Link>
-        <Link>Tilbake til gammel versjon</Link>
+        <Link
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(localStorageProductPageBeta, 'false')
+              setBetaEnabled('false')
+            }
+          }}
+        >
+          Tilbake til gammel versjon
+        </Link>
       </HStack>
       {expandFeedback && (
         <Box>
