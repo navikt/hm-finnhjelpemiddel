@@ -1,18 +1,25 @@
 'use client'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
-import { Button, Heading, HelpText, HGrid, HStack, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
-import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
-import NextLink from 'next/link'
-import { Density2Icon, FolderFileIcon, LinkIcon } from '@navikt/aksel-icons'
-import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
-import React, { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { QRCodeCanvas } from 'qrcode.react'
-import { Videos } from '@/app/produkt/[id]/Videos'
 import { Documents } from '@/app/produkt/[id]/Documents'
-import styles from './ProductInfo.module.scss'
+import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
+import { Videos } from '@/app/produkt/[id]/Videos'
 import { WorksWith } from '@/app/produkt/[id]/WorksWith'
+import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+
+import React, { useEffect, useState } from 'react'
+
+import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
+
+import { QRCodeCanvas } from 'qrcode.react'
+
+import { Density2Icon, FolderFileIcon, LinkIcon } from '@navikt/aksel-icons'
+import { Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
+
+import { AgreementInfo, Product } from '@/utils/product-util'
+
+import styles from './ProductInfo.module.scss'
 
 export const ProductInfoTest = ({ product }: { product: Product }) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
@@ -23,15 +30,16 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
 
       <VStack gap={'space-24'}>
         <VStack gap={'space-20'}>
-          <VStack gap={'space-0'}>
+          <VStack gap={'space-0'} align={'start'}>
+            <CompareButton product={product} />
             <Heading size={'xlarge'}>{product.title}</Heading>
-            <Link as={NextLink} href={`/leverandorer#${product.supplierId}`} style={{ width: 'fit-content' }}>
+            <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
               {product.supplierName}
             </Link>
           </VStack>
-          <VStack gap={'space-2'}>
+          <VStack gap={'space-2'} align={'start'}>
             <Description description={product.attributes.text} />
-            <Link as={NextLink} href={`/produkt/${product.id}/deler`} style={{ width: 'fit-content' }}>
+            <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
               Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
             </Link>
           </VStack>
