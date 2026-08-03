@@ -7,6 +7,8 @@ import { useState } from 'react'
 
 import { BodyShort, Box, Button, HStack, Link, VStack } from '@navikt/ds-react'
 
+import { logUmamiClickButton } from '@/utils/umami'
+
 interface FeedbackBlockProps {
   setBetaEnabled: (value: string) => void
 }
@@ -51,6 +53,7 @@ export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
           <Link
             onClick={() => {
               if (typeof window !== 'undefined') {
+                logUmamiClickButton('Tilbake til gammel versjon', 'new-product-page-toggle', 'action')
                 localStorage.setItem(localStorageProductPageBeta, 'false')
                 setBetaEnabled('false')
               }

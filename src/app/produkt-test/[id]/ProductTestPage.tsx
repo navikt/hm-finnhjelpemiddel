@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react'
 import { Box, HStack, Link, VStack } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
+import { logUmamiClickButton } from '@/utils/umami'
 
 import CompareMenu from '@/components/layout/CompareMenu'
 
@@ -68,6 +69,7 @@ export const ProductTestPage = ({ product }: { product: Product }) => {
             <Link
               onClick={() => {
                 if (typeof window !== 'undefined') {
+                  logUmamiClickButton('Se ny versjon', 'new-product-page-toggle', 'action')
                   localStorage.setItem(localStorageProductPageBeta, 'true')
                   setBetaEnabled('true')
                 }
