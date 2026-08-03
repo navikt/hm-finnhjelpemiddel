@@ -39,10 +39,13 @@ export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
     >
       <VStack gap={'space-16'} justify={'space-between'}>
         {!expandFeedback && (
-          <BodyShort>
-            Vi har gjort siden mer oversiktlig, for å enklere finne riktig variant.
-            {consent && ' Gi oss gjerne tilbakemeldinger på endringene.'}
-          </BodyShort>
+          <>
+            Dette er den nye visningen.
+            <BodyShort>
+              Vi har gjort siden mer oversiktlig, for å enklere finne riktig variant.
+              {consent && ' Gi oss gjerne tilbakemeldinger på endringene.'}
+            </BodyShort>
+          </>
         )}
         <HStack gap={'space-16'} justify={'space-between'} width={'100%'}>
           {!expandFeedback && consent === 'true' && (
