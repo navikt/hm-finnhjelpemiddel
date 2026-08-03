@@ -1,22 +1,12 @@
 'use client'
 
-import { PostWithProducts } from '@/utils/agreement-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
 import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
 
+import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
+
+import { PostWithProducts } from '@/utils/agreement-util'
+
 const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
-  const { setCompareMenuState } = useHydratedCompareStore()
-  const [firstCompareClick, setFirstCompareClick] = useState(true)
-
-  const handleCompareClick = () => {
-    if (firstCompareClick) {
-      setCompareMenuState(CompareMenuState.Open)
-    }
-    setFirstCompareClick(false)
-  }
-
   const groupProductsByIsoCategory = (posts: PostWithProducts[]) => {
     return posts.map((post) => {
       const productsByIsoCategory = post.products.reduce(
@@ -82,7 +72,6 @@ const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[];
                       product={productWithRank.product}
                       rank={productWithRank.rank}
                       variantCount={productWithRank.variantCount ?? 0}
-                      handleCompareClick={handleCompareClick}
                     />
                   ))}
                 </HStack>

@@ -11,6 +11,7 @@ import ProductTop from '@/app/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
 import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
+import CompareMenu from '@/components/layout/CompareMenu'
 
 export const localStorageProductPageBeta = 'enabledProductPageBeta'
 export const ProductTestPage = ({ product }: { product: Product }) => {
@@ -40,6 +41,7 @@ export const ProductTestPage = ({ product }: { product: Product }) => {
         <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
           {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
         </VStack>
+        <CompareMenu />
       </VStack>
     )
   } else {
