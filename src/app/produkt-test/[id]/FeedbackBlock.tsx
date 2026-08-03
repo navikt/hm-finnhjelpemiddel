@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { Box, HStack, Link, VStack } from '@navikt/ds-react'
+import { getCookie } from '@/app/layoutProvider'
 import { localStorageProductPageBeta } from '@/app/produkt-test/[id]/ProductTestPage'
+
+import { useState } from 'react'
+
+import { BodyShort, Box, Button, HStack, Link, VStack } from '@navikt/ds-react'
 
 interface FeedbackBlockProps {
   setBetaEnabled: (value: string) => void
@@ -11,29 +14,53 @@ interface FeedbackBlockProps {
 export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
   const [expandFeedback, setExpandFeedback] = useState(false)
 
+  const [consent] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return getCookie('finnhjelpemiddel-consent')
+    } else {
+      return 'pending'
+    }
+  })
+
   return (
     <Box
       as={VStack}
       gap={'space-24'}
-      paddingBlock={'space-12'}
-      paddingInline={'space-24'}
+      paddingBlock={'space-16'}
+      paddingInline={'space-32'}
       background={'warning-soft'}
       width={{ xs: '100%', sm: '500px' }}
+      borderRadius={'8'}
+      borderColor={'warning-subtle'}
+      borderWidth={'1'}
       style={{ alignSelf: 'center' }}
     >
-      <HStack gap={'space-24'} justify={'space-between'}>
-        <Link onClick={() => setExpandFeedback((value) => !value)}>Gi tilbakemelding</Link>
-        <Link
-          onClick={() => {
-            if (typeof window !== 'undefined') {
-              localStorage.setItem(localStorageProductPageBeta, 'false')
-              setBetaEnabled('false')
-            }
-          }}
-        >
-          Tilbake til gammel versjon
-        </Link>
-      </HStack>
+      <VStack gap={'space-16'} justify={'space-between'}>
+        {!expandFeedback && (
+          <BodyShort>
+            Vi har gjort siden mer oversiktlig, for å enklere finne riktig variant.
+            {consent && ' Gi oss gjerne tilbakemeldinger på endringen.'}
+          </BodyShort>
+        )}
+        <HStack gap={'space-16'} justify={'space-between'} width={'100%'}>
+          {!expandFeedback && consent === 'true' && (
+            <Button size={'small'} onClick={() => setExpandFeedback((value) => !value)}>
+              Gi tilbakemelding
+            </Button>
+          )}
+          <Link
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                localStorage.setItem(localStorageProductPageBeta, 'false')
+                setBetaEnabled('false')
+              }
+            }}
+            style={{ marginLeft: 'auto' }}
+          >
+            Tilbake til gammel versjon
+          </Link>
+        </HStack>
+      </VStack>
       {expandFeedback && (
         <Box>
           <div>

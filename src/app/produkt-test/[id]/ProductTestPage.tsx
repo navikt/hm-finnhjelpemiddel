@@ -1,16 +1,20 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
-import { Box, HStack, Link, VStack } from '@navikt/ds-react'
+import { FeedbackBlock } from '@/app/produkt-test/[id]/FeedbackBlock'
+import { OtherProductsOnPost } from '@/app/produkt-test/[id]/OtherProductsOnPost'
 import { ProductInfoTest } from '@/app/produkt-test/[id]/ProductInfoTest'
 import { VariantTableTest } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
-import { OtherProductsOnPost } from '@/app/produkt-test/[id]/OtherProductsOnPost'
-import { FeedbackBlock } from '@/app/produkt-test/[id]/FeedbackBlock'
-import { useEffect, useState } from 'react'
-import ProductTop from '@/app/produkt/[id]/ProductTop'
-import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
-import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
+import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
+import ProductTop from '@/app/produkt/[id]/ProductTop'
+import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
+
+import { useEffect, useState } from 'react'
+
+import { Box, HStack, Link, VStack } from '@navikt/ds-react'
+
+import { Product } from '@/utils/product-util'
+
 import CompareMenu from '@/components/layout/CompareMenu'
 
 export const localStorageProductPageBeta = 'enabledProductPageBeta'
@@ -55,6 +59,9 @@ export const ProductTestPage = ({ product }: { product: Product }) => {
           background={'warning-soft'}
           width={{ xs: '100%', sm: '500px' }}
           style={{ alignSelf: 'center' }}
+          borderRadius={'8'}
+          borderColor={'warning-subtle'}
+          borderWidth={'1'}
         >
           <HStack gap={'space-24'} justify={'space-between'}>
             Vil du teste en ny versjon av denne siden?
