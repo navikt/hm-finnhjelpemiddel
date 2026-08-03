@@ -39,7 +39,7 @@ export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
         {!expandFeedback && (
           <BodyShort>
             Vi har gjort siden mer oversiktlig, for å enklere finne riktig variant.
-            {consent && ' Gi oss gjerne tilbakemeldinger på endringen.'}
+            {consent && ' Gi oss gjerne tilbakemeldinger på endringene.'}
           </BodyShort>
         )}
         <HStack gap={'space-16'} justify={'space-between'} width={'100%'}>
