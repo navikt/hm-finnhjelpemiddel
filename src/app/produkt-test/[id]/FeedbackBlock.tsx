@@ -40,9 +40,8 @@ export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
         <VStack gap={'space-16'} justify={'space-between'}>
           {!expandFeedback && (
             <>
-              Dette er den nye visningen.
               <BodyShort>
-                Vi har gjort siden mer oversiktlig, for å enklere finne riktig variant.
+                Dette er den nye visningen hvor vi har sortert informasjon på en annen måte.
                 {consent && ' Gi oss gjerne tilbakemeldinger på endringene.'}
               </BodyShort>
             </>
