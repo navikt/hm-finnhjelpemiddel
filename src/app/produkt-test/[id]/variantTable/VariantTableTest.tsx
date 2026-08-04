@@ -1,21 +1,28 @@
 'use client'
 
-import { Product, ProductVariant } from '@/utils/product-util'
-import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { mapSearchParams } from '@/utils/mapSearchParams'
-import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
-import { toValueAndUnit } from '@/utils/string-util'
-import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Pagination, Table, VStack } from '@navikt/ds-react'
-import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
-import styles from './VariantTableTest.module.scss'
-import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
-import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
-import { NeutralTag, SuccessTag } from '@/components/Tags'
-import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 import { TechDataGroupTable } from '@/app/produkt-test/[id]/variantTable/TechDataGroupTable'
+import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
+import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
+import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
+import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
+
+import React, { useEffect, useState } from 'react'
+
+import { useSearchParams } from 'next/navigation'
+
+import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Box, Button, CopyButton, HStack, Heading, Pagination, Table, VStack } from '@navikt/ds-react'
+
+import { mapSearchParams } from '@/utils/mapSearchParams'
+import { Product, ProductVariant } from '@/utils/product-util'
+import { toValueAndUnit } from '@/utils/string-util'
+
+import { NeutralTag, SuccessTag } from '@/components/Tags'
+
+import styles from './VariantTableTest.module.scss'
+
+import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 
 export type SortColumns = {
   orderBy: string | null
@@ -212,7 +219,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   )
 
   return (
-    <Box background={'info-soft'} padding={'space-32'}>
+    <Box background={'info-soft'} padding={{ xs: 'space-16', md: 'space-32' }}>
       <Heading size={'medium'} level={'2'} spacing>
         Spesifikasjoner
       </Heading>
