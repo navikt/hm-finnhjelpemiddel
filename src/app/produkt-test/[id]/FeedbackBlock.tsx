@@ -9,6 +9,8 @@ import { BodyShort, Box, Button, HStack, Link, VStack } from '@navikt/ds-react'
 
 import { logUmamiClickButton } from '@/utils/umami'
 
+import styles from './FeedbackBlock.module.scss'
+
 interface FeedbackBlockProps {
   setBetaEnabled: (value: string) => void
 }
@@ -27,8 +29,6 @@ export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
   return (
     <Box paddingInline={'space-8'} style={{ alignSelf: 'center', marginTop: '-40px' }}>
       <Box
-        as={VStack}
-        gap={'space-24'}
         paddingBlock={'space-16'}
         paddingInline={{ xs: 'space-16', md: 'space-32' }}
         background={'warning-soft'}
@@ -62,19 +62,17 @@ export const FeedbackBlock = ({ setBetaEnabled }: FeedbackBlockProps) => {
                   setBetaEnabled('false')
                 }
               }}
-              style={{ marginLeft: 'auto' }}
+              className={styles.backToOldVersion}
             >
               Tilbake til gammel versjon
             </Link>
           </HStack>
         </VStack>
         {expandFeedback && (
-          <Box>
-            <div>
-              {/* @ts-expect-error Ikke typet */}
-              <skyra-survey slug="arbeids-og-velferdsetaten-nav/finnhjelpemiddel-ny-produktside"></skyra-survey>
-            </div>
-          </Box>
+          <div className={styles.skyra}>
+            {/* @ts-expect-error Ikke typet */}
+            <skyra-survey slug="arbeids-og-velferdsetaten-nav/finnhjelpemiddel-ny-produktside"></skyra-survey>
+          </div>
         )}
       </Box>
     </Box>

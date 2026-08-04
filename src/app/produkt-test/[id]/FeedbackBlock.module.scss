@@ -1,0 +1,13 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+@media (min-width: $ax-breakpoint-sm) {
+  .backToOldVersion {
+    margin-left: auto;
+  }
+}
+
+.skyra {
+  skyra-survey::part(wrapper) {
+    padding-top: 24px;
+  }
+}
