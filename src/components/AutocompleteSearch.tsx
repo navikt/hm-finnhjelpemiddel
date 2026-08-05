@@ -173,21 +173,25 @@ const AutocompleteSearch = ({
             ref={listContainerRef}
             id="suggestion-list"
           >
-            {(suggestions || []).map((suggestion, i) => (
-              <li key={i} id={suggestion.text}>
-                <button tabIndex={0} onClick={handleSelectedOption} data-value={suggestion.text} type="button">
-                  {suggestion.text}
-                </button>
-              </li>
-            ))}
+            {openState && (
+              <>
+                {(suggestions || []).map((suggestion, i) => (
+                  <li key={i} id={suggestion.text}>
+                    <button tabIndex={0} onClick={handleSelectedOption} data-value={suggestion.text} type="button">
+                      {suggestion.text}
+                    </button>
+                  </li>
+                ))}
 
-            {!selectedOption && (
-              <li className="popover-search-word">
-                <button className="reset-button-styling" onClick={handleSelectInputValue} type="button">
-                  <MagnifyingGlassIcon title="søkeikon" fontSize="1.5rem" />
-                  <span>{`Søk på "${inputValue}" i hele databasen`}</span>
-                </button>
-              </li>
+                {!selectedOption && (
+                  <li className="popover-search-word">
+                    <button className="reset-button-styling" onClick={handleSelectInputValue} type="button">
+                      <MagnifyingGlassIcon title="søkeikon" fontSize="1.5rem" />
+                      <span>{`Søk på "${inputValue}" i hele databasen`}</span>
+                    </button>
+                  </li>
+                )}
+              </>
             )}
           </ul>
         </Popover.Content>
