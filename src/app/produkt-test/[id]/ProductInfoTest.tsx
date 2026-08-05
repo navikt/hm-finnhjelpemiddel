@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation'
 
 import { QRCodeCanvas } from 'qrcode.react'
 
-import { Density2Icon, FolderFileIcon, LinkIcon } from '@navikt/aksel-icons'
+import { LinkIcon } from '@navikt/aksel-icons'
 import { Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
 
 import { AgreementInfo, Product } from '@/utils/product-util'
@@ -203,10 +203,10 @@ const TagRow = ({
           </Tag>
         ) : productAgreements.length == 1 ? (
           <VStack gap={'space-8'} align={'start'}>
-            <Tag variant={'success'} size={'xsmall'} icon={<FolderFileIcon aria-hidden />}>
+            <Tag variant={'success-moderate'} size={'xsmall'}>
               Delkontrakt {productAgreements[0].refNr}
             </Tag>
-            <Tag variant={'success'} size={'xsmall'} icon={<Density2Icon aria-hidden />}>
+            <Tag variant={'success-moderate'} size={'xsmall'}>
               Rangering {productAgreements[0].rank}
             </Tag>
           </VStack>
