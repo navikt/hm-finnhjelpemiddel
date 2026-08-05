@@ -23,7 +23,7 @@ export default function NewsVerticalFeed() {
         as={NextLink}
         href="/aktuelt"
         variant={'tertiary'}
-        icon={<ArrowRightIcon />}
+        icon={<ArrowRightIcon aria-hidden />}
         style={{ alignSelf: 'flex-start' }}
       >
         Flere saker
