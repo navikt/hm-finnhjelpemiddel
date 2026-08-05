@@ -14,7 +14,6 @@ import { usePathname } from 'next/navigation'
 
 import { QRCodeCanvas } from 'qrcode.react'
 
-import { LinkIcon } from '@navikt/aksel-icons'
 import { Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
 
 import { AgreementInfo, Product } from '@/utils/product-util'
@@ -39,9 +38,9 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
           </VStack>
           <VStack gap={'space-8'} align={'start'}>
             <Description description={product.attributes.text} />
-            <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
-              Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
-            </Link>
+            <Button as={NextLink} size="medium" variant="secondary" href={`/produkt/${product.id}/deler`}>
+              Tilbehør og reservedeler
+            </Button>
           </VStack>
         </VStack>
 
@@ -133,7 +132,7 @@ export const QrCodeButtonSmall = ({ id }: { id: string }) => {
 
   return (
     <Button
-      size="xsmall"
+      size="small"
       style={{
         border: '1px dashed var(--Border-Action, #0067C5)',
         borderRadius: '4px',
