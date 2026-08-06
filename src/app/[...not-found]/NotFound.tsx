@@ -1,5 +1,3 @@
-'use client'
-
 import { BodyShort, Heading } from '@/components/aksel-client'
 import { Link, List, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'

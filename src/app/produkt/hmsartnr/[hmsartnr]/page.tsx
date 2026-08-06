@@ -1,7 +1,7 @@
 import { fetchProductsWithVariants, getProductByHmsartnrWithVariants } from '@/utils/api-util'
 import { mapProductFromHmsArtNr } from '@/utils/product-util'
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { NotFound } from '@/app/[...not-found]/NotFound'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
 import ProductTop from '@/app/produkt/[id]/ProductTop'
 import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
@@ -20,7 +20,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       description: 'Produktside for ' + product.title,
     }
   } catch {
-    notFound()
+    return {
+      title: 'Fant ikke siden',
+      description: 'Siden ble ikke funnet',
+    }
   }
 }
 
@@ -31,7 +34,7 @@ export default async function ProduktPage(props: Props) {
   try {
     product = mapProductFromHmsArtNr(await getProductByHmsartnrWithVariants(params.hmsartnr), params.hmsartnr)
   } catch {
-    notFound()
+    return <NotFound />
   }
 
   const isAccessoryOrSparePart = !product.main
