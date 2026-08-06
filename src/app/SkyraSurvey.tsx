@@ -31,16 +31,14 @@ export const SkyraSurvey = ({ buttonText, skyraSlug }: { buttonText: string; sky
       <Popover placement="bottom" open={openState} onClose={() => setOpenState(false)} anchorEl={buttonRef.current}>
         <Popover.Content style={{ width: '360px', paddingTop: '10px' }}>
           <VStack gap={"space-0"}>
-            {openState && (
-              <Button
-                className={styles.closeButton}
-                variant={'tertiary'}
-                size={'xsmall'}
-                icon={<XMarkIcon aria-hidden />}
-                aria-label={'Lukk tilbakemelding'}
-                onClick={() => setOpenState(false)}
-              />
-            )}
+            <Button
+              className={styles.closeButton}
+              variant={'tertiary'}
+              size={'xsmall'}
+              icon={<XMarkIcon aria-hidden />}
+              title={'Lukk'}
+              onClick={() => setOpenState(false)}
+            />
             {/* @ts-expect-error Ikke typet */}
             <skyra-survey ref={skyraSurveyRef} slug={skyraSlug} />
           </VStack>

@@ -51,16 +51,14 @@ const ProductMiddle = ({ product }: { product: Product }) => {
           {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
         </VStack>
       )}
-      {product.variants.length > 0 && (
-        <div style={{ gridArea: 'box3' }}>
-          <>
-            {product.variants.length > 1 && (
-              <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
-            )}
-            {product.variants.length === 1 && <VariantTableSingle product={product} />}
-          </>
-        </div>
-      )}
+      <div style={{ gridArea: 'box3' }}>
+        <>
+          {product.variants.length > 1 && (
+            <SharedVariantDataTable isoCategory={product.isoCategory} variants={product.variants} />
+          )}
+          {product.variants.length === 1 && <VariantTableSingle product={product} />}
+        </>
+      </div>
     </HGrid>
   )
 }
