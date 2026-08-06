@@ -3,7 +3,6 @@ import NextLink from 'next/link'
 import { BodyLong, BodyShort, HStack, HelpText, Link, VStack } from '@navikt/ds-react'
 
 import { Product, containsHTML, validateHTML } from '@/utils/product-util'
-import { sanitizeProductDescription } from '@/utils/product-html-util'
 
 export const GeneralProductInformation = ({ product }: { product: Product }) => {
   const description = product.attributes.text
@@ -45,7 +44,7 @@ export const Description = ({ description }: { description: string | undefined }
   return !description ? (
     <BodyLong>Ingen beskrivelse fra leverandør. Ta kontakt med leverandør for mer informasjon.</BodyLong>
   ) : htmlDescription ? (
-    <div dangerouslySetInnerHTML={{ __html: sanitizeProductDescription(description) }} />
+    <div dangerouslySetInnerHTML={{ __html: description }} />
   ) : (
     <BodyLong>{description}</BodyLong>
   )
