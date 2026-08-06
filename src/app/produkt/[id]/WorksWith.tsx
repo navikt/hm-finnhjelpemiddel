@@ -34,14 +34,14 @@ export const WorksWith = ({ worksWithSeriesIds }: Props) => {
     worksWithProducts.length > 0 && (
       <Accordion size={'small'} indent={false}>
         <Accordion.Item defaultOpen className={styles.accordionLast}>
-          <Accordion.Header className={styles.accordion}>
-            <HStack gap="space-8" align="center">
+          <HStack gap="space-4" align="center">
+            <Accordion.Header className={`${styles.accordion} ${styles.accordionHeader}`}>
               Virker sammen med
-              <HelpText onClick={(event) => event.stopPropagation()} placement="right">
-                {helpTextWorksWith}
-              </HelpText>
-            </HStack>
-          </Accordion.Header>
+            </Accordion.Header>
+            <HelpText placement="right">
+              {helpTextWorksWith}
+            </HelpText>
+          </HStack>
           <Accordion.Content>
             <WorksWithSection products={worksWithProducts} />
           </Accordion.Content>

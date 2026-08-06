@@ -44,11 +44,13 @@ const ProductMiddle = ({ product }: { product: Product }) => {
       <div style={{ gridArea: 'box1' }}>
         <ProductInformation product={product} />
       </div>
-      <VStack gap={'space-24'} style={{ gridArea: 'box2' }}>
-        {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
+      {(product.agreements.length > 0 || worksWithShowConstrain) && (
+        <VStack gap={'space-24'} style={{ gridArea: 'box2' }}>
+          {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
 
-        {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
-      </VStack>
+          {worksWithShowConstrain && <WorksWith worksWithSeriesIds={worksWithSeriesIds} />}
+        </VStack>
+      )}
       <div style={{ gridArea: 'box3' }}>
         <>
           {product.variants.length > 1 && (
