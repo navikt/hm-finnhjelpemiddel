@@ -50,16 +50,6 @@
       left: 0;
       z-index: 1;
     }
-
-    &:focus-visible {
-      outline: none;
-
-      &::after {
-        outline: 3px solid var(--ax-border-focus);
-        outline-offset: 2px;
-        border-radius: 8px;
-      }
-    }
   }
 
   @media print {
@@ -310,16 +300,6 @@
       bottom: 0;
       left: 0;
       z-index: 1;
-    }
-
-    &:focus-visible {
-      outline: none;
-
-      &::after {
-        outline: 3px solid var(--ax-border-focus);
-        outline-offset: 2px;
-        border-radius: $ax-radius-4;
-      }
     }
   }
 

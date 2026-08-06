@@ -36,16 +36,6 @@
     left: 0;
     z-index: 1;
   }
-
-  &:focus-visible {
-    outline: none;
-
-    &::after {
-      outline: 3px solid var(--ax-border-focus);
-      outline-offset: 2px;
-      border-radius: 0.5rem;
-    }
-  }
 }
 
 .compareButton {
