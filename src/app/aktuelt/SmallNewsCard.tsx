@@ -45,6 +45,7 @@ export default function SmallNewsCard({ news }: NewsProps) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            fontSize: '63px',
           }}
           borderRadius={'12 0 0 12'}
         >
