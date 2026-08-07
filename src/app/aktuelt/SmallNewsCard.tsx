@@ -3,7 +3,6 @@ import { NewsDTO, NewsTag, formatPublishedDate, newsTagMeta } from '@/app/aktuel
 
 import NextLink from 'next/link'
 
-import { DocPencilIcon, LightBulbIcon, NewsletterIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, HStack, LinkCard, Tag } from '@navikt/ds-react'
 
 type NewsProps = {
@@ -49,15 +48,7 @@ export default function SmallNewsCard({ news }: NewsProps) {
           }}
           borderRadius={'12 0 0 12'}
         >
-          {firstTag === NewsTag.RAMMEAVTALE && (
-            <DocPencilIcon fontSize={'63px'} color={'var(--ax-bg-brand-magenta-moderate-pressed)'} />
-          )}
-          {firstTag === NewsTag.NYHETSBREV && (
-            <NewsletterIcon fontSize={'63px'} color={'var(--ax-bg-accent-moderate-pressed)'} />
-          )}
-          {firstTag === NewsTag.NY_FUNKSJON && (
-            <LightBulbIcon fontSize={'63px'} color={'var(--ax-bg-warning-moderate-hover)'} />
-          )}
+          {tagMetaData.defaultIcon}
         </Box>
       )}
 

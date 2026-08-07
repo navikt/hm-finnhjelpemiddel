@@ -16,7 +16,7 @@ export default function NewsCard({ news, searchQuery }: NewsProps) {
   return (
     <LinkCard style={{ minHeight: '490px' }}>
       <LinkCard.Image aspectRatio="16/9">
-        <NewsImage imageUrl={news.imageUrl} alt={news.imageDescription} loaderSize={'large'} tags={news.tags} />
+        <NewsImage imageUrl={news.imageUrl} alt={news.imageDescription} loaderSize={'small'} tags={news.tags} />
       </LinkCard.Image>
       <LinkCard.Title>
         <LinkCard.Anchor asChild>

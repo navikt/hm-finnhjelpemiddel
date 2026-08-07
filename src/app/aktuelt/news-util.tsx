@@ -1,3 +1,7 @@
+import { DefaultNyFunksjonIcon, DefaultNyhetsbrevIcon, DefaultRammeavtaleIcon } from '@/app/aktuelt/defaultIcons'
+
+import { JSX } from 'react/jsx-runtime'
+
 import type { TagProps } from '@navikt/ds-react'
 
 import { CustomError } from '@/utils/api-util'
@@ -38,10 +42,25 @@ export enum NewsTag {
   NY_FUNKSJON = 'Ny funksjon',
 }
 
-export const newsTagMeta: Record<NewsTag, { tagColor: TagProps['data-color']; defaultBackgroundColor: string }> = {
-  [NewsTag.NYHETSBREV]: { tagColor: 'info', defaultBackgroundColor: 'var(--ax-bg-info-moderate)' },
-  [NewsTag.RAMMEAVTALE]: { tagColor: 'danger', defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)' },
-  [NewsTag.NY_FUNKSJON]: { tagColor: 'warning', defaultBackgroundColor: 'var(--ax-bg-warning-soft)' },
+export const newsTagMeta: Record<
+  NewsTag,
+  { tagColor: TagProps['data-color']; defaultBackgroundColor: string; defaultIcon: JSX.Element }
+> = {
+  [NewsTag.NYHETSBREV]: {
+    tagColor: 'info',
+    defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
+    defaultIcon: <DefaultNyhetsbrevIcon />,
+  },
+  [NewsTag.RAMMEAVTALE]: {
+    tagColor: 'danger',
+    defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
+    defaultIcon: <DefaultRammeavtaleIcon />,
+  },
+  [NewsTag.NY_FUNKSJON]: {
+    tagColor: 'warning',
+    defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
+    defaultIcon: <DefaultNyFunksjonIcon />,
+  },
 }
 
 export async function getNewsPaginated(
