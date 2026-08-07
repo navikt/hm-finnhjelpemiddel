@@ -1,26 +1,22 @@
-import { LinkCard, Tag, HStack, BodyShort } from '@navikt/ds-react'
-import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
-import NextLink from 'next/link'
 import NewsImage from '@/app/aktuelt/NewsImage'
-import { DocPencilIcon } from '@navikt/aksel-icons'
+import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
+
+import NextLink from 'next/link'
+
+import { BodyShort, HStack, LinkCard, Tag } from '@navikt/ds-react'
 
 type NewsProps = {
   news: NewsDTO
   searchQuery?: string
 }
 
-export default function NewsCard({ news, searchQuery }: NewsProps){
+export default function NewsCard({ news, searchQuery }: NewsProps) {
   const date = formatPublishedDate(news.publishedFrom)
 
   return (
     <LinkCard style={{ minHeight: '490px' }}>
       <LinkCard.Image aspectRatio="16/9">
-        <NewsImage
-          imageUrl={news.imageUrl}
-          alt={news.imageDescription}
-          loaderSize={'large'}
-          tags={news.tags}
-        />
+        <NewsImage imageUrl={news.imageUrl} alt={news.imageDescription} loaderSize={'large'} tags={news.tags} />
       </LinkCard.Image>
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
@@ -41,10 +37,8 @@ export default function NewsCard({ news, searchQuery }: NewsProps){
         <HStack gap={'space-4'} wrap justify={'space-between'} width={'100%'}>
           {news.tags?.map((tag) => {
             const meta = newsTagMeta[tag.toLowerCase() as keyof typeof newsTagMeta]
-            const Icon = meta?.icon ?? DocPencilIcon
             return (
-              <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.color ?? 'neutral'}>
-                <Icon aria-hidden />
+              <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
                 {tag}
               </Tag>
             )

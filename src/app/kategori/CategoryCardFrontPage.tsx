@@ -1,9 +1,12 @@
 'use client'
 
-import { LinkCard, VStack } from '@navikt/ds-react'
-import NextLink from 'next/link'
-import styles from './CategoryCardFrontPage.module.scss'
 import { ReactNode } from 'react'
+
+import NextLink from 'next/link'
+
+import { LinkCard } from '@navikt/ds-react'
+
+import styles from './CategoryCardFrontPage.module.scss'
 
 type Props = {
   title: string
@@ -15,11 +18,7 @@ type Props = {
 export const CategoryCardFrontPage = ({ title, link, icon }: Props) => {
   return (
     <LinkCard arrow={true} className={styles.container}>
-      {icon && (
-        <VStack justify="center" height="100%" asChild>
-          <LinkCard.Icon>{icon}</LinkCard.Icon>
-        </VStack>
-      )}
+      {icon && <LinkCard.Icon>{icon}</LinkCard.Icon>}
       <LinkCard.Title style={{ textWrap: 'balance' }}>
         <LinkCard.Anchor asChild>
           <NextLink href={link}>{title}</NextLink>
