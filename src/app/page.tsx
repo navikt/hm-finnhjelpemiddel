@@ -1,5 +1,5 @@
 import { FrontPageSearch } from '@/app/FrontPageSearch'
-import NewsVerticalFeed from '@/app/aktuelt/NewsVerticalFeed'
+import NewsFrontPage from '@/app/aktuelt/NewsFrontPage'
 import Agreements from '@/app/forside/Agreements'
 import FinnHjelpemiddelLogo from '@/app/forside/FinnHjelpemiddelLogo'
 import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
@@ -46,8 +46,8 @@ function FrontPage() {
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
-        {/*<NewsVerticalFeed />*/}
-        <NewsVerticalFeed />
+
+        <NewsFrontPage />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />
