@@ -40,7 +40,7 @@ function FrontPage() {
       </Bleed>
       <KategoriInngangForside />
       <HGrid
-        columns={{ xs: 1, lg: '3fr 2.5fr' }}
+        columns={{ xs: 1, lg: '3fr 2fr' }}
         gap={{ md: 'space-32' }}
         align="start"
         paddingBlock={{ md: 'space-56 space-0' }}
