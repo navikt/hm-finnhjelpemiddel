@@ -1,5 +1,5 @@
 import NewsImage from '@/app/aktuelt/NewsImage'
-import { NewsDTO, NewsTag, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
+import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
 
 import NextLink from 'next/link'
 
@@ -14,10 +14,6 @@ export default function SmallNewsCard({ news }: NewsProps) {
   const firstTag = news.tags[0]
   const tagMetaData = newsTagMeta[firstTag]
 
-  console.log(firstTag, NewsTag.NY_FUNKSJON)
-  if (firstTag === NewsTag.NY_FUNKSJON) {
-    console.log('aaa, ')
-  }
   return (
     <LinkCard key={news.id} size={'small'} style={{ minHeight: '130px', paddingInlineStart: '140px' }}>
       {news.imageUrl ? (
@@ -53,9 +49,11 @@ export default function SmallNewsCard({ news }: NewsProps) {
         </Box>
       )}
 
-      <LinkCard.Title style={{ textWrap: 'balance' }}>
+      <LinkCard.Title style={{ textWrap: 'balance', fontWeight: 'initial' }}>
         <LinkCard.Anchor asChild>
-          <NextLink href={`/aktuelt/${news.id}`}>{news.title}</NextLink>
+          <NextLink href={`/aktuelt/${news.id}`} style={{ textDecoration: 'none' }}>
+            {news.title}
+          </NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
       <LinkCard.Footer>

@@ -15,7 +15,7 @@ export default function NewsFrontPage() {
   const { data: news, isLoading } = useSWR('news-vstack', () => getNews(4), { keepPreviousData: true })
 
   return (
-    <VStack gap="space-16" width={'100%'}>
+    <VStack gap="space-24" width={'100%'}>
       <Heading level={'2'} size={'large'}>
         Aktuelt
       </Heading>
