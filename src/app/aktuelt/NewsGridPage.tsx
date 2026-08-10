@@ -1,11 +1,14 @@
 'use client'
 
-import { BodyLong, Heading, HGrid, HStack, VStack, Page, Search, Chips } from '@navikt/ds-react'
-import { NewsDTO } from '@/app/aktuelt/news-util'
 import NewsCard from '@/app/aktuelt/NewsCard'
 import NewsPagination from '@/app/aktuelt/NewsPagination'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { NewsDTO } from '@/app/aktuelt/news-util'
+
 import { useState } from 'react'
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
+import { BodyLong, Chips, HGrid, HStack, Heading, Page, Search, VStack } from '@navikt/ds-react'
 
 type NewsProps = {
   news?: NewsDTO[]
@@ -38,9 +41,7 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
   }
 
   const toggleTag = (tag: string) => {
-    const next = selectedTags.includes(tag)
-      ? selectedTags.filter((t) => t !== tag)
-      : [...selectedTags, tag]
+    const next = selectedTags.includes(tag) ? selectedTags.filter((t) => t !== tag) : [...selectedTags, tag]
     const params = new URLSearchParams(searchParams.toString())
     params.delete('tag')
     params.delete('page')
@@ -56,11 +57,17 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
             <Heading size="large" level="1">
               Aktuelt
             </Heading>
-            <VStack gap={'space-16'}>
-              <form onSubmit={(e) => { e.preventDefault(); handleSearch(inputValue) }}>
+            <VStack gap={'space-16'} align={'start'} width={'100%'}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleSearch(inputValue)
+                }}
+                style={{ width: '100%', maxWidth: '490px' }}
+              >
                 <Search
                   label="Søk etter saker"
-                  variant="secondary"
+                  variant="primary"
                   hideLabel={false}
                   value={inputValue}
                   onChange={setInputValue}

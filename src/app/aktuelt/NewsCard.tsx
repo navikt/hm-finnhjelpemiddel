@@ -1,58 +1,58 @@
-import { LinkCard, Tag, HStack, BodyShort } from '@navikt/ds-react'
-import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
-import NextLink from 'next/link'
 import NewsImage from '@/app/aktuelt/NewsImage'
-import { DocPencilIcon } from '@navikt/aksel-icons'
+import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
+
+import NextLink from 'next/link'
+
+import { BodyShort, Box, LinkCard, Tag } from '@navikt/ds-react'
 
 type NewsProps = {
   news: NewsDTO
   searchQuery?: string
 }
 
-export default function NewsCard({ news, searchQuery }: NewsProps){
+export default function NewsCard({ news, searchQuery }: NewsProps) {
   const date = formatPublishedDate(news.publishedFrom)
 
+  const firstTag = news.tags[0]
+  const tagMetaData = newsTagMeta[firstTag]
+
   return (
-    <LinkCard style={{ minHeight: '490px' }}>
+    <LinkCard>
       <LinkCard.Image aspectRatio="16/9">
-        <NewsImage
-          imageUrl={news.imageUrl}
-          alt={news.imageDescription}
-          loaderSize={'large'}
-          tags={news.tags}
-        />
+        {news.imageUrl ? (
+          <NewsImage imageUrl={news.imageUrl} alt={news.imageDescription} loaderSize={'small'} tags={news.tags} />
+        ) : (
+          <Box
+            height={'100%'}
+            style={{
+              backgroundColor: tagMetaData.defaultBackgroundColor,
+              fontSize: '90px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {tagMetaData.defaultIcon}
+          </Box>
+        )}
       </LinkCard.Image>
       <LinkCard.Title>
         <LinkCard.Anchor asChild>
           <NextLink href={`/aktuelt/${news.id}${searchQuery ? `?${searchQuery}` : ''}`}>{news.title}</NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
-      <LinkCard.Description
-        style={{
-          display: '-webkit-box',
-          WebkitLineClamp: 5,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-        }}
-      >
-        {news.description}
+      <LinkCard.Description>
+        <BodyShort size={'medium'}>{date}</BodyShort>
       </LinkCard.Description>
       <LinkCard.Footer>
-        <HStack gap={'space-4'} wrap justify={'space-between'} width={'100%'}>
-          {news.tags?.map((tag) => {
-            const meta = newsTagMeta[tag.toLowerCase() as keyof typeof newsTagMeta]
-            const Icon = meta?.icon ?? DocPencilIcon
-            return (
-              <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.color ?? 'neutral'}>
-                <Icon aria-hidden />
-                {tag}
-              </Tag>
-            )
-          })}
-          <BodyShort size={'medium'} style={{ color: 'var(--ax-text-neutral-decoration)' }}>
-            {`Publisert: ${date}`}
-          </BodyShort>
-        </HStack>
+        {news.tags?.map((tag) => {
+          const meta = newsTagMeta[tag]
+          return (
+            <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
+              {tag}
+            </Tag>
+          )
+        })}
       </LinkCard.Footer>
     </LinkCard>
   )

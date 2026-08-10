@@ -1,12 +1,13 @@
-import { Bleed, Box, Heading, HGrid, VStack } from '@navikt/ds-react'
-import FinnHjelpemiddelLogo from '@/app/forside/FinnHjelpemiddelLogo'
-import Agreements from '@/app/forside/Agreements'
-import styles from './FrontPage.module.scss'
-import { OtherAgreements } from '@/app/forside/OtherAgreements'
-import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
 import { FrontPageSearch } from '@/app/FrontPageSearch'
-import NewsFeed from '@/app/forside/NewsFeed'
-import NewsVerticalFeed from '@/app/aktuelt/NewsVerticalFeed'
+import NewsFrontPage from '@/app/aktuelt/NewsFrontPage'
+import Agreements from '@/app/forside/Agreements'
+import FinnHjelpemiddelLogo from '@/app/forside/FinnHjelpemiddelLogo'
+import { KategoriInngangForside } from '@/app/forside/KategoriInngangForside'
+import { OtherAgreements } from '@/app/forside/OtherAgreements'
+
+import { Bleed, Box, HGrid, Heading, VStack } from '@navikt/ds-react'
+
+import styles from './FrontPage.module.scss'
 
 function FrontPage() {
   return (
@@ -40,13 +41,13 @@ function FrontPage() {
       <KategoriInngangForside />
       <HGrid
         columns={{ xs: 1, lg: '3fr 2fr' }}
-        gap={{ md: 'space-128' }}
+        gap={{ md: 'space-32' }}
         align="start"
         paddingBlock={{ md: 'space-56 space-0' }}
       >
         <Agreements />
-        {/*<NewsVerticalFeed />*/}
-        <NewsVerticalFeed/>
+
+        <NewsFrontPage />
       </HGrid>
       <Bleed marginInline="full" reflectivePadding style={{ marginBottom: '1.5rem' }}>
         <OtherAgreements />
