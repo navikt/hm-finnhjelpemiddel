@@ -19,7 +19,7 @@ import { logUmamiClickButton } from '@/utils/umami'
 import CompareMenu from '@/components/layout/CompareMenu'
 
 export const localStorageProductPageBeta = 'enabledProductPageBeta'
-export const ProductTestPage = ({ product }: { product: Product }) => {
+export const ProductTestPage = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const [betaEnabled, setBetaEnabled] = useState<string | undefined>()
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const ProductTestPage = ({ product }: { product: Product }) => {
         maxWidth={'1200px'}
       >
         <FeedbackBlock setBetaEnabled={setBetaEnabled} />
-        <ProductInfoTest product={product} />
+        <ProductInfoTest product={product} hmsartnr={hmsartnr} />
         {<VariantTableTest product={product} />}
         <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
           {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
@@ -79,7 +79,7 @@ export const ProductTestPage = ({ product }: { product: Product }) => {
             </Link>
           </HStack>
         </Box>
-        <ProductTop product={product} />
+        {hmsartnr ? <ProductTop product={product} hmsartnr={hmsartnr} /> : <ProductTop product={product} />}
         <ProductMiddle product={product} />
         {product.variants.length > 1 && <VariantTable product={product} />}
       </ProductPageLayout>
