@@ -3,7 +3,6 @@
 import { Documents } from '@/app/produkt/[id]/Documents'
 import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
 import { Videos } from '@/app/produkt/[id]/Videos'
-import { WorksWith } from '@/app/produkt/[id]/WorksWith'
 import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
@@ -20,6 +19,7 @@ import { Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } fro
 import { AgreementInfo, Product } from '@/utils/product-util'
 
 import styles from './ProductInfo.module.scss'
+import { WorksWith } from '@/app/produkt-test/[id]/WorksWith'
 
 export const ProductInfoTest = ({ product }: { product: Product }) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
