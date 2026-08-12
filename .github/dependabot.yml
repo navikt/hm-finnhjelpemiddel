@@ -14,17 +14,14 @@ updates:
       minor:
         update-types:
           - "minor"
-        exclude-patterns:
-          - ["next", "@next*", "eslint-config-next"]
+        exclude-patterns: ["next", "@next*", "eslint-config-next"]
       major:
         update-types:
           - "major"
-        exclude-patterns:
-          - ["next", "@next*", "eslint-config-next"]
+        exclude-patterns: ["next", "@next*", "eslint-config-next"]
         group-by: dependency-name
       next:
-        patterns:
-          - ["next", "@next*", "eslint-config-next"]
+        patterns: ["next", "@next*", "eslint-config-next"]
         update-types:
           - "minor"
           - "major"
