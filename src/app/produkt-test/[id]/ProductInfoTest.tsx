@@ -1,16 +1,23 @@
 'use client'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
-import { Button, Heading, HelpText, HGrid, HStack, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
-import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
-import NextLink from 'next/link'
-import { Density2Icon, FolderFileIcon, LinkIcon } from '@navikt/aksel-icons'
-import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
-import React, { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { QRCodeCanvas } from 'qrcode.react'
-import { Videos } from '@/app/produkt/[id]/Videos'
 import { Documents } from '@/app/produkt/[id]/Documents'
+import { BestillingsordningBehovsmelding, Description, ISOCategory } from '@/app/produkt/[id]/GeneralProductInformation'
+import { Videos } from '@/app/produkt/[id]/Videos'
+import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+
+import React, { useEffect, useState } from 'react'
+
+import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
+
+import { QRCodeCanvas } from 'qrcode.react'
+
+import { LinkIcon } from '@navikt/aksel-icons'
+import { Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
+
+import { AgreementInfo, Product } from '@/utils/product-util'
+
 import styles from './ProductInfo.module.scss'
 import { WorksWith } from '@/app/produkt-test/[id]/WorksWith'
 
@@ -23,13 +30,14 @@ export const ProductInfoTest = ({ product }: { product: Product }) => {
 
       <VStack gap={'space-24'}>
         <VStack gap={'space-20'}>
-          <VStack gap={'space-0'}>
+          <VStack gap={'space-8'} align={'start'}>
+            <CompareButton product={product} />
             <Heading size={'xlarge'}>{product.title}</Heading>
             <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
               {product.supplierName}
             </Link>
           </VStack>
-          <VStack gap={'space-2'}>
+          <VStack gap={'space-8'} align={'start'}>
             <Description description={product.attributes.text} />
             <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
               Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
@@ -195,10 +203,10 @@ const TagRow = ({
           </Tag>
         ) : productAgreements.length == 1 ? (
           <VStack gap={'space-8'} align={'start'}>
-            <Tag variant={'success'} size={'xsmall'} icon={<FolderFileIcon aria-hidden />}>
+            <Tag variant={'success-moderate'} size={'xsmall'}>
               Delkontrakt {productAgreements[0].refNr}
             </Tag>
-            <Tag variant={'success'} size={'xsmall'} icon={<Density2Icon aria-hidden />}>
+            <Tag variant={'success-moderate'} size={'xsmall'}>
               Rangering {productAgreements[0].rank}
             </Tag>
           </VStack>
@@ -208,11 +216,11 @@ const TagRow = ({
           </Tag>
         )
       ) : isExpired ? (
-        <Tag variant={'success'} size={'xsmall'}>
+        <Tag variant={'neutral'} size={'xsmall'}>
           Utgått
         </Tag>
       ) : (
-        <Tag variant={'success'} size={'xsmall'}>
+        <Tag variant={'neutral'} size={'xsmall'}>
           Ikke på avtale
         </Tag>
       )}

@@ -6,7 +6,7 @@ import { toValueAndUnit } from '@/utils/string-util'
 import { TechDataRow } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
 
 export const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
-  const [showTable, setShowTable] = useState(false)
+  const [showTable, setShowTable] = useState(true)
 
   const rowsMerged: TechDataRow[] = []
 
@@ -20,7 +20,6 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
 
       if (maksRow !== undefined) {
         rowsMerged.push({
-          isCommonField: techDataRow.isCommonField,
           key: baseKey,
           unit: techDataRow.unit,
           values: mergeMinMaksValues(techDataRow.values, maksRow.values),

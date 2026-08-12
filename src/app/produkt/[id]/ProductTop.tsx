@@ -1,22 +1,28 @@
 'use client'
 
-import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
-import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
-import { Alert, BodyLong, BodyShort, Button, CopyButton, HelpText, HGrid, HStack, Link, VStack } from '@navikt/ds-react'
-import { Heading } from '@/components/aksel-client'
-import NextLink from 'next/link'
-import styles from './ProductTop.module.scss'
-import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
-import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
-import { NeutralTag, SuccessTag } from '@/components/Tags'
-import useSWR from 'swr'
-import { useSearchParams } from 'next/navigation'
-import { mapSearchParams } from '@/utils/mapSearchParams'
+import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import React, { useState } from 'react'
+
+import React from 'react'
+
+import NextLink from 'next/link'
+import { useSearchParams } from 'next/navigation'
+
+import useSWR from 'swr'
+
+import { ArrowDownIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, BodyShort, Button, CopyButton, HGrid, HStack, HelpText, Link, VStack } from '@navikt/ds-react'
+
+import { EXCLUDED_ISO_CATEGORIES, fetchCompatibleProducts } from '@/utils/api-util'
+import { mapSearchParams } from '@/utils/mapSearchParams'
+import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
+
+import { NeutralTag, SuccessTag } from '@/components/Tags'
+import { Heading } from '@/components/aksel-client'
 import CompareMenu from '@/components/layout/CompareMenu'
+
+import styles from './ProductTop.module.scss'
 
 const ProductTop = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   return (
@@ -111,9 +117,6 @@ const TagRow = ({
   isExpired: boolean
   product: Product
 }) => {
-  const { setCompareMenuState } = useHydratedCompareStore()
-  const [firstCompareClick, setFirstCompareClick] = useState(true)
-
   const topRank =
     productAgreements &&
     productAgreements?.length > 0 &&
@@ -131,12 +134,6 @@ const TagRow = ({
         </BodyLong>
       </>
     )
-  }
-  const handleCompareClick = () => {
-    if (firstCompareClick) {
-      setCompareMenuState(CompareMenuState.Open)
-    }
-    setFirstCompareClick(false)
   }
 
   return (
@@ -176,10 +173,8 @@ const TagRow = ({
         !isExpired && <NeutralTag>Ikke på avtale</NeutralTag>
       )}
       {isExpired && <NeutralTag>Utgått</NeutralTag>}
-      <CompareButton product={product} handleCompareClick={handleCompareClick} />
-      <span className={styles.compareMenuWrapper}>
-        <CompareMenu />
-      </span>
+      <CompareButton product={product} />
+      <CompareMenu />
     </HStack>
   )
 }

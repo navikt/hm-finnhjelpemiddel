@@ -1,24 +1,27 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
-import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
+
+import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
+
+import { Product } from '@/utils/product-util'
+
 import ProductImage from '@/components/ProductImage'
-import styles from './ProductCardAgreement.module.scss'
-import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+
+import styles from './ProductCardAgreement.module.scss'
 
 export const ProductCardAgreement = ({
   product,
   rank,
   variantCount,
-  handleCompareClick,
 }: {
   product: Product
   rank?: number
   variantCount: number
-  handleCompareClick?: () => void
 }) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
@@ -29,16 +32,16 @@ export const ProductCardAgreement = ({
   const onAgreement = currentRank !== Infinity
 
   return (
-    <Box padding={{ xs: "space-8", md: "space-16" }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
-      <VStack justify={'space-between'} height={'100%'} gap={"space-8"}>
+    <Box padding={{ xs: 'space-8', md: 'space-16' }} className={styles.container} width={{ xs: '100%', sm: '288px' }}>
+      <VStack justify={'space-between'} height={'100%'} gap={'space-8'}>
         <VStack>
-          <HStack paddingBlock={{ xs: "space-0", md: "space-0 space-16" }} align={'center'} justify={'space-between'}>
+          <HStack paddingBlock={{ xs: 'space-0', md: 'space-0 space-16' }} align={'center'} justify={'space-between'}>
             {onAgreement ? (
               <SuccessTag>{currentRank === 99 ? 'På avtale' : `Rangering ${currentRank}`}</SuccessTag>
             ) : (
               <NeutralTag>Ikke på avtale</NeutralTag>
             )}
-            <CompareButton product={product} handleCompareClick={handleCompareClick} />
+            <CompareButton product={product} />
           </HStack>
 
           <Box className={styles.imageWrapper}>
@@ -49,11 +52,11 @@ export const ProductCardAgreement = ({
           </Link>
         </VStack>
 
-        <VStack gap={{ xs: "space-4", md: "space-16" }}>
+        <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
           <BodyShort size="small">{product.supplierName}</BodyShort>
           <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>
         </VStack>
       </VStack>
     </Box>
-  );
+  )
 }

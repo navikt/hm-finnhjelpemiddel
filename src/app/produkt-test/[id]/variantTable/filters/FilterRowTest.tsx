@@ -4,14 +4,15 @@ import { Heading, VStack } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { ProductVariant } from '@/utils/product-util'
-import { Filter, FilterType, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
-import { ChipFilters } from '@/app/produkt-test/[id]/variantTable/filters/ChipFilters'
+import { CheckboxFilters } from '@/app/produkt-test/[id]/variantTable/filters/CheckboxFilters'
+import { Filter, FilterType, TechDataRow } from '../VariantTableTest'
 
 type Props = {
   variants: ProductVariant[]
   filterConfigs: Filter[]
   techDataRows: TechDataRow[]
+  resetPageState: () => void
 }
 
 export type FilterContent = {
@@ -23,7 +24,7 @@ export type FilterContent = {
   unit: string | undefined
 }
 
-export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) => {
+export const FilterRowTest = ({ variants, filterConfigs, techDataRows, resetPageState }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -40,8 +41,13 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
       .includes(searchParams.get('term')!.toLowerCase())
 
   const isRelevantDropdownFilter = (name: string) => {
-    return techDataRows.some(
-      ({ key, isCommonField }) => [name, `${name} min`, `${name} maks`].some((field) => field === key) && !isCommonField
+    const relevantRows = techDataRows.filter(({ key }) =>
+      [name, `${name} min`, `${name} maks`].some((field) => field === key)
+    )
+
+    return (
+      relevantRows.length > 0 &&
+      relevantRows.some((row) => new Set(row.values.filter((value) => value != '-')).size > 1)
     )
   }
 
@@ -161,6 +167,7 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
   )
 
   const onFilterChange = (name: string, value: string) => {
+    resetPageState()
     const newSearchParams = createQueryString(name, value)
     router.replace(`${pathname}?${newSearchParams}`, { scroll: false })
   }
@@ -182,7 +189,7 @@ export const FilterRowTest = ({ variants, filterConfigs, techDataRows }: Props) 
     <VStack gap={'space-16'}>
       <VStack gap={'space-16'} width={'fit-content'}>
         <SelectFilters filters={dropdownFilters} onFilterChange={onFilterChange} />
-        <ChipFilters filters={toggleFilters} onFilterChange={onFilterChange} />
+        <CheckboxFilters filters={toggleFilters} onFilterChange={onFilterChange} />
       </VStack>
     </VStack>
   )

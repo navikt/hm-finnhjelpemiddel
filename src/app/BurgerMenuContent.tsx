@@ -149,17 +149,6 @@ const BurgerMenuContent = ({ menuOpen, setMenuOpen, closeMenuAndRestoreFocus }: 
                   <li>
                     <Link
                       as={NextLink}
-                      href={baseUrl + '/til-leverandorer'}
-                      onClick={() => {
-                        setMenuOpen(false)
-                      }}
-                    >
-                      For leverandører
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      as={NextLink}
                       href={baseUrl + '/leverandorer'}
                       onClick={() => {
                         setMenuOpen(false)

@@ -1,15 +1,16 @@
 'use client'
 
-import { RefObject, useState } from 'react'
+import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
+
+import { RefObject } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { Alert, BodyLong, Button, HStack, VStack } from '@navikt/ds-react'
 
-import useRestoreScroll from '@/hooks/useRestoreScroll'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 import { FormSearchData } from '@/utils/search-state-util'
-import { useFormContext } from 'react-hook-form'
-import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
+
+import useRestoreScroll from '@/hooks/useRestoreScroll'
 
 const SearchResults = ({
   products,
@@ -23,15 +24,6 @@ const SearchResults = ({
   formRef: RefObject<HTMLFormElement | null>
 }) => {
   const formMethods = useFormContext<FormSearchData>()
-  const { setCompareMenuState } = useHydratedCompareStore()
-  const [firstCompareClick, setFirstCompareClick] = useState(true)
-
-  const handleCompareClick = () => {
-    if (firstCompareClick) {
-      setCompareMenuState(CompareMenuState.Open)
-    }
-    setFirstCompareClick(false)
-  }
 
   const visFilters = formMethods.getValues(`filters.vis`)
   const isHideUtgåttActive = visFilters.includes('Skjul utgåtte hjelpemidler')
@@ -60,24 +52,19 @@ const SearchResults = ({
           )}
         </Alert>
       </div>
-    );
+    )
   }
 
   return (
     <VStack gap="space-16">
       <HStack
-        gap={{ xs: "space-16", md: "space-20" }}
+        gap={{ xs: 'space-16', md: 'space-20' }}
         id="searchResults"
         className="search-results"
         justify={{ xs: 'start', md: 'start' }}
       >
         {products?.map((product) => (
-          <ProductCardSearch
-            key={product.id}
-            product={product}
-            variantCount={product.variantCount}
-            handleCompareClick={handleCompareClick}
-          />
+          <ProductCardSearch key={product.id} product={product} variantCount={product.variantCount} />
         ))}
       </HStack>
       {loadMore && !isLoading && (
@@ -91,7 +78,7 @@ const SearchResults = ({
         </Button>
       )}
     </VStack>
-  );
+  )
 }
 
 export default SearchResults

@@ -1,6 +1,8 @@
-import { containsHTML, Product, validateHTML } from '@/utils/product-util'
-import { BodyLong, BodyShort, HelpText, HStack, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
+
+import { BodyLong, BodyShort, HStack, HelpText, Link, VStack } from '@navikt/ds-react'
+
+import { Product, containsHTML, validateHTML } from '@/utils/product-util'
 
 export const GeneralProductInformation = ({ product }: { product: Product }) => {
   const description = product.attributes.text
@@ -60,7 +62,7 @@ export const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bes
         Noen varianter.
         <br />
         <Link as={NextLink} href="#variants-table">
-          Se tabell nedenfor.
+          Se tabell nedenfor
         </Link>
       </BodyShort>
     ) : sett.has(true) ? (

@@ -1,22 +1,14 @@
 'use client'
 
-import { PostWithProducts } from '@/utils/agreement-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
 import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
 
+import { useEffect } from 'react'
+
+import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
+
+import { PostWithProducts } from '@/utils/agreement-util'
+
 const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
-  const { setCompareMenuState } = useHydratedCompareStore()
-  const [firstCompareClick, setFirstCompareClick] = useState(true)
-
-  const handleCompareClick = () => {
-    if (firstCompareClick) {
-      setCompareMenuState(CompareMenuState.Open)
-    }
-    setFirstCompareClick(false)
-  }
-
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (!posts || posts.length === 0) return
@@ -34,9 +26,19 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
   }, [posts])
 
   return (
-    <VStack as="ol" gap={{ xs: "space-32", md: "space-48" }} className="agreement-search-results" id="agreementSearchResults">
+    <VStack
+      as="ol"
+      gap={{ xs: 'space-32', md: 'space-48' }}
+      className="agreement-search-results"
+      id="agreementSearchResults"
+    >
       {posts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: "space-16", md: "space-32" }} className={'agreement-post spacing-top--small'}>
+        <VStack
+          as="li"
+          key={post.nr}
+          gap={{ xs: 'space-16', md: 'space-32' }}
+          className={'agreement-post spacing-top--small'}
+        >
           <HStack gap="space-16" align={'center'}>
             <Heading level="2" size="small" id={`${post.refNr}`} className="agreement-page__post-heading">
               {post.title}
@@ -53,21 +55,20 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
           {post.products.length === 0 && !postLoading && post.nr !== 99 && (
             <Alert variant="info">Delkontrakten inneholder ingen hjelpemidler</Alert>
           )}
-          <HStack gap={"space-16"}>
+          <HStack gap={'space-16'}>
             {post.products.map((productWithRank) => (
               <ProductCardAgreement
                 key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                 product={productWithRank.product}
                 rank={productWithRank.rank}
                 variantCount={productWithRank.variantCount ?? 0}
-                handleCompareClick={handleCompareClick}
               />
             ))}
           </HStack>
         </VStack>
       ))}
     </VStack>
-  );
+  )
 }
 
 export default PostsList

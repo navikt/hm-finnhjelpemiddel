@@ -70,7 +70,12 @@
   tr > th:nth-child(n + 1),
   tr > td {
     width: 180px;
-    //display: inline-block;
+  }
+
+  @media (max-width: $ax-breakpoint-sm) {
+    tr > td {
+      width: 120px;
+    }
   }
 
   tr {

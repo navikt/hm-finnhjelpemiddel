@@ -1,21 +1,28 @@
 'use client'
 
-import { Product, ProductVariant } from '@/utils/product-util'
-import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { mapSearchParams } from '@/utils/mapSearchParams'
-import { customSort, sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
-import { toValueAndUnit } from '@/utils/string-util'
-import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Box, Button, CopyButton, Heading, HStack, Pagination, Table, VStack } from '@navikt/ds-react'
-import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
-import styles from './VariantTableTest.module.scss'
-import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
-import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
-import { NeutralTag, SuccessTag } from '@/components/Tags'
-import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 import { TechDataGroupTable } from '@/app/produkt-test/[id]/variantTable/TechDataGroupTable'
+import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
+import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
+import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
+import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
+
+import React, { useEffect, useState } from 'react'
+
+import { useSearchParams } from 'next/navigation'
+
+import { ChevronDownIcon, ChevronUpIcon, ThumbUpIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Box, Button, CopyButton, HStack, Heading, Pagination, Table, VStack } from '@navikt/ds-react'
+
+import { mapSearchParams } from '@/utils/mapSearchParams'
+import { Product, ProductVariant } from '@/utils/product-util'
+import { toValueAndUnit } from '@/utils/string-util'
+
+import { NeutralTag, SuccessTag } from '@/components/Tags'
+
+import styles from './VariantTableTest.module.scss'
+
+import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 
 export type SortColumns = {
   orderBy: string | null
@@ -25,7 +32,6 @@ export type SortColumns = {
 export type TechDataRow = {
   key: string
   values: string[]
-  isCommonField: boolean
   unit: string | undefined
   type: string
 }
@@ -174,24 +180,17 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
 
   const currentMaxPageCount = Math.ceil(productVariantsToShow.length / spaceNrvariants)
 
-  const allDataKeys =
-    product.isoCategory === '18301505'
-      ? [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort(customSort)
-      : [...new Set(productVariantsSorted.flatMap((variant) => Object.keys(variant.techData)))].sort()
-
+  const allDataKeys = [...new Set(product.variants.flatMap((variant) => Object.keys(variant.techData)))].sort()
   const techDataRowsAll: TechDataRow[] = allDataKeys.map((key) => {
     return {
       key: key,
-      values: productVariantsSorted.map((variant) =>
+      values: product.variants.map((variant) =>
         variant.techData[key] !== undefined
           ? toValueAndUnit(variant.techData[key].value, variant.techData[key].unit)
           : '-'
       ),
-      isCommonField: product.variants.every(
-        (variant) => variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
-      ),
-      unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
-      type: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
+      unit: product.variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+      type: product.variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
     }
   })
 
@@ -220,13 +219,18 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
   )
 
   return (
-    <Box background={'info-soft'} padding={'space-32'}>
+    <Box background={'info-soft'} padding={{ xs: 'space-16', md: 'space-32' }}>
       <Heading size={'medium'} level={'2'} spacing>
         Spesifikasjoner
       </Heading>
       {product.variants.length > 1 && (
         <VStack paddingBlock={'space-12 space-32'} id="variants-table">
-          <FilterRowTest variants={product.variants} filterConfigs={filters} techDataRows={techDataRowsAll} />
+          <FilterRowTest
+            variants={product.variants}
+            filterConfigs={filters}
+            techDataRows={techDataRowsAll}
+            resetPageState={() => setPageState(1)}
+          />
         </VStack>
       )}
       {productVariantsSorted.length === 0 && (
@@ -239,19 +243,21 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
           <div className={styles.variantsTable}>
             <VStack>
               <VStack gap={'space-8'} paddingBlock={'space-4 space-0'} className={styles.stickyTop}>
-                {currentMaxPageCount > 1 && (
+                {product.variants.length > 1 && (
                   <HStack justify={'space-between'} align={'end'}>
                     <BodyShort>
-                      Viser {productVariantsSorted.length} av {productVariantsToShow.length}
+                      {productVariantsToShow.length} av {product.variants.length} varianter
                     </BodyShort>
-                    <Pagination
-                      page={pageState}
-                      onPageChange={setPageState}
-                      count={currentMaxPageCount}
-                      boundaryCount={1}
-                      siblingCount={0}
-                      size={'small'}
-                    />
+                    {currentMaxPageCount > 1 && (
+                      <Pagination
+                        page={pageState}
+                        onPageChange={setPageState}
+                        count={currentMaxPageCount}
+                        boundaryCount={1}
+                        siblingCount={0}
+                        size={'small'}
+                      />
+                    )}
                   </HStack>
                 )}
                 <Table className={styles.stickyTable}>

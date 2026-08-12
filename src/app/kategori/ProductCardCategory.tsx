@@ -1,22 +1,19 @@
 'use client'
 
-import { Product } from '@/utils/product-util'
-import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
-import NextLink from 'next/link'
-import ProductImage from '@/components/ProductImage'
 import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+
+import NextLink from 'next/link'
+
+import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
+
+import { Product } from '@/utils/product-util'
+
+import ProductImage from '@/components/ProductImage'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
+
 import styles from './ProductCardCategory.module.scss'
 
-export const ProductCardCategory = ({
-  product,
-  postTitle,
-  handleCompareClick,
-}: {
-  product: Product
-  postTitle: string
-  handleCompareClick?: () => void
-}) => {
+export const ProductCardCategory = ({ product, postTitle }: { product: Product; postTitle: string }) => {
   const linkToProduct = `/produkt/${product.id}`
 
   const rank = product.agreements && product.agreements.find((agreement) => agreement.postTitle === postTitle)?.rank
@@ -32,7 +29,7 @@ export const ProductCardCategory = ({
             ) : (
               <NeutralTag>Ikke på avtale</NeutralTag>
             )}
-            <CompareButton product={product} handleCompareClick={handleCompareClick} />
+            <CompareButton product={product} />
           </HStack>
 
           <Box className={styles.imageWrapper}>
