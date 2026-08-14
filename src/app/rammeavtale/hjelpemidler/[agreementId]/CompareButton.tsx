@@ -1,21 +1,28 @@
-import { Product } from '@/utils/product-util'
-import { useHydratedCompareStore } from '@/utils/global-state-util'
-import { Button, Popover } from '@navikt/ds-react'
-import classNames from 'classnames'
-import styles from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement.module.scss'
-import { ArrowRightLeftIcon } from '@navikt/aksel-icons'
 import { useState } from 'react'
 
-export const CompareButton = ({
-  product,
-  handleCompareClick,
-}: {
-  product: Product
-  handleCompareClick: (() => void) | undefined
-}) => {
+import classNames from 'classnames'
+
+import { ArrowRightLeftIcon } from '@navikt/aksel-icons'
+import { Button, Popover } from '@navikt/ds-react'
+
+import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
+import { Product } from '@/utils/product-util'
+
+import styles from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement.module.scss'
+
+export const CompareButton = ({ product }: { product: Product }) => {
   const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()
   const [showPopover, setShowPopover] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  const { setCompareMenuState } = useHydratedCompareStore()
+  const [firstCompareClick, setFirstCompareClick] = useState(true)
+  const handleCompareClick = () => {
+    if (firstCompareClick) {
+      setCompareMenuState(CompareMenuState.Open)
+    }
+    setFirstCompareClick(false)
+  }
 
   const toggleCompareProduct = () => {
     handleCompareClick && handleCompareClick()

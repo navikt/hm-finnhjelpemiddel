@@ -1,10 +1,10 @@
-import { CustomError } from '@/utils/api-util'
-import { SparklesIcon, DocPencilIcon, NewsletterIcon } from '@navikt/aksel-icons'
+import { DefaultNyFunksjonIcon, DefaultNyhetsbrevIcon, DefaultRammeavtaleIcon } from '@/app/aktuelt/defaultIcons'
+
+import { JSX } from 'react/jsx-runtime'
+
 import type { TagProps } from '@navikt/ds-react'
-import type { StaticImageData } from 'next/image'
-import nyhetsbrevImage from '@/app/aktuelt/images/nyhetsbrev.svg'
-import rammeavtaleImage from '@/app/aktuelt/images/rammeavtale.svg'
-import nyFunksjonImage from '@/app/aktuelt/images/ny-funksjon.svg'
+
+import { CustomError } from '@/utils/api-util'
 
 const HM_FINNHJELPEMIDDEL_NEWS_URL = process.env.HM_FINNHJELPEMIDDEL_NEWS_URL || ''
 
@@ -37,15 +37,30 @@ export enum PublishingState {
 }
 
 export enum NewsTag {
-  NYHETSBREV = 'nyhetsbrev',
-  RAMMEAVTALE = 'rammeavtale',
-  NY_FUNKSJON = 'ny funksjon',
+  NYHETSBREV = 'Nyhetsbrev',
+  RAMMEAVTALE = 'Rammeavtale',
+  NY_FUNKSJON = 'Ny funksjon',
 }
 
-export const newsTagMeta: Record<NewsTag, { icon: typeof DocPencilIcon; color: TagProps['data-color']; image: StaticImageData }> = {
-  [NewsTag.NYHETSBREV]: { icon: NewsletterIcon, color: 'info', image: nyhetsbrevImage },
-  [NewsTag.RAMMEAVTALE]: { icon: DocPencilIcon, color: 'danger', image: rammeavtaleImage },
-  [NewsTag.NY_FUNKSJON]: { icon: SparklesIcon, color: 'warning', image: nyFunksjonImage },
+export const newsTagMeta: Record<
+  NewsTag,
+  { tagColor: TagProps['data-color']; defaultBackgroundColor: string; defaultIcon: JSX.Element }
+> = {
+  [NewsTag.NYHETSBREV]: {
+    tagColor: 'info',
+    defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
+    defaultIcon: <DefaultNyhetsbrevIcon />,
+  },
+  [NewsTag.RAMMEAVTALE]: {
+    tagColor: 'danger',
+    defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
+    defaultIcon: <DefaultRammeavtaleIcon />,
+  },
+  [NewsTag.NY_FUNKSJON]: {
+    tagColor: 'warning',
+    defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
+    defaultIcon: <DefaultNyFunksjonIcon />,
+  },
 }
 
 export async function getNewsPaginated(
@@ -71,15 +86,14 @@ export async function getNewsPaginated(
 }
 
 export async function getAllTags(): Promise<string[]> {
-  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/admin/tags/`,
-    {
-      method: 'GET',
-    })
+  const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/admin/tags/`, {
+    method: 'GET',
+  })
   if (!res.ok) {
     throw new CustomError(res.statusText, res.status)
   }
   const data: { tag: string }[] = await res.json()
-  return data.map(t => t.tag)
+  return data.map((t) => t.tag)
 }
 
 export const formatPublishedDate = (dateString: string): string =>
@@ -96,14 +110,14 @@ export interface NewsDTO {
   publishedTo: string
   imageUrl: string
   imageDescription: string
-  tags: string[]
+  tags: NewsTag[]
 }
 
 export interface NewsPageDTO {
   content: NewsDTO[]
-  totalSize: number,
+  totalSize: number
   pageable: {
-    number: number,
+    number: number
     size: number
   }
 }

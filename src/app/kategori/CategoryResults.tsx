@@ -1,17 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Alert, BodyLong, BodyShort, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { Product } from '@/utils/product-util'
 import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
+
+import React, { useState } from 'react'
+
 import { ChevronDownIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, BodyShort, Button, HStack, Heading, Tag, VStack } from '@navikt/ds-react'
+
+import { Product } from '@/utils/product-util'
+
 import CompareMenu from '@/components/layout/CompareMenu'
 
 export const CategoryResults = ({ products }: { products: Product[] }) => {
-  const { setCompareMenuState } = useHydratedCompareStore()
-  const [firstCompareClick, setFirstCompareClick] = useState(true)
-
   const delkontraktGroups = groupByDelkontrakt(products)
   const nonAgreementGroup = delkontraktGroups['Ikke på avtale']
   const productsTotalCount = products.length
@@ -22,13 +22,6 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
   const [visibleNonAgreementProductsCount, setvisibleNonAgreementProductsCount] = useState(
     agreementProductsCount > 24 ? 6 : 12 //tall vi har bare funnet på
   )
-
-  const handleCompareClick = () => {
-    if (firstCompareClick) {
-      setCompareMenuState(CompareMenuState.Open)
-    }
-    setFirstCompareClick(false)
-  }
 
   if (products && productsTotalCount === 0) {
     return (
@@ -54,11 +47,7 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
           .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
           .filter(([delkontraktName]) => delkontraktName !== 'Ikke på avtale')
           .map(([delkontraktName, delkontraktGroup]) => (
-            <DelkontraktGroup
-              delkontraktProducts={delkontraktGroup}
-              handleCompareClick={handleCompareClick}
-              key={delkontraktName}
-            />
+            <DelkontraktGroup delkontraktProducts={delkontraktGroup} key={delkontraktName} />
           ))}
         {nonAgreementGroup && (
           <DelkontraktGroup
@@ -68,7 +57,6 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
               normalizedTitle: nonAgreementGroup.normalizedTitle,
               products: nonAgreementGroup.products.slice(0, visibleNonAgreementProductsCount),
             }}
-            handleCompareClick={handleCompareClick}
           />
         )}
       </VStack>
@@ -88,13 +76,7 @@ export const CategoryResults = ({ products }: { products: Product[] }) => {
   )
 }
 
-const DelkontraktGroup = ({
-  delkontraktProducts,
-  handleCompareClick,
-}: {
-  delkontraktProducts: DelkontraktProducts
-  handleCompareClick: () => void
-}) => {
+const DelkontraktGroup = ({ delkontraktProducts }: { delkontraktProducts: DelkontraktProducts }) => {
   return (
     <VStack gap={'space-16'} style={{ borderTop: '1px solid #CFD3D8' }}>
       <HStack gap={'space-8'} align={'center'} paddingBlock={'space-16 space-0'}>
@@ -118,12 +100,7 @@ const DelkontraktGroup = ({
             )
           })
           .map((product) => (
-            <ProductCardCategory
-              key={product.id}
-              product={product}
-              postTitle={delkontraktProducts.postTitle}
-              handleCompareClick={handleCompareClick}
-            />
+            <ProductCardCategory key={product.id} product={product} postTitle={delkontraktProducts.postTitle} />
           ))}
       </HStack>
     </VStack>

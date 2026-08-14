@@ -1,29 +1,19 @@
 'use client'
 
-import { PostWithProducts } from '@/utils/agreement-util'
-import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
-import { Alert, Heading, HelpText, HStack, Loader, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
 import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
+
+import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
+
+import { PostWithProducts } from '@/utils/agreement-util'
 import { Product, ProductVariant } from '@/utils/product-util'
 
 export const PostsListKomponenttypeGroups = ({
-                                               posts,
-                                               postLoading,
-                                             }: {
+  posts,
+  postLoading,
+}: {
   posts: PostWithProducts[]
   postLoading: boolean
 }) => {
-  const { setCompareMenuState } = useHydratedCompareStore()
-  const [firstCompareClick, setFirstCompareClick] = useState(true)
-
-  const handleCompareClick = () => {
-    if (firstCompareClick) {
-      setCompareMenuState(CompareMenuState.Open)
-    }
-    setFirstCompareClick(false)
-  }
-
   const getKomponenttyperForProduct = (productWithRank: PostWithProducts['products'][number]): string[] => {
     const variants = (productWithRank.product as Product).variants ?? []
     const values = new Set<string>()
@@ -63,9 +53,7 @@ export const PostsListKomponenttypeGroups = ({
       )
 
       // flag: does this post have any komponenttype other than "Uten komponenttype"?
-      const hasNonDefaultKomponenttype = Object.keys(productsByKomponenttype).some(
-        (k) => k !== 'Uten komponenttype'
-      )
+      const hasNonDefaultKomponenttype = Object.keys(productsByKomponenttype).some((k) => k !== 'Uten komponenttype')
 
       return {
         ...post,
@@ -78,9 +66,19 @@ export const PostsListKomponenttypeGroups = ({
   const groupedPosts = groupProductsByKomponenttype(posts)
 
   return (
-    <VStack as="ol" gap={{ xs: "space-32", md: "space-48" }} className="agreement-search-results" id="agreementSearchResults">
+    <VStack
+      as="ol"
+      gap={{ xs: 'space-32', md: 'space-48' }}
+      className="agreement-search-results"
+      id="agreementSearchResults"
+    >
       {groupedPosts.map((post) => (
-        <VStack as="li" key={post.nr} gap={{ xs: "space-16", md: "space-32" }} className="agreement-post spacing-top--small">
+        <VStack
+          as="li"
+          key={post.nr}
+          gap={{ xs: 'space-16', md: 'space-32' }}
+          className="agreement-post spacing-top--small"
+        >
           <HStack gap="space-16" align="center">
             <Heading level="2" size="small" className="agreement-page__post-heading">
               {post.title}
@@ -113,7 +111,6 @@ export const PostsListKomponenttypeGroups = ({
                     product={productWithRank.product}
                     rank={productWithRank.rank}
                     variantCount={productWithRank.variantCount ?? 0}
-                    handleCompareClick={handleCompareClick}
                   />
                 ))}
               </HStack>
@@ -122,5 +119,5 @@ export const PostsListKomponenttypeGroups = ({
         </VStack>
       ))}
     </VStack>
-  );
+  )
 }
