@@ -234,7 +234,7 @@ const TagRow = ({
           Ikke på avtale
         </Tag>
       )}
-      <HelpText placement={'right'} style={{ padding: 0 }}>
+      <HelpText title={'Hva betyr delkonktrakt og rangering'} placement={'right'} style={{ padding: 0 }}>
         {helpHvaEr}
       </HelpText>
     </HStack>

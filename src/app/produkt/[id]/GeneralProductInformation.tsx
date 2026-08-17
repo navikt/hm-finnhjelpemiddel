@@ -74,7 +74,9 @@ export const BestillingsordningBehovsmelding = ({ heading, helpText, sett }: Bes
     <VStack gap={'space-2'}>
       <HStack gap={'space-8'}>
         <BodyShort weight={'semibold'}>{heading}</BodyShort>
-        <HelpText placement="right">{helpText}</HelpText>
+        <HelpText title={`Hva betyr ${heading}`} placement="right">
+          {helpText}
+        </HelpText>
       </HStack>
       {bestillingsordning}
     </VStack>
