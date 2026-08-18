@@ -1,7 +1,6 @@
-import { DefaultNyFunksjonIcon, DefaultNyhetsbrevIcon, DefaultRammeavtaleIcon } from '@/app/aktuelt/defaultIcons'
+import { ReactElement } from 'react'
 
-import { JSX } from 'react/jsx-runtime'
-
+import { DocPencilIcon, LightBulbIcon, NewsletterIcon } from '@navikt/aksel-icons'
 import type { TagProps } from '@navikt/ds-react'
 
 import { CustomError } from '@/utils/api-util'
@@ -44,22 +43,22 @@ export enum NewsTag {
 
 export const newsTagMeta: Record<
   NewsTag,
-  { tagColor: TagProps['data-color']; defaultBackgroundColor: string; defaultIcon: JSX.Element }
+  { tagColor: TagProps['data-color']; defaultBackgroundColor: string; defaultIcon: ReactElement }
 > = {
   [NewsTag.NYHETSBREV]: {
     tagColor: 'info',
     defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
-    defaultIcon: <DefaultNyhetsbrevIcon />,
+    defaultIcon: <NewsletterIcon color={'var(--ax-bg-accent-moderate-pressed)'} />,
   },
   [NewsTag.RAMMEAVTALE]: {
     tagColor: 'danger',
     defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
-    defaultIcon: <DefaultRammeavtaleIcon />,
+    defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} />,
   },
   [NewsTag.NY_FUNKSJON]: {
     tagColor: 'warning',
     defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
-    defaultIcon: <DefaultNyFunksjonIcon />,
+    defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} />,
   },
 }
 
