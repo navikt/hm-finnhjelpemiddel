@@ -1,11 +1,19 @@
 import { ProductVariant } from '@/utils/product-util'
-import { CopyButton, Hide, Link, Skeleton, Table } from '@navikt/ds-react'
+import { BodyShort, CopyButton, Hide, Link, Skeleton, Table } from '@navikt/ds-react'
 import styles from './PartsTable.module.scss'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
 import NextLink from 'next/link'
 
 export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
-  return products ? (
+  if (!products) {
+    return <Skeleton />
+  }
+
+  if (products.length === 0) {
+    return <BodyShort>Fant ingen deler.</BodyShort>
+  }
+
+  return (
     <Table zebraStripes>
       <Table.Header>
         <Table.Row>
@@ -49,7 +57,5 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
         ))}
       </Table.Body>
     </Table>
-  ) : (
-    <Skeleton />
   )
 }
