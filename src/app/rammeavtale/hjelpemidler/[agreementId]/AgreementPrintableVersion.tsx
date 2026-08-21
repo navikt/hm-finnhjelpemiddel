@@ -14,7 +14,7 @@ const AgreementPrintableVersion = ({ postWithProducts }: Props) => {
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell scope="col"></Table.HeaderCell>
+            <Table.HeaderCell scope="col"><span className="visually-hidden">Nr.</span></Table.HeaderCell>
             <Table.HeaderCell scope="col">Delkontrakt</Table.HeaderCell>
             <Table.HeaderCell scope="col">Hjelpemidler</Table.HeaderCell>
           </Table.Row>
