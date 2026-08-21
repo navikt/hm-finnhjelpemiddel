@@ -22,7 +22,7 @@ export const Documents = ({ documents, documentUrls }: { documents: Document[]; 
       {documents.map((doc, index) => (
         <li key={index} className={styles.fileContainer}>
           <Link as={NextLink} href={documentLoader(doc.uri)} target="_blank" rel="noreferrer">
-            {titleCapitalized(doc.title)} (PDF)
+            {titleCapitalized(doc.title) || 'Dokument'} (PDF)
             <FileIcon aria-hidden fontSize="1.5rem" />
           </Link>
         </li>
@@ -30,7 +30,7 @@ export const Documents = ({ documents, documentUrls }: { documents: Document[]; 
       {documentUrls.map((docUrl, index) => (
         <li key={index} className={styles.fileContainer}>
           <Link as={NextLink} href={docUrl.url} target="_blank" rel="noreferrer">
-            {titleCapitalized(docUrl.title)}
+            {titleCapitalized(docUrl.title) || docUrl.url}
             <LinkIcon aria-hidden fontSize="1.5rem" />
           </Link>
         </li>
