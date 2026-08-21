@@ -19,6 +19,7 @@ export const Thumb = ({
     <button
       onClick={onClick}
       type="button"
+      aria-label={`Velg produktbilde ${index + 1}`}
       className={classNames(styles.emblaThumbs__slide__number, { [styles.emblaThumbs__slideSelected]: selected })}
     >
       <div className={styles.thumbImageWrapper}>
