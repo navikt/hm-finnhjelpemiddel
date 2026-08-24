@@ -18,6 +18,8 @@ import { mapSearchParams } from '@/utils/mapSearchParams'
 import { Product, ProductVariant } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 
+import { useTechLabels } from '@/hooks/useTechLabels'
+
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 import styles from './VariantTableTest.module.scss'
@@ -194,7 +196,8 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     }
   })
 
-  const groupedTechData = groupTechDataKeys(product.variants)
+  const { techLabels } = useTechLabels(product.isoCategory)
+  const groupedTechData = techLabels ? groupTechDataKeys(product.variants, techLabels) : []
   const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
     ({ title, keys }) => {
       return {

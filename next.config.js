@@ -31,6 +31,14 @@ const nextConfig = {
         destination: process.env.HM_SEARCH_URL + '/servicejobs/_search/:path*',
       },
       {
+        source: '/api/v1/techlabels',
+        destination: process.env.HM_GRUNNDATA_DB + '/api/v1/techlabels',
+      },
+      {
+        source: '/api/v1/techlabels/:isocode',
+        destination: process.env.HM_GRUNNDATA_DB + '/api/v1/techlabels/:isocode',
+      },
+      {
         source: '/category/:path*',
         destination: process.env.HM_FINNHJELPEMIDDEL_BFF_URL + '/category/:path*',
       },
