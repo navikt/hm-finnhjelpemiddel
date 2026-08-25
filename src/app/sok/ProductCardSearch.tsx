@@ -1,18 +1,46 @@
 'use client'
 
-import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton';
 
-import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
 
-import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 
-import { Product } from '@/utils/product-util'
+import NextLink from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
-import ProductImage from '@/components/ProductImage'
-import { NeutralTag, SuccessTag } from '@/components/Tags'
 
-import styles from './ProductCardSearch.module.scss'
+
+import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react';
+
+
+
+import { Product } from '@/utils/product-util';
+
+
+
+import ProductImage from '@/components/ProductImage';
+import { NeutralTag, SuccessTag } from '@/components/Tags';
+
+
+
+import styles from './ProductCardSearch.module.scss';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const ProductCardSearch = ({
   product,
@@ -47,7 +75,12 @@ export const ProductCardSearch = ({
           <Box className={styles.imageWrapper}>
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
-          <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
+          <Link
+            className={styles.link}
+            href={linkToProduct}
+            aria-label={`Gå til ${product.title} fra ${product.supplierName}`}
+            as={NextLink}
+          >
             <BodyShort weight="semibold">{product.title}</BodyShort>
           </Link>
         </VStack>
