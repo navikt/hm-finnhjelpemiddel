@@ -43,17 +43,24 @@ export const SupplierPage = () => {
           {!isLoading && activeSuppliers && (
             <>
               <HStack gap="space-8" paddingBlock={{ xs: 'space-0 space-32', md: 'space-0 space-48' }}>
-                {alphabet.map((letter) => (
-                  <span
-                    className={disabledLetters.includes(letter) ? styles.letterDisabled : styles.letter}
-                    aria-hidden={disabledLetters.includes(letter) ? 'true' : 'false'}
-                    key={letter}
-                  >
-                    <Link as={NextLink} href={`#${letter}`} key={letter}>
-                      {letter}
-                    </Link>
-                  </span>
-                ))}
+                {alphabet.map((letter) => {
+                  const isDisabled = disabledLetters.includes(letter)
+                  return (
+                    <span
+                      className={isDisabled ? styles.letterDisabled : styles.letter}
+                      key={letter}
+                    >
+                      <Link
+                        as={NextLink}
+                        href={`#${letter}`}
+                        tabIndex={isDisabled ? -1 : undefined}
+                        aria-disabled={isDisabled ? 'true' : undefined}
+                      >
+                        {letter}
+                      </Link>
+                    </span>
+                  )
+                })}
               </HStack>
 
               {alphabet.map((letter) => (
