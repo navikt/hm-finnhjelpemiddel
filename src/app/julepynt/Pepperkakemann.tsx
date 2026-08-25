@@ -1,14 +1,25 @@
 'use client'
 
-import type { Ref, SVGProps } from 'react'
-import * as React from 'react'
+import type { SVGProps } from 'react'
 import { forwardRef } from 'react'
 
 interface SVGRProps {
   active: boolean
 }
-export const Pepperkakemann = forwardRef(({ active }: SVGProps<SVGSVGElement> & SVGRProps, ref: Ref<SVGSVGElement>) => (
-  <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 900" width="2em" height="2em">
+
+export const Pepperkakemann = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement> & SVGRProps>(
+  ({ active, ...props }, ref) => (
+    <svg
+      ref={ref}
+      version="1.2"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 750 900"
+      width="2em"
+      height="2em"
+      {...props}
+      aria-hidden="true"
+      focusable="false"
+    >
     <path
       fill={active ? '#d09242' : '#d9b78b'}
       d="m380 279c-74.7 0-135-60.3-135-135 0-74.7 60.3-135 135-135 74.7 0 135 60.3 135 135 0 74.7-60.3 135-135 135zm0 362c-75.5 1.3-136.5-83.4-136.5-189.5 0-106.1 61-192.8 136.5-194.1 50.6-0.8 94.7 37 118.2 93.9 3.6 8.5 6.6 17.5 9.2 26.8 5.9 21.3 9.1 44.5 9.1 68.9 0 106.1-61 192.8-136.5 194zm-49.5-278.8c-18.6 32.3-56.2 47.9-131.6 4.6-75.5-43.3-201-124.1-185.6-158 36.3-80.5 335.7 121.1 317.2 153.4zm-170.5 516.5c-32.9-16.2-20.2-109.2 28.4-208.1 48.6-98.9 95.6-131.5 128.5-115.4 32.9 16.2 39 74.9-9.6 173.8-48.6 98.9-114.5 165.8-147.3 149.7zm390 11c-34 13.9-95.2-57.2-137-159.2-41.9-101.9-35.1-158.7-1.3-172.7 34-13.9 82 20.5 123.8 122.4 41.8 102 48.3 195.6 14.5 209.5zm-88.2-484.6c-22-30.1-21.1-70.8 49-122.3 70.1-51.6 194.7-133.8 219.5-106 59 65.7-246.4 258.2-268.5 228.3z"
@@ -66,5 +77,6 @@ export const Pepperkakemann = forwardRef(({ active }: SVGProps<SVGSVGElement> & 
       fill="#fff"
       d="m494.8 755.7c-32.8 11.1-59.8 18.4-60.5 16.3-0.7-2.1 25.2-12.7 57.9-23.8 32.8-11.1 59.8-18.4 60.5-16.3 0.7 2-25.2 12.7-57.9 23.8z"
     />
-  </svg>
-))
+    </svg>
+  )
+)
