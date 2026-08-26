@@ -1,7 +1,9 @@
-import { CategoryPage } from './CategoryPage'
 import { SubCategoryPage } from '@/app/kategori/[kategori]/SubCategoryPage'
-import { getCategoryByTitle } from '@/app/kategori/admin/category-admin-util'
+import { getCategoryByTitle, uppercaseCategoryTitle } from '@/app/kategori/admin/category-admin-util'
+
 import type { Metadata } from 'next'
+
+import { CategoryPage } from './CategoryPage'
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
@@ -38,5 +40,5 @@ export default async function Page(props: Props) {
 }
 
 const normalizeCategoryTitle = (categoryTitle: string) => {
-  return decodeURIComponent(categoryTitle.charAt(0).toUpperCase() + categoryTitle.slice(1))
+  return decodeURIComponent(uppercaseCategoryTitle(categoryTitle))
 }

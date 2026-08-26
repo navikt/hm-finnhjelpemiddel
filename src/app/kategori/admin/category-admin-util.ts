@@ -107,3 +107,7 @@ export async function updateCategory(category: EditableCategoryDTO): Promise<voi
 export async function deleteCategory(categoryId: string): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category/id/${categoryId}`, 'DELETE')
 }
+
+export const uppercaseCategoryTitle = (categoryTitle: string) => {
+  return categoryTitle.charAt(0).toUpperCase() + categoryTitle.slice(1)
+}

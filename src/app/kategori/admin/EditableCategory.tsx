@@ -1,6 +1,11 @@
 'use client'
 
-import { CategoryAdminDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
+import {
+  CategoryAdminDTO,
+  EditableCategoryDTO,
+  getCategories,
+  uppercaseCategoryTitle,
+} from '@/app/kategori/admin/category-admin-util'
 
 import { useRef, useState } from 'react'
 import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort'
@@ -46,7 +51,9 @@ export const EditableCategory = ({
         label="Tittel"
         style={{ width: '400px' }}
         defaultValue={inputValue.title}
-        onChange={(event) => setInputValue({ ...inputValue, title: event.currentTarget.value.trimEnd() })}
+        onChange={(event) =>
+          setInputValue({ ...inputValue, title: uppercaseCategoryTitle(event.currentTarget.value.trimEnd()) })
+        }
       />
       <Textarea
         label={'Beskrivelse'}
