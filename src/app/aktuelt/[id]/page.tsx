@@ -1,11 +1,13 @@
-import { BodyLong, BodyShort, Box, Heading, HStack, Tag, VStack } from '@navikt/ds-react'
-import { Metadata } from 'next'
-import { getNewsById, formatPublishedDate } from '@/app/aktuelt/news-util'
-import { notFound } from 'next/navigation'
-import { sanitize } from '@/utils/news-html-util'
-import NewsArticleImage from '@/app/aktuelt/[id]/NewsArticleImage'
 import BackButton from '@/app/aktuelt/[id]/BackButton'
+import NewsArticleImage from '@/app/aktuelt/[id]/NewsArticleImage'
+import { formatPublishedDate, getNewsById, newsTagMeta } from '@/app/aktuelt/news-util'
 
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
+import { BodyLong, BodyShort, Box, HStack, Heading, Tag, VStack } from '@navikt/ds-react'
+
+import { sanitize } from '@/utils/news-html-util'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolved = await params
@@ -17,16 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-export default async function NewsArticlePage({
-  params,
-                                              }: {
-  params: Promise<{id: string}>
-}) {
+export default async function NewsArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const resolved = await params
   const id = resolved.id
 
   const news = await getNewsById(id)
-  if(!news) return notFound()
+  if (!news) return notFound()
 
   const title = news.title
   const sanitizedBody = sanitize(news.body)
@@ -51,17 +49,17 @@ export default async function NewsArticlePage({
             <HStack
               gap={'space-16'}
               align={'center'}
+              paddingBlock={'space-16'}
               style={{ borderBottom: '1px solid var(--ax-border-neutral-subtle)' }}
             >
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', gap: 'normal', flexWrap: 'wrap' }}>
-                {news.tags?.map((tag) => (
-                  <li key={tag}>
-                    <Tag variant={'moderate'} data-color={'neutral'}>
-                      {tag}
-                    </Tag>
-                  </li>
-                ))}
-              </ul>
+              {news.tags?.map((tag) => {
+                const meta = newsTagMeta[tag]
+                return (
+                  <Tag key={tag} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
+                    {tag}
+                  </Tag>
+                )
+              })}
               <BodyShort size={'medium'}>{`Publisert: ${published}`}</BodyShort>
             </HStack>
             <div id="aktuelt-article-body" dangerouslySetInnerHTML={{ __html: sanitizedBody }}></div>
