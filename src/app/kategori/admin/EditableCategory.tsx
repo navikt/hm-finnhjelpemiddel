@@ -192,7 +192,7 @@ const SubCategoriesModule = ({
       })) ?? []
 
   const [selectedOptions, setSelectedOptions] = useState<Options[]>(
-    options.filter((option) => inputValue.data.subCategories?.includes(option.value))
+    inputValue.data.subCategories?.map((id) => options.find((option) => option.value === id)!) ?? []
   )
 
   const updateSubcategories = (updatedSubcategories: Options[]) => {
