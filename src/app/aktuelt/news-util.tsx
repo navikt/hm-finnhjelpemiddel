@@ -48,17 +48,17 @@ export const newsTagMeta: Record<
   [NewsTag.NYHETSBREV]: {
     tagColor: 'info',
     defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
-    defaultIcon: <NewsletterIcon color={'var(--ax-bg-accent-moderate-pressed)'} />,
+    defaultIcon: <NewsletterIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />,
   },
   [NewsTag.RAMMEAVTALE]: {
     tagColor: 'danger',
     defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
-    defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} />,
+    defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} aria-hidden />,
   },
   [NewsTag.NY_FUNKSJON]: {
     tagColor: 'warning',
     defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
-    defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} />,
+    defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} aria-hidden />,
   },
 }
 
