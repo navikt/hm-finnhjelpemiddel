@@ -107,10 +107,3 @@ export async function updateCategory(category: EditableCategoryDTO): Promise<voi
 export async function deleteCategory(categoryId: string): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category/id/${categoryId}`, 'DELETE')
 }
-
-export const moveItemInArray = (arr: string[], currentIndex: number, newIndex: number) => {
-  if (newIndex >= 0 && newIndex < arr.length) {
-    ;[arr[currentIndex], arr[newIndex]] = [arr[newIndex], arr[currentIndex]]
-  }
-  return arr
-}

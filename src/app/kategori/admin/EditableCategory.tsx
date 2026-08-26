@@ -155,6 +155,23 @@ type Options = {
   value: string
 }
 
+export function arrayMoveMutable(array: any[], fromIndex: number, toIndex: number) {
+  const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex
+
+  if (startIndex >= 0 && startIndex < array.length) {
+    const endIndex = toIndex < 0 ? array.length + toIndex : toIndex
+
+    const [item] = array.splice(fromIndex, 1)
+    array.splice(endIndex, 0, item)
+  }
+}
+
+export function arrayMoveImmutable(array: any[], fromIndex: number, toIndex: number) {
+  const newArray = [...array]
+  arrayMoveMutable(newArray, fromIndex, toIndex)
+  return newArray
+}
+
 const SubCategoriesModule = ({
   categories,
   inputValue,
@@ -169,18 +186,6 @@ const SubCategoriesModule = ({
   const options: Options[] =
     categories
       ?.filter((category) => category.id != id)
-      ?.sort((a, b) => {
-        if (inputValue.data.subCategories?.includes(a.id) && !inputValue.data.subCategories?.includes(b.id)) {
-          return -1
-        }
-
-        if (!inputValue.data.subCategories?.includes(a.id) && inputValue.data.subCategories?.includes(b.id)) {
-          return 1
-        }
-
-        return a.title.localeCompare(b.title)
-      })
-
       .map((category) => ({
         label: category.title,
         value: category.id,
@@ -190,30 +195,30 @@ const SubCategoriesModule = ({
     options.filter((option) => inputValue.data.subCategories?.includes(option.value))
   )
 
-  const addSubCategory = (optionValue: string) => {
-    const newSelected = [...selectedOptions, options.filter((option) => option.value === optionValue)[0]]
-    setSelectedOptions(newSelected)
+  const updateSubcategories = (updatedSubcategories: Options[]) => {
+    setSelectedOptions(updatedSubcategories)
     setInputValue({
       ...inputValue,
-      data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
-      subcategories: newSelected.map((option, index) => {
+      data: { ...inputValue.data, subCategories: updatedSubcategories.flatMap((option) => option.value) },
+      subcategories: updatedSubcategories.map((option, index) => {
         return { id: option.value, priority: index }
       }),
     })
-    //add: max-priority+1
+  }
+
+  const addSubCategory = (optionValue: string) => {
+    const newSelected = [...selectedOptions, options.filter((option) => option.value === optionValue)[0]]
+    updateSubcategories(newSelected)
   }
   const removeSubCategory = (optionValue: string) => {
     const newSelected = selectedOptions.filter((o) => o.value !== optionValue)
-    setSelectedOptions(newSelected)
-    setInputValue({
-      ...inputValue,
-      data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
-      subcategories: newSelected.map((option, index) => {
-        return { id: option.value, priority: index }
-      }),
-    })
+    updateSubcategories(newSelected)
   }
-  const onSortEnd = (oldIndex: number, newIndex: number) => {}
+
+  const onSortEnd = (oldIndex: number, newIndex: number) => {
+    const rearrangedSelected = arrayMoveImmutable(selectedOptions, oldIndex, newIndex)
+    updateSubcategories(rearrangedSelected)
+  }
 
   return (
     <HStack gap={'space-32'} align={'start'}>
@@ -223,20 +228,26 @@ const SubCategoriesModule = ({
           isMultiSelect
           shouldAutocomplete
           shouldShowSelectedOptions={false}
-          options={options}
+          options={[...options].sort((a, b) => {
+            if (inputValue.data.subCategories?.includes(a.value) && !inputValue.data.subCategories?.includes(b.value)) {
+              return -1
+            }
+
+            if (!inputValue.data.subCategories?.includes(a.value) && inputValue.data.subCategories?.includes(b.value)) {
+              return 1
+            }
+
+            return a.label.localeCompare(b.label)
+          })}
+
           selectedOptions={selectedOptions}
           onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
         />
-        <SortableList
-          onSortEnd={() => {}}
-          className={styles.subcategoryList}
-          //draggedItemClassName={styles.dragged}
-          //allowDrag={true}
-        >
+        <SortableList onSortEnd={onSortEnd} className={styles.subcategoryList}>
           <VStack gap={'space-8'}>
             {selectedOptions?.map((option) => (
               <SortableItem key={option.value + '-chip'}>
-                <HStack paddingInline={'space-16'}>
+                <HStack paddingInline={'space-16'} align={'center'}>
                   <SortableKnob>
                     <MenuGridIcon fontSize="1.5rem" />
                   </SortableKnob>
