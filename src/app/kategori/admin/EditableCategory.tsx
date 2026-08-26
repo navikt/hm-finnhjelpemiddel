@@ -1,5 +1,16 @@
 'use client'
 
+import { CategoryAdminDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
+
+import { useRef, useState } from 'react'
+import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort'
+
+import Image from 'next/image'
+import NextLink from 'next/link'
+
+import useSWR from 'swr'
+
+import { MenuGridIcon, PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
 import {
   BodyShort,
   Box,
@@ -10,17 +21,13 @@ import {
   Popover,
   Skeleton,
   Switch,
-  Textarea,
   TextField,
+  Textarea,
   UNSAFE_Combobox,
   VStack,
 } from '@navikt/ds-react'
-import { useRef, useState } from 'react'
-import { CategoryAdminDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
-import useSWR from 'swr'
-import NextLink from 'next/link'
-import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
-import Image from 'next/image'
+
+import styles from './EditableCategory.module.scss'
 
 export const EditableCategory = ({
   inputValue,
@@ -189,7 +196,11 @@ const SubCategoriesModule = ({
     setInputValue({
       ...inputValue,
       data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
+      subcategories: newSelected.map((option, index) => {
+        return { id: option.value, priority: index }
+      }),
     })
+    //add: max-priority+1
   }
   const removeSubCategory = (optionValue: string) => {
     const newSelected = selectedOptions.filter((o) => o.value !== optionValue)
@@ -197,8 +208,12 @@ const SubCategoriesModule = ({
     setInputValue({
       ...inputValue,
       data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
+      subcategories: newSelected.map((option, index) => {
+        return { id: option.value, priority: index }
+      }),
     })
   }
+  const onSortEnd = (oldIndex: number, newIndex: number) => {}
 
   return (
     <HStack gap={'space-32'} align={'start'}>
@@ -212,16 +227,25 @@ const SubCategoriesModule = ({
           selectedOptions={selectedOptions}
           onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
         />
-        <HStack gap={'space-8'}>
-          {selectedOptions?.map((option) => (
-            <ChipsPopover
-              key={option.value + '-chip'}
-              option={option}
-              removeSubCategory={removeSubCategory}
-              categories={categories}
-            />
-          ))}
-        </HStack>
+        <SortableList
+          onSortEnd={() => {}}
+          className={styles.subcategoryList}
+          //draggedItemClassName={styles.dragged}
+          //allowDrag={true}
+        >
+          <VStack gap={'space-8'}>
+            {selectedOptions?.map((option) => (
+              <SortableItem key={option.value + '-chip'}>
+                <HStack paddingInline={'space-16'}>
+                  <SortableKnob>
+                    <MenuGridIcon fontSize="1.5rem" />
+                  </SortableKnob>
+                  <ChipsPopover option={option} removeSubCategory={removeSubCategory} categories={categories} />
+                </HStack>
+              </SortableItem>
+            ))}
+          </VStack>
+        </SortableList>
       </VStack>
       {selectedOptions && selectedOptions.length > 0 && (
         <Switch

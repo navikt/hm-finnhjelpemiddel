@@ -27,6 +27,12 @@ export type CategoryDTO = {
 export type EditableCategoryDTO = {
   title: string
   data: Category
+  subcategories: EditableSubcategoryDTO[]
+}
+
+export type EditableSubcategoryDTO = {
+  id: string
+  priority: number
 }
 
 export async function getCategories(): Promise<CategoryAdminDTO[]> {
@@ -44,7 +50,7 @@ export async function getCategories(): Promise<CategoryAdminDTO[]> {
   return res.json()
 }
 
-export async function getCategoryById(id: string): Promise<CategoryAdminDTO> {
+export async function getCategoryById(id: string): Promise<EditableCategoryDTO> {
   const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category/id/${id}`, {
     method: 'GET',
     headers: {
@@ -100,4 +106,11 @@ export async function updateCategory(category: EditableCategoryDTO): Promise<voi
 
 export async function deleteCategory(categoryId: string): Promise<void> {
   return await fetcherModify(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category/id/${categoryId}`, 'DELETE')
+}
+
+export const moveItemInArray = (arr: string[], currentIndex: number, newIndex: number) => {
+  if (newIndex >= 0 && newIndex < arr.length) {
+    ;[arr[currentIndex], arr[newIndex]] = [arr[newIndex], arr[currentIndex]]
+  }
+  return arr
 }
