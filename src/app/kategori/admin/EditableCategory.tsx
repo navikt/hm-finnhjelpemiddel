@@ -248,9 +248,6 @@ const SubCategoriesModule = ({
             {selectedOptions?.map((option) => (
               <SortableItem key={option.value + '-chip'}>
                 <HStack paddingInline={'space-16'} align={'center'}>
-                  <SortableKnob>
-                    <MenuGridIcon fontSize="1.5rem" />
-                  </SortableKnob>
                   <ChipsPopover option={option} removeSubCategory={removeSubCategory} categories={categories} />
                 </HStack>
               </SortableItem>
@@ -370,16 +367,23 @@ const ChipsPopover = ({
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const category = categories.find((cat) => cat.id === option.value)
   return (
-    <>
+    <HStack
+      as={Box}
+      gap={'space-8'}
+      borderColor={'accent'}
+      borderRadius={'full'}
+      borderWidth={'1'}
+      width={'fit-content'}
+      height={'fit-content'}
+      paddingInline={'space-12'}
+      paddingBlock={'space-4'}
+    >
+      <SortableKnob>
+        <MenuGridIcon fontSize="1.5rem" />
+      </SortableKnob>
       <Box
         ref={ref}
-        borderColor={'accent'}
-        borderRadius={'full'}
-        borderWidth={'1'}
-        width={'fit-content'}
-        height={'fit-content'}
-        paddingInline={'space-12'}
-        paddingBlock={'space-4'}
+
         onMouseOver={() => setPopoverOpen(true)}
         onMouseLeave={() => setPopoverOpen(false)}
         asChild
@@ -417,6 +421,6 @@ const ChipsPopover = ({
           </VStack>
         </Popover.Content>
       </Popover>
-    </>
+    </HStack>
   )
 }
