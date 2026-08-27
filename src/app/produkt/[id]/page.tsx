@@ -1,9 +1,5 @@
 import { ProductTestPage } from '@/app/produkt-test/[id]/ProductTestPage'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
-import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
-import ProductMiddle from '@/app/produkt/[id]/ProductMiddle'
-import ProductTop from '@/app/produkt/[id]/ProductTop'
-import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 
 import { Metadata } from 'next'
 
