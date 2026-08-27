@@ -8,6 +8,7 @@ import styles from './ProductMiddleTest.module.scss'
 import { useMemo } from 'react'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import { WorksWith } from '@/app/produkt/[id]/WorksWith'
+import { TechLabelDTO } from '@/utils/techlabel-util'
 
 const WORKS_WITH_CONFIG = {
   featureFlag: 'finnhjelpemiddel.vis-virker-sammen-med-products',
@@ -15,51 +16,47 @@ const WORKS_WITH_CONFIG = {
   agreementTitles: new Set(['Varslingshjelpemidler', 'Hørselshjelpemidler']),
 }
 
-export const groupTechDataKeys = (variants: ProductVariant[]): { title: string; keys: string[] }[] => {
-  const KeyGroups: { title: string; keys: string[] }[] = []
+const DIVERSE_TITLE = 'Diverse'
 
-  const allDataLabels = new Map(
-    variants.flatMap((variant) => {
-      return Object.entries(variant.techData).map(([key, value]) => {
-        return [key, { key: key, unit: value.unit }]
-      })
-    })
-  )
-  const hasBarteri = Array.from(allDataLabels.keys()).some((key) => /batteri/i.test(key))
-  const målOgVekt: string[] = []
-  const seteting: string[] = []
-  const batteriting: string[] = []
-  const armleneting: string[] = []
-  const ryggting: string[] = []
+export const groupTechDataKeys = (
+  variants: ProductVariant[],
+  techLabels: TechLabelDTO[]
+): { title: string; keys: string[] }[] => {
+  const techDataKeys = new Set(variants.flatMap((variant) => Object.keys(variant.techData)))
 
-  const diverse: string[] = []
+  const labels = techLabels.filter((label) => label.section && techDataKeys.has(label.label)).sort((a, b) => a.sort - b.sort)
 
-  allDataLabels.forEach(function (label, key) {
-    if (/sete/i.test(key)) {
-      seteting.push(key)
-    } else if (/armlene/i.test(key)) {
-      armleneting.push(key)
-    } else if (/rygg/i.test(key)) {
-      ryggting.push(key)
-    } else if (['cm', 'tommer', 'kg', 'gram'].includes(label.unit.toLowerCase())) {
-      målOgVekt.push(key)
-    } else if (/batteri/i.test(key)) {
-      batteriting.push(key)
-    } else if (hasBarteri && ['volt', 'v', 't', 'Ah'].includes(label.unit.toLowerCase())) {
-      batteriting.push(key)
-    } else {
-      diverse.push(key)
+  const keysBySection = new Map<string, string[]>()
+  const sectionOrderKey = new Map<string, number>()
+  const mappedKeys = new Set<string>()
+
+  labels.forEach((label) => {
+    if (mappedKeys.has(label.label)) return
+    const section = label.section!
+    // section order = min(sort) across its labels in that section
+    const orderKey = label.sort
+    if (!keysBySection.has(section) || orderKey < sectionOrderKey.get(section)!) {
+      sectionOrderKey.set(section, orderKey)
     }
+    if (!keysBySection.has(section)) {
+      keysBySection.set(section, [])
+    }
+    keysBySection.get(section)!.push(label.label)
+    mappedKeys.add(label.label)
   })
 
-  KeyGroups.push({ title: 'Sete', keys: seteting })
-  KeyGroups.push({ title: 'Armlene', keys: armleneting })
-  KeyGroups.push({ title: 'Rygg', keys: ryggting })
-  KeyGroups.push({ title: 'Batteri', keys: batteriting })
-  KeyGroups.push({ title: 'Mål og vekt', keys: målOgVekt })
-  KeyGroups.push({ title: 'Diverse', keys: diverse })
+  const diverse = Array.from(techDataKeys).filter((key) => !mappedKeys.has(key))
 
-  return KeyGroups.filter(({ keys }) => keys.length > 0)
+  const sectionOrder = Array.from(keysBySection.keys()).sort(
+    (a, b) => sectionOrderKey.get(a)! - sectionOrderKey.get(b)!
+  )
+
+  const groups = sectionOrder.map((title) => ({ title, keys: keysBySection.get(title)! }))
+  if (diverse.length > 0) {
+    groups.push({ title: DIVERSE_TITLE, keys: diverse })
+  }
+
+  return groups
 }
 
 const ProductMiddleTest = ({ product }: { product: Product }) => {

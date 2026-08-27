@@ -1,4 +1,4 @@
-import { fetchProductsWithVariants, getProductWithVariants } from '@/utils/api-util'
+import { fetchProductsWithVariants, getProductWithVariants, getTechLabels } from '@/utils/api-util'
 import { mapProductFromSeriesId } from '@/utils/product-util'
 import { Metadata } from 'next'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
@@ -25,11 +25,16 @@ export default async function ProduktPage(props: Props) {
   const isAccessoryOrSparePart = !product.main
   const matchingSeriesIds = product.attributes.compatibleWith?.seriesIds
 
-  const matchingProducts = (matchingSeriesIds && (await fetchProductsWithVariants(matchingSeriesIds)).products) || []
+  const matchingProductsPromise = matchingSeriesIds
+    ? fetchProductsWithVariants(matchingSeriesIds).then((res) => res.products)
+    : Promise.resolve([])
+  const techLabelsPromise = isAccessoryOrSparePart ? Promise.resolve([]) : getTechLabels(product.isoCategory)
+
+  const [matchingProducts, techLabels] = await Promise.all([matchingProductsPromise, techLabelsPromise])
 
   return isAccessoryOrSparePart ? (
     <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
   ) : (
-    <ProductTestPage product={product} />
+    <ProductTestPage product={product} techLabels={techLabels} />
   )
 }

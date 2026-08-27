@@ -17,6 +17,7 @@ import { Alert, BodyShort, Box, Button, CopyButton, HStack, Heading, Pagination,
 import { mapSearchParams } from '@/utils/mapSearchParams'
 import { Product, ProductVariant } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
+import { TechLabelDTO } from '@/utils/techlabel-util'
 
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 
@@ -48,7 +49,7 @@ export type Filter = {
   predicate: (variant: ProductVariant, filterFieldName: string) => boolean
 }
 
-export const VariantTableTest = ({ product }: { product: Product }) => {
+export const VariantTableTest = ({ product, techLabels }: { product: Product; techLabels: TechLabelDTO[] }) => {
   const sortColumns: SortColumns = { orderBy: 'Expired', direction: 'ascending' }
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
@@ -194,7 +195,7 @@ export const VariantTableTest = ({ product }: { product: Product }) => {
     }
   })
 
-  const groupedTechData = groupTechDataKeys(product.variants)
+  const groupedTechData = techLabels ? groupTechDataKeys(product.variants, techLabels) : []
   const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
     ({ title, keys }) => {
       return {
