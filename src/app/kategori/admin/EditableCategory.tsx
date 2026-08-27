@@ -199,7 +199,14 @@ const SubCategoriesModule = ({
       })) ?? []
 
   const [selectedOptions, setSelectedOptions] = useState<Options[]>(
-    inputValue.data.subCategories?.map((id) => options.find((option) => option.value === id)!) ?? []
+    inputValue.data.subCategories?.reduce<Options[]>(function (result, element) {
+      //hvis en subkategori er slettet så ignoreres den, og forsvinner ved lagring
+      const option = options.find((o) => o.value === element)
+      if (option) {
+        result.push(option)
+      }
+      return result
+    }, []) ?? []
   )
 
   const updateSubcategories = (updatedSubcategories: Options[]) => {
