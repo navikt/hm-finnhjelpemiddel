@@ -1,6 +1,5 @@
 'use client'
 
-import { groupTechDataKeys } from '@/app/produkt-test/[id]/ProductMiddleTest'
 import { TechDataGroupTable } from '@/app/produkt-test/[id]/variantTable/TechDataGroupTable'
 import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
@@ -351,12 +350,8 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
                 ))}
               </Table.Row>
 
-              {rankSet.size > 1 && (
-                <VariantRankRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
-              )}
-              {postSet.size > 1 && (
-                <VariantPostRow variants={productVariants} selectedColumn={null} handleColumnClick={() => null} />
-              )}
+              {rankSet.size > 1 && <VariantRankRow variants={productVariants} />}
+              {postSet.size > 1 && <VariantPostRow variants={productVariants} />}
               <Table.Row>
                 <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
                 {productVariants.map((variant, _) => (
@@ -389,4 +384,49 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
       </Box>
     </VStack>
   )
+}
+
+const groupTechDataKeys = (
+  variants: ProductVariant[],
+  techLabels: TechLabelDTO[]
+): { title: string; keys: string[] }[] => {
+  const DIVERSE_TITLE = 'Diverse'
+
+  const techDataKeys = new Set(variants.flatMap((variant) => Object.keys(variant.techData)))
+
+  const labels = techLabels
+    .filter((label) => label.section && techDataKeys.has(label.label))
+    .sort((a, b) => a.sort - b.sort)
+
+  const keysBySection = new Map<string, string[]>()
+  const sectionOrderKey = new Map<string, number>()
+  const mappedKeys = new Set<string>()
+
+  labels.forEach((label) => {
+    if (mappedKeys.has(label.label)) return
+    const section = label.section!
+    // section order = min(sort) across its labels in that section
+    const orderKey = label.sort
+    if (!keysBySection.has(section) || orderKey < sectionOrderKey.get(section)!) {
+      sectionOrderKey.set(section, orderKey)
+    }
+    if (!keysBySection.has(section)) {
+      keysBySection.set(section, [])
+    }
+    keysBySection.get(section)!.push(label.label)
+    mappedKeys.add(label.label)
+  })
+
+  const diverse = Array.from(techDataKeys).filter((key) => !mappedKeys.has(key))
+
+  const sectionOrder = Array.from(keysBySection.keys()).sort(
+    (a, b) => sectionOrderKey.get(a)! - sectionOrderKey.get(b)!
+  )
+
+  const groups = sectionOrder.map((title) => ({ title, keys: keysBySection.get(title)! }))
+  if (diverse.length > 0) {
+    groups.push({ title: DIVERSE_TITLE, keys: diverse })
+  }
+
+  return groups
 }

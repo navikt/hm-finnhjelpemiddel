@@ -2,42 +2,7 @@ import NextLink from 'next/link'
 
 import { BodyLong, BodyShort, HStack, HelpText, Link, VStack } from '@navikt/ds-react'
 
-import { Product, containsHTML, validateHTML } from '@/utils/product-util'
-
-export const GeneralProductInformation = ({ product }: { product: Product }) => {
-  const description = product.attributes.text
-  const bestillingsordning = new Set(product.variants.map((p) => p.bestillingsordning))
-  const digitalsoknad = new Set(product.variants.map((p) => p.digitalSoknad))
-  const helpTextBestilling =
-    'Bestillingsordningen er en forenkling av saksbehandling. Gjennom denne ordningen kan man bestille enkle\n' +
-    '        hjelpemidler som hjelpemiddelsentralene har på lager.'
-  const helpTextSoknad =
-    'Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg av\n' +
-    '        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.'
-
-  return (
-    <VStack gap={'space-44'}>
-      <Description description={description} />
-      <VStack gap={'space-24'}>
-        <BestillingsordningBehovsmelding
-          heading={'Bestillingsordning'}
-          helpText={helpTextBestilling}
-          sett={bestillingsordning}
-        />
-        <BestillingsordningBehovsmelding
-          heading={'Digital behovsmelding'}
-          helpText={helpTextSoknad}
-          sett={digitalsoknad}
-        />
-        <ISOCategory
-          isoCategory={product.isoCategory}
-          isoCategoryTitle={product.isoCategoryTitle}
-          isoCategoryTitleInternational={product.isoCategoryTitleInternational}
-        />
-      </VStack>
-    </VStack>
-  )
-}
+import { containsHTML, validateHTML } from '@/utils/product-util'
 
 export const Description = ({ description }: { description: string | undefined }) => {
   const htmlDescription = description && containsHTML(description) && validateHTML(description)

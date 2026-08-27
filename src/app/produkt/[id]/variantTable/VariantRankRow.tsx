@@ -1,15 +1,14 @@
 import { Table } from '@navikt/ds-react'
+
 import { AgreementInfo, ProductVariant } from '@/utils/product-util'
-import styles from './VariantTable.module.scss'
+
 import { SuccessTag } from '@/components/Tags'
 
 interface VariantRankRowProps {
   variants: ProductVariant[]
-  handleColumnClick: (key: number) => void
-  selectedColumn: number | null
 }
 
-export const VariantRankRow = ({ variants, selectedColumn, handleColumnClick }: VariantRankRowProps) => {
+export const VariantRankRow = ({ variants }: VariantRankRowProps) => {
   const text = (agreements: AgreementInfo[]) =>
     agreements
       .map((ag) => ag.rank)
@@ -21,11 +20,7 @@ export const VariantRankRow = ({ variants, selectedColumn, handleColumnClick }: 
     <Table.Row>
       <Table.HeaderCell>Rangering</Table.HeaderCell>
       {variants.map((variant, i) => (
-        <Table.DataCell
-          key={'rank-' + variant.id}
-          className={selectedColumn === i ? styles.selectedColumn : ''}
-          onClick={() => handleColumnClick(i)}
-        >
+        <Table.DataCell key={'rank-' + variant.id}>
           <SuccessTag title={'Rangering'}>{text(variant.agreements)}</SuccessTag>
         </Table.DataCell>
       ))}

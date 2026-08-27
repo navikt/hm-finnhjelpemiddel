@@ -1,27 +1,10 @@
 import { ProductVariant } from '@/utils/product-util'
 import { sortAlphabetically, sortIntWithStringFallback } from '@/utils/sort-util'
 import { formatAgreementPosts, formatAgreementRanks } from '@/utils/string-util'
-import { SortColumns } from '@/app/produkt/[id]/variantTable/VariantTable'
 
-// Spesifikk rekkefølge av bestemte rader for Terskeleliminatorer med ISO 18301505.
-// De radene som bør komme etter hverandre er: "Bredde",  "Terskelhøyde maks",  "Terskelhøyde min"
-
-const customOrder = ['Belastning maks', 'Bredde', 'Terskelhøyde maks', 'Terskelhøyde min']
-
-export const customSort = (a: string, b: string) => {
-  const indexA = customOrder.indexOf(a)
-  const indexB = customOrder.indexOf(b)
-
-  if (indexA === -1 && indexB === -1) {
-    return a.localeCompare(b)
-  }
-  if (indexA === -1) {
-    return 1
-  }
-  if (indexB === -1) {
-    return -1
-  }
-  return indexA - indexB
+type SortColumns = {
+  orderBy: string | null
+  direction: 'ascending' | 'descending'
 }
 
 // Define the custom order for statuses
@@ -57,7 +40,7 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
         variantA.articleName.trim().replace(/\s/g, ''),
         variantB.articleName.trim().replace(/\s/g, ''),
         sortColumns?.direction === 'descending'
-      );
+      )
     }
 
     if (sortColumns.orderBy === 'rank') {
@@ -86,7 +69,7 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
           variantA.articleName.trim().replace(/\s/g, ''),
           variantB.articleName.trim().replace(/\s/g, ''),
           sortColumns?.direction === 'descending'
-        );
+        )
       }
       return -1
     }
@@ -99,5 +82,5 @@ export const sortColumnsByRowKey = (variants: ProductVariant[], sortColumns: Sor
     } else {
       return -1
     }
-  });
+  })
 }
