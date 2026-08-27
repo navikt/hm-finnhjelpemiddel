@@ -14,12 +14,21 @@ import { useEffect, useState } from 'react'
 import { Box, HStack, Link, VStack } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
+import { TechLabelDTO } from '@/utils/techlabel-util'
 import { logUmamiClickButton } from '@/utils/umami'
 
 import CompareMenu from '@/components/layout/CompareMenu'
 
 export const localStorageProductPageBeta = 'enabledProductPageBeta'
-export const ProductTestPage = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
+export const ProductTestPage = ({
+  product,
+  hmsartnr,
+  techLabels,
+}: {
+  product: Product
+  hmsartnr?: string
+  techLabels: TechLabelDTO[]
+}) => {
   const [betaEnabled, setBetaEnabled] = useState<string | undefined>()
 
   useEffect(() => {
@@ -42,7 +51,7 @@ export const ProductTestPage = ({ product, hmsartnr }: { product: Product; hmsar
       >
         <FeedbackBlock setBetaEnabled={setBetaEnabled} />
         <ProductInfoTest product={product} hmsartnr={hmsartnr} />
-        {<VariantTableTest product={product} />}
+        {<VariantTableTest product={product} techLabels={techLabels} />}
         <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
           {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
         </VStack>

@@ -30,6 +30,7 @@ import {
   Product,
   ProductVariant,
 } from './product-util'
+import { TechLabelDTO } from './techlabel-util'
 import {
   AgreementDocResponse,
   AgreementInfoResponse,
@@ -44,6 +45,7 @@ export const PAGE_SIZE = 24
 
 //if HM_SEARCH_URL is undefined it means that we are on the client and we want to use relative url
 const HM_SEARCH_URL = process.env.HM_SEARCH_URL || ''
+const HM_GRUNNDATA_DB = process.env.HM_GRUNNDATA_DB || ''
 
 // ISO categories that must always be excluded / filtered out (e.g. from autocomplete) and optionally from general search
 export const EXCLUDED_ISO_CATEGORIES = ['09540601', '09540901', '09540301', '09541201']
@@ -853,6 +855,15 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
       'Content-Type': 'application/json',
     },
     body: body,
+  })
+
+  return res.json()
+}
+
+export async function getTechLabels(isoCategory: string): Promise<TechLabelDTO[]> {
+  const res = await fetch(HM_GRUNNDATA_DB + `/api/v1/techlabels/${isoCategory}`, {
+    method: 'GET',
+    next: { revalidate: 300 },
   })
 
   return res.json()
