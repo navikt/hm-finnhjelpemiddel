@@ -24,7 +24,7 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
   }
 
   return (
-    <VStack gap={'space-16'} className={styles.embla} aria-label={'Produktbilder'}>
+    <VStack gap={'space-16'} className={styles.embla} role="group" aria-label={'Produktbilder'}>
       <ImageDialog
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
