@@ -1,6 +1,22 @@
 'use client'
 
 import {
+  CategoryAdminDTO,
+  EditableCategoryDTO,
+  getCategories,
+  uppercaseCategoryTitle,
+} from '@/app/kategori/admin/category-admin-util'
+
+import { useRef, useState } from 'react'
+import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort'
+
+import Image from 'next/image'
+import NextLink from 'next/link'
+
+import useSWR from 'swr'
+
+import { MenuGridIcon, PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
+import {
   BodyShort,
   Box,
   Button,
@@ -10,17 +26,13 @@ import {
   Popover,
   Skeleton,
   Switch,
-  Textarea,
   TextField,
+  Textarea,
   UNSAFE_Combobox,
   VStack,
 } from '@navikt/ds-react'
-import { useRef, useState } from 'react'
-import { CategoryAdminDTO, EditableCategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
-import useSWR from 'swr'
-import NextLink from 'next/link'
-import { PlusCircleIcon, XMarkIcon } from '@navikt/aksel-icons'
-import Image from 'next/image'
+
+import styles from './EditableCategory.module.scss'
 
 export const EditableCategory = ({
   inputValue,
@@ -39,7 +51,9 @@ export const EditableCategory = ({
         label="Tittel"
         style={{ width: '400px' }}
         defaultValue={inputValue.title}
-        onChange={(event) => setInputValue({ ...inputValue, title: event.currentTarget.value.trimEnd() })}
+        onChange={(event) =>
+          setInputValue({ ...inputValue, title: uppercaseCategoryTitle(event.currentTarget.value.trimEnd()) })
+        }
       />
       <Textarea
         label={'Beskrivelse'}
@@ -148,6 +162,23 @@ type Options = {
   value: string
 }
 
+export function arrayMoveMutable(array: any[], fromIndex: number, toIndex: number) {
+  const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex
+
+  if (startIndex >= 0 && startIndex < array.length) {
+    const endIndex = toIndex < 0 ? array.length + toIndex : toIndex
+
+    const [item] = array.splice(fromIndex, 1)
+    array.splice(endIndex, 0, item)
+  }
+}
+
+export function arrayMoveImmutable(array: any[], fromIndex: number, toIndex: number) {
+  const newArray = [...array]
+  arrayMoveMutable(newArray, fromIndex, toIndex)
+  return newArray
+}
+
 const SubCategoriesModule = ({
   categories,
   inputValue,
@@ -162,42 +193,45 @@ const SubCategoriesModule = ({
   const options: Options[] =
     categories
       ?.filter((category) => category.id != id)
-      ?.sort((a, b) => {
-        if (inputValue.data.subCategories?.includes(a.id) && !inputValue.data.subCategories?.includes(b.id)) {
-          return -1
-        }
-
-        if (!inputValue.data.subCategories?.includes(a.id) && inputValue.data.subCategories?.includes(b.id)) {
-          return 1
-        }
-
-        return a.title.localeCompare(b.title)
-      })
-
       .map((category) => ({
         label: category.title,
         value: category.id,
       })) ?? []
 
   const [selectedOptions, setSelectedOptions] = useState<Options[]>(
-    options.filter((option) => inputValue.data.subCategories?.includes(option.value))
+    inputValue.data.subCategories?.reduce<Options[]>(function (result, element) {
+      //hvis en subkategori er slettet så ignoreres den, og forsvinner ved lagring
+      const option = options.find((o) => o.value === element)
+      if (option) {
+        result.push(option)
+      }
+      return result
+    }, []) ?? []
   )
+
+  const updateSubcategories = (updatedSubcategories: Options[]) => {
+    setSelectedOptions(updatedSubcategories)
+    setInputValue({
+      ...inputValue,
+      data: { ...inputValue.data, subCategories: updatedSubcategories.flatMap((option) => option.value) },
+      subcategories: updatedSubcategories.map((option, index) => {
+        return { id: option.value, priority: index }
+      }),
+    })
+  }
 
   const addSubCategory = (optionValue: string) => {
     const newSelected = [...selectedOptions, options.filter((option) => option.value === optionValue)[0]]
-    setSelectedOptions(newSelected)
-    setInputValue({
-      ...inputValue,
-      data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
-    })
+    updateSubcategories(newSelected)
   }
   const removeSubCategory = (optionValue: string) => {
     const newSelected = selectedOptions.filter((o) => o.value !== optionValue)
-    setSelectedOptions(newSelected)
-    setInputValue({
-      ...inputValue,
-      data: { ...inputValue.data, subCategories: newSelected.flatMap((option) => option.value) },
-    })
+    updateSubcategories(newSelected)
+  }
+
+  const onSortEnd = (oldIndex: number, newIndex: number) => {
+    const rearrangedSelected = arrayMoveImmutable(selectedOptions, oldIndex, newIndex)
+    updateSubcategories(rearrangedSelected)
   }
 
   return (
@@ -208,20 +242,32 @@ const SubCategoriesModule = ({
           isMultiSelect
           shouldAutocomplete
           shouldShowSelectedOptions={false}
-          options={options}
+          options={[...options].sort((a, b) => {
+            if (inputValue.data.subCategories?.includes(a.value) && !inputValue.data.subCategories?.includes(b.value)) {
+              return -1
+            }
+
+            if (!inputValue.data.subCategories?.includes(a.value) && inputValue.data.subCategories?.includes(b.value)) {
+              return 1
+            }
+
+            return a.label.localeCompare(b.label)
+          })}
+
           selectedOptions={selectedOptions}
           onToggleSelected={(option, isSelected) => (isSelected ? addSubCategory(option) : removeSubCategory(option))}
         />
-        <HStack gap={'space-8'}>
-          {selectedOptions?.map((option) => (
-            <ChipsPopover
-              key={option.value + '-chip'}
-              option={option}
-              removeSubCategory={removeSubCategory}
-              categories={categories}
-            />
-          ))}
-        </HStack>
+        <SortableList onSortEnd={onSortEnd} className={styles.subcategoryList}>
+          <VStack gap={'space-8'}>
+            {selectedOptions?.map((option) => (
+              <SortableItem key={option.value + '-chip'}>
+                <HStack paddingInline={'space-16'} align={'center'}>
+                  <ChipsPopover option={option} removeSubCategory={removeSubCategory} categories={categories} />
+                </HStack>
+              </SortableItem>
+            ))}
+          </VStack>
+        </SortableList>
       </VStack>
       {selectedOptions && selectedOptions.length > 0 && (
         <Switch
@@ -335,16 +381,23 @@ const ChipsPopover = ({
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const category = categories.find((cat) => cat.id === option.value)
   return (
-    <>
+    <HStack
+      as={Box}
+      gap={'space-8'}
+      borderColor={'accent'}
+      borderRadius={'full'}
+      borderWidth={'1'}
+      width={'fit-content'}
+      height={'fit-content'}
+      paddingInline={'space-12'}
+      paddingBlock={'space-4'}
+    >
+      <SortableKnob>
+        <MenuGridIcon fontSize="1.5rem" />
+      </SortableKnob>
       <Box
         ref={ref}
-        borderColor={'accent'}
-        borderRadius={'full'}
-        borderWidth={'1'}
-        width={'fit-content'}
-        height={'fit-content'}
-        paddingInline={'space-12'}
-        paddingBlock={'space-4'}
+
         onMouseOver={() => setPopoverOpen(true)}
         onMouseLeave={() => setPopoverOpen(false)}
         asChild
@@ -382,6 +435,6 @@ const ChipsPopover = ({
           </VStack>
         </Popover.Content>
       </Popover>
-    </>
+    </HStack>
   )
 }

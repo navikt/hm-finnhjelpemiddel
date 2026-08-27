@@ -1,12 +1,15 @@
 'use client'
 
-import { Button, Heading, Link, VStack } from '@navikt/ds-react'
-import { useState } from 'react'
-import { createCategory, EditableCategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { useRouter } from 'next/navigation'
 import { EditableCategory } from '@/app/kategori/admin/EditableCategory'
+import { EditableCategoryDTO, createCategory } from '@/app/kategori/admin/category-admin-util'
+
+import { useState } from 'react'
+
 import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
+
 import { ArrowLeftIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Link, VStack } from '@navikt/ds-react'
 
 export const NewCategory = () => {
   const router = useRouter()
@@ -21,6 +24,7 @@ export const NewCategory = () => {
       icon: '',
       showSubCategoryIcons: true,
     },
+    subcategories: [],
   })
 
   const onSave = () => {
