@@ -22,6 +22,7 @@ const NavigationBar = () => {
   const featureFlags = useFeatureFlags()
   const juledekorasjonFlag = featureFlags.isEnabled('juledekorasjon')
   const [visJulepynt, setVisJulepynt] = useState(false)
+  const julepyntLabel = visJulepynt ? 'Skjul julepynt' : 'Vis julepynt'
 
   const { setMenuOpen: setMenuOpenGlobalState } = useMenuStore()
   const router = useRouter()
@@ -137,19 +138,21 @@ const NavigationBar = () => {
                 <Button
                   size="medium"
                   variant="tertiary-neutral"
+                  aria-label={julepyntLabel}
+                  aria-pressed={visJulepynt}
                   icon={<Pepperkakemann active={visJulepynt} />}
                   onClick={() => setVisJulepynt(!visJulepynt)}
-                  title={'Pepperkake'}
-                ></Button>
+                />
               </Hide>
               <Hide above="sm">
                 <Button
                   size="xsmall"
                   variant="tertiary-neutral"
+                  aria-label={julepyntLabel}
+                  aria-pressed={visJulepynt}
                   icon={<Pepperkakemann active={visJulepynt} />}
                   onClick={() => setVisJulepynt(!visJulepynt)}
-                  title={'Pepperkake'}
-                ></Button>
+                />
               </Hide>
             </div>
           )}
