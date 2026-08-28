@@ -1,14 +1,5 @@
-import { Product } from '@/utils/product-util'
-import {
-  findUniqueStringValues,
-  formatAgreementPosts,
-  formatAgreementRanks,
-  toValueAndUnit,
-  tryParseNumber,
-} from '@/utils/string-util'
-import { Heading, Table } from '@/components/aksel-client'
-import ProductCardCompare from '@/components/ProductCardCompare'
-import { Description } from '@/app/produkt/[id]/GeneralProductInformation'
+import { Description } from '@/app/produkt/[id]/productInfo/GeneralProductInformation'
+
 import {
   TableBody,
   TableColumnHeader,
@@ -17,6 +8,18 @@ import {
   TableHeaderCell,
   TableRow,
 } from '@navikt/ds-react/Table'
+
+import { Product } from '@/utils/product-util'
+import {
+  findUniqueStringValues,
+  formatAgreementPosts,
+  formatAgreementRanks,
+  toValueAndUnit,
+  tryParseNumber,
+} from '@/utils/string-util'
+
+import ProductCardCompare from '@/components/ProductCardCompare'
+import { Heading, Table } from '@/components/aksel-client'
 
 export const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
   const allDataKeysVariants = [

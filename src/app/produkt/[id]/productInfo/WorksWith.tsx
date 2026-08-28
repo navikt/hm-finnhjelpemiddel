@@ -1,12 +1,17 @@
-import { BodyShort, Button, Chips, ReadMore, VStack } from '@navikt/ds-react'
-import styles from '@/app/produkt/[id]/WorksWith.module.scss'
+import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
+
 import { useEffect, useMemo, useState } from 'react'
+
 import useSWRImmutable from 'swr/immutable'
+
+import { ChevronDownIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Chips, ReadMore, VStack } from '@navikt/ds-react'
+
 import { FetchSeriesResponse, fetchWorkWithProducts } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import { logUmamiClickButton, logUmamiFilterChangeEvent } from '@/utils/umami'
-import { ProductCardWorksWith } from '@/app/produkt/[id]/ProductCardWorksWith'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
+
+import styles from './WorksWith.module.scss'
 
 type Props = {
   worksWithSeriesIds?: string[]
@@ -117,7 +122,6 @@ const WorksWithSection = ({ products }: { products: Product[] }) => {
         selectedTypes={selectedComponentTypes}
         onToggle={handleComponentTypeToggle}
       />
-      {/*      <BodyShort size="small">{products.length}</BodyShort>*/}
       {displayedProducts.map((workWithProduct: Product) => (
         <ProductCardWorksWith key={workWithProduct.id} product={workWithProduct} />
       ))}

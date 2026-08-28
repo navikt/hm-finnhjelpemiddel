@@ -1,9 +1,13 @@
+import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
+
 import React, { useState } from 'react'
-import { Box, Button, Heading, HStack, Table } from '@navikt/ds-react'
-import styles from '@/app/produkt-test/[id]/variantTable/VariantTableTest.module.scss'
+
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
+import { Box, Button, HStack, Heading, Table } from '@navikt/ds-react'
+
 import { toValueAndUnit } from '@/utils/string-util'
-import { TechDataRow } from '@/app/produkt-test/[id]/variantTable/VariantTableTest'
+
+import styles from '@/app/produkt/[id]/variantTable/VariantTableTest.module.scss'
 
 export const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
   const [showTable, setShowTable] = useState(true)

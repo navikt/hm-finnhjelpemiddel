@@ -1,9 +1,9 @@
 'use client'
 
-import { TechDataGroupTable } from '@/app/produkt-test/[id]/variantTable/TechDataGroupTable'
-import { FilterRowTest } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
+import { TechDataGroupTable } from '@/app/produkt/[id]/variantTable/TechDataGroupTable'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
+import { FilterRowTest } from '@/app/produkt/[id]/variantTable/filters/FilterRowTest'
 import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 
 import React, { useEffect, useState } from 'react'

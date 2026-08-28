@@ -1,11 +1,16 @@
 'use client'
 
-import { Heading, VStack } from '@navikt/ds-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { CheckboxFilters } from '@/app/produkt/[id]/variantTable/filters/CheckboxFilters'
+import { SelectFilters } from '@/app/produkt/[id]/variantTable/filters/SelectFilters'
+
 import { useCallback } from 'react'
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
+import { Heading, VStack } from '@navikt/ds-react'
+
 import { ProductVariant } from '@/utils/product-util'
-import { SelectFilters } from '@/app/produkt-test/[id]/variantTable/filters/SelectFilters'
-import { CheckboxFilters } from '@/app/produkt-test/[id]/variantTable/filters/CheckboxFilters'
+
 import { Filter, FilterType, TechDataRow } from '../VariantTableTest'
 
 type Props = {

@@ -1,6 +1,9 @@
+import { FilterContent } from '@/app/produkt/[id]/variantTable/filters/FilterRowTest'
+
 import { useSearchParams } from 'next/navigation'
+
 import { BodyShort, HStack, Select, VStack } from '@navikt/ds-react'
-import { FilterContent } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
+
 import styles from './SelectFilters.module.scss'
 
 export const SelectFilters = ({

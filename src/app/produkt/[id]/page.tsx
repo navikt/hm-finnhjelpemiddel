@@ -1,5 +1,5 @@
-import { ProductTestPage } from '@/app/produkt-test/[id]/ProductTestPage'
 import AccessoryOrSparePartPage from '@/app/produkt/AccessoryOrSparePartPage'
+import { ProductPage } from '@/app/produkt/[id]/ProductPage'
 
 import { Metadata } from 'next'
 
@@ -20,7 +20,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProduktPage(props: Props) {
+export default async function Page(props: Props) {
   const params = await props.params
 
   const product = mapProductFromSeriesId(await getProductWithVariants(params.id))
@@ -37,6 +37,6 @@ export default async function ProduktPage(props: Props) {
   return isAccessoryOrSparePart ? (
     <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
   ) : (
-    <ProductTestPage product={product} techLabels={techLabels} />
+    <ProductPage product={product} techLabels={techLabels} />
   )
 }

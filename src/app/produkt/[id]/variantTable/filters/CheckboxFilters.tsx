@@ -1,6 +1,8 @@
+import { FilterContent } from '@/app/produkt/[id]/variantTable/filters/FilterRowTest'
+
 import { useSearchParams } from 'next/navigation'
+
 import { Checkbox, CheckboxGroup, HStack } from '@navikt/ds-react'
-import { FilterContent } from '@/app/produkt-test/[id]/variantTable/filters/FilterRowTest'
 
 export const CheckboxFilters = ({
   filters,
