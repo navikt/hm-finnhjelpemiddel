@@ -1,11 +1,15 @@
 'use client'
-import { Box, HGrid, ReadMore } from '@navikt/ds-react'
 import { CategoryCard } from '@/app/kategori/CategoryCard'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
-import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
+
 import Link from 'next/link'
+
+import { Box, HGrid, ReadMore } from '@navikt/ds-react'
+
 import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
+
+import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 
 export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
   const subCategoryHelpText = 'Hvordan kan du få hjelpemidler?'
@@ -46,7 +50,7 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
       {category.subCategories?.length && (
         <HGrid gap={'space-40'} columns={{ xs: 1, md: 2, lg: 3 }} paddingBlock={'space-0 space-96'}>
           {category.subCategories
-            .sort((a, b) => a.title.localeCompare(b.title))
+            .sort((a, b) => a.priority - b.priority)
             .map((subCategory) => (
               <CategoryCard
                 icon={subCategory.icon}
