@@ -7,13 +7,20 @@ import Image from 'next/image'
 import NextLink from 'next/link'
 
 const PartThumbnail = ({ product }: { product: ProductVariant }) => {
-  const photoUri = product.photos?.at(0)?.uri
-  if (!photoUri) {
+  const seriesId = product.seriesId
+  const photoUri = product.photos.at(0)?.uri
+
+  if (!seriesId || !photoUri) {
     return null
   }
 
   return (
-    <Link as={NextLink} href={`/produkt/${product.seriesId}`} className={styles.thumbnailLink}>
+    <Link
+      as={NextLink}
+      href={`/produkt/${seriesId}`}
+      className={styles.thumbnailLink}
+      aria-label={`Åpne ${product.articleName}`}
+    >
       <Image
         loader={smallImageLoader}
         src={photoUri}
