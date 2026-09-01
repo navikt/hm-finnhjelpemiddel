@@ -286,6 +286,7 @@ const TopLinks = ({ agreementId, harTjenester }: { agreementId: string; harTjene
 const avtalerMedNyTjenesteSide = [
   '7eab246b-aa2a-4bdd-b3e7-741967aa9bb7', //Moduloppbygde sittesystemer, formstøp og bilseter for barn
   '0875c2c5-f14a-4131-b244-640093abc6e3', //Hygienehjelpemidler og støttestang
+  'd4cfdf46-8725-42af-8623-2b284eec91a9', //Varmehjelpemidler for hender og føtter
 ]
 
 export default AgreementPage
