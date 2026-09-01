@@ -1,10 +1,45 @@
 import { ProductVariant } from '@/utils/product-util'
+import { smallImageLoader } from '@/utils/image-util'
 import { BodyShort, CopyButton, Hide, Link, Skeleton, Table } from '@navikt/ds-react'
 import styles from './PartsTable.module.scss'
 import { ThumbUpIcon } from '@navikt/aksel-icons'
+import Image from 'next/image'
 import NextLink from 'next/link'
 
-export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
+const PartThumbnail = ({ product }: { product: ProductVariant }) => {
+  const seriesId = product.seriesId
+  const photoUri = product.photos.at(0)?.uri
+
+  if (!seriesId || !photoUri) {
+    return null
+  }
+
+  return (
+    <Link
+      as={NextLink}
+      href={`/produkt/${seriesId}`}
+      className={styles.thumbnailLink}
+      aria-label={`Åpne ${product.articleName}`}
+    >
+      <Image
+        loader={smallImageLoader}
+        src={photoUri}
+        alt=""
+        width={40}
+        height={40}
+        className={styles.thumbnail}
+      />
+    </Link>
+  )
+}
+
+export const PartsTable = ({
+  products,
+  showThumbnails = true,
+}: {
+  products: ProductVariant[]
+  showThumbnails?: boolean
+}) => {
   if (!products) {
     return <Skeleton />
   }
@@ -17,6 +52,13 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
     <Table zebraStripes>
       <Table.Header>
         <Table.Row>
+          {showThumbnails && (
+            <Hide below={'md'} asChild>
+              <Table.HeaderCell scope="col">
+                Bilde
+              </Table.HeaderCell>
+            </Hide>
+          )}
           <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
           <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
           <Hide below={'md'} asChild>
@@ -28,6 +70,13 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
       <Table.Body>
         {products.map((product) => (
           <Table.Row key={product.id}>
+            {showThumbnails && (
+              <Hide below={'md'} asChild>
+                <Table.DataCell>
+                  <PartThumbnail product={product} />
+                </Table.DataCell>
+              </Hide>
+            )}
             <Table.DataCell>
               <CopyButton
                 size="small"
