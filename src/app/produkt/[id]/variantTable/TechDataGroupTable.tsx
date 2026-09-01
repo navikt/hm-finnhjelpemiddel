@@ -1,3 +1,5 @@
+'use client'
+
 import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
 
 import React, { useState } from 'react'

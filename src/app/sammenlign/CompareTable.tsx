@@ -1,5 +1,10 @@
 import { Description } from '@/app/produkt/[id]/productInfo/GeneralProductInformation'
+import { TechDataGroupTable } from '@/app/produkt/[id]/variantTable/TechDataGroupTable'
+import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
 
+import React from 'react'
+
+import { VStack } from '@navikt/ds-react'
 import {
   TableBody,
   TableColumnHeader,
@@ -9,6 +14,7 @@ import {
   TableRow,
 } from '@navikt/ds-react/Table'
 
+import { getTechLabels } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 import {
   findUniqueStringValues,
@@ -17,11 +23,15 @@ import {
   toValueAndUnit,
   tryParseNumber,
 } from '@/utils/string-util'
+import { TechLabelDTO } from '@/utils/techlabel-util'
 
 import ProductCardCompare from '@/components/ProductCardCompare'
 import { Heading, Table } from '@/components/aksel-client'
 
-export const CompareTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
+export const CompareTable = async ({ productsToCompare }: { productsToCompare: Product[] }) => {
+  const isos = [...new Set(productsToCompare.map((product) => product.isoCategory))]
+  const techLabels = (await Promise.all(isos.map((iso) => getTechLabels(iso)))).flat()
+
   const allDataKeysVariants = [
     ...new Set(
       productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
@@ -67,6 +77,66 @@ export const CompareTable = ({ productsToCompare }: { productsToCompare: Product
     },
     {} as Record<string, Record<string, string>>
   )
+
+  const techDataRowsAll: TechDataRow[] = allDataKeysVariants.map((key) => {
+    return {
+      key: key,
+      values: productsToCompare.map((product) => {
+        const variantValues = product.variants
+          .filter((variant) => key in variant.techData)
+          .map((variant) => variant.techData[key].value)
+
+        return findValueRangeForProductRowKey(variantValues)
+      }),
+      unit: productsToCompare[0].variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+      type:
+        productsToCompare[0].variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
+    } as TechDataRow
+  })
+
+  const groupTechDataRowsBySection = (
+    techDataRows: TechDataRow[],
+    techLabels: TechLabelDTO[]
+  ): Map<string, TechDataRow[]> => {
+    const rowsBySection = new Map<string, TechDataRow[]>()
+
+    techDataRows.forEach((techDataRow) => {
+      const section = techLabels.find((techLabel) => techLabel.label === techDataRow.key)?.section ?? 'Diverse'
+
+      if (!rowsBySection.has(section)) {
+        rowsBySection.set(section, [])
+      }
+      rowsBySection.get(section)?.push(techDataRow)
+    })
+
+    return rowsBySection
+  }
+
+  const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
+
+  /*
+
+  const groupedTechData = techLabels ? groupTechDataKeys(product.variants, techLabels) : []
+  const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
+    ({ title, keys }) => {
+      return {
+        title: title,
+        techDataRows: keys.map((key) => {
+          return {
+            key: key,
+            values: productVariantsSorted.map((variant) =>
+              variant.techData[key] !== undefined ? variant.techData[key].value : '-'
+            ),
+            unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+            type:
+              productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
+          }
+        }),
+      }
+    }
+
+  )
+   */
 
   return (
     <div className="compare-table-container">
@@ -125,20 +195,27 @@ export const CompareTable = ({ productsToCompare }: { productsToCompare: Product
           <TableRow>
             <TableHeaderCell className="side_header">
               <Heading level="2" size="medium">
-                Tekniske egenskaper
+                Spesifikasjoner
               </Heading>
             </TableHeaderCell>
             {<TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
           </TableRow>
+          <VStack>
+            {groupedTechDataRows.entries().map(([title, techDataRows]) => (
+              <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
+            ))}
+          </VStack>
+          {/*
+            allDataKeysVariants.map((key, i) => (
 
-          {allDataKeysVariants.map((key, i) => (
             <TableRow key={i}>
               <TableHeaderCell className="side_header">{key}</TableHeaderCell>
               {productsToCompare.map((product) => (
                 <TableDataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</TableDataCell>
               ))}
             </TableRow>
-          ))}
+          ))
+          */}
         </TableBody>
       </Table>
     </div>

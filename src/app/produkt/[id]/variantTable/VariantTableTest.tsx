@@ -205,10 +205,6 @@ export const VariantTableTest = ({ product, techLabels }: { product: Product; te
             values: productVariantsSorted.map((variant) =>
               variant.techData[key] !== undefined ? variant.techData[key].value : '-'
             ),
-            isCommonField: product.variants.every(
-              (variant) =>
-                variant.techData[key] && variant.techData[key].value === product.variants[0].techData[key].value
-            ),
             unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
             type:
               productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
@@ -386,7 +382,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
   )
 }
 
-const groupTechDataKeys = (
+export const groupTechDataKeys = (
   variants: ProductVariant[],
   techLabels: TechLabelDTO[]
 ): { title: string; keys: string[] }[] => {
