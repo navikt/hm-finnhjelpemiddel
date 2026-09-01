@@ -33,7 +33,13 @@ const PartThumbnail = ({ product }: { product: ProductVariant }) => {
   )
 }
 
-export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
+export const PartsTable = ({
+  products,
+  showThumbnails = true,
+}: {
+  products: ProductVariant[]
+  showThumbnails?: boolean
+}) => {
   if (!products) {
     return <Skeleton />
   }
@@ -46,11 +52,13 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
     <Table zebraStripes>
       <Table.Header>
         <Table.Row>
-          <Hide below={'md'} asChild>
-            <Table.HeaderCell scope="col">
-              Bilde
-            </Table.HeaderCell>
-          </Hide>
+          {showThumbnails && (
+            <Hide below={'md'} asChild>
+              <Table.HeaderCell scope="col">
+                Bilde
+              </Table.HeaderCell>
+            </Hide>
+          )}
           <Table.HeaderCell scope="col">HMS-nummer</Table.HeaderCell>
           <Table.HeaderCell scope="col">Navn</Table.HeaderCell>
           <Hide below={'md'} asChild>
@@ -62,11 +70,13 @@ export const PartsTable = ({ products }: { products: ProductVariant[] }) => {
       <Table.Body>
         {products.map((product) => (
           <Table.Row key={product.id}>
-            <Hide below={'md'} asChild>
-              <Table.DataCell>
-                <PartThumbnail product={product} />
-              </Table.DataCell>
-            </Hide>
+            {showThumbnails && (
+              <Hide below={'md'} asChild>
+                <Table.DataCell>
+                  <PartThumbnail product={product} />
+                </Table.DataCell>
+              </Hide>
+            )}
             <Table.DataCell>
               <CopyButton
                 size="small"
