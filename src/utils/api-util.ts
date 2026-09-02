@@ -1278,22 +1278,12 @@ export const fetchParts = ({
         sparePart: true,
       },
     },
-    {
-      term: {
-        accessory: false,
-      },
-    },
   ]
 
   const accessoriesQuery = [
     {
       term: {
         accessory: true,
-      },
-    },
-    {
-      term: {
-        sparePart: false,
       },
     },
   ]
