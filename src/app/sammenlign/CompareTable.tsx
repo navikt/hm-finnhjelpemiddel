@@ -1,6 +1,6 @@
 import { Description } from '@/app/produkt/[id]/productInfo/GeneralProductInformation'
-import { TechDataGroupTable } from '@/app/produkt/[id]/variantTable/TechDataGroupTable'
 import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
+import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroupTable'
 
 import React from 'react'
 
@@ -27,6 +27,8 @@ import { TechLabelDTO } from '@/utils/techlabel-util'
 
 import ProductCardCompare from '@/components/ProductCardCompare'
 import { Heading, Table } from '@/components/aksel-client'
+
+import styles from './CompareTable.module.scss'
 
 export const CompareTable = async ({ productsToCompare }: { productsToCompare: Product[] }) => {
   const isos = [...new Set(productsToCompare.map((product) => product.isoCategory))]
@@ -127,76 +129,81 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
   const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
 
   return (
-    <div className="compare-table-container">
-      <Table zebraStripes>
-        <TableHeader>
-          <TableRow>
-            <TableColumnHeader className="common_headercell"></TableColumnHeader>
-            {productsToCompare.map((product) => (
-              <TableColumnHeader className="header" key={'id-' + product.id}>
-                <ProductCardCompare product={product} type="removable" />
-              </TableColumnHeader>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableHeaderCell className="side_header">Beskrivelse</TableHeaderCell>
-            {productsToCompare.map((product) => {
-              return (
-                <TableDataCell key={product.id}>{<Description description={product.attributes.text} />}</TableDataCell>
-              )
-            })}
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell className="side_header">Rangering</TableHeaderCell>
-            {productsToCompare.map((product) => {
-              return <TableDataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</TableDataCell>
-            })}
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell className="side_header">Delkontrakt</TableHeaderCell>
-            {productsToCompare.map((product) => {
-              return <TableDataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</TableDataCell>
-            })}
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell className="side_header">Antall varianter</TableHeaderCell>
-            {productsToCompare.map((product) => (
-              <TableDataCell key={product.id}>{product.variantCount}</TableDataCell>
-            ))}
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell className="side_header">HMS-nummer</TableHeaderCell>
-            {productsToCompare.map((product) => (
-              <TableDataCell key={product.id}>
-                {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
-              </TableDataCell>
-            ))}
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell className="side_header">Leverandør</TableHeaderCell>
-            {productsToCompare.map((product) => (
-              <TableDataCell key={product.id}>{product.supplierName}</TableDataCell>
-            ))}
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell className="side_header">
-              <Heading level="2" size="medium">
-                Spesifikasjoner
-              </Heading>
-            </TableHeaderCell>
-            {<TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
-          </TableRow>
-          <VStack>
-            {groupedTechDataRows
-              .sort((a, b) => a.priority - b.priority)
-              .map(({ title, techDataRows }) => (
-                <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
+    <VStack width={'100%'}>
+      <div className="compare-table-container">
+        <Table zebraStripes>
+          <TableHeader>
+            <TableRow>
+              <TableColumnHeader className="common_headercell"></TableColumnHeader>
+              {productsToCompare.map((product) => (
+                <TableColumnHeader className="header" key={'id-' + product.id}>
+                  <ProductCardCompare product={product} type="removable" />
+                </TableColumnHeader>
               ))}
-          </VStack>
-        </TableBody>
-      </Table>
-    </div>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableHeaderCell className="side_header">Beskrivelse</TableHeaderCell>
+              {productsToCompare.map((product) => {
+                return (
+                  <TableDataCell key={product.id}>
+                    {<Description description={product.attributes.text} />}
+                  </TableDataCell>
+                )
+              })}
+            </TableRow>
+            <TableRow>
+              <TableHeaderCell className="side_header">Rangering</TableHeaderCell>
+              {productsToCompare.map((product) => {
+                return <TableDataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</TableDataCell>
+              })}
+            </TableRow>
+            <TableRow>
+              <TableHeaderCell className="side_header">Delkontrakt</TableHeaderCell>
+              {productsToCompare.map((product) => {
+                return <TableDataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</TableDataCell>
+              })}
+            </TableRow>
+            <TableRow>
+              <TableHeaderCell className="side_header">Antall varianter</TableHeaderCell>
+              {productsToCompare.map((product) => (
+                <TableDataCell key={product.id}>{product.variantCount}</TableDataCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableHeaderCell className="side_header">HMS-nummer</TableHeaderCell>
+              {productsToCompare.map((product) => (
+                <TableDataCell key={product.id}>
+                  {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
+                </TableDataCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableHeaderCell className="side_header">Leverandør</TableHeaderCell>
+              {productsToCompare.map((product) => (
+                <TableDataCell key={product.id}>{product.supplierName}</TableDataCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableHeaderCell className="side_header">
+                <Heading level="2" size="medium">
+                  Spesifikasjoner
+                </Heading>
+              </TableHeaderCell>
+              {<TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
+            </TableRow>
+            <VStack></VStack>
+          </TableBody>
+        </Table>
+      </div>
+      <VStack className={styles.compareTable}>
+        {groupedTechDataRows
+          .sort((a, b) => a.priority - b.priority)
+          .map(({ title, techDataRows }) => (
+            <CompareTechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
+          ))}
+      </VStack>
+    </VStack>
   )
 }

@@ -1,0 +1,67 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.compareTable {
+  overflow: scroll;
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  th {
+    font-weight: normal;
+  }
+
+  tr > th:nth-child(n + 1),
+  tr > td {
+    width: 180px;
+  }
+
+  @media (max-width: $ax-breakpoint-sm) {
+    tr > td {
+      width: 120px;
+    }
+  }
+
+  tr {
+    display: flex;
+    //align-items: stretch;
+  }
+
+  tr > td:last-child {
+    flex: 1;
+  }
+
+  table thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+
+  * {
+    font-size: 1rem;
+  }
+
+  thead tr {
+    vertical-align: bottom;
+  }
+
+  thead tr > th:first-child {
+    vertical-align: bottom;
+  }
+}
+
+.expandTableButton {
+  width: 100%;
+  padding: 12px 8px;
+  border-bottom: 1px solid $ax-border-neutral-subtleA;
+  border-radius: 0;
+  justify-content: start;
+  color: black;
+  span {
+    width: 100%;
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
