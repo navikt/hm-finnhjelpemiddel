@@ -94,49 +94,37 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
     } as TechDataRow
   })
 
-  const groupTechDataRowsBySection = (
-    techDataRows: TechDataRow[],
-    techLabels: TechLabelDTO[]
-  ): Map<string, TechDataRow[]> => {
-    const rowsBySection = new Map<string, TechDataRow[]>()
+  type TechDataSection = {
+    title: string
+    priority: number
+    techDataRows: TechDataRow[]
+  }
+
+  const groupTechDataRowsBySection = (techDataRows: TechDataRow[], techLabels: TechLabelDTO[]): TechDataSection[] => {
+    const rowsBySection = new Map<string, TechDataSection>()
 
     techDataRows.forEach((techDataRow) => {
-      const section = techLabels.find((techLabel) => techLabel.label === techDataRow.key)?.section ?? 'Diverse'
+      const techLabel = techLabels.find((techLabel) => techLabel.label === techDataRow.key)
+      const sectionTitle = techLabel?.section ?? 'Diverse'
 
-      if (!rowsBySection.has(section)) {
-        rowsBySection.set(section, [])
+      if (!rowsBySection.has(sectionTitle)) {
+        rowsBySection.set(sectionTitle, {
+          title: sectionTitle,
+          priority: sectionTitle == 'Diverse' || !techLabel ? 1000 : techLabel.sort,
+          techDataRows: [],
+        })
       }
-      rowsBySection.get(section)?.push(techDataRow)
+      const section = rowsBySection.get(sectionTitle)!
+      if (techLabel && techLabel.section && techLabel.sort < section.priority) {
+        section.priority = techLabel.sort
+      }
+      section.techDataRows.push(techDataRow)
     })
 
-    return rowsBySection
+    return rowsBySection.values().toArray()
   }
 
   const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
-
-  /*
-
-  const groupedTechData = techLabels ? groupTechDataKeys(product.variants, techLabels) : []
-  const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
-    ({ title, keys }) => {
-      return {
-        title: title,
-        techDataRows: keys.map((key) => {
-          return {
-            key: key,
-            values: productVariantsSorted.map((variant) =>
-              variant.techData[key] !== undefined ? variant.techData[key].value : '-'
-            ),
-            unit: productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
-            type:
-              productVariantsSorted.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
-          }
-        }),
-      }
-    }
-
-  )
-   */
 
   return (
     <div className="compare-table-container">
@@ -201,21 +189,12 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
             {<TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
           </TableRow>
           <VStack>
-            {groupedTechDataRows.entries().map(([title, techDataRows]) => (
-              <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
-            ))}
-          </VStack>
-          {/*
-            allDataKeysVariants.map((key, i) => (
-
-            <TableRow key={i}>
-              <TableHeaderCell className="side_header">{key}</TableHeaderCell>
-              {productsToCompare.map((product) => (
-                <TableDataCell key={key + product.id}>{productRowKeyValue[product.id][key]}</TableDataCell>
+            {groupedTechDataRows
+              .sort((a, b) => a.priority - b.priority)
+              .map(({ title, techDataRows }) => (
+                <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
               ))}
-            </TableRow>
-          ))
-          */}
+          </VStack>
         </TableBody>
       </Table>
     </div>
