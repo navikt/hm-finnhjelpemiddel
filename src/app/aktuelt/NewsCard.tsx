@@ -1,5 +1,5 @@
 import NewsImage from '@/app/aktuelt/NewsImage'
-import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-util'
+import { NewsDTO, formatPublishedDate, getTagConfig } from '@/app/aktuelt/news-util'
 
 import NextLink from 'next/link'
 
@@ -14,7 +14,7 @@ export default function NewsCard({ news, searchQuery }: NewsProps) {
   const date = formatPublishedDate(news.publishedFrom)
 
   const firstTag = news.tags[0]
-  const tagMetaData = newsTagMeta[firstTag]
+  const tagMetaData = getTagConfig(firstTag)
 
   return (
     <LinkCard>
@@ -52,14 +52,9 @@ export default function NewsCard({ news, searchQuery }: NewsProps) {
         </BodyShort>
       </LinkCard.Description>
       <LinkCard.Footer>
-        {news.tags?.map((tag) => {
-          const meta = newsTagMeta[tag]
-          return (
-            <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
-              {meta.tagText}
-            </Tag>
-          )
-        })}
+        <Tag key={firstTag} size={'small'} variant={'moderate'} data-color={tagMetaData?.tagColor ?? 'neutral'}>
+          {tagMetaData.tagText}
+        </Tag>
       </LinkCard.Footer>
     </LinkCard>
   )

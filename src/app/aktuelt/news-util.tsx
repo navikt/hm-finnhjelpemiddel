@@ -39,12 +39,19 @@ export enum NewsTag {
   NYHETSBREV = 'Nyhetsbrev',
   RAMMEAVTALE = 'Rammeavtale',
   NY_FUNKSJON = 'Ny funksjon',
+  AVTALER = 'Avtaler',
+  FRA_HJELPEMIDDELOMRÅDET = 'Fra hjelpemiddelområdet',
+  TIPS_OG_TRIKS = 'Tips og triks',
 }
 
-export const newsTagMeta: Record<
-  NewsTag,
-  { tagColor: TagProps['data-color']; tagText: string; defaultBackgroundColor: string; defaultIcon: ReactElement }
-> = {
+export type TagConfig = {
+  tagColor: TagProps['data-color']
+  tagText: string
+  defaultBackgroundColor: string
+  defaultIcon: ReactElement
+}
+
+export const newsTagMeta: Record<NewsTag, TagConfig> = {
   [NewsTag.NYHETSBREV]: {
     tagColor: 'info',
     tagText: 'Fra hjelpemiddelområdet',
@@ -67,6 +74,46 @@ export const newsTagMeta: Record<
     defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
     defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} aria-hidden />,
   },
+  [NewsTag.AVTALER]: {
+    tagColor: 'danger',
+    tagText: 'Avtaler',
+    defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
+    defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} aria-hidden />,
+  },
+  [NewsTag.FRA_HJELPEMIDDELOMRÅDET]: {
+    tagColor: 'info',
+    tagText: 'Fra hjelpemiddelområdet',
+    defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
+    defaultIcon: (
+      <Box paddingInline={'space-12 space-0'}>
+        <MegaphoneSpeakingIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />
+      </Box>
+    ),
+  },
+  [NewsTag.TIPS_OG_TRIKS]: {
+    tagColor: 'warning',
+    tagText: 'Tips og triks',
+    defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
+    defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} aria-hidden />,
+  },
+}
+
+export const getTagConfig = (tag: NewsTag): TagConfig => {
+  if (!Object.values(NewsTag).includes(tag)) {
+    console.log('bbbbbbb')
+    return {
+      tagColor: 'info',
+      tagText: 'Nyhet',
+      defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
+      defaultIcon: (
+        <Box paddingInline={'space-12 space-0'}>
+          <MegaphoneSpeakingIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />
+        </Box>
+      ),
+    }
+  }
+
+  return newsTagMeta[tag]
 }
 
 export async function getNewsPaginated(
