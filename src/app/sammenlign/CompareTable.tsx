@@ -129,7 +129,7 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
   const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
 
   return (
-    <VStack width={'100%'}>
+    <VStack>
       <div className="compare-table-container">
         <Table zebraStripes>
           <TableHeader>
@@ -197,11 +197,16 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
           </TableBody>
         </Table>
       </div>
-      <VStack className={styles.compareTable}>
+      <VStack className={styles.compareTable} width={'100%'}>
         {groupedTechDataRows
           .sort((a, b) => a.priority - b.priority)
           .map(({ title, techDataRows }) => (
-            <CompareTechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
+            <CompareTechDataGroupTable
+              title={title}
+              techDataRows={techDataRows}
+              productCount={productsToCompare.length}
+              key={title}
+            />
           ))}
       </VStack>
     </VStack>

@@ -5,13 +5,21 @@ import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
 import React, { useState } from 'react'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { Box, Button, HStack, Heading, Table } from '@navikt/ds-react'
+import { Box, Button, Heading, Table } from '@navikt/ds-react'
 
 import { toValueAndUnit } from '@/utils/string-util'
 
 import styles from './CompareTable.module.scss'
 
-export const CompareTechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+export const CompareTechDataGroupTable = ({
+  title,
+  techDataRows,
+  productCount,
+}: {
+  title: string
+  techDataRows: TechDataRow[]
+  productCount: number
+}) => {
   const [showTable, setShowTable] = useState(true)
 
   const rowsMerged: TechDataRow[] = []
@@ -77,20 +85,19 @@ export const CompareTechDataGroupTable = ({ title, techDataRows }: { title: stri
   }
 
   return (
-    <Box>
+    <Box width={`${120 + 180 * productCount}px`} style={{ minWidth: '100%' }}>
       <Button
         variant="tertiary"
         data-color={'neutral'}
         onClick={() => setShowTable((value) => !value)}
         className={styles.expandTableButton}
+        icon={showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+        iconPosition={'right'}
         aria-expanded={showTable}
       >
-        <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
-          <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
-            {title}
-          </Heading>
-          {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-        </HStack>
+        <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
+          {title}
+        </Heading>
       </Button>
       {showTable && (
         <Table zebraStripes>

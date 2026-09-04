@@ -2,6 +2,7 @@
 
 .compareTable {
   overflow: scroll;
+
   table {
     border-collapse: separate;
     border-spacing: 0;
@@ -9,8 +10,16 @@
 
   th {
     font-weight: normal;
+    width: 120px;
+    min-width: 120px;
   }
 
+  td {
+    width: 180px;
+    min-width: 180px;
+  }
+
+  /*
   tr > th:nth-child(n + 1),
   tr > td {
     width: 180px;
@@ -21,7 +30,6 @@
       width: 120px;
     }
   }
-
   tr {
     display: flex;
     //align-items: stretch;
@@ -36,6 +44,8 @@
     left: 0;
     z-index: 2;
   }
+
+   */
 
   * {
     font-size: 1rem;
@@ -57,9 +67,7 @@
   border-radius: 0;
   justify-content: start;
   color: black;
-  span {
-    width: 100%;
-  }
+
   svg {
     width: 24px;
     height: 24px;
