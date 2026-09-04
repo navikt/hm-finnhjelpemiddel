@@ -87,14 +87,14 @@ export async function getNewsPaginated(
   return res.json()
 }
 
-export async function getAllTags(): Promise<string[]> {
+export async function getAllTags(): Promise<NewsTag[]> {
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/admin/tags/`, {
     method: 'GET',
   })
   if (!res.ok) {
     throw new CustomError(res.statusText, res.status)
   }
-  const data: { tag: string }[] = await res.json()
+  const data: { tag: NewsTag }[] = await res.json()
   return data.map((t) => t.tag)
 }
 
