@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
-import { DocPencilIcon, LightBulbIcon, NewsletterIcon } from '@navikt/aksel-icons'
-import type { TagProps } from '@navikt/ds-react'
+import { DocPencilIcon, LightBulbIcon, MegaphoneSpeakingIcon } from '@navikt/aksel-icons'
+import { Box, TagProps } from '@navikt/ds-react'
 
 import { CustomError } from '@/utils/api-util'
 
@@ -49,7 +49,11 @@ export const newsTagMeta: Record<
     tagColor: 'info',
     tagText: 'Fra hjelpemiddelområdet',
     defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
-    defaultIcon: <NewsletterIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />,
+    defaultIcon: (
+      <Box paddingInline={'space-12 space-0'}>
+        <MegaphoneSpeakingIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />
+      </Box>
+    ),
   },
   [NewsTag.RAMMEAVTALE]: {
     tagColor: 'danger',
