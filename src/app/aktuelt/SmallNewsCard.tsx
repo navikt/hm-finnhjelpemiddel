@@ -3,7 +3,7 @@ import { NewsDTO, formatPublishedDate, newsTagMeta } from '@/app/aktuelt/news-ut
 
 import NextLink from 'next/link'
 
-import { BodyShort, Box, HStack, LinkCard, Tag } from '@navikt/ds-react'
+import { BodyShort, Box, LinkCard, Tag, VStack } from '@navikt/ds-react'
 
 type NewsProps = {
   news: NewsDTO
@@ -56,20 +56,22 @@ export default function SmallNewsCard({ news }: NewsProps) {
           </NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
+      <LinkCard.Description>
+        <BodyShort size={'medium'} style={{ color: 'var(--ax-text-neutral-decoration)' }}>
+          {date}
+        </BodyShort>
+      </LinkCard.Description>
       <LinkCard.Footer>
-        <HStack justify={'space-between'} width={'100%'}>
+        <VStack align={'start'} width={'100%'}>
           {news.tags?.map((tag) => {
             const meta = newsTagMeta[tag]
             return (
               <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
-                {tag}
+                {meta.tagText}
               </Tag>
             )
           })}
-          <BodyShort size={'medium'} style={{ color: 'var(--ax-text-neutral-decoration)' }}>
-            {date}
-          </BodyShort>
-        </HStack>
+        </VStack>
       </LinkCard.Footer>
     </LinkCard>
   )

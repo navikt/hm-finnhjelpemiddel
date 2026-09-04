@@ -36,20 +36,27 @@ export default function NewsCard({ news, searchQuery }: NewsProps) {
           </Box>
         )}
       </LinkCard.Image>
-      <LinkCard.Title>
+      <LinkCard.Title style={{ textWrap: 'balance', fontWeight: 'initial' }}>
         <LinkCard.Anchor asChild>
-          <NextLink href={`/aktuelt/${news.id}${searchQuery ? `?${searchQuery}` : ''}`}>{news.title}</NextLink>
+          <NextLink
+            href={`/aktuelt/${news.id}${searchQuery ? `?${searchQuery}` : ''}`}
+            style={{ textDecoration: 'none' }}
+          >
+            {news.title}
+          </NextLink>
         </LinkCard.Anchor>
       </LinkCard.Title>
       <LinkCard.Description>
-        <BodyShort size={'medium'}>{date}</BodyShort>
+        <BodyShort size={'medium'} style={{ color: 'var(--ax-text-neutral-decoration)' }}>
+          {date}
+        </BodyShort>
       </LinkCard.Description>
       <LinkCard.Footer>
         {news.tags?.map((tag) => {
           const meta = newsTagMeta[tag]
           return (
             <Tag key={tag} size={'small'} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
-              {tag}
+              {meta.tagText}
             </Tag>
           )
         })}

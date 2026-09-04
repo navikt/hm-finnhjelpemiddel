@@ -56,7 +56,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ id
                 const meta = newsTagMeta[tag]
                 return (
                   <Tag key={tag} variant={'moderate'} data-color={meta?.tagColor ?? 'neutral'}>
-                    {tag}
+                    {meta.tagText}
                   </Tag>
                 )
               })}

@@ -43,20 +43,23 @@ export enum NewsTag {
 
 export const newsTagMeta: Record<
   NewsTag,
-  { tagColor: TagProps['data-color']; defaultBackgroundColor: string; defaultIcon: ReactElement }
+  { tagColor: TagProps['data-color']; tagText: string; defaultBackgroundColor: string; defaultIcon: ReactElement }
 > = {
   [NewsTag.NYHETSBREV]: {
     tagColor: 'info',
+    tagText: 'Fra hjelpemiddelområdet',
     defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
     defaultIcon: <NewsletterIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />,
   },
   [NewsTag.RAMMEAVTALE]: {
     tagColor: 'danger',
+    tagText: 'Avtaler',
     defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
     defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} aria-hidden />,
   },
   [NewsTag.NY_FUNKSJON]: {
     tagColor: 'warning',
+    tagText: 'Tips og triks',
     defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
     defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} aria-hidden />,
   },
