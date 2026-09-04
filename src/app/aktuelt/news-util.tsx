@@ -100,7 +100,6 @@ export const newsTagMeta: Record<NewsTag, TagConfig> = {
 
 export const getTagConfig = (tag: NewsTag): TagConfig => {
   if (!Object.values(NewsTag).includes(tag)) {
-    console.log('bbbbbbb')
     return {
       tagColor: 'info',
       tagText: 'Nyhet',
