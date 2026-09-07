@@ -36,9 +36,6 @@ export enum PublishingState {
 }
 
 export enum NewsTag {
-  NYHETSBREV = 'Nyhetsbrev',
-  RAMMEAVTALE = 'Rammeavtale',
-  NY_FUNKSJON = 'Ny funksjon',
   AVTALER = 'Avtaler',
   FRA_HJELPEMIDDELOMRÅDET = 'Fra hjelpemiddelområdet',
   TIPS_OG_TRIKS = 'Tips og triks',
@@ -52,28 +49,6 @@ export type TagConfig = {
 }
 
 export const newsTagMeta: Record<NewsTag, TagConfig> = {
-  [NewsTag.NYHETSBREV]: {
-    tagColor: 'info',
-    tagText: 'Fra hjelpemiddelområdet',
-    defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
-    defaultIcon: (
-      <Box paddingInline={'space-12 space-0'}>
-        <MegaphoneSpeakingIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />
-      </Box>
-    ),
-  },
-  [NewsTag.RAMMEAVTALE]: {
-    tagColor: 'danger',
-    tagText: 'Avtaler',
-    defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
-    defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} aria-hidden />,
-  },
-  [NewsTag.NY_FUNKSJON]: {
-    tagColor: 'warning',
-    tagText: 'Tips og triks',
-    defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
-    defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} aria-hidden />,
-  },
   [NewsTag.AVTALER]: {
     tagColor: 'danger',
     tagText: 'Avtaler',
