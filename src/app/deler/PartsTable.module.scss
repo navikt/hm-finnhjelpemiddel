@@ -3,3 +3,16 @@
 .copyButton {
   border: 1px dashed$ax-bg-accent-strong;
 }
+
+.thumbnailLink {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+.thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+

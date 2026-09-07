@@ -62,6 +62,7 @@ export interface ProductVariant {
   digitalSoknad: boolean
   accessory: boolean
   sparePart: boolean
+  photos: Photo[]
   /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648*/
 }
 
@@ -375,6 +376,7 @@ export const mapProductVariant = (source: ProductSourceResponse): ProductVariant
     digitalSoknad: source.attributes.digitalSoknad || false,
     accessory: source.accessory,
     sparePart: source.sparePart,
+    photos: mapPhotoInfo(source.media),
     /** expired from backend is a Date data field like 2043-06-01T14:19:30.505665648 */
   }
 }

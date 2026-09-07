@@ -62,6 +62,7 @@ export const accessoriesMock: Product[] = [
         supplierName: 'Levereandør AS',
         sparePart: false,
         accessory: false,
+        photos: [],
       },
     ],
     compareData: { techDataRange: {}, agreementRank: null },

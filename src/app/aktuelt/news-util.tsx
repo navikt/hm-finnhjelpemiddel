@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
-import { DocPencilIcon, LightBulbIcon, NewsletterIcon } from '@navikt/aksel-icons'
-import type { TagProps } from '@navikt/ds-react'
+import { DocPencilIcon, LightBulbIcon, MegaphoneSpeakingIcon } from '@navikt/aksel-icons'
+import { Box, TagProps } from '@navikt/ds-react'
 
 import { CustomError } from '@/utils/api-util'
 
@@ -36,30 +36,58 @@ export enum PublishingState {
 }
 
 export enum NewsTag {
-  NYHETSBREV = 'Nyhetsbrev',
-  RAMMEAVTALE = 'Rammeavtale',
-  NY_FUNKSJON = 'Ny funksjon',
+  AVTALER = 'Avtaler',
+  FRA_HJELPEMIDDELOMRÅDET = 'Fra hjelpemiddelområdet',
+  TIPS_OG_TRIKS = 'Tips og triks',
 }
 
-export const newsTagMeta: Record<
-  NewsTag,
-  { tagColor: TagProps['data-color']; defaultBackgroundColor: string; defaultIcon: ReactElement }
-> = {
-  [NewsTag.NYHETSBREV]: {
-    tagColor: 'info',
-    defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
-    defaultIcon: <NewsletterIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />,
-  },
-  [NewsTag.RAMMEAVTALE]: {
+export type TagConfig = {
+  tagColor: TagProps['data-color']
+  tagText: string
+  defaultBackgroundColor: string
+  defaultIcon: ReactElement
+}
+
+export const newsTagMeta: Record<NewsTag, TagConfig> = {
+  [NewsTag.AVTALER]: {
     tagColor: 'danger',
+    tagText: 'Avtaler',
     defaultBackgroundColor: 'var(--ax-bg-brand-magenta-soft)',
     defaultIcon: <DocPencilIcon color={'var(--ax-bg-brand-magenta-moderate-pressed)'} aria-hidden />,
   },
-  [NewsTag.NY_FUNKSJON]: {
+  [NewsTag.FRA_HJELPEMIDDELOMRÅDET]: {
+    tagColor: 'info',
+    tagText: 'Fra hjelpemiddelområdet',
+    defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
+    defaultIcon: (
+      <Box paddingInline={'space-12 space-0'}>
+        <MegaphoneSpeakingIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />
+      </Box>
+    ),
+  },
+  [NewsTag.TIPS_OG_TRIKS]: {
     tagColor: 'warning',
+    tagText: 'Tips og triks',
     defaultBackgroundColor: 'var(--ax-bg-warning-soft)',
     defaultIcon: <LightBulbIcon color={'var(--ax-bg-warning-moderate-pressed)'} aria-hidden />,
   },
+}
+
+export const getTagConfig = (tag: NewsTag): TagConfig => {
+  if (!Object.values(NewsTag).includes(tag)) {
+    return {
+      tagColor: 'info',
+      tagText: 'Nyhet',
+      defaultBackgroundColor: 'var(--ax-bg-info-moderate)',
+      defaultIcon: (
+        <Box paddingInline={'space-12 space-0'}>
+          <MegaphoneSpeakingIcon color={'var(--ax-bg-accent-moderate-pressed)'} aria-hidden />
+        </Box>
+      ),
+    }
+  }
+
+  return newsTagMeta[tag]
 }
 
 export async function getNewsPaginated(
@@ -84,14 +112,14 @@ export async function getNewsPaginated(
   return res.json()
 }
 
-export async function getAllTags(): Promise<string[]> {
+export async function getAllTags(): Promise<NewsTag[]> {
   const res = await fetch(`${HM_FINNHJELPEMIDDEL_NEWS_URL}/admin/tags/`, {
     method: 'GET',
   })
   if (!res.ok) {
     throw new CustomError(res.statusText, res.status)
   }
-  const data: { tag: string }[] = await res.json()
+  const data: { tag: NewsTag }[] = await res.json()
   return data.map((t) => t.tag)
 }
 

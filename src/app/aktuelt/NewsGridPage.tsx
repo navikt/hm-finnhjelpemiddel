@@ -2,7 +2,7 @@
 
 import NewsCard from '@/app/aktuelt/NewsCard'
 import NewsPagination from '@/app/aktuelt/NewsPagination'
-import { NewsDTO } from '@/app/aktuelt/news-util'
+import { NewsDTO, NewsTag, newsTagMeta } from '@/app/aktuelt/news-util'
 
 import { useState } from 'react'
 
@@ -14,7 +14,7 @@ type NewsProps = {
   news?: NewsDTO[]
   totalPages: number
   currentPage: number
-  allTags: string[]
+  allTags: NewsTag[]
 }
 
 export default function NewsGridPage({ news, currentPage, totalPages, allTags }: NewsProps) {
@@ -79,7 +79,7 @@ export default function NewsGridPage({ news, currentPage, totalPages, allTags }:
                 <Chips>
                   {allTags.map((tag) => (
                     <Chips.Toggle key={tag} selected={selectedTags.includes(tag)} onClick={() => toggleTag(tag)}>
-                      {tag}
+                      {newsTagMeta[tag].tagText}
                     </Chips.Toggle>
                   ))}
                 </Chips>

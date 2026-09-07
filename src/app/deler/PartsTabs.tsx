@@ -85,7 +85,7 @@ export const PartsTabs = ({ accessoriesData, sparePartsData }: PartsTabsProps) =
         </Tabs.Panel>
         <Tabs.Panel value={ProductTabs.SPAREPART}>
           <VStack gap={"space-16"} paddingBlock="space-16">
-            <PartsTable products={sparePartsData?.products} />
+            <PartsTable products={sparePartsData?.products} showThumbnails={false} />
             {sparePartsData?.totalHits > 0 && pageCount(sparePartsData?.totalHits) > 1 && (
               <ResponsivePagination page={page} count={pageCount(sparePartsData?.totalHits)} setPage={handleSetPage} />
             )}
