@@ -5,7 +5,7 @@ import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroup
 import React from 'react'
 
 import { VStack } from '@navikt/ds-react'
-import { TableColumnHeader, TableHeader, TableRow } from '@navikt/ds-react/Table'
+import { TableColumnHeader, TableRow } from '@navikt/ds-react/Table'
 
 import { getTechLabels } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
@@ -92,16 +92,14 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
   return (
     <VStack className={styles.compareTable} width={'100%'}>
       <Table zebraStripes>
-        <TableHeader>
-          <TableRow>
-            <TableColumnHeader className="common_headercell"></TableColumnHeader>
-            {productsToCompare.map((product) => (
-              <TableColumnHeader className="header" key={'id-' + product.id}>
-                <ProductCardCompare product={product} type="removable" />
-              </TableColumnHeader>
-            ))}
-          </TableRow>
-        </TableHeader>
+        <TableRow>
+          <TableColumnHeader></TableColumnHeader>
+          {productsToCompare.map((product) => (
+            <TableColumnHeader key={'id-' + product.id}>
+              <ProductCardCompare product={product} type="removable" />
+            </TableColumnHeader>
+          ))}
+        </TableRow>
       </Table>
       <CompareMetaDataTable productsToCompare={productsToCompare} />
       {groupedTechDataRows
