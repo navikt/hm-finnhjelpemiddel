@@ -1,32 +1,19 @@
-import { Description } from '@/app/produkt/[id]/productInfo/GeneralProductInformation'
 import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
+import { CompareMetaDataTable } from '@/app/sammenlign/CompareMetaDataTable'
 import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroupTable'
 
 import React from 'react'
 
 import { VStack } from '@navikt/ds-react'
-import {
-  TableBody,
-  TableColumnHeader,
-  TableDataCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from '@navikt/ds-react/Table'
+import { TableColumnHeader, TableHeader, TableRow } from '@navikt/ds-react/Table'
 
 import { getTechLabels } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
-import {
-  findUniqueStringValues,
-  formatAgreementPosts,
-  formatAgreementRanks,
-  toValueAndUnit,
-  tryParseNumber,
-} from '@/utils/string-util'
+import { findUniqueStringValues, tryParseNumber } from '@/utils/string-util'
 import { TechLabelDTO } from '@/utils/techlabel-util'
 
 import ProductCardCompare from '@/components/ProductCardCompare'
-import { Heading, Table } from '@/components/aksel-client'
+import { Table } from '@/components/aksel-client'
 
 import styles from './CompareTable.module.scss'
 
@@ -53,32 +40,6 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
     if (min === max) return String(min)
     return `${min} - ${max}`
   }
-
-  const productRowKeyValue = productsToCompare.reduce(
-    (rowKeyValue, product) => {
-      rowKeyValue[product.id] = allDataKeysVariants.reduce(
-        (keysVariants, key) => {
-          const values = product.variants
-            .filter((variant) => key in variant.techData)
-            .map((variant) => variant.techData[key].value)
-
-          let unit = product.variants.find((p) => key in p.techData)?.techData[key].unit || ''
-
-          let value = findValueRangeForProductRowKey(values)
-          if (key.includes('intervall') && value === '0') {
-            value = '-'
-            unit = ''
-          }
-
-          keysVariants[key] = value ? (unit ? toValueAndUnit(value, unit) : value) : '-'
-          return keysVariants
-        },
-        {} as Record<string, string>
-      )
-      return rowKeyValue
-    },
-    {} as Record<string, Record<string, string>>
-  )
 
   const techDataRowsAll: TechDataRow[] = allDataKeysVariants.map((key) => {
     return {
@@ -129,86 +90,30 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
   const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
 
   return (
-    <VStack>
-      <div className="compare-table-container">
-        <Table zebraStripes>
-          <TableHeader>
-            <TableRow>
-              <TableColumnHeader className="common_headercell"></TableColumnHeader>
-              {productsToCompare.map((product) => (
-                <TableColumnHeader className="header" key={'id-' + product.id}>
-                  <ProductCardCompare product={product} type="removable" />
-                </TableColumnHeader>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableHeaderCell className="side_header">Beskrivelse</TableHeaderCell>
-              {productsToCompare.map((product) => {
-                return (
-                  <TableDataCell key={product.id}>
-                    {<Description description={product.attributes.text} />}
-                  </TableDataCell>
-                )
-              })}
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell className="side_header">Rangering</TableHeaderCell>
-              {productsToCompare.map((product) => {
-                return <TableDataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</TableDataCell>
-              })}
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell className="side_header">Delkontrakt</TableHeaderCell>
-              {productsToCompare.map((product) => {
-                return <TableDataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</TableDataCell>
-              })}
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell className="side_header">Antall varianter</TableHeaderCell>
-              {productsToCompare.map((product) => (
-                <TableDataCell key={product.id}>{product.variantCount}</TableDataCell>
-              ))}
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell className="side_header">HMS-nummer</TableHeaderCell>
-              {productsToCompare.map((product) => (
-                <TableDataCell key={product.id}>
-                  {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
-                </TableDataCell>
-              ))}
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell className="side_header">Leverandør</TableHeaderCell>
-              {productsToCompare.map((product) => (
-                <TableDataCell key={product.id}>{product.supplierName}</TableDataCell>
-              ))}
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell className="side_header">
-                <Heading level="2" size="medium">
-                  Spesifikasjoner
-                </Heading>
-              </TableHeaderCell>
-              {<TableDataCell colSpan={productsToCompare.length + 1}></TableDataCell>}
-            </TableRow>
-            <VStack></VStack>
-          </TableBody>
-        </Table>
-      </div>
-      <VStack className={styles.compareTable} width={'100%'}>
-        {groupedTechDataRows
-          .sort((a, b) => a.priority - b.priority)
-          .map(({ title, techDataRows }) => (
-            <CompareTechDataGroupTable
-              title={title}
-              techDataRows={techDataRows}
-              productCount={productsToCompare.length}
-              key={title}
-            />
-          ))}
-      </VStack>
+    <VStack className={styles.compareTable} width={'100%'}>
+      <Table zebraStripes>
+        <TableHeader>
+          <TableRow>
+            <TableColumnHeader className="common_headercell"></TableColumnHeader>
+            {productsToCompare.map((product) => (
+              <TableColumnHeader className="header" key={'id-' + product.id}>
+                <ProductCardCompare product={product} type="removable" />
+              </TableColumnHeader>
+            ))}
+          </TableRow>
+        </TableHeader>
+      </Table>
+      <CompareMetaDataTable productsToCompare={productsToCompare} />
+      {groupedTechDataRows
+        .sort((a, b) => a.priority - b.priority)
+        .map(({ title, techDataRows }) => (
+          <CompareTechDataGroupTable
+            title={title}
+            techDataRows={techDataRows}
+            productCount={productsToCompare.length}
+            key={title}
+          />
+        ))}
     </VStack>
   )
 }

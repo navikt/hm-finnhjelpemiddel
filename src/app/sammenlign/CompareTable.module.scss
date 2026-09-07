@@ -19,34 +19,6 @@
     min-width: 180px;
   }
 
-  /*
-  tr > th:nth-child(n + 1),
-  tr > td {
-    width: 180px;
-  }
-
-  @media (max-width: $ax-breakpoint-sm) {
-    tr > td {
-      width: 120px;
-    }
-  }
-  tr {
-    display: flex;
-    //align-items: stretch;
-  }
-
-  tr > td:last-child {
-    flex: 1;
-  }
-
-  table thead th:first-child {
-    position: sticky;
-    left: 0;
-    z-index: 2;
-  }
-
-   */
-
   * {
     font-size: 1rem;
   }
