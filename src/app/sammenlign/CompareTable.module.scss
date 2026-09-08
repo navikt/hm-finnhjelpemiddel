@@ -1,7 +1,7 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .compareTable {
-  overflow: scroll;
+  overflow-block: scroll;
 
   table {
     border-collapse: separate;
@@ -44,4 +44,11 @@
     width: 24px;
     height: 24px;
   }
+}
+
+.stickyTop {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3;
 }

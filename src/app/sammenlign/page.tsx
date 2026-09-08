@@ -1,8 +1,11 @@
+import { CompareTable } from '@/app/sammenlign/CompareTable'
+
 import { Metadata } from 'next'
+
 import { fetchProductsWithVariants } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
+
 import { Heading } from '@/components/aksel-client'
-import { CompareTable } from '@/app/sammenlign/CompareTable'
 
 export const metadata: Metadata = {
   title: 'Sammenligner',

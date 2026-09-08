@@ -9,7 +9,6 @@ import { Box, Button, HStack, VStack } from '@navikt/ds-react'
 import { TableDataCell, TableHeaderCell, TableRow } from '@navikt/ds-react/Table'
 
 import { Product } from '@/utils/product-util'
-import { formatAgreementPosts, formatAgreementRanks } from '@/utils/string-util'
 
 import { Heading, Table } from '@/components/aksel-client'
 
@@ -47,36 +46,6 @@ export const CompareMetaDataTable = ({ productsToCompare }: { productsToCompare:
                     </TableDataCell>
                   )
                 })}
-              </TableRow>
-              <TableRow>
-                <TableHeaderCell className="side_header">Rangering</TableHeaderCell>
-                {productsToCompare.map((product) => {
-                  return (
-                    <TableDataCell key={product.id}>{formatAgreementRanks(product.agreements || [])}</TableDataCell>
-                  )
-                })}
-              </TableRow>
-              <TableRow>
-                <TableHeaderCell className="side_header">Delkontrakt</TableHeaderCell>
-                {productsToCompare.map((product) => {
-                  return (
-                    <TableDataCell key={product.id}>{formatAgreementPosts(product.agreements || [])}</TableDataCell>
-                  )
-                })}
-              </TableRow>
-              <TableRow>
-                <TableHeaderCell className="side_header">Antall varianter</TableHeaderCell>
-                {productsToCompare.map((product) => (
-                  <TableDataCell key={product.id}>{product.variantCount}</TableDataCell>
-                ))}
-              </TableRow>
-              <TableRow>
-                <TableHeaderCell className="side_header">HMS-nummer</TableHeaderCell>
-                {productsToCompare.map((product) => (
-                  <TableDataCell key={product.id}>
-                    {product.variantCount > 1 ? 'Flere HMS-nummer' : product.variants[0].hmsArtNr}
-                  </TableDataCell>
-                ))}
               </TableRow>
               <TableRow>
                 <TableHeaderCell className="side_header">Leverandør</TableHeaderCell>

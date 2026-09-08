@@ -91,16 +91,18 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
 
   return (
     <VStack className={styles.compareTable} width={'100%'}>
-      <Table zebraStripes>
-        <TableRow>
-          <TableColumnHeader></TableColumnHeader>
-          {productsToCompare.map((product) => (
-            <TableColumnHeader key={'id-' + product.id}>
-              <ProductCardCompare product={product} type="removable" />
-            </TableColumnHeader>
-          ))}
-        </TableRow>
-      </Table>
+      <div>
+        <Table zebraStripes className={styles.stickyTop}>
+          <TableRow>
+            <TableColumnHeader></TableColumnHeader>
+            {productsToCompare.map((product) => (
+              <TableColumnHeader key={'id-' + product.id}>
+                <ProductCardCompare product={product} type="removable" />
+              </TableColumnHeader>
+            ))}
+          </TableRow>
+        </Table>
+      </div>
       <CompareMetaDataTable productsToCompare={productsToCompare} />
       {groupedTechDataRows
         .sort((a, b) => a.priority - b.priority)
