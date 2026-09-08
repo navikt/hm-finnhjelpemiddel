@@ -33,6 +33,9 @@ export const CompareTechDataGroupTable = ({
       const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
 
       if (maksRow !== undefined) {
+        if (techDataRow.key.startsWith('Setehøyde med verktøy')) {
+          console.log('aaa', mergeMinMaksValues(techDataRow.values, maksRow.values))
+        }
         rowsMerged.push({
           key: baseKey,
           unit: techDataRow.unit,
@@ -107,7 +110,9 @@ export const CompareTechDataGroupTable = ({
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {values.map((value, i) => (
-                    <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                    <Table.DataCell key={key + '-' + i}>
+                      {value === undefined ? '-' : toValueAndUnit(value, unit)}
+                    </Table.DataCell>
                   ))}
                 </Table.Row>
               )
@@ -121,11 +126,20 @@ export const CompareTechDataGroupTable = ({
 
 const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
   return min.map((minValue, index) => {
-    const maksValue = maks[index]
-    if (minValue === maksValue) {
+    const maxValue = maks[index]
+
+    if (minValue === undefined) {
+      return maxValue
+    }
+
+    if (maxValue === undefined) {
+      return minValue
+    }
+
+    if (minValue === maxValue) {
       return minValue
     } else {
-      return minValue + `-${maks[index]}`
+      return minValue + `-${maxValue}`
     }
   })
 }
