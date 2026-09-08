@@ -51,9 +51,13 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
 
         return findValueRangeForProductRowKey(variantValues)
       }),
-      unit: productsToCompare[0].variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].unit,
+      unit: productsToCompare
+        .flatMap((product) => product.variants)
+        .find((variant) => variant.techData[key]?.unit !== undefined)?.techData[key].unit,
       type:
-        productsToCompare[0].variants.find((variant) => variant.techData[key] !== undefined)?.techData[key].type ?? '',
+        productsToCompare
+          .flatMap((product) => product.variants)
+          .find((variant) => variant.techData[key]?.type !== undefined)?.techData[key].type ?? '',
     } as TechDataRow
   })
 

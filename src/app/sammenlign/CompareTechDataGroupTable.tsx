@@ -33,9 +33,6 @@ export const CompareTechDataGroupTable = ({
       const maksRow = techDataRows.find((otherRow) => otherRow.key === `${baseKey} maks`)
 
       if (maksRow !== undefined) {
-        if (techDataRow.key.startsWith('Setehøyde med verktøy')) {
-          console.log('aaa', mergeMinMaksValues(techDataRow.values, maksRow.values))
-        }
         rowsMerged.push({
           key: baseKey,
           unit: techDataRow.unit,
