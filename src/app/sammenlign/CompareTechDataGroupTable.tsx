@@ -136,10 +136,12 @@ const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
       return minValue
     }
 
+    const minSplit = minValue.split(' - ')
+    const maxSplit = maxValue.split(' - ')
     if (minValue === maxValue) {
-      return minValue
+      return minSplit[0]
     } else {
-      return minValue + `-${maxValue}`
+      return minSplit[0] + `-${maxSplit[maxSplit.length - 1]}`
     }
   })
 }
