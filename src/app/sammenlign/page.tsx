@@ -27,7 +27,7 @@ export default async function Page(props: Props) {
   return (
     <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
       <Heading level="1" size="large" spacing>
-        Sammenlign produkter
+        Sammenlign hjelpemidler
       </Heading>
 
       {<CompareTable productsToCompare={sortedProductsToCompare} />}

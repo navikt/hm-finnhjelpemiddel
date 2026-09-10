@@ -1,8 +1,9 @@
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
 .compareTable {
-  //overflow-x: scroll;
-  //overflow: auto;
+  @media (max-width: $ax-breakpoint-lg) {
+    overflow: scroll;
+  }
 
   table {
     border-collapse: separate;
