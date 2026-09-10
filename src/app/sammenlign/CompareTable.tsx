@@ -1,4 +1,4 @@
-import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
+import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { CompareMetaDataTable } from '@/app/sammenlign/CompareMetaDataTable'
 import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroupTable'
 

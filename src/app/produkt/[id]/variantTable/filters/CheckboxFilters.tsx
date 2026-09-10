@@ -1,4 +1,4 @@
-import { FilterContent } from '@/app/produkt/[id]/variantTable/filters/FilterRowTest'
+import { FilterContent } from '@/app/produkt/[id]/variantTable/filters/FilterRow'
 
 import { useSearchParams } from 'next/navigation'
 

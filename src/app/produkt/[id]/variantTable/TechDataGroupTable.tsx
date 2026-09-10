@@ -1,6 +1,6 @@
 'use client'
 
-import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
+import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 
 import React, { useState } from 'react'
 
@@ -9,7 +9,7 @@ import { Box, Button, HStack, Heading, Table } from '@navikt/ds-react'
 
 import { toValueAndUnit } from '@/utils/string-util'
 
-import styles from '@/app/produkt/[id]/variantTable/VariantTableTest.module.scss'
+import styles from '@/app/produkt/[id]/variantTable/VariantTable.module.scss'
 
 export const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
   const [showTable, setShowTable] = useState(true)

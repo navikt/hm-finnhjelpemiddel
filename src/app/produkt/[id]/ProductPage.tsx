@@ -2,7 +2,7 @@
 
 import { OtherProductsOnPost } from '@/app/produkt-test/[id]/OtherProductsOnPost'
 import { ProductInfo } from '@/app/produkt/[id]/productInfo/ProductInfo'
-import { VariantTableTest } from '@/app/produkt/[id]/variantTable/VariantTableTest'
+import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 
 import { VStack } from '@navikt/ds-react'
 
@@ -29,7 +29,7 @@ export const ProductPage = ({
       maxWidth={'1200px'}
     >
       <ProductInfo product={product} hmsartnr={hmsartnr} />
-      <VariantTableTest product={product} techLabels={techLabels} />
+      <VariantTable product={product} techLabels={techLabels} />
       <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
         {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
       </VStack>

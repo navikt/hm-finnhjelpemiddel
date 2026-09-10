@@ -11,7 +11,7 @@ import { Heading, VStack } from '@navikt/ds-react'
 
 import { ProductVariant } from '@/utils/product-util'
 
-import { Filter, FilterType, TechDataRow } from '../VariantTableTest'
+import { Filter, FilterType, TechDataRow } from '../VariantTable'
 
 type Props = {
   variants: ProductVariant[]
@@ -29,7 +29,7 @@ export type FilterContent = {
   unit: string | undefined
 }
 
-export const FilterRowTest = ({ variants, filterConfigs, techDataRows, resetPageState }: Props) => {
+export const FilterRow = ({ variants, filterConfigs, techDataRows, resetPageState }: Props) => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()

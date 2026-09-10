@@ -3,7 +3,7 @@
 import { TechDataGroupTable } from '@/app/produkt/[id]/variantTable/TechDataGroupTable'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
-import { FilterRowTest } from '@/app/produkt/[id]/variantTable/filters/FilterRowTest'
+import { FilterRow } from '@/app/produkt/[id]/variantTable/filters/FilterRow'
 import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 
 import React, { useEffect, useState } from 'react'
@@ -20,7 +20,7 @@ import { TechLabelDTO } from '@/utils/techlabel-util'
 
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 
-import styles from './VariantTableTest.module.scss'
+import styles from './VariantTable.module.scss'
 
 import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
 
@@ -48,7 +48,7 @@ export type Filter = {
   predicate: (variant: ProductVariant, filterFieldName: string) => boolean
 }
 
-export const VariantTableTest = ({ product, techLabels }: { product: Product; techLabels: TechLabelDTO[] }) => {
+export const VariantTable = ({ product, techLabels }: { product: Product; techLabels: TechLabelDTO[] }) => {
   const sortColumns: SortColumns = { orderBy: 'Expired', direction: 'ascending' }
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
@@ -221,7 +221,7 @@ export const VariantTableTest = ({ product, techLabels }: { product: Product; te
       </Heading>
       {product.variants.length > 1 && (
         <VStack paddingBlock={'space-12 space-32'} id="variants-table">
-          <FilterRowTest
+          <FilterRow
             variants={product.variants}
             filterConfigs={filters}
             techDataRows={techDataRowsAll}
