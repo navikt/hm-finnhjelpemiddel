@@ -5,13 +5,21 @@ import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTableTest'
 import React, { useState } from 'react'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
-import { Box, Button, HStack, Heading, Table } from '@navikt/ds-react'
+import { Box, Button, Heading, Table } from '@navikt/ds-react'
 
 import { toValueAndUnit } from '@/utils/string-util'
 
-import styles from '@/app/produkt/[id]/variantTable/VariantTableTest.module.scss'
+import styles from './CompareTable.module.scss'
 
-export const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+export const CompareTechDataGroupTable = ({
+  title,
+  techDataRows,
+  productCount,
+}: {
+  title: string
+  techDataRows: TechDataRow[]
+  productCount: number
+}) => {
   const [showTable, setShowTable] = useState(true)
 
   const rowsMerged: TechDataRow[] = []
@@ -77,20 +85,19 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
   }
 
   return (
-    <Box className={styles.techDataGroup}>
+    <Box width={`${120 + 180 * productCount}px`} style={{ minWidth: '100%' }}>
       <Button
         variant="tertiary"
         data-color={'neutral'}
         onClick={() => setShowTable((value) => !value)}
         className={styles.expandTableButton}
+        icon={showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
+        iconPosition={'right'}
         aria-expanded={showTable}
       >
-        <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
-          <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
-            {title}
-          </Heading>
-          {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
-        </HStack>
+        <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
+          {title}
+        </Heading>
       </Button>
       {showTable && (
         <Table zebraStripes>
@@ -100,7 +107,9 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {values.map((value, i) => (
-                    <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                    <Table.DataCell key={key + '-' + i}>
+                      {value === undefined ? '-' : toValueAndUnit(value, unit)}
+                    </Table.DataCell>
                   ))}
                 </Table.Row>
               )
@@ -114,11 +123,22 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
 
 const mergeMinMaksValues = (min: string[], maks: string[]): string[] => {
   return min.map((minValue, index) => {
-    const maksValue = maks[index]
-    if (minValue === maksValue) {
+    const maxValue = maks[index]
+
+    if (minValue === undefined) {
+      return maxValue
+    }
+
+    if (maxValue === undefined) {
       return minValue
+    }
+
+    const minSplit = minValue.split(' - ')
+    const maxSplit = maxValue.split(' - ')
+    if (minValue === maxValue) {
+      return minSplit[0]
     } else {
-      return minValue + `-${maks[index]}`
+      return minSplit[0] + `-${maxSplit[maxSplit.length - 1]}`
     }
   })
 }

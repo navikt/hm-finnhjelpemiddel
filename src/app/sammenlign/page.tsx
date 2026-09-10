@@ -1,8 +1,11 @@
+import { CompareTable } from '@/app/sammenlign/CompareTable'
+
 import { Metadata } from 'next'
+
 import { fetchProductsWithVariants } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
+
 import { Heading } from '@/components/aksel-client'
-import { CompareTable } from '@/app/sammenlign/CompareTable'
 
 export const metadata: Metadata = {
   title: 'Sammenligner',
@@ -24,7 +27,7 @@ export default async function Page(props: Props) {
   return (
     <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
       <Heading level="1" size="large" spacing>
-        Sammenlign produkter
+        Sammenlign hjelpemidler
       </Heading>
 
       {<CompareTable productsToCompare={sortedProductsToCompare} />}

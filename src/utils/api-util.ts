@@ -1,6 +1,9 @@
-import { mapAllNews, mapNews, News } from '@/utils/news-util'
-import { mapSuppliers, Supplier } from '@/utils/supplier-util'
 import { Fetcher } from 'swr'
+
+import { News, mapAllNews, mapNews } from '@/utils/news-util'
+import { ServiceJob, mapServicejobs } from '@/utils/servicejob-util'
+import { Supplier, mapSuppliers } from '@/utils/supplier-util'
+
 import { AgreementLabel, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
@@ -21,16 +24,15 @@ import {
   toMinMaxAggs,
 } from './filter-util'
 import {
+  Product,
+  ProductVariant,
   mapProductFromSeriesId,
+  mapProductVariant,
   mapProductsFromAggregation,
   mapProductsFromCollapse,
   mapProductsVariants,
   mapProductsWithoutAggregationOnSeries,
-  mapProductVariant,
-  Product,
-  ProductVariant,
 } from './product-util'
-import { TechLabelDTO } from './techlabel-util'
 import {
   AgreementDocResponse,
   AgreementInfoResponse,
@@ -39,7 +41,7 @@ import {
   SearchResponse,
 } from './response-types'
 import { SearchData } from './search-state-util'
-import { mapServicejobs, ServiceJob } from '@/utils/servicejob-util'
+import { TechLabelDTO } from './techlabel-util'
 
 export const PAGE_SIZE = 24
 
@@ -862,6 +864,15 @@ export async function getProductWithVariants(seriesId: string): Promise<SearchRe
 
 export async function getTechLabels(isoCategory: string): Promise<TechLabelDTO[]> {
   const res = await fetch(HM_GRUNNDATA_DB + `/api/v1/techlabels/${isoCategory}`, {
+    method: 'GET',
+    next: { revalidate: 300 },
+  })
+
+  return res.json()
+}
+
+export async function getAllTechLabels(): Promise<{ [key: string]: TechLabelDTO[] }> {
+  const res = await fetch(HM_GRUNNDATA_DB + `/api/v1/techlabels`, {
     method: 'GET',
     next: { revalidate: 300 },
   })

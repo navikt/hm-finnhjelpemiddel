@@ -1,13 +1,16 @@
 'use client'
 
-import { useHydratedCompareStore } from '@/utils/global-state-util'
-import { Product } from '@/utils/product-util'
-import { MultiplyIcon } from '@navikt/aksel-icons'
-import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import ProductImage from './ProductImage'
+
+import { MultiplyIcon } from '@navikt/aksel-icons'
+import { BodyShort, Box, Button, Detail, Link, VStack } from '@navikt/ds-react'
+
+import { useHydratedCompareStore } from '@/utils/global-state-util'
+import { Product } from '@/utils/product-util'
 import useQueryString from '@/utils/search-params-util'
+
+import ProductImage from './ProductImage'
 
 const ProductCardCompare = ({
   type,
