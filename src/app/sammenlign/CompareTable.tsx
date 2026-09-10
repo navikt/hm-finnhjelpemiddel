@@ -5,7 +5,7 @@ import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroup
 import React from 'react'
 
 import { BodyShort, VStack } from '@navikt/ds-react'
-import { TableBody, TableColumnHeader, TableRow } from '@navikt/ds-react/Table'
+import { TableBody, TableColumnHeader, TableDataCell, TableRow } from '@navikt/ds-react/Table'
 
 import { getTechLabels } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
@@ -104,9 +104,9 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
           <TableRow>
             <TableColumnHeader></TableColumnHeader>
             {productsToCompare.map((product) => (
-              <TableColumnHeader key={'id-' + product.id}>
+              <TableDataCell key={'id-' + product.id}>
                 <ProductCardCompare product={product} type="removable" />
-              </TableColumnHeader>
+              </TableDataCell>
             ))}
           </TableRow>
         </TableBody>
