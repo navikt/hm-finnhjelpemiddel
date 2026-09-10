@@ -1,14 +1,14 @@
 'use client'
 
-import { fetchTjenesterForAgreement, FilterData, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
+import { PostsListKomponenttypeGroups } from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListKomponenttypeGroups'
+
+import NextLink from 'next/link'
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import useSWR from 'swr'
-import CompareMenu from '@/components/layout/CompareMenu'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
-import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
-import { mapSearchParams } from '@/utils/mapSearchParams'
-import { PostBucketResponse, ProductSourceResponse } from '@/utils/response-types'
-import { dateToString } from '@/utils/string-util'
+import useSWRImmutable from 'swr/immutable'
+
 import {
   ArrowRightIcon,
   CalendarIcon,
@@ -17,16 +17,24 @@ import {
   LayersPlusIcon,
   WrenchIcon,
 } from '@navikt/aksel-icons'
-import { Alert, Bleed, BodyLong, Button, Heading, Hide, HStack, Loader, Stack, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, BodyLong, Button, HStack, Heading, Hide, Loader, Stack, VStack } from '@navikt/ds-react'
+
+import { Agreement, mapAgreementProducts } from '@/utils/agreement-util'
+import { FilterData, fetchTjenesterForAgreement, getFiltersAgreement, getProductsOnAgreement } from '@/utils/api-util'
+import { mapSearchParams } from '@/utils/mapSearchParams'
+import { PostBucketResponse, ProductSourceResponse } from '@/utils/response-types'
+import useQueryString from '@/utils/search-params-util'
+import { dateToString } from '@/utils/string-util'
+
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+
+import CompareMenu from '@/components/layout/CompareMenu'
+
 import AgreementPrintableVersion from './AgreementPrintableVersion'
 import FilterForm, { AgreementFilters } from './FilterForm'
 import PostsList from './PostsList'
-import PostsListIsoGroups from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListIsoGroups'
-import NextLink from 'next/link'
+
 import styles from '@/app/rammeavtale/AgreementPage.module.scss'
-import useSWRImmutable from 'swr/immutable'
-import useQueryString from '@/utils/search-params-util'
-import { PostsListKomponenttypeGroups } from '@/app/rammeavtale/hjelpemidler/[agreementId]/PostsListKomponenttypeGroups'
 
 const AgreementPage = ({ agreement }: { agreement: Agreement }) => {
   const { isEnabled } = useFeatureFlags()

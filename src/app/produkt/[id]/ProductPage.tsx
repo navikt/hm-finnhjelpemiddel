@@ -1,6 +1,6 @@
 'use client'
 
-import { OtherProductsOnPost } from '@/app/produkt-test/[id]/OtherProductsOnPost'
+import { OtherProductsOnPosts } from '@/app/produkt-test/[id]/OtherProductsOnPosts'
 import { ProductInfo } from '@/app/produkt/[id]/productInfo/ProductInfo'
 import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 
@@ -31,7 +31,7 @@ export const ProductPage = ({
       <ProductInfo product={product} hmsartnr={hmsartnr} />
       <VariantTable product={product} techLabels={techLabels} />
       <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
-        {product.agreements.length > 0 && <OtherProductsOnPost agreements={product.agreements} />}
+        {product.agreements.length > 0 && <OtherProductsOnPosts product={product} />}
       </VStack>
       <CompareMenu />
     </VStack>

@@ -1227,6 +1227,47 @@ export const fetchWorkWithProducts = (seriesIds: string[]): Promise<FetchSeriesR
     })
 }
 
+export const fetchOtherProductsOnPost = (postId: string): Promise<FetchSeriesResponse> => {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'agreements.postId': postId,
+              },
+            },
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+          ],
+        },
+      },
+      sort: [
+        {
+          hmsArtNr: {
+            order: 'asc',
+          },
+        },
+      ],
+      size: 100,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: mapProductsWithoutAggregationOnSeries(data),
+      }
+    })
+}
+
 export type ProductVariantsPagination = {
   products: ProductVariant[]
   totalHits: number
