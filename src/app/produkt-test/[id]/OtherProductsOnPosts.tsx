@@ -20,12 +20,9 @@ export const OtherProductsOnPosts = ({ product }: { product: Product }) => {
 
   return (
     <VStack gap={'space-8'} paddingInline={'space-8 space-0'}>
-      <Heading size={'medium'} level={'2'}>
-        Andre hjelpemidler på delkontrakt:
-      </Heading>
       {sortedAgreements.length > 0 &&
-        sortedAgreements.map((agreement, index) => (
-          <OtherProductsOnPost agreement={agreement} seriesId={product.id} key={agreement.id} />
+        sortedAgreements.map((agreement) => (
+          <OtherProductsOnPost agreement={agreement} seriesId={product.id} key={agreement.postTitle} />
         ))}
     </VStack>
   )
@@ -39,11 +36,12 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
 
   return (
     <VStack gap={'space-8'} paddingBlock={'space-8 space-16'}>
-      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
-        {agreement.postTitle}
-      </Link>
+      <Heading size={'medium'} level={'2'}>
+        Andre hjelpemidler på delkontrakt {agreement.refNr}
+      </Heading>
+
       <HStack gap={'space-24'}>
-        {data?.products.map((product) => (
+        {data?.products.slice(0, 4).map((product) => (
           <ProductCardSearch
             product={product}
             rank={product.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank}
@@ -51,6 +49,9 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
           />
         ))}
       </HStack>
+      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+        Se mer
+      </Link>
     </VStack>
   )
 }
