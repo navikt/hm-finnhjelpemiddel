@@ -35,7 +35,7 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
   )
 
   return (
-    <VStack gap={'space-8'} paddingBlock={'space-8 space-16'}>
+    <VStack gap={'space-8'} paddingBlock={'space-8 space-16'} align={'start'}>
       <Heading size={'medium'} level={'2'}>
         Andre hjelpemidler på delkontrakt {agreement.refNr}
       </Heading>
