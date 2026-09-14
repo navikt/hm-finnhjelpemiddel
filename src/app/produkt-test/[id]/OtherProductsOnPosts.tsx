@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
+import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
 
 import NextLink from 'next/link'
 
@@ -41,13 +41,12 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
       </Heading>
 
       <HStack gap={'space-24'}>
-        {data?.products.slice(0, 4).map((product) => (
-          <ProductCardSearch
-            product={product}
-            rank={product.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank}
-            key={product.id}
-          />
-        ))}
+        {agreement.postTitle &&
+          data?.products
+            .slice(0, 4)
+            .map((product) => (
+              <ProductCardCategory product={product} postTitle={agreement.postTitle!} key={product.id} />
+            ))}
       </HStack>
       <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
         Se mer
