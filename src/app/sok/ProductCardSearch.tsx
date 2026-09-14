@@ -1,46 +1,18 @@
 'use client'
 
-import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton';
+import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
+import NextLink from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
+import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react'
 
-import NextLink from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { Product } from '@/utils/product-util'
 
+import ProductImage from '@/components/ProductImage'
+import { NeutralTag, SuccessTag } from '@/components/Tags'
 
-
-import { BodyShort, Box, HStack, Link, VStack } from '@navikt/ds-react';
-
-
-
-import { Product } from '@/utils/product-util';
-
-
-
-import ProductImage from '@/components/ProductImage';
-import { NeutralTag, SuccessTag } from '@/components/Tags';
-
-
-
-import styles from './ProductCardSearch.module.scss';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import styles from './ProductCardSearch.module.scss'
 
 export const ProductCardSearch = ({
   product,
@@ -48,7 +20,6 @@ export const ProductCardSearch = ({
 }: {
   product: Product
   rank?: number
-  variantCount: number
   handleCompareClick?: () => void
 }) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))

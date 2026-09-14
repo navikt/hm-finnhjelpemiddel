@@ -64,7 +64,7 @@ const SearchResults = ({
         justify={{ xs: 'start', md: 'start' }}
       >
         {products?.map((product) => (
-          <ProductCardSearch key={product.id} product={product} variantCount={product.variantCount} />
+          <ProductCardSearch key={product.id} product={product} />
         ))}
       </HStack>
       {loadMore && !isLoading && (

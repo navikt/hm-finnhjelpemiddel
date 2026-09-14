@@ -1,10 +1,12 @@
 'use client'
 
+import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
+
 import NextLink from 'next/link'
 
 import useSWRImmutable from 'swr/immutable'
 
-import { Heading, Link, VStack } from '@navikt/ds-react'
+import { HStack, Heading, Link, VStack } from '@navikt/ds-react'
 
 import { FetchSeriesResponse, fetchOtherProductsOnPost } from '@/utils/api-util'
 import { AgreementInfo, Product } from '@/utils/product-util'
@@ -22,20 +24,33 @@ export const OtherProductsOnPosts = ({ product }: { product: Product }) => {
         Andre hjelpemidler på delkontrakt:
       </Heading>
       {sortedAgreements.length > 0 &&
-        sortedAgreements.map((agreement, index) => <OtherProductsOnPost agreement={agreement} key={agreement.id} />)}
+        sortedAgreements.map((agreement, index) => (
+          <OtherProductsOnPost agreement={agreement} seriesId={product.id} key={agreement.id} />
+        ))}
     </VStack>
   )
 }
 
-const OtherProductsOnPost = ({ agreement }: { agreement: AgreementInfo }) => {
-  const { data } = useSWRImmutable<FetchSeriesResponse>(agreement.id, fetchOtherProductsOnPost)
+const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo; seriesId: string }) => {
+  const { data } = useSWRImmutable<FetchSeriesResponse>(
+    { postTitle: agreement.postTitle, seriesId: seriesId },
+    fetchOtherProductsOnPost
+  )
 
-  console.log('ccccc', data)
   return (
     <VStack gap={'space-8'} paddingBlock={'space-8 space-16'}>
       <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
         {agreement.postTitle}
       </Link>
+      <HStack gap={'space-24'}>
+        {data?.products.map((product) => (
+          <ProductCardSearch
+            product={product}
+            rank={product.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank}
+            key={product.id}
+          />
+        ))}
+      </HStack>
     </VStack>
   )
 }
