@@ -4,6 +4,7 @@
   position: relative;
   border-radius: 0.5rem;
   border: 1px solid$ax-border-neutral;
+  background-color: white;
 
   &:hover {
     outline: 1px solid$ax-border-accent;
@@ -17,7 +18,7 @@
 
 .link {
   color: $ax-text-neutral;
-  text-decoration: underline;
+  text-decoration: none;
 
   &:hover,
   &:focus {
@@ -35,6 +36,29 @@
     left: 0;
     z-index: 1;
   }
+}
+
+.isoCategoryText {
+  color: $ax-text-neutral-decoration;
+  font-size: 14px;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+}
+
+.bleedUppercaseText {
+  font-size: 14px;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+}
+
+.bleedLowercaseText {
+  font-size: 14px;
+}
+
+.delkontrakt {
+  background-color: rgba(236, 237, 239, 0.24);
+  height: 100%;
+  border-radius: 0 0 8px 8px;
 }
 
 .compareButton {

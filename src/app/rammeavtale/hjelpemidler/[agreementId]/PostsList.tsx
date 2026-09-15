@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
+import { ProductCard } from '@/app/produkt/ProductCard'
 
 import { useEffect } from 'react'
 
@@ -57,7 +57,7 @@ const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoad
           )}
           <HStack gap={'space-16'}>
             {post.products.map((productWithRank) => (
-              <ProductCardAgreement
+              <ProductCard
                 key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                 product={productWithRank.product}
                 rank={productWithRank.rank}

@@ -1,5 +1,6 @@
 'use client'
 
+import { CompareButton } from '@/app/produkt/CompareButton'
 import { Videos } from '@/app/produkt/[id]/Videos'
 import { Documents } from '@/app/produkt/[id]/productInfo/Documents'
 import {
@@ -9,7 +10,6 @@ import {
 } from '@/app/produkt/[id]/productInfo/GeneralProductInformation'
 import { WorksWith } from '@/app/produkt/[id]/productInfo/WorksWith'
 import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
-import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
 import React, { useEffect, useState } from 'react'
 

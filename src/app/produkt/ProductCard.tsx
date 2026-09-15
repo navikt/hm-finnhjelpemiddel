@@ -1,6 +1,6 @@
 'use client'
 
-import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
+import { CompareButton } from '@/app/produkt/CompareButton'
 
 import NextLink from 'next/link'
 
@@ -11,12 +11,18 @@ import { Product } from '@/utils/product-util'
 import ProductImage from '@/components/ProductImage'
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 
-import styles from './ProductCardCategory.module.scss'
+import styles from './ProductCard.module.scss'
 
-export const ProductCardCategory = ({ product, postTitle }: { product: Product; postTitle: string }) => {
+export const ProductCard = ({
+  product,
+  rank,
+  variantCount,
+}: {
+  product: Product
+  rank?: number
+  variantCount?: number
+}) => {
   const linkToProduct = `/produkt/${product.id}`
-
-  const rank = product.agreements && product.agreements.find((agreement) => agreement.postTitle === postTitle)?.rank
   const onAgreement = rank !== undefined
 
   return (
@@ -42,7 +48,12 @@ export const ProductCardCategory = ({ product, postTitle }: { product: Product; 
             <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
               <BodyShort weight="semibold">{product.title}</BodyShort>
             </Link>
-            <BodyShort size="small">{product.supplierName}</BodyShort>
+            <VStack gap={{ xs: 'space-4', md: 'space-16' }}>
+              <BodyShort size="small">{product.supplierName}</BodyShort>
+              {variantCount && (
+                <BodyShort size="small">{`${variantCount} ${variantCount === 1 ? 'variant' : 'varianter'}`} </BodyShort>
+              )}
+            </VStack>
           </VStack>
         </VStack>
       </VStack>

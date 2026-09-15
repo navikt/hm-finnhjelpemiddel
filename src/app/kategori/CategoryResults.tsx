@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
+import { ProductCard } from '@/app/produkt/ProductCard'
 
 import React, { useState } from 'react'
 
@@ -100,7 +100,14 @@ const DelkontraktGroup = ({ delkontraktProducts }: { delkontraktProducts: Delkon
             )
           })
           .map((product) => (
-            <ProductCardCategory key={product.id} product={product} postTitle={delkontraktProducts.postTitle} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              rank={
+                product.agreements &&
+                product.agreements.find((agreement) => agreement.postTitle === delkontraktProducts.postTitle)?.rank
+              }
+            />
           ))}
       </HStack>
     </VStack>

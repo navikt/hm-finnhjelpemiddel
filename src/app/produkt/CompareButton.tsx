@@ -8,7 +8,7 @@ import { Button, Popover } from '@navikt/ds-react'
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
 
-import styles from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement.module.scss'
+import styles from './ProductCard.module.scss'
 
 export const CompareButton = ({ product }: { product: Product }) => {
   const { setProductToCompare, removeProduct, productsToCompare } = useHydratedCompareStore()

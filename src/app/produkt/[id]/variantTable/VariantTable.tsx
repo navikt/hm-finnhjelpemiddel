@@ -309,7 +309,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
 
   const bestillingsordningVaries = new Set(product.variants.map((p) => p.bestillingsordning)).size === 2
   const digitalSoknadVaries = new Set(product.variants.map((p) => p.digitalSoknad)).size === 2
-  //const hasHmsNumber = product.variants.some((p) => p.hmsArtNr)
+  const hasUtgått = !!product.variants.find((variant) => variant.status === 'INACTIVE')
 
   return (
     <VStack paddingBlock={'space-48'}>
@@ -323,7 +323,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
         >
           <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
             <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
-              {'Avtaleinfo'}
+              {'Generelt'}
             </Heading>
             {showTable ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
           </HStack>
@@ -335,9 +335,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
                 <Table.HeaderCell>På avtale</Table.HeaderCell>
                 {productVariants.map((variant, _) => (
                   <Table.DataCell key={'på avtale-' + variant.id}>
-                    {variant.status === 'INACTIVE' ? (
-                      <NeutralTag>Utgått</NeutralTag>
-                    ) : variant.hasAgreement ? (
+                    {variant.hasAgreement ? (
                       <SuccessTag>På avtale</SuccessTag>
                     ) : (
                       <NeutralTag>Ikke på avtale</NeutralTag>
@@ -345,6 +343,21 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
                   </Table.DataCell>
                 ))}
               </Table.Row>
+
+              {hasUtgått && (
+                <Table.Row>
+                  <Table.HeaderCell>Utgått</Table.HeaderCell>
+                  {productVariants.map((variant, _) => (
+                    <Table.DataCell key={'på avtale-' + variant.id}>
+                      {variant.status === 'INACTIVE' ? (
+                        <NeutralTag>Utgått</NeutralTag>
+                      ) : (
+                        <BodyShort>Ikke Utgått</BodyShort>
+                      )}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              )}
 
               {rankSet.size > 1 && <VariantRankRow variants={productVariants} />}
               {postSet.size > 1 && <VariantPostRow variants={productVariants} />}
