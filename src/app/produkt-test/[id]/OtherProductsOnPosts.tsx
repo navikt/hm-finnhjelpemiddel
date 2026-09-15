@@ -50,6 +50,16 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
       <HStack gap={'space-24'} paddingBlock={'space-0 space-8'}>
         {agreement.postTitle &&
           data.products
+            .sort((a, b) => {
+              if (agreement.postTitle === '') {
+                return 0
+              }
+
+              return (
+                (a.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank ?? 0) -
+                (b.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank ?? 0)
+              )
+            })
             .slice(0, 3)
             .map((product) => (
               <ProductCard
