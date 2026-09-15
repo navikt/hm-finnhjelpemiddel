@@ -2,10 +2,13 @@
 
 import { ProductCard } from '@/app/produkt/ProductCard'
 
+import React from 'react'
+
 import NextLink from 'next/link'
 
 import useSWRImmutable from 'swr/immutable'
 
+import { ArrowRightIcon } from '@navikt/aksel-icons'
 import { HStack, Heading, Link, VStack } from '@navikt/ds-react'
 
 import { FetchSeriesResponse, fetchOtherProductsOnPost } from '@/utils/api-util'
@@ -71,12 +74,12 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
                 key={product.id}
               />
             ))}
+        {data.products.length > 3 && (
+          <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+            Se flere <ArrowRightIcon aria-hidden fontSize={'24px'} />
+          </Link>
+        )}
       </HStack>
-      {data.products.length > 3 && (
-        <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
-          Se flere
-        </Link>
-      )}
     </VStack>
   )
 }
