@@ -1,8 +1,8 @@
 'use client'
 
+import { CompareButton } from '@/app/produkt/CompareButton'
 import { QrCodeButton } from '@/app/produkt/[id]/QrCodeButton'
 import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
-import { CompareButton } from '@/app/rammeavtale/hjelpemidler/[agreementId]/CompareButton'
 
 import React from 'react'
 

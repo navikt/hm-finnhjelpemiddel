@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCardAgreement } from '@/app/rammeavtale/hjelpemidler/[agreementId]/ProductCardAgreement'
+import { ProductCard } from '@/app/produkt/ProductCard'
 
 import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
 
@@ -106,7 +106,7 @@ export const PostsListKomponenttypeGroups = ({
 
               <HStack gap="space-16">
                 {products.map((productWithRank) => (
-                  <ProductCardAgreement
+                  <ProductCard
                     key={`${productWithRank.product.id} + ${productWithRank.rank}`}
                     product={productWithRank.product}
                     rank={productWithRank.rank}

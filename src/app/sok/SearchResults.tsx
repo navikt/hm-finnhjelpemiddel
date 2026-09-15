@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCardSearch } from '@/app/sok/ProductCardSearch'
+import { ProductCard } from '@/app/produkt/ProductCard'
 
 import { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -64,7 +64,11 @@ const SearchResults = ({
         justify={{ xs: 'start', md: 'start' }}
       >
         {products?.map((product) => (
-          <ProductCardSearch key={product.id} product={product} variantCount={product.variantCount} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            rank={product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))}
+          />
         ))}
       </HStack>
       {loadMore && !isLoading && (
