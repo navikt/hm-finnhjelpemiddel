@@ -50,7 +50,7 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
         {agreement.postTitle}
       </Link>
 
-      <HStack gap={'space-24'} paddingBlock={'space-0 space-8'}>
+      <HStack gap={'space-24'} paddingBlock={'space-0 space-8'} align={'center'}>
         {agreement.postTitle &&
           data.products
             .sort((a, b) => {
