@@ -20,6 +20,9 @@ export const OtherProductsOnPosts = ({ product }: { product: Product }) => {
 
   return (
     <VStack gap={'space-8'} paddingInline={'space-8 space-0'}>
+      <Heading size={'medium'} level={'2'}>
+        Andre hjelpemidler på delkontrakt
+      </Heading>
       {sortedAgreements.length > 0 &&
         sortedAgreements.map((agreement) => (
           <OtherProductsOnPost agreement={agreement} seriesId={product.id} key={agreement.postTitle} />
@@ -34,16 +37,20 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
     fetchOtherProductsOnPost
   )
 
+  if (!data) {
+    return <></>
+  }
+
   return (
     <VStack gap={'space-8'} paddingBlock={'space-8 space-16'} align={'start'}>
-      <Heading size={'medium'} level={'2'}>
-        Andre hjelpemidler på delkontrakt {agreement.refNr}
-      </Heading>
+      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+        {agreement.postTitle}
+      </Link>
 
       <HStack gap={'space-24'} paddingBlock={'space-0 space-8'}>
         {agreement.postTitle &&
-          data?.products
-            .slice(0, 6)
+          data.products
+            .slice(0, 3)
             .map((product) => (
               <ProductCard
                 product={product}
@@ -55,9 +62,11 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
               />
             ))}
       </HStack>
-      <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
-        Se flere
-      </Link>
+      {data.products.length > 3 && (
+        <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+          Se flere
+        </Link>
+      )}
     </VStack>
   )
 }
