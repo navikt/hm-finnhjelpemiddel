@@ -40,16 +40,16 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
         Andre hjelpemidler på delkontrakt {agreement.refNr}
       </Heading>
 
-      <HStack gap={'space-24'}>
+      <HStack gap={'space-24'} paddingBlock={'space-0 space-8'}>
         {agreement.postTitle &&
           data?.products
-            .slice(0, 4)
+            .slice(0, 6)
             .map((product) => (
               <ProductCardCategory product={product} postTitle={agreement.postTitle!} key={product.id} />
             ))}
       </HStack>
       <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
-        Se mer
+        Se flere
       </Link>
     </VStack>
   )
