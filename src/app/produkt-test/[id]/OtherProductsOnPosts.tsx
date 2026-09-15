@@ -1,6 +1,6 @@
 'use client'
 
-import { ProductCardCategory } from '@/app/kategori/ProductCardCategory'
+import { ProductCard } from '@/app/produkt/ProductCard'
 
 import NextLink from 'next/link'
 
@@ -45,7 +45,14 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
           data?.products
             .slice(0, 6)
             .map((product) => (
-              <ProductCardCategory product={product} postTitle={agreement.postTitle!} key={product.id} />
+              <ProductCard
+                product={product}
+                rank={
+                  product.agreements &&
+                  product.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank
+                }
+                key={product.id}
+              />
             ))}
       </HStack>
       <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
