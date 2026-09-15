@@ -50,7 +50,7 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
         {agreement.postTitle}
       </Link>
 
-      <HStack gap={'space-24'} paddingBlock={'space-0 space-8'} align={'center'}>
+      <HStack gap={'space-24'} paddingBlock={'space-0 space-8'}>
         {agreement.postTitle &&
           data.products
             .sort((a, b) => {
@@ -75,7 +75,11 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
               />
             ))}
         {data.products.length > 3 && (
-          <Link as={NextLink} href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}>
+          <Link
+            as={NextLink}
+            href={`/rammeavtale/hjelpemidler/${agreement.id}#${agreement.refNr}`}
+            style={{ alignSelf: 'center' }}
+          >
             Se flere <ArrowRightIcon aria-hidden fontSize={'24px'} />
           </Link>
         )}
