@@ -1227,6 +1227,68 @@ export const fetchWorkWithProducts = (seriesIds: string[]): Promise<FetchSeriesR
     })
 }
 
+export const fetchOtherProductsOnPost = ({
+  postTitle,
+  seriesId,
+}: {
+  postTitle: string
+  seriesId: string
+}): Promise<FetchSeriesResponse> => {
+  return fetch(HM_SEARCH_URL + '/products/_search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'agreements.postTitle': postTitle,
+              },
+            },
+            {
+              term: {
+                main: true,
+              },
+            },
+            {
+              term: {
+                status: 'ACTIVE',
+              },
+            },
+          ],
+          must_not: [
+            {
+              term: {
+                seriesId: seriesId,
+              },
+            },
+          ],
+        },
+      },
+      sort: [
+        {
+          'agreements.rank': {
+            order: 'asc',
+          },
+        },
+      ],
+      size: 100,
+      collapse: {
+        field: 'seriesId',
+      },
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return {
+        products: mapProductsFromCollapse(data),
+      }
+    })
+}
+
 export type ProductVariantsPagination = {
   products: ProductVariant[]
   totalHits: number
