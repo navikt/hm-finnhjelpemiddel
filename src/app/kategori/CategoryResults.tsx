@@ -104,8 +104,9 @@ const DelkontraktGroup = ({ delkontraktProducts }: { delkontraktProducts: Delkon
               key={product.id}
               product={product}
               rank={
-                product.agreements &&
-                product.agreements.find((agreement) => agreement.postTitle === delkontraktProducts.postTitle)?.rank
+                product.agreements.length > 0
+                  ? product.agreements.find((agreement) => agreement.postTitle === delkontraktProducts.postTitle)?.rank
+                  : undefined
               }
             />
           ))}

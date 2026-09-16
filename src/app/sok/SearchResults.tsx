@@ -67,7 +67,11 @@ const SearchResults = ({
           <ProductCard
             key={product.id}
             product={product}
-            rank={product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))}
+            rank={
+              product.agreements.length > 0
+                ? Math.min(...product.agreements.map((agreement) => agreement.rank))
+                : undefined
+            }
           />
         ))}
       </HStack>
