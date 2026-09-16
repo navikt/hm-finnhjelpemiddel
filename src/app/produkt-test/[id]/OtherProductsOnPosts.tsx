@@ -51,29 +51,31 @@ const OtherProductsOnPost = ({ agreement, seriesId }: { agreement: AgreementInfo
       </Link>
 
       <HStack gap={'space-16'} paddingBlock={'space-0 space-8'}>
-        {agreement.postTitle &&
-          data.products
-            .sort((a, b) => {
-              if (agreement.postTitle === '') {
-                return 0
-              }
-
-              return (
-                (a.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank ?? 0) -
-                (b.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank ?? 0)
-              )
-            })
-            .slice(0, 3)
-            .map((product) => (
-              <ProductCard
-                product={product}
-                rank={
-                  product.agreements &&
-                  product.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank
+        <HStack gap={'space-16'}>
+          {agreement.postTitle &&
+            data.products
+              .sort((a, b) => {
+                if (agreement.postTitle === '') {
+                  return 0
                 }
-                key={product.id}
-              />
-            ))}
+
+                return (
+                  (a.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank ?? 0) -
+                  (b.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank ?? 0)
+                )
+              })
+              .slice(0, 3)
+              .map((product) => (
+                <ProductCard
+                  product={product}
+                  rank={
+                    product.agreements &&
+                    product.agreements.find((agreement) => agreement.postTitle === agreement.postTitle)?.rank
+                  }
+                  key={product.id}
+                />
+              ))}
+        </HStack>
         {data.products.length > 3 && (
           <Link
             as={NextLink}
