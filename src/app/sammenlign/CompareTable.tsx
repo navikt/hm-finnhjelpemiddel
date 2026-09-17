@@ -4,7 +4,7 @@ import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroup
 
 import React from 'react'
 
-import { BodyShort, VStack } from '@navikt/ds-react'
+import { BodyShort, Link, VStack } from '@navikt/ds-react'
 import { TableBody, TableColumnHeader, TableDataCell, TableRow } from '@navikt/ds-react/Table'
 
 import { getTechLabels } from '@/utils/api-util'
@@ -94,7 +94,12 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
   const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
 
   if (productsToCompare.length === 0) {
-    return <BodyShort>Ingen hjelpemidler til sammenlikning</BodyShort>
+    return (
+      <VStack gap={'space-16'}>
+        <BodyShort>Ingen hjelpemidler til sammenlikning.</BodyShort>
+        <Link href={'/'}>Tilbake til forsiden</Link>
+      </VStack>
+    )
   }
 
   return (
