@@ -93,7 +93,7 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
         </HStack>
       </Button>
       {showTable && (
-        <Table zebraStripes>
+        <Table>
           <Table.Body>
             {rowsMerged.sort(sortRows).map(({ key, values, unit }) => {
               return (

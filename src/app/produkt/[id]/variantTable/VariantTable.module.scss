@@ -31,6 +31,10 @@
   top: 0;
   z-index: 3;
   background-color: $ax-bg-info-soft;
+
+  tr:first-of-type > td {
+    font-weight: 600;
+  }
 }
 
 .stickyTable {
