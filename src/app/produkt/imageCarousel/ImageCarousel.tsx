@@ -1,16 +1,22 @@
 'use client'
 
-import { Photo } from '@/utils/product-util'
-import useEmblaCarousel, { EmblaViewportRefType } from 'embla-carousel-react'
-import styles from './ImageCarousel.module.scss'
-import React, { useCallback, useEffect, useState } from 'react'
-import Image from 'next/image'
-import { largeImageLoader } from '@/utils/image-util'
-import { BodyShort, Button, Dialog, Hide, HStack, VStack } from '@navikt/ds-react'
-import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { usePrevNextButtons } from '@/app/produkt/imageCarousel/UsePrevNextButtons'
 import { Thumb } from '@/app/produkt/imageCarousel/Thumb'
+import { usePrevNextButtons } from '@/app/produkt/imageCarousel/UsePrevNextButtons'
+
+import React, { useCallback, useEffect, useState } from 'react'
+
+import Image from 'next/image'
+
 import { EmblaCarouselType } from 'embla-carousel'
+import useEmblaCarousel, { EmblaViewportRefType } from 'embla-carousel-react'
+
+import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { Button, Dialog, HStack, Hide, VStack } from '@navikt/ds-react'
+
+import { largeImageLoader } from '@/utils/image-util'
+import { Photo } from '@/utils/product-util'
+
+import styles from './ImageCarousel.module.scss'
 
 export const ImageCarousel = ({ images }: { images: Photo[] }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -24,7 +30,13 @@ export const ImageCarousel = ({ images }: { images: Photo[] }) => {
   }
 
   return (
-    <VStack gap={'space-16'} className={styles.embla} role="group" aria-label={'Produktbilder'}>
+    <VStack
+      gap={'space-16'}
+      className={styles.embla}
+      role="group"
+      aria-label={'Produktbilder'}
+      paddingBlock={'space-0 space-24'}
+    >
       <ImageDialog
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
@@ -180,40 +192,39 @@ const ThumbnailBar = ({
 
   return (
     <HStack gap={'space-8'} align={'center'} justify={'center'} style={{ position: 'relative', zIndex: '100' }}>
-      <Button
-        aria-label="Forrige bilde"
-        variant="tertiary"
-        onClick={onPrevButtonClick}
-        icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
-        disabled={prevBtnDisabled}
-      />
       <Hide below={'lg'}>
-        <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
-          <HStack wrap={false} gap={'space-8'}>
-            {images.map((image, index) => (
-              <Thumb
-                imageUri={image.uri}
-                key={index}
-                onClick={() => onThumbClick(index)}
-                selected={index === selectedIndex}
-                index={index}
-              />
-            ))}
-          </HStack>
-        </div>
+        <Button
+          aria-label="Forrige bilde"
+          variant="tertiary"
+          onClick={onPrevButtonClick}
+          icon={<ChevronLeftIcon aria-hidden height={40} width={40} />}
+          disabled={prevBtnDisabled}
+        />
       </Hide>
-      <Hide above={'lg'}>
-        <BodyShort size="large">
-          {selectedIndex + 1} / {images.length}
-        </BodyShort>
+
+      <div className={styles.emblaThumbs__viewport} ref={emblaThumbsRef}>
+        <HStack wrap={false} gap={'space-8'}>
+          {images.map((image, index) => (
+            <Thumb
+              imageUri={image.uri}
+              key={index}
+              onClick={() => onThumbClick(index)}
+              selected={index === selectedIndex}
+              index={index}
+            />
+          ))}
+        </HStack>
+      </div>
+
+      <Hide below={'lg'}>
+        <Button
+          aria-label="Neste bilde"
+          variant="tertiary"
+          onClick={onNextButtonClick}
+          icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
+          disabled={nextBtnDisabled}
+        />
       </Hide>
-      <Button
-        aria-label="Neste bilde"
-        variant="tertiary"
-        onClick={onNextButtonClick}
-        icon={<ChevronRightIcon aria-hidden height={40} width={40} />}
-        disabled={nextBtnDisabled}
-      />
     </HStack>
   )
 }
