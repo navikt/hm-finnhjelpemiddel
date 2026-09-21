@@ -41,6 +41,8 @@
   background: white;
   border: 1px solid $ax-border-neutral-subtleA;
   border-bottom: none;
+  box-shadow: 0 0 6px 2px #0000004d;
+  clip-path: inset(0 0 -6px 0);
 }
 
 .expandTableButton {
