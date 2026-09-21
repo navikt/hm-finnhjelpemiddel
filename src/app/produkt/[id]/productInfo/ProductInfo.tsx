@@ -220,7 +220,7 @@ const StatusTag = ({
           Ikke på avtale
         </Tag>
       )}
-      <HelpText title={'Hva betyr delkonktrakt og rangering'} placement={'right'} style={{ padding: 0 }}>
+      <HelpText title={'Hva betyr delkonktrakt og rangering'} placement={'bottom'} style={{ padding: 0 }}>
         {helpHvaEr}
       </HelpText>
     </HStack>
