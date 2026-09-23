@@ -18,7 +18,6 @@ import { usePathname } from 'next/navigation'
 
 import { QRCodeCanvas } from 'qrcode.react'
 
-import { LinkIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
 
 import { AgreementInfo, Product } from '@/utils/product-util'
@@ -43,7 +42,7 @@ export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?
             </HStack>
             <Heading size={'xlarge'}>{hmsartnr ? product.variants[0].articleName : product.title}</Heading>
             <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
-              <BodyShort weight={'semibold'}>{product.supplierName}</BodyShort>
+              <BodyShort>{product.supplierName}</BodyShort>
             </Link>
           </VStack>
           <VStack gap={'space-8'} align={'start'}>
@@ -57,7 +56,7 @@ export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?
             )}
             <Description description={product.attributes.text} />
             <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
-              Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
+              Tilbehør og reservedeler
             </Link>
           </VStack>
         </VStack>
