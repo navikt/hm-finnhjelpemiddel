@@ -18,15 +18,24 @@ import { usePathname } from 'next/navigation'
 
 import { QRCodeCanvas } from 'qrcode.react'
 
-import { LinkIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
 
 import styles from './ProductInfo.module.scss'
 
-export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
+export const ProductInfo = ({
+  product,
+  hmsartnr,
+  compatibleWithProducts,
+}: {
+  product: Product
+  hmsartnr?: string
+  compatibleWithProducts?: ProductVariant[]
+}) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
+
+  const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
   return (
     <HGrid columns={{ xs: 1, md: 2 }} gap={'space-8'} paddingInline={'space-16'}>
@@ -35,10 +44,13 @@ export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?
       <VStack gap={'space-24'}>
         <VStack gap={'space-20'}>
           <VStack gap={'space-8'} align={'start'}>
-            <CompareButton product={product} />
+            <HStack gap={{ xs: 'space-16', md: 'space-24' }} width={'100%'}>
+              <CompareButton product={product} />
+              <StatusTag productAgreements={product.agreements} isExpired={isExpired} />
+            </HStack>
             <Heading size={'xlarge'}>{hmsartnr ? product.variants[0].articleName : product.title}</Heading>
             <Link as={NextLink} href={`/leverandorer#${product.supplierId}`}>
-              {product.supplierName}
+              <BodyShort>{product.supplierName}</BodyShort>
             </Link>
           </VStack>
           <VStack gap={'space-8'} align={'start'}>
@@ -51,9 +63,11 @@ export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?
               </HStack>
             )}
             <Description description={product.attributes.text} />
-            <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
-              Tilbehør og reservedeler <LinkIcon aria-hidden fontSize={'24px'} />
-            </Link>
+            {compatibleWithProducts && compatibleWithProducts.length > 0 && (
+              <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
+                Tilbehør og reservedeler
+              </Link>
+            )}
           </VStack>
         </VStack>
 
@@ -87,8 +101,6 @@ export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?
 const InfoTab = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
   const qrId = hmsartnr ? hmsartnr : product.id
 
-  const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
-
   const bestillingsordning = new Set(product.variants.map((p) => p.bestillingsordning))
   const digitalsoknad = new Set(product.variants.map((p) => p.digitalSoknad))
   const helpTextBestilling =
@@ -113,12 +125,6 @@ const InfoTab = ({ product, hmsartnr }: { product: Product; hmsartnr?: string })
             sett={digitalsoknad}
           />
         </VStack>
-        <TagRow
-          productAgreements={product.agreements}
-          accessory={product.accessory}
-          sparePart={product.sparePart}
-          isExpired={isExpired}
-        />
       </HStack>
       <ISOCategory
         isoCategory={product.isoCategory}
@@ -167,15 +173,11 @@ export const QrCodeButtonSmall = ({ id }: { id: string }) => {
   )
 }
 
-const TagRow = ({
+const StatusTag = ({
   productAgreements,
-  accessory,
-  sparePart,
   isExpired,
 }: {
   productAgreements: AgreementInfo[] | undefined
-  accessory: boolean | undefined
-  sparePart: boolean | undefined
   isExpired: boolean
 }) => {
   const helpHvaEr = (
@@ -202,43 +204,32 @@ const TagRow = ({
     productAgreements?.length > 0 &&
     Math.min(...productAgreements.map((agreement) => agreement.rank))
 
-  const accessoryOrSparePart = accessory || sparePart
-
   return (
-    <HStack gap={'space-8'} height={'fit-content'}>
-      {accessoryOrSparePart ? (
-        <Tag variant={'success'} size={'xsmall'}>
-          {accessory ? 'Tilbehør' : 'Reservedel'}
-        </Tag>
-      ) : topRank ? (
+    <HStack gap={'space-8'} height={'fit-content'} align={'center'}>
+      {topRank ? (
         topRank === 99 ? (
-          <Tag variant={'success'} size={'xsmall'}>
+          <Tag variant={'success'} size={'small'}>
             På avtale
           </Tag>
         ) : productAgreements.length == 1 ? (
-          <VStack gap={'space-8'} align={'start'}>
-            <Tag variant={'success-moderate'} size={'xsmall'}>
-              Delkontrakt {productAgreements[0].refNr}
-            </Tag>
-            <Tag variant={'success-moderate'} size={'xsmall'}>
-              Rangering {productAgreements[0].rank}
-            </Tag>
-          </VStack>
+          <Tag variant={'success-moderate'} size={'small'}>
+            Delkontrakt {productAgreements[0].refNr} - Rangering {productAgreements[0].rank}
+          </Tag>
         ) : (
-          <Tag variant={'success'} size={'xsmall'}>
+          <Tag variant={'success'} size={'small'}>
             Flere delkontrakter
           </Tag>
         )
       ) : isExpired ? (
-        <Tag variant={'neutral'} size={'xsmall'}>
+        <Tag variant={'neutral'} size={'small'}>
           Utgått
         </Tag>
       ) : (
-        <Tag variant={'neutral'} size={'xsmall'}>
+        <Tag variant={'neutral'} size={'small'}>
           Ikke på avtale
         </Tag>
       )}
-      <HelpText title={'Hva betyr delkonktrakt og rangering'} placement={'right'} style={{ padding: 0 }}>
+      <HelpText title={'Hva betyr delkonktrakt og rangering'} placement={'bottom'} style={{ padding: 0 }}>
         {helpHvaEr}
       </HelpText>
     </HStack>

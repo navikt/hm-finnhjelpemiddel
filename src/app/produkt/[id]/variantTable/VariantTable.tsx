@@ -235,66 +235,62 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
         </Alert>
       )}
       {productVariantsSorted.length > 0 && (
-        <VStack>
-          <div className={styles.variantsTable}>
-            <VStack>
-              <VStack gap={'space-8'} paddingBlock={'space-4 space-0'} className={styles.stickyTop}>
-                {product.variants.length > 1 && (
-                  <HStack justify={'space-between'} align={'end'}>
-                    <BodyShort>
-                      {productVariantsToShow.length} av {product.variants.length} varianter
-                    </BodyShort>
-                    {currentMaxPageCount > 1 && (
-                      <Pagination
-                        page={pageState}
-                        onPageChange={setPageState}
-                        count={currentMaxPageCount}
-                        boundaryCount={1}
-                        siblingCount={0}
-                        size={'small'}
-                      />
-                    )}
-                  </HStack>
+        <VStack className={styles.variantsTable}>
+          <VStack gap={'space-8'} paddingBlock={'space-4 space-0'} className={styles.stickyTop}>
+            {product.variants.length > 1 && (
+              <HStack justify={'space-between'} align={'end'}>
+                <BodyShort>
+                  {productVariantsToShow.length} av {product.variants.length} varianter
+                </BodyShort>
+                {currentMaxPageCount > 1 && (
+                  <Pagination
+                    page={pageState}
+                    onPageChange={setPageState}
+                    count={currentMaxPageCount}
+                    boundaryCount={1}
+                    siblingCount={0}
+                    size={'small'}
+                  />
                 )}
-                <Table className={styles.stickyTable}>
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.HeaderCell>Navn på variant</Table.HeaderCell>
-                      {productVariantsSorted.map((variant) => (
-                        <Table.DataCell key={'artname-' + variant.id}>{variant.articleName}</Table.DataCell>
-                      ))}
-                    </Table.Row>
+              </HStack>
+            )}
+            <Table className={styles.stickyTable}>
+              <Table.Body>
+                <Table.Row>
+                  <Table.HeaderCell>Navn på variant</Table.HeaderCell>
+                  {productVariantsSorted.map((variant) => (
+                    <Table.DataCell key={'artname-' + variant.id}>{variant.articleName}</Table.DataCell>
+                  ))}
+                </Table.Row>
 
-                    <Table.Row>
-                      <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
-                      {productVariantsSorted.map((variant) => (
-                        <Table.DataCell key={'hms-' + variant.id}>
-                          {variant.hmsArtNr ? (
-                            <CopyButton
-                              size="small"
-                              className={productTop.copyButton}
-                              copyText={variant.hmsArtNr ?? ''}
-                              text={variant.hmsArtNr ?? ''}
-                              activeText="kopiert"
-                              data-color={'accent'}
-                              activeIcon={<ThumbUpIcon aria-hidden />}
-                              iconPosition="right"
-                            />
-                          ) : (
-                            <BodyShort align={'center'}>-</BodyShort>
-                          )}
-                        </Table.DataCell>
-                      ))}
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-              </VStack>
-              <MetaDataTable product={product} productVariants={productVariantsSorted} />
-              {groupedTechDataRows.map(({ title, techDataRows }) => (
-                <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
-              ))}
-            </VStack>
-          </div>
+                <Table.Row>
+                  <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
+                  {productVariantsSorted.map((variant) => (
+                    <Table.DataCell key={'hms-' + variant.id}>
+                      {variant.hmsArtNr ? (
+                        <CopyButton
+                          size="small"
+                          className={productTop.copyButton}
+                          copyText={variant.hmsArtNr ?? ''}
+                          text={variant.hmsArtNr ?? ''}
+                          activeText="kopiert"
+                          data-color={'accent'}
+                          activeIcon={<ThumbUpIcon aria-hidden />}
+                          iconPosition="right"
+                        />
+                      ) : (
+                        <BodyShort align={'center'}>-</BodyShort>
+                      )}
+                    </Table.DataCell>
+                  ))}
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </VStack>
+          <MetaDataTable product={product} productVariants={productVariantsSorted} />
+          {groupedTechDataRows.map(({ title, techDataRows }) => (
+            <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
+          ))}
         </VStack>
       )}
     </Box>
@@ -329,7 +325,7 @@ const MetaDataTable = ({ product, productVariants }: { product: Product; product
           </HStack>
         </Button>
         {showTable && (
-          <Table zebraStripes>
+          <Table>
             <Table.Body>
               <Table.Row>
                 <Table.HeaderCell>På avtale</Table.HeaderCell>
