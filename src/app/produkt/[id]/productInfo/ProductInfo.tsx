@@ -20,11 +20,19 @@ import { QRCodeCanvas } from 'qrcode.react'
 
 import { BodyShort, Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, VStack } from '@navikt/ds-react'
 
-import { AgreementInfo, Product } from '@/utils/product-util'
+import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
 
 import styles from './ProductInfo.module.scss'
 
-export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?: string }) => {
+export const ProductInfo = ({
+  product,
+  hmsartnr,
+  compatibleWithProducts,
+}: {
+  product: Product
+  hmsartnr?: string
+  compatibleWithProducts?: ProductVariant[]
+}) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
 
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
@@ -55,9 +63,11 @@ export const ProductInfo = ({ product, hmsartnr }: { product: Product; hmsartnr?
               </HStack>
             )}
             <Description description={product.attributes.text} />
-            <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
-              Tilbehør og reservedeler
-            </Link>
+            {compatibleWithProducts && compatibleWithProducts.length > 0 && (
+              <Link as={NextLink} href={`/produkt/${product.id}/deler`}>
+                Tilbehør og reservedeler
+              </Link>
+            )}
           </VStack>
         </VStack>
 

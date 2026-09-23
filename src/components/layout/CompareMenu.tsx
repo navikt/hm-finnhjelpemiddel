@@ -1,11 +1,15 @@
+'use client'
+
+import NextLink from 'next/link'
+
+import classNames from 'classnames'
+
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
-import classNames from 'classnames'
 import ProductCardCompare from '@/components/ProductCardCompare'
-import NextLink from 'next/link'
 
 const CompareMenu = () => {
   const { compareMenuState, productsToCompare, setCompareMenuState, resetProductToCompare } = useHydratedCompareStore()
