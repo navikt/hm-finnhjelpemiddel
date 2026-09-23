@@ -208,7 +208,7 @@ const StatusTag = ({
     <HStack gap={'space-8'} height={'fit-content'} align={'center'}>
       {topRank ? (
         topRank === 99 ? (
-          <Tag variant={'success'} size={'small'}>
+          <Tag variant={'success-moderate'} size={'small'}>
             På avtale
           </Tag>
         ) : productAgreements.length == 1 ? (
@@ -216,16 +216,16 @@ const StatusTag = ({
             Delkontrakt {productAgreements[0].refNr} - Rangering {productAgreements[0].rank}
           </Tag>
         ) : (
-          <Tag variant={'success'} size={'small'}>
+          <Tag variant={'success-moderate'} size={'small'}>
             Flere delkontrakter
           </Tag>
         )
       ) : isExpired ? (
-        <Tag variant={'neutral'} size={'small'}>
+        <Tag variant={'neutral-moderate'} size={'small'}>
           Utgått
         </Tag>
       ) : (
-        <Tag variant={'neutral'} size={'small'}>
+        <Tag variant={'neutral-moderate'} size={'small'}>
           Ikke på avtale
         </Tag>
       )}
