@@ -85,8 +85,17 @@
   }
 
   tr {
-    display: flex;
+    //display: flex;
     //align-items: stretch;
+    &:hover {
+      background-color: white;
+    }
+  }
+
+  td {
+    &:hover {
+      background-color: $ax-bg-neutral-moderate-hover;
+    }
   }
 
   tr > td:last-child {
@@ -117,4 +126,8 @@
   border-right: #0056b4 dashed 1px;
   background-color: #f1f5f9;
   font-weight: 500;
+}
+
+.colgroup {
+  background-color: $ax-bg-neutral-moderate-hover;
 }

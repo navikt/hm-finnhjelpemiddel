@@ -52,6 +52,7 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
   const sortColumns: SortColumns = { orderBy: 'Expired', direction: 'ascending' }
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
+  const [highlightCol, setHighlightCol] = useState(0)
 
   const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
 
@@ -289,7 +290,14 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
           </VStack>
           <MetaDataTable product={product} productVariants={productVariantsSorted} />
           {groupedTechDataRows.map(({ title, techDataRows }) => (
-            <TechDataGroupTable title={title} techDataRows={techDataRows} key={title} />
+            <TechDataGroupTable
+              title={title}
+              techDataRows={techDataRows}
+              nrVariants={productVariantsSorted.length}
+              key={title}
+              highlightCol={highlightCol}
+              setHighlightCol={setHighlightCol}
+            />
           ))}
         </VStack>
       )}

@@ -2,7 +2,7 @@
 
 import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Box, Button, HStack, Heading, Table } from '@navikt/ds-react'
@@ -11,7 +11,19 @@ import { toValueAndUnit } from '@/utils/string-util'
 
 import styles from '@/app/produkt/[id]/variantTable/VariantTable.module.scss'
 
-export const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+export const TechDataGroupTable = ({
+  title,
+  techDataRows,
+  nrVariants,
+  highlightCol,
+  setHighlightCol,
+}: {
+  title: string
+  techDataRows: TechDataRow[]
+  nrVariants: number
+  highlightCol: number
+  setHighlightCol: Dispatch<SetStateAction<number>>
+}) => {
   const [showTable, setShowTable] = useState(true)
 
   const rowsMerged: TechDataRow[] = []
@@ -94,13 +106,22 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
       </Button>
       {showTable && (
         <Table>
+          {[...Array(nrVariants + 1)].map((_, i) => (
+            <colgroup key={i} className={i + 1 === highlightCol ? styles.colgroup : ''}></colgroup>
+          ))}
           <Table.Body>
             {rowsMerged.sort(sortRows).map(({ key, values, unit }) => {
               return (
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {values.map((value, i) => (
-                    <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                    <Table.DataCell
+                      key={key + '-' + i}
+                      onMouseEnter={() => setHighlightCol(i + 2)}
+                      onMouseLeave={() => setHighlightCol(0)}
+                    >
+                      {toValueAndUnit(value, unit)}
+                    </Table.DataCell>
                   ))}
                 </Table.Row>
               )
