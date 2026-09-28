@@ -14,13 +14,11 @@ import styles from '@/app/produkt/[id]/variantTable/VariantTable.module.scss'
 export const TechDataGroupTable = ({
   title,
   techDataRows,
-  nrVariants,
   highlightCol,
   setHighlightCol,
 }: {
   title: string
   techDataRows: TechDataRow[]
-  nrVariants: number
   highlightCol: number
   setHighlightCol: Dispatch<SetStateAction<number>>
 }) => {
@@ -97,7 +95,7 @@ export const TechDataGroupTable = ({
         className={styles.expandTableButton}
         aria-expanded={showTable}
       >
-        <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
+        <HStack gap={'space-8'} align={'center'}>
           <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
             {title}
           </Heading>
@@ -106,9 +104,6 @@ export const TechDataGroupTable = ({
       </Button>
       {showTable && (
         <Table>
-          {[...Array(nrVariants + 1)].map((_, i) => (
-            <colgroup key={i} className={i + 1 === highlightCol ? styles.colgroup : ''}></colgroup>
-          ))}
           <Table.Body>
             {rowsMerged.sort(sortRows).map(({ key, values, unit }) => {
               return (
@@ -117,8 +112,9 @@ export const TechDataGroupTable = ({
                   {values.map((value, i) => (
                     <Table.DataCell
                       key={key + '-' + i}
-                      onMouseEnter={() => setHighlightCol(i + 2)}
-                      onMouseLeave={() => setHighlightCol(0)}
+                      className={i === highlightCol ? styles.colgroup : ''}
+                      onMouseEnter={() => setHighlightCol(i)}
+                      onMouseLeave={() => setHighlightCol(-1)}
                     >
                       {toValueAndUnit(value, unit)}
                     </Table.DataCell>

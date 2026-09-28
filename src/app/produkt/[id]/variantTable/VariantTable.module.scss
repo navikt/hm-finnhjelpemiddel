@@ -2,12 +2,6 @@
 
 @use '@navikt/ds-tokens/dist/tokens' as *;
 
-.statusRow {
-  th {
-    border-bottom: none;
-  }
-}
-
 .techDataGroupHeader {
   background-color: $ax-bg-neutral-soft;
 
@@ -20,10 +14,6 @@
   border: 1px solid $ax-border-neutral-subtleA;
   border-bottom: none;
   background: white;
-}
-
-.techDataGroup + .techDataGroup {
-  border-top: none;
 }
 
 .stickyTop {
@@ -47,7 +37,7 @@
 
 .expandTableButton {
   width: 100%;
-  padding: 12px 8px;
+  padding: 12px 16px;
   border-bottom: 1px solid $ax-border-neutral-subtleA;
   border-radius: 0;
   justify-content: start;
@@ -58,6 +48,10 @@
   svg {
     width: 24px;
     height: 24px;
+  }
+
+  &:hover {
+    background-color: $ax-bg-neutral-softA;
   }
 }
 
@@ -71,6 +65,7 @@
 
   th {
     font-weight: normal;
+    padding-left: 16px;
   }
 
   tr > th:nth-child(n + 1),
@@ -85,7 +80,7 @@
   }
 
   tr {
-    //display: flex;
+    display: flex;
     //align-items: stretch;
     &:hover {
       background-color: white;
@@ -94,7 +89,7 @@
 
   td {
     &:hover {
-      background-color: $ax-bg-neutral-moderate-hover;
+      background-color: $ax-bg-neutral-softA;
     }
   }
 
@@ -121,13 +116,6 @@
   }
 }
 
-.selectedColumn {
-  border-left: #0056b4 dashed 1px;
-  border-right: #0056b4 dashed 1px;
-  background-color: #f1f5f9;
-  font-weight: 500;
-}
-
 .colgroup {
-  background-color: $ax-bg-neutral-moderate-hover;
+  background-color: $ax-bg-neutral-softA;
 }
