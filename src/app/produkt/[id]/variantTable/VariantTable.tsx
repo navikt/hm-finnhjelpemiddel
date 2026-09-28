@@ -351,7 +351,7 @@ const MetaDataTable = ({
           className={styles.expandTableButton}
           aria-expanded={showTable}
         >
-          <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
+          <HStack gap={'space-8'} align={'center'}>
             <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
               {'Generelt'}
             </Heading>
