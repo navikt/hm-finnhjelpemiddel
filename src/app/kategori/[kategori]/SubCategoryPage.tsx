@@ -48,7 +48,11 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
       <UXSignalsSurvey />
 
       {category.subCategories?.length && (
-        <HGrid gap={'space-40'} columns={{ xs: 1, md: 2, lg: 3 }} paddingBlock={'space-0 space-96'}>
+        <HGrid
+          gap={{ xs: 'space-16', md: 'space-40' }}
+          columns={{ xs: 1, md: 2, lg: 3 }}
+          paddingBlock={'space-0 space-96'}
+        >
           {category.subCategories
             .sort((a, b) => a.priority - b.priority)
             .map((subCategory) => (
