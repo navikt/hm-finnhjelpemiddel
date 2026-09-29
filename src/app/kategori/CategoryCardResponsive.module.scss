@@ -8,27 +8,29 @@
   }
 
   @media (max-width: $ax-breakpoint-sm) {
-    grid-template: 
-     "image title arrow" min-content
-     "image description description" min-content 
-     "image footer footer" / auto 1fr;
+    grid-template:
+      'image title arrow' min-content
+      'image description description' min-content
+      'image footer footer' / auto 1fr;
   }
 }
 
 .imageContainer {
   display: grid;
+  aspect-ratio: 16/9;
 
   @media (max-width: $ax-breakpoint-sm) {
     margin-block: calc(var(--__axc-link-card-padding-block) * -1);
     margin-inline: calc(var(--__axc-link-card-padding-inline) * -1) var(--__axc-link-card-padding-inline);
     border-radius: calc(var(--ax-radius-12) - 1px) 0 0 calc(var(--ax-radius-12) - 1px);
     align-self: stretch;
+    aspect-ratio: auto;
   }
 }
 
 .iconImage {
   user-select: none;
-  background-color: #FBF3F6;
+  background-color: #fbf3f6;
   object-fit: contain;
   padding: 50px 50px;
 

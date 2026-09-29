@@ -20,7 +20,7 @@ export const CategoryCardResponsive = ({ title, link, description, icon, showSub
   return (
     <LinkCard arrow={false} data-color={'accent'} className={styles.container}>
       {showIcon && (
-        <LinkCard.Image aspectRatio={'16/9'} className={styles.imageContainer}>
+        <LinkCard.Image className={styles.imageContainer}>
           <Image
             width={100}
             height={500}
