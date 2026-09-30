@@ -1,8 +1,8 @@
 'use client'
 
-import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
+import { HighlightableDataCell, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Box, Button, HStack, Heading, Table } from '@navikt/ds-react'
@@ -11,7 +11,17 @@ import { toValueAndUnit } from '@/utils/string-util'
 
 import styles from '@/app/produkt/[id]/variantTable/VariantTable.module.scss'
 
-export const TechDataGroupTable = ({ title, techDataRows }: { title: string; techDataRows: TechDataRow[] }) => {
+export const TechDataGroupTable = ({
+  title,
+  techDataRows,
+  highlightCol,
+  setHighlightCol,
+}: {
+  title: string
+  techDataRows: TechDataRow[]
+  highlightCol: number
+  setHighlightCol: Dispatch<SetStateAction<number>>
+}) => {
   const [showTable, setShowTable] = useState(true)
 
   const rowsMerged: TechDataRow[] = []
@@ -85,7 +95,7 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
         className={styles.expandTableButton}
         aria-expanded={showTable}
       >
-        <HStack gap={'space-24'} justify={'space-between'} align={'center'}>
+        <HStack gap={'space-8'} align={'center'}>
           <Heading size={'medium'} level={'3'} style={{ fontSize: '18px' }}>
             {title}
           </Heading>
@@ -100,7 +110,15 @@ export const TechDataGroupTable = ({ title, techDataRows }: { title: string; tec
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {values.map((value, i) => (
-                    <Table.DataCell key={key + '-' + i}>{toValueAndUnit(value, unit)}</Table.DataCell>
+                    <HighlightableDataCell
+                      key={key + '-' + i}
+                      variantCount={values.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
+                    >
+                      {toValueAndUnit(value, unit)}
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
               )
