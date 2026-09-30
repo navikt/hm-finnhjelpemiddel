@@ -1,7 +1,6 @@
 'use client'
 
-import NewsCard from '@/app/aktuelt/NewsCard'
-import SmallNewsCard from '@/app/aktuelt/SmallNewsCard'
+import { NewsCardFrontPage } from '@/app/aktuelt/NewsCardFrontPage'
 import { getNews } from '@/app/aktuelt/news-util'
 
 import NextLink from 'next/link'
@@ -23,14 +22,14 @@ export default function NewsFrontPage() {
       <Show above={'lg'}>
         <VStack gap="space-16">
           {news?.map((news) => (
-            <SmallNewsCard news={news} key={news.id} />
+            <NewsCardFrontPage news={news} key={news.id} big={false} />
           ))}
         </VStack>
       </Show>
       <Show below={'lg'}>
         <HGrid gap="space-16" columns={{ xs: 1, sm: 2 }}>
           {news?.map((news) => (
-            <NewsCard news={news} key={news.id} />
+            <NewsCardFrontPage news={news} key={news.id} big={true} />
           ))}
         </HGrid>
       </Show>
