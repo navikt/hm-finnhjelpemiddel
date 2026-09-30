@@ -1,10 +1,12 @@
 'use client'
 
-import { CategoryDTO, getCategoriesByIds } from '@/app/kategori/admin/category-admin-util'
+import { CategoryCardResponsive } from '@/app/kategori/CategoryCardResponsive'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
-import { HGrid } from '@navikt/ds-react'
-import { CategoryCard } from '@/app/kategori/CategoryCard'
+import { CategoryDTO, getCategoriesByIds } from '@/app/kategori/admin/category-admin-util'
+
 import useSWRImmutable from 'swr/immutable'
+
+import { HGrid } from '@navikt/ds-react'
 
 export const TopCategoriesPage = () => {
   const rootCategoryIds = [
@@ -26,7 +28,7 @@ export const TopCategoriesPage = () => {
     <CategoryPageLayout title={'Hjelpemiddelkategorier'} description={''}>
       <HGrid gap={'space-40'} columns={{ xs: 1, md: 2, lg: 3 }} paddingBlock={'space-0 space-96'}>
         {categories?.map((category) => (
-          <CategoryCard
+          <CategoryCardResponsive
             icon={category.data.icon}
             title={category.title}
             link={`kategori/${category.title}`}
