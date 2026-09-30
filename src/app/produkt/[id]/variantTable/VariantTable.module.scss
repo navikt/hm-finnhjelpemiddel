@@ -81,15 +81,8 @@
 
   tr {
     display: flex;
-    //align-items: stretch;
     &:hover {
       background-color: white;
-    }
-  }
-
-  td {
-    &:hover {
-      background-color: $ax-bg-neutral-softA;
     }
   }
 

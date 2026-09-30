@@ -1,6 +1,6 @@
 'use client'
 
-import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
+import { HighlightableDataCell, TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 
 import React, { Dispatch, SetStateAction, useState } from 'react'
 
@@ -110,14 +110,15 @@ export const TechDataGroupTable = ({
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {values.map((value, i) => (
-                    <Table.DataCell
+                    <HighlightableDataCell
                       key={key + '-' + i}
-                      className={i === highlightCol ? styles.colgroup : ''}
-                      onMouseEnter={() => setHighlightCol(i)}
-                      onMouseLeave={() => setHighlightCol(-1)}
+                      variantCount={values.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
                     >
                       {toValueAndUnit(value, unit)}
-                    </Table.DataCell>
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
               )

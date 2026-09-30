@@ -6,7 +6,7 @@ import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/filters/FilterRow'
 import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
 
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 
 import { useSearchParams } from 'next/navigation'
 
@@ -260,25 +260,27 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
                 <Table.Row>
                   <Table.HeaderCell>Navn på variant</Table.HeaderCell>
                   {productVariantsSorted.map((variant, i) => (
-                    <Table.DataCell
-                      className={i === highlightCol ? styles.colgroup : ''}
-                      onMouseEnter={() => setHighlightCol(i)}
-                      onMouseLeave={() => setHighlightCol(-1)}
+                    <HighlightableDataCell
                       key={'artname-' + variant.id}
+                      variantCount={productVariantsSorted.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
                     >
                       {variant.articleName}
-                    </Table.DataCell>
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
 
                 <Table.Row>
                   <Table.HeaderCell>HMS-nummer</Table.HeaderCell>
                   {productVariantsSorted.map((variant, i) => (
-                    <Table.DataCell
-                      className={i === highlightCol ? styles.colgroup : ''}
-                      onMouseEnter={() => setHighlightCol(i)}
-                      onMouseLeave={() => setHighlightCol(-1)}
+                    <HighlightableDataCell
                       key={'hms-' + variant.id}
+                      variantCount={productVariantsSorted.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
                     >
                       {variant.hmsArtNr ? (
                         <CopyButton
@@ -294,7 +296,7 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
                       ) : (
                         <BodyShort align={'center'}>-</BodyShort>
                       )}
-                    </Table.DataCell>
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
               </Table.Body>
@@ -364,18 +366,19 @@ const MetaDataTable = ({
               <Table.Row>
                 <Table.HeaderCell>På avtale</Table.HeaderCell>
                 {productVariants.map((variant, i) => (
-                  <Table.DataCell
-                    className={i === highlightCol ? styles.colgroup : ''}
-                    onMouseEnter={() => setHighlightCol(i)}
-                    onMouseLeave={() => setHighlightCol(-1)}
+                  <HighlightableDataCell
                     key={'på avtale-' + variant.id}
+                    variantCount={productVariants.length}
+                    thisColumnNr={i}
+                    highlightColNr={highlightCol}
+                    setHighlightCol={setHighlightCol}
                   >
                     {variant.hasAgreement ? (
                       <SuccessTag>På avtale</SuccessTag>
                     ) : (
                       <NeutralTag>Ikke på avtale</NeutralTag>
                     )}
-                  </Table.DataCell>
+                  </HighlightableDataCell>
                 ))}
               </Table.Row>
 
@@ -383,18 +386,19 @@ const MetaDataTable = ({
                 <Table.Row>
                   <Table.HeaderCell>Utgått</Table.HeaderCell>
                   {productVariants.map((variant, i) => (
-                    <Table.DataCell
-                      className={i === highlightCol ? styles.colgroup : ''}
-                      onMouseEnter={() => setHighlightCol(i)}
-                      onMouseLeave={() => setHighlightCol(-1)}
-                      key={'på avtale-' + variant.id}
+                    <HighlightableDataCell
+                      key={'utgått' + variant.id}
+                      variantCount={productVariants.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
                     >
                       {variant.status === 'INACTIVE' ? (
                         <NeutralTag>Utgått</NeutralTag>
                       ) : (
                         <BodyShort>Ikke Utgått</BodyShort>
                       )}
-                    </Table.DataCell>
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
               )}
@@ -404,28 +408,30 @@ const MetaDataTable = ({
               <Table.Row>
                 <Table.HeaderCell>Lev-artnr</Table.HeaderCell>
                 {productVariants.map((variant, i) => (
-                  <Table.DataCell
-                    className={i === highlightCol ? styles.colgroup : ''}
-                    onMouseEnter={() => setHighlightCol(i)}
-                    onMouseLeave={() => setHighlightCol(-1)}
+                  <HighlightableDataCell
                     key={'levart-' + variant.id}
+                    variantCount={productVariants.length}
+                    thisColumnNr={i}
+                    highlightColNr={highlightCol}
+                    setHighlightCol={setHighlightCol}
                   >
                     {variant.supplierRef ?? '-'}
-                  </Table.DataCell>
+                  </HighlightableDataCell>
                 ))}
               </Table.Row>
               {bestillingsordningVaries && (
                 <Table.Row>
                   <Table.HeaderCell>Bestillingsordning</Table.HeaderCell>
                   {productVariants.map((variant, i) => (
-                    <Table.DataCell
-                      className={i === highlightCol ? styles.colgroup : ''}
-                      onMouseEnter={() => setHighlightCol(i)}
-                      onMouseLeave={() => setHighlightCol(-1)}
+                    <HighlightableDataCell
                       key={'bestillingsordning-' + variant.id}
+                      variantCount={productVariants.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
                     >
                       {variant.bestillingsordning ? 'Ja' : 'Nei'}
-                    </Table.DataCell>
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
               )}
@@ -433,14 +439,15 @@ const MetaDataTable = ({
                 <Table.Row>
                   <Table.HeaderCell>Digital behovsmelding</Table.HeaderCell>
                   {productVariants.map((variant, i) => (
-                    <Table.DataCell
-                      className={i === highlightCol ? styles.colgroup : ''}
-                      onMouseEnter={() => setHighlightCol(i)}
-                      onMouseLeave={() => setHighlightCol(-1)}
+                    <HighlightableDataCell
                       key={'behovsmelding-' + variant.id}
+                      variantCount={productVariants.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
                     >
                       {variant.digitalSoknad ? 'Ja' : 'Nei'}
-                    </Table.DataCell>
+                    </HighlightableDataCell>
                   ))}
                 </Table.Row>
               )}
@@ -449,6 +456,30 @@ const MetaDataTable = ({
         )}
       </Box>
     </VStack>
+  )
+}
+
+export const HighlightableDataCell = ({
+  variantCount,
+  thisColumnNr,
+  highlightColNr,
+  setHighlightCol,
+  children,
+}: {
+  variantCount: number
+  thisColumnNr: number
+  highlightColNr: number
+  setHighlightCol: Dispatch<SetStateAction<number>>
+  children: ReactNode
+}) => {
+  return (
+    <Table.DataCell
+      className={thisColumnNr === highlightColNr && variantCount > 1 ? styles.colgroup : ''}
+      onMouseEnter={() => setHighlightCol(thisColumnNr)}
+      onMouseLeave={() => setHighlightCol(-1)}
+    >
+      {children}
+    </Table.DataCell>
   )
 }
 
