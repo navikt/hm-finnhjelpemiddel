@@ -3,17 +3,17 @@ import { CategoryCardResponsive } from '@/app/kategori/CategoryCardResponsive'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
-import Link from 'next/link'
-
-import { Box, HGrid, ReadMore } from '@navikt/ds-react'
+import { Box, HGrid, Link, ReadMore } from '@navikt/ds-react'
 
 import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 
 export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
-  const subCategoryHelpText = 'Hvordan kan du få hjelpemidler?'
-  const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
+  const subCategoryHelpText = 'Hvordan kan du låne hjelpemidler fra Nav?'
+  const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler'
+  const linkToMedlemskapFolketrygden =
+    'https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-norge/relatert-informasjon/medlemskap-i-folketrygden'
   return (
     <CategoryPageLayout title={category.title} description={category.data.description}>
       <Box maxWidth={'500px'}>
@@ -25,15 +25,26 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
             logUmamiClickButton(`${subCategoryHelpText}`, 'subcategory-readmore', `${open}`)
           }}
         >
-          Dersom du har en varig og vesentlig nedsatt funksjon på grunn av sykdom, skade eller annen tilstand, kan du
-          søke om hjelpemidler fra Nav.
+          De viktigste vilkårene som må være oppfylt er:
+          <ul>
+            <li>Funksjonsvanskene må være varige. Det vil si at vanskene har en varighet på over to år.</li>
+            <li>Hjelpemiddelet skal kompensere for funksjonstap.</li>
+            <li>
+              Man må ha{' '}
+              <Link
+                href={linkToMedlemskapFolketrygden}
+                onClick={() => {
+                  logUmamiNavigationEvent('subcategory-readmore', linkToMedlemskapFolketrygden, subCategoryHelpText)
+                }}
+              >
+                medlemskap i folketrygden (nav.no).
+              </Link>
+            </li>
+          </ul>
+          Kommunen kan hjelpe deg med å finne de hjelpemidlene som passer best for deg, og med å utforme søknaden. Har
+          du behov for hjelpemidler i en begrenset periode, kan du låne dem direkte fra kommunen.
           <br />
           <br />
-          I mange tilfeller er det nyttig å samarbeide med en fagperson i kommunen for å komme frem til det til det mest
-          hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
-          <br />
-          <br />
-          Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
           <Link
             href={linkToNavHowToApply}
             aria-label={`Gå til ${subCategoryHelpText}`}
@@ -41,7 +52,7 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
               logUmamiNavigationEvent('subcategory-readmore', linkToNavHowToApply, subCategoryHelpText)
             }}
           >
-            Informasjon om hjelpemidler og tilrettelegging - nav.no.
+            Du finner mer informasjon om hjelpemidler og tilrettelegging på nav.no.
           </Link>
         </ReadMore>
       </Box>
