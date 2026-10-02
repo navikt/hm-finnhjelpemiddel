@@ -1,4 +1,4 @@
-import { OtherProductsOnPosts } from '@/app/produkt-test/[id]/OtherProductsOnPosts'
+import { OtherProductsOnPosts } from '@/app/produkt/[id]/OtherProductsOnPosts'
 import { ProductInfo } from '@/app/produkt/[id]/productInfo/ProductInfo'
 import { VariantTable } from '@/app/produkt/[id]/variantTable/VariantTable'
 
