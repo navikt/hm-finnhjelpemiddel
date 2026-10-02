@@ -1,0 +1,62 @@
+@use '@navikt/ds-tokens/dist/tokens' as *;
+
+.container {
+  display: grid;
+
+  min-height: 130px;
+
+  @media (min-width: $ax-breakpoint-sm) {
+    grid-template:
+      'image title arrow' min-content
+      'image description description' min-content
+      'image footer footer' / auto 1fr;
+  }
+}
+
+.imageContainer {
+  display: grid;
+  aspect-ratio: 16/9;
+
+  @media (min-width: $ax-breakpoint-sm) {
+    width: 130px;
+    aspect-ratio: auto;
+
+    margin-block: calc(var(--__axc-link-card-padding-block) * -1);
+    margin-inline: calc(var(--__axc-link-card-padding-inline) * -1) var(--__axc-link-card-padding-inline);
+
+    border-radius: calc(var(--ax-radius-12) - 1px) 0 0 calc(var(--ax-radius-12) - 1px);
+
+    align-self: stretch;
+  }
+}
+
+.imageBox {
+  display: flex;
+  font-size: 63px;
+
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: $ax-breakpoint-sm) {
+    font-size: 90px;
+    width: stretch;
+    height: 100%;
+  }
+}
+
+.iconImage {
+  user-select: none;
+  object-fit: cover;
+
+  width: 100%;
+  position: absolute;
+
+  @media (min-width: $ax-breakpoint-sm) {
+    object-fit: cover;
+    position: relative;
+  }
+}
+
+.linkText {
+  text-decoration: none;
+}
