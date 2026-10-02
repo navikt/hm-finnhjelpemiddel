@@ -30,7 +30,7 @@ export default function NewsFrontPage() {
         as={NextLink}
         href="/aktuelt"
         variant={'tertiary'}
-        icon={<ArrowRightIcon />}
+        icon={<ArrowRightIcon aria-hidden />}
         style={{ alignSelf: 'flex-start' }}
       >
         Flere saker
