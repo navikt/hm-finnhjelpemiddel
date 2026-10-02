@@ -52,8 +52,7 @@
   position: absolute;
 
   @media (min-width: $ax-breakpoint-sm) {
-    object-fit: contain;
-    width: revert-layer;
+    object-fit: cover;
     position: relative;
   }
 }
