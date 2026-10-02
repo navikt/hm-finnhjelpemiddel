@@ -11,13 +11,13 @@ import { smallImageLoader } from '@/utils/image-util'
 
 import styles from './NewsCardFrontPage.module.scss'
 
-export const NewsCardFrontPage = ({ news, big }: { news: NewsDTO; big: boolean }) => {
+export const NewsCardFrontPage = ({ news }: { news: NewsDTO }) => {
   const date = formatPublishedDate(news.publishedFrom)
   const firstTag = news.tags[0]
   const tagMetaData = getTagConfig(firstTag)
 
   return (
-    <LinkCard key={news.id} size={big ? 'medium' : 'small'} className={styles.container}>
+    <LinkCard key={news.id} size={'small'} className={styles.container}>
       <LinkCard.Image className={styles.imageContainer}>
         {news.imageUrl ? (
           <Image
