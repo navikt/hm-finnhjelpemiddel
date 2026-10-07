@@ -1,5 +1,8 @@
 'use client'
 
+import { SearchSidebar } from '@/app/sok/SearchSidebar'
+import SortSearchResults from '@/app/sok/SortSearchResults'
+
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -7,23 +10,23 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import useSWRInfinite from 'swr/infinite'
 
+import { faro } from '@grafana/faro-core'
 import { FilterIcon } from '@navikt/aksel-icons'
-import { Alert, Bleed, Button, Heading, HGrid, HStack, Loader, Show, Skeleton, VStack } from '@navikt/ds-react'
+import { Alert, Bleed, Button, HGrid, HStack, Heading, Loader, Show, Skeleton, VStack } from '@navikt/ds-react'
 
-import { fetchProducts, FetchProductsWithFilters, FilterData, initialFilters, PAGE_SIZE } from '@/utils/api-util'
-import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
-
-import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
-import CompareMenu from '@/components/layout/CompareMenu'
+import { FetchProductsWithFilters, FilterData, PAGE_SIZE, fetchProducts, initialFilters } from '@/utils/api-util'
 import { categoryFilters, initialFiltersFormState, visFilters } from '@/utils/filter-util'
 import { useMobileOverlayStore } from '@/utils/global-state-util'
+import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
+import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
+import { logUmamiHMSNrOppslagSokEvent } from '@/utils/umami'
+
+import { MobileOverlayModal } from '@/components/MobileOverlayModal'
+import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
+import CompareMenu from '@/components/layout/CompareMenu'
+
 import SearchForm from './SearchForm'
 import SearchResults from './SearchResults'
-import { MobileOverlayModal } from '@/components/MobileOverlayModal'
-import { SearchSidebar } from '@/app/sok/SearchSidebar'
-import { faro } from '@grafana/faro-core'
-import SortSearchResults from '@/app/sok/SortSearchResults'
-import { logUmamiHMSNrOppslagSokEvent } from '@/utils/umami'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -143,7 +146,7 @@ export default function SearchPage() {
     return (
       <FormProvider {...formMethods}>
         <CompareMenu />
-        <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: "space-16", lg: "space-72" }}>
+        <HGrid columns={{ xs: 1, lg: '374px auto' }} gap={{ xs: 'space-16', lg: 'space-72' }}>
           <Show above={'lg'}>
             <SearchSidebar onSubmit={onSubmit} filters={filters} searchFormRef={searchFormRef} onReset={onReset} />
           </Show>
@@ -164,10 +167,10 @@ export default function SearchPage() {
             />
           </Show>
 
-          <VStack gap={{ xs: "space-16", lg: "space-32" }}>
+          <VStack gap={{ xs: 'space-16', lg: 'space-32' }}>
             <HStack
               justify={{ xs: 'start', lg: 'space-between' }}
-              gap={{ xs: "space-16", lg: "space-0" }}
+              gap={{ xs: 'space-16', lg: 'space-0' }}
               className="results__header"
             >
               <Show above="lg">
@@ -191,37 +194,37 @@ export default function SearchPage() {
           </VStack>
         </HGrid>
       </FormProvider>
-    );
+    )
   }
 
   if (isMaybeRedirecting) {
     return (
       <VStack
         marginInline={'auto'}
-        marginBlock={"space-0"}
+        marginBlock={'space-0'}
         maxWidth={'1408px'}
-        paddingBlock={"space-0 space-48"}
-        paddingInline={"space-16"}
-        gap={{ xs: "space-48", md: "space-48" }}
+        paddingBlock={'space-0 space-48'}
+        paddingInline={'space-16'}
+        gap={{ xs: 'space-48', md: 'space-48' }}
       >
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Loader size="3xlarge" title="Venter..." />
         </HStack>
       </VStack>
-    );
+    )
   }
 
   return (
     <VStack
       marginInline={'auto'}
-      marginBlock={"space-0"}
+      marginBlock={'space-0'}
       maxWidth={'1408px'}
-      paddingBlock={"space-0 space-48"}
-      paddingInline={"space-16"}
-      gap={{ xs: "space-48", md: "space-48" }}
+      paddingBlock={'space-0 space-48'}
+      paddingInline={'space-16'}
+      gap={{ xs: 'space-48', md: 'space-48' }}
     >
       <Bleed style={{ backgroundColor: '#F5F9FF' }} reflectivePadding marginInline={'full'}>
-        <VStack gap="space-16" align={'start'} paddingBlock={"space-48"}>
+        <VStack gap="space-16" align={'start'} paddingBlock={'space-48'}>
           <Heading level="1" size="large">
             {searchData.searchTerm ? (
               `Søkeresultater: '${searchData.searchTerm}'`
@@ -233,6 +236,7 @@ export default function SearchPage() {
           </Heading>
         </VStack>
       </Bleed>
+      {searchData.searchTerm.toLowerCase() === 'rullator' && <UXSignalsSurvey />}
       {error ? (
         <HStack justify="center" style={{ marginTop: '48px' }}>
           <Alert variant="error" title="Error med lasting av produkter">
@@ -243,5 +247,5 @@ export default function SearchPage() {
         <SearchPageBody />
       )}
     </VStack>
-  );
+  )
 }
