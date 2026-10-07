@@ -45,7 +45,7 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
           </Link>
         </ReadMore>
       </Box>
-      <UXSignalsSurvey />
+      {category.title === 'Stå og gå' && <UXSignalsSurvey />}
 
       {category.subCategories?.length && (
         <HGrid

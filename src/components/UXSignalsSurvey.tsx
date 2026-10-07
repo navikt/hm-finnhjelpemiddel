@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import { getCookie } from '@/app/layoutProvider'
+
+import { useState } from 'react'
+
 import Script from 'next/script'
 
 export const UXSignalsSurvey = () => {
@@ -17,7 +19,7 @@ export const UXSignalsSurvey = () => {
     <div>
       {consent === 'true' && (
         <>
-          <div data-uxsignals-embed="panel-p9bmli1xkl" style={{ maxWidth: '620px' }} />
+          <div data-uxsignals-embed="panel-ntrsvr4ljz" style={{ maxWidth: '620px' }} />
           <Script src="https://widget.uxsignals.com/embed.js"></Script>
         </>
       )}
