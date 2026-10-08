@@ -19,7 +19,7 @@ export const UXSignalsSurvey = () => {
     <div>
       {consent === 'true' && (
         <>
-          <div data-uxsignals-embed="panel-ntrsvr4ljz" style={{ maxWidth: '620px' }} />
+          <div data-uxsignals-embed="panel-xxgsfjmzr5" style={{ maxWidth: '620px' }} />
           <Script src="https://widget.uxsignals.com/embed.js"></Script>
         </>
       )}
