@@ -22,8 +22,6 @@ import { NeutralTag, SuccessTag } from '@/components/Tags'
 
 import styles from './VariantTable.module.scss'
 
-import productTop from '@/app/produkt/[id]/ProductTop.module.scss'
-
 export type SortColumns = {
   orderBy: string | null
   direction: 'ascending' | 'descending'
@@ -285,13 +283,13 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
                       {variant.hmsArtNr ? (
                         <CopyButton
                           size="small"
-                          className={productTop.copyButton}
                           copyText={variant.hmsArtNr ?? ''}
                           text={variant.hmsArtNr ?? ''}
                           activeText="kopiert"
                           data-color={'accent'}
                           activeIcon={<ThumbUpIcon aria-hidden />}
                           iconPosition="right"
+                          style={{ border: '1px dashed #0056b4' }}
                         />
                       ) : (
                         <BodyShort align={'center'}>-</BodyShort>
