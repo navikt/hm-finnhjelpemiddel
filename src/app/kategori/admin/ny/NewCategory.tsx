@@ -20,6 +20,7 @@ export const NewCategory = () => {
       description: '',
       subCategories: [],
       isos: [],
+      isos22: [],
       filters: [],
       icon: '',
       showSubCategoryIcons: true,

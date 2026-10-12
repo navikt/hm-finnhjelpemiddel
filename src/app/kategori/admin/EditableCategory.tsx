@@ -69,6 +69,7 @@ export const EditableCategory = ({
         <SubCategoriesModule categories={categories} inputValue={inputValue} setInputValue={setInputValue} id={id} />
       )}
       <IsoModule inputValue={inputValue} setInputValue={setInputValue} />
+      <Iso22Module inputValue={inputValue} setInputValue={setInputValue} />
       <FilterModule inputValue={inputValue} setInputValue={setInputValue} />
       <HStack gap={'space-16'}>
         <Textarea
@@ -145,6 +146,63 @@ const IsoModule = ({
                 data: {
                   ...inputValue.data,
                   isos: [...(inputValue.data.isos ?? []).filter((i) => i != iso)],
+                },
+              })
+            }
+          >
+            {iso}
+          </Chips.Removable>
+        ))}
+      </Chips>
+    </VStack>
+  )
+}
+
+const Iso22Module = ({
+  inputValue,
+  setInputValue,
+}: {
+  inputValue: EditableCategoryDTO
+  setInputValue: (value: EditableCategoryDTO) => void
+}) => {
+  const [isoFieldValue, setIsoFieldValue] = useState('')
+
+  const addIso = () => {
+    if (isoFieldValue != '') {
+      setInputValue({
+        ...inputValue,
+        data: { ...inputValue.data, isos22: [...(inputValue.data.isos22 ?? []), isoFieldValue.trim()] },
+      })
+      setIsoFieldValue('')
+    }
+  }
+
+  return (
+    <VStack gap={'space-8'}>
+      <HStack gap={'space-4'} align={'end'}>
+        <TextField
+          label={'ISO 2022'}
+          value={isoFieldValue}
+          style={{ width: '100px' }}
+          onChange={(event) => setIsoFieldValue(event.currentTarget.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              addIso()
+            }
+          }}
+        />
+        {isoFieldValue.length > 0 && <Button variant="tertiary" icon={<PlusCircleIcon />} onClick={addIso}></Button>}
+      </HStack>
+      <Chips>
+        {inputValue.data.isos22?.map((iso) => (
+          <Chips.Removable
+            key={iso + '-chip'}
+            onClick={() =>
+              setInputValue({
+                ...inputValue,
+                data: {
+                  ...inputValue.data,
+                  isos22: [...(inputValue.data.isos22 ?? []).filter((i) => i != iso)],
                 },
               })
             }
