@@ -16,7 +16,8 @@ function AboutUs() {
   return (
     <VStack
       gap={'space-64'}
-      paddingBlock={'space-64'}
+      paddingBlock={'space-0 space-64'}
+      paddingInline={{ xs: 'space-16', md: 'space-0' }}
       marginInline={'auto'}
       marginBlock={'space-0'}
       maxWidth={'700px'}
