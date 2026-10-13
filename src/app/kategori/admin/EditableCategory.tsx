@@ -300,7 +300,7 @@ const SubCategoriesModule = ({
           shouldAutocomplete
           shouldShowSelectedOptions={false}
           options={[...options].sort((a, b) => {
-            const subCategoryIds = inputValue.subcategories.map((sub) => sub.id)
+            const subCategoryIds = inputValue.subcategories?.map((sub) => sub.id) ?? []
             if (subCategoryIds.includes(a.value) && !subCategoryIds.includes(b.value)) {
               return -1
             }
