@@ -25,7 +25,7 @@ export const LOCAL_TOGGLES = [
   },
   {
     name: 'finnhjelpemiddel.iso22',
-    enabled: false,
+    enabled: true,
   },
   {
     name: 'paaskepynt',

@@ -20,6 +20,7 @@ import { useMobileOverlayStore } from '@/utils/global-state-util'
 import { mapSearchParams, toSearchQueryString } from '@/utils/mapSearchParams'
 import { FormSearchData, initialSearchDataState } from '@/utils/search-state-util'
 import { logUmamiHMSNrOppslagSokEvent } from '@/utils/umami'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 import { MobileOverlayModal } from '@/components/MobileOverlayModal'
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
@@ -34,6 +35,8 @@ export default function SearchPage() {
   const searchParams = useSearchParams()
 
   const [isMaybeRedirecting, setIsMaybeRedirecting] = useState(false)
+  const { isEnabled } = useFeatureFlags()
+  const iso22Enabled = isEnabled('finnhjelpemiddel.iso22')
 
   const searchFormRef = useRef<HTMLFormElement>(null)
 
@@ -77,6 +80,7 @@ export default function SearchPage() {
         from: index * PAGE_SIZE,
         size: PAGE_SIZE,
         searchData,
+        iso22Enabled,
       }
     },
     fetchProducts,
