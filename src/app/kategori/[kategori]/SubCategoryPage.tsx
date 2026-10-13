@@ -29,7 +29,7 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
           <Link href={'/om-nettstedet'}>Les mer om om å låne hjelpemidler fra Nav her.</Link>
         </ReadMore>
       </Box>
-      <UXSignalsSurvey />
+      {category.title === 'Stå og gå' && <UXSignalsSurvey />}
 
       {category.subCategories?.length && (
         <HGrid

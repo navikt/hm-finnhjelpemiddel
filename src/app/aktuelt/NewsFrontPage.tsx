@@ -1,7 +1,6 @@
 'use client'
 
-import NewsCard from '@/app/aktuelt/NewsCard'
-import SmallNewsCard from '@/app/aktuelt/SmallNewsCard'
+import { NewsCardFrontPage } from '@/app/aktuelt/NewsCardFrontPage'
 import { getNews } from '@/app/aktuelt/news-util'
 
 import NextLink from 'next/link'
@@ -9,7 +8,7 @@ import NextLink from 'next/link'
 import useSWR from 'swr'
 
 import { ArrowRightIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, HGrid, Heading, Loader, Show, VStack } from '@navikt/ds-react'
+import { BodyLong, Button, Heading, Loader, VStack } from '@navikt/ds-react'
 
 export default function NewsFrontPage() {
   const { data: news, isLoading } = useSWR('news-vstack', () => getNews(4), { keepPreviousData: true })
@@ -20,27 +19,18 @@ export default function NewsFrontPage() {
         Aktuelt
       </Heading>
       {isLoading && <Loader size="small" />}
-      <Show above={'lg'}>
-        <VStack gap="space-16">
-          {news?.map((news) => (
-            <SmallNewsCard news={news} key={news.id} />
-          ))}
-        </VStack>
-      </Show>
-      <Show below={'lg'}>
-        <HGrid gap="space-16" columns={{ xs: 1, sm: 2 }}>
-          {news?.map((news) => (
-            <NewsCard news={news} key={news.id} />
-          ))}
-        </HGrid>
-      </Show>
+      <VStack gap="space-16">
+        {news?.map((news) => (
+          <NewsCardFrontPage news={news} key={news.id} />
+        ))}
+      </VStack>
       {news && news.length === 0 && <BodyLong>Ingen aktuelle saker tilgjengelig</BodyLong>}
       {!news && <BodyLong>Kan ikke vise aktuelle saker</BodyLong>}
       <Button
         as={NextLink}
         href="/aktuelt"
         variant={'tertiary'}
-        icon={<ArrowRightIcon />}
+        icon={<ArrowRightIcon aria-hidden />}
         style={{ alignSelf: 'flex-start' }}
       >
         Flere saker

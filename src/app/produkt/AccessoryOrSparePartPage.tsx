@@ -1,10 +1,15 @@
+import { AccessorySparePartSummary } from '@/app/produkt/AccessorySparePartSummary'
+import { ProductCardPart } from '@/app/produkt/ProductCardPart'
+import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
+import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
+
+import React from 'react'
+
+import { HGrid, HStack, VStack } from '@navikt/ds-react'
+
 import { Product } from '@/utils/product-util'
 
 import { BodyLong, Heading } from '@/components/aksel-client'
-import { HStack, VStack } from '@navikt/ds-react'
-import ProductTop from '@/app/produkt/[id]/ProductTop'
-import { ProductPageLayout } from '@/app/produkt/ProductPageLayout'
-import { ProductCardPart } from '@/app/produkt/ProductCardPart'
 
 type Props = {
   product: Product
@@ -14,23 +19,25 @@ type Props = {
 const AccessoryOrSparePartPage = ({ product, matchingProducts }: Props) => {
   return (
     <ProductPageLayout>
-      <ProductTop product={product} />
+      <HGrid columns={{ sm: 1, md: 2 }} gap={'space-32'}>
+        {product.photos && <ImageCarousel images={product.photos} />}
+        <AccessorySparePartSummary product={product} />
+      </HGrid>
       <VStack>
         <Heading level="2" size="medium" spacing>
           Hjelpemidler {product.accessory ? 'tilbehøret' : 'reservedelen'} passer til
         </Heading>
         {matchingProducts && matchingProducts.length > 0 ? (
-          <VStack gap={"space-16"}>
+          <VStack gap={'space-16'}>
             <HStack gap="space-8" justify="start">
               {/*Her må det håndteres at et tilbehør kan ha flere avtaler*/}
               {matchingProducts.map((product, i) => (
-                /*<ProductCard product={product} key={`${i}-${product.id}`} type="plain" />*/
-                (<ProductCardPart
+                <ProductCardPart
                   product={product}
                   key={`${i}-${product.id}`}
                   variantCount={product.variantCount}
                   rank={product.agreements?.[0]?.rank}
-                />)
+                />
               ))}
             </HStack>
           </VStack>
@@ -42,7 +49,7 @@ const AccessoryOrSparePartPage = ({ product, matchingProducts }: Props) => {
         )}
       </VStack>
     </ProductPageLayout>
-  );
+  )
 }
 
 export default AccessoryOrSparePartPage
