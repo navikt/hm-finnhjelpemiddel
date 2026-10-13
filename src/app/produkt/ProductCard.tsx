@@ -17,10 +17,12 @@ export const ProductCard = ({
   product,
   rank,
   variantCount,
+  isoCategoryTitle,
 }: {
   product: Product
   rank?: number
   variantCount?: number
+  isoCategoryTitle?: string
 }) => {
   const linkToProduct = `/produkt/${product.id}`
   const onAgreement = rank !== undefined
@@ -42,7 +44,7 @@ export const ProductCard = ({
             <ProductImage src={product.photos.at(0)?.uri} productTitle={product.title} />
           </Box>
           <BodyShort size="small" className={styles.isoCategoryText}>
-            {product.isoCategoryTitle}
+            {isoCategoryTitle ?? product.isoCategoryTitle}
           </BodyShort>
           <VStack gap={'space-4'} paddingBlock={'space-8'}>
             <Link className={styles.link} href={linkToProduct} aria-label={`Gå til ${product.title}`} as={NextLink}>
