@@ -18,7 +18,6 @@ export const NewCategory = () => {
     title: '',
     data: {
       description: '',
-      subCategories: [],
       isos: [],
       isos22: [],
       filters: [],

@@ -1,7 +1,7 @@
 'use client'
 
 import {
-  CategoryAdminDTO,
+  CategoryDTO,
   EditableCategoryDTO,
   getCategories,
   uppercaseCategoryTitle,
@@ -43,7 +43,7 @@ export const EditableCategory = ({
   setInputValue: (value: EditableCategoryDTO) => void
   id?: string
 }) => {
-  const { data: categories, isLoading } = useSWR<CategoryAdminDTO[]>('categories', () => getCategories())
+  const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   return (
     <VStack gap={'space-16'} paddingBlock={'space-0 space-16'} style={{ display: 'flex' }}>
@@ -243,7 +243,7 @@ const SubCategoriesModule = ({
   setInputValue,
   id = '',
 }: {
-  categories: CategoryAdminDTO[]
+  categories: CategoryDTO[]
   inputValue: EditableCategoryDTO
   setInputValue: (value: EditableCategoryDTO) => void
   id?: string
@@ -257,9 +257,9 @@ const SubCategoriesModule = ({
       })) ?? []
 
   const [selectedOptions, setSelectedOptions] = useState<Options[]>(
-    inputValue.data.subCategories?.reduce<Options[]>(function (result, element) {
+    inputValue.subcategories?.reduce<Options[]>(function (result, element) {
       //hvis en subkategori er slettet så ignoreres den, og forsvinner ved lagring
-      const option = options.find((o) => o.value === element)
+      const option = options.find((o) => o.value === element.id)
       if (option) {
         result.push(option)
       }
@@ -271,7 +271,6 @@ const SubCategoriesModule = ({
     setSelectedOptions(updatedSubcategories)
     setInputValue({
       ...inputValue,
-      data: { ...inputValue.data, subCategories: updatedSubcategories.flatMap((option) => option.value) },
       subcategories: updatedSubcategories.map((option, index) => {
         return { id: option.value, priority: index }
       }),
@@ -301,11 +300,12 @@ const SubCategoriesModule = ({
           shouldAutocomplete
           shouldShowSelectedOptions={false}
           options={[...options].sort((a, b) => {
-            if (inputValue.data.subCategories?.includes(a.value) && !inputValue.data.subCategories?.includes(b.value)) {
+            const subCategoryIds = inputValue.subcategories.map((sub) => sub.id)
+            if (subCategoryIds.includes(a.value) && !subCategoryIds.includes(b.value)) {
               return -1
             }
 
-            if (!inputValue.data.subCategories?.includes(a.value) && inputValue.data.subCategories?.includes(b.value)) {
+            if (!subCategoryIds.includes(a.value) && subCategoryIds.includes(b.value)) {
               return 1
             }
 
@@ -433,7 +433,7 @@ const ChipsPopover = ({
 }: {
   option: Options
   removeSubCategory: (val: string) => void
-  categories: CategoryAdminDTO[]
+  categories: CategoryDTO[]
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
@@ -478,11 +478,11 @@ const ChipsPopover = ({
           <VStack gap={'space-8'} width={'400px'}>
             <BodyShort weight={'semibold'}>{category?.title}</BodyShort>
             <BodyShort>{category?.data.description}</BodyShort>
-            {category?.data.subCategories && category?.data.subCategories.length > 0 && (
+            {category?.subCategories && category?.subCategories.length > 0 && (
               <BodyShort>
                 Underkategorier:{' '}
                 {categories
-                  .filter((cat) => category.data.subCategories?.includes(cat.id))
+                  .filter((cat) => category.subCategories?.map((cat) => cat.id).includes(cat.id))
                   .map((val) => ' ' + val.title)
                   .toString()}
               </BodyShort>

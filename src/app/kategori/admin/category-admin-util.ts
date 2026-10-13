@@ -4,18 +4,11 @@ const HM_FINNHJELPEMIDDEL_BFF_URL = process.env.HM_FINNHJELPEMIDDEL_BFF_URL || '
 
 export type Category = {
   description: string | undefined
-  subCategories: string[] | undefined
   isos: string[] | undefined
   isos22: string[] | undefined
   filters: string[] | undefined
   icon: string | undefined
   showSubCategoryIcons: boolean | undefined
-}
-
-export type CategoryAdminDTO = {
-  id: string
-  title: string
-  data: Category
 }
 
 export type CategoryDTO = {
@@ -36,7 +29,7 @@ export type EditableSubcategoryDTO = {
   priority: number
 }
 
-export async function getCategories(): Promise<CategoryAdminDTO[]> {
+export async function getCategories(): Promise<CategoryDTO[]> {
   const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, {
     method: 'GET',
     headers: {
