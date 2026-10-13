@@ -91,9 +91,13 @@ export interface ProductSourceResponse {
   identifier: string
   supplierRef: string
   isoCategory: string
+  isoCategory22: string | null
   isoCategoryTitle: string
+  isoCategoryTitle22: string | null
   isoCategoryTitleInternational: string
+  isoCategoryTitleInternational22: string | null
   isoCategoryText: string
+  isoCategoryText22: string | null
   accessory: boolean
   sparePart: boolean
   seriesId: string

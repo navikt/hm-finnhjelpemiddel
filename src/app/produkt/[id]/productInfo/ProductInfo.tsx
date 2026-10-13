@@ -22,6 +22,8 @@ import { BodyShort, Button, HGrid, HStack, Heading, HelpText, Link, Tabs, Tag, V
 
 import { AgreementInfo, Product, ProductVariant } from '@/utils/product-util'
 
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+
 import styles from './ProductInfo.module.scss'
 
 export const ProductInfo = ({
@@ -110,6 +112,9 @@ const InfoTab = ({ product, hmsartnr }: { product: Product; hmsartnr?: string })
     'Digital behovsmelding betyr at man kan melde behov for hjelpemidler digitalt, og gjelder for et utvalg av\n' +
     '        hjelpemidler innen utvalgte kategorier. Ordningen kan benyttes av kommunalt ansatte.'
 
+  const featureFlags = useFeatureFlags()
+  const visIso22 = featureFlags.isEnabled('finnhjelpemiddel.iso22')
+
   return (
     <VStack gap={'space-24'}>
       <HStack gap={'space-20'} justify={'space-between'} style={{ flexWrap: 'wrap-reverse' }} align={'start'}>
@@ -126,11 +131,22 @@ const InfoTab = ({ product, hmsartnr }: { product: Product; hmsartnr?: string })
           />
         </VStack>
       </HStack>
-      <ISOCategory
-        isoCategory={product.isoCategory}
-        isoCategoryTitle={product.isoCategoryTitle}
-        isoCategoryTitleInternational={product.isoCategoryTitleInternational}
-      />
+      {visIso22 ? (
+        <ISOCategory
+          isoCategory={product.isoCategory22 || 'Mangler iso-kode'}
+          isoCategoryTitle={product.isoCategoryTitle22 || 'Mangler iso-kode tittel'}
+          isoCategoryTitleInternational={
+            product.isoCategoryTitleInternational22 || 'Mangler iso-kode tittel internasjonal'
+          }
+        />
+      ) : (
+        <ISOCategory
+          isoCategory={product.isoCategory}
+          isoCategoryTitle={product.isoCategoryTitle}
+          isoCategoryTitleInternational={product.isoCategoryTitleInternational}
+        />
+      )}
+
       <QrCodeButtonSmall id={qrId} />
     </VStack>
   )
