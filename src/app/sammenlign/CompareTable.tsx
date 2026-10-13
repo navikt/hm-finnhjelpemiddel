@@ -1,6 +1,7 @@
 import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { CompareMetaDataTable } from '@/app/sammenlign/CompareMetaDataTable'
-import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroupTable'
+import { CompareTechDataSections } from '@/app/sammenlign/CompareTechDataSections'
+import type { TechDataSection } from '@/app/sammenlign/CompareTechDataSections'
 
 import React from 'react'
 
@@ -19,7 +20,13 @@ import styles from './CompareTable.module.scss'
 
 export const CompareTable = async ({ productsToCompare }: { productsToCompare: Product[] }) => {
   const isos = [...new Set(productsToCompare.map((product) => product.isoCategory))]
-  const techLabels = (await Promise.all(isos.map((iso) => getTechLabels(iso)))).flat()
+  const isos22 = [
+    ...new Set(productsToCompare.map((product) => product.isoCategory22).filter((iso): iso is string => !!iso)),
+  ]
+  const [techLabels, techLabels22] = await Promise.all([
+    Promise.all(isos.map((iso) => getTechLabels(iso))).then((labels) => labels.flat()),
+    Promise.all(isos22.map((iso) => getTechLabels(iso))).then((labels) => labels.flat()),
+  ])
 
   const allDataKeysVariants = [
     ...new Set(
@@ -61,12 +68,6 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
     } as TechDataRow
   })
 
-  type TechDataSection = {
-    title: string
-    priority: number
-    techDataRows: TechDataRow[]
-  }
-
   const groupTechDataRowsBySection = (techDataRows: TechDataRow[], techLabels: TechLabelDTO[]): TechDataSection[] => {
     const rowsBySection = new Map<string, TechDataSection>()
 
@@ -92,6 +93,7 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
   }
 
   const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
+  const groupedTechDataRows22 = groupTechDataRowsBySection(techDataRowsAll, techLabels22)
 
   if (productsToCompare.length === 0) {
     return (
@@ -117,16 +119,11 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
         </TableBody>
       </Table>
       <CompareMetaDataTable productsToCompare={productsToCompare} />
-      {groupedTechDataRows
-        .sort((a, b) => a.priority - b.priority)
-        .map(({ title, techDataRows }) => (
-          <CompareTechDataGroupTable
-            title={title}
-            techDataRows={techDataRows}
-            productCount={productsToCompare.length}
-            key={title}
-          />
-        ))}
+      <CompareTechDataSections
+        groupedTechDataRows={groupedTechDataRows}
+        groupedTechDataRows22={groupedTechDataRows22}
+        productCount={productsToCompare.length}
+      />
     </VStack>
   )
 }
