@@ -14,10 +14,12 @@ export const ProductPage = async ({
   product,
   hmsartnr,
   techLabels,
+  techLabels22,
 }: {
   product: Product
   hmsartnr?: string
   techLabels: TechLabelDTO[]
+  techLabels22: TechLabelDTO[]
 }) => {
   const compatibleWithProducts = await fetchCompatibleProducts(product.id)
 
@@ -30,7 +32,7 @@ export const ProductPage = async ({
       maxWidth={'1200px'}
     >
       <ProductInfo product={product} hmsartnr={hmsartnr} compatibleWithProducts={compatibleWithProducts} />
-      <VariantTable product={product} techLabels={techLabels} />
+      <VariantTable product={product} techLabels={techLabels} techLabels22={techLabels22} />
       <VStack gap={'space-24'} style={{ gridArea: 'box2' }} paddingInline={'space-32'}>
         {product.agreements.length > 0 && <OtherProductsOnPosts product={product} />}
       </VStack>

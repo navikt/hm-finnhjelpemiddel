@@ -133,10 +133,10 @@ const InfoTab = ({ product, hmsartnr }: { product: Product; hmsartnr?: string })
       </HStack>
       {visIso22 ? (
         <ISOCategory
-          isoCategory={product.isoCategory22 || 'Mangler iso-kode'}
-          isoCategoryTitle={product.isoCategoryTitle22 || 'Mangler iso-kode tittel'}
+          isoCategory={product.isoCategory22 || ''}
+          isoCategoryTitle={product.isoCategoryTitle22 || ''}
           isoCategoryTitleInternational={
-            product.isoCategoryTitleInternational22 || 'Mangler iso-kode tittel internasjonal'
+            product.isoCategoryTitleInternational22 || ''
           }
         />
       ) : (

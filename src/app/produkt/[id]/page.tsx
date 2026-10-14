@@ -31,12 +31,18 @@ export default async function Page(props: Props) {
     ? fetchProductsWithVariants(matchingSeriesIds).then((res) => res.products)
     : Promise.resolve([])
   const techLabelsPromise = isAccessoryOrSparePart ? Promise.resolve([]) : getTechLabels(product.isoCategory)
+  const techLabels22Promise =
+    isAccessoryOrSparePart || !product.isoCategory22 ? Promise.resolve([]) : getTechLabels(product.isoCategory22)
 
-  const [matchingProducts, techLabels] = await Promise.all([matchingProductsPromise, techLabelsPromise])
+  const [matchingProducts, techLabels, techLabels22] = await Promise.all([
+    matchingProductsPromise,
+    techLabelsPromise,
+    techLabels22Promise,
+  ])
 
   return isAccessoryOrSparePart ? (
     <AccessoryOrSparePartPage product={product} matchingProducts={matchingProducts} />
   ) : (
-    <ProductPage product={product} techLabels={techLabels} />
+    <ProductPage product={product} techLabels={techLabels} techLabels22={techLabels22} />
   )
 }

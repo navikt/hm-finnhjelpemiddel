@@ -17,6 +17,7 @@ import { mapSearchParams } from '@/utils/mapSearchParams'
 import { Product, ProductVariant } from '@/utils/product-util'
 import { toValueAndUnit } from '@/utils/string-util'
 import { TechLabelDTO } from '@/utils/techlabel-util'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 
@@ -46,10 +47,20 @@ export type Filter = {
   predicate: (variant: ProductVariant, filterFieldName: string) => boolean
 }
 
-export const VariantTable = ({ product, techLabels }: { product: Product; techLabels: TechLabelDTO[] }) => {
+export const VariantTable = ({
+  product,
+  techLabels,
+  techLabels22,
+}: {
+  product: Product
+  techLabels: TechLabelDTO[]
+  techLabels22: TechLabelDTO[]
+}) => {
   const sortColumns: SortColumns = { orderBy: 'Expired', direction: 'ascending' }
   const searchParams = useSearchParams()
   const searchData = mapSearchParams(searchParams)
+  const featureFlags = useFeatureFlags()
+  const selectedTechLabels = featureFlags.isEnabled('finnhjelpemiddel.iso22') ? techLabels22 : techLabels
   const [highlightCol, setHighlightCol] = useState(-1)
 
   const [spaceNrvariants, setSpaceNrvariants] = useState<number>(1)
@@ -193,7 +204,7 @@ export const VariantTable = ({ product, techLabels }: { product: Product; techLa
     }
   })
 
-  const groupedTechData = techLabels ? groupTechDataKeys(product.variants, techLabels) : []
+  const groupedTechData = selectedTechLabels ? groupTechDataKeys(product.variants, selectedTechLabels) : []
   const groupedTechDataRows: { title: string; techDataRows: TechDataRow[] }[] = groupedTechData.map(
     ({ title, keys }) => {
       return {
