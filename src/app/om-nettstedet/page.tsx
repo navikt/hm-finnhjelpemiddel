@@ -121,7 +121,7 @@ function AboutUs() {
               <AccordionContent>
                 <BodyLong>De viktigste vilkårene som må være oppfylt er:</BodyLong>
                 <ul>
-                  <li>• Funksjonsvanskene må være varige. Det vil si en varighet på over to år.</li>
+                  <li>Funksjonsvanskene må være varige. Det vil si en varighet på over to år.</li>
                   <li>Hjelpemiddelet skal kompensere for funksjonstap.</li>
                   <li>
                     Man må ha{' '}
@@ -138,13 +138,6 @@ function AboutUs() {
                   Kommunen kan bistå med å finne hjelpemidler som passer og med å søke. Dersom det er behov for et
                   hjelpemidler i en kortere periode, kan man låne dem direkte fra kommunen.
                 </BodyLong>
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionHeader>Trenger du informasjon om et hjelpemiddel?</AccordionHeader>
-              <AccordionContent>
-                For spørsmål om hjelpemidler fra Nav eller hjelpemidler på dette nettstedet, kontakt din kommune.
               </AccordionContent>
             </AccordionItem>
 
