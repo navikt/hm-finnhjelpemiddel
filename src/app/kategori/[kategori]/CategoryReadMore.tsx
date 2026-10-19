@@ -1,8 +1,48 @@
 'use client'
 
-import { Box, ReadMore } from '@navikt/ds-react'
-import React from 'react'
-import { logUmamiClickButton } from '@/utils/umami'
+import React from 'react';
+
+
+
+import NextLink from 'next/link';
+
+
+
+import { Box, Link, ReadMore } from '@navikt/ds-react';
+
+
+
+import { logUmamiClickButton } from '@/utils/umami';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const CategoryReadMore = () => {
   const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
@@ -17,20 +57,23 @@ export const CategoryReadMore = () => {
           logUmamiClickButton(`${lastSubcategoryText}`, 'lastSubcategory-readmore', `${open}`)
         }}
       >
-        Alle hjelpemidlene på FinnHjelpemiddel som er på avtale er markert med «På avtale». I tillegg er de markert med
-        «Delkontrakt» og «Rangering». I mange tilfeller er det nyttig å samarbeide med en fagperson i kommunen for å
-        komme frem til det til det mest hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
         <ul>
+          <li>På avtale: Hjelpemidlene som er markert med «På avtale» skal vurderes først.</li>
           <li>
-            Delkontrakt: Avtalene inndeles i delkontrakter ut ifra hjelpemidlenes egenskaper. Å lese teksten i
-            delkontrakten kan gjøre det lettere for deg å finne det du er ute etter.
+            Delkontrakt: Hver avtale er delt inn etter hjelpemidlenes egenskaper, for eksempel rullator for utendørs-
+            eller innendørsbruk. Dette kalles delkontrakter.
           </li>
           <li>
-            Rangering: En delkontrakt omfatter som regel flere hjelpemidler. Disse er inndelt i rangeringer. Du må
-            alltid starte med å vurdere om hjelpemidlet som er markert med «Rangering 1» dekker ditt behov. Dersom det
-            ikke gjøre det må det begrunnes i søknaden.
+            Rangering: Hjelpemidler i en delkontrakt har ulike rangeringer. De som er markert med rangering 1 skal
+            vurderes først.
+          </li>
+          <li>
+            Ikke på avtale: Hjelpemidlene vil kunne være aktuelle dersom de som er på avtale ikke dekker behovet, eller
+            at det ikke finnes en avtale.
           </li>
         </ul>
+        Trenger du mer informasjon om begrepene og regelverket for hjelpemiddelformidling?
+        <Link as={NextLink} href="/om-nettstedet">Les mer på finnhjelpemiddel.no - om nettstedet</Link>
       </ReadMore>
     </Box>
   )

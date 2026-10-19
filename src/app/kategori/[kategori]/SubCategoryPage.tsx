@@ -12,7 +12,7 @@ import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 
 export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
-  const subCategoryHelpText = 'Hvordan kan du få hjelpemidler?'
+  const subCategoryHelpText = 'Hvordan kan du låne hjelpemidler fra Nav? '
   const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
   return (
     <CategoryPageLayout title={category.title} description={category.data.description}>
@@ -25,12 +25,9 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
             logUmamiClickButton(`${subCategoryHelpText}`, 'subcategory-readmore', `${open}`)
           }}
         >
-          Dersom du har en varig og vesentlig nedsatt funksjon på grunn av sykdom, skade eller annen tilstand, kan du
-          søke om hjelpemidler fra Nav.
+          Om du har varige funksjonsvansker kan du søke om hjelpemidler fra Nav.
           <br />
-          <br />
-          I mange tilfeller er det nyttig å samarbeide med en fagperson i kommunen for å komme frem til det til det mest
-          hensiktsmessige hjelpemidlet, og å skrive selve søknaden.
+          I mange tilfeller kan det være nyttig å få hjelp av en fagperson i kommunen.
           <br />
           <br />
           Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
