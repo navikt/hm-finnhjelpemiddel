@@ -3,15 +3,17 @@ import { CategoryCardResponsive } from '@/app/kategori/CategoryCardResponsive'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
+import { IsoVersion } from '@/app/kategori/utils/iso-version'
+
 import Link from 'next/link'
 
-import { Box, HGrid, ReadMore } from '@navikt/ds-react'
+import { Alert, Box, HGrid, ReadMore } from '@navikt/ds-react'
 
 import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 
-export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
+export const SubCategoryPage = ({ category, isoVersion }: { category: CategoryDTO; isoVersion?: IsoVersion }) => {
   const subCategoryHelpText = 'Hvordan kan du låne hjelpemidler fra Nav? '
   const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
   return (
@@ -44,6 +46,12 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
       </Box>
       {category.title === 'Stå og gå' && <UXSignalsSurvey />}
 
+      {isoVersion === 22 && !category.subCategories?.length && (
+        <Alert variant="info" inline>
+          Ingen treff for ISO 2022 i denne kategorien ennå.
+        </Alert>
+      )}
+
       {category.subCategories?.length && (
         <HGrid
           gap={{ xs: 'space-16', md: 'space-40' }}
@@ -57,6 +65,7 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
                 icon={subCategory.icon}
                 title={subCategory.title}
                 link={subCategory.title}
+                isoVersion={isoVersion}
                 key={subCategory.title}
                 showSubCategoryIcons={category.data.showSubCategoryIcons}
                 description={subCategory.description}

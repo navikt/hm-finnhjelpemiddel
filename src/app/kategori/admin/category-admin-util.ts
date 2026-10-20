@@ -1,3 +1,5 @@
+import { IsoVersion } from '@/app/kategori/utils/iso-version'
+
 import { CustomError, fetcherModify } from '@/utils/api-util'
 
 const HM_FINNHJELPEMIDDEL_BFF_URL = process.env.HM_FINNHJELPEMIDDEL_BFF_URL || ''
@@ -14,6 +16,7 @@ export type Category = {
 export type CategoryDTO = {
   id: string
   title: string
+  isoVersion?: IsoVersion
   subCategories?: { id: string; title: string; icon: string; description: string; priority: number }[]
   data: Category
 }
@@ -28,6 +31,8 @@ export type EditableSubcategoryDTO = {
   id: string
   priority: number
 }
+
+const isoVersionQuery = (isoVersion?: IsoVersion) => (isoVersion ? `?isoVersion=${isoVersion}` : '')
 
 export async function getCategories(): Promise<CategoryDTO[]> {
   const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/admin/category`, {
@@ -59,8 +64,8 @@ export async function getCategoryById(id: string): Promise<EditableCategoryDTO> 
   return res.json()
 }
 
-export async function getCategoryByTitle(title: string): Promise<CategoryDTO> {
-  const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/category/${title}`, {
+export async function getCategoryByTitle(title: string, isoVersion?: IsoVersion): Promise<CategoryDTO> {
+  const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/category/${title}${isoVersionQuery(isoVersion)}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -74,8 +79,8 @@ export async function getCategoryByTitle(title: string): Promise<CategoryDTO> {
   return res.json()
 }
 
-export async function getCategoriesByIds(ids: string[]): Promise<CategoryDTO[]> {
-  const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/category/ids/`, {
+export async function getCategoriesByIds(ids: string[], isoVersion?: IsoVersion): Promise<CategoryDTO[]> {
+  const res = await fetch(HM_FINNHJELPEMIDDEL_BFF_URL + `/category/ids/${isoVersionQuery(isoVersion)}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

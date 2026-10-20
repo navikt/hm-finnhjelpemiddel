@@ -181,7 +181,8 @@ const Iso22Module = ({
     <VStack gap={'space-8'}>
       <HStack gap={'space-4'} align={'end'}>
         <TextField
-          label={'ISO 2022'}
+          label={'ISO 2022 (isos22)'}
+          description={'Brukes når kategorisidene vises med ISO 2022. Tom liste gir tom kategori.'}
           value={isoFieldValue}
           style={{ width: '100px' }}
           onChange={(event) => setIsoFieldValue(event.currentTarget.value)}

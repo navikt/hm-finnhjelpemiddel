@@ -1,7 +1,9 @@
 'use client'
 
+import { IsoVersionSwitch } from '@/app/kategori/IsoVersionSwitch'
 import { CategoryList } from '@/app/kategori/admin/CategoryList'
 import { CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
+import { IsoVersion } from '@/app/kategori/utils/iso-version'
 
 import NextLink from 'next/link'
 
@@ -9,7 +11,7 @@ import useSWR from 'swr'
 
 import { Bleed, Box, Button, Heading, Loader } from '@navikt/ds-react'
 
-export const AdminPage = () => {
+export const AdminPage = ({ isoVersion }: { isoVersion: IsoVersion }) => {
   const { data: categories, isLoading } = useSWR<CategoryDTO[]>('categories', () => getCategories())
 
   if (isLoading || !categories) {
@@ -23,6 +25,7 @@ export const AdminPage = () => {
           <Heading size={'large'}>Kategori-admin 🤠</Heading>
         </Box>
       </Bleed>
+      <IsoVersionSwitch isoVersion={isoVersion} />
       <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
         Ny kategori
       </Button>

@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import NextLink from 'next/link'
 
+import { IsoVersion, categoryHref } from '@/app/kategori/utils/iso-version'
+
 import { LinkCard } from '@navikt/ds-react'
 
 import styles from './CategoryCardResponsive.module.scss'
@@ -13,9 +15,10 @@ type Props = {
   description?: string
   icon?: string
   showSubCategoryIcons?: boolean
+  isoVersion?: IsoVersion
 }
 
-export const CategoryCardResponsive = ({ title, link, description, icon, showSubCategoryIcons }: Props) => {
+export const CategoryCardResponsive = ({ title, link, description, icon, showSubCategoryIcons, isoVersion }: Props) => {
   const showIcon = (showSubCategoryIcons === undefined || showSubCategoryIcons) && icon !== undefined
   return (
     <LinkCard arrow={false} data-color={'accent'} className={styles.container}>
@@ -34,7 +37,7 @@ export const CategoryCardResponsive = ({ title, link, description, icon, showSub
       )}
       <LinkCard.Title style={{ textWrap: 'balance' }}>
         <LinkCard.Anchor asChild>
-          <NextLink href={link} className={styles.linkText}>
+          <NextLink href={categoryHref(link, isoVersion)} className={styles.linkText}>
             {title}
           </NextLink>
         </LinkCard.Anchor>
