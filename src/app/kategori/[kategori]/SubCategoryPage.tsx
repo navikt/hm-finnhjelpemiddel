@@ -3,8 +3,6 @@ import { CategoryCardResponsive } from '@/app/kategori/CategoryCardResponsive'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
-import { IsoVersion } from '@/app/kategori/utils/iso-version'
-
 import Link from 'next/link'
 
 import { Alert, Box, HGrid, ReadMore } from '@navikt/ds-react'
@@ -13,7 +11,7 @@ import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
 import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 
-export const SubCategoryPage = ({ category, isoVersion }: { category: CategoryDTO; isoVersion?: IsoVersion }) => {
+export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
   const subCategoryHelpText = 'Hvordan kan du låne hjelpemidler fra Nav? '
   const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
   return (
@@ -46,13 +44,7 @@ export const SubCategoryPage = ({ category, isoVersion }: { category: CategoryDT
       </Box>
       {category.title === 'Stå og gå' && <UXSignalsSurvey />}
 
-      {isoVersion === 22 && !category.subCategories?.length && (
-        <Alert variant="info" inline>
-          Ingen treff for ISO 2022 i denne kategorien ennå.
-        </Alert>
-      )}
-
-      {category.subCategories?.length && (
+      {category.subCategories?.length ? (
         <HGrid
           gap={{ xs: 'space-16', md: 'space-40' }}
           columns={{ xs: 1, md: 2, lg: 3 }}
@@ -65,13 +57,18 @@ export const SubCategoryPage = ({ category, isoVersion }: { category: CategoryDT
                 icon={subCategory.icon}
                 title={subCategory.title}
                 link={subCategory.title}
-                isoVersion={isoVersion}
                 key={subCategory.title}
                 showSubCategoryIcons={category.data.showSubCategoryIcons}
                 description={subCategory.description}
               />
             ))}
         </HGrid>
+      ) : (
+        <Alert variant="info">
+          {category.isoVersion === 22
+            ? 'Ingen treff for ISO 2022 i denne kategorien ennå.'
+            : 'Ingen treff for ISO 2016 i denne kategorien.'}
+        </Alert>
       )}
     </CategoryPageLayout>
   )

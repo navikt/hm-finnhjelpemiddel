@@ -1,5 +1,5 @@
 import React from 'react'
-import { HGrid, HStack, VStack } from '@navikt/ds-react'
+import { Alert, HGrid, HStack, VStack } from '@navikt/ds-react'
 import { CategoryResults } from '../CategoryResults'
 import { FilterBarCategory, Filters } from '@/app/kategori/filter/FilterBarCategory'
 import { fetchProductsCategory } from '@/app/kategori/utils/kategori-inngang-util'
@@ -44,7 +44,11 @@ export const CategoryPage = async ({ category, searchParams }: Props) => {
               <FilterBarCategory filters={filters} />
             </HStack>
 
-            <CategoryResults products={products} />
+            {category.isoVersion === 22 && !products?.length ? (
+              <Alert variant="info">Ingen hjelpemidler med ISO 2022-koder i søket ennå.</Alert>
+            ) : (
+              <CategoryResults products={products} />
+            )}
           </VStack>
         </HGrid>
       </>

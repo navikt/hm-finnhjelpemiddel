@@ -5,6 +5,7 @@ import { XMarkIcon } from '@navikt/aksel-icons'
 import { CheckboxFilterNew, FilterMenu } from '@/components/filters/CheckboxFilterNew'
 import { RangeFilter } from '@/app/kategori/filter/RangeFilter'
 import styles from './FilterBarKategori.module.scss'
+import { ISO_VERSION_PARAM } from '@/app/kategori/utils/iso-version'
 import { getIsoLabel } from '@/app/kategori/utils/mappings/isoLabelMapping'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FilterFunctionType, TechDataFilterAggs } from '@/app/kategori/utils/category-types'
@@ -34,7 +35,8 @@ export const FilterBarCategory = ({ filters }: Props) => {
 
   const searchParams = useSearchParams()
 
-  const hasActiveFilter = Array.from(searchParams.keys()).filter((param) => param != 'page').length > 0
+  const hasActiveFilter =
+    Array.from(searchParams.keys()).filter((param) => param != 'page' && param != ISO_VERSION_PARAM).length > 0
 
   const supplierFilters: FilterMenu = {
     name: { key: 'suppliers', label: 'Leverandør', paramKey: 'leverandor' },
@@ -70,7 +72,8 @@ export const FilterBarCategory = ({ filters }: Props) => {
   }
 
   const onReset = () => {
-    router.replace(pathname)
+    const isoVersion = searchParams.get(ISO_VERSION_PARAM)
+    router.replace(isoVersion ? `${pathname}?${new URLSearchParams({ [ISO_VERSION_PARAM]: isoVersion })}` : pathname)
   }
 
   return (

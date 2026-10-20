@@ -1,9 +1,10 @@
 'use client'
 
+import { ISO_VERSION_PARAM, categoryHref, parseIsoVersion } from '@/app/kategori/utils/iso-version'
+
 import Image from 'next/image'
 import NextLink from 'next/link'
-
-import { IsoVersion, categoryHref } from '@/app/kategori/utils/iso-version'
+import { useSearchParams } from 'next/navigation'
 
 import { LinkCard } from '@navikt/ds-react'
 
@@ -15,10 +16,10 @@ type Props = {
   description?: string
   icon?: string
   showSubCategoryIcons?: boolean
-  isoVersion?: IsoVersion
 }
 
-export const CategoryCardResponsive = ({ title, link, description, icon, showSubCategoryIcons, isoVersion }: Props) => {
+export const CategoryCardResponsive = ({ title, link, description, icon, showSubCategoryIcons }: Props) => {
+  const isoVersion = parseIsoVersion(useSearchParams().get(ISO_VERSION_PARAM))
   const showIcon = (showSubCategoryIcons === undefined || showSubCategoryIcons) && icon !== undefined
   return (
     <LinkCard arrow={false} data-color={'accent'} className={styles.container}>

@@ -3,13 +3,14 @@
 import { CategoryCardResponsive } from '@/app/kategori/CategoryCardResponsive'
 import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO, getCategoriesByIds } from '@/app/kategori/admin/category-admin-util'
-import { IsoVersion } from '@/app/kategori/utils/iso-version'
 
 import useSWRImmutable from 'swr/immutable'
 
 import { HGrid } from '@navikt/ds-react'
 
-export const TopCategoriesPage = ({ isoVersion }: { isoVersion: IsoVersion }) => {
+import { useIsoVersion } from '@/hooks/useIsoVersion'
+
+export const TopCategoriesPage = () => {
   const rootCategoryIds = [
     '26d532f8-df3b-4fa1-96f2-0c0db5d5c6f9', //Bevegelse
     'c0157c13-3644-4d4f-9efb-04bb596e833c', //Bolig
@@ -21,6 +22,7 @@ export const TopCategoriesPage = ({ isoVersion }: { isoVersion: IsoVersion }) =>
     '5dbd4a7c-0992-439c-9b53-fea263a05ddd', //Kommunikasjon
   ]
 
+  const isoVersion = useIsoVersion()
   const { data: categories } = useSWRImmutable<CategoryDTO[]>(['/category/ids/', isoVersion], () =>
     getCategoriesByIds(rootCategoryIds, isoVersion)
   )
@@ -33,7 +35,6 @@ export const TopCategoriesPage = ({ isoVersion }: { isoVersion: IsoVersion }) =>
             icon={category.data.icon}
             title={category.title}
             link={`kategori/${category.title}`}
-            isoVersion={isoVersion}
             description={category.data.description}
             key={category.title}
           />

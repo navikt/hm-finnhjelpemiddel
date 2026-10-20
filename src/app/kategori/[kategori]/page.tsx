@@ -1,7 +1,6 @@
 import { SubCategoryPage } from '@/app/kategori/[kategori]/SubCategoryPage'
 import { getCategoryByTitle, uppercaseCategoryTitle } from '@/app/kategori/admin/category-admin-util'
-
-import { resolveIsoVersion, ISO_VERSION_COOKIE } from '@/app/kategori/utils/iso-version'
+import { ISO_VERSION_PARAM, resolveIsoVersion } from '@/app/kategori/utils/iso-version'
 
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
@@ -25,7 +24,7 @@ export default async function Page(props: Props) {
   const normalizedCategory = normalizeCategoryTitle((await props.params).kategori)
 
   const searchParams = await props.searchParams
-  const isoVersion = resolveIsoVersion(searchParams, (await cookies()).get(ISO_VERSION_COOKIE)?.value)
+  const isoVersion = resolveIsoVersion(searchParams.isoVersion, (await cookies()).get(ISO_VERSION_PARAM)?.value)
   const category = await getCategoryByTitle(normalizedCategory, isoVersion)
 
   const searchParamsMap = new Map<string, (string | undefined)[]>(
@@ -41,7 +40,7 @@ export default async function Page(props: Props) {
     return <CategoryPage category={category} searchParams={searchParamsMap} />
   }
 
-  return <SubCategoryPage category={category} isoVersion={isoVersion} />
+  return <SubCategoryPage category={category} />
 }
 
 const normalizeCategoryTitle = (categoryTitle: string) => {
