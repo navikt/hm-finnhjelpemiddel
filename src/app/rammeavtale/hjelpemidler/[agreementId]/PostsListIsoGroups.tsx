@@ -5,13 +5,19 @@ import { ProductCard } from '@/app/produkt/ProductCard'
 import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
 
 import { PostWithProducts } from '@/utils/agreement-util'
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
+  const featureFlags = useFeatureFlags()
+  const visIso22 = featureFlags.isEnabled('finnhjelpemiddel.iso22')
+
   const groupProductsByIsoCategory = (posts: PostWithProducts[]) => {
     return posts.map((post) => {
       const productsByIsoCategory = post.products.reduce(
         (acc, productWithRank) => {
-          const isoCategory = productWithRank.product.isoCategoryTitle
+          const isoCategory = visIso22
+            ? productWithRank.product.isoCategoryTitle22 || 'Mangler iso-kode tittel'
+            : productWithRank.product.isoCategoryTitle
           if (!acc[isoCategory]) {
             acc[isoCategory] = []
           }
@@ -72,6 +78,7 @@ const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[];
                       product={productWithRank.product}
                       rank={productWithRank.rank}
                       variantCount={productWithRank.variantCount ?? 0}
+                      isoCategoryTitle={isoCategory}
                     />
                   ))}
                 </HStack>

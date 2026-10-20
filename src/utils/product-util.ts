@@ -21,9 +21,13 @@ export interface Product {
   variants: ProductVariant[]
   compareData: ComparingData
   isoCategory: string
+  isoCategory22: string | null
   isoCategoryTitle: string
+  isoCategoryTitle22: string | null
   isoCategoryTitleInternational: string
+  isoCategoryTitleInternational22: string | null
   isoCategoryText: string
+  isoCategoryText22: string | null
   accessory: boolean
   sparePart: boolean
   photos: Photo[]
@@ -234,9 +238,13 @@ export const mapProductWithNoAggregation = (sources: ProductSourceResponse[]): P
         agreementRank: null,
       },
       isoCategory: product.isoCategory,
+      isoCategory22: product.isoCategory22,
       isoCategoryTitle: product.isoCategoryTitle,
+      isoCategoryTitle22: product.isoCategoryTitle22,
       isoCategoryTitleInternational: product.isoCategoryTitleInternational,
+      isoCategoryTitleInternational22: product.isoCategoryTitleInternational22,
       isoCategoryText: product.isoCategoryText,
+      isoCategoryText22: product.isoCategoryText22,
       accessory: product.accessory,
       sparePart: product.sparePart,
       photos: mapPhotoInfo(product.media),
@@ -289,9 +297,13 @@ export const mapProductWithOneVariant = (sources: ProductSourceResponse[], hmsAr
       agreementRank: null,
     },
     isoCategory: firstVariant.isoCategory,
+    isoCategory22: firstVariant.isoCategory22,
     isoCategoryTitle: firstVariant.isoCategoryTitle,
+    isoCategoryTitle22: firstVariant.isoCategoryTitle22,
     isoCategoryText: firstVariant.isoCategoryText,
+    isoCategoryText22: firstVariant.isoCategoryText22,
     isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
+    isoCategoryTitleInternational22: firstVariant.isoCategoryTitleInternational22,
     accessory: firstVariant.accessory,
     sparePart: firstVariant.sparePart,
     photos: mapPhotoInfo(firstVariant.media),
@@ -343,9 +355,13 @@ export const mapProductWithVariants = (sources: ProductSourceResponse[]): Produc
       agreementRank: null,
     },
     isoCategory: firstVariant.isoCategory,
+    isoCategory22: firstVariant.isoCategory22,
     isoCategoryTitle: firstVariant.isoCategoryTitle,
+    isoCategoryTitle22: firstVariant.isoCategoryTitle22,
     isoCategoryText: firstVariant.isoCategoryText,
+    isoCategoryText22: firstVariant.isoCategoryText22,
     isoCategoryTitleInternational: firstVariant.isoCategoryTitleInternational,
+    isoCategoryTitleInternational22: firstVariant.isoCategoryTitleInternational22,
     accessory: firstVariant.accessory,
     sparePart: firstVariant.sparePart,
     photos: mapPhotoInfo(firstVariant.media),

@@ -3,6 +3,7 @@ export const EXPECTED_TOGGLES = [
   'juledekorasjon',
   'finnhjelpemiddel.vis-tilbehor-og-reservedel-lister',
   'finnhjelpemiddel.feilbanner',
+  'finnhjelpemiddel.iso22',
   'paaskepynt',
   'finnhjelpemiddel.vis-virker-sammen-med-products',
   'finnhjelpemiddel.vis-tjenester-for-avtale',
@@ -21,6 +22,10 @@ export const LOCAL_TOGGLES = [
   {
     name: 'finnhjelpemiddel.feilbanner',
     enabled: false,
+  },
+  {
+    name: 'finnhjelpemiddel.iso22',
+    enabled: true,
   },
   {
     name: 'paaskepynt',

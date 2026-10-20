@@ -11,6 +11,8 @@ import { Alert, BodyLong, BodyShort, CopyButton, HStack, HelpText, Link, VStack 
 import { EXCLUDED_ISO_CATEGORIES } from '@/utils/api-util'
 import { AgreementInfo, Product } from '@/utils/product-util'
 
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+
 import { NeutralTag, SuccessTag } from '@/components/Tags'
 import { Heading } from '@/components/aksel-client'
 import CompareMenu from '@/components/layout/CompareMenu'
@@ -20,6 +22,11 @@ import styles from './AccessorySparePartSummary.module.scss'
 export const AccessorySparePartSummary = ({ product }: { product: Product }) => {
   const qrId = product.id
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
+
+  const featureFlags = useFeatureFlags()
+  const visIso22 = featureFlags.isEnabled('finnhjelpemiddel.iso22') === true
+  const isoCategory = visIso22 ? product.isoCategory22 : product.isoCategory
+  const isoCategoryTitle = visIso22 ? product.isoCategoryTitle22 : product.isoCategoryTitle
 
   return (
     <VStack gap={'space-32'}>
@@ -36,7 +43,7 @@ export const AccessorySparePartSummary = ({ product }: { product: Product }) => 
       <Heading level="1" size="large">
         {product.title}
       </Heading>
-      {EXCLUDED_ISO_CATEGORIES.includes(product.isoCategory) && (
+      {isoCategory && EXCLUDED_ISO_CATEGORIES.includes(isoCategory) && (
         <Alert variant="warning" size="small">
           Kun autoriserte leger i Norge kan bestille hjelpemidler for seksuallivet. Les mer på{' '}
           <Link href="https://www.nav.no/seksualtekniskehjelpemidler" target="_blank" rel="noopener noreferrer">
@@ -49,7 +56,7 @@ export const AccessorySparePartSummary = ({ product }: { product: Product }) => 
           <Heading size={'xsmall'} level={'2'}>
             Produktkategori
           </Heading>
-          {product.isoCategoryTitle}
+          {isoCategoryTitle || 'Mangler iso-kode tittel'}
         </div>
       </VStack>
       <CopyHms product={product} />

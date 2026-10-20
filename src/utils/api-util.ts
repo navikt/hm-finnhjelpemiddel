@@ -181,6 +181,7 @@ type FetchProps = {
   from: number
   size: number
   searchData: SearchData
+  iso22Enabled?: boolean
   dontCollapse?: boolean
   seriesId?: string
 }
@@ -195,11 +196,13 @@ export const makeSearchTermQuery = ({
   agreementId,
   seriesId,
   includeNegativeIsoCategories,
+  iso22Enabled = false,
 }: {
   searchTerm: string
   agreementId?: string
   seriesId?: string
   includeNegativeIsoCategories?: boolean
+  iso22Enabled?: boolean
 }) => {
   const commonBoosting = {
     negative: {
@@ -340,13 +343,14 @@ export const makeSearchTermQuery = ({
   // Decide if we apply negative iso categories. Default: apply when NOT on agreement page
   const applyNegativeIsoCategories =
     includeNegativeIsoCategories !== undefined ? includeNegativeIsoCategories : !agreementId
+  const isoCategoryField = iso22Enabled ? 'isoCategory22' : 'isoCategory'
 
   return {
     must: mustAlternatives(),
     ...(applyNegativeIsoCategories && {
       must_not: {
         bool: {
-          should: EXCLUDED_ISO_CATEGORIES.map((isoCategory) => ({ match: { isoCategory } })),
+          should: EXCLUDED_ISO_CATEGORIES.map((isoCategory) => ({ match: { [isoCategoryField]: isoCategory } })),
         },
       },
     }),
@@ -381,12 +385,13 @@ export const fetchProducts = ({
   from,
   size,
   searchData,
+  iso22Enabled = false,
   dontCollapse = false,
   seriesId,
 }: FetchProps): Promise<FetchProductsWithFilters> => {
   const { searchTerm, isoCode, sortOrder, filters } = searchData
   const sortOrderOpenSearch = sortOrder ? sortOptionsOpenSearch[sortOrder] : sortOptionsOpenSearch['Best_soketreff']
-  const searchTermQuery = makeSearchTermQuery({ searchTerm, seriesId })
+  const searchTermQuery = makeSearchTermQuery({ searchTerm, seriesId, iso22Enabled })
 
   const {
     setebreddeMinCM,
@@ -460,7 +465,7 @@ export const fetchProducts = ({
   if (isoCode) {
     queryFilters.push({
       match_bool_prefix: {
-        isoCategory: isoCode,
+        [iso22Enabled ? 'isoCategory22' : 'isoCategory']: isoCode,
       },
     })
   }
