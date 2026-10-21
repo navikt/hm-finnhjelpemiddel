@@ -5,7 +5,7 @@ import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
 import Link from 'next/link'
 
-import { Box, HGrid, ReadMore } from '@navikt/ds-react'
+import { Alert, Box, HGrid, ReadMore } from '@navikt/ds-react'
 
 import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
@@ -44,7 +44,7 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
       </Box>
       {category.title === 'Stå og gå' && <UXSignalsSurvey />}
 
-      {category.subCategories?.length && (
+      {category.subCategories?.length ? (
         <HGrid
           gap={{ xs: 'space-16', md: 'space-40' }}
           columns={{ xs: 1, md: 2, lg: 3 }}
@@ -63,6 +63,12 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
               />
             ))}
         </HGrid>
+      ) : (
+        <Alert variant="info">
+          {category.isoVersion === 22
+            ? 'Ingen treff for ISO 2022 i denne kategorien ennå.'
+            : 'Ingen treff for ISO 2016 i denne kategorien.'}
+        </Alert>
       )}
     </CategoryPageLayout>
   )

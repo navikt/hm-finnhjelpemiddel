@@ -1,5 +1,6 @@
 'use client'
 
+import { IsoVersionSwitch } from '@/app/kategori/IsoVersionSwitch'
 import { CategoryList } from '@/app/kategori/admin/CategoryList'
 import { CategoryDTO, getCategories } from '@/app/kategori/admin/category-admin-util'
 
@@ -23,6 +24,7 @@ export const AdminPage = () => {
           <Heading size={'large'}>Kategori-admin 🤠</Heading>
         </Box>
       </Bleed>
+      <IsoVersionSwitch />
       <Button as={NextLink} href={'admin/ny'} style={{ width: 'fit-content' }}>
         Ny kategori
       </Button>

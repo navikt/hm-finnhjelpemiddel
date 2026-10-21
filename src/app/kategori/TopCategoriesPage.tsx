@@ -8,6 +8,8 @@ import useSWRImmutable from 'swr/immutable'
 
 import { HGrid } from '@navikt/ds-react'
 
+import { useIsoVersion } from '@/hooks/useIsoVersion'
+
 export const TopCategoriesPage = () => {
   const rootCategoryIds = [
     '26d532f8-df3b-4fa1-96f2-0c0db5d5c6f9', //Bevegelse
@@ -20,8 +22,9 @@ export const TopCategoriesPage = () => {
     '5dbd4a7c-0992-439c-9b53-fea263a05ddd', //Kommunikasjon
   ]
 
-  const { data: categories } = useSWRImmutable<CategoryDTO[]>('/category/ids/', () =>
-    getCategoriesByIds(rootCategoryIds)
+  const isoVersion = useIsoVersion()
+  const { data: categories } = useSWRImmutable<CategoryDTO[]>(['/category/ids/', isoVersion], () =>
+    getCategoriesByIds(rootCategoryIds, isoVersion)
   )
 
   return (
