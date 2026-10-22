@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import NextLink from 'next/link'
 
-import { Box, HGrid, Heading, Link, Search, VStack } from '@navikt/ds-react'
+import { Box, Heading, HGrid, Link, Search, VStack } from '@navikt/ds-react'
 
 import styles from './CategoryList.module.scss'
 
