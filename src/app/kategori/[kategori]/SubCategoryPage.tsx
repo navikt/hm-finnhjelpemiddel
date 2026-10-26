@@ -4,6 +4,7 @@ import { CategoryPageLayout } from '@/app/kategori/CategoryPageLayout'
 import { CategoryDTO } from '@/app/kategori/admin/category-admin-util'
 
 import Link from 'next/link'
+import NextLink from 'next/link'
 
 import { Alert, Box, HGrid, ReadMore } from '@navikt/ds-react'
 
@@ -14,6 +15,7 @@ import { UXSignalsSurvey } from '@/components/UXSignalsSurvey'
 export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
   const subCategoryHelpText = 'Hvordan kan du låne hjelpemidler fra Nav? '
   const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
+  const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
   return (
     <CategoryPageLayout title={category.title} description={category.data.description}>
       <Box maxWidth={'500px'}>
@@ -25,20 +27,18 @@ export const SubCategoryPage = ({ category }: { category: CategoryDTO }) => {
             logUmamiClickButton(`${subCategoryHelpText}`, 'subcategory-readmore', `${open}`)
           }}
         >
-          Om du har varige funksjonsvansker kan du søke om hjelpemidler fra Nav.
+          Om du har en varig funksjonsnedsettelse kan du søke om hjelpemidler fra Nav. I mange tilfeller kan det være
+          nyttig å få hjelp av en fagperson i kommunen.
           <br />
-          I mange tilfeller kan det være nyttig å få hjelp av en fagperson i kommunen.
           <br />
-          <br />
-          Du kan lese mer hva du kan få og hvordan du skal søke under «Slik går du frem» på nav.no{' '}
+          Du kan lese mer under{' '}
           <Link
-            href={linkToNavHowToApply}
-            aria-label={`Gå til ${subCategoryHelpText}`}
+            href={baseUrl + '/om-nettstedet'}
             onClick={() => {
               logUmamiNavigationEvent('subcategory-readmore', linkToNavHowToApply, subCategoryHelpText)
             }}
           >
-            Informasjon om hjelpemidler og tilrettelegging - nav.no.
+            «Vanlige spørsmål»
           </Link>
         </ReadMore>
       </Box>

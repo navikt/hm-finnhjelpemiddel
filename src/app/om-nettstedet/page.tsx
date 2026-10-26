@@ -38,7 +38,7 @@ function AboutUs() {
       <VStack gap={'space-64'} maxWidth={'700px'}>
         <VStack>
           <Heading size={'medium'} spacing>
-            Generelle spørsmål
+            Vanlige spørsmål
           </Heading>
           <Accordion>
             <AccordionItem>
@@ -48,74 +48,21 @@ function AboutUs() {
                   Nav forvalter hjelpemidler som dekkes gjennom folketrygden. Derfor er det folketrygdens regler som
                   bestemmer hva som regnes som hjelpemidler i denne sammenhengen.{' '}
                 </BodyLong>
-                <BodyLong>
+                <BodyLong spacing>
                   Hjelpemidler etter folketrygdloven er løsninger som er nødvendige og hensiktsmessige for å kompensere
                   for en varig funksjonsnedsettelse. Hjelpemidler som er vanlige i befolkningen eller som kan kjøpes i
-                  ordinær handel, regnes som hovedregel ikke som hjelpemidler etter folketrygdloven. Det samme gjelder
-                  behandlingshjelpemidler. Hvilke produkter og løsninger som til enhver tid omfattes av folketrygdens
-                  hjelpemiddelbegrep, kan endre seg i takt med samfunnsutvikling, teknologiutvikling og endringer i
-                  regelverket.
+                  ordinær handel, regnes som hovedregel ikke som hjelpemidler.
+                </BodyLong>
+                <BodyLong spacing>
+                  Behandlingshjelpemidler dekkes ikke av folketrygden. Mer informasjon om disse hjelpemidlene kan du
+                  lese om på <Link href={'https://behandlingshjelpemidler.no/'}>behandlingshjelpemidler.no</Link>.
+                </BodyLong>
+                <BodyLong spacing>
+                  Hvilke produkter og løsninger som til enhver tid omfattes av folketrygdens hjelpemiddelbegrep, kan
+                  endre seg i takt med samfunnsutvikling, teknologiutvikling og endringer i regelverket.
                 </BodyLong>
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem>
-              <AccordionHeader>Hvilke hjelpemidler finnes på FinnHjelpemiddel?</AccordionHeader>
-              <AccordionContent>
-                <BodyShort>FinnHjelpemiddel inneholder:</BodyShort>
-                <ul>
-                  <li>hjelpemidler som er på avtale med Nav (markert med «på avtale»)</li>
-                  <li>hjelpemidler som ikke er på avtale med Nav (markert med «ikke på avtale»)</li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem>
-              <AccordionHeader>Hjelpemidler på avtale med Nav</AccordionHeader>
-              <AccordionContent>
-                <BodyLong spacing>
-                  For å kunne bruke FinnHjelpemiddel på en god og effektiv måte er det viktig at du kjenner til
-                  betydningen av følgende begreper:
-                </BodyLong>
-
-                <BodyShort weight={'semibold'}>På avtale:</BodyShort>
-                <BodyLong spacing>
-                  Nav inngår avtaler med leverandører av hjelpemidler. Hjelpemidler på avtale, skal dekke behov som
-                  skyldes funksjonsnedsettelsen. I en søknadsprosess vurderes hjelpemidler på avtale først. Disse
-                  hjelpemidlene er merket med «På avtale».
-                </BodyLong>
-
-                <BodyShort weight={'semibold'}>Delkontrakt:</BodyShort>
-                <BodyLong spacing>
-                  Avtalene med leverandører er inndelt i delkontrakter slik at man lettere skal kunne orientere seg.
-                  Inndelingen er gjort ut ifra hjelpemidlenes egenskaper som for eksempel «Rullator – innendørs bruk med
-                  smal bredde». Hjelpemidler på avtale er markert med tittel eller nummeret på delkontrakten.
-                </BodyLong>
-                <BodyShort weight={'semibold'}>Rangering:</BodyShort>
-                <BodyLong spacing>
-                  En delkontrakt kan inneholde hjelpemidler med ulik rangering. Hjelpemidler merket med rangering 1 skal
-                  vurderes først. Dersom dette hjelpemiddelet ikke dekker behovet skal rangering 2 vurderes, og så
-                  videre. Hvis et hjelpemiddel med for eksempel rangering 3 er nødvendig, må det begrunnes hvorfor ikke
-                  behovet dekkes av rangering 1 og 2. Alle hjelpemidler på avtale er markert med hvilken rangering de
-                  tilhører.
-                </BodyLong>
-                <BodyShort weight={'semibold'}>Ikke på avtale:</BodyShort>
-                <BodyLong spacing>
-                  FinnHjelpemiddel gir en bred oversikt over hjelpemidler som er på markedet, og inneholder derfor også
-                  hjelpemidler som ikke er på avtale med Nav. Disse hjelpemidlene vil i enkelte tilfeller være aktuelle
-                  dersom hjelpemidler på avtale ikke dekker behovet. Hjelpemidler uten avtale med Nav er merket med
-                  «Ikke på avtale».
-                </BodyLong>
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionHeader>Hvem bestemmer hva som presenteres på FinnHjelpemiddel?</AccordionHeader>
-              <AccordionContent>
-                Nav bestemmer hvilke hjelpemidler som skal presenteres på FinnHjelpemiddel. All informasjonen som for
-                eksempel bilder, brosjyrer og spesifikasjoner registreres av leverandører. Innholdsredaksjonen for
-                FinnHjelpemiddel gjennomgår informasjonen før den publiseres.
-              </AccordionContent>
-            </AccordionItem>
-
             <AccordionItem>
               <AccordionHeader>Hvem kan låne hjelpemidler fra Nav?</AccordionHeader>
               <AccordionContent>
@@ -140,17 +87,103 @@ function AboutUs() {
                 </BodyLong>
               </AccordionContent>
             </AccordionItem>
-
             <AccordionItem>
-              <AccordionHeader>Innspill til innholdet på FinnHjelpemiddel</AccordionHeader>
+              <AccordionHeader>Hvilke hjelpemidler finnes på FinnHjelpemiddel?</AccordionHeader>
               <AccordionContent>
-                <BodyLong>
-                  Tilbakemeldinger og innspill sendes til{' '}
-                  <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
+                <BodyShort>FinnHjelpemiddel inneholder:</BodyShort>
+                <ul>
+                  <li>hjelpemidler som er på avtale med Nav (markert med «På avtale»)</li>
+                  <li>hjelpemidler som ikke er på avtale med Nav (markert med «Ikke på avtale»)</li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionHeader>Hva betyr Nav-begrepene?</AccordionHeader>
+              <AccordionContent>
+                <BodyLong spacing>
+                  For å kunne bruke FinnHjelpemiddel på en god og effektiv måte er det viktig at du kjenner til
+                  betydningen av følgende begreper:
+                </BodyLong>
+
+                <BodyShort weight={'semibold'}>På avtale:</BodyShort>
+                <BodyLong spacing>
+                  Nav inngår avtaler med leverandører av hjelpemidler. Hjelpemidler på avtale, skal dekke behov som
+                  skyldes funksjonsnedsettelsen. I en søknadsprosess vurderes hjelpemidler på avtale først. Disse
+                  hjelpemidlene er merket med «På avtale».
+                </BodyLong>
+                <BodyShort weight={'semibold'}>Delkontrakt:</BodyShort>
+                <BodyLong spacing>
+                  Avtalene med leverandører er inndelt i delkontrakter slik at man lettere skal kunne orientere seg.
+                  Inndelingen er gjort ut ifra hjelpemidlenes egenskaper som for eksempel «Rullator – innendørs bruk med
+                  smal bredde». Hjelpemidler på avtale er markert med tittel eller nummeret på delkontrakten.
+                </BodyLong>
+                <BodyShort weight={'semibold'}>Rangering:</BodyShort>
+                <BodyLong spacing>
+                  En delkontrakt kan inneholde hjelpemidler med ulik rangering. Hjelpemidler merket med «Rangering 1»
+                  skal vurderes først. Dersom dette hjelpemiddelet ikke dekker behovet skal rangering 2 vurderes, og så
+                  videre. Hvis et hjelpemiddel med for eksempel rangering 3 er nødvendig, må det begrunnes hvorfor ikke
+                  behovet dekkes av rangering 1 og 2. Alle hjelpemidler på avtale er markert med hvilken rangering de
+                  tilhører.
+                </BodyLong>
+                <BodyShort weight={'semibold'}>Ikke på avtale:</BodyShort>
+                <BodyLong spacing>
+                  FinnHjelpemiddel gir en bred oversikt over hjelpemidler som er på markedet, og inneholder derfor også
+                  hjelpemidler som ikke er på avtale med Nav. Disse hjelpemidlene vil i enkelte tilfeller være aktuelle
+                  dersom hjelpemidler på avtale ikke dekker behovet. Hjelpemidler uten avtale med Nav er merket med
+                  «Ikke på avtale».
                 </BodyLong>
               </AccordionContent>
             </AccordionItem>
 
+            <AccordionItem>
+              <AccordionHeader>Hvem bestemmer hva som presenteres på FinnHjelpemiddel?</AccordionHeader>
+              <AccordionContent>
+                Nav bestemmer hvilke hjelpemidler som skal presenteres på FinnHjelpemiddel. All informasjonen som for
+                eksempel bilder, brosjyrer og spesifikasjoner registreres av leverandører. Innholdsredaksjonen for
+                FinnHjelpemiddel gjennomgår informasjonen før den publiseres.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem>
+              <AccordionHeader>Har du innspill til FinnHjelpemiddel?</AccordionHeader>
+              <AccordionContent>
+                <BodyLong>
+                  Send en e-post til <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
+                </BodyLong>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem>
+              <AccordionHeader>Hvor finner jeg mer informasjon?</AccordionHeader>
+              <AccordionContent>
+                <BodyLong>
+                  <ul>
+                    <li>
+                      <Link href={'https://www.nav.no/hjelpemidler'}>
+                        Generell informasjon om hjelpemidler og tilrettelegging (nav.no).
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href={'https://www.nav.no/om-hjelpemidler'}>
+                        Informasjon til deg som er privatperson (nav.no).
+                      </Link>{' '}
+                    </li>
+                    <li>
+                      <Link href={'https://www.nav.no/samarbeidspartner/hjelpemiddelformidler'}>
+                        Informasjon til deg som er samarbeidspartner, samt søknad og skjema (nav.no).{' '}
+                      </Link>
+                    </li>
+                  </ul>
+                </BodyLong>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </VStack>
+
+        <VStack>
+          <Heading size={'medium'} spacing>
+            For leverandør
+          </Heading>
+          <Accordion>
             <AccordionItem>
               <AccordionHeader>Er du leverandør og ønsker å registrere hjelpemidler?</AccordionHeader>
               <AccordionContent>
@@ -161,10 +194,10 @@ function AboutUs() {
                   <li>være norsk leverandør, eller ha norske underleverandører</li>
                   <li>levere hjelpemidler som er spesiallaget for personer med nedsatt funksjon</li>
                   <li>ha ferdig utviklede produkter med nødvendig dokumentasjon</li>
-                  <li>
-                    kunne klassifiseres produktene etter NS-EN ISO 9999 – «Hjelpemidler – klassifisering og terminologi»
-                  </li>
                 </ul>
+                <BodyLong spacing>
+                  Hjelpemidlene skal klassifiseres etter NS-EN ISO 9999 – «Hjelpemidler – klassifisering og terminologi»
+                </BodyLong>
                 <BodyLong className="spacing-bottom--small">
                   Henvendelser om å opprette registreringstilgang sendes til{' '}
                   <Link href="mailto:finnhjelpemiddel@nav.no">finnhjelpemiddel@nav.no</Link>.
@@ -172,16 +205,6 @@ function AboutUs() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </VStack>
-        <VStack gap={'space-16'}>
-          <Heading size={'small'}>Nyttig informasjon på nav.no:</Heading>
-          <Link href={'https://www.nav.no/hjelpemidler'}>
-            Generell informasjon om hjelpemidler og tilrettelegging (nav.no).
-          </Link>
-          <Link href={'https://www.nav.no/om-hjelpemidler'}>Informasjon til deg som er privatperson (nav.no).</Link>{' '}
-          <Link href={'https://www.nav.no/samarbeidspartner/hjelpemiddelformidler'}>
-            Informasjon til deg som er samarbeidspartner, samt søknad og skjema (nav.no).{' '}
-          </Link>
         </VStack>
       </VStack>
     </VStack>

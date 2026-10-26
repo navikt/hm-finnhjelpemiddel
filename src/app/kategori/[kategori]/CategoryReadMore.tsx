@@ -8,28 +8,11 @@ import NextLink from 'next/link';
 
 
 
-import { Box, Link, ReadMore } from '@navikt/ds-react';
+import { BodyLong, Box, Link, ReadMore } from '@navikt/ds-react';
 
 
 
-import { logUmamiClickButton } from '@/utils/umami';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami';
 
 
 
@@ -45,8 +28,9 @@ import { logUmamiClickButton } from '@/utils/umami';
 
 
 export const CategoryReadMore = () => {
-  const lastSubcategoryText = 'Hva betyr «På avtale» og «Rangering»?'
-
+  const lastSubcategoryText = 'Hva betyr Nav-begrepene?'
+  const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
+  
   return (
     <Box maxWidth={'500px'}>
       <ReadMore
@@ -58,22 +42,33 @@ export const CategoryReadMore = () => {
         }}
       >
         <ul>
-          <li>På avtale: Hjelpemidlene som er markert med «På avtale» skal vurderes først.</li>
           <li>
-            Delkontrakt: Hver avtale er delt inn etter hjelpemidlenes egenskaper, for eksempel rullator for utendørs-
-            eller innendørsbruk. Dette kalles delkontrakter.
+            <b>På avtale:</b> Hjelpemidlene som er markert med «På avtale» skal vurderes først.
           </li>
           <li>
-            Rangering: Hjelpemidler i en delkontrakt har ulike rangeringer. De som er markert med rangering 1 skal
-            vurderes først.
+            <b>Delkontrakt:</b> Hver avtale er delt inn etter hjelpemidlenes egenskaper, for eksempel rullator for
+            utendørs- eller innendørsbruk. Dette kalles delkontrakter.
           </li>
           <li>
-            Ikke på avtale: Hjelpemidlene vil kunne være aktuelle dersom de som er på avtale ikke dekker behovet, eller
-            at det ikke finnes en avtale.
+            <b>Rangering:</b> Hjelpemidler i en delkontrakt har ulike rangeringer. De som er markert med «Rangering 1»
+            skal vurderes først.
+          </li>
+          <li>
+            <b>Ikke på avtale:</b> Hjelpemidlene vil kunne være aktuelle dersom de som er på avtale ikke dekker behovet,
+            eller at det ikke finnes en avtale.
           </li>
         </ul>
-        Trenger du mer informasjon om begrepene og regelverket for hjelpemiddelformidling?
-        <Link as={NextLink} href="/om-nettstedet">Les mer på finnhjelpemiddel.no - om nettstedet</Link>
+        <BodyLong>
+          Du kan lese mer under{' '}
+          <Link
+            href={baseUrl + '/om-nettstedet'}
+            onClick={() => {
+              logUmamiNavigationEvent('subcategory-readmore', linkToNavHowToApply, subCategoryHelpText)
+            }}
+          >
+            «Vanlige spørsmål»
+          </Link>
+        </BodyLong>
       </ReadMore>
     </Box>
   )
