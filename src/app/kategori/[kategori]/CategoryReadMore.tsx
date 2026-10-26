@@ -1,36 +1,19 @@
 'use client'
 
-import React from 'react';
+import React from 'react'
 
+import NextLink from 'next/link'
 
+import { BodyLong, Box, Link, ReadMore } from '@navikt/ds-react'
 
-import NextLink from 'next/link';
-
-
-
-import { BodyLong, Box, Link, ReadMore } from '@navikt/ds-react';
-
-
-
-import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami';
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { logUmamiClickButton, logUmamiNavigationEvent } from '@/utils/umami'
 
 export const CategoryReadMore = () => {
   const lastSubcategoryText = 'Hva betyr Nav-begrepene?'
   const baseUrl = process.env.BUILD_ENV === 'prod' ? 'https://finnhjelpemiddel.nav.no' : ''
-  
+  const subCategoryHelpText = 'Hvordan kan du låne hjelpemidler fra Nav? '
+  const linkToNavHowToApply = 'https://www.nav.no/om-hjelpemidler#hvordan'
+
   return (
     <Box maxWidth={'500px'}>
       <ReadMore
