@@ -145,14 +145,14 @@ const groupByDelkontrakt = (products: Product[] | undefined): ProductsByDelkontr
 
     product.agreements.forEach((agreement) => {
       const delkontrakt = agreement.postTitle!
-      const normalizedTitle = delkontrakt.split(/[):.]\s*/)
+      const normalizedTitle = delkontrakt.replace(/^(?:Post\s+)?\d+[):.]\s*/i,'')
 
       if (delkontrakt !== null) {
         if (!productsByDelkonktrakt[delkontrakt]) {
           productsByDelkonktrakt[delkontrakt] = {
             refNr: agreement.refNr!,
             postTitle: agreement.postTitle ?? '',
-            normalizedTitle: normalizedTitle[1],
+            normalizedTitle,
             products: [],
           }
         }
