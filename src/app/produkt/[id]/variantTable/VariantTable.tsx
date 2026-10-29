@@ -405,7 +405,7 @@ const MetaDataTable = ({
                       {variant.status === 'INACTIVE' ? (
                         <NeutralTag>Utgått</NeutralTag>
                       ) : (
-                        <BodyShort>Ikke Utgått</BodyShort>
+                        <BodyShort>-</BodyShort> /* Tidligere "Ikke Utgått"*/
                       )}
                     </HighlightableDataCell>
                   ))}
