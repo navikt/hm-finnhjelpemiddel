@@ -99,14 +99,19 @@ export const ProductInfo = ({
         <Tabs value={activeTab} onChange={setSelectedTab}>
           <Tabs.List style={{ whiteSpace: 'nowrap' }}>
             <Tabs.Tab value={'info'} label={'Informasjon'} />
+            {displayedAgreements.length > 0 && <Tabs.Tab value={'agreement'} label={'Avtale'} />}
             <Tabs.Tab value={'docs'} label={'Dokumenter'} />
             <Tabs.Tab value={'video'} label={'Videoer'} />
             {worksWithSeriesIds && <Tabs.Tab value={'works'} label={'Virker sammen med'} />}
-            {displayedAgreements.length > 0 && <Tabs.Tab value={'agreement'} label={'Avtaleinformasjon'} />}
           </Tabs.List>
           <Tabs.Panel value={'info'} className={styles.tabPanel}>
             <InfoTab product={product} hmsartnr={hmsartnr} />
           </Tabs.Panel>
+          {displayedAgreements.length > 0 && (
+            <Tabs.Panel value={'agreement'} className={styles.tabPanel}>
+              <AgreementInformation productAgreements={displayedAgreements} scope={agreementScope} />
+            </Tabs.Panel>
+          )}
           <Tabs.Panel value={'docs'} className={styles.tabPanel}>
             <Documents documents={product.documents} documentUrls={product.attributes.documentUrls ?? []} />
           </Tabs.Panel>
@@ -116,11 +121,6 @@ export const ProductInfo = ({
           {worksWithSeriesIds && (
             <Tabs.Panel value={'works'} className={styles.tabPanel}>
               <WorksWith worksWithSeriesIds={worksWithSeriesIds} />
-            </Tabs.Panel>
-          )}
-          {displayedAgreements.length > 0 && (
-            <Tabs.Panel value={'agreement'} className={styles.tabPanel}>
-              <AgreementInformation productAgreements={displayedAgreements} scope={agreementScope} />
             </Tabs.Panel>
           )}
         </Tabs>

@@ -70,7 +70,7 @@ const mapAgreementInformation = (
     ]
   })
 
-// validateHTML sjekker bare tagnavn. sanitize fjerner i tillegg hendelsesattributter og javascript:-lenker.
+// HTML-en saneres i backend. validateHTML og sanitize er et ekstra lag, som for produktbeskrivelsen.
 const PostDescription = ({ description }: { description: string }) =>
   containsHTML(description) && validateHTML(description) ? (
     <div className={styles.agreementDescription} dangerouslySetInnerHTML={{ __html: sanitize(description) }} />
