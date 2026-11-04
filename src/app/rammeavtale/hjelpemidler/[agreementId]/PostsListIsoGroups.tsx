@@ -6,10 +6,13 @@ import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-rea
 
 import { PostWithProducts } from '@/utils/agreement-util'
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import useScrollToHash from '@/hooks/useScrollToHash'
 
 const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
   const featureFlags = useFeatureFlags()
   const visIso22 = featureFlags.isEnabled('finnhjelpemiddel.iso22')
+
+  useScrollToHash(posts)
 
   const groupProductsByIsoCategory = (posts: PostWithProducts[]) => {
     return posts.map((post) => {
@@ -51,7 +54,7 @@ const PostsListIsoGroups = ({ posts, postLoading }: { posts: PostWithProducts[];
           className={'agreement-post spacing-top--small'}
         >
           <HStack gap="space-16" align={'center'}>
-            <Heading level="2" size="small" className="agreement-page__post-heading">
+            <Heading level="2" size="small" id={`${post.refNr}`} className="agreement-page__post-heading">
               {post.title}
             </Heading>
             <HelpText title={'Om delkontrakten'}>{post.description}</HelpText>

@@ -2,28 +2,14 @@
 
 import { ProductCard } from '@/app/produkt/ProductCard'
 
-import { useEffect } from 'react'
-
 import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-react'
 
 import { PostWithProducts } from '@/utils/agreement-util'
 
+import useScrollToHash from '@/hooks/useScrollToHash'
+
 const PostsList = ({ posts, postLoading }: { posts: PostWithProducts[]; postLoading: boolean }) => {
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (!posts || posts.length === 0) return
-
-    const hash = window.location.hash
-    if (!hash) return
-
-    const id = hash.substring(1)
-    const el = document.getElementById(id)
-    if (!el) return
-
-    window.setTimeout(() => {
-      el.scrollIntoView({ behavior: 'instant', block: 'start' })
-    }, 0)
-  }, [posts])
+  useScrollToHash(posts)
 
   return (
     <VStack

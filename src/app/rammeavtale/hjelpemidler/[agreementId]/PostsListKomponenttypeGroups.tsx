@@ -7,6 +7,8 @@ import { Alert, HStack, Heading, HelpText, Loader, VStack } from '@navikt/ds-rea
 import { PostWithProducts } from '@/utils/agreement-util'
 import { Product, ProductVariant } from '@/utils/product-util'
 
+import useScrollToHash from '@/hooks/useScrollToHash'
+
 export const PostsListKomponenttypeGroups = ({
   posts,
   postLoading,
@@ -14,6 +16,8 @@ export const PostsListKomponenttypeGroups = ({
   posts: PostWithProducts[]
   postLoading: boolean
 }) => {
+  useScrollToHash(posts)
+
   const getKomponenttyperForProduct = (productWithRank: PostWithProducts['products'][number]): string[] => {
     const variants = (productWithRank.product as Product).variants ?? []
     const values = new Set<string>()
@@ -80,7 +84,7 @@ export const PostsListKomponenttypeGroups = ({
           className="agreement-post spacing-top--small"
         >
           <HStack gap="space-16" align="center">
-            <Heading level="2" size="small" className="agreement-page__post-heading">
+            <Heading level="2" size="small" id={`${post.refNr}`} className="agreement-page__post-heading">
               {post.title}
             </Heading>
             <HelpText title="Om delkontrakten">{post.description}</HelpText>

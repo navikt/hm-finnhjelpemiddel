@@ -2,6 +2,7 @@
 
 import { CompareButton } from '@/app/produkt/CompareButton'
 import { Videos } from '@/app/produkt/[id]/Videos'
+import { AgreementInformation } from '@/app/produkt/[id]/productInfo/AgreementInformation'
 import { Documents } from '@/app/produkt/[id]/productInfo/Documents'
 import {
   BestillingsordningBehovsmelding,
@@ -14,7 +15,7 @@ import { ImageCarousel } from '@/app/produkt/imageCarousel/ImageCarousel'
 import React, { useEffect, useState } from 'react'
 
 import NextLink from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 import { QRCodeCanvas } from 'qrcode.react'
 
@@ -36,6 +37,28 @@ export const ProductInfo = ({
   compatibleWithProducts?: ProductVariant[]
 }) => {
   const worksWithSeriesIds = product.attributes.worksWith?.seriesIds
+  const searchParams = useSearchParams()
+  const searchTerm = searchParams.get('term')
+  const normalizedSearchTerm = searchTerm?.toLocaleLowerCase()
+  const matchingVariants = normalizedSearchTerm
+    ? product.variants.filter(
+        (variant) =>
+          variant.hmsArtNr?.toLocaleLowerCase() === normalizedSearchTerm ||
+          variant.supplierRef?.toLocaleLowerCase() === normalizedSearchTerm
+      )
+    : []
+  const hasMatchingVariant = matchingVariants.length > 0
+  const displayedAgreements = (
+    hasMatchingVariant ? matchingVariants.flatMap((variant) => variant.agreements) : product.agreements
+  ).filter((agreement) => new Date(agreement.expired).getTime() >= Date.now())
+  const agreementScope =
+    product.variants.length === 1 || matchingVariants.length === 1
+      ? 'variant'
+      : hasMatchingVariant
+        ? 'variants'
+        : 'product'
+  const [selectedTab, setSelectedTab] = useState('info')
+  const activeTab = selectedTab === 'agreement' && displayedAgreements.length === 0 ? 'info' : selectedTab
 
   const isExpired = product.variants.every((variant) => new Date(variant.expired).getTime() <= Date.now())
 
@@ -73,9 +96,10 @@ export const ProductInfo = ({
           </VStack>
         </VStack>
 
-        <Tabs defaultValue={'info'}>
+        <Tabs value={activeTab} onChange={setSelectedTab}>
           <Tabs.List style={{ whiteSpace: 'nowrap' }}>
             <Tabs.Tab value={'info'} label={'Informasjon'} />
+            {displayedAgreements.length > 0 && <Tabs.Tab value={'agreement'} label={'Avtale'} />}
             <Tabs.Tab value={'docs'} label={'Dokumenter'} />
             <Tabs.Tab value={'video'} label={'Videoer'} />
             {worksWithSeriesIds && <Tabs.Tab value={'works'} label={'Virker sammen med'} />}
@@ -83,6 +107,11 @@ export const ProductInfo = ({
           <Tabs.Panel value={'info'} className={styles.tabPanel}>
             <InfoTab product={product} hmsartnr={hmsartnr} />
           </Tabs.Panel>
+          {displayedAgreements.length > 0 && (
+            <Tabs.Panel value={'agreement'} className={styles.tabPanel}>
+              <AgreementInformation productAgreements={displayedAgreements} scope={agreementScope} />
+            </Tabs.Panel>
+          )}
           <Tabs.Panel value={'docs'} className={styles.tabPanel}>
             <Documents documents={product.documents} documentUrls={product.attributes.documentUrls ?? []} />
           </Tabs.Panel>
