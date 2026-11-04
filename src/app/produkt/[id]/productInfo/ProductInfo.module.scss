@@ -6,3 +6,13 @@
   padding-left: 32px;
   min-height: 260px;
 }
+
+.agreementDescription {
+  > :first-child {
+    margin-block-start: 0;
+  }
+
+  > :last-child {
+    margin-block-end: 0;
+  }
+}

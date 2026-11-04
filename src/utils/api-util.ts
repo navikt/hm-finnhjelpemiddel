@@ -4,7 +4,7 @@ import { News, mapAllNews, mapNews } from '@/utils/news-util'
 import { ServiceJob, mapServicejobs } from '@/utils/servicejob-util'
 import { Supplier, mapSuppliers } from '@/utils/supplier-util'
 
-import { AgreementLabel, mapAgreementLabels } from './agreement-util'
+import { Agreement, AgreementLabel, mapAgreement, mapAgreementLabels } from './agreement-util'
 import {
   filterBeregnetBarn,
   filterBredde,
@@ -36,6 +36,7 @@ import {
 import {
   AgreementDocResponse,
   AgreementInfoResponse,
+  AgreementsSourceResponse,
   PostBucketResponse,
   ProductSourceResponse,
   SearchResponse,
@@ -760,6 +761,30 @@ export async function getAgreement(id: string): Promise<AgreementDocResponse> {
     method: 'GET',
   })
   return res.json()
+}
+
+export const fetchAgreementsByIds = async (agreementIds: string[]): Promise<Agreement[]> => {
+  const res = await fetch(HM_SEARCH_URL + `/agreements/_search`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      size: agreementIds.length,
+      query: {
+        ids: {
+          values: agreementIds,
+        },
+      },
+    }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`Kunne ikke hente avtaler, status ${res.status}`)
+  }
+
+  const data: SearchResponse = await res.json()
+  return data.hits.hits.map((hit) => mapAgreement(hit._source as AgreementsSourceResponse))
 }
 
 export async function getAgreementLabels(): Promise<AgreementLabel[]> {
