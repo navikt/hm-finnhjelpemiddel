@@ -3,7 +3,7 @@
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, BodyShort, Heading, Label, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface Props {
   supplier: Supplier
@@ -39,10 +39,10 @@ export const SupplierAccordion = ({ supplier }: Props) => {
 }
 
 const SupplierInfo = ({ supplier }: { supplier: Supplier }) => {
-  const supplierHomepageUrlHref = React.useMemo(() => {
+  const supplierHomepageUrlHref = useMemo(() => {
     if (!supplier.homepageUrl) return null
-    // https starter også med http.
-    return supplier.homepageUrl.startsWith('http') ? supplier.homepageUrl : `//${supplier.homepageUrl}`
+    // Legg til '//' foran URL hvis den ikke starter med http:// eller https://
+    return /^https?:\/\//i.test(supplier.homepageUrl) ? supplier.homepageUrl : `//${supplier.homepageUrl}`
   }, [supplier.homepageUrl])
 
   return (
