@@ -40,9 +40,10 @@ export const SupplierAccordion = ({ supplier }: Props) => {
 
 const SupplierInfo = ({ supplier }: { supplier: Supplier }) => {
   const supplierHomepageUrlHref = useMemo(() => {
-    if (!supplier.homepageUrl) return null
+    const homepageUrl = supplier.homepageUrl?.trim()
+    if (!homepageUrl) return null
     // Legg til '//' foran URL hvis den ikke starter med http:// eller https://
-    return /^https?:\/\//i.test(supplier.homepageUrl) ? supplier.homepageUrl : `//${supplier.homepageUrl}`
+    return /^https?:\/\//i.test(homepageUrl) ? homepageUrl : `//${homepageUrl}`
   }, [supplier.homepageUrl])
 
   return (
