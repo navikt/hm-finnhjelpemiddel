@@ -3,7 +3,7 @@
 import { Supplier } from '@/utils/supplier-util'
 import { Accordion, BodyShort, Heading, Label, Link, VStack } from '@navikt/ds-react'
 import NextLink from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface Props {
   supplier: Supplier
@@ -38,41 +38,49 @@ export const SupplierAccordion = ({ supplier }: Props) => {
   )
 }
 
-const SupplierInfo = ({ supplier }: { supplier: Supplier }) => (
-  <VStack gap="space-4">
-    {supplier.address && (
-      <VStack gap="space-0">
-        <Label>Adresse</Label>
-        {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
-        {supplier.postNr && supplier.postLocation && (
-          <BodyShort>
-            {supplier.postNr} {supplier.postLocation}
-          </BodyShort>
-        )}
-      </VStack>
-    )}
-    {supplier.email && (
-      <VStack>
-        <Label>E-post</Label>
-        <BodyShort> {supplier.email}</BodyShort>
-      </VStack>
-    )}
-    {supplier.phone && (
-      <VStack>
-        <Label>Telefon</Label>
-        <BodyShort> {supplier.phone}</BodyShort>
-      </VStack>
-    )}
-    {supplier.homepageUrl && (
-      <BodyShort>
-        <Link href={supplier?.homepageUrl} target="_blank" rel="noreferrer">
-          Hjemmeside (åpnes i ny side)
-        </Link>
-      </BodyShort>
-    )}
+const SupplierInfo = ({ supplier }: { supplier: Supplier }) => {
+  const supplierHomepageUrlHref = useMemo(() => {
+    const homepageUrl = supplier.homepageUrl?.trim()
+    if (!homepageUrl) return null
+    // Legg til '//' foran URL hvis den ikke starter med http:// eller https://
+    return /^https?:\/\//i.test(homepageUrl) ? homepageUrl : `//${homepageUrl}`
+  }, [supplier.homepageUrl])
 
-    <Link as={NextLink} href={`/sok?sortering=Best_soketreff&leverandor=${encodeURIComponent(supplier.name)}`}>
-      Se produkter fra {supplier.name}
-    </Link>
-  </VStack>
-)
+  return (
+    <VStack gap="space-4">
+      {supplier.address && (
+        <VStack gap="space-0">
+          <Label>Adresse</Label>
+          {supplier.address && <BodyShort>{supplier.address}</BodyShort>}
+          {supplier.postNr && supplier.postLocation && (
+            <BodyShort>
+              {supplier.postNr} {supplier.postLocation}
+            </BodyShort>
+          )}
+        </VStack>
+      )}
+      {supplier.email && (
+        <VStack>
+          <Label>E-post</Label>
+          <BodyShort> {supplier.email}</BodyShort>
+        </VStack>
+      )}
+      {supplier.phone && (
+        <VStack>
+          <Label>Telefon</Label>
+          <BodyShort> {supplier.phone}</BodyShort>
+        </VStack>
+      )}
+      {supplierHomepageUrlHref && (
+        <BodyShort>
+          <Link href={supplierHomepageUrlHref} target="_blank" rel="noreferrer">
+            Hjemmeside (åpnes i ny side)
+          </Link>
+        </BodyShort>
+      )}
+      <Link as={NextLink} href={`/sok?sortering=Best_soketreff&leverandor=${encodeURIComponent(supplier.name)}`}>
+        Se produkter fra {supplier.name}
+      </Link>
+    </VStack>
+  )
+}
