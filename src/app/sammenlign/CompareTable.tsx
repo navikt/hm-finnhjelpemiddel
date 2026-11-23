@@ -1,101 +1,142 @@
-import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
+'use client'
+
+import type { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
 import { CompareMetaDataTable } from '@/app/sammenlign/CompareMetaDataTable'
+import { CompareProductHeader, CompareVariantLabel } from '@/app/sammenlign/CompareProductHeader'
 import { CompareTechDataSections } from '@/app/sammenlign/CompareTechDataSections'
 import type { TechDataSection } from '@/app/sammenlign/CompareTechDataSections'
+import {
+  ALL_VARIANTS,
+  COLUMN_PARAM,
+  CompareColumn,
+  PRODUCT_PARAM,
+  buildTechDataRows,
+  columnsToSearchParams,
+  parseColumns,
+  selectionOf,
+} from '@/app/sammenlign/compare-columns'
 
-import React from 'react'
+import React, { useMemo } from 'react'
+
+import { usePathname, useSearchParams } from 'next/navigation'
 
 import { BodyShort, Link, VStack } from '@navikt/ds-react'
 import { TableBody, TableColumnHeader, TableDataCell, TableRow } from '@navikt/ds-react/Table'
 
-import { getTechLabels } from '@/utils/api-util'
+import { useHydratedCompareStore } from '@/utils/global-state-util'
 import { Product } from '@/utils/product-util'
-import { findUniqueStringValues, tryParseNumber } from '@/utils/string-util'
 import { TechLabelDTO } from '@/utils/techlabel-util'
 
-import ProductCardCompare from '@/components/ProductCardCompare'
 import { Table } from '@/components/aksel-client'
 
 import styles from './CompareTable.module.scss'
 
-export const CompareTable = async ({ productsToCompare }: { productsToCompare: Product[] }) => {
-  const isos = [...new Set(productsToCompare.map((product) => product.isoCategory))]
-  const isos22 = [
-    ...new Set(productsToCompare.map((product) => product.isoCategory22).filter((iso): iso is string => !!iso)),
-  ]
-  const [techLabels, techLabels22] = await Promise.all([
-    Promise.all(isos.map((iso) => getTechLabels(iso))).then((labels) => labels.flat()),
-    Promise.all(isos22.map((iso) => getTechLabels(iso))).then((labels) => labels.flat()),
-  ])
+const groupTechDataRowsBySection = (techDataRows: TechDataRow[], techLabels: TechLabelDTO[]): TechDataSection[] => {
+  const rowsBySection = new Map<string, TechDataSection>()
 
-  const allDataKeysVariants = [
-    ...new Set(
-      productsToCompare.flatMap((product) => product.variants.flatMap((variant) => Object.keys(variant.techData)))
-    ),
-  ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  techDataRows.forEach((techDataRow) => {
+    const techLabel = techLabels.find((techLabel) => techLabel.label === techDataRow.key)
+    const sectionTitle = techLabel?.section ?? 'Diverse'
 
-  const findValueRangeForProductRowKey = (values: string[]) => {
-    if (values.length === 0) return
-
-    if (values.some((value) => isNaN(tryParseNumber(value)))) {
-      return findUniqueStringValues(values)
+    if (!rowsBySection.has(sectionTitle)) {
+      rowsBySection.set(sectionTitle, {
+        title: sectionTitle,
+        priority: sectionTitle == 'Diverse' || !techLabel ? 1000 : techLabel.sort,
+        techDataRows: [],
+      })
     }
-
-    const numberList = values.map(tryParseNumber)
-    const min = Math.min(...numberList)
-    const max = Math.max(...numberList)
-    if (min === max) return String(min)
-    return `${min} - ${max}`
-  }
-
-  const techDataRowsAll: TechDataRow[] = allDataKeysVariants.map((key) => {
-    return {
-      key: key,
-      values: productsToCompare.map((product) => {
-        const variantValues = product.variants
-          .filter((variant) => key in variant.techData)
-          .map((variant) => variant.techData[key].value)
-
-        return findValueRangeForProductRowKey(variantValues)
-      }),
-      unit: productsToCompare
-        .flatMap((product) => product.variants)
-        .find((variant) => variant.techData[key]?.unit !== undefined)?.techData[key].unit,
-      type:
-        productsToCompare
-          .flatMap((product) => product.variants)
-          .find((variant) => variant.techData[key]?.type !== undefined)?.techData[key].type ?? '',
-    } as TechDataRow
+    const section = rowsBySection.get(sectionTitle)!
+    if (techLabel && techLabel.section && techLabel.sort < section.priority) {
+      section.priority = techLabel.sort
+    }
+    section.techDataRows.push(techDataRow)
   })
 
-  const groupTechDataRowsBySection = (techDataRows: TechDataRow[], techLabels: TechLabelDTO[]): TechDataSection[] => {
-    const rowsBySection = new Map<string, TechDataSection>()
+  return [...rowsBySection.values()]
+}
 
-    techDataRows.forEach((techDataRow) => {
-      const techLabel = techLabels.find((techLabel) => techLabel.label === techDataRow.key)
-      const sectionTitle = techLabel?.section ?? 'Diverse'
+export const CompareTable = ({
+  productsToCompare,
+  techLabels,
+  techLabels22,
+}: {
+  productsToCompare: Product[]
+  techLabels: TechLabelDTO[]
+  techLabels22: TechLabelDTO[]
+}) => {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { removeProduct } = useHydratedCompareStore()
 
-      if (!rowsBySection.has(sectionTitle)) {
-        rowsBySection.set(sectionTitle, {
-          title: sectionTitle,
-          priority: sectionTitle == 'Diverse' || !techLabel ? 1000 : techLabel.sort,
-          techDataRows: [],
-        })
-      }
-      const section = rowsBySection.get(sectionTitle)!
-      if (techLabel && techLabel.section && techLabel.sort < section.priority) {
-        section.priority = techLabel.sort
-      }
-      section.techDataRows.push(techDataRow)
-    })
+  // Produktene hentes på serveren. Endringer i kolonner skjer bare i URL-en, så vi slipper ny henting.
+  const productIds = searchParams.getAll(PRODUCT_PARAM)
+  const columnParams = searchParams.getAll(COLUMN_PARAM)
 
-    return rowsBySection.values().toArray()
+  const columns = useMemo(
+    () =>
+      parseColumns(
+        productsToCompare.filter((product) => productIds.includes(product.id)),
+        columnParams
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [productsToCompare, productIds.join(','), columnParams.join(',')]
+  )
+
+  const techDataRows = useMemo(() => buildTechDataRows(columns), [columns])
+  const groupedTechDataRows = useMemo(
+    () => groupTechDataRowsBySection(techDataRows, techLabels),
+    [techDataRows, techLabels]
+  )
+  const groupedTechDataRows22 = useMemo(
+    () => groupTechDataRowsBySection(techDataRows, techLabels22),
+    [techDataRows, techLabels22]
+  )
+
+  const updateColumns = (newColumns: CompareColumn[]) => {
+    const params = columnsToSearchParams(searchParams, newColumns)
+    // Native history-API: Next oppdaterer useSearchParams uten ny server-rendering
+    window.history.replaceState(null, '', `${pathname}?${params.toString()}`)
   }
 
-  const groupedTechDataRows = groupTechDataRowsBySection(techDataRowsAll, techLabels)
-  const groupedTechDataRows22 = groupTechDataRowsBySection(techDataRowsAll, techLabels22)
+  const toggleSelection = (product: Product, selection: string, isSelected: boolean) => {
+    const productColumns = columns.filter((c) => c.product.id === product.id)
 
-  if (productsToCompare.length === 0) {
+    if (isSelected) {
+      if (productColumns.some((c) => selectionOf(c) === selection)) return
+      const variant = selection === ALL_VARIANTS ? null : (product.variants.find((v) => v.id === selection) ?? null)
+      if (selection !== ALL_VARIANTS && !variant) return
+
+      // Ny kolonne plasseres etter de andre kolonnene for samme produkt.
+      // Varianter som ikke finnes lenger, ryddes bort når brukeren gjør et nytt valg.
+      const newColumn: CompareColumn = { key: `${product.id}:${selection}`, product, variant }
+      const insertAt = columns.findLastIndex((c) => c.product.id === product.id) + 1
+      const withNew = [...columns.slice(0, insertAt), newColumn, ...columns.slice(insertAt)]
+      updateColumns(withNew.filter((c) => !(c.product.id === product.id && c.missingVariantId)))
+      return
+    }
+
+    // Produktet skal alltid ha minst én kolonne. Hele produktet fjernes med krysset på produktkortet.
+    if (productColumns.length <= 1) return
+    updateColumns(columns.filter((c) => !(c.product.id === product.id && selectionOf(c) === selection)))
+  }
+
+  const removeProductColumns = (product: Product) => {
+    removeProduct(product.id)
+    updateColumns(columns.filter((c) => c.product.id !== product.id))
+  }
+
+  // Kolonnene er gruppert per produkt (se parseColumns), så hvert produkt får én sammenslått celle
+  const productGroups = columns.reduce<{ product: Product; columns: CompareColumn[] }[]>((groups, column) => {
+    const last = groups.at(-1)
+    if (last?.product.id === column.product.id) {
+      last.columns.push(column)
+    } else {
+      groups.push({ product: column.product, columns: [column] })
+    }
+    return groups
+  }, [])
+
+  if (columns.length === 0) {
     return (
       <VStack gap={'space-16'}>
         <BodyShort>Ingen hjelpemidler til sammenlikning.</BodyShort>
@@ -110,19 +151,34 @@ export const CompareTable = async ({ productsToCompare }: { productsToCompare: P
         <TableBody>
           <TableRow>
             <TableColumnHeader></TableColumnHeader>
-            {productsToCompare.map((product) => (
-              <TableDataCell key={'id-' + product.id}>
-                <ProductCardCompare product={product} type="removable" />
+            {productGroups.map(({ product, columns: productColumns }) => (
+              <TableDataCell key={product.id} colSpan={productColumns.length} className={styles.columnHeaderCell}>
+                <CompareProductHeader
+                  product={product}
+                  columns={productColumns}
+                  onToggleSelection={(selection, isSelected) => toggleSelection(product, selection, isSelected)}
+                  onRemove={() => removeProductColumns(product)}
+                />
               </TableDataCell>
             ))}
           </TableRow>
+          {columns.some((column) => column.variant || column.missingVariantId) && (
+            <TableRow>
+              <TableColumnHeader></TableColumnHeader>
+              {columns.map((column) => (
+                <TableColumnHeader key={column.key} scope="col" className={styles.variantHeaderCell}>
+                  <CompareVariantLabel column={column} />
+                </TableColumnHeader>
+              ))}
+            </TableRow>
+          )}
         </TableBody>
       </Table>
-      <CompareMetaDataTable productsToCompare={productsToCompare} />
+      <CompareMetaDataTable columns={columns} />
       <CompareTechDataSections
         groupedTechDataRows={groupedTechDataRows}
         groupedTechDataRows22={groupedTechDataRows22}
-        productCount={productsToCompare.length}
+        productCount={columns.length}
       />
     </VStack>
   )

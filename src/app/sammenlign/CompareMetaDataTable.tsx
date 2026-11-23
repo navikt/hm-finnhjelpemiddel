@@ -1,6 +1,7 @@
 'use client'
 
 import { Description } from '@/app/produkt/[id]/productInfo/GeneralProductInformation'
+import { CompareColumn } from '@/app/sammenlign/compare-columns'
 
 import React, { useState } from 'react'
 
@@ -8,14 +9,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Box, Button, HStack, VStack } from '@navikt/ds-react'
 import { TableDataCell, TableHeaderCell, TableRow } from '@navikt/ds-react/Table'
 
-import { Product } from '@/utils/product-util'
-
 import { Heading, Table } from '@/components/aksel-client'
 
 import styles from '@/app/sammenlign/CompareTable.module.scss'
 
-export const CompareMetaDataTable = ({ productsToCompare }: { productsToCompare: Product[] }) => {
+export const CompareMetaDataTable = ({ columns }: { columns: CompareColumn[] }) => {
   const [showTable, setShowTable] = useState(true)
+  const hasVariantColumns = columns.some((column) => column.variant !== null)
 
   return (
     <VStack>
@@ -39,20 +39,26 @@ export const CompareMetaDataTable = ({ productsToCompare }: { productsToCompare:
             <Table.Body>
               <TableRow>
                 <TableHeaderCell className="side_header">Beskrivelse</TableHeaderCell>
-                {productsToCompare.map((product) => {
-                  return (
-                    <TableDataCell key={product.id}>
-                      {<Description description={product.attributes.text} />}
-                    </TableDataCell>
-                  )
-                })}
+                {columns.map(({ key, product }) => (
+                  <TableDataCell key={key}>
+                    <Description description={product.attributes.text} />
+                  </TableDataCell>
+                ))}
               </TableRow>
               <TableRow>
                 <TableHeaderCell className="side_header">Leverandør</TableHeaderCell>
-                {productsToCompare.map((product) => (
-                  <TableDataCell key={product.id}>{product.supplierName}</TableDataCell>
+                {columns.map(({ key, product }) => (
+                  <TableDataCell key={key}>{product.supplierName}</TableDataCell>
                 ))}
               </TableRow>
+              {hasVariantColumns && (
+                <TableRow>
+                  <TableHeaderCell className="side_header">Lev-artnr</TableHeaderCell>
+                  {columns.map(({ key, variant }) => (
+                    <TableDataCell key={key}>{variant?.supplierRef ?? '-'}</TableDataCell>
+                  ))}
+                </TableRow>
+              )}
             </Table.Body>
           </Table>
         )}

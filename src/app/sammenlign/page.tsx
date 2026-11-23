@@ -2,7 +2,7 @@ import { CompareTable } from '@/app/sammenlign/CompareTable'
 
 import { Metadata } from 'next'
 
-import { fetchProductsWithVariants } from '@/utils/api-util'
+import { fetchProductsWithVariants, getTechLabels } from '@/utils/api-util'
 import { Product } from '@/utils/product-util'
 
 import { Heading } from '@/components/aksel-client'
@@ -24,15 +24,26 @@ export default async function Page(props: Props) {
   const sortedProductsToCompare =
     productsToCompareWithVariants && sortProductsOnAgreementPostAndRank(productsToCompareWithVariants)
 
+  const [techLabels, techLabels22] = await fetchTechLabels(sortedProductsToCompare)
+
   return (
     <div className="main-wrapper--xlarge compare-page spacing-top--large spacing-bottom--xlarge">
       <Heading level="1" size="large" spacing>
         Sammenlign hjelpemidler
       </Heading>
 
-      {<CompareTable productsToCompare={sortedProductsToCompare} />}
+      <CompareTable productsToCompare={sortedProductsToCompare} techLabels={techLabels} techLabels22={techLabels22} />
     </div>
   )
+}
+
+function fetchTechLabels(products: Product[]) {
+  const isos = [...new Set(products.map((product) => product.isoCategory))]
+  const isos22 = [...new Set(products.map((product) => product.isoCategory22).filter((iso): iso is string => !!iso))]
+  return Promise.all([
+    Promise.all(isos.map((iso) => getTechLabels(iso))).then((labels) => labels.flat()),
+    Promise.all(isos22.map((iso) => getTechLabels(iso))).then((labels) => labels.flat()),
+  ])
 }
 
 function sortProductsOnAgreementPostAndRank(products: Product[]): Product[] {

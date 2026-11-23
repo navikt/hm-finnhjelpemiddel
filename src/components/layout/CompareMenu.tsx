@@ -70,7 +70,7 @@ const CompareMenu = () => {
                 ))}
               </ul>
 
-              {productsToCompare.length > 1 && (
+              {productsToCompare.length > 0 && (
                 <div className="compare-menu__buttons">
                   <NextLink href={compareUrl} passHref>
                     <Button as="a" icon={<ChevronRightIcon aria-hidden />} iconPosition="right">
@@ -91,7 +91,7 @@ const CompareMenu = () => {
               )}
               {productsToCompare.length === 1 && (
                 <div className="compare-menu__placeholder compare-menu__placeholder__one-more">
-                  <BodyShort>Velg minst ett produkt til for å gå til sammenligning.</BodyShort>
+                  <BodyShort>Legg til flere produkter, eller sammenlign varianter av dette produktet.</BodyShort>
                 </div>
               )}
             </>

@@ -16,10 +16,15 @@ const ProductCardCompare = ({
   type,
   product,
   rank,
+  onRemove,
+  removeLabel,
 }: {
   type: 'removable' | 'plain'
   product: Product
   rank?: number
+  /** Overstyrer standard fjerning (sammenligningslista og URL-en) */
+  onRemove?: () => void
+  removeLabel?: string
 }) => {
   const minRank = product.agreements && Math.min(...product.agreements.map((agreement) => agreement.rank))
 
@@ -38,7 +43,17 @@ const ProductCardCompare = ({
 
   return (
     <Box padding="space-8" className={cardClassName}>
-      {type === 'removable' && <RemoveButton product={product} />}
+      {type === 'removable' &&
+        (onRemove ? (
+          <Button
+            variant="tertiary-neutral"
+            className="product-card__remove-button"
+            onClick={onRemove}
+            icon={<MultiplyIcon title={removeLabel ?? 'Fjern produkt fra sammenligning'} />}
+          />
+        ) : (
+          <RemoveButton product={product} />
+        ))}
       <VStack justify="space-between" className="product-card__content" style={{ marginTop: '2px', gap: '2px' }}>
         <VStack style={{ gap: '2px' }}>
           <Detail textColor="subtle">

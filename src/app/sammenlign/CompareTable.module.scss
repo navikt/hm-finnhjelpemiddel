@@ -22,6 +22,14 @@
     min-width: 180px;
   }
 
+  th.variantHeaderCell {
+    width: 180px;
+    min-width: 180px;
+    max-width: none;
+    vertical-align: top;
+    text-align: left;
+  }
+
   * {
     font-size: 1rem;
   }
@@ -56,4 +64,8 @@
     z-index: 3;
     background-color: white;
   }
+}
+
+.columnHeaderCell {
+  vertical-align: top;
 }
