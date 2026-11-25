@@ -54,8 +54,8 @@ function AboutUs() {
                   ordinær handel, regnes som hovedregel ikke som hjelpemidler.
                 </BodyLong>
                 <BodyLong spacing>
-                  Behandlingshjelpemidler dekkes ikke av folketrygden. Mer informasjon om disse hjelpemidlene kan du
-                  lese om på <Link href={'https://behandlingshjelpemidler.no/'}>behandlingshjelpemidler.no</Link>.
+                  Behandlingshjelpemidler dekkes ikke av folketrygden. Informasjon om disse hjelpemidlene finner du på{' '}
+                  <Link href={'https://behandlingshjelpemidler.no/'}>behandlingshjelpemidler.no</Link>.
                 </BodyLong>
                 <BodyLong spacing>
                   Hvilke produkter og løsninger som til enhver tid omfattes av folketrygdens hjelpemiddelbegrep, kan
@@ -82,8 +82,8 @@ function AboutUs() {
                   </li>
                 </ul>
                 <BodyLong>
-                  Kommunen kan bistå med å finne hjelpemidler som passer og med å søke. Dersom det er behov for et
-                  hjelpemidler i en kortere periode, kan man låne dem direkte fra kommunen.
+                  Kommunen kan bistå med å vurdere hjelpemidler som dekker behovet og med å søke. Dersom det er behov
+                  for et hjelpemiddel i en kortere periode, kan man låne det direkte fra kommunen.
                 </BodyLong>
               </AccordionContent>
             </AccordionItem>
@@ -107,15 +107,15 @@ function AboutUs() {
 
                 <BodyShort weight={'semibold'}>På avtale:</BodyShort>
                 <BodyLong spacing>
-                  Nav inngår avtaler med leverandører av hjelpemidler. Hjelpemidler på avtale, skal dekke behov som
-                  skyldes funksjonsnedsettelsen. I en søknadsprosess vurderes hjelpemidler på avtale først. Disse
+                  Nav inngår avtaler med leverandører av hjelpemidler. Avtalene dekker ulike hjelpemiddelområder og
+                  hjelpemidlene er vurdert av Nav. I en søknadsprosess vurderes hjelpemidler på avtale først. Disse
                   hjelpemidlene er merket med «På avtale».
                 </BodyLong>
                 <BodyShort weight={'semibold'}>Delkontrakt:</BodyShort>
                 <BodyLong spacing>
-                  Avtalene med leverandører er inndelt i delkontrakter slik at man lettere skal kunne orientere seg.
-                  Inndelingen er gjort ut ifra hjelpemidlenes egenskaper som for eksempel «Rullator – innendørs bruk med
-                  smal bredde». Hjelpemidler på avtale er markert med tittel eller nummeret på delkontrakten.
+                  Avtalene med leverandører er inndelt i delkontrakter. Inndelingen er gjort ut ifra hjelpemidlenes
+                  egenskaper som for eksempel «Rullator – innendørs bruk med smal bredde». Hjelpemidler på avtale er
+                  markert med tittel eller nummeret på delkontrakten.
                 </BodyLong>
                 <BodyShort weight={'semibold'}>Rangering:</BodyShort>
                 <BodyLong spacing>
@@ -132,15 +132,19 @@ function AboutUs() {
                   dersom hjelpemidler på avtale ikke dekker behovet. Hjelpemidler uten avtale med Nav er merket med
                   «Ikke på avtale».
                 </BodyLong>
+                <BodyShort weight={'semibold'}>Utgått:</BodyShort>
+                <BodyLong spacing>
+                  Hjelpemidler merket «utgått» fås ikke lenger fra aktuell leverandør. Men kan fortsatt lånes fra Nav
+                  dersom hjelpemiddelet er på lager eller er tilgjengelig hos en annen leverandør.
+                </BodyLong>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem>
               <AccordionHeader>Hvem bestemmer hva som presenteres på FinnHjelpemiddel?</AccordionHeader>
               <AccordionContent>
-                Nav bestemmer hvilke hjelpemidler som skal presenteres på FinnHjelpemiddel. All informasjonen som for
-                eksempel bilder, brosjyrer og spesifikasjoner registreres av leverandører. Innholdsredaksjonen for
-                FinnHjelpemiddel gjennomgår informasjonen før den publiseres.
+                Nav bestemmer hvilke hjelpemidler som skal presenteres på FinnHjelpemiddel. Informasjon om hjelpemidlene
+                legges inn av leverandørene og blir gått gjennom av innholdsredaksjonen før publisering.
               </AccordionContent>
             </AccordionItem>
 
@@ -191,12 +195,12 @@ function AboutUs() {
                   Leverandører som ønsker å registrere hjelpemidler på FinnHjelpemiddel må blant annet:
                 </BodyShort>
                 <ul>
-                  <li>være norsk leverandør, eller ha norske underleverandører</li>
+                  <li>være norske, eller ha norske underleverandører</li>
                   <li>levere hjelpemidler som er spesiallaget for personer med nedsatt funksjon</li>
-                  <li>ha ferdig utviklede produkter med nødvendig dokumentasjon</li>
+                  <li>ha ferdig utviklede hjelpemidler med nødvendig dokumentasjon</li>
                 </ul>
                 <BodyLong spacing>
-                  Hjelpemidlene skal klassifiseres etter NS-EN ISO 9999 – «Hjelpemidler – klassifisering og terminologi»
+                  Hjelpemidlene skal klassifiseres etter NS-EN ISO 9999 – «Hjelpemidler – klassifisering og terminologi».
                 </BodyLong>
                 <BodyLong className="spacing-bottom--small">
                   Henvendelser om å opprette registreringstilgang sendes til{' '}

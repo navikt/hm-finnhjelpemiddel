@@ -164,9 +164,7 @@ const InfoTab = ({ product, hmsartnr }: { product: Product; hmsartnr?: string })
         <ISOCategory
           isoCategory={product.isoCategory22 || ''}
           isoCategoryTitle={product.isoCategoryTitle22 || ''}
-          isoCategoryTitleInternational={
-            product.isoCategoryTitleInternational22 || ''
-          }
+          isoCategoryTitleInternational={product.isoCategoryTitleInternational22 || ''}
         />
       ) : (
         <ISOCategory
@@ -244,6 +242,13 @@ const StatusTag = ({
     </>
   )
 
+  const helpHvaErUtgaatt = (
+    <>
+      Hjelpemidler merket «utgått» fås ikke lenger fra aktuell leverandør. Men kan fortsatt lånes fra Nav dersom
+      hjelpemiddelet er på lager eller er tilgjengelig hos en annen leverandør.
+    </>
+  )
+
   const topRank =
     productAgreements &&
     productAgreements?.length > 0 &&
@@ -275,7 +280,7 @@ const StatusTag = ({
         </Tag>
       )}
       <HelpText title={'Hva betyr delkonktrakt og rangering'} placement={'bottom'} style={{ padding: 0 }}>
-        {helpHvaEr}
+        {isExpired ? helpHvaErUtgaatt : helpHvaEr}
       </HelpText>
     </HStack>
   )
