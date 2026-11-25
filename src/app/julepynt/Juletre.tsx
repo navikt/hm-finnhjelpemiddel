@@ -3,13 +3,6 @@
 import type { SVGProps } from 'react';
 import { forwardRef } from 'react';
 
-
-
-
-
-
-
-
 interface SVGRProps {
   active: boolean
 }
@@ -21,7 +14,7 @@ export const Juletre = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement> & SVGRP
     width="2em"
     height="2em"
     role="img"
-    aria-label="Christmas tree"
+    aria-label="Juletre"
   >
     <rect x="27.5" y="50" width="9" height="9" rx="1.5" fill="#8b5a2b" stroke="#1f2937" stroke-width="2.5" />
     <path
