@@ -1,17 +1,24 @@
-import AutocompleteSearch from '@/components/AutocompleteSearch'
-import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
-import useOnClickOutside from '@/hooks/useOnClickOutside'
-import { useMenuStore } from '@/utils/global-state-util'
-import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Button, Hide, HStack, Show } from '@navikt/ds-react'
+import { Juletre } from '@/app/julepynt/Juletre'
+
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+
 import Image from 'next/image'
 import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import BurgerMenuContent from './BurgerMenuContent'
+
+import { MagnifyingGlassIcon, MenuHamburgerIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { Button, HStack, Hide, Show } from '@navikt/ds-react'
+
+import { useMenuStore } from '@/utils/global-state-util'
+
 import { useFeatureFlags } from '@/hooks/useFeatureFlag'
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
+
+import AutocompleteSearch from '@/components/AutocompleteSearch'
 import { SnowfallComponent } from '@/components/Snowfall'
-import { Pepperkakemann } from '@/app/julepynt/Pepperkakemann'
+
+import BurgerMenuContent from './BurgerMenuContent'
 
 const NavigationBar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -140,7 +147,7 @@ const NavigationBar = () => {
                   variant="tertiary-neutral"
                   aria-label={julepyntLabel}
                   aria-pressed={visJulepynt}
-                  icon={<Pepperkakemann active={visJulepynt} />}
+                  icon={<Juletre active={visJulepynt} />}
                   onClick={() => setVisJulepynt(!visJulepynt)}
                 />
               </Hide>
@@ -150,7 +157,7 @@ const NavigationBar = () => {
                   variant="tertiary-neutral"
                   aria-label={julepyntLabel}
                   aria-pressed={visJulepynt}
-                  icon={<Pepperkakemann active={visJulepynt} />}
+                  icon={<Juletre active={visJulepynt} />}
                   onClick={() => setVisJulepynt(!visJulepynt)}
                 />
               </Hide>
