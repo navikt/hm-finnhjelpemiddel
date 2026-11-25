@@ -1,30 +1,27 @@
 'use client'
 
-import { ALL_VARIANTS, CompareColumn, columnRank, sortedVariants, variantLabel } from '@/app/sammenlign/compare-columns'
+import { AddVariantCombobox } from '@/app/sammenlign/AddVariantCombobox'
+import { CompareColumn, selectionOf } from '@/app/sammenlign/compare-columns'
 
-import { Alert, BodyShort, Detail, UNSAFE_Combobox, VStack } from '@navikt/ds-react'
+import { MultiplyIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react'
 
 import { Product } from '@/utils/product-util'
 
 import ProductCardCompare from '@/components/ProductCardCompare'
 import { NeutralTag } from '@/components/Tags'
 
+import styles from './CompareTable.module.scss'
+
 type Props = {
   product: Product
   columns: CompareColumn[]
-  onToggleSelection: (selection: string, isSelected: boolean) => void
+  onAddSelection: (selection: string) => void
   onRemove: () => void
 }
 
-/** Sammenslått toppcelle for alle kolonner av samme produkt: produktkort og flervalg av varianter. */
-export const CompareProductHeader = ({ product, columns, onToggleSelection, onRemove }: Props) => {
-  const allOption = { label: `Alle varianter (${product.variants.length})`, value: ALL_VARIANTS }
-  const options = [allOption, ...sortedVariants(product).map((v) => ({ label: variantLabel(v), value: v.id }))]
-
-  const selectedOptions = columns
-    .filter((column) => !column.missingVariantId)
-    .map((column) => (column.variant ? options.find((option) => option.value === column.variant!.id)! : allOption))
-
+/** Sammenslått toppcelle for alle kolonner av samme produkt: produktkort og liste for å legge til varianter. */
+export const CompareProductHeader = ({ product, columns, onAddSelection, onRemove }: Props) => {
   const hasMissingVariant = columns.some((column) => column.missingVariantId)
 
   return (
@@ -32,24 +29,32 @@ export const CompareProductHeader = ({ product, columns, onToggleSelection, onRe
       <ProductCardCompare product={product} type="removable" onRemove={onRemove} />
       {hasMissingVariant && (
         <Alert variant="warning" size="small">
-          En valgt variant finnes ikke lenger. Velg en annen variant.
+          En valgt variant finnes ikke lenger. Fjern kolonnen med X-knappen i variantraden.
         </Alert>
       )}
-      <UNSAFE_Combobox
-        label="Varianter"
-        description={`Velg hvilke varianter av ${product.title} du vil sammenligne`}
-        size="small"
-        isMultiSelect
-        options={options}
-        selectedOptions={selectedOptions}
-        onToggleSelected={onToggleSelection}
-      />
+      <AddVariantCombobox product={product} usedSelections={columns.map(selectionOf)} onAdd={onAddSelection} />
     </VStack>
   )
 }
 
 /** Overskrift for én kolonne under den sammenslåtte produktcellen. */
-export const CompareVariantLabel = ({ column }: { column: CompareColumn }) => {
+export const CompareVariantLabel = ({ column, onRemove }: { column: CompareColumn; onRemove: () => void }) => {
+  const label = column.variant ? column.variant.articleName : column.missingVariantId ? 'variant' : 'alle varianter'
+  return (
+    <HStack gap="space-4" justify="space-between" align="start" wrap={false}>
+      <VariantLabelContent column={column} />
+      {/* Samme knapp som «Fjern produkt fra sammenligning» på produktkortet */}
+      <Button
+        variant="tertiary-neutral"
+        className={styles.removeColumnButton}
+        onClick={onRemove}
+        icon={<MultiplyIcon title={`Fjern ${label} fra sammenligning`} />}
+      />
+    </HStack>
+  )
+}
+
+const VariantLabelContent = ({ column }: { column: CompareColumn }) => {
   if (column.missingVariantId) {
     return <Detail textColor="subtle">Varianten finnes ikke lenger</Detail>
   }
@@ -59,7 +64,6 @@ export const CompareVariantLabel = ({ column }: { column: CompareColumn }) => {
   }
 
   const { variant } = column
-  const rank = columnRank(column)
 
   return (
     <VStack gap="space-4">
@@ -69,9 +73,6 @@ export const CompareVariantLabel = ({ column }: { column: CompareColumn }) => {
       <Detail textColor="subtle">
         {variant.hmsArtNr ? `HMS ${variant.hmsArtNr}` : `Lev-artnr ${variant.supplierRef}`}
       </Detail>
-      {rank !== undefined && rank !== Infinity && (
-        <Detail textColor="subtle">{rank < 90 ? `Rangering ${rank}` : 'På avtale med Nav'}</Detail>
-      )}
       {variant.status === 'INACTIVE' && <NeutralTag>Utgått</NeutralTag>}
     </VStack>
   )

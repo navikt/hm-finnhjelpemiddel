@@ -1,8 +1,11 @@
 'use client'
 
 import { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
+import { CompareColGroup } from '@/app/sammenlign/CompareColGroup'
 
 import React, { useState } from 'react'
+
+import classNames from 'classnames'
 
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Box, Button, Heading, Table } from '@navikt/ds-react'
@@ -15,10 +18,12 @@ export const CompareTechDataGroupTable = ({
   title,
   techDataRows,
   productCount,
+  productBoundaries,
 }: {
   title: string
   techDataRows: TechDataRow[]
   productCount: number
+  productBoundaries: number[]
 }) => {
   const [showTable, setShowTable] = useState(true)
 
@@ -85,7 +90,7 @@ export const CompareTechDataGroupTable = ({
   }
 
   return (
-    <Box width={`${120 + 180 * productCount}px`} style={{ minWidth: '100%' }}>
+    <Box width={`${150 + 180 * productCount}px`} style={{ minWidth: '100%' }}>
       <Button
         variant="tertiary"
         data-color={'neutral'}
@@ -101,13 +106,17 @@ export const CompareTechDataGroupTable = ({
       </Button>
       {showTable && (
         <Table zebraStripes>
+          <CompareColGroup columnCount={productCount} />
           <Table.Body>
             {rowsMerged.sort(sortRows).map(({ key, values, unit }) => {
               return (
                 <Table.Row key={key + 'row'}>
                   <Table.HeaderCell>{key}</Table.HeaderCell>
                   {values.map((value, i) => (
-                    <Table.DataCell key={key + '-' + i}>
+                    <Table.DataCell
+                      key={key + '-' + i}
+                      className={classNames({ [styles.productBoundary]: productBoundaries.includes(i) })}
+                    >
                       {value === undefined ? '-' : toValueAndUnit(value, unit)}
                     </Table.DataCell>
                   ))}

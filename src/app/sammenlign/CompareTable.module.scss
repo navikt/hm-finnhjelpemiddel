@@ -5,9 +5,21 @@
     overflow: scroll;
   }
 
+  // Alle tabellene får samme bredde og faste kolonner (se CompareColGroup), så kolonner og
+  // skillelinjer liner opp mellom toppseksjonen og de ekspanderbare seksjonene
   table {
     border-collapse: separate;
     border-spacing: 0;
+    table-layout: fixed;
+    width: max(100%, calc(150px + 180px * var(--compare-column-count, 1)));
+  }
+
+  :global(.compare-col--label) {
+    width: 150px;
+  }
+
+  :global(.compare-col--value) {
+    width: 180px;
   }
 
   th {
@@ -67,5 +79,26 @@
 }
 
 .columnHeaderCell {
+  vertical-align: top;
+}
+
+// Samme ikonstørrelse som .product-card__remove-button på produktkortet
+.removeColumnButton {
+  padding: 0;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+// Skillelinje mellom hjelpemidler, ikke mellom varianter av samme hjelpemiddel
+.productBoundary {
+  border-left: 1px solid $ax-border-neutral-subtle;
+}
+
+// Lange tekster (f.eks. beskrivelse) skal starte øverst i cellen, ikke midtstilles
+.alignTop > th,
+.alignTop > td {
   vertical-align: top;
 }

@@ -1,8 +1,9 @@
 'use client'
 
-import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroupTable'
-import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 import type { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
+import { CompareTechDataGroupTable } from '@/app/sammenlign/CompareTechDataGroupTable'
+
+import { useFeatureFlags } from '@/hooks/useFeatureFlag'
 
 export type TechDataSection = {
   title: string
@@ -14,10 +15,12 @@ export const CompareTechDataSections = ({
   groupedTechDataRows,
   groupedTechDataRows22,
   productCount,
+  productBoundaries,
 }: {
   groupedTechDataRows: TechDataSection[]
   groupedTechDataRows22: TechDataSection[]
   productCount: number
+  productBoundaries: number[]
 }) => {
   const { isEnabled } = useFeatureFlags()
   const sections = isEnabled('finnhjelpemiddel.iso22') ? groupedTechDataRows22 : groupedTechDataRows
@@ -29,6 +32,7 @@ export const CompareTechDataSections = ({
         title={title}
         techDataRows={techDataRows}
         productCount={productCount}
+        productBoundaries={productBoundaries}
         key={title}
       />
     ))

@@ -50,7 +50,9 @@ export const parseColumns = (products: Product[], columnParams: string[]): Compa
   })
 
   return products.flatMap((product) => {
-    const selections = selectionsByProduct.get(product.id) ?? [ALL_VARIANTS]
+    const selections = [...(selectionsByProduct.get(product.id) ?? [ALL_VARIANTS])]
+      // «Alle varianter» står alltid først, før enkeltvariantene
+      .sort((a, b) => Number(b === ALL_VARIANTS) - Number(a === ALL_VARIANTS))
 
     return selections.map((selection): CompareColumn => {
       const key = toParamValue(product.id, selection)
@@ -63,38 +65,56 @@ export const parseColumns = (products: Product[], columnParams: string[]): Compa
   })
 }
 
-/** Skriver kolonnene tilbake til URL-parametere. Standardoppsettet gir rene lenker uten kolonne-parametere. */
-export const columnsToSearchParams = (current: URLSearchParams, columns: CompareColumn[]): URLSearchParams => {
+/**
+ * Lager URL-parametere for sammenligningen. Uten valgte varianter (bare «Alle varianter» per produkt)
+ * får lenken ingen kolonne-parametere, slik at den ser ut som før.
+ */
+export const selectionsToSearchParams = (
+  current: URLSearchParams,
+  productIds: string[],
+  selectionsByProduct: Record<string, string[] | undefined>
+): URLSearchParams => {
   const params = new URLSearchParams(current.toString())
   params.delete(PRODUCT_PARAM)
   params.delete(COLUMN_PARAM)
 
-  const productIds = [...new Set(columns.map((column) => column.product.id))]
   productIds.forEach((id) => params.append(PRODUCT_PARAM, id))
 
-  const isDefault =
-    columns.length === productIds.length && columns.every((column) => selectionOf(column) === ALL_VARIANTS)
+  const selections = productIds.map((id) => {
+    const selected = selectionsByProduct[id]
+    return { id, selected: selected && selected.length > 0 ? selected : [ALL_VARIANTS] }
+  })
+  const isDefault = selections.every(({ selected }) => selected.length === 1 && selected[0] === ALL_VARIANTS)
 
   if (!isDefault) {
-    columns.forEach((column) => params.append(COLUMN_PARAM, toParamValue(column.product.id, selectionOf(column))))
+    selections.forEach(({ id, selected }) =>
+      selected.forEach((selection) => params.append(COLUMN_PARAM, toParamValue(id, selection)))
+    )
   }
 
   return params
 }
 
+export const groupSelectionsByProduct = (columns: CompareColumn[]): Record<string, string[]> =>
+  columns.reduce<Record<string, string[]>>((acc, column) => {
+    acc[column.product.id] = [...(acc[column.product.id] ?? []), selectionOf(column)]
+    return acc
+  }, {})
+
+/** Skriver kolonnene tilbake til URL-parametere. */
+export const columnsToSearchParams = (current: URLSearchParams, columns: CompareColumn[]): URLSearchParams =>
+  selectionsToSearchParams(
+    current,
+    [...new Set(columns.map((column) => column.product.id))],
+    groupSelectionsByProduct(columns)
+  )
+
 export const sortedVariants = (product: Product): ProductVariant[] =>
   sortColumnsByRowKey([...product.variants], { orderBy: 'Expired', direction: 'ascending' })
 
 export const variantLabel = (variant: ProductVariant): string => {
-  const id = variant.hmsArtNr ? `HMS ${variant.hmsArtNr}` : `Lev-artnr ${variant.supplierRef}`
   const status = variant.status === 'INACTIVE' ? ' · Utgått' : ''
-  return `${variant.articleName} · ${id}${status}`
-}
-
-export const columnRank = (column: CompareColumn): number | undefined => {
-  if (!column.variant) return undefined
-  // Tom liste gir Infinity, som ProductCardCompare tolker som «ikke på avtale»
-  return Math.min(...column.variant.agreements.map((agreement) => agreement.rank))
+  return `${variant.articleName}${status}`
 }
 
 const variantsInColumn = (column: CompareColumn): ProductVariant[] => {
@@ -141,3 +161,21 @@ export const buildTechDataRows = (columns: CompareColumn[]): TechDataRow[] => {
       }) as TechDataRow
   )
 }
+
+export type ProductGroup = { product: Product; columns: CompareColumn[] }
+
+/** Kolonnene er gruppert per produkt (se parseColumns), så hvert produkt kan få sammenslåtte celler. */
+export const groupColumnsByProduct = (columns: CompareColumn[]): ProductGroup[] =>
+  columns.reduce<ProductGroup[]>((groups, column) => {
+    const last = groups.at(-1)
+    if (last?.product.id === column.product.id) {
+      last.columns.push(column)
+    } else {
+      groups.push({ product: column.product, columns: [column] })
+    }
+    return groups
+  }, [])
+
+/** Indeksene til kolonner som starter et nytt hjelpemiddel (ikke den første). Brukes til skillelinjer. */
+export const productBoundaryIndices = (columns: CompareColumn[]): number[] =>
+  columns.flatMap((column, index) => (index > 0 && columns[index - 1].product.id !== column.product.id ? [index] : []))

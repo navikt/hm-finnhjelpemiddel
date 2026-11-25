@@ -1,6 +1,7 @@
 'use client'
 
 import type { TechDataRow } from '@/app/produkt/[id]/variantTable/VariantTable'
+import { CompareColGroup } from '@/app/sammenlign/CompareColGroup'
 import { CompareMetaDataTable } from '@/app/sammenlign/CompareMetaDataTable'
 import { CompareProductHeader, CompareVariantLabel } from '@/app/sammenlign/CompareProductHeader'
 import { CompareTechDataSections } from '@/app/sammenlign/CompareTechDataSections'
@@ -12,13 +13,18 @@ import {
   PRODUCT_PARAM,
   buildTechDataRows,
   columnsToSearchParams,
+  groupColumnsByProduct,
+  groupSelectionsByProduct,
   parseColumns,
+  productBoundaryIndices,
   selectionOf,
 } from '@/app/sammenlign/compare-columns'
 
 import React, { useMemo } from 'react'
 
 import { usePathname, useSearchParams } from 'next/navigation'
+
+import classNames from 'classnames'
 
 import { BodyShort, Link, VStack } from '@navikt/ds-react'
 import { TableBody, TableColumnHeader, TableDataCell, TableRow } from '@navikt/ds-react/Table'
@@ -66,7 +72,7 @@ export const CompareTable = ({
 }) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const { removeProduct } = useHydratedCompareStore()
+  const { removeProduct, productsToCompare: productsInMenu, setVariantSelections } = useHydratedCompareStore()
 
   // Produktene hentes på serveren. Endringer i kolonner skjer bare i URL-en, så vi slipper ny henting.
   const productIds = searchParams.getAll(PRODUCT_PARAM)
@@ -96,28 +102,32 @@ export const CompareTable = ({
     const params = columnsToSearchParams(searchParams, newColumns)
     // Native history-API: Next oppdaterer useSearchParams uten ny server-rendering
     window.history.replaceState(null, '', `${pathname}?${params.toString()}`)
+
+    // Synk til sammenligningsmenyen og knappene på produktsiden. Varianter som ikke finnes lenger, tas ikke med.
+    const selections = groupSelectionsByProduct(newColumns.filter((column) => !column.missingVariantId))
+    productsInMenu
+      .filter((product) => selections[product.id])
+      .forEach((product) => setVariantSelections(product.id, selections[product.id]))
   }
 
-  const toggleSelection = (product: Product, selection: string, isSelected: boolean) => {
-    const productColumns = columns.filter((c) => c.product.id === product.id)
+  const addSelection = (product: Product, selection: string) => {
+    if (columns.some((c) => c.product.id === product.id && selectionOf(c) === selection)) return
+    const variant = selection === ALL_VARIANTS ? null : (product.variants.find((v) => v.id === selection) ?? null)
+    if (selection !== ALL_VARIANTS && !variant) return
 
-    if (isSelected) {
-      if (productColumns.some((c) => selectionOf(c) === selection)) return
-      const variant = selection === ALL_VARIANTS ? null : (product.variants.find((v) => v.id === selection) ?? null)
-      if (selection !== ALL_VARIANTS && !variant) return
+    // Ny kolonne plasseres etter de andre kolonnene for samme produkt
+    const newColumn: CompareColumn = { key: `${product.id}:${selection}`, product, variant }
+    const insertAt = columns.findLastIndex((c) => c.product.id === product.id) + 1
+    updateColumns([...columns.slice(0, insertAt), newColumn, ...columns.slice(insertAt)])
+  }
 
-      // Ny kolonne plasseres etter de andre kolonnene for samme produkt.
-      // Varianter som ikke finnes lenger, ryddes bort når brukeren gjør et nytt valg.
-      const newColumn: CompareColumn = { key: `${product.id}:${selection}`, product, variant }
-      const insertAt = columns.findLastIndex((c) => c.product.id === product.id) + 1
-      const withNew = [...columns.slice(0, insertAt), newColumn, ...columns.slice(insertAt)]
-      updateColumns(withNew.filter((c) => !(c.product.id === product.id && c.missingVariantId)))
-      return
+  const removeColumn = (column: CompareColumn) => {
+    const remaining = columns.filter((c) => c.key !== column.key)
+    if (!remaining.some((c) => c.product.id === column.product.id)) {
+      // Siste kolonne for produktet: fjern hele produktet fra sammenligningen
+      removeProduct(column.product.id)
     }
-
-    // Produktet skal alltid ha minst én kolonne. Hele produktet fjernes med krysset på produktkortet.
-    if (productColumns.length <= 1) return
-    updateColumns(columns.filter((c) => !(c.product.id === product.id && selectionOf(c) === selection)))
+    updateColumns(remaining)
   }
 
   const removeProductColumns = (product: Product) => {
@@ -125,16 +135,8 @@ export const CompareTable = ({
     updateColumns(columns.filter((c) => c.product.id !== product.id))
   }
 
-  // Kolonnene er gruppert per produkt (se parseColumns), så hvert produkt får én sammenslått celle
-  const productGroups = columns.reduce<{ product: Product; columns: CompareColumn[] }[]>((groups, column) => {
-    const last = groups.at(-1)
-    if (last?.product.id === column.product.id) {
-      last.columns.push(column)
-    } else {
-      groups.push({ product: column.product, columns: [column] })
-    }
-    return groups
-  }, [])
+  const productGroups = groupColumnsByProduct(columns)
+  const productBoundaries = productBoundaryIndices(columns)
 
   if (columns.length === 0) {
     return (
@@ -146,17 +148,26 @@ export const CompareTable = ({
   }
 
   return (
-    <VStack className={styles.compareTable} width={'100%'}>
+    <VStack
+      className={styles.compareTable}
+      width={'100%'}
+      style={{ '--compare-column-count': columns.length } as React.CSSProperties}
+    >
       <Table className={styles.stickyTop}>
+        <CompareColGroup columnCount={columns.length} />
         <TableBody>
           <TableRow>
             <TableColumnHeader></TableColumnHeader>
-            {productGroups.map(({ product, columns: productColumns }) => (
-              <TableDataCell key={product.id} colSpan={productColumns.length} className={styles.columnHeaderCell}>
+            {productGroups.map(({ product, columns: productColumns }, groupIndex) => (
+              <TableDataCell
+                key={product.id}
+                colSpan={productColumns.length}
+                className={classNames(styles.columnHeaderCell, { [styles.productBoundary]: groupIndex > 0 })}
+              >
                 <CompareProductHeader
                   product={product}
                   columns={productColumns}
-                  onToggleSelection={(selection, isSelected) => toggleSelection(product, selection, isSelected)}
+                  onAddSelection={(selection) => addSelection(product, selection)}
                   onRemove={() => removeProductColumns(product)}
                 />
               </TableDataCell>
@@ -164,21 +175,30 @@ export const CompareTable = ({
           </TableRow>
           {columns.some((column) => column.variant || column.missingVariantId) && (
             <TableRow>
-              <TableColumnHeader></TableColumnHeader>
-              {columns.map((column) => (
-                <TableColumnHeader key={column.key} scope="col" className={styles.variantHeaderCell}>
-                  <CompareVariantLabel column={column} />
+              <TableColumnHeader scope="row" className={styles.variantHeaderCell}>
+                Variant
+              </TableColumnHeader>
+              {columns.map((column, index) => (
+                <TableColumnHeader
+                  key={column.key}
+                  scope="col"
+                  className={classNames(styles.variantHeaderCell, {
+                    [styles.productBoundary]: productBoundaries.includes(index),
+                  })}
+                >
+                  <CompareVariantLabel column={column} onRemove={() => removeColumn(column)} />
                 </TableColumnHeader>
               ))}
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <CompareMetaDataTable columns={columns} />
+      <CompareMetaDataTable columns={columns} productBoundaries={productBoundaries} />
       <CompareTechDataSections
         groupedTechDataRows={groupedTechDataRows}
         groupedTechDataRows22={groupedTechDataRows22}
         productCount={columns.length}
+        productBoundaries={productBoundaries}
       />
     </VStack>
   )

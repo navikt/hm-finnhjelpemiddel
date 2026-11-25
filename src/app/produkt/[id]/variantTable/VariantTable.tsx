@@ -2,6 +2,7 @@
 
 import { TechDataGroupTable } from '@/app/produkt/[id]/variantTable/TechDataGroupTable'
 import { VariantPostRow } from '@/app/produkt/[id]/variantTable/VariantPostRow'
+import { VariantCompareButton } from '@/app/produkt/[id]/variantTable/VariantCompareButton'
 import { VariantRankRow } from '@/app/produkt/[id]/variantTable/VariantRankRow'
 import { FilterRow } from '@/app/produkt/[id]/variantTable/filters/FilterRow'
 import { sortColumnsByRowKey } from '@/app/produkt/[id]/variantTable/variant-utils'
@@ -305,6 +306,21 @@ export const VariantTable = ({
                       ) : (
                         <BodyShort align={'center'}>-</BodyShort>
                       )}
+                    </HighlightableDataCell>
+                  ))}
+                </Table.Row>
+
+                <Table.Row>
+                  <Table.HeaderCell>Sammenligning</Table.HeaderCell>
+                  {productVariantsSorted.map((variant, i) => (
+                    <HighlightableDataCell
+                      key={'compare-' + variant.id}
+                      variantCount={productVariantsSorted.length}
+                      thisColumnNr={i}
+                      highlightColNr={highlightCol}
+                      setHighlightCol={setHighlightCol}
+                    >
+                      <VariantCompareButton product={product} variant={variant} />
                     </HighlightableDataCell>
                   ))}
                 </Table.Row>

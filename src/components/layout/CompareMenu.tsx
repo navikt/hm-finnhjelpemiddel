@@ -1,18 +1,21 @@
 'use client'
 
+import { ALL_VARIANTS, selectionsToSearchParams } from '@/app/sammenlign/compare-columns'
+
 import NextLink from 'next/link'
 
 import classNames from 'classnames'
 
 import { ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button } from '@navikt/ds-react'
+import { BodyShort, Button, Detail, VStack } from '@navikt/ds-react'
 
 import { CompareMenuState, useHydratedCompareStore } from '@/utils/global-state-util'
 
 import ProductCardCompare from '@/components/ProductCardCompare'
 
 const CompareMenu = () => {
-  const { compareMenuState, productsToCompare, setCompareMenuState, resetProductToCompare } = useHydratedCompareStore()
+  const { compareMenuState, productsToCompare, setCompareMenuState, resetProductToCompare, variantSelections } =
+    useHydratedCompareStore()
 
   const toggleButtonText = `Produkter til sammenligning (${productsToCompare.length})`
 
@@ -22,7 +25,11 @@ const CompareMenu = () => {
     return <></>
   }
 
-  const compareUrl = `/sammenlign?${reversedProductsToCompare.map((p) => `id=${p.id}`).join('&')}`
+  const compareUrl = `/sammenlign?${selectionsToSearchParams(
+    new URLSearchParams(),
+    reversedProductsToCompare.map((p) => p.id),
+    variantSelections
+  )}`
 
   return (
     <div
@@ -65,7 +72,10 @@ const CompareMenu = () => {
               <ul className="compare-menu__chosen-products">
                 {reversedProductsToCompare.map((product) => (
                   <li key={'compare-' + product.id}>
-                    <ProductCardCompare product={product} type="removable" />
+                    <VStack gap="space-4">
+                      <ProductCardCompare product={product} type="removable" />
+                      <SelectedVariantsText selections={variantSelections[product.id]} />
+                    </VStack>
                   </li>
                 ))}
               </ul>
@@ -99,6 +109,20 @@ const CompareMenu = () => {
         </div>
       )}
     </div>
+  )
+}
+
+/** Kort tekst om valgte varianter. Ingenting vises når bare «Alle varianter» er valgt (standard). */
+const SelectedVariantsText = ({ selections }: { selections: string[] | undefined }) => {
+  if (!selections) return null
+  const variantCount = selections.filter((selection) => selection !== ALL_VARIANTS).length
+  if (variantCount === 0) return null
+
+  const variantsText = variantCount === 1 ? '1 variant valgt' : `${variantCount} varianter valgt`
+  return (
+    <Detail textColor="subtle">
+      {selections.includes(ALL_VARIANTS) ? `Alle varianter + ${variantsText}` : variantsText}
+    </Detail>
   )
 }
 
