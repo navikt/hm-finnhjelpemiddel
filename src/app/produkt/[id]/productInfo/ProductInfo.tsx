@@ -244,8 +244,8 @@ const StatusTag = ({
 
   const helpHvaErUtgaatt = (
     <>
-      Hjelpemidler merket «utgått» fås ikke lenger fra aktuell leverandør. Men kan fortsatt lånes fra Nav dersom
-      hjelpemiddelet er på lager eller er tilgjengelig hos en annen leverandør.
+      Hjelpemidler merket «utgått» fås ikke lenger fra aktuell leverandør, men kan fortsatt lånes fra Nav dersom
+      hjelpemiddelet er på lager.
     </>
   )
 
